@@ -1,0 +1,40 @@
+{
+  "id": "E16",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "The default tree correctly shows both import generations and every module. A long identifier wraps and separate branches are noisier, but the hierarchy remains readable without manual placement.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Moderate: seven pins and seven sizes recover a very simple asymmetric tree after the unarrowed-edge refinement removed automatic depth. The final source remains easy to read, but its geometry is less resilient than v0.",
+  "residuals": [
+    "Shared trunk and sparse branch labels remain separate repeated edges.",
+    "v1 undirected hierarchy collapse is preserved.",
+    "Slightly bolder/smaller type and different spacing.",
+    "Arrowless native relations use directed=false, so native logical direction is weaker than the directed import concept; the final hierarchy supplies visual direction."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-S03"
+  ],
+  "confirmation_case": true,
+  "label_edit_resilience": "Predicted: v0 adapts labels more naturally; v2 fixes widths/heights and coordinates, so module renames can require intervention.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

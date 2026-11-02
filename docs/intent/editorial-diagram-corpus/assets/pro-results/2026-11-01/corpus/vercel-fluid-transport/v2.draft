@@ -1,0 +1,35 @@
+diagram "Fluid custom transport" version=1
+theme blueprint canvas="#090909" text="#eeeeee" connection="#cccccc" title-font=sans annotation-font=sans padding-x=20 padding-y=20 radius=7
+theme-color slate shade=50 fill="#202020" stroke="#404040" ink="#eeeeee"
+theme-color component fill="#0b0b0b" stroke="#505050" ink="#ededed"
+theme-color boundary shade=900 fill="#0b0b0b" stroke="#4f4f4f" ink="#efefef"
+theme-color core shade=800 fill="#131313" stroke="#515151" ink="#efefef"
+node client "Client" color=component
+node proxy "Vercel Proxy" color=component
+node router "Vercel Function Router" color=component
+node api "Lambda API" color=component
+group lambda "Lambda VM" color=boundary shade=900
+group rust "Rust Core" in=lambda color=core shade=800
+node nodejs "Node.js" in=rust color=component
+edge request1 client -> proxy "HTTP request"
+edge request2 proxy -> router "HTTP request"
+edge invoke router -> api "HTTP"
+edge lambda_http api -> lambda "HTTP" from=left to=right
+edge lambda_return lambda -> api constraint=false from=right to=left
+edge tunnel rust -> router "TCP response" constraint=false kind=async from=right to=left
+edge response2 router -> proxy "response" constraint=false kind=async
+edge response1 proxy -> client "response" constraint=false kind=async
+layout root flow direction=right
+note "Solid arrows: request/invocation. Dashed arrows: response path. Original uses green/blue." width=650
+pin client x=0 y=0
+size client width=200 height=100
+pin proxy x=500 y=0
+size proxy width=330 height=100
+pin router x=1150 y=0
+size router width=330 height=100
+pin api x=1210 y=310
+size api width=220 height=80
+pin lambda x=500 y=180
+size nodejs width=160 height=80
+layout lambda column min-width=340 min-height=280
+layout rust column min-width=280 min-height=190

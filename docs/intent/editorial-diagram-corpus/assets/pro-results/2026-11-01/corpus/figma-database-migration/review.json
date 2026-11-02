@@ -1,0 +1,46 @@
+{
+  "id": "E04",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The first render shifts corresponding stores between rows and routes stage progression through the next panel. This obscures the small connection changes that the source makes easy to compare.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "High but transparent: nineteen pins and nineteen exact node sizes duplicate a five-component coordinate template across four panels. The layout remains readable in source, but the author owns every panel dimension and shared coordinate.",
+  "residuals": [
+    "Native pills cannot reproduce database cylinders and their top ellipses.",
+    "Large centered stage headings and offset black shadows are absent.",
+    "Many fixed coordinates and sizes are required for panel correspondence."
+  ],
+  "provisional_gaps": [
+    "I-PANEL-GEOMETRY",
+    "I-TYPE",
+    "I-VISUAL-VOCAB",
+    "I-GROUP-ROUTING"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

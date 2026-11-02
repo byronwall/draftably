@@ -1,0 +1,29 @@
+{
+  "accepted": 30,
+  "software": 22,
+  "adjacent": 8,
+  "publisher_labels": 24,
+  "publisher_groups": 22,
+  "pattern_families": 16,
+  "principal_objects": {
+    "min": 4,
+    "median": 14.0,
+    "max": 39,
+    "within_5_30": 27
+  },
+  "confirmation_ids": [
+    "E06",
+    "E10",
+    "E16",
+    "E20",
+    "E28",
+    "E30"
+  ],
+  "candidate_records": 39,
+  "candidate_statuses": {
+    "accepted": 30,
+    "rejected": 6,
+    "not_selected": 2,
+    "superseded_acquisition": 1
+  }
+}

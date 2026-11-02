@@ -1,0 +1,64 @@
+{
+  "id": "E11",
+  "slug": "e11-transformer-stacks",
+  "title": "Transformer encoder and decoder stacks",
+  "publisher": "Jay Alammar",
+  "author": "Jay Alammar",
+  "publication_date": "2018-06-27",
+  "access_date": "2026-11-02",
+  "page_url": "https://jalammar.github.io/illustrated-transformer/",
+  "image_url": "https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png",
+  "license": "CC BY-NC-SA 4.0; statement on source article",
+  "figure": "The_transformer_encoder_decoder_stack.png",
+  "patterns": [
+    "layered stack",
+    "fanout",
+    "neural architecture"
+  ],
+  "principal_objects": 15,
+  "reading_path": "Input below the left stack, upward through six encoders, across to each decoder, upward to output.",
+  "merit": "Two aligned towers and a single fanout origin make the repeated processing stages easy to count. Pastel fills distinguish roles without filling the routing corridor.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "bdc0fd6444dd03385e53f0789b370c3ffab9045d221949a180d5a0a317f44708",
+  "reference_bytes": 127812,
+  "reference_preview_size": [
+    1218,
+    793
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "d7586dae5d5b3ba0bfe69d90a2bb2e653c840d11b779cb4b1a2e414257410b27",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "97be7a352e9e9447115d7bebe7cfdc432df3936f1c7a7dc634810af3bc68cda1",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "d5703301657ddc7f6c4bd6359b7aff6b6e711cd5674c00ae67ed9bfd64d4fee5",
+      "warning_count": 12,
+      "warnings": [
+        "warning line 56: enc1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 57: enc2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 58: enc3's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 59: enc4's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 60: enc5's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 61: enc6's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 62: dec1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 63: dec2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 64: dec3's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 65: dec4's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 66: dec5's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+        "warning line 67: dec6's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]"
+      ]
+    }
+  }
+}

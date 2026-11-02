@@ -1,0 +1,62 @@
+diagram "Database migration" version=1
+theme signal canvas="#05aa5b" text="#072e1a" connection="#08281a" annotation-font=sans padding-x=16 padding-y=20 radius=0
+theme-color backdrop shade=100 fill="#05aa5b" stroke="#05aa5b" ink="#072e1a"
+theme-color app fill="#ffffff" stroke="#111111" ink="#111111"
+theme-color pooler fill="#ffd42a" stroke="#111111" ink="#111111"
+theme-color database fill="#6699f2" stroke="#111111" ink="#111111"
+group prepare "Prepare" color=backdrop shade=100
+node prepare.app "Application backend" in=prepare color=app
+node prepare.pg1 "PgBouncer-1" in=prepare color=pooler
+node prepare.pg2 "PgBouncer-2" in=prepare color=pooler
+node prepare.original "Original" in=prepare color=database shape=pill
+edge prepare.a prepare.app -> prepare.pg1
+edge prepare.b prepare.app -> prepare.pg2
+edge prepare.c prepare.pg1 -> prepare.original
+edge prepare.d prepare.pg2 -> prepare.original
+layout prepare flow direction=down
+group replicate "Replicate" color=backdrop shade=100
+node replicate.app "Application backend" in=replicate color=app
+node replicate.pg1 "PgBouncer-1" in=replicate color=pooler
+node replicate.pg2 "PgBouncer-2" in=replicate color=pooler
+node replicate.original "Original" in=replicate color=database shape=pill
+node replicate.replica "Replica" in=replicate color=database shape=pill
+edge replicate.a replicate.app -> replicate.pg1
+edge replicate.b replicate.app -> replicate.pg2
+edge replicate.c replicate.pg1 -> replicate.original
+edge replicate.d replicate.pg2 -> replicate.original
+edge replicate.r replicate.original -> replicate.replica
+layout replicate flow direction=down
+group pause "Pause" color=backdrop shade=100
+node pause.app "Application backend" in=pause color=app
+node pause.pg1 "PgBouncer-1" in=pause color=pooler
+node pause.pg2 "PgBouncer-2" in=pause color=pooler
+node pause.original "Original" in=pause color=database shape=pill
+node pause.replica "Replica" in=pause color=database shape=pill
+edge pause.a pause.app -> pause.pg1
+edge pause.b pause.app -> pause.pg2
+edge pause.c pause.pg1 -> pause.original
+edge pause.r pause.original -> pause.replica
+layout pause flow direction=down
+group reroute "Reroute" color=backdrop shade=100
+node reroute.app "Application backend" in=reroute color=app
+node reroute.pg1 "PgBouncer-1" in=reroute color=pooler
+node reroute.pg2 "PgBouncer-2" in=reroute color=pooler
+node reroute.original "Original" in=reroute color=database shape=pill
+node reroute.replica "Promoted" in=reroute color=database shape=pill
+edge reroute.a reroute.app -> reroute.pg1
+edge reroute.b reroute.app -> reroute.pg2
+edge reroute.c reroute.pg1 -> reroute.original
+edge reroute.d reroute.pg2 -> reroute.replica
+edge reroute.r reroute.replica -> reroute.original
+layout reroute flow direction=down
+edge next1 prepare -> replicate from=top to=top
+edge next2 replicate -> pause from=top to=top
+edge next3 pause -> reroute from=top to=top
+layout root row
+align y prepare.pg1 prepare.pg2
+align y replicate.pg1 replicate.pg2
+align y pause.pg1 pause.pg2
+align y reroute.pg1 reroute.pg2
+align y replicate.original replicate.replica
+align y pause.original pause.replica
+align y reroute.original reroute.replica

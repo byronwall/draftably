@@ -1,0 +1,46 @@
+{
+  "id": "E03",
+  "v0_readability_vs_reference": "worse",
+  "reason": "v0 stacks all objects in one column and its Redis note overlaps the following Git region. The source full-width bands make hierarchy immediately apparent without introducing flow arrows.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Moderate. Five pins and eight exact node sizes establish two full-width bands and one service row. Two notes need explicit wrap widths. It is legible source, but changing the shard count or long layer label requires revisiting width assumptions.",
+  "residuals": [
+    "Small text relative to oversized layer panels at publication width.",
+    "Native note panels replace fine annotation leaders.",
+    "Fixed group-header glyph, placement, and scale differ from the quiet source."
+  ],
+  "provisional_gaps": [
+    "I-TYPE",
+    "I-LABEL-EXPOSURE",
+    "I-PANEL-GEOMETRY",
+    "I-NOTE-LAYOUT"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

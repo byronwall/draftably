@@ -1,0 +1,64 @@
+diagram "Plagiarism in a submitted manuscript" version=1
+theme drafting canvas="#FFFFFF" text="#555555" connection="#444444" radius=12 padding-x=16 padding-y=12
+theme-color end shade=500 fill="#233B3C" stroke="#233B3C" ink="#FFFFFF"
+theme-color concern shade=100 fill="#EADFEB" stroke="#946A95" ink="#674469"
+theme-color satisfactory shade=100 fill="#E9F2E1" stroke="#62984B" ink="#39642B"
+subtitle "A publishing decision process with four initial branches and two escalation routes."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node reviewer "Reviewer flags possible plagiarism" color=end
+node evidence "Thank reviewer; gather complete evidence and investigate"
+node degree "Assess extent of copying" shape=diamond
+node clear "Substantial unattributed text or data presented as original" color=concern shade=100
+node redundancy "Author has reused their own work" color=concern shade=100
+node minor "Brief copied phrases; no false attribution of data" color=satisfactory shade=100
+node none "No plagiarism issue" color=satisfactory shade=100
+node ask "Write to corresponding author with evidence and the signed originality statement"
+node otherchart "Use redundancy flowchart" color=end
+node rephrase "Ask author to rephrase or quote and cite; explain journal policy"
+node proceed "Discuss with reviewer; continue peer review" color=end
+node responds "Author responds" color=satisfactory shade=100
+node noresponse "No response" color=concern shade=100
+node otherauthors "Try other authors; locate current affiliations or email"
+node stillnone "Still no response" color=concern shade=100
+node unsatisfactory "Inadequate explanation or admission" color=concern shade=100
+node satisfactory "Credible error, unclear instructions or inexperienced author" color=satisfactory shade=100
+node reject "Notify all authors of rejection, reasons and future expectations" color=concern shade=100
+node revise "Explain expectations; decide whether to reject or request revision"
+node institution "Ask institution to refer concerns to supervisor or research governance lead"
+node informreviewer "Tell reviewer the outcome and action" color=end
+node superior "Consider notifying supervisor, research governance and potential victims" color=concern shade=100
+node informauthors "Tell authors about the action taken"
+node keepcontact "Keep contacting the institution every 3–6 months; consider other authorities if unresolved" color=concern shade=100
+edge e1 reviewer -> evidence
+edge e2 evidence -> degree
+edge e3 degree -> clear
+edge e4 degree -> redundancy
+edge e5 degree -> minor
+edge e6 degree -> none
+edge e7 clear -> ask
+edge e8 redundancy -> otherchart
+edge e9 minor -> rephrase
+edge e10 rephrase -> proceed
+edge e11 none -> proceed
+edge e12 ask -> responds
+edge e13 ask -> noresponse
+edge e14 noresponse -> otherauthors
+edge e15 otherauthors -> responds constraint=false
+edge e16 otherauthors -> stillnone
+edge e17 responds -> unsatisfactory
+edge e18 responds -> satisfactory
+edge e19 unsatisfactory -> reject
+edge e20 reject -> superior
+edge e21 reject -> informreviewer
+edge e22 superior -> informauthors
+edge e23 informauthors -> informreviewer
+edge e24 superior -> keepcontact
+edge e25 satisfactory -> revise
+edge e26 revise -> informreviewer
+edge e27 stillnone -> institution
+edge e28 institution -> informreviewer
+edge e29 institution -> keepcontact
+layout root engine=layered direction=down fold=never ordering=stable rank-gap=56 node-gap=50
+note "Author instructions should define plagiarism and explain the journal’s policy."
+note "COPE flowchart; labels paraphrased for the editable study. Consult the preserved original for exact editorial guidance."
+order root reviewer evidence degree clear redundancy minor none ask otherchart rephrase proceed responds noresponse otherauthors stillnone unsatisfactory satisfactory reject revise institution superior informauthors informreviewer keepcontact

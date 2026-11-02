@@ -1,0 +1,21 @@
+{
+  "id": "E17",
+  "slug": "e17-go-slice",
+  "stage": "v1",
+  "noncomment_lines": 17,
+  "declarations": 11,
+  "node_declarations": 8,
+  "group_declarations": 2,
+  "edge_declarations": 1,
+  "layout_refinement_lines": 4,
+  "layouts": 3,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 9,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 2,
+  "current_stage_command_seconds": 3.161,
+  "authoring_time": "not measured"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "E11",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default folds twelve repeated blocks into a snake. The two towers and upward reading path are no longer apparent, although every connection remains traceable.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Moderate to high: the final source is still recognizable as two repeated stacks, but fifteen pins, fourteen sizes and thirty-two endpoint-side assignments make the composition largely manual.",
+  "residuals": [
+    "Orthogonal fanout replaces shared diagonal origin.",
+    "Native group header/icon and taller proportions.",
+    "Twelve padding-related text-overflow diagnostics remain despite visible text."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G05"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted, not separately tested: changing one stage label can overflow its fixed height or width; a new stage requires edits to both pinned columns and their fanout links.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

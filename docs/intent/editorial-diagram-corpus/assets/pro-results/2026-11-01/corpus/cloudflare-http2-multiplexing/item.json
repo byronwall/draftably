@@ -1,0 +1,28 @@
+{
+  "id": "E07",
+  "slug": "cloudflare-http2-multiplexing",
+  "title": "HTTP/1.1 and HTTP/2 multiplexing",
+  "publisher": "Cloudflare",
+  "author": "Ryan Hodson",
+  "publication_date": "2015-12-10",
+  "access_date": "2026-11-02",
+  "page_url": "https://blog.cloudflare.com/http-2-for-web-developers/",
+  "image_url": "https://blog.cloudflare.com/_emdash/api/media/file/01KW450RNFAGW22C04DTS7BFE8.png",
+  "license": "unknown",
+  "figure": "HTTP/2 Multiplexing",
+  "patterns": [
+    "comparison-panels",
+    "protocol",
+    "multiplexing"
+  ],
+  "principal_objects": 16,
+  "reading_path": "Compare three independent TCP lanes above with one bundled lane below.",
+  "merit": "Aligned duplicate filenames and three-versus-one connectors make transport consolidation the central visual statement.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "89d62674f30ad4b4bfec4108561a249ba81b79fe4c58be2aeff35c57b84879fc",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

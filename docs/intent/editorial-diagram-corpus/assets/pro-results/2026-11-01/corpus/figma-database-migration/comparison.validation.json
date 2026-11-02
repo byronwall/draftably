@@ -1,0 +1,30 @@
+{
+  "source_sha256": {
+    "reference-preview.png": "406ac5a314208375c1847a5c678aeb42ba8f9ee4eabdaa736a105813fdf590cd",
+    "v0.png": "ecd9681c345566f7006769aaba1fa5008cb90d1e6c947c3ac1da26bdd2d4e20d",
+    "v2.png": "bc9a69d58f60d71f783b0df37dc141568e726bb6ec4f6bb3f4c7487da00efe53"
+  },
+  "log": "logs/figma-database-migration/final-comparison/20261102T033923763171Z",
+  "command": {
+    "argv": [
+      "pnpm",
+      "--silent",
+      "shoot",
+      "--sheet",
+      "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/comparison.png",
+      "--cols",
+      "3",
+      "Reference::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/reference-preview.png",
+      "v0 \u2014 default::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/v0.png",
+      "v2 \u2014 refined::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/v2.png"
+    ],
+    "cwd": "/workspace/scratch/742d8c352255/baseline",
+    "started_utc": "2026-11-02T03:39:23.763870+00:00",
+    "environment": {
+      "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+      "DRAFTABLY_NO_UPDATE_CHECK": "1"
+    },
+    "elapsed_seconds": 1.4536,
+    "exit_code": 0
+  }
+}

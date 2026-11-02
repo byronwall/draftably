@@ -1,0 +1,63 @@
+{
+  "stage": "v0",
+  "source_sha256": "e3b28d29f2c393f780435c7067e3efee95494dacb33e723745876c9d76a93398",
+  "run_id": "20261102T032005662624Z",
+  "log": "logs/E23-nasa-star-life/v0/20261102T032005662624Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:05.663116+00:00",
+      "elapsed_seconds": 0.919,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:06.582371+00:00",
+      "elapsed_seconds": 0.9755,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:07.558039+00:00",
+      "elapsed_seconds": 0.965,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:08.523262+00:00",
+      "elapsed_seconds": 2.0136,
+      "exit_code": 0
+    }
+  }
+}

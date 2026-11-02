@@ -1,0 +1,7 @@
+warning Edge h2.cb (h2.out -> h2.client) runs through h2.o1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge h2.cf (h2.client -> h2.out) runs through h2.server. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge h2.sf (h2.in -> h2.server) runs through h2.o1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge h2.sf (h2.in -> h2.server) runs through h2.i1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge h2.tb (h2.in -> h2.out) runs through h2.i1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge h2.tf (h2.out -> h2.in) runs through h2.i1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+Warnings: 16 nodes, 6 groups, 24 connections.

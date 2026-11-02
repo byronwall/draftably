@@ -1,0 +1,24 @@
+{
+  "focus": "Root-server exchange and shown NS record context",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      70,
+      505,
+      1570,
+      240
+    ],
+    "v0": [
+      838,
+      1362,
+      412,
+      348
+    ],
+    "v2": [
+      24,
+      776,
+      2412,
+      714
+    ]
+  }
+}

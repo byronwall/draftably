@@ -1,0 +1,79 @@
+{
+  "stage": "v2",
+  "source_sha256": "121aa28dee311b0f51140621d6a6e06a596a21a195c9c7d33147669b50763bfa",
+  "run_id": "20261102T033237242123Z",
+  "log": "logs/e12-lstm-recurrent-cell/v2/20261102T033237242123Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:37.242394+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.9076,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:39.150150+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.8229,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:40.973403+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.6665,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:42.640383+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.9396,
+      "exit_code": 0
+    }
+  }
+}

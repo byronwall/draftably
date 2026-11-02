@@ -1,0 +1,40 @@
+{
+  "id": "E15",
+  "v0_readability_vs_reference": "worse",
+  "reason": "Default layout turns each heap into a long row, moves realms to the far right, and makes shared memory a large outer loop; the original\u2019s mirrored agent structure is much clearer.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "Very high: 136 non-comment lines, thirty-four pins and thirty-one exact sizes. The manual coordinates dominate the native semantic model, and a corrective cycle was required because group headers/padding made the queues overlap heaps.",
+  "residuals": [
+    "Shared-memory route detours around queue and through lower panel.",
+    "Reference realm/color correspondence only partly restored.",
+    "Native padding and headers enlarge the dense two-agent figure.",
+    "Reference preview font substitution limits precise fidelity judgment."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G05"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: a longer stack label can overflow a fixed frame; adding a heap object or queue job requires manual coordinate and spacing edits. No resilience trial was run.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

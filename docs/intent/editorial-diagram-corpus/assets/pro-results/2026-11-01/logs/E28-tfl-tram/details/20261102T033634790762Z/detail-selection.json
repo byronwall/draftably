@@ -1,0 +1,35 @@
+{
+  "focus": "Croydon one-way loop, overlapping service colors, station points and exterior interchange labels",
+  "crops": {
+    "reference": [
+      620,
+      95,
+      500,
+      265
+    ],
+    "v0": [
+      64,
+      2322,
+      3480,
+      848
+    ],
+    "v2": [
+      2656,
+      374,
+      1828,
+      780
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "wandle",
+    "reeves",
+    "centrale",
+    "west",
+    "wellesley",
+    "east",
+    "george",
+    "church",
+    "lebanon"
+  ]
+}

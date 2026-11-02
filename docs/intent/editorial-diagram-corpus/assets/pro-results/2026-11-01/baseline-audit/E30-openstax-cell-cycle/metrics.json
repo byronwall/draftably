@@ -1,0 +1,386 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 6,
+    "groups": 2,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 733,
+    "height": 288,
+    "aspect": 2.55,
+    "density": 0.273,
+    "aligned": 0.83,
+    "crossings": 1,
+    "bends": 5,
+    "bendsPerEdge": 0.83,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 143,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "mitotic": 0.82,
+      "interphase": 0.78
+    },
+    "groupGaps": {
+      "interphase | mitotic": 117,
+      "daughters | mitotic": 28
+    },
+    "emptyArea": {
+      "share": 0.22,
+      "boxes": 4.8,
+      "w": 216,
+      "h": 216,
+      "x": 517,
+      "y": 72
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 2.5,
+    "issues": [
+      {
+        "kind": "off-axis-port",
+        "detail": "e6 cytokinesis→daughters arrives sideways"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 6,
+    "groups": 2,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1401,
+    "height": 128,
+    "aspect": 10.95,
+    "density": 0.322,
+    "aligned": 0.83,
+    "crossings": 0,
+    "bends": 4,
+    "bendsPerEdge": 0.67,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 223,
+    "theme": "drafting",
+    "fills": 6,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "mitotic": 0.86,
+      "interphase": 0.83
+    },
+    "groupGaps": {
+      "interphase | mitotic": 117,
+      "daughters | mitotic": 48
+    },
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e5",
+        "kind": "back",
+        "length": 941,
+        "detour": 1.16,
+        "span": 0.67
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 3.5,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e5 (4)"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "1401×128px (10.9:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 8,
+      "meanMove": 402,
+      "maxMove": 669,
+      "moved": 7,
+      "alignedMean": 201,
+      "alignedMoved": 8,
+      "orderFlips": 0,
+      "shift": {
+        "x": 432,
+        "y": -40
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 8,
+      "meanMove": 402,
+      "maxMove": 669,
+      "moved": 7,
+      "alignedMean": 201,
+      "alignedMoved": 8,
+      "orderFlips": 0,
+      "shift": {
+        "x": 432,
+        "y": -40
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 6,
+    "groups": 2,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1150,
+    "height": 498,
+    "aspect": 2.31,
+    "density": 0.163,
+    "aligned": 0.5,
+    "crossings": 0,
+    "bends": 5,
+    "bendsPerEdge": 0.83,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 232,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 9.66,
+    "groupFill": {
+      "mitotic": 0.3,
+      "interphase": 0.21
+    },
+    "groupGaps": {
+      "daughters | interphase": 270,
+      "daughters | mitotic": 50
+    },
+    "emptyArea": {
+      "share": 0.25,
+      "boxes": 9.1,
+      "w": 593,
+      "h": 240,
+      "x": 110,
+      "y": 180
+    },
+    "edgeStretch": [
+      {
+        "id": "e5",
+        "kind": "wrap",
+        "length": 430,
+        "detour": 1.95,
+        "span": 0.34
+      }
+    ],
+    "counts": {
+      "node-overlap": 2,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 1,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 2,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 2,
+      "group-staircase": 1,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 29.5,
+    "issues": [
+      {
+        "kind": "node-overlap",
+        "detail": "interphase × mitosis"
+      },
+      {
+        "kind": "node-overlap",
+        "detail": "interphase × mitotic"
+      },
+      {
+        "kind": "edge-through-title-band",
+        "detail": "e3 through interphase's title band"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "e3 along interphase"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "e4 along interphase"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "mitotic fill 0.3"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "interphase fill 0.21"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "mitotic: mitosis → cytokinesis sit diagonally"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e4 mitosis→cytokinesis arrives sideways"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"Cycle repeats\" on interphase"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 8,
+      "meanMove": 321,
+      "maxMove": 650,
+      "moved": 8,
+      "alignedMean": 219,
+      "alignedMoved": 7,
+      "orderFlips": 4,
+      "shift": {
+        "x": -179,
+        "y": 131
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 8,
+      "meanMove": 365,
+      "maxMove": 650,
+      "moved": 8,
+      "alignedMean": 192,
+      "alignedMoved": 7,
+      "orderFlips": 10,
+      "shift": {
+        "x": 324,
+        "y": 147
+      }
+    },
+    "checks": []
+  }
+]

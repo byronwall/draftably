@@ -1,0 +1,21 @@
+{
+  "id": "E18",
+  "slug": "e18-git-divergent-history",
+  "stage": "v2",
+  "noncomment_lines": 36,
+  "declarations": 15,
+  "node_declarations": 8,
+  "group_declarations": 0,
+  "edge_declarations": 7,
+  "layout_refinement_lines": 17,
+  "layouts": 1,
+  "pins": 8,
+  "nudges": 0,
+  "manual_sizes": 8,
+  "styling_override_lines": 12,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 2,
+  "current_stage_command_seconds": 3.6781,
+  "authoring_time": "not measured"
+}

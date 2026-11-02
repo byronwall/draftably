@@ -1,0 +1,69 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+group transformer "Transformer" color=frame
+node input "INPUT: Je suis étudiant" shape=text
+node output "OUTPUT: I am a student" shape=text
+node enc1 "ENCODER" in=transformer color=encoder
+node enc2 "ENCODER" in=transformer color=encoder
+node enc3 "ENCODER" in=transformer color=encoder
+node enc4 "ENCODER" in=transformer color=encoder
+node enc5 "ENCODER" in=transformer color=encoder
+node enc6 "ENCODER" in=transformer color=encoder
+node dec1 "DECODER" in=transformer color=decoder
+node dec2 "DECODER" in=transformer color=decoder
+node dec3 "DECODER" in=transformer color=decoder
+node dec4 "DECODER" in=transformer color=decoder
+node dec5 "DECODER" in=transformer color=decoder
+node dec6 "DECODER" in=transformer color=decoder
+edge input_enc input -> enc1
+edge output_dec dec6 -> output
+edge enc_step1 enc1 -> enc2
+edge enc_step2 enc2 -> enc3
+edge enc_step3 enc3 -> enc4
+edge enc_step4 enc4 -> enc5
+edge enc_step5 enc5 -> enc6
+edge dec_step1 dec1 -> dec2
+edge dec_step2 dec2 -> dec3
+edge dec_step3 dec3 -> dec4
+edge dec_step4 dec4 -> dec5
+edge dec_step5 dec5 -> dec6
+edge attention1 enc6 -> dec1
+edge attention2 enc6 -> dec2
+edge attention3 enc6 -> dec3
+edge attention4 enc6 -> dec4
+edge attention5 enc6 -> dec5
+edge attention6 enc6 -> dec6
+layout root flow
+layout transformer row gap=160
+theme drafting canvas="#FFFFFF" radius=12
+theme-color encoder fill="#D6EACB" stroke="#48794B" ink="#151D19"
+theme-color decoder fill="#F3D5D5" stroke="#9B4B56" ink="#201516"
+theme-color frame fill="#EEF4FC" stroke="#6C8FBF" ink="#244870"
+pin transformer x=0 y=80
+pin input x=24 y=590
+pin output x=420 y=0
+pin enc1 x=0 y=380
+pin enc2 x=0 y=304
+pin enc3 x=0 y=228
+pin enc4 x=0 y=152
+pin enc5 x=0 y=76
+pin enc6 x=0 y=0
+pin dec1 x=390 y=380
+pin dec2 x=390 y=304
+pin dec3 x=390 y=228
+pin dec4 x=390 y=152
+pin dec5 x=390 y=76
+pin dec6 x=390 y=0
+size enc1 width=280 height=48
+size enc2 width=280 height=48
+size enc3 width=280 height=48
+size enc4 width=280 height=48
+size enc5 width=280 height=48
+size enc6 width=280 height=48
+size dec1 width=280 height=48
+size dec2 width=280 height=48
+size dec3 width=280 height=48
+size dec4 width=280 height=48
+size dec5 width=280 height=48
+size dec6 width=280 height=48
+size input width=300 height=48
+size output width=300 height=48

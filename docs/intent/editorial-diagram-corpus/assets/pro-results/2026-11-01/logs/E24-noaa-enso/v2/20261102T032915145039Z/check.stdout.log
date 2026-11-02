@@ -1,0 +1,5 @@
+warning line 37: n1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+warning line 39: y1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+warning line 43: n2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+warning line 45: y2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+Warnings: 11 nodes, 0 groups, 12 connections.

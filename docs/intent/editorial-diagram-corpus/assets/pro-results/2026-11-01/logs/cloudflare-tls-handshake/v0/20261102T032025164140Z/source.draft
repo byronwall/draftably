@@ -1,0 +1,11 @@
+diagram "TLS handshake" version=1
+node client "Client"
+node server "Server"
+edge syn client -> server "SYN"
+edge synack server -> client "SYN ACK"
+edge hello client -> server "ACK / ClientHello"
+edge serverhello server -> client "ServerHello / Certificate / ServerHelloDone"
+edge key client -> server "ClientKeyExchange / ChangeCipherSpec / Finished"
+edge finished server -> client "ChangeCipherSpec / Finished"
+note "Reference timing: TCP 50 ms; TLS 110 ms."
+layout root sequence

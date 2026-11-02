@@ -1,0 +1,13 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Pixel pipeline" version=1
+node js "JavaScript" color=amber shade=400
+node style "Style" color=violet shade=500
+node layout "Layout" color=violet shade=500
+node paint "Paint" color=green shade=600
+node composite "Composite" color=green shade=600
+edge e1 js -> style
+edge e2 style -> layout
+edge e3 layout -> paint
+edge e4 paint -> composite
+layout root row gap=16
+theme signal padding-x=12 padding-y=12 radius=0

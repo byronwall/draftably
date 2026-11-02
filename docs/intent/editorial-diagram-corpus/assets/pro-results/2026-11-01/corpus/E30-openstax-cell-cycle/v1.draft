@@ -1,0 +1,25 @@
+diagram "The cell cycle" version=1
+theme drafting canvas="#FFFFFF" text="#111111" connection="#FF202B" radius=0
+theme-color g1color shade=100 fill="#DFD6EB" stroke="#777777" ink="#111111"
+theme-color scolor shade=100 fill="#89C2D5" stroke="#777777" ink="#111111"
+theme-color g2color shade=100 fill="#D7DBE3" stroke="#777777" ink="#111111"
+theme-color mitoticcolor shade=100 fill="#F5D2BD" stroke="#777777" ink="#111111"
+subtitle "G₁ → S → G₂ → mitosis → cytokinesis; two daughter cells form."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+group interphase "Interphase"
+group mitotic "Mitotic phase"
+node g1 "G₁ · Cell growth" in=interphase color=g1color shade=100
+node s "S · DNA synthesis" in=interphase color=scolor shade=100
+node g2 "G₂ · Cell growth" in=interphase color=g2color shade=100
+node mitosis "Mitosis" in=mitotic color=mitoticcolor shade=100
+node cytokinesis "Cytokinesis" in=mitotic color=mitoticcolor shade=100
+node daughters "Formation of 2 daughter cells" shape=pill
+edge e1 g1 -> s
+edge e2 s -> g2
+edge e3 g2 -> mitosis
+edge e4 mitosis -> cytokinesis
+edge e5 cytokinesis -> g1 "Cycle repeats" constraint=false
+edge e6 cytokinesis -> daughters
+layout root engine=compound-flow direction=right fold=never
+order interphase g1 s g2
+order mitotic mitosis cytokinesis

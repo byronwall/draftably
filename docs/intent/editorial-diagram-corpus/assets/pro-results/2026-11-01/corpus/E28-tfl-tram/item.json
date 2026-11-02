@@ -1,0 +1,40 @@
+{
+  "id": "E28",
+  "slug": "E28-tfl-tram",
+  "title": "London Trams service map",
+  "publisher": "Transport for London",
+  "author": "Transport for London",
+  "publication_date": "2024-09",
+  "page_url": "https://tfl.gov.uk/maps/track/tram",
+  "image_url": "https://content.tfl.gov.uk/tram-service-map.pdf",
+  "license": "unknown",
+  "license_observation": "Copyright TfL is printed in the map; no permission grant was observed. This is a preserved research reference, not an assertion of a redistribution license.",
+  "figure": "Single-page tram service map, Version A 09.2024, TfL 0181.08.24; whole page.",
+  "patterns": [
+    "transport map",
+    "branching network",
+    "one-way cycle",
+    "external labels",
+    "dense stress case"
+  ],
+  "principal_objects": 39,
+  "object_count_basis": "Thirty-nine named stops. Route colors, interchange symbols, stop ticks, direction arrows, and the key are additional semantic marks.",
+  "reading_path": "Follow the west-to-east Wimbledon line into the one-way Croydon loop, then distinguish branches to Beckenham Junction, Elmers End, and New Addington. Interchange symbols qualify named stops.",
+  "merit": "Consistent octilinear geometry, clear green route identities, alternating exterior labels, a careful Croydon loop, and terse interchange symbols make a large network readable at modest publication size.",
+  "confirmation_case": true,
+  "reference_file": "reference.pdf",
+  "preview_note": "Actual single-page PDF retained. Preview rasterized proportionally with pdftoppm at a 1800-pixel-long edge.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "c304116f68b3b5974fb5cb7edc1b2ed7e5dac39ddb2248d7cd21bca70509027f",
+  "reference_bytes": 72687,
+  "reference_preview_dimensions": [
+    1800,
+    413
+  ],
+  "native_v0_objects": {
+    "nodes": 39,
+    "groups": 0,
+    "edges": 40
+  }
+}

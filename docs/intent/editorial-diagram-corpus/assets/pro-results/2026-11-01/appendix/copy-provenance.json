@@ -1,0 +1,146 @@
+{
+  "created_utc": "2026-11-02T03:53:16.102177+00:00",
+  "copies": [
+    {
+      "path": "source-context/pro-prompt.md",
+      "copied_from": "upload/pro-prompt(20261102-031322).md",
+      "bytes": 14840,
+      "sha256": "9fa4ab97fd9dc7a637741b23989e898cfbfebd659d80435e14bcb74802cf87d3",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "source-context/SOURCE-CONTEXT.md",
+      "copied_from": "baseline/SOURCE-CONTEXT.md",
+      "bytes": 1020,
+      "sha256": "795b829557147f2788d54c4c5da8d8cf298cecb7bd89a19fb72ef2169f38c3cd",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "source-context/AGENTS.md",
+      "copied_from": "baseline/AGENTS.md",
+      "bytes": 2220,
+      "sha256": "9077f03f7bbadce1c9d329c39b38129e640687e5e7f9dbf435c1e2015caec8c3",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "readlogs/infra-e01-e10.md",
+      "copied_from": "deliverable/working/infra/files-read.md",
+      "bytes": 2883,
+      "sha256": "9c4b9d40f0c1d2509d13b50de4633d9cc28c226d86cfbbe5e1edc5fe546755dc",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "readlogs/concept-e11-e22.json",
+      "copied_from": "deliverable/working/concept/files-read.json",
+      "bytes": 1033,
+      "sha256": "9731bb5e6fbc6aca8f581b25c07f7be4c2ad4246cf0efff79be9aa332dc7ef51",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "findings/infra-e01-e10.md",
+      "copied_from": "deliverable/working/infra/findings.md",
+      "bytes": 14182,
+      "sha256": "39f1ac4080c71492533afcd92968ba9aec72225b4c79b274b0fc2e30c8ebf118",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "findings/concept-e11-e22.md",
+      "copied_from": "deliverable/working/concept/findings.md",
+      "bytes": 18645,
+      "sha256": "e006a69d000f0e82106116c874c3652aea6b9a44a97978ed0a96c7254fee04ed",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "findings/adjacent-e23-e30.md",
+      "copied_from": "deliverable/working/adjacent/findings.md",
+      "bytes": 12600,
+      "sha256": "09cf2015f403ad2a73a6f1d33cfc6d9331dea6a7a632046eaacebc061af6a286",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "reviews/implementation-plan-independent-review.md",
+      "copied_from": "deliverable/working/infra/plan-review.md",
+      "bytes": 19198,
+      "sha256": "413be93cf8763270f5ec1e2bd46c80fc574b6926ae3ff14cfa3f3d43bcb4948b",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "reviews/infra-independent-visual-review.md",
+      "copied_from": "deliverable/working/adjacent/cross-infra-review.md",
+      "bytes": 7014,
+      "sha256": "5436e079faa3feb5ea5cbb50d10f34c3d5e1fae3e42f9d9c2a75588db62bced1",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "reviews/historical-audit-concept-review.md",
+      "copied_from": "deliverable/working/concept/historical-audit-review.md",
+      "bytes": 5977,
+      "sha256": "9050f4bf55045195831fde0cfec0fce05db9cc7d79068791fce9d684e413ef5d",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "proofs/concept-final-verification.json",
+      "copied_from": "deliverable/working/concept/final-verification.json",
+      "bytes": 6673,
+      "sha256": "77972760d201d8d0fd4b4a36b7239d360e41061edcc8a5eadd74af9e8f08c72c",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "candidates/infra-e01-e10.csv",
+      "copied_from": "deliverable/working/infra/candidate-log.csv",
+      "bytes": 4831,
+      "sha256": "0521601da06a1a5cb3433a2dc65d5ba460176efd87b808896c95a31b694325ad",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "candidates/concept-e11-e22.csv",
+      "copied_from": "deliverable/working/concept/candidate-log-concept.csv",
+      "bytes": 5782,
+      "sha256": "e04b758c708dd78241383339cb1b312a1ffd979bd48ffb396159a0fd7c826b7a",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "candidates/adjacent-e23-e30.csv",
+      "copied_from": "deliverable/working/adjacent/candidate-log.csv",
+      "bytes": 4821,
+      "sha256": "6bfce9af9b98c4750c2925113dc89b390bc1d5e747841596b99ed04210338286",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "licenses/crafting-interpreters-license.txt",
+      "copied_from": "deliverable/working/concept/nystrom-license.txt",
+      "bytes": 4394,
+      "sha256": "a828cc050cf28cc9a019e70669aa9d129db08c5eaaf29b99dedf25d9aba6a598",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "licenses/react-docs-license.txt",
+      "copied_from": "deliverable/working/concept/react-license.txt",
+      "bytes": 18525,
+      "sha256": "61b098d905d9799fc4f4625b476dac117630a1740a02e032594ff2fccbbb6206",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "licenses/pro-git-license.txt",
+      "copied_from": "deliverable/working/concept/progit-license.txt",
+      "bytes": 277,
+      "sha256": "10332ca5127ffe7acd5526b0dad1f3b73f0191f725e656e2e86c35bc123aa3e3",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "findings/effort-concept.csv",
+      "copied_from": "deliverable/working/concept/effort-concept.csv",
+      "bytes": 3142,
+      "sha256": "79120d9ebb46cfccf8b10b49847ca3a79d8d10cd458a5a4b899de53c276a1fbe",
+      "copy": "byte-identical"
+    },
+    {
+      "path": "proofs/final-review-edits.json",
+      "copied_from": "deliverable/working/infra/final-review-edits.json",
+      "bytes": 1511,
+      "sha256": "d69d2211b12b8162cc73727f3ce97cdd4ce32344c37defe80fc7428d46338aad",
+      "copy": "byte-identical"
+    }
+  ],
+  "updated_utc": "2026-11-02T04:00:21.469228+00:00"
+}

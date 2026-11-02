@@ -1,0 +1,4 @@
+warning line 38: near root_panel gave way by 62 px to keep root clear. Remove line 38, or run format --drop-stale. [relaxed]
+info    line 40: near domain_panel gave way by 12 px to keep root clear.
+warning line 41: near control gave way by 49 px to keep root clear. Remove line 41, or run format --drop-stale. [relaxed]
+Warnings: 15 nodes, 5 groups, 8 connections.

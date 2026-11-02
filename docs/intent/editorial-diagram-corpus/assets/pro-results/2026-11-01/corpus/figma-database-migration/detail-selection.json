@@ -1,0 +1,38 @@
+{
+  "focus": "Replicate and Pause: same component positions, changed connection",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      1600,
+      820
+    ],
+    "v0": [
+      3600,
+      1012
+    ],
+    "v2": [
+      3244,
+      1500
+    ]
+  },
+  "crops": {
+    "reference": [
+      400,
+      16,
+      800,
+      787
+    ],
+    "v0": [
+      900,
+      111,
+      1800,
+      860
+    ],
+    "v2": [
+      811,
+      150,
+      1622,
+      1275
+    ]
+  }
+}

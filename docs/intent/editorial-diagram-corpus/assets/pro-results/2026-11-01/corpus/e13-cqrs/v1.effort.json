@@ -1,0 +1,21 @@
+{
+  "id": "E13",
+  "slug": "e13-cqrs",
+  "stage": "v1",
+  "noncomment_lines": 40,
+  "declarations": 24,
+  "node_declarations": 10,
+  "group_declarations": 3,
+  "edge_declarations": 11,
+  "layout_refinement_lines": 9,
+  "layouts": 4,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 11,
+  "endpoint_side_overrides": 0,
+  "notes": 5,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 4.0566,
+  "authoring_time": "not measured"
+}

@@ -1,0 +1,40 @@
+{
+  "checked_utc": "2026-11-02T03:54:39.019385+00:00",
+  "version_commands": [
+    {
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "v24.22.1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "pnpm",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "11.25.0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "Python 3.12.14\n",
+      "stderr": ""
+    }
+  ],
+  "baseline_commit_attested": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "source_packet_sha256": "5112a74cdb9674f223914392783baaa5349c63d4fdc492b26e823436c45f9373",
+  "prompt_sha256": "9fa4ab97fd9dc7a637741b23989e898cfbfebd659d80435e14bcb74802cf87d3",
+  "package_manager_declared": "pnpm@11.9.0",
+  "browser_archive_record": "logs/browser-direct-download.json",
+  "browser": "Chromium headless shell 156.0.8078.4; Playwright build 1248",
+  "application_files_changed": false,
+  "v0_sources_changed_after_freeze": false
+}

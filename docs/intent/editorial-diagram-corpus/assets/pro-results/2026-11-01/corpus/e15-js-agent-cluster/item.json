@@ -1,0 +1,52 @@
+{
+  "id": "E15",
+  "slug": "e15-js-agent-cluster",
+  "title": "JavaScript agent cluster execution model",
+  "publisher": "MDN Web Docs",
+  "author": "MDN contributors",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model",
+  "image_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model/runtime-environment-diagram.svg",
+  "license": "MDN page links to a Creative Commons license; exact image-specific license unknown",
+  "figure": "runtime-environment-diagram.svg",
+  "patterns": [
+    "runtime memory",
+    "containment",
+    "data flow",
+    "parallel agents"
+  ],
+  "principal_objects": 34,
+  "reading_path": "Two agent bands; realms on the left, objects in the heap centrally, stack frames to the right, queued jobs below, shared memory linking bands.",
+  "merit": "Two mirrored agent bands expose isolation and shared memory in one picture. Repeated color links realms to execution contexts while distinct reference styles keep object pointers subordinate.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "595738edfb94e7606825a8032a07c1cc9c0b635fb7b6a36f5516e1527aa9dc50",
+  "reference_bytes": 12854,
+  "reference_preview_size": [
+    1136,
+    1322
+  ],
+  "reference_preview_method": "Original SVG rasterized by unchanged scripts/shoot.mjs at --size 568x661 matching its 568.03\u00d7661.07 viewBox; original retained byte-for-byte. Font substitution remains possible (Menlo/Myriad Pro are not bundled). Earlier letterboxed preview retained in trials/reference-preview-viewport.png.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "f805c2c23103c236377719194e7a70052b5d48b67aa96681fd35ebc83a81a633",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "f7337cf387f03cb37b7b50467c7c8747e96b92b5d92e5dc36732ad67627660e8",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "569eca908a1117d4d2cc5798e7f701aba8a1ab2c73cef1ec483e8e3564b9a74f",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

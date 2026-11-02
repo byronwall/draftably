@@ -1,0 +1,79 @@
+{
+  "stage": "v1",
+  "source_sha256": "7864ae7bd4b4ce264cfb5ad322fcac3cdea13cf8f94794e02e4c0d1497a97446",
+  "run_id": "20261102T032119880733Z",
+  "log": "logs/E25-usgs-water-cycle/v1/20261102T032119880733Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v1.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:19.881095+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 5.0786,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v1.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:24.959859+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 5.4394,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v1.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:30.399478+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 4.5623,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v1.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v1.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:34.962157+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 5.2641,
+      "exit_code": 0
+    }
+  }
+}

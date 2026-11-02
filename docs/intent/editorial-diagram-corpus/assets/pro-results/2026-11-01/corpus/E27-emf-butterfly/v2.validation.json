@@ -1,0 +1,79 @@
+{
+  "stage": "v2",
+  "source_sha256": "f5f755eb99723732daeb7a5008571d06409abd4055dca2408db2eb7f32adbe18",
+  "run_id": "20261102T032618144731Z",
+  "log": "logs/E27-emf-butterfly/v2/20261102T032618144731Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:26:18.145008+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.2515,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:26:20.396823+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.1552,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:26:22.552267+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.0385,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:26:24.591077+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 3.5336,
+      "exit_code": 0
+    }
+  }
+}

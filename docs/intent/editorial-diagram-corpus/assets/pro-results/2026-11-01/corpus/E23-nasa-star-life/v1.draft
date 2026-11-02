@@ -1,0 +1,32 @@
+diagram "Life cycles of Sun-like and massive stars" version=1
+theme blueprint canvas="#000000" text="#B8E5DF" connection="#9EBFBB" title-font=sans annotation-font=sans
+subtitle "Two mass-dependent paths return material to the star-forming nebula."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node nebula "Star-forming nebula" shape=circle color=rose shade=700
+node protostar_low "Protostar: lower mass" shape=circle color=amber shade=500
+node sun "Sun-like star" shape=circle color=amber shade=500
+node giant "Red giant" shape=circle color=orange shade=500
+node planetary "Planetary nebula" shape=circle color=slate shade=800
+node white "White dwarf" shape=circle color=slate shade=100
+node protostar_high "Protostar: higher mass" shape=circle color=sky shade=500
+node massive "Massive star" shape=circle color=sky shade=400
+node supergiant "Red supergiant" shape=circle color=orange shade=500
+node supernova "Supernova" shape=circle color=slate shade=100
+node neutron "Neutron star" shape=circle color=slate shade=100
+node black "Black hole" shape=circle color=slate shade=950
+edge e1 nebula -> protostar_low
+edge e2 protostar_low -> sun
+edge e3 sun -> giant "Billions of years"
+edge e4 giant -> planetary
+edge e5 planetary -> white
+edge e6 planetary -> nebula "Ejected material" constraint=false
+edge e7 nebula -> protostar_high
+edge e8 protostar_high -> massive
+edge e9 massive -> supergiant "Millions of years"
+edge e10 supergiant -> supernova
+edge e11 supernova -> neutron
+edge e12 supernova -> black
+edge e13 supernova -> nebula "Ejected material" constraint=false
+layout root engine=layered direction=right fold=never rank-gap=70 node-gap=60
+note "The massive-star branch is for stars more than 8–10 times the Sun’s mass."
+

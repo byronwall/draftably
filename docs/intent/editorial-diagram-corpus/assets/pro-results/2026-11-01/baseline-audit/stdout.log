@@ -1,0 +1,32 @@
+E23-nasa-star-life: v0.draft DI=7.7, e1.draft DI=3.1, e2.draft DI=5
+E24-noaa-enso: v0.draft DI=8.3, e1.draft DI=12.5, e2.draft DI=14.2
+E25-usgs-water-cycle: v0.draft DI=39.7, e1.draft DI=14.8, e2.draft DI=11.5
+E26-design-double-diamond: v0.draft DI=2, e1.draft DI=0, e2.draft DI=0
+E27-emf-butterfly: v0.draft DI=27.6, e1.draft DI=14.2, e2.draft DI=9.7
+E28-tfl-tram: v0.draft DI=2.1, e1.draft DI=3.1, e2.draft DI=5
+E29-cope-plagiarism: v0.draft DI=9.5, e1.draft DI=2.6, e2.draft DI=6.9
+E30-openstax-cell-cycle: v0.draft DI=2.5, e1.draft DI=3.5, e2.draft DI=29.5
+chrome-process-architecture: v0.draft DI=12, e1.draft DI=5, e2.draft DI=5
+cloudflare-http2-multiplexing: v0.draft DI=87.1, e1.draft DI=10.2, e2.draft DI=18.8
+cloudflare-tls-handshake: v0.draft DI=13.5, e1.draft DI=13.5, e2.draft DI=13.5
+e11-transformer-stacks: v0.draft DI=7.8, e1.draft DI=16.1, e2.draft DI=11.1
+e12-lstm-recurrent-cell: v0.draft DI=11.3, e1.draft DI=7.9, e2.draft DI=15.6
+e13-cqrs: v0.draft DI=22.7, e1.draft DI=12.3, e2.draft DI=14.1
+e14-dns-hierarchy: v0.draft DI=8, e1.draft DI=11, e2.draft DI=14.5
+e15-js-agent-cluster: v0.draft DI=70, e1.draft DI=21.3, e2.draft DI=27.3
+e16-react-dependency-tree: v0.draft DI=3, e1.draft DI=36, e2.draft DI=54
+e17-go-slice: v0.draft DI=5, e1.draft DI=8, e2.draft DI=12
+e18-git-divergent-history: v0.draft DI=1, e1.draft DI=8, e2.draft DI=11
+e19-pixel-pipeline: v0.draft DI=2, e1.draft DI=2, e2.draft DI=2
+e20-compiler-mountain: v0.draft DI=20, e1.draft DI=15, e2.draft DI=3.5
+e21-open-upvalue: v0.draft DI=33.5, e1.draft DI=54, e2.draft DI=18
+e22-dns-query: v0.draft DI=22.5, e1.draft DI=22.5, e2.draft DI=20
+figma-database-migration: v0.draft DI=16.7, e1.draft DI=7.1, e2.draft DI=7.1
+figma-journal-checkpoints: v0.draft DI=7, e1.draft DI=13, e2.draft DI=30
+github-blackbird-query: v0.draft DI=3, e1.draft DI=3, e2.draft DI=0
+github-security-layers: v0.draft DI=0, e1.draft DI=0, e2.draft DI=6
+stripe-read-compare: v0.draft DI=3, e1.draft DI=16, e2.draft DI=15
+stripe-synchronized-retries: v0.draft DI=0, e1.draft DI=0, e2.draft DI=2.5
+vercel-fluid-transport: v0.draft DI=27, e1.draft DI=13.5, e2.draft DI=19.5
+
+Wrote /workspace/scratch/742d8c352255/deliverable/baseline-audit/summary.md

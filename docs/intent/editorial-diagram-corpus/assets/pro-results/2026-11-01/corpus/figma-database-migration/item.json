@@ -1,0 +1,28 @@
+{
+  "id": "E04",
+  "slug": "figma-database-migration",
+  "title": "Prepare, replicate, pause, reroute",
+  "publisher": "Figma",
+  "author": "Tim Liang",
+  "publication_date": "2023-04-04",
+  "access_date": "2026-11-02",
+  "page_url": "https://www.figma.com/blog/how-figma-scaled-to-multiple-databases/",
+  "image_url": "https://cdn.sanity.io/images/599r6htc/regionalized/04b69070d25ab954c8adafaf010ff82d0de0ed4f-1600x820.png",
+  "license": "unknown",
+  "figure": "A digram on a green background showing four phases: prepare, replicate, pause, reroute. Under each phase, there's a white square that says \"Application backend,\" which leads to two yellow squares that say \"PgBouncer-1\" and \"Pgbouncer 2.\" These then lead to blue cylinder(s) that say \"Original,\" \"Replica,\" or \"Promoted.\"",
+  "patterns": [
+    "comparison-panels",
+    "migration",
+    "deployment"
+  ],
+  "principal_objects": 23,
+  "reading_path": "Scan the four stages left to right; compare identical service positions within each stage.",
+  "merit": "Repeated aligned mini-architectures make small connection changes legible. Yellow poolers and blue stores carry consistent roles.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "406ac5a314208375c1847a5c678aeb42ba8f9ee4eabdaa736a105813fdf590cd",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

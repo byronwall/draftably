@@ -1,0 +1,169 @@
+diagram "London Trams" version=1
+theme drafting canvas="#FFFFFF" text="#232F8A" connection="#81C82C" padding-x=4 padding-y=4 radius=0
+subtitle "Complete station topology; exact service-line colors and interchange pictograms are absent."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node wimbledon "Wimbledon · rail / District" shape=text
+node dundonald "Dundonald Road" shape=text
+node merton "Merton Park" shape=text
+node morden "Morden Road" shape=text
+node phipps "Phipps Bridge" shape=text
+node belgrave "Belgrave Walk" shape=text
+node mitcham "Mitcham" shape=text
+node mitcham_j "Mitcham Junction · rail" shape=text
+node beddington "Beddington Lane" shape=text
+node therapia "Therapia Lane" shape=text
+node ampere "Ampere Way" shape=text
+node waddon "Waddon Marsh" shape=text
+node wandle "Wandle Park" shape=text
+node reeves "Reeves Corner" shape=text
+node centrale "Centrale" shape=text
+node west "West Croydon · rail / bus / Windrush" shape=text
+node wellesley "Wellesley Road" shape=text
+node east "East Croydon · rail / bus" shape=text
+node george "George Street" shape=text
+node church "Church Street" shape=text
+node lebanon "Lebanon Road" shape=text
+node sandilands "Sandilands" shape=text
+node addiscombe "Addiscombe" shape=text
+node blackhorse "Blackhorse Lane" shape=text
+node woodside "Woodside" shape=text
+node arena "Arena" shape=text
+node harrington "Harrington Road" shape=text
+node birkbeck "Birkbeck · rail" shape=text
+node avenue "Avenue Road" shape=text
+node beckenham_r "Beckenham Road" shape=text
+node beckenham_j "Beckenham Junction · rail" shape=text
+node lloyd "Lloyd Park" shape=text
+node coombe "Coombe Lane" shape=text
+node gravel "Gravel Hill" shape=text
+node addington_v "Addington Village · bus" shape=text
+node fieldway "Fieldway" shape=text
+node king "King Henry’s Drive" shape=text
+node new_addington "New Addington · bus" shape=text
+node elmers "Elmers End · rail" shape=text
+edge e1 wimbledon -> dundonald directed=false from=right to=left
+edge e2 dundonald -> merton directed=false from=right to=left
+edge e3 merton -> morden directed=false from=right to=left
+edge e4 morden -> phipps directed=false from=right to=left
+edge e5 phipps -> belgrave directed=false from=right to=left
+edge e6 belgrave -> mitcham directed=false from=right to=left
+edge e7 mitcham -> mitcham_j directed=false from=right to=left
+edge e8 mitcham_j -> beddington directed=false from=right to=left
+edge e9 beddington -> therapia directed=false from=right to=left
+edge e10 therapia -> ampere directed=false from=right to=left
+edge e11 ampere -> waddon directed=false from=right to=left
+edge e12 waddon -> wandle directed=false from=right to=left
+edge e13 wandle -> reeves from=right to=left
+edge e14 reeves -> centrale from=top to=left
+edge e15 centrale -> west from=right to=left
+edge e16 west -> wellesley from=right to=top
+edge e17 wellesley -> east from=bottom to=top
+edge e18 east -> george from=left to=right
+edge e19 george -> church from=left to=right
+edge e20 church -> wandle from=left to=bottom
+edge e21 church -> centrale from=top to=bottom
+edge e22 east -> lebanon directed=false from=right to=left
+edge e23 lebanon -> sandilands directed=false from=right to=left
+edge e24 sandilands -> addiscombe directed=false from=top to=left
+edge e25 addiscombe -> blackhorse directed=false from=right to=left
+edge e26 blackhorse -> woodside directed=false from=right to=left
+edge e27 woodside -> arena directed=false from=right to=left
+edge e28 arena -> harrington directed=false from=right to=left
+edge e29 harrington -> birkbeck directed=false from=right to=left
+edge e30 birkbeck -> avenue directed=false from=right to=left
+edge e31 avenue -> beckenham_r directed=false from=right to=left
+edge e32 beckenham_r -> beckenham_j directed=false from=right to=left
+edge e33 arena -> elmers directed=false from=bottom to=left
+edge e34 sandilands -> lloyd directed=false from=right to=left
+edge e35 lloyd -> coombe directed=false from=right to=left
+edge e36 coombe -> gravel directed=false from=right to=left
+edge e37 gravel -> addington_v directed=false from=right to=left
+edge e38 addington_v -> fieldway directed=false from=right to=left
+edge e39 fieldway -> king directed=false from=right to=left
+edge e40 king -> new_addington directed=false from=right to=left
+layout root engine=layered direction=right fold=never ordering=stable rank-gap=28 node-gap=30
+note "Step-free access across the network. Track and stop works may affect journeys; check TfL."
+note "Arrows show the Croydon one-way loop; other links represent travel in both directions. Reference: Version A, 09.2024."
+
+
+# Explicit sizes and parent-relative positions.
+size wimbledon width=110 height=auto
+pin wimbledon x=0 y=290
+size dundonald width=110 height=auto
+pin dundonald x=110 y=290
+size merton width=110 height=auto
+pin merton x=220 y=290
+size morden width=110 height=auto
+pin morden x=330 y=290
+size phipps width=110 height=auto
+pin phipps x=440 y=290
+size belgrave width=110 height=auto
+pin belgrave x=550 y=290
+size mitcham width=110 height=auto
+pin mitcham x=660 y=290
+size mitcham_j width=110 height=auto
+pin mitcham_j x=770 y=290
+size beddington width=110 height=auto
+pin beddington x=880 y=290
+size therapia width=110 height=auto
+pin therapia x=990 y=290
+size ampere width=110 height=auto
+pin ampere x=1100 y=290
+size waddon width=110 height=auto
+pin waddon x=1210 y=290
+size wandle width=110 height=auto
+pin wandle x=1320 y=290
+size reeves width=110 height=auto
+pin reeves x=1450 y=230
+size centrale width=110 height=auto
+pin centrale x=1550 y=20
+size west width=110 height=auto
+pin west x=1680 y=20
+size wellesley width=110 height=auto
+pin wellesley x=1800 y=90
+size east width=110 height=auto
+pin east x=1930 y=290
+size george width=110 height=auto
+pin george x=1780 y=290
+size church width=110 height=auto
+pin church x=1650 y=290
+size lebanon width=110 height=auto
+pin lebanon x=2060 y=290
+size sandilands width=110 height=auto
+pin sandilands x=2190 y=290
+size addiscombe width=110 height=auto
+pin addiscombe x=2320 y=20
+size blackhorse width=110 height=auto
+pin blackhorse x=2450 y=20
+size woodside width=110 height=auto
+pin woodside x=2580 y=20
+size arena width=110 height=auto
+pin arena x=2710 y=20
+size harrington width=110 height=auto
+pin harrington x=2840 y=20
+size birkbeck width=110 height=auto
+pin birkbeck x=2970 y=20
+size avenue width=110 height=auto
+pin avenue x=3100 y=20
+size beckenham_r width=110 height=auto
+pin beckenham_r x=3230 y=20
+size beckenham_j width=110 height=auto
+pin beckenham_j x=3360 y=20
+size elmers width=110 height=auto
+pin elmers x=2840 y=160
+size lloyd width=110 height=auto
+pin lloyd x=2320 y=290
+size coombe width=110 height=auto
+pin coombe x=2450 y=290
+size gravel width=110 height=auto
+pin gravel x=2580 y=290
+size addington_v width=110 height=auto
+pin addington_v x=2710 y=290
+size fieldway width=110 height=auto
+pin fieldway x=2840 y=290
+size king width=110 height=auto
+pin king x=2970 y=290
+size new_addington width=110 height=auto
+pin new_addington x=3100 y=290
+routing corner-radius=8 bend-penalty=100
+# The station words are native text nodes. Native DSL cannot attach exterior station labels or assign line colors per edge.

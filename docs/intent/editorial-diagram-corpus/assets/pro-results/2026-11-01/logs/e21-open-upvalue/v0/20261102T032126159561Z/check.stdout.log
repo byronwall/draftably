@@ -1,0 +1,4 @@
+warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+Warnings: 12 nodes, 5 groups, 7 connections.

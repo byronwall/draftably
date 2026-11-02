@@ -1,0 +1,38 @@
+{
+  "id": "E19",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "The default five-stage row has clear order, high-contrast labels and no overlaps. It loses the contiguous ribbon and process grouping colors, but the basic explanation remains immediately readable.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Low: five exact sizes and one row gap are the only geometric refinements. No pins are needed, and the source remains a straightforward five-stage pipeline.",
+  "residuals": [
+    "No contiguous chevron stage shape.",
+    "Separate arrow links remain.",
+    "Per-stage text scale and exact palette differ."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-S02"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: row layout adapts to stage changes; the five fixed widths may need editing for much longer labels, but there are no pinned coordinates.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

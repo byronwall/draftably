@@ -1,0 +1,43 @@
+{
+  "id": "E25",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The source uses geographic location, elevation, ocean depth and terrain to explain the system. The default box graph discards that context and introduces 30 measured crossings. Explicitly labeled transfers are useful, but do not compensate for the physical model loss.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 2
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 2
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 2
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "High and low reward. Twenty sizes and twenty pins, plus thirty edge labels and global routing settings, still produce a diagram with substantially less meaning than the source. The graph itself is understandable; maintaining a physical layout and its many routes would be laborious.",
+  "residuals": [
+    "No geographic cutaway, continuous terrain, layered groundwater/ocean regions or physical surface geometry.",
+    "Generalized graph transfers are not an exact transcription of every local flux in the source.",
+    "Footer prose and water-quality/climate explanations are condensed.",
+    "No repeated field-of-arrows motifs or variable-width/physical-flow paths.",
+    "Seven final measured crossings; publication-width labels remain small."
+  ],
+  "provisional_gaps": [
+    "native-image-icon-serializability",
+    "physical-region-geometry",
+    "curved-directed-paths",
+    "external-label-roles",
+    "rich-label-hierarchy"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

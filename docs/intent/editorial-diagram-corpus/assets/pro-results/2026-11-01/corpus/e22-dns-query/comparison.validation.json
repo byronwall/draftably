@@ -1,0 +1,30 @@
+{
+  "source_sha256": {
+    "reference-preview.png": "d624c55b704937badec4edb1c3eed8cf9e4a1eab2cf2978fb3e16c8a3c8caf4f",
+    "v0.png": "88906b8d9356e0237f89c971bb96f6a1dd8510f016f721cee2b8df138f88d002",
+    "v2.png": "2286540bb3736c597d34b637e73cc9977f6b3bd59787bdca467f6e3c21af4d34"
+  },
+  "log": "logs/e22-dns-query/final-comparison/20261102T033923538054Z",
+  "command": {
+    "argv": [
+      "pnpm",
+      "--silent",
+      "shoot",
+      "--sheet",
+      "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/comparison.png",
+      "--cols",
+      "3",
+      "Reference::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/reference-preview.png",
+      "v0 \u2014 default::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v0.png",
+      "v2 \u2014 refined::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v2.png"
+    ],
+    "cwd": "/workspace/scratch/742d8c352255/baseline",
+    "started_utc": "2026-11-02T03:39:23.538927+00:00",
+    "environment": {
+      "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+      "DRAFTABLY_NO_UPDATE_CHECK": "1"
+    },
+    "elapsed_seconds": 1.5853,
+    "exit_code": 0
+  }
+}

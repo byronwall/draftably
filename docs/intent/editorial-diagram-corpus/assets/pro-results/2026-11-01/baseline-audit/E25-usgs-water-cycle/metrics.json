@@ -1,0 +1,1140 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 0,
+    "edges": 30,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1468,
+    "height": 613,
+    "aspect": 2.39,
+    "density": 0.216,
+    "aligned": 1,
+    "crossings": 30,
+    "bends": 78,
+    "bendsPerEdge": 2.6,
+    "maxBends": 5,
+    "hooks": 3,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 736,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.21,
+      "boxes": 19.7,
+      "w": 344,
+      "h": 557,
+      "x": 1124,
+      "y": 56
+    },
+    "edgeStretch": [
+      {
+        "id": "e1",
+        "kind": "forward",
+        "length": 1332,
+        "detour": 1.17,
+        "span": 0.84
+      },
+      {
+        "id": "e12",
+        "kind": "wrap",
+        "length": 1243,
+        "detour": 2.22,
+        "span": 0.78
+      },
+      {
+        "id": "e13",
+        "kind": "forward",
+        "length": 1074,
+        "detour": 1.14,
+        "span": 0.68
+      },
+      {
+        "id": "e14",
+        "kind": "forward",
+        "length": 1142,
+        "detour": 1.52,
+        "span": 0.72
+      },
+      {
+        "id": "e15",
+        "kind": "forward",
+        "length": 1638,
+        "detour": 1.44,
+        "span": 1.03
+      },
+      {
+        "id": "e16",
+        "kind": "wrap",
+        "length": 1624,
+        "detour": 1.22,
+        "span": 1.02
+      },
+      {
+        "id": "e18",
+        "kind": "wrap",
+        "length": 1869,
+        "detour": 1.29,
+        "span": 1.17
+      },
+      {
+        "id": "e19",
+        "kind": "forward",
+        "length": 947,
+        "detour": 1.15,
+        "span": 0.6
+      },
+      {
+        "id": "e2",
+        "kind": "forward",
+        "length": 1600,
+        "detour": 1.4,
+        "span": 1.01
+      },
+      {
+        "id": "e20",
+        "kind": "wrap",
+        "length": 877,
+        "detour": 1.07,
+        "span": 0.55
+      },
+      {
+        "id": "e23",
+        "kind": "forward",
+        "length": 819,
+        "detour": 1.78,
+        "span": 0.51
+      },
+      {
+        "id": "e24",
+        "kind": "forward",
+        "length": 755,
+        "detour": 1.16,
+        "span": 0.47
+      },
+      {
+        "id": "e25",
+        "kind": "wrap",
+        "length": 606,
+        "detour": 1.07,
+        "span": 0.38
+      },
+      {
+        "id": "e26",
+        "kind": "forward",
+        "length": 1085,
+        "detour": 1.28,
+        "span": 0.68
+      },
+      {
+        "id": "e28",
+        "kind": "back",
+        "length": 557,
+        "detour": 1.21,
+        "span": 0.35
+      },
+      {
+        "id": "e29",
+        "kind": "forward",
+        "length": 747,
+        "detour": 1.14,
+        "span": 0.47
+      },
+      {
+        "id": "e30",
+        "kind": "back",
+        "length": 599,
+        "detour": 1.12,
+        "span": 0.38
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 962,
+        "detour": 1.72,
+        "span": 0.6
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 2,
+      "label-overlap": 0,
+      "label-on-edge": 2,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 3,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 10,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 9,
+      "expectation-failed": 0,
+      "edge-hugs-node": 24,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 3,
+      "ragged-bends": 2,
+      "uneven-ports": 0,
+      "off-axis-port": 5,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 2,
+      "labels-too-close": 1,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 39.7,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e10 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e12 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e13 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e14 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e15 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e23 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e26 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e28 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e30 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e6 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e1 along airsea"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along airland"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along airsea"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along deep"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along airsea"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along freshlake"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along ice"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along reservoir"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e18 along ground"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e20 along reservoir"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e22 along domestic"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along brackishwet"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along domestic"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along industry"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along municipal"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e24 along river"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along brackishwet"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along grazing"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e28 along river"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along agriculture"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along airland"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along airland"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along airsea"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e7 along ice"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈-77: gaps 16/16/16/16/33/16/16/30/3/16/10/38/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈206: gaps 16/16/16/8/8/8/8/20/16/15"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈416: gaps 16/32"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "river in D: turns at 222, 203, 219, 206"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "river out R: turns at 1488, 366, 177"
+      },
+      {
+        "kind": "hook",
+        "detail": "e18 ground→ocean into its far side"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e19 ocean→deep arrives sideways"
+      },
+      {
+        "kind": "hook",
+        "detail": "e2 airsea→ocean into its far side"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e22 river→municipal arrives sideways"
+      },
+      {
+        "kind": "hook",
+        "detail": "e23 river→industry doubles back"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e23 river→industry arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e26 river→grazing arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e29 agriculture→soil arrives sideways"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "e21 through the \"Estuarine flow\" text"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"Precipitation\" by snow"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"Precipitation\" & \"Precipitation\" 15px apart"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"Precipitation over land\" by soil"
+      },
+      {
+        "kind": "label-on-edge",
+        "detail": "\"Meltwater\" over e13"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "e7 through the \"Meltwater\" text"
+      },
+      {
+        "kind": "label-on-edge",
+        "detail": "\"Streamflow to closed basins\" over e12"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e1 1332px, 0.84 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e13 1074px, 0.68 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e14 1142px, 0.72 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e15 1638px, 1.03 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e16 1624px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e18 1869px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e2 1600px, 1.01 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e26 1085px, 0.68 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e6 962px, 0.60 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "344×557px at 1124,56 (21% of the drawing, room for 20 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 0,
+    "edges": 30,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1436,
+    "height": 868,
+    "aspect": 1.65,
+    "density": 0.156,
+    "aligned": 1,
+    "crossings": 11,
+    "bends": 70,
+    "bendsPerEdge": 2.33,
+    "maxBends": 8,
+    "hooks": 0,
+    "backEdges": 5,
+    "edgeLengthPerEdge": 598,
+    "theme": "drafting",
+    "fills": 3,
+    "minTextContrast": 13.25,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.11,
+      "boxes": 14.1,
+      "w": 530,
+      "h": 259,
+      "x": 0,
+      "y": 609
+    },
+    "edgeStretch": [
+      {
+        "id": "e1",
+        "kind": "forward",
+        "length": 1212,
+        "detour": 1.09,
+        "span": 0.72
+      },
+      {
+        "id": "e10",
+        "kind": "back",
+        "length": 1624,
+        "detour": 6.34,
+        "span": 0.97
+      },
+      {
+        "id": "e12",
+        "kind": "back",
+        "length": 1350,
+        "detour": 1.6,
+        "span": 0.8
+      },
+      {
+        "id": "e13",
+        "kind": "forward",
+        "length": 419,
+        "detour": 1.28,
+        "span": 0.25
+      },
+      {
+        "id": "e14",
+        "kind": "forward",
+        "length": 411,
+        "detour": 1.47,
+        "span": 0.24
+      },
+      {
+        "id": "e15",
+        "kind": "forward",
+        "length": 905,
+        "detour": 1.68,
+        "span": 0.54
+      },
+      {
+        "id": "e16",
+        "kind": "wrap",
+        "length": 811,
+        "detour": 1.08,
+        "span": 0.48
+      },
+      {
+        "id": "e17",
+        "kind": "forward",
+        "length": 568,
+        "detour": 1.22,
+        "span": 0.34
+      },
+      {
+        "id": "e18",
+        "kind": "wrap",
+        "length": 1452,
+        "detour": 1.3,
+        "span": 0.87
+      },
+      {
+        "id": "e19",
+        "kind": "forward",
+        "length": 532,
+        "detour": 1.45,
+        "span": 0.32
+      },
+      {
+        "id": "e2",
+        "kind": "forward",
+        "length": 1368,
+        "detour": 1.23,
+        "span": 0.82
+      },
+      {
+        "id": "e20",
+        "kind": "wrap",
+        "length": 432,
+        "detour": 1.17,
+        "span": 0.26
+      },
+      {
+        "id": "e26",
+        "kind": "forward",
+        "length": 592,
+        "detour": 1.27,
+        "span": 0.35
+      },
+      {
+        "id": "e29",
+        "kind": "forward",
+        "length": 418,
+        "detour": 1.65,
+        "span": 0.25
+      },
+      {
+        "id": "e30",
+        "kind": "back",
+        "length": 1354,
+        "detour": 1.35,
+        "span": 0.81
+      },
+      {
+        "id": "e4",
+        "kind": "forward",
+        "length": 574,
+        "detour": 1.56,
+        "span": 0.34
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 962,
+        "detour": 1.14,
+        "span": 0.57
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 3,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 2,
+      "expectation-failed": 0,
+      "edge-hugs-node": 11,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 4,
+      "ragged-bends": 3,
+      "uneven-ports": 0,
+      "off-axis-port": 4,
+      "jog": 1,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 14.8,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e1 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e15 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e30 (8)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along brackishwet"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along freshlake"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along snow"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along reservoir"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e25 along agriculture"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e28 along industry"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along domestic"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along airland"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along ice"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along permafrost"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along permafrost"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈-44: gaps 16/16/40/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈324: gaps 32/16/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈324: gaps 40/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "x≈673: gaps 32/16/16/16"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "river in L: turns at 1456, 919"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "river in D: turns at 324, 264, 324"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "ground out R: turns at 1476, 941"
+      },
+      {
+        "kind": "jog",
+        "detail": "e30 has a 10px step"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e22 river→municipal arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e4 airland→snow arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e6 airland→soil arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e8 ice→river arrives sideways"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"Moisture transport to land\" 63px from its edge"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e1 1212px, 0.72 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e2 1368px, 0.82 of the diagonal"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 20,
+      "meanMove": 283,
+      "maxMove": 668,
+      "moved": 19,
+      "alignedMean": 238,
+      "alignedMoved": 20,
+      "orderFlips": 28,
+      "shift": {
+        "x": 166,
+        "y": 102
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 20,
+      "meanMove": 283,
+      "maxMove": 668,
+      "moved": 19,
+      "alignedMean": 238,
+      "alignedMoved": 20,
+      "orderFlips": 28,
+      "shift": {
+        "x": 166,
+        "y": 102
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 0,
+    "edges": 30,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1860,
+    "height": 1116,
+    "aspect": 1.67,
+    "density": 0.111,
+    "aligned": 0.6,
+    "crossings": 7,
+    "bends": 48,
+    "bendsPerEdge": 1.6,
+    "maxBends": 6,
+    "hooks": 2,
+    "backEdges": 7,
+    "edgeLengthPerEdge": 684,
+    "theme": "drafting",
+    "fills": 3,
+    "minTextContrast": 13.25,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.11,
+      "boxes": 19.4,
+      "w": 900,
+      "h": 248,
+      "x": 0,
+      "y": 72
+    },
+    "edgeStretch": [
+      {
+        "id": "e1",
+        "kind": "back",
+        "length": 872,
+        "detour": 1.14,
+        "span": 0.4
+      },
+      {
+        "id": "e10",
+        "kind": "back",
+        "length": 502,
+        "detour": 1.11,
+        "span": 0.23
+      },
+      {
+        "id": "e11",
+        "kind": "forward",
+        "length": 456,
+        "detour": 1.33,
+        "span": 0.21
+      },
+      {
+        "id": "e12",
+        "kind": "back",
+        "length": 1385,
+        "detour": 1.22,
+        "span": 0.64
+      },
+      {
+        "id": "e14",
+        "kind": "forward",
+        "length": 624,
+        "detour": 1.07,
+        "span": 0.29
+      },
+      {
+        "id": "e15",
+        "kind": "forward",
+        "length": 662,
+        "detour": 1.34,
+        "span": 0.31
+      },
+      {
+        "id": "e16",
+        "kind": "forward",
+        "length": 1080,
+        "detour": 1.22,
+        "span": 0.5
+      },
+      {
+        "id": "e17",
+        "kind": "forward",
+        "length": 922,
+        "detour": 1.22,
+        "span": 0.43
+      },
+      {
+        "id": "e18",
+        "kind": "back",
+        "length": 1054,
+        "detour": 1.04,
+        "span": 0.49
+      },
+      {
+        "id": "e2",
+        "kind": "forward",
+        "length": 768,
+        "detour": 1,
+        "span": 0.35
+      },
+      {
+        "id": "e21",
+        "kind": "forward",
+        "length": 500,
+        "detour": 1,
+        "span": 0.23
+      },
+      {
+        "id": "e22",
+        "kind": "forward",
+        "length": 578,
+        "detour": 1.47,
+        "span": 0.27
+      },
+      {
+        "id": "e25",
+        "kind": "wrap",
+        "length": 1320,
+        "detour": 2.62,
+        "span": 0.61
+      },
+      {
+        "id": "e27",
+        "kind": "wrap",
+        "length": 522,
+        "detour": 1.32,
+        "span": 0.24
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 700,
+        "detour": 1,
+        "span": 0.32
+      },
+      {
+        "id": "e30",
+        "kind": "back",
+        "length": 1178,
+        "detour": 1.34,
+        "span": 0.54
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 1902,
+        "detour": 1.67,
+        "span": 0.88
+      },
+      {
+        "id": "e7",
+        "kind": "forward",
+        "length": 638,
+        "detour": 1.41,
+        "span": 0.29
+      },
+      {
+        "id": "e8",
+        "kind": "forward",
+        "length": 972,
+        "detour": 2.24,
+        "span": 0.45
+      },
+      {
+        "id": "e9",
+        "kind": "back",
+        "length": 1534,
+        "detour": 1.2,
+        "span": 0.71
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 2,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 2,
+      "expectation-failed": 0,
+      "edge-hugs-node": 7,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 3,
+      "uneven-ports": 0,
+      "off-axis-port": 4,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11.5,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e8 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e9 (6)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along agriculture"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along agriculture"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along reservoir"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e8 along ice"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e8 along river"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along agriculture"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along salinelake"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "soil out L: turns at 1300, 1390"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "airland in L: turns at 1610, 1590"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "river in D: turns at 438, 422, 637"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e11 soil→ground arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e14 freshlake→river arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e23 river→industry arrives sideways"
+      },
+      {
+        "kind": "hook",
+        "detail": "e25 ground→agriculture into its far side"
+      },
+      {
+        "kind": "hook",
+        "detail": "e6 airland→soil into its far side"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e6 airland→soil arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e6 1902px, 0.88 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e8 972px, 2.2× the direct way"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 20,
+      "meanMove": 575,
+      "maxMove": 1505,
+      "moved": 19,
+      "alignedMean": 495,
+      "alignedMoved": 20,
+      "orderFlips": 86,
+      "shift": {
+        "x": 212,
+        "y": 248
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 20,
+      "meanMove": 753,
+      "maxMove": 1536,
+      "moved": 19,
+      "alignedMean": 587,
+      "alignedMoved": 20,
+      "orderFlips": 91,
+      "shift": {
+        "x": 318,
+        "y": 408
+      }
+    },
+    "checks": []
+  }
+]

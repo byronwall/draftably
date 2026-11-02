@@ -1,0 +1,25 @@
+{
+  "final_stage_commands": 360,
+  "successful": 360,
+  "sum_command_elapsed_seconds": 531.3717,
+  "interpretation": "Sum across final command processes, including concurrent work. Not wall time, authoring time, speed benchmark, or complete study cost.",
+  "authoring_time_measured": false,
+  "by_command": {
+    "check": {
+      "count": 90,
+      "sum_elapsed_seconds": 108.9447
+    },
+    "inspect": {
+      "count": 90,
+      "sum_elapsed_seconds": 112.1471
+    },
+    "svg": {
+      "count": 90,
+      "sum_elapsed_seconds": 107.7223
+    },
+    "shoot": {
+      "count": 90,
+      "sum_elapsed_seconds": 202.5576
+    }
+  }
+}

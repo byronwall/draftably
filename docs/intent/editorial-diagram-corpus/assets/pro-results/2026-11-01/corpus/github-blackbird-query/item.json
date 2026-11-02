@@ -1,0 +1,28 @@
+{
+  "id": "E03",
+  "slug": "github-blackbird-query",
+  "title": "Blackbird query architecture",
+  "publisher": "GitHub",
+  "author": "Timothy Clem",
+  "publication_date": "2023-02-06",
+  "access_date": "2026-11-02",
+  "page_url": "https://github.blog/engineering/the-technology-behind-githubs-new-code-search/",
+  "image_url": "https://github.blog/wp-content/uploads/2023/02/code-search.png",
+  "license": "unknown",
+  "figure": "Architecture diagram of a query path.",
+  "patterns": [
+    "layered-stack",
+    "architecture",
+    "annotation"
+  ],
+  "principal_objects": 9,
+  "reading_path": "Read the full-width web and query layers, then the Redis/Git support services and shard container.",
+  "merit": "Quiet color, full-width bands and sparse annotation leaders show responsibility hierarchy with almost no connector clutter.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "0c35c8423b70176642923d254c8a0afd3271099d7769b61c9129c92a44047a2c",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

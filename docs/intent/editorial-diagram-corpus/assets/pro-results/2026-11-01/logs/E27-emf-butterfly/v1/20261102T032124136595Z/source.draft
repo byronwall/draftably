@@ -1,0 +1,64 @@
+diagram "Circular economy: biological and technical cycles" version=1
+theme drafting canvas="#FFFFFF" text="#111111" connection="#555555" padding-x=18 padding-y=12
+theme-color bio shade=100 fill="#ECF1DF" stroke="#8F9F67" ink="#354724"
+theme-color tech shade=100 fill="#E5F0F9" stroke="#438DCA" ink="#16456A"
+subtitle "Biological return paths on the left; technical value-preserving loops on the right."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node renewable "Renewables" color=bio shade=100
+node finite "Finite materials" color=tech shade=100
+node parts "Parts manufacturer" shape=pill color=stone shade=100
+node product "Product manufacturer" shape=pill color=stone shade=100
+node service "Service provider" shape=pill color=stone shade=100
+node consumer "Consumer" shape=circle color=bio shade=100
+node user "User" shape=circle color=tech shade=100
+node bio_collect "Collection: biological" color=bio shade=100
+node tech_collect "Collection: technical" color=tech shade=100
+node farm "Farming / collection¹" color=bio shade=100
+node biosphere "Biosphere: regeneration" color=bio shade=100
+node biogas "Biogas" color=bio shade=100
+node digest "Anaerobic digestion" color=bio shade=100
+node extract "Extract biochemical feedstock²" color=bio shade=100
+node feedstock "Biochemical feedstock" color=bio shade=100
+node cascades "Cascades" color=bio shade=100
+node share "Share" color=tech shade=100
+node maintain "Maintain / prolong" color=tech shade=100
+node reuse "Reuse / redistribute" color=tech shade=100
+node refurbish "Refurbish / remanufacture" color=tech shade=100
+node recycle "Recycle" color=tech shade=100
+node leakage "Minimise systematic leakage and negative externalities" color=stone shade=100
+edge e1 renewable -> parts
+edge e2 finite -> parts
+edge e3 parts -> product
+edge e4 product -> service
+edge e5 service -> consumer
+edge e6 service -> user
+edge e7 consumer -> bio_collect
+edge e8 user -> tech_collect
+edge e9 bio_collect -> cascades
+edge e10 cascades -> consumer constraint=false
+edge e11 bio_collect -> extract
+edge e12 extract -> feedstock
+edge e13 feedstock -> parts constraint=false
+edge e14 farm -> parts constraint=false
+edge e15 bio_collect -> digest
+edge e16 extract -> digest
+edge e17 digest -> biogas
+edge e18 digest -> biosphere
+edge e19 biosphere -> farm constraint=false
+edge e20 tech_collect -> maintain
+edge e21 maintain -> user constraint=false
+edge e22 user -> share
+edge e23 share -> user constraint=false
+edge e24 tech_collect -> reuse
+edge e25 reuse -> service constraint=false
+edge e26 tech_collect -> refurbish
+edge e27 refurbish -> product constraint=false
+edge e28 tech_collect -> recycle
+edge e29 recycle -> parts constraint=false
+edge e30 bio_collect -> leakage
+edge e31 tech_collect -> leakage
+layout root engine=layered direction=down fold=never ordering=crossings rank-gap=80 node-gap=40
+note "Renewables flow management on the biological side; stock management on the technical side."
+note "¹ Farming / collection includes hunting and fishing. ² Extraction can accept post-harvest and post-consumer inputs."
+legend bio "Biological cycle" shade=100
+legend tech "Technical cycle" shade=100

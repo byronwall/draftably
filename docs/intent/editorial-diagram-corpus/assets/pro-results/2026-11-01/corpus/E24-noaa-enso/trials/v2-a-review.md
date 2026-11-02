@@ -1,0 +1,1 @@
+The first v2 was valid and preserved. Visual review found excessive manual spacing reduced label size when displayed at publication width. The third and final refinement cycle reduces the manually specified footprint while retaining the same semantic content and port choices. This is an authoring refinement, not a renderer defect.

@@ -1,0 +1,93 @@
+{
+  "case": "E27-emf-butterfly",
+  "focus": "Technical recovery loops and ordered returns to the manufacturing/service spine",
+  "log": "logs/E27-emf-butterfly/details/20261102T033633864238Z",
+  "selection_sha256": "2171aac592e78723a6ffaa35758894d5a5d79d8e435acb4c23898a07602c81cc",
+  "source_sha256": {
+    "reference-preview.png": "f50aa7b7b386f5423e6c4040144648c2a9d7707fc6849825985cea8c33a2daa5",
+    "v0.png": "1129e74d6848084da952aca18683134fc2f1e5137b9b90b30138bae239e81a22",
+    "v2.png": "c9705e26b838012376bb030873a84ee012a3fd8cc8149491de1aa11c667a5b3f"
+  },
+  "commands": {
+    "reference": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/reference-preview.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/reference.png",
+        "--crop",
+        "850,100,950,880"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:33.864571+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4598,
+      "exit_code": 0
+    },
+    "v0": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v0.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v0.png",
+        "--crop",
+        "128,586,2760,1224"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:35.324745+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.6116,
+      "exit_code": 0
+    },
+    "v2": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v2.png",
+        "--crop",
+        "1664,714,2228,1560"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:36.936863+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.6375,
+      "exit_code": 0
+    },
+    "sheet": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "--sheet",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/comparison.png",
+        "--cols",
+        "3",
+        "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/reference.png",
+        "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v0.png",
+        "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:38.574563+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.5643,
+      "exit_code": 0
+    }
+  },
+  "status": "complete"
+}

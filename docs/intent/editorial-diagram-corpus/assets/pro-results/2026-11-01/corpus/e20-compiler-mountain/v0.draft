@@ -1,0 +1,21 @@
+diagram "Language implementation paths" version=1
+node source "SOURCE CODE"
+node tokens "TOKENS"
+node syntax "SYNTAX TREE"
+node ir "INTERMEDIATE REPRESENTATION(S)"
+node high "HIGH-LEVEL LANGUAGE"
+node bytecode "BYTECODE"
+node machine "MACHINE CODE"
+node interpreter "TREE-WALK INTERPRETER"
+node vm "VIRTUAL MACHINE"
+edge scan source -> tokens "Scanning"
+edge parse tokens -> syntax "Parsing"
+edge analyse syntax -> ir "Analysis"
+edge optimize ir -> ir "Optimizing"
+edge interpret syntax -> interpreter
+edge transpile_tree syntax -> high "Transpiling"
+edge transpile_ir ir -> high "Transpiling"
+edge gen_byte ir -> bytecode "Code Generation"
+edge gen_machine ir -> machine "Code Generation"
+edge execute bytecode -> vm
+layout root flow

@@ -1,0 +1,79 @@
+{
+  "stage": "v1",
+  "source_sha256": "f720f425bf887cccd5ebf6b851f5d99ea4f5d53eda91b5e49ac54e40180b7f1d",
+  "run_id": "20261102T032114914320Z",
+  "log": "logs/E23-nasa-star-life/v1/20261102T032114914320Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v1.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:14.914714+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.1367,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v1.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:16.052111+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.0295,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v1.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:17.081839+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.0364,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v1.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v1.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:21:18.118433+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.1368,
+      "exit_code": 0
+    }
+  }
+}

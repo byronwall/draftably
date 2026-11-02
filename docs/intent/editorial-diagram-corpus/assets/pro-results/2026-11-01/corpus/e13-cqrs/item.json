@@ -1,0 +1,56 @@
+{
+  "id": "E13",
+  "slug": "e13-cqrs",
+  "title": "CQRS: separate query and command models",
+  "publisher": "Martin Fowler",
+  "author": "Martin Fowler",
+  "publication_date": "2011-07-14",
+  "access_date": "2026-11-02",
+  "page_url": "https://martinfowler.com/bliki/CQRS.html",
+  "image_url": "https://martinfowler.com/bliki/images/cqrs/cqrs.png",
+  "license": "unknown; article footer \u00a9 Martin Fowler",
+  "figure": "cqrs.png",
+  "patterns": [
+    "architecture",
+    "comparison panels",
+    "annotation leaders",
+    "request/data flow"
+  ],
+  "principal_objects": 13,
+  "reading_path": "Database \u2192 query model \u2192 UI across the top; UI \u2192 command model \u2192 database across the bottom.",
+  "merit": "A compact U-shaped story separates read and write responsibility. Small internal model graphs and handwritten leader notes explain the abstraction at two levels.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "38a9da39997f4508f0ef57eef8187f881ee597cbefff41749cf9920203f401c5",
+  "reference_bytes": 148223,
+  "reference_preview_size": [
+    637,
+    464
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "c236b505d8d768c04cf853312d535e9a0f645238805ea13062b98017d8e0122b",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "64dacb6066cef25f7554ad488fa3645d24b965df8542b3e2a66f519c0be9a2d3",
+      "warning_count": 3,
+      "warnings": [
+        "warning line 40: near ci gave way by 96 px to keep service clear. Remove line 40, or run format --drop-stale. [relaxed]",
+        "warning line 29: The note beside ui covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]",
+        "warning line 30: The note beside ci covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]"
+      ]
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "90b0d6a3b008fd86e234355d4aa15eaf509695468524c61b5f4976f466aa3310",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

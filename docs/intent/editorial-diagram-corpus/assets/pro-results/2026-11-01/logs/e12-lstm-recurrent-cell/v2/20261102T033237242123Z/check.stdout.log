@@ -1,0 +1,3 @@
+info    line 14: 6 accent colors (mint, green, sky, violet, amber, rose). Use two to four, each for one role, with slate or stone for the rest, and say what each one means with legend lines.
+warning line 50: Edge e4 (cp -> forget) crosses the title of cell. Remove the pin on line 50. [edge-through-title]
+Warnings: 20 nodes, 1 group, 24 connections.

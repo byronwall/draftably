@@ -1,0 +1,39 @@
+diagram "The cell cycle" version=1
+theme drafting canvas="#FFFFFF" text="#111111" connection="#FF202B" radius=0
+theme-color g1color shade=100 fill="#DFD6EB" stroke="#777777" ink="#111111"
+theme-color scolor shade=100 fill="#89C2D5" stroke="#777777" ink="#111111"
+theme-color g2color shade=100 fill="#D7DBE3" stroke="#777777" ink="#111111"
+theme-color mitoticcolor shade=100 fill="#F5D2BD" stroke="#777777" ink="#111111"
+subtitle "G₁ → S → G₂ → mitosis → cytokinesis; two daughter cells form."
+# v2: manual-native refinement; all geometry remains editable in this source.
+group interphase "Interphase" frame=soft
+group mitotic "Mitotic phase" frame=soft
+node g1 "G₁ · Cell growth" in=interphase color=g1color shade=100
+node s "S · DNA synthesis" in=interphase color=scolor shade=100
+node g2 "G₂ · Cell growth" in=interphase color=g2color shade=100
+node mitosis "Mitosis" in=mitotic color=mitoticcolor shade=100
+node cytokinesis "Cytokinesis" in=mitotic color=mitoticcolor shade=100
+node daughters "Formation of 2 daughter cells" shape=pill
+edge e1 g1 -> s from=left to=right
+edge e2 s -> g2 from=top to=bottom
+edge e3 g2 -> mitosis from=right to=left
+edge e4 mitosis -> cytokinesis from=right to=top
+edge e5 cytokinesis -> g1 "Cycle repeats" constraint=false from=bottom to=top
+edge e6 cytokinesis -> daughters from=right to=left
+layout root engine=compound-flow direction=right fold=never
+
+# Explicit sizes and parent-relative positions.
+size g1 width=220 height=80
+pin g1 x=520 y=420
+size s width=220 height=80
+pin s x=120 y=420
+size g2 width=220 height=80
+pin g2 x=120 y=100
+size mitosis width=200 height=60
+pin mitosis x=520 y=40
+size cytokinesis width=200 height=60
+pin cytokinesis x=760 y=160
+size daughters width=240 height=70
+pin daughters x=1020 y=160
+routing corner-radius=16
+note "The source uses radial bands and a mitotic-phase sector. Native soft groups mark membership; they do not encode phase duration or angular extent."

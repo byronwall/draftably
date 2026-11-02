@@ -1,0 +1,86 @@
+diagram "Multiplexing" version=1
+theme signal canvas="#ffffff" connection="#aaaaaa" title-font=sans annotation-font=sans padding-x=12 padding-y=12 radius=2
+theme-color quiet shade=100 fill="#ffffff" stroke="#eeeeee" ink="#3c3c3c"
+theme-color resource fill="#f7f7f7" stroke="#777777" ink="#333333"
+theme-color clientblue fill="#2949bd" stroke="#2949bd" ink="#ffffff"
+theme-color clientorange fill="#f18a18" stroke="#f18a18" ink="#161616"
+theme-color server fill="#2b2b2b" stroke="#2b2b2b" ink="#ffffff"
+group h1 "HTTP 1.1 — 3 TCP connections" color=quiet shade=100
+node h1.client "HTTP 1.1" in=h1 color=clientblue
+node h1.server "Server" in=h1 color=server
+group h1.out "Client resources" in=h1 color=quiet shade=100
+group h1.in "Server resources" in=h1 color=quiet shade=100
+node h1.o0 "jquery.js" in=h1.out color=resource
+node h1.i0 "jquery.js" in=h1.in color=resource
+node h1.o1 "example.css" in=h1.out color=resource
+node h1.i1 "example.css" in=h1.in color=resource
+node h1.o2 "image.png" in=h1.out color=resource
+node h1.i2 "image.png" in=h1.in color=resource
+edge h1.c0f h1.client -> h1.o0 from=right to=left
+edge h1.c0b h1.o0 -> h1.client constraint=false from=left to=right
+edge h1.t0f h1.o0 -> h1.i0 from=right to=left
+edge h1.t0b h1.i0 -> h1.o0 constraint=false from=left to=right
+edge h1.s0f h1.i0 -> h1.server from=right to=left
+edge h1.s0b h1.server -> h1.i0 constraint=false from=left to=right
+edge h1.c1f h1.client -> h1.o1 from=right to=left
+edge h1.c1b h1.o1 -> h1.client constraint=false from=left to=right
+edge h1.t1f h1.o1 -> h1.i1 from=right to=left
+edge h1.t1b h1.i1 -> h1.o1 constraint=false from=left to=right
+edge h1.s1f h1.i1 -> h1.server from=right to=left
+edge h1.s1b h1.server -> h1.i1 constraint=false from=left to=right
+edge h1.c2f h1.client -> h1.o2 from=right to=left
+edge h1.c2b h1.o2 -> h1.client constraint=false from=left to=right
+edge h1.t2f h1.o2 -> h1.i2 from=right to=left
+edge h1.t2b h1.i2 -> h1.o2 constraint=false from=left to=right
+edge h1.s2f h1.i2 -> h1.server from=right to=left
+edge h1.s2b h1.server -> h1.i2 constraint=false from=left to=right
+layout h1 row
+layout h1.out column
+layout h1.in column
+group h2 "HTTP/2 — 1 TCP connection" color=quiet shade=100
+node h2.client "HTTP/2" in=h2 color=clientorange
+node h2.server "Server" in=h2 color=server
+group h2.out "Client resources" in=h2 color=quiet shade=100
+group h2.in "Server resources" in=h2 color=quiet shade=100
+node h2.o0 "jquery.js" in=h2.out color=resource
+node h2.i0 "jquery.js" in=h2.in color=resource
+node h2.o1 "example.css" in=h2.out color=resource
+node h2.i1 "example.css" in=h2.in color=resource
+node h2.o2 "image.png" in=h2.out color=resource
+node h2.i2 "image.png" in=h2.in color=resource
+edge h2.cf h2.client -> h2.out from=right to=left
+edge h2.cb h2.out -> h2.client constraint=false from=left to=right
+edge h2.tf h2.out -> h2.in "1 TCP connection" from=right to=left
+edge h2.tb h2.in -> h2.out constraint=false from=left to=right
+edge h2.sf h2.in -> h2.server from=right to=left
+edge h2.sb h2.server -> h2.in constraint=false from=left to=right
+layout h2 row
+layout h2.out column
+layout h2.in column
+layout root column gap=60
+order h1 h1.client h1.out h1.in h1.server
+order h2 h2.client h2.out h2.in h2.server
+pin h1.client x=0 y=100
+size h1.client width=170 height=80
+pin h1.out x=220 y=0
+pin h1.in x=550 y=0
+pin h1.server x=880 y=100
+size h1.server width=170 height=80
+size h1.o0 width=160 height=48
+size h1.i0 width=160 height=48
+size h1.o1 width=160 height=48
+size h1.i1 width=160 height=48
+size h1.o2 width=160 height=48
+size h1.i2 width=160 height=48
+pin h2.client x=0 y=100
+size h2.client width=170 height=80
+pin h2.out x=220 y=0
+pin h2.in x=550 y=0
+pin h2.server x=880 y=100
+size h2.server width=170 height=80
+size h2.o0 width=160 height=48
+size h2.i0 width=160 height=48
+size h2.o1 width=160 height=48
+size h2.i1 width=160 height=48
+size h2.o2 width=160 height=48
+size h2.i2 width=160 height=48

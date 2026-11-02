@@ -1,0 +1,3 @@
+warning line 52: ci's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+warning line 28: The note beside ui covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]
+Warnings: 10 nodes, 3 groups, 11 connections.

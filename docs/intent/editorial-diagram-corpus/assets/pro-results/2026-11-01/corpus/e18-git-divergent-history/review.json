@@ -1,0 +1,38 @@
+{
+  "id": "E18",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default orders by arrow direction and folds the parent chain, reversing the intended chronological reading path and mixing branch-pointer roles with commits.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "good enough",
+  "dsl_nastiness": "Moderate: the graph itself is tiny, but eight pins and eight sizes make chronological position explicit. The v1 order/near solution is actually more resilient and already communicates well.",
+  "residuals": [
+    "Testing branch bends orthogonally instead of diagonally.",
+    "Commit junction geometry differs.",
+    "Native text/strokes slightly heavier."
+  ],
+  "provisional_gaps": [
+    "C-G02",
+    "C-G05"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: short hash/name changes are safe within the fixed widths; adding commits requires manual pins. v1 soft placement is preferable for evolving histories.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

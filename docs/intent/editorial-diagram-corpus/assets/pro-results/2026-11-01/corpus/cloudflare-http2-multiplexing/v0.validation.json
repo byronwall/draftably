@@ -1,0 +1,63 @@
+{
+  "stage": "v0",
+  "source_sha256": "997836e473b54a4bf699c3c54e1d88a17d63c2e0e4f9b20f87f2fac6ef738156",
+  "run_id": "20261102T032008816931Z",
+  "log": "logs/cloudflare-http2-multiplexing/v0/20261102T032008816931Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:08.817369+00:00",
+      "elapsed_seconds": 4.6886,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:13.506223+00:00",
+      "elapsed_seconds": 5.0539,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:18.560544+00:00",
+      "elapsed_seconds": 4.8535,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:23.414258+00:00",
+      "elapsed_seconds": 6.1686,
+      "exit_code": 0
+    }
+  }
+}

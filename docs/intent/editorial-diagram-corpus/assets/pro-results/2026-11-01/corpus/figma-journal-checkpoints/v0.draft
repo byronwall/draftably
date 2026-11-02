@@ -1,0 +1,46 @@
+diagram "Checkpoints and journal entries" version=1
+group checkpoints "Check points"
+group journal "Journal (incremental changes)"
+group cp0 "Checkpoint" in=checkpoints
+node cp0.empty "Empty canvas" in=cp0
+layout cp0 row
+group cp1 "Checkpoint" in=checkpoints
+node cp1.b "Blue circle" in=cp1 shape=circle
+node cp1.y "Yellow circle" in=cp1 shape=circle
+layout cp1 row
+group cp2 "Checkpoint" in=checkpoints
+node cp2.b "Blue circle" in=cp2 shape=circle
+node cp2.y "Yellow circle" in=cp2 shape=circle
+node cp2.r "Red octagon" in=cp2 shape=diamond
+layout cp2 row
+group cp3 "Current state" in=checkpoints
+node cp3.b "Blue circle" in=cp3 shape=circle
+node cp3.y "Yellow circle" in=cp3 shape=circle
+node cp3.r "Red octagon" in=cp3 shape=diamond
+node cp3.g "Green freeform path" in=cp3 shape=pill
+layout cp3 row
+group j0 "Entry: create canvas" in=journal
+node j0.empty "Empty canvas" in=j0
+layout j0 row
+group j1 "Entry: add blue" in=journal
+node j1.b "Blue circle" in=j1 shape=circle
+layout j1 row
+group j2 "Entry: add yellow" in=journal
+node j2.b "Blue circle" in=j2 shape=circle
+node j2.y "Yellow circle" in=j2 shape=circle
+layout j2 row
+group j3 "Entry: add red" in=journal
+node j3.b "Blue circle" in=j3 shape=circle
+node j3.y "Yellow circle" in=j3 shape=circle
+node j3.r "Red octagon" in=j3 shape=diamond
+layout j3 row
+group j4 "Entry: add green" in=journal
+node j4.b "Blue circle" in=j4 shape=circle
+node j4.y "Yellow circle" in=j4 shape=circle
+node j4.r "Red octagon" in=j4 shape=diamond
+node j4.g "Green freeform path" in=j4 shape=pill
+layout j4 row
+note "Diamond stands for the red octagon; pill stands for the green freeform path. Prior journal content is not faded in this first attempt."
+layout checkpoints row
+layout journal row
+layout root column

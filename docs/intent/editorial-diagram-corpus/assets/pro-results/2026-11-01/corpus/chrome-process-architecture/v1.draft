@@ -1,0 +1,19 @@
+diagram "Chrome multi-process architecture" version=1
+theme ink canvas="#ffffff" text="#111111" connection="#5d5d5d" annotation-font=sans padding-x=22 padding-y=26 radius=1
+theme-color process fill="#ffffff" stroke="#292929" ink="#111111"
+node browser "Browser Process" color=process
+node utility "Utility Process" color=process
+node gpu "GPU Process" color=process
+node renderer "Renderer Process" count=many color=process
+node plugin "Plugin Process" count=many color=process
+edge bu browser -> utility directed=false kind=async
+edge bg browser -> gpu directed=false kind=async
+edge br browser -> renderer directed=false kind=async
+edge bp browser -> plugin directed=false kind=async
+edge rg renderer -> gpu directed=false kind=async
+edge pg plugin -> gpu directed=false kind=async
+layout root engine=stress
+near utility browser side=right gap=170
+near gpu utility side=below gap=100
+near renderer browser side=below gap=190
+near plugin renderer side=right gap=170

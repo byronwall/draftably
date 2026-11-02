@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "inspect",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/v1.draft",
+    "--json",
+    "--metrics"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:25:31.493211+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 0.5521,
+  "exit_code": 0
+}

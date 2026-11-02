@@ -1,0 +1,540 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 5,
+    "edges": 7,
+    "warnings": [
+      "warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "Warnings: 12 nodes, 5 groups, 7 connections."
+    ],
+    "flowDir": "right",
+    "width": 758,
+    "height": 198,
+    "aspect": 3.83,
+    "density": 0.323,
+    "aligned": 0.83,
+    "crossings": 0,
+    "bends": 10,
+    "bendsPerEdge": 1.43,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 320,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "stack": 1,
+      "function": 1,
+      "closure": 1
+    },
+    "groupGaps": {
+      "closure | function": 28,
+      "chunk_rest | function": 38,
+      "function | up_array": 28,
+      "chunk_rest | stack": 28,
+      "up_array | upvalue": 28,
+      "constants_rest | upvalue": 28
+    },
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "f_closure",
+        "kind": "back",
+        "length": 1045,
+        "detour": 2.34,
+        "span": 1.33
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 3,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 1,
+      "shared-segment": 0,
+      "edge-through-group": 1,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 33.5,
+    "issues": [
+      {
+        "kind": "edge-through-node",
+        "detail": "array_upvalue through location"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "array_upvalue into upvalue"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "closure_array through constants"
+      },
+      {
+        "kind": "edge-through-group",
+        "detail": "closure_array through function"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "closure_fn through chunk"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "f_closure (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "chunk_more along chunk_rest"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "closure_array along constants"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "closure_array along up_array"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "f_closure 1045px return, longer than the diagonal"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 5,
+    "edges": 7,
+    "warnings": [
+      "warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge upvalue_stack (location -> a) runs through idx0. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the near on line 38. [edge-through-title]",
+      "Warnings: 12 nodes, 5 groups, 7 connections."
+    ],
+    "flowDir": "right",
+    "width": 693,
+    "height": 391,
+    "aspect": 1.77,
+    "density": 0.176,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 10,
+    "bendsPerEdge": 1.43,
+    "maxBends": 4,
+    "hooks": 1,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 371,
+    "theme": "ink",
+    "fills": 2,
+    "minTextContrast": 9.18,
+    "groupFill": {
+      "stack": 1,
+      "function": 1,
+      "closure": 1
+    },
+    "groupGaps": {
+      "closure | function": 48,
+      "closure | stack": 220,
+      "chunk_rest | function": 160,
+      "function | up_array": 48,
+      "stack | up_array": 104,
+      "up_array | upvalue": 48,
+      "constants_rest | upvalue": 42
+    },
+    "emptyArea": {
+      "share": 0.28,
+      "boxes": 18.9,
+      "w": 437,
+      "h": 172,
+      "x": 190,
+      "y": 219
+    },
+    "edgeStretch": [
+      {
+        "id": "f_closure",
+        "kind": "forward",
+        "length": 703,
+        "detour": 2.78,
+        "span": 0.88
+      },
+      {
+        "id": "upvalue_stack",
+        "kind": "wrap",
+        "length": 581,
+        "detour": 1.17,
+        "span": 0.73
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 4,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 1,
+      "arrives-below": 2,
+      "shared-segment": 1,
+      "edge-through-group": 2,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 54,
+    "issues": [
+      {
+        "kind": "edge-through-node",
+        "detail": "array_upvalue through location"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "array_upvalue into upvalue"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "chunk_more into chunk_rest"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "closure_array through constants"
+      },
+      {
+        "kind": "edge-through-group",
+        "detail": "closure_array through function"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "closure_fn through chunk"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "f_closure (4)"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "upvalue_stack through idx0"
+      },
+      {
+        "kind": "edge-through-group",
+        "detail": "upvalue_stack through up_array"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "closure_array along constants"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "closure_array along up_array"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 48–104px"
+      },
+      {
+        "kind": "shared-segment",
+        "detail": "array_upvalue & upvalue_stack (48px)"
+      },
+      {
+        "kind": "hook",
+        "detail": "f_closure f→closure into its far side"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "f_closure 703px, 2.8× the direct way"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "437×172px at 190,219 (28% of the drawing, room for 19 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 17,
+      "meanMove": 226,
+      "maxMove": 655,
+      "moved": 14,
+      "alignedMean": 223,
+      "alignedMoved": 12,
+      "orderFlips": 54,
+      "shift": {
+        "x": 24,
+        "y": 22
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 17,
+      "meanMove": 226,
+      "maxMove": 655,
+      "moved": 14,
+      "alignedMean": 223,
+      "alignedMoved": 12,
+      "orderFlips": 54,
+      "shift": {
+        "x": 24,
+        "y": 22
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 5,
+    "edges": 7,
+    "warnings": [
+      "warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the pin on line 38. [edge-through-title]",
+      "Warnings: 12 nodes, 5 groups, 7 connections."
+    ],
+    "flowDir": "right",
+    "width": 800,
+    "height": 487,
+    "aspect": 1.64,
+    "density": 0.169,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 7,
+    "bendsPerEdge": 1,
+    "maxBends": 1,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 299,
+    "theme": "ink",
+    "fills": 2,
+    "minTextContrast": 9.18,
+    "groupFill": {
+      "stack": 1,
+      "function": 1,
+      "closure": 1
+    },
+    "groupGaps": {
+      "closure | function": 130,
+      "closure | stack": 179,
+      "chunk_rest | function": 120,
+      "function | up_array": 89,
+      "closure | up_array": 130,
+      "up_array | upvalue": 138,
+      "constants_rest | upvalue": 96
+    },
+    "emptyArea": {
+      "share": 0.27,
+      "boxes": 19,
+      "w": 520,
+      "h": 200,
+      "x": 280,
+      "y": 287
+    },
+    "edgeStretch": [
+      {
+        "id": "f_closure",
+        "kind": "forward",
+        "length": 422,
+        "detour": 1.99,
+        "span": 0.45
+      },
+      {
+        "id": "upvalue_stack",
+        "kind": "wrap",
+        "length": 865,
+        "detour": 1.26,
+        "span": 0.92
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 3,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 6,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 18,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "array_upvalue into upvalue"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "chunk_more into chunk_rest"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "constants_more into constants_rest"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "closure_array along up_array"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "closure_fn along function"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "f_closure along closure"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "f_closure along stack"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "upvalue_stack along up_array"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "upvalue_stack along upvalue"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 89–138px"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 123px at y=287"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "520×200px at 280,287 (27% of the drawing, room for 19 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 17,
+      "meanMove": 156,
+      "maxMove": 287,
+      "moved": 17,
+      "alignedMean": 76,
+      "alignedMoved": 17,
+      "orderFlips": 8,
+      "shift": {
+        "x": 120,
+        "y": 64
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 17,
+      "meanMove": 343,
+      "maxMove": 650,
+      "moved": 17,
+      "alignedMean": 290,
+      "alignedMoved": 15,
+      "orderFlips": 60,
+      "shift": {
+        "x": 177,
+        "y": 87
+      }
+    },
+    "checks": []
+  }
+]

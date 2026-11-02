@@ -1,0 +1,2792 @@
+[
+  {
+    "case": "chrome-process-architecture",
+    "focus": "Renderer/plugin multiplicity and GPU links",
+    "log": "logs/chrome-process-architecture/details/20261102T033209386489Z",
+    "selection_sha256": "c815a58e02598033c1f8c92f7af4fafbf950783914d7064776d6585051e206fb",
+    "source_sha256": {
+      "reference-preview.png": "a092e8f584e61039a76e4ce9c251c0ac82dd24ae583a070c389c4706c87e78dd",
+      "v0.png": "6de58d41c04a17acec16f26a5fa03a769bfb6f9df0dc1384db7afcc94b9d3fba",
+      "v2.png": "1a3d32c4d1da372478ebd1f0210fe352993dc9208859b6f1191ccea5397c31a9"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/reference.png",
+          "--crop",
+          "8,164,847,324"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:09.392795+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3221,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/v0.png",
+          "--crop",
+          "8,372,825,642"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:10.715194+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4188,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/v2.png",
+          "--crop",
+          "27,566,1305,856"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:12.134296+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3596,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:13.494122+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3611,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "cloudflare-http2-multiplexing",
+    "focus": "Three TCP lanes above versus the single bundled lane below",
+    "log": "logs/cloudflare-http2-multiplexing/details/20261102T033209386657Z",
+    "selection_sha256": "cba5f71575a9121e3badecb073f04555073161e1dfe48306c2b57e48a44f3b4e",
+    "source_sha256": {
+      "reference-preview.png": "89d62674f30ad4b4bfec4108561a249ba81b79fe4c58be2aeff35c57b84879fc",
+      "v0.png": "1d4598768bcdd3fbf0c9f2ac310576434fd276d6daa135d640d5623fd588b461",
+      "v2.png": "27508a3919cb1fdf8eb71df29119cb62aa8681bfb5bdf824a355e2d55a26993e"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/reference.png",
+          "--crop",
+          "192,23,416,435"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:09.392345+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2577,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/v0.png",
+          "--crop",
+          "686,178,1286,1477"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:10.650434+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5649,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/v2.png",
+          "--crop",
+          "518,227,1225,1380"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:12.215830+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.403,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:13.619127+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5884,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "cloudflare-tls-handshake",
+    "focus": "TLS message bundles and phase/timing boundary",
+    "log": "logs/cloudflare-tls-handshake/details/20261102T033214856032Z",
+    "selection_sha256": "f1b8a74f1fbf9641547c3357870590f3417857ca244f2c58d6649c1076045693",
+    "source_sha256": {
+      "reference-preview.png": "4c5ae50684e5141d876736943e58636c37f5a87bb22282faed4d15605d613339",
+      "v0.png": "64007507be438ce4fa33b76b4b498defaf8dd445b7476029c92107bf2c00e11f",
+      "v2.png": "d01ac6e2bf40bfc6f77aa8288da189d0ca7dfcf4af9cf737b59baf1c3029856f"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/reference.png",
+          "--crop",
+          "116,866,2655,750"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:14.856530+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6567,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/v0.png",
+          "--crop",
+          "200,547,620,456"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:16.513807+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3709,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/v2.png",
+          "--crop",
+          "348,506,492,440"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:17.885066+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.37,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-tls-handshake/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:19.255340+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4095,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "figma-database-migration",
+    "focus": "Replicate and Pause: same component positions, changed connection",
+    "log": "logs/figma-database-migration/details/20261102T033215208771Z",
+    "selection_sha256": "879c414974fb027f62cc279700da53a2862093a389bbe1cce08474676eff3ace",
+    "source_sha256": {
+      "reference-preview.png": "406ac5a314208375c1847a5c678aeb42ba8f9ee4eabdaa736a105813fdf590cd",
+      "v0.png": "ecd9681c345566f7006769aaba1fa5008cb90d1e6c947c3ac1da26bdd2d4e20d",
+      "v2.png": "bc9a69d58f60d71f783b0df37dc141568e726bb6ec4f6bb3f4c7487da00efe53"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/reference.png",
+          "--crop",
+          "400,16,800,787"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:15.209249+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5583,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/v0.png",
+          "--crop",
+          "900,111,1800,860"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:16.767870+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4875,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/v2.png",
+          "--crop",
+          "811,150,1622,1275"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:18.255774+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5408,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:19.796831+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.373,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "figma-journal-checkpoints",
+    "focus": "Current state and final journal entry: prior versus new content",
+    "log": "logs/figma-journal-checkpoints/details/20261102T033220665600Z",
+    "selection_sha256": "039cbee210a512ce762d2efc2c1ae3b4ef11066af365ae92bf4d4357d0a0d9d6",
+    "source_sha256": {
+      "reference-preview.png": "b9a7679ac7dae53afb353276d6f3750f4745bf6041f88f87c9116d0172accea7",
+      "v0.png": "4d960587c8b3b4e5e07b5b855cbaa862f4dcf4e844fb8eb190b635eecdfabab3",
+      "v2.png": "127b5bd106dbbe975769a03a493559ffa0ac6f5673f9172f8180ab6cd51becc6"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/reference.png",
+          "--crop",
+          "1505,44,593,1009"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:20.666166+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.361,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v0.png",
+          "--crop",
+          "2574,191,1066,1205"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:22.027467+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4497,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v2.png",
+          "--crop",
+          "2044,251,806,1589"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:23.477447+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4038,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:24.881691+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4586,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "github-blackbird-query",
+    "focus": "Redis/Git support annotations; v0 note collision",
+    "log": "logs/github-blackbird-query/details/20261102T033221170800Z",
+    "selection_sha256": "bfb9e49758a84611f508c7bc9317639d48c09ce9ed6c0b150211fac13d64feb7",
+    "source_sha256": {
+      "reference-preview.png": "0c35c8423b70176642923d254c8a0afd3271099d7769b61c9129c92a44047a2c",
+      "v0.png": "8f7998b7b4aee95e982bd61715a9af79619296d910b5ab33b70abb81630bdfcd",
+      "v2.png": "170199d8d33293c475654023b187426d3463cee5e71e5b5b4c3700810ea83894"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/reference.png",
+          "--crop",
+          "27,286,591,375"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:21.171278+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.355,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/v0.png",
+          "--crop",
+          "17,460,607,533"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:22.526664+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3614,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/v2.png",
+          "--crop",
+          "51,479,896,479"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:23.888440+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.373,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:25.261712+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3124,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "github-security-layers",
+    "focus": "Planning layer: component names versus mechanism captions",
+    "log": "logs/github-security-layers/details/20261102T033226341558Z",
+    "selection_sha256": "4d7c47813143b14ae5d7abae2d12ba38eed5c65f127fa771783c6bca6b8a52b0",
+    "source_sha256": {
+      "reference-preview.png": "9f0df94825acb30589416a5f00e51ff1f9ef043d62fe49d0f982fe5fd3f52a4a",
+      "v0.png": "7873f8bdf64b3b332de211e7477af05561bb06e08add90b8aa2eef764bba9a08",
+      "v2.png": "8cb5c7bd9262327b406f10480be927eb13bc024c30150b9b8dec0f83acaf8811"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/reference.png",
+          "--crop",
+          "42,79,2053,575"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:26.341998+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4872,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/v0.png",
+          "--crop",
+          "27,158,1297,370"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:27.829552+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2891,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/v2.png",
+          "--crop",
+          "35,151,1724,530"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:29.119032+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3849,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:30.504161+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.242,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "stripe-read-compare",
+    "focus": "Customer record: entity, field, and value type hierarchy",
+    "log": "logs/stripe-read-compare/details/20261102T033226575451Z",
+    "selection_sha256": "c9da331491fdd3bfbdbba7c1707bed111ab9209baf28ab2d1f4d04ebe1c309d6",
+    "source_sha256": {
+      "reference-preview.png": "df973abc27dfba147c4c693fa390afcd339bf8e96ec32275b5487cb847541433",
+      "v0.png": "3b54803777060d65dc075df78f2372698bafeebe0748d15418ebdcd7a9fb68f9",
+      "v2.png": "3cffa22d17af7b589757e4870c7d18012da2b9d4e7fad1922e3cb59c15a968d7"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/reference.png",
+          "--crop",
+          "57,126,1238,1098"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:26.575814+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5092,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/v0.png",
+          "--crop",
+          "25,171,640,855"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:28.085359+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3046,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/v2.png",
+          "--crop",
+          "58,160,764,750"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:29.390242+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3725,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:30.762968+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3298,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "stripe-synchronized-retries",
+    "focus": "Retry interval spacing and vertical synchronization across clients",
+    "log": "logs/stripe-synchronized-retries/details/20261102T033231747598Z",
+    "selection_sha256": "dff10fd515dfe7ae3ee231b9f0d3343778c85525c4dd2155534372e11a85f393",
+    "source_sha256": {
+      "reference-preview.png": "967779b4e7f4e70fa09661195445c6c08929bc31ad92a01637995523cc35ed06",
+      "v0.png": "b02a1aae6995ec25309ef460b9a16cc8b4bf839ffc2a54637c64d32eebb0810b",
+      "v2.png": "080bf42acbc5df065dd7a63e0611fe0b3ed4872d03f4d30b26ed10945d377520"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/reference.png",
+          "--crop",
+          "331,10,979,480"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:31.747978+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3184,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/v0.png",
+          "--crop",
+          "636,293,1441,961"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:33.066885+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4911,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/v2.png",
+          "--crop",
+          "570,316,1758,922"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:34.558484+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4671,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:36.025850+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5402,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "vercel-fluid-transport",
+    "focus": "Lambda/Rust nesting, duplex HTTP, and TCP response route",
+    "log": "logs/vercel-fluid-transport/details/20261102T033232093696Z",
+    "selection_sha256": "99a69f7a048b84d4dadaea3f3fb2f830632cccc9c258ad01ee7d4ff82b93a673",
+    "source_sha256": {
+      "reference-preview.png": "8fbf37eac2b1cc8163f9d78aca324fd181ac669e74eb36062cb64d46b637afff",
+      "v0.png": "728b52c2d40aeb0c395591df2aa0c5f56eba375d8c8e4d615e72a61b003bed3c",
+      "v2.png": "699f8da5d45c61b8cbe9c8224fcc73ca50171b493e7fad90f6e0b2fda3b35d9f"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/reference.png",
+          "--crop",
+          "1305,372,2457,879"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:32.094206+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5706,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/v0.png",
+          "--crop",
+          "1686,139,1050,496"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:33.665155+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3332,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/v2.png",
+          "--crop",
+          "1029,350,1996,837"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:34.998745+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5138,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/vercel-fluid-transport/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:32:36.513168+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6108,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E23-nasa-star-life",
+    "focus": "Supernova remnant split and return toward the central nebula",
+    "log": "logs/E23-nasa-star-life/details/20261102T033621711300Z",
+    "selection_sha256": "9b9de806824ecdb75826be05a64efbfb08e17462b7a76afd999ad623c9d41d7d",
+    "source_sha256": {
+      "reference-preview.png": "044502cb7c1931065605ec9b295afb95d6f7c94cd8c72842bca20ea04234f0d1",
+      "v0.png": "2f51a44be25cbffe86dd9988850393a64f90b6905b1daa1594a17471f682487e",
+      "v2.png": "ecdfe73db5277ca73e2df46c47ee36c26a65a51245bcad963b6cf3837a5b18d0"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/reference.png",
+          "--crop",
+          "820,500,960,700"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:21.717113+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.7543,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/v0.png",
+          "--crop",
+          "188,200,1224,1208"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:23.471856+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5342,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/v2.png",
+          "--crop",
+          "776,586,1328,1300"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:25.006438+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6526,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E23-nasa-star-life/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:26.659248+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6514,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E24-noaa-enso",
+    "focus": "Atmospheric evidence, two outcomes, and the negative collector",
+    "log": "logs/E24-noaa-enso/details/20261102T033621711558Z",
+    "selection_sha256": "7d4423a985ab16b7ce0113683d40f3479ae95b2f0a0cc86ac5955e607941b9dc",
+    "source_sha256": {
+      "reference-preview.png": "aaf0895de86aa3061348f0643ed48c1dd48086420c9c3f1c6aee6fe6f6adbc7d",
+      "v0.png": "37ea329d374744e7d469b7d182730ccc52551cfc069f49ea88f8d0e4c9909a56",
+      "v2.png": "170ab53e1a6f180a61ca2f65feda45078bd1b488ca23480e62600670cb724990"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/reference.png",
+          "--crop",
+          "0,750,2500,943"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:21.717195+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5494,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/v0.png",
+          "--crop",
+          "96,1084,840,894"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:23.267075+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3808,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/v2.png",
+          "--crop",
+          "16,728,2248,1100"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:24.648192+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6209,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:26.269409+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.8099,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E25-usgs-water-cycle",
+    "focus": "Water-use sites, river, soil and groundwater: physical cutaway versus schematic transfers",
+    "log": "logs/E25-usgs-water-cycle/details/20261102T033628080308Z",
+    "selection_sha256": "7d4e37858dda98c1f2d28149a8d4877cddaa052e7a6b857fbd1be0523439714a",
+    "source_sha256": {
+      "reference-preview.png": "5870773fb015128427801bf1d16e4c829934601d1926be83ad141b61f04fa711",
+      "v0.png": "65ddc9810707adc1227673ee8e7446992c65cab86a5871d395d1bac064280bbe",
+      "v2.png": "01b1d4c3f564b59adde9e4c95c8e56668ee4505bac292ea061f22da534e513f6"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/reference.png",
+          "--crop",
+          "420,420,1280,620"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:28.080900+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 2.0695,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/v0.png",
+          "--crop",
+          "334,1194,1992,902"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:30.150779+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5342,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/v2.png",
+          "--crop",
+          "1132,1842,2468,1092"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:31.685432+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6342,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:33.319809+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4673,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E26-design-double-diamond",
+    "focus": "First divergence/convergence diamond and its two independently positioned phase words",
+    "log": "logs/E26-design-double-diamond/details/20261102T033628312876Z",
+    "selection_sha256": "d0d15bf54a6f1c3aa1196ffe3b13476eb83789eec3a53ee333546758d3cfffec",
+    "source_sha256": {
+      "reference-preview.png": "e17f164ca99835c284c35e1c2ce351ed4086eaea7ba2f1e0cd3f2e8cb400a1b9",
+      "v0.png": "5883c1d4489860f4c461877184eacbd43b33cebd79d136f30d7950bcaad4a581",
+      "v2.png": "acdf3332e0a478c63b9fd3d13397a024f29c92d7409495d895659e40acbb4f6b"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/reference.png",
+          "--crop",
+          "0,0,470,453"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:28.313281+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.39,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/v0.png",
+          "--crop",
+          "64,188,840,272"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:29.703561+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4035,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/v2.png",
+          "--crop",
+          "16,272,688,720"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:31.107360+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3085,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E26-design-double-diamond/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:32.416349+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4472,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E27-emf-butterfly",
+    "focus": "Technical recovery loops and ordered returns to the manufacturing/service spine",
+    "log": "logs/E27-emf-butterfly/details/20261102T033633864238Z",
+    "selection_sha256": "2171aac592e78723a6ffaa35758894d5a5d79d8e435acb4c23898a07602c81cc",
+    "source_sha256": {
+      "reference-preview.png": "f50aa7b7b386f5423e6c4040144648c2a9d7707fc6849825985cea8c33a2daa5",
+      "v0.png": "1129e74d6848084da952aca18683134fc2f1e5137b9b90b30138bae239e81a22",
+      "v2.png": "c9705e26b838012376bb030873a84ee012a3fd8cc8149491de1aa11c667a5b3f"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/reference.png",
+          "--crop",
+          "850,100,950,880"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:33.864571+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4598,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v0.png",
+          "--crop",
+          "128,586,2760,1224"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:35.324745+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6116,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v2.png",
+          "--crop",
+          "1664,714,2228,1560"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:36.936863+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6375,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:38.574563+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5643,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E28-tfl-tram",
+    "focus": "Croydon one-way loop, overlapping service colors, station points and exterior interchange labels",
+    "log": "logs/E28-tfl-tram/details/20261102T033634790762Z",
+    "selection_sha256": "21ccfa64eccf84cdfe8451d61b7f809e9b3feccceaa7bef28f030875320e05f0",
+    "source_sha256": {
+      "reference-preview.png": "2d12cf4cd24e2a66b07566ae61352e0c8ba57378aa741e26037e898f6bfc27ed",
+      "v0.png": "34709934fcdf87168281dede03c3f54535c9dca7f557453f84bf0077f7d07568",
+      "v2.png": "00d160c7aeaee79dd971e5afbe461acaf981a46a194d5bd179813fac46a8efbc"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/reference.png",
+          "--crop",
+          "620,95,500,265"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:34.791123+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2978,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/v0.png",
+          "--crop",
+          "64,2322,3480,848"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:36.089365+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6645,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/v2.png",
+          "--crop",
+          "2656,374,1828,780"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:37.754278+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4656,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E28-tfl-tram/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:39.220096+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3534,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E29-cope-plagiarism",
+    "focus": "Four severity branches: compact symbol with adjacent explanatory prose versus full text boxes",
+    "log": "logs/E29-cope-plagiarism/details/20261102T033640140278Z",
+    "selection_sha256": "eec50c15a9332214dcde8ea4dd716dd1c1a3576483e3f17325d70a272c546484",
+    "source_sha256": {
+      "reference-preview.png": "518520a7229b731505c98443c036224b5ea377bb31d846ddef6f61b81436bd3b",
+      "v0.png": "4576cd72a67e2ee7b93491de4f580932dd3fcd7572592665dab1ff0351a05969",
+      "v2.png": "64ef4b51ff6d9bb1134868208b3e86c9ababda0facff843e835383de9d554d2e"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/reference.png",
+          "--crop",
+          "350,430,900,510"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:40.140587+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4234,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v0.png",
+          "--crop",
+          "64,802,1608,1192"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:41.564282+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4556,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v2.png",
+          "--crop",
+          "16,994,2488,1252"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:43.020244+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.8193,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:44.839786+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.483,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "E30-openstax-cell-cycle",
+    "focus": "Continuous interphase band and narrow mitotic sector versus native grouping and split soft tint",
+    "log": "logs/E30-openstax-cell-cycle/details/20261102T033640574832Z",
+    "selection_sha256": "710f588b73fb25df6dd43cbd0d7aedf1efd21e04e083277c9f246cb38ea4409d",
+    "source_sha256": {
+      "reference-preview.png": "09b7b23b6d11891b609c0a9417840161af9e4dafbb8f6aa81858cb548ed49069",
+      "v0.png": "5d26f06d5c363a11d3876400954a99be0269b4e21876e0e647718ccaa9826576",
+      "v2.png": "aa95cf5e5cab4fdaff9d178cf6c542c8704eb50a4ae56cb62ca2395286e01832"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/reference.png",
+          "--crop",
+          "135,40,550,515"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:40.575450+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4092,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/v0.png",
+          "--crop",
+          "64,188,1114,592"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:41.985055+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3971,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/v2.png",
+          "--crop",
+          "36,352,1808,1080"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:43.382488+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5953,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E30-openstax-cell-cycle/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:36:44.978035+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4393,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e11-transformer-stacks",
+    "focus": "Upper encoder fanout and upper decoder stages",
+    "log": "logs/e11-transformer-stacks/details/20261102T033703536734Z",
+    "selection_sha256": "193697af21625fbf82e3614da3ad329f4e3cf186b21fb3c1366a0ac699ba54ea",
+    "source_sha256": {
+      "reference-preview.png": "aea34aefa233964caeb07aec17825488ce4a821d429c505b59544880a5be62c5",
+      "v0.png": "a821c2aeb62c7ba23f97c82accd0c1b92876b08f5ac8e8dbf9b45db6ab116eac",
+      "v2.png": "d94204bc3da5a7fb267219c2f5ce4e6c693096ccf14142fe438061ab38b77570"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/reference.png",
+          "--crop",
+          "120,100,1000,390"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:03.543294+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5301,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/v0.png",
+          "--crop",
+          "456,492,1208,536"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:05.073933+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4741,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/v2.png",
+          "--crop",
+          "72,280,1452,512"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:06.548362+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5476,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:08.096197+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5999,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e12-lstm-recurrent-cell",
+    "focus": "Expanded current LSTM cell: gate and cell-state routing",
+    "log": "logs/e12-lstm-recurrent-cell/details/20261102T033703537170Z",
+    "selection_sha256": "b7ef96bed58bd6f882f0eaeadb0a56bbaa4e09215a86a5883a152ffd68eef5ec",
+    "source_sha256": {
+      "reference-preview.png": "4369f62aff6048edb95697200a8077d3ef7c31d6a8bea8bae6affc9484386d09",
+      "v0.png": "4c8be11c24199e88cb155fc5a4b78692499aa13ec44c50de1044b5450e7f85d4",
+      "v2.png": "d22fe1b002fa50ecb617564105a14aab5695982b80020a47fba6a713644f982e"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/reference.png",
+          "--crop",
+          "715,200,825,500"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:03.543426+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5319,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/v0.png",
+          "--crop",
+          "1056,116,1952,944"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:05.077291+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.7174,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/v2.png",
+          "--crop",
+          "604,224,1588,860"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:06.795223+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6195,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:08.414917+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5367,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e13-cqrs",
+    "focus": "Query model, service interface and UI with annotations",
+    "log": "logs/e13-cqrs/details/20261102T033709697635Z",
+    "selection_sha256": "aa92f950319952b1c9d14f3c7524dca696d7d0bc75dcd100bfc1eaecc8c9ba06",
+    "source_sha256": {
+      "reference-preview.png": "a3265a8c1ad36cb56c9fb3b44400936f3efcc389ee1b5f36857fbb82e7a38934",
+      "v0.png": "732fb05e4e956bc0aeffa96fa7f9786b0d25b80a6f306ab4898fb6a49c6d1a71",
+      "v2.png": "c8f450b8a1a717cb7f184c552bb5676f5abd06c76924d20c07c561967100f409"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/reference.png",
+          "--crop",
+          "205,45,425,250"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:09.698049+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.465,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/v0.png",
+          "--crop",
+          "104,740,1768,1048"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:11.163401+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.7257,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/v2.png",
+          "--crop",
+          "532,120,1824,656"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:12.889803+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 2.289,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e13-cqrs/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:15.179869+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.9422,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e14-dns-hierarchy",
+    "focus": "Decentralized authority and control example",
+    "log": "logs/e14-dns-hierarchy/details/20261102T033709952854Z",
+    "selection_sha256": "8cf28bf825ed6a8e98fc0f5cfec2d6a83b3f5b931487ce1070c74ee8282eb68a",
+    "source_sha256": {
+      "reference-preview.png": "21e207dd4310dab8e1a60c7e434cfdcb992be86f4a92fe0b4ffb4afaf3e841ef",
+      "v0.png": "09511dfd26691d96a9ffb6c18768f0d5c2488750bf9cb3d3d1b7f1cc64cadaed",
+      "v2.png": "25889f33ab657900743f712ced259582871969fbada345c62926caf105f5e5ee"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/reference.png",
+          "--crop",
+          "1090,560,580,470"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:09.953185+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5447,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v0.png",
+          "--crop",
+          "24,1524,2054,768"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:11.498226+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.7079,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v2.png",
+          "--crop",
+          "1424,716,1048,824"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:13.206955+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 2.2103,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:15.417439+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 2.0036,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e15-js-agent-cluster",
+    "focus": "HTML page realm fields and heap reference mapping",
+    "log": "logs/e15-js-agent-cluster/details/20261102T034812454695Z",
+    "selection_sha256": "73dfe79d7ebb1b0480e4004ebbe5b68ee6629c3b324fd2a9c87913bfd444a0a8",
+    "source_sha256": {
+      "reference-preview.png": "5ba63f2af6d2d6a9cb1e5b12e21df4d461d98dd8fe41c98b52dbcfb1523bca33",
+      "v0.png": "0dcb0d829c9a7603acebd863aacd759538820cf1e396435d6a42ac9cf32d2e8b",
+      "v2.png": "a65c45020da4a62be4eeea5f779648e2dacd85449bdeb4af9eea3aa1e4399691"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/reference.png",
+          "--crop",
+          "65,140,745,375"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:48:12.465744+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2825,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/v0.png",
+          "--crop",
+          "3556,302,824,320"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:48:13.748690+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2663,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/v2.png",
+          "--crop",
+          "72,120,1478,996"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:48:15.015429+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3991,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:48:16.414881+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.2685,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e16-react-dependency-tree",
+    "focus": "InspirationGenerator subtree and repeated import labels",
+    "log": "logs/e16-react-dependency-tree/details/20261102T033717422995Z",
+    "selection_sha256": "db705fce21e9908e77a5e8ab196892e2bd33e791b3e6b8abb1036c361b93990c",
+    "source_sha256": {
+      "reference-preview.png": "1a42df9be1f1a38d618249a24f62ac407322a60287800b809bc500532dff87a6",
+      "v0.png": "378a886ffbbca9568faa4c435ea0fa43a474d455dee80620f225965ff5570c34",
+      "v2.png": "7ec186dac220521cc8aebbdbc865165709397d3db527397261f18f21696efe41"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/reference.png",
+          "--crop",
+          "0,205,1000,350"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:17.424775+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.8497,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/v0.png",
+          "--crop",
+          "24,332,1192,472"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:19.275434+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.7214,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/v2.png",
+          "--crop",
+          "24,344,1512,560"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:20.997207+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.828,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e16-react-dependency-tree/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:22.825382+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6304,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e17-go-slice",
+    "focus": "Slice pointer, length/capacity fields and third array cell",
+    "log": "logs/e17-go-slice/details/20261102T033724425293Z",
+    "selection_sha256": "065b9c1a0489a9b42402dc594e8402ee5138a71d3077b51facc654cf2fdde23e",
+    "source_sha256": {
+      "reference-preview.png": "9d97eafcffe927282c39f71a9d9e7c5744787911ef54b8cf8f0a20cb351fcea5",
+      "v0.png": "59b0a912dd17d71ada04cd263e4800d3d23ad7b41a806efb46956d735daa311f",
+      "v2.png": "1c826047d4aabb0e124fcd2d529da7eee68c2be987c476ee363d6cdb32736d20"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/reference.png",
+          "--crop",
+          "65,0,360,190"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:24.425685+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6182,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/v0.png",
+          "--crop",
+          "24,116,724,388"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:26.044376+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4103,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/v2.png",
+          "--crop",
+          "24,24,936,520"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:27.455047+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4788,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e17-go-slice/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:28.934047+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3748,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e18-git-divergent-history",
+    "focus": "Divergent branch junction and branch pointers",
+    "log": "logs/e18-git-divergent-history/details/20261102T033724457169Z",
+    "selection_sha256": "61020e574ba23e7ffad0a3329192ea1b5d8c3d68d3ae8f7dd5174298a5c4a3ac",
+    "source_sha256": {
+      "reference-preview.png": "8f1bc106d2e83893a44d3254c0929fe1e6df4aac7c7e6d8dd16765ef11befd32",
+      "v0.png": "9f7758fe1471ab97f4baebbd1dfdb53ee7a546b24a90c33c5f868c0e83ffcf4b",
+      "v2.png": "9c6d55790689317548f241c5d8c8d37b52255e4c20afb7bbcbb7423a1acfa616"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/reference.png",
+          "--crop",
+          "275,95,320,290"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:24.457653+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.654,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/v0.png",
+          "--crop",
+          "24,116,1208,672"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:26.111956+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4814,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/v2.png",
+          "--crop",
+          "584,174,632,702"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:27.594072+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4731,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e18-git-divergent-history/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:29.067720+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4352,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e19-pixel-pipeline",
+    "focus": "Style, Layout and Paint stage transitions",
+    "log": "logs/e19-pixel-pipeline/details/20261102T033730310185Z",
+    "selection_sha256": "7f947f1a118b40490524707f5650e1975ef19e5b62996b9b51060e4388d27781",
+    "source_sha256": {
+      "reference-preview.png": "07256627a96fc2c4a28d6b0d626e2ff8024573ed5ac460ba64f336c48f2bf27e",
+      "v0.png": "28b16b50d9e2d5e0a514cca696c2c4d9831be9323b7804e10a41d29dc7cb6cf4",
+      "v2.png": "30ae40cb17d841c88bea43c802a6c12c9a867b1384b1d8cf6dbf1fec1f972848"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/reference.png",
+          "--crop",
+          "300,20,530,130"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:30.310517+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3523,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/v0.png",
+          "--crop",
+          "408,116,1208,224"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:31.663302+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4126,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/v2.png",
+          "--crop",
+          "408,24,900,228"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:33.076235+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3582,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e19-pixel-pipeline/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:34.434626+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4686,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e20-compiler-mountain",
+    "focus": "Syntax, intermediate representation and transpiling paths",
+    "log": "logs/e20-compiler-mountain/details/20261102T033730503469Z",
+    "selection_sha256": "67853d732eee940fe4f781129d5dc0d8f33a2df0a4a30081bc5d0ef63316e046",
+    "source_sha256": {
+      "reference-preview.png": "9c6d847cd73514310164ac8b305f6e34710234821d568b23209bcaf832da9648",
+      "v0.png": "ac346286c6241e21513040fdf24347ffd38e59afd0f6be0112d87b2f81112589",
+      "v2.png": "0d9d1198770f2aa8bf4b9a5283cd610fa62db7979b09f64d12718bdd360c2982"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/reference.png",
+          "--crop",
+          "330,100,900,650"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:30.503800+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5765,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/v0.png",
+          "--crop",
+          "24,396,1538,256"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:32.080884+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4227,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/v2.png",
+          "--crop",
+          "544,116,1292,1020"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:33.503994+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5664,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e20-compiler-mountain/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:35.070707+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5854,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e21-open-upvalue",
+    "focus": "Closure/upvalue record fields and pointer endpoints",
+    "log": "logs/e21-open-upvalue/details/20261102T033735904201Z",
+    "selection_sha256": "9ef68fd5e7259dbec678f7734b9c193d0660ac4fba8354ad5987f10457a732d7",
+    "source_sha256": {
+      "reference-preview.png": "fa70d448e17e801e94afaf20094b711986974fd443fe5b4a9f0623a9e7516497",
+      "v0.png": "cdc0c30ab1f533ae775ae882d0eaa664ac29e298059c070ee128fb9dae55e647",
+      "v2.png": "c459ec286feaf1b1b749da6c45c2310edff5616ffc430f9edc58dee9a26a74b0"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/reference.png",
+          "--crop",
+          "210,125,940,275"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:35.904811+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.3715,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/v0.png",
+          "--crop",
+          "24,242,976,508"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:37.276769+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4676,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/v2.png",
+          "--crop",
+          "32,244,1712,466"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:38.744696+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5004,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e21-open-upvalue/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:40.245318+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4497,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  },
+  {
+    "case": "e22-dns-query",
+    "focus": "Root-server exchange and shown NS record context",
+    "log": "logs/e22-dns-query/details/20261102T033736657186Z",
+    "selection_sha256": "90f6ddf793fa4ef1fb1c5edd38589376f679c21ff167dba2cbebc0e854ca1298",
+    "source_sha256": {
+      "reference-preview.png": "d624c55b704937badec4edb1c3eed8cf9e4a1eab2cf2978fb3e16c8a3c8caf4f",
+      "v0.png": "88906b8d9356e0237f89c971bb96f6a1dd8510f016f721cee2b8df138f88d002",
+      "v2.png": "2286540bb3736c597d34b637e73cc9977f6b3bd59787bdca467f6e3c21af4d34"
+    },
+    "commands": {
+      "reference": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/reference-preview.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/reference.png",
+          "--crop",
+          "70,505,1570,240"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:36.657562+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.5498,
+        "exit_code": 0
+      },
+      "v0": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v0.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v0.png",
+          "--crop",
+          "838,1362,412,348"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:38.207772+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4923,
+        "exit_code": 0
+      },
+      "v2": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v2.png",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v2.png",
+          "--crop",
+          "24,776,2412,714"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:39.700425+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.6024,
+        "exit_code": 0
+      },
+      "sheet": {
+        "argv": [
+          "pnpm",
+          "--silent",
+          "shoot",
+          "--sheet",
+          "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/comparison.png",
+          "--cols",
+          "3",
+          "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/reference.png",
+          "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v0.png",
+          "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v2.png"
+        ],
+        "cwd": "/workspace/scratch/742d8c352255/baseline",
+        "started_utc": "2026-11-02T03:37:41.303050+00:00",
+        "environment": {
+          "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+          "DRAFTABLY_NO_UPDATE_CHECK": "1"
+        },
+        "elapsed_seconds": 1.4812,
+        "exit_code": 0
+      }
+    },
+    "status": "complete"
+  }
+]

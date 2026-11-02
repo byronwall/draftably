@@ -1,0 +1,43 @@
+{
+  "id": "E28",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The automatic default turns a low, wide transport map into a very tall station list with huge loop detours. It preserves names and adjacency but loses route/service identity and rapid geographic scanning.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 3
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Very high. Seventy-eight size/pin lines, plus explicit sides on nearly every edge, are needed for the visible map. The station declarations are easy to read, but maintaining branches and preventing label growth from colliding is manual cartographic work. This is a confirmation case, not a numeric tuning target.",
+  "residuals": [
+    "Service-line identity and shared parallel route strokes are absent.",
+    "No exterior stop labels, native station ticks or interchange symbols.",
+    "No controlled octilinear geometry or saved route waypoints.",
+    "Every stop requires manual pin/size; the full publication-width result is too fine for the source’s rapid scanning.",
+    "All 39 stops remain; no claim that a simplified adjacency graph is an operational transit map."
+  ],
+  "provisional_gaps": [
+    "edge-semantic-styling",
+    "external-label-roles",
+    "native-image-icon-serializability",
+    "curved-directed-paths",
+    "native-text-scale-control"
+  ],
+  "confirmation_case": true,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

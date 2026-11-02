@@ -1,0 +1,63 @@
+{
+  "stage": "v0",
+  "source_sha256": "8ecbf1d783451cac75e484527310f3c01c12fec05b149bbec38a645ecf87814e",
+  "run_id": "20261102T032009731383Z",
+  "log": "logs/E25-usgs-water-cycle/v0/20261102T032009731383Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:09.732083+00:00",
+      "elapsed_seconds": 5.5398,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:15.272073+00:00",
+      "elapsed_seconds": 6.25,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:21.522364+00:00",
+      "elapsed_seconds": 5.683,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:27.205842+00:00",
+      "elapsed_seconds": 6.7675,
+      "exit_code": 0
+    }
+  }
+}

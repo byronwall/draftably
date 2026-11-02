@@ -1,0 +1,11 @@
+diagram "Pixel pipeline" version=1
+node js "JavaScript"
+node style "Style"
+node layout "Layout"
+node paint "Paint"
+node composite "Composite"
+edge e1 js -> style
+edge e2 style -> layout
+edge e3 layout -> paint
+edge e4 paint -> composite
+layout root row

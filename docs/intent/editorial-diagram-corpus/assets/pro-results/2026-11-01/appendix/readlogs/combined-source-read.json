@@ -1,0 +1,551 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "method": "Collective reading record consolidated from root handoff and preserved workstream readlogs. A targeted read is not promoted to full unless another reader explicitly read the complete file.",
+  "full": [
+    {
+      "path": "baseline/AGENTS.md",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 30,
+      "sha256": "9077f03f7bbadce1c9d329c39b38129e640687e5e7f9dbf435c1e2015caec8c3"
+    },
+    {
+      "path": "baseline/README.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 153,
+      "sha256": "197ad83ea686e484062b74a321797801d8d2c265a9b702094f86c346449ec3ee"
+    },
+    {
+      "path": "baseline/SOURCE-CONTEXT.md",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 10,
+      "sha256": "795b829557147f2788d54c4c5da8d8cf298cecb7bd89a19fb72ef2169f38c3cd"
+    },
+    {
+      "path": "baseline/docs/ARCHITECTURE.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 139,
+      "sha256": "fa60e1cad8fca3f5b3d3ee136c7709c7f92acb971a4f606c5bdb676c69590993"
+    },
+    {
+      "path": "baseline/docs/CHECKS.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 168,
+      "sha256": "7e54f0a174f5a622245c2024cedff3b8839762557dfe5ea92f9b236dc60ef5c5"
+    },
+    {
+      "path": "baseline/docs/DSL.md",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "adjacent E23–E30"
+      ],
+      "lines": 1245,
+      "sha256": "e429c119b4862438d7b5bc74186e95b2a3fdcb3d860d2f0c729ff613d47754c7"
+    },
+    {
+      "path": "baseline/docs/intent/diagram-quality/CORPUS.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 29,
+      "sha256": "effb9b1f86428e562f605b0a93daa868d4e88fb920be377d9f15a68ca5cfce19"
+    },
+    {
+      "path": "baseline/docs/intent/diagram-quality/FEEL.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 88,
+      "sha256": "cfbffe66e998a40074821a9e48bfd99213053a2604cd503ea8f0623ad82e7d9e"
+    },
+    {
+      "path": "baseline/docs/intent/diagram-quality/NEXT.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 299,
+      "sha256": "cb13682cc672737be85f0a6148f4888fb2b7abd6c6d35282377ec69a35beafc7"
+    },
+    {
+      "path": "baseline/docs/intent/diagram-quality/RUBRIC.md",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 313,
+      "sha256": "08fb23e0d4eecdcfcce052a183c752e2c618aff5c75fcb5f7ed2399889e88ede"
+    },
+    {
+      "path": "baseline/examples/checkout-change.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 27,
+      "sha256": "d6de3405828b166c72d5c722a4e1577324efd383f034cd82817ec0326bf46b69"
+    },
+    {
+      "path": "baseline/examples/login-sequence.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 18,
+      "sha256": "c8952f79266dd0fecce262631c6d2c03fe910673128b209d3e99ec2be649004e"
+    },
+    {
+      "path": "baseline/examples/order-lifecycle.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 26,
+      "sha256": "0f6ed6a2a42d03a72958a12247f6fb2b8d4d16d1823405e3502636aef41980f7"
+    },
+    {
+      "path": "baseline/examples/png-file.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 27,
+      "sha256": "29470744493c2b1c9b0be92cf973ae49491b583195c15de5a9ac71ee7a44c66e"
+    },
+    {
+      "path": "baseline/examples/support-lanes.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 34,
+      "sha256": "6b5c9b95006a86432263243556ca385f67234e7247c3eeedc26bb2b1d6cebd24"
+    },
+    {
+      "path": "baseline/examples/tcp-header.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 25,
+      "sha256": "823e5c389072362061d741a2a646286cd408b7acbbb6646964b1d762ff075595"
+    },
+    {
+      "path": "baseline/examples/theme-proof.draft",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 36,
+      "sha256": "a79c7ffb760792370d37cc17792a524463ce71766712faf0d28a5719ed4faa96"
+    },
+    {
+      "path": "baseline/package.json",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 79,
+      "sha256": "7bcc24863a96ac239c9b86a921dc74531abefb2d952064d099171cd6a273df2b"
+    },
+    {
+      "path": "baseline/scripts/diagram-audit.mjs",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 1721,
+      "sha256": "d84c69cf5291cd8ee803b8f42580a3e8715a4f5305929a4aa3e75c66ff5d808e"
+    },
+    {
+      "path": "baseline/scripts/draftably.mjs",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "infra E01–E10"
+      ],
+      "lines": 62,
+      "sha256": "c48956da482fdbefaf3f59c8e94217f4edd9339b40d7a9f896fb32cc4accc6b1"
+    },
+    {
+      "path": "baseline/scripts/lib/proof.mjs",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 106,
+      "sha256": "e5d98020ab8a9db9f05616df405f5c86184756a936f1795421fa66d940af41f6"
+    },
+    {
+      "path": "baseline/scripts/shoot.mjs",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 137,
+      "sha256": "d9e10625339b40e6c5f9f70dd179f702af36f42074deffe17bde9d20726cbbc4"
+    },
+    {
+      "path": "baseline/skills/draftably/SKILL.md",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 341,
+      "sha256": "c6e18fd0583f2c7e61a079e24780684c95ac27cced1ab92080e9dabb36dd86ea"
+    },
+    {
+      "path": "baseline/src/cli/main.ts",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 694,
+      "sha256": "7c503a123199111764ccccba4285a05cb817d8bf5279a5f1b2f18d69b87cefc0"
+    },
+    {
+      "path": "baseline/src/cli/svg.ts",
+      "scope": "full",
+      "read_by": [
+        "infra E01–E10"
+      ],
+      "lines": 549,
+      "sha256": "3c0b010bd09e3be16ed93bb7a1dbe37740e01a51a4e0ee44e2ed7495b40ba513"
+    },
+    {
+      "path": "baseline/src/dsl/cells.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "adjacent E23–E30"
+      ],
+      "lines": 232,
+      "sha256": "443ce057649afb14e58af51416db5aa9b5f7e3783a3c8d285698b9f64e89a5b5"
+    },
+    {
+      "path": "baseline/src/dsl/compile.ts",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 3162,
+      "sha256": "aaa27b7359ebd3da960fb65e6d13a21ea65378f5749bc1522faec4cdd6ad461e"
+    },
+    {
+      "path": "baseline/src/dsl/frame.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "adjacent E23–E30"
+      ],
+      "lines": 34,
+      "sha256": "b83efff77d56d32296d81cd109a780ba0d5469a09ce0c03ed82cb36348e12a20"
+    },
+    {
+      "path": "baseline/src/dsl/syntax.ts",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 1181,
+      "sha256": "a31c7dd2b0b933616806934765e8301447a588e0fe03b08035eb3ce70add20c9"
+    },
+    {
+      "path": "baseline/src/model/appearance.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22"
+      ],
+      "lines": 664,
+      "sha256": "609311a57852e935d302a24cd94bf701ae437408350077684dbbba13999e63f5"
+    },
+    {
+      "path": "baseline/src/model/fonts.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "adjacent E23–E30"
+      ],
+      "lines": 175,
+      "sha256": "c7969cc11e1b8a91d4e7f00a07843acb3d8c8679dacc4a212b64790ab8c66633"
+    },
+    {
+      "path": "baseline/src/model/heading.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "adjacent E23–E30"
+      ],
+      "lines": 82,
+      "sha256": "780a19a2da18639ea777ae7b64f159ba65f6ba1cc06cebeed159f407c0db1f88"
+    },
+    {
+      "path": "baseline/src/model/labels.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10"
+      ],
+      "lines": 178,
+      "sha256": "db702ed1b70225b9fc63bf816a3e07d9e69e3b1e4cc38749d9c45c8dcfda7703"
+    },
+    {
+      "path": "baseline/src/model/legend.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22"
+      ],
+      "lines": 77,
+      "sha256": "8599a6f22c86878946d7327fc1ed6ee472e64ac7ee6f4ab665cb7499ee000a13"
+    },
+    {
+      "path": "baseline/src/model/note.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 133,
+      "sha256": "f31dd4890e70419881ce64a4bb3b7e7fa165f42088051afee4091811309a5b15"
+    },
+    {
+      "path": "baseline/src/model/panels.ts",
+      "scope": "full",
+      "read_by": [
+        "adjacent E23–E30"
+      ],
+      "lines": 91,
+      "sha256": "26f93b7f7bd3784225f191f20e56abbb540f68d6482d0d7a1e9caf6738b2fdb7"
+    },
+    {
+      "path": "baseline/src/model/routes.ts",
+      "scope": "full",
+      "read_by": [
+        "infra E01–E10"
+      ],
+      "lines": 860,
+      "sha256": "499dd5794462adc6fc348fa70b01bdcd78cfe8c111aca7b4eb93b24bc7396e2d"
+    },
+    {
+      "path": "baseline/src/model/types.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "infra E01–E10"
+      ],
+      "lines": 271,
+      "sha256": "2cc8047c41f89627cc34fc0d1c00a268c41c88dd6236666c1c9049f3b03a25de"
+    },
+    {
+      "path": "baseline/tests/cells.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "adjacent E23–E30"
+      ],
+      "lines": 155,
+      "sha256": "34812ef2d9c733c152fcc73141c95baab1399e15f8606a4ae8bbae31cd610916"
+    },
+    {
+      "path": "baseline/tests/compare.test.ts",
+      "scope": "full",
+      "read_by": [
+        "adjacent E23–E30"
+      ],
+      "lines": 89,
+      "sha256": "3155fa7107e68a1fc777dfaab09240488d5171ec20770bef391afc56488536e6"
+    },
+    {
+      "path": "baseline/tests/dsl.test.ts",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 333,
+      "sha256": "4f3bf1c13ed53573d2f43194370e31233df4fa331428a0d21d0ae08fa7eb35eb"
+    },
+    {
+      "path": "baseline/tests/edge-labels.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "infra E01–E10"
+      ],
+      "lines": 150,
+      "sha256": "d37537823ca764ec89fe297a19e08bbb3bc89802f3add90cbd90e6ba290350be"
+    },
+    {
+      "path": "baseline/tests/heading.test.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22"
+      ],
+      "lines": 64,
+      "sha256": "b1ae9cfbac1557fb9219eddad57a48b46b6d42541ce739789d63242df81dd810"
+    },
+    {
+      "path": "baseline/tests/legend.test.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22"
+      ],
+      "lines": 73,
+      "sha256": "c6d9fcae1f139ce0795075a61ee79f40100e9f9b2b996cd4d54e40a281369431"
+    },
+    {
+      "path": "baseline/tests/notes.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 38,
+      "sha256": "7a33d6f0f3db47b69555bd4fa9a3b5fc25527159f83ae278ec5db82dc3304e4a"
+    },
+    {
+      "path": "baseline/tests/sequence.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "infra E01–E10"
+      ],
+      "lines": 128,
+      "sha256": "a9b78fc0747b915ea7855bffa7b40ef618f4ef733cd1940d0d48169ce3daf525"
+    },
+    {
+      "path": "baseline/tests/soft-groups.test.ts",
+      "scope": "full",
+      "read_by": [
+        "root"
+      ],
+      "lines": 97,
+      "sha256": "d201b2e92abbc9778cb8071784b93bd2c93dd74079f63fe7a3dcf0b1a2f011cb"
+    },
+    {
+      "path": "baseline/tests/theme-slots.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22"
+      ],
+      "lines": 120,
+      "sha256": "bf2d14d352c7b5eef0f54df4c1be60e08565696e9c90dbd86a578f2f4d05eedb"
+    },
+    {
+      "path": "baseline/tests/themes.test.ts",
+      "scope": "full",
+      "read_by": [
+        "concept E11–E22",
+        "infra E01–E10"
+      ],
+      "lines": 295,
+      "sha256": "79f656e894bc34f6655061f29dff3d1ab383b31daae2c25acb4bf4f9da12cff8"
+    },
+    {
+      "path": "baseline/tests/title-wrap.test.ts",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22"
+      ],
+      "lines": 88,
+      "sha256": "1f75953115929ef923b7c6f146997f18edb7225f1728045d5bfe62cc20d6d7ff"
+    },
+    {
+      "path": "upload/pro-prompt(20261102-031322).md",
+      "scope": "full",
+      "read_by": [
+        "root",
+        "concept E11–E22",
+        "infra E01–E10",
+        "adjacent E23–E30"
+      ],
+      "lines": 247,
+      "sha256": "9fa4ab97fd9dc7a637741b23989e898cfbfebd659d80435e14bcb74802cf87d3"
+    }
+  ],
+  "targeted_only": [
+    {
+      "path": "baseline/src/dsl/translate.ts",
+      "scope": "targeted",
+      "read_by": [
+        "root",
+        "infra E01–E10"
+      ],
+      "sections": "root lines 98–130; infra beginning through rejectUnsupported and main translation setup",
+      "sha256": "1a5cdd32f81f30d8a6acc211406b9530d590fb7bb3b95e604daa87be59b08e82"
+    },
+    {
+      "path": "baseline/src/model/geometry.ts",
+      "scope": "targeted",
+      "read_by": [
+        "infra E01–E10"
+      ],
+      "sections": "roundedPath",
+      "sha256": "87af18587a1fcdb843952c0790a778bbeca2f4a857af7f30d0dbf9227a284f17"
+    },
+    {
+      "path": "baseline/src/components/scene/NodeView.tsx",
+      "scope": "targeted",
+      "read_by": [
+        "infra E01–E10"
+      ],
+      "sections": "ShapeOutline",
+      "sha256": "742d7c4bb7c34d7155236e32d0c13951c7c924ce8b18f57fea114ab7c50d7c2c"
+    },
+    {
+      "path": "baseline/src/engines/routing-engine.js",
+      "scope": "targeted",
+      "read_by": [
+        "concept handoff review"
+      ],
+      "sections": "lines 1–100 (settings and obstacles), 518–604 (ports/slots), 1760–1834 (routing report/export); no full engine read claimed",
+      "sha256": "feee4a0ce946d8b2961b86219bc4e72dc333a04173b913c1908fab24376456d9"
+    },
+    {
+      "path": "baseline/tests/translate.test.ts",
+      "scope": "targeted",
+      "read_by": [
+        "infra E01–E10"
+      ],
+      "sections": "unsupported-edit / waypoint rejection test",
+      "sha256": "47a407ba92db41701559119104b50dbd52be7fbedbe5e90798da911b4805a175"
+    }
+  ]
+}

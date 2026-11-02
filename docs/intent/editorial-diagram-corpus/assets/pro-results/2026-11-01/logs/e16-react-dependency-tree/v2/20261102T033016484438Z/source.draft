@@ -1,0 +1,31 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+node app "App.js" color=module
+node generator "InspirationGenerator.js" color=module
+node fancy_a "FancyText.js" color=module
+node copyright "Copyright.js" color=module
+node fancy_b "FancyText.js" color=module
+node color "Color.js" color=module
+node inspirations "inspirations.js" color=module
+edge imports1 app -> generator "imports" directed=false
+edge imports2 app -> fancy_a "imports" directed=false
+edge imports3 app -> copyright "imports" directed=false
+edge imports4 generator -> fancy_b "imports" directed=false
+edge imports5 generator -> color "imports" directed=false
+edge imports6 generator -> inspirations "imports" directed=false
+layout root engine=tree root=app direction=down
+theme blueprint canvas="#23272F" text="#FFFFFF" connection="#FFFFFF" title-font=sans padding-x=12 padding-y=12 radius=10
+theme-color module fill="#303944" stroke="#FFFFFF" ink="#FFFFFF"
+pin app x=580 y=0
+pin generator x=160 y=160
+pin fancy_a x=590 y=160
+pin copyright x=900 y=160
+pin fancy_b x=0 y=330
+pin color x=270 y=330
+pin inspirations x=480 y=330
+size app width=170 height=54
+size generator width=300 height=54
+size fancy_a width=220 height=54
+size copyright width=220 height=54
+size fancy_b width=220 height=54
+size color width=170 height=54
+size inspirations width=220 height=54

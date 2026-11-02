@@ -1,0 +1,43 @@
+{
+  "id": "E23",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default graph makes the sequence explicit, but long wraparound links and two crossings obscure the paired stellar lifecycles. The source uses two immediately legible loops and distinct celestial objects.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Moderate to high. The semantic model remains easy to scan, but every stage receives a size and a pin, most edges receive explicit endpoint sides, and a palette entry is needed just to make the note legible. The two paths can be edited, but the final composition no longer adapts automatically.",
+  "residuals": [
+    "No nebula/stellar illustration, glow, texture or scientifically recognizable silhouettes in native DSL.",
+    "No tapered circular flow bands or text along a path.",
+    "Object-bound labels replace separate exterior captions.",
+    "Manual sizes and pins mean later text changes require review.",
+    "Relative physical sizes are not preserved; the diagram must not be read as a size scale."
+  ],
+  "provisional_gaps": [
+    "native-image-icon-serializability",
+    "curved-directed-paths",
+    "external-label-roles",
+    "dark-note-contrast",
+    "native-text-scale-control"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

@@ -1,0 +1,28 @@
+{
+  "id": "E08",
+  "slug": "stripe-read-compare",
+  "title": "Online migration: read and compare results",
+  "publisher": "Stripe",
+  "author": "Jacqueline Xu",
+  "publication_date": "2017-02-02",
+  "access_date": "2026-11-02",
+  "page_url": "https://stripe.com/blog/online-migrations",
+  "image_url": "https://images.stripeassets.com/fzn2n1nzq965/4kSUiA4uz9hQAvzKSXHKm2/f6ed7fc288e8906c0ceb10a78b16686c/2-reads-compare.svg",
+  "license": "unknown",
+  "figure": "Blog > Online Migrations > Reads Compare",
+  "patterns": [
+    "record-layout",
+    "migration",
+    "convergence"
+  ],
+  "principal_objects": 10,
+  "reading_path": "Compare the nested customer subscription list with the separate subscription store, then follow both reads downward.",
+  "merit": "Typography distinguishes entity, field and value; quiet tinted stacks and sweeping arrows make dual reads easy to follow.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.svg",
+  "reference_sha256": "8198e4d12b68f149f4c920183e260288e7830dcad1ca37cb4ddda3c1dc259564",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

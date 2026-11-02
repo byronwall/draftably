@@ -1,0 +1,263 @@
+[
+  {
+    "id": "G01",
+    "title": "Local text hierarchy and bounded text roles",
+    "classification": "Missing native controls; some new text primitives",
+    "severity": "Medium; high when prose or notation carries distinctions",
+    "decision": "Build",
+    "reason": "Title, field, value and caption roles recur, and global font changes cannot express them.",
+    "cases": {
+      "E08": "Entity, field and italic value roles collapse into similarly bold small text.",
+      "E10": "Component titles and monospace mechanism captions need nine separate notes and reserved heights.",
+      "E12": "Subscripts and gate notation become prose; the author-created plus shorthand also introduces ambiguity.",
+      "E14": "Dialogue, emphasis and nameserver identity become uniform box text.",
+      "E22": "Panel narration, NS/A records and answers require different text roles.",
+      "E24": "Inline emphasis inside atmospheric evidence and varied hierarchy are flattened.",
+      "E29": "Long guidance loses the original distinction between short icon labels and explanatory prose."
+    },
+    "source": "src/dsl/syntax.ts: THEME_ATTRS and node/group attribute allowlists; src/model/appearance.ts: typography roles; src/model/labels.ts: titleArea/nodeLabel/edgeLabelLines; src/model/heading.ts: headingMarkup.",
+    "boundary": "The baseline already has title, group-title and annotation roles and deterministic bundled font metrics. It lacks per-object size/weight/italic/rich-run authoring. Ordinary edge labels do not get the sequence-specific wrapping path. Oversized author-selected coordinates also caused tiny publication text; that is not solely a renderer fault.",
+    "workaround": "Choose global theme font roles, split content into nodes or notes, and manually resize/reposition. Exact mixed weight, italic values and local rich text remain unavailable.",
+    "cost": "Styling, notes and manual geometry in affected files are measured; the isolated cost of typography is not separable. Full v2 burden is reported below, not attributed wholly to this gap.",
+    "proof": "Use E08 record fields and E29 prose as development proofs; keep all values readable at the same comparison width with distinct roles and fewer helper notes. Check a longer label without clipping. E10 is a confirmation case.",
+    "tests": "tests/themes.test.ts, theme-slots.test.ts, title-wrap.test.ts, heading.test.ts, edge-labels.test.ts, translate.test.ts.",
+    "risk": "Arbitrary free-form CSS would undermine deterministic measurement and make themes inconsistent. Prefer a small stable role vocabulary before unrestricted rich text."
+  },
+  {
+    "id": "G02",
+    "title": "Anchored labels, captions and annotation space",
+    "classification": "Native persistence gap plus missing additive caption/leader behavior",
+    "severity": "High when the explanation becomes detached or overlaps",
+    "decision": "Build",
+    "reason": "Annotations should point to their subject and have room without becoming fake graph nodes.",
+    "cases": {
+      "E03": "The v0 Redis note overlaps the following Git region; v2 replaces fine leaders with boxed notes.",
+      "E13": "Explanatory leaders around the command/query model become disconnected note panels.",
+      "E20": "Process labels and pointers to terrain/artifacts lose their anchored editorial role.",
+      "E23": "Exterior object captions become text inside the celestial stand-ins.",
+      "E25": "Labels tied to terrain, water stores and fluxes become small node/edge labels.",
+      "E27": "Exterior role labels and loop annotations become node-bound text.",
+      "E28": "External station names cannot be attached to ticks or interchange symbols through native label layout.",
+      "E29": "A route icon with a separate explanatory paragraph is replaced by one box.",
+      "E30": "Sector leaders and a phase bracket have no equivalent native annotation primitive."
+    },
+    "source": "src/model/types.ts: LabelLayout; src/model/labels.ts: nodeLabel; src/model/note.ts: Note/placeNotes/noteMarkup; src/dsl/translate.ts: rejectUnsupported; src/dsl/syntax.ts note parsing; src/dsl/compile.ts and src/dsl/project.ts.",
+    "boundary": "Node-label mode, offsets, width and leader already exist in the model, but native persistence explicitly rejects label-position edits. A second caption is different from moving the primary label. Notes accept near/side/width but lack edge anchors or leaders and are placed after graph layout.",
+    "workaround": "Use note near=object side=... width=..., reserve room with larger groups, or add a text node and edge. The last workaround alters graph semantics and should remain explicit.",
+    "cost": "Counts include notes, exact note widths and reserved group sizes. The actual source shows where captions duplicate the object structure. No measured time-saving claim.",
+    "proof": "E03 must keep Redis/Git labels and both notes unobscured after a longer label; E13 must maintain obvious subject-to-annotation correspondence. Existing label-position edits must survive native save/reopen. E28/E30 confirm exterior and sector-like labeling needs.",
+    "tests": "tests/notes.test.ts, edge-labels.test.ts, heading.test.ts, bounds.test.ts, translate.test.ts, file-session.test.ts.",
+    "risk": "Reservation can inflate diagrams or destabilize unrelated nodes. Keep additive captions distinct from primary-label placement; preserve existing note defaults when no new option is used."
+  },
+  {
+    "id": "G03",
+    "title": "Semantic connection styling and arrow ends",
+    "classification": "Missing native/model semantic line controls",
+    "severity": "High when route color identifies the type of flow",
+    "decision": "Build",
+    "reason": "Color and line form often distinguish relations rather than decorate them.",
+    "cases": {
+      "E01": "TCP and TLS flights cannot receive independent colors; a combined ACK/ClientHello row cannot split its paint.",
+      "E02": "Client tracks are colored by event boxes, but the connecting timeline tracks remain uniform.",
+      "E05": "Green requests, blue responses and neutral duplex HTTP become solid/dashed gray alternatives; the native legend has a retained exception.",
+      "E27": "Biological and technical material-return streams lose their independent green/blue line meaning.",
+      "E28": "Different tram service identities and shared parallel route strokes are absent.",
+      "E07": "Two-ended source connections require pairs of directed edges: 24 native edges for 12 source duplex connections."
+    },
+    "source": "src/dsl/syntax.ts: ModelEdge and edge attribute allowlist; src/model/types.ts: DiagramEdge; src/cli/svg.ts: sceneMarkup/arrowsFor; src/model/appearance.ts and status paint helpers.",
+    "boundary": "The theme can set one connection color. Async dashing and status/emphasis paint exist, but status is not a general semantic category. Native directed=false removes the arrowhead; it does not create two-ended arrowheads (docs/DSL.md, Undirected connections).",
+    "workaround": "Differentiate nodes, use meaningful edge text or async dashes, and duplicate reverse edges for duplex relations. Do not misuse change-status markers to fake unrelated route colors.",
+    "cost": "E07 is an exact measured duplication: 24 edge declarations versus 12 visually bidirectional source links, plus repeated endpoint controls. Other style costs are visible case totals rather than causal estimates.",
+    "proof": "E05 should preserve all three relation classes with a truthful legend; E07 should express duplex connections once without changing connectivity; E27 should distinguish both cycles in the routes themselves. E28 is a confirmation.",
+    "tests": "tests/drawn-colors.test.ts, themes.test.ts, undirected.test.ts, edge-labels.test.ts, translate.test.ts, sequence.test.ts.",
+    "risk": "New paint must preserve contrast, arrowhead inheritance, diff/emphasis precedence and accessibility when color is not available."
+  },
+  {
+    "id": "G04",
+    "title": "Quiet containment that preserves the layout scope",
+    "classification": "Awkward coupling between appearance and layout",
+    "severity": "Medium; high when membership becomes ambiguous",
+    "decision": "Build",
+    "reason": "Removing visual weight should not require losing a useful layout boundary.",
+    "cases": {
+      "E03": "Large bands and a quiet shard region need custom fill/stroke and manual dimensions.",
+      "E08": "Nested record scopes require several nearly identical custom shades to hide internal box chrome.",
+      "E10": "Layer groups and component captions need reserved room but lighter header/card treatment.",
+      "E13": "Nested query/command model groups acquire heavier headers and framing than their editorial role needs.",
+      "E14": "Comic panels need independent layout and restrained panel borders.",
+      "E15": "Repeated realm/heap/stack groups gain much more framing and padding than the original.",
+      "E22": "Numbered panels and records use different visual containment roles that the native group treatment only approximates.",
+      "E30": "The Interphase soft tint splits into separate pieces around manually placed phases."
+    },
+    "source": "src/dsl/frame.ts; src/dsl/compile.ts: scope layout and group framing; src/model/types.ts: DiagramGroup.frame/hull; src/cli/svg.ts: sceneMarkup group rendering; src/model/panels.ts; src/dsl/translate.ts.",
+    "boundary": "frame=soft draws member tints; frame=none draws no frame. Both dissolve the group's own layout scope and cannot take their own layout/position. They are not simply borderless versions of an ordinary framed container. Existing compare/state panels serve different semantics.",
+    "workaround": "Keep framed scopes and define quiet swatches; reserve group dimensions; manually align contents. This preserves membership but retains fixed header glyphs/spacing.",
+    "cost": "Repeated custom palette shades, group minimum dimensions and pins are measurable in E08/E10/E14/E15. Source verbosity is partly legitimate hierarchical content.",
+    "proof": "E08 should retain editable record nesting with unobtrusive presentation; E14 panels should keep their independent recipes with quiet chrome. E10 confirms captions/layers, E30 confirms that membership is not accidentally changed.",
+    "tests": "tests/soft-groups.test.ts, group-fit.test.ts, group-packing.test.ts, compare.test.ts, theme-slots.test.ts, translate.test.ts.",
+    "risk": "Changing the meaning of existing frame=soft would break deliberate scope dissolution. Add an explicit appearance control for a retained scope rather than silently repurposing it."
+  },
+  {
+    "id": "G05",
+    "title": "Native route and edge-label placement controls",
+    "classification": "Existing model capability rejected by native persistence",
+    "severity": "Medium to high for constrained editorial arrangements",
+    "decision": "Explore",
+    "reason": "Existing waypoint capability is valuable, but coordinate and save/reopen semantics need a small design proof; edge-label persistence can ship with G02.",
+    "cases": {
+      "E05": "TCP and HTTP corridors need repeated endpoint choices and object repositioning.",
+      "E07": "Duplicated duplex edges compete for closely spaced paths even after alignment.",
+      "E11": "A shared fanout origin becomes several orthogonal elbows; repeated explicit endpoints reduce ambiguity but do not reproduce the chosen paths.",
+      "E13": "Longer orthogonal reads/writes replace compact perimeter paths and annotation relationships.",
+      "E21": "Pointer paths still run along record borders and through the Stack title after explicit endpoint choices.",
+      "E28": "Pinned station labels cannot preserve authored octilinear paths or shared route segments."
+    },
+    "source": "src/model/types.ts: EdgeLayout.waypoints/labelDx/labelDy; src/model/routes.ts: laneBends/routeInput/drawRoutes/placeEdgeLabels; src/dsl/translate.ts: rejectUnsupported; src/dsl/syntax.ts: edge allowlist.",
+    "boundary": "Waypoints and edge-label offsets already exist internally. rejectUnsupported explicitly prevents saving changed bends or label positions to native files. Exposing them will not itself add arbitrary Bézier curves, shared buses or repair default endpoint behavior.",
+    "workaround": "Reposition actual nodes/groups, set from/to sides, tune global routing controls, or accept the automatic route. The files retain these controls visibly.",
+    "cost": "Explicit port lines and pins are counted independently. The corpus does not claim that every pin would disappear after waypoint support; many pins define the intended composition.",
+    "proof": "Round-trip a manually chosen corridor and label placement without moving semantic nodes, then recompile deterministically. E05 and E11 are development proofs; E28 confirms cartographic limitations separately. Default routes must remain unchanged when no controls are specified.",
+    "tests": "tests/translate.test.ts, layout-edits.test.ts, routing-ports.test.ts, routing-direction.test.ts, routing-clearance.test.ts, edge-labels.test.ts.",
+    "risk": "Saved bends can become stale after label growth or node moves. Validation must report stale/obstructed controls rather than silently discard them or snap back."
+  },
+  {
+    "id": "G06",
+    "title": "Directed contours, smooth loops and cyclic regions",
+    "classification": "Missing path/region primitives and layout recipes",
+    "severity": "High when the path shape itself explains the concept",
+    "decision": "Explore",
+    "reason": "The need recurs, but one generic curve switch will not cover all the semantics.",
+    "cases": {
+      "E08": "Two sweeping read paths become orthogonal paths with different convergence.",
+      "E23": "Two broad stellar lifecycle loops become thin elbow routes.",
+      "E26": "The two directed divergence/convergence contours lose perimeter arrows and sloped phase labels.",
+      "E27": "Nested return loops no longer show shorter and longer value-preserving cycles through their shape.",
+      "E30": "Annular phase bands and sector extent are replaced by a rectangular cycle with split Interphase tint."
+    },
+    "source": "src/model/routes.ts: drawRoutes uses roundedPath; src/cli/svg.ts: path and marker rendering; src/dsl/syntax.ts: layout/shape vocabulary; src/dsl/compile.ts: recipe dispatch; src/model/types.ts.",
+    "boundary": "Rounded orthogonal corners already exist. They are not arbitrary smooth curves, directed closed contours, annular regions or radial layout. These cases require different semantic abstractions, not just a larger corner radius.",
+    "workaround": "Pin nodes around the desired silhouette and use orthogonal return edges, with explicit notes about the missing spatial meaning.",
+    "cost": "E23/E27 use one pin and size per principal node; E30 adds manual geometry yet has lower judged quality than v0. Those measurements do not prove the cost of a future radial recipe.",
+    "proof": "Prototype one narrow primitive at a time: ordered nested return lanes on E27, then a directed cyclic band proof on a non-confirmation fixture. Test E30 only after the design is chosen. Readers should be able to follow cycle direction and membership without corrective explanatory notes.",
+    "tests": "New path/region fixture tests if pursued; tests/routing-direction.test.ts, routing-clearance.test.ts, routing-group-borders.test.ts, bounds.test.ts and CLI/canvas export parity.",
+    "risk": "Generic vector editing could overwhelm the semantic DSL and create difficult text/path bounds problems. Keep an exploratory branch separate from immediate default fixes."
+  },
+  {
+    "id": "G07",
+    "title": "A small missing semantic shape vocabulary",
+    "classification": "Missing native geometric primitives",
+    "severity": "Medium; sometimes semantic, sometimes stylistic",
+    "decision": "Explore",
+    "reason": "Three compact shape needs recur across different publishers; full illustration is a separate problem.",
+    "cases": {
+      "E04": "Pills/circles substitute for database cylinders.",
+      "E09": "A diamond substitutes for an octagon and a pill for a freeform patch; overlap and canvas state are reduced.",
+      "E19": "Separated rectangles and small connectors replace a contiguous chevron pipeline."
+    },
+    "source": "src/dsl/syntax.ts: DSL_SHAPES/DslShape; src/model/types.ts: ShapeKind; src/cli/svg.ts: outline; src/model/labels.ts: titleArea; src/model/routes.ts: portPoint.",
+    "boundary": "Native shapes are box, pill, circle, diamond, text and marker. The model also has icon/image kinds, but native files reject their persistence. Adding a cylinder or chevron requires native shape measurement, attachment and export work; an image of the entire reference is not a native recreation. Each particular new outline appears in one accepted case; the three-case count supports a vocabulary limitation, not a claim that any one proposed shape is individually common.",
+    "workaround": "Use a labeled existing shape, keep the substitution explicit, and score the lost visual meaning separately. The source remains editable at the substitute level.",
+    "cost": "Manual sizes and explanatory labels can make the substitute clearer but cannot create the missing outline. Their source counts are measured; a new primitive's effort benefit is unmeasured.",
+    "proof": "Compare a narrow cylinder and contiguous-stage proof using E04 and E19; preserve labels, arrow attachment and small-size legibility. Do not select a large icon library merely to match brands.",
+    "tests": "tests/title-wrap.test.ts, bounds.test.ts, model.test.ts, routing-ports.test.ts, dsl.test.ts, translate.test.ts.",
+    "risk": "Shape additions can multiply sizing and routing edge cases. Keep pictorial terrain, stars and cartoon characters out of the scope of this small vocabulary proposal."
+  },
+  {
+    "id": "G08",
+    "title": "Shared geometry across repeated editorial panels",
+    "classification": "Awkward authoring controls; recipe/design exploration",
+    "severity": "Medium",
+    "decision": "Explore",
+    "reason": "Repeated scenes require repeated geometry, while native comparison features have narrower semantics.",
+    "cases": {
+      "E04": "Four migration scenes repeat a coordinate template using 19 pins and 19 exact node sizes.",
+      "E09": "Nine checkpoint/journal panels repeat shape placement with 21 pins, 21 sizes and nine panel minimum dimensions.",
+      "E14": "Five explanatory panels need a manually maintained reading grid.",
+      "E15": "Mirrored agent bands duplicate realm/heap/stack geometry.",
+      "E22": "Six numbered panels and record rows repeat a visual template manually."
+    },
+    "source": "src/model/panels.ts; src/dsl/compare.ts; src/dsl/compile.ts: group layout/order/pin handling; src/dsl/syntax.ts; src/model/types.ts.",
+    "boundary": "Existing compare and emphasis-state panels are useful, but their graph/version semantics do not directly express arbitrary editorial panels with shared positions. In particular, native state declarations and inspect --states already draw labeled panels from one layout and can fade nonfocused objects; compare already aligns before/after version panels. E09's rejected state=muted node attribute is an authoring error, not evidence that focus or dimming is absent. The study did not exhaustively evaluate those existing panel paths or implement a template system, so assess their applicability before adding new shared-geometry syntax.",
+    "workaround": "Repeat groups and explicit geometry, using stable IDs and comments to expose correspondence.",
+    "cost": "This is a direct source-burden finding. Corresponding objects have repeated pins/sizes; aggregate counts are not a stopwatch measurement. A label edit's maintenance burden is assessed, not experimentally measured.",
+    "proof": "Use E04/E09 to test whether a small correspondence/slot mechanism preserves aligned counterparts with fewer repeated controls. Make one content edit and inspect all affected panels. E10 is a confirmation for whether simpler native rows remain adequate.",
+    "tests": "tests/compare.test.ts, states.test.ts, refinement-drift.test.ts, group-fit.test.ts, translate.test.ts.",
+    "risk": "Premature macros can obscure meaning and complicate source edits. First determine whether shared layout constraints solve the cases without a general templating language."
+  },
+  {
+    "id": "G09",
+    "title": "Dark-theme notes use incompatible foreground and surface",
+    "classification": "Reproduced default contrast defect",
+    "severity": "High locally; narrow affected feature",
+    "decision": "Build",
+    "reason": "A small demonstrated correctness fix should precede broader styling work.",
+    "cases": {
+      "E05": "The v1 dark Vercel note has pale text on a pale note panel.",
+      "E23": "The v1 dark NASA note independently shows the same near-unreadable combination."
+    },
+    "source": "src/model/note.ts: noteMarkup chooses swatchFor(look,'slate',50,'group') for panel.fill but look.text for the note text; src/model/appearance.ts: swatch resolution.",
+    "boundary": "This is not an unavailable publisher font or subjective style difference. Both actual v1 renders expose the same foreground/background mismatch. Two cases from two publishers is reproduced stress evidence, below this study's commonness threshold.",
+    "workaround": "The v2 files override theme-color slate shade=50 with a dark surface and light ink. The renderer still reads look.text for the text.",
+    "cost": "One extra palette line with three assignments in each final case; it also couples the workaround to any other use of that shade.",
+    "proof": "E05 and E23 notes must remain readable without the workaround on their dark canvas; light notes and custom swatches must retain intended contrast. Inspect both SVG and PNG.",
+    "tests": "tests/notes.test.ts, themes.test.ts, drawn-colors.test.ts.",
+    "risk": "Blindly replacing look.text with an ink role without checking custom swatches may change legitimate note styles. Preserve intended surface/foreground pairing explicitly."
+  },
+  {
+    "id": "G10",
+    "title": "Metric time is not a native timeline abstraction",
+    "classification": "Missing domain recipe; manual workaround available",
+    "severity": "High for temporal meaning; limited corpus incidence",
+    "decision": "Explore",
+    "reason": "Manual scaled pins can preserve one timeline, but the coordinate arithmetic belongs in a reusable abstraction if the need grows.",
+    "cases": {
+      "E01": "The sequence preserves flight order but not slanted time-of-flight or timed phase extent.",
+      "E02": "Default equal spacing loses exponential backoff spacing; final v2 restores proportional event centers with 15 pins and 15 sizes."
+    },
+    "source": "src/dsl/compile.ts: sequenced; src/model/routes.ts: messageRoute; src/dsl/syntax.ts: layout recipe choices; docs/DSL.md: sequence behavior.",
+    "boundary": "Sequence rows are ordinal message events, not a quantitative time axis. No finding implies that the sequence recipe should silently become time-scaled. The v2 retry diagram demonstrates a possible but laborious workaround.",
+    "workaround": "Encode explicit times in labels and calculate pin coordinates from a common scale. Keep flight durations labeled as schematic when not geometrically represented.",
+    "cost": "E02 has 30 pin/size lines for 15 event objects, plus repeated timing labels. Authoring minutes and future time savings are not measured.",
+    "proof": "A separate timeline proof should reproduce the common event centers for t0, t0+1, +2, +4 and +8 from data values; label edits must not alter those positions. E01 checks that ordinal sequence behavior remains stable.",
+    "tests": "New metric-timeline fixture tests if pursued; existing tests/sequence.test.ts and layout-fit.test.ts remain protection.",
+    "risk": "A universal time axis would conflate duration, ordering and protocol-flight notation. Keep any new recipe opt-in."
+  },
+  {
+    "id": "G11",
+    "title": "Cell and open-group endpoint routing needs targeted repair",
+    "classification": "Observed default routing defect/limitation",
+    "severity": "High in the affected pointer diagrams",
+    "decision": "Build",
+    "reason": "These are concrete route correctness cases, distinct from exposing manual bends.",
+    "cases": {
+      "E21": "Initial group-target routes cross fields; final explicit ports still put the upvalue-to-stack route through the Stack title and approach a bottom endpoint from above.",
+      "E22": "An earlier v2 route to a record container crosses record fields; semantic field targeting and explicit sides repair the retained final case."
+    },
+    "source": "src/model/routes.ts: cellEnds/routeInput/drawRoutes; src/engines/routing-engine.js: side selection/stubs/ancestor handling; src/dsl/conflicts.ts: sceneConflicts.",
+    "boundary": "Interior cells without a free side intentionally get a crossing segment. Open-group targets instead use frame-sized stubs. Explicit from/to sides select endpoints but do not guarantee a clear outward departure or approach in E21. E22's successful workaround means group attachment is not wholly unsupported.",
+    "workaround": "Use exact semantic field targets when appropriate and explicit from/to sides; preserve group targets when the pointer means the record as a whole. Do not silently change the target solely to make a route look better.",
+    "cost": "Repeated port overrides plus manual group placement; E21 still retains an edge-through-title warning. The source and geometry, not only visual scores, support this finding.",
+    "proof": "Reduce E21 to a regression fixture that preserves record targets and requires outward approach without traversing unrelated fields or the title. E22 tests container-versus-field targeting; E17 is a positive control for valid slice-to-cell attachment.",
+    "tests": "tests/cells.test.ts, routing-direction.test.ts, routing-ports.test.ts, routing-group-borders.test.ts, routing-clearance.test.ts.",
+    "risk": "A global clearance adjustment can break legitimate interior-cell references. Fix endpoint/stub behavior using semantic target type, not a corpus-wide penalty tweak."
+  },
+  {
+    "id": "G12",
+    "title": "Fit diagnostics should distinguish padding policy from visible clipping",
+    "classification": "Diagnostic precision and guidance",
+    "severity": "Medium for author trust; not a demonstrated unreadability failure",
+    "decision": "Build",
+    "reason": "The current warning can imply clipped text when the glyphs visibly fit.",
+    "cases": {
+      "E11": "Twelve final compact ENCODER/DECODER boxes receive text-overflow warnings although their labels are visibly contained.",
+      "E24": "Four final 52-pixel YES/NO diamonds receive fit warnings despite the short words fitting the outlines."
+    },
+    "source": "src/model/labels.ts: titleArea/diamondMeasure; src/dsl/compile.ts: text-overflow diagnostics; tests/title-wrap.test.ts; scripts/diagram-audit.mjs: heuristic text/shape measures.",
+    "boundary": "The warnings reflect the baseline's conservative text/padding fit policy, not necessarily escaped or clipped glyphs. This study does not suppress them or call them proof that all diagnostics are wrong.",
+    "workaround": "Use larger shapes to satisfy the fit policy or retain a documented warning after visual inspection. Both choices have a layout cost.",
+    "cost": "Sixteen final warnings across these two cases are retained in warnings.csv; no extra authoring-time estimate. The diagrams are still valid native outputs.",
+    "proof": "Classify actual clipping separately from tight padding on E11/E24 and add a deliberately clipped control that must still warn. Keep the warning's actionable source line and avoid weakening safety margins silently.",
+    "tests": "tests/title-wrap.test.ts, dsl.test.ts, quality-notes.test.ts, bounds.test.ts.",
+    "risk": "Relaxing padding solely to remove corpus warnings can create regressions in different fonts or longer labels. Improve diagnostic specificity before changing numerical thresholds."
+  }
+]

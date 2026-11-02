@@ -1,0 +1,40 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Open upvalue object graph" version=1
+group closure "ObjClosure"
+node fn "function" in=closure
+node ups "upvalues" in=closure
+group function "ObjFunction"
+node chunk "chunk" in=function
+node constants "constants" in=function
+group up_array "upvalue array"
+node idx0 "0" in=up_array
+group upvalue "ObjUpvalue"
+node location "location" in=upvalue
+group stack "Stack"
+node a "3" in=stack
+node f "<fn>" in=stack
+node rest1 "" in=stack
+node rest2 "" in=stack
+node chunk_rest "…" shape=text
+node constants_rest "…" shape=text
+edge f_closure f -> closure constraint=false
+edge closure_fn fn -> function constraint=false
+edge closure_array ups -> up_array constraint=false
+edge array_upvalue idx0 -> upvalue constraint=false
+edge upvalue_stack location -> a constraint=false
+edge chunk_more chunk -> chunk_rest kind=async constraint=false
+edge constants_more constants -> constants_rest kind=async constraint=false
+note "Stack variables: a holds 3; f holds the closure."
+layout root flow
+layout closure cells direction=down
+layout function cells direction=down
+layout up_array cells
+layout upvalue cells
+layout stack cells
+theme ink canvas="#FFFFFF" text="#111111" connection="#111111" padding-x=8 padding-y=8 radius=0
+near function closure side=right gap=48
+near up_array function side=below gap=48
+near upvalue up_array side=right gap=48
+near stack closure side=below gap=220
+near chunk_rest chunk side=right gap=160
+near constants_rest constants side=right gap=160

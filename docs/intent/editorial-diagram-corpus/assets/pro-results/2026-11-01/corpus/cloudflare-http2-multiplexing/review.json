@@ -1,0 +1,46 @@
+{
+  "id": "E07",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The first render has a severe line tangle and six edge-through-node warnings. Client/server declared before resource groups, row ordering, and doubled reverse edges all contribute; this is not solely a router defect.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "High. Twenty-four native edges represent twelve source duplex connections, and explicit ports are repeated on every edge. Eight pins and sixteen exact sizes align the two panels. The source remains inspectable, but adding one file means several new edges and repeated geometry.",
+  "residuals": [
+    "Paired edge workaround is verbose and creates route competition.",
+    "Thin low-contrast connections and large native card/group overhead remain.",
+    "File, client, and server illustrations are replaced by explicitly labeled native boxes."
+  ],
+  "provisional_gaps": [
+    "I-DUPLEX",
+    "I-GROUP-ROUTING",
+    "I-VISUAL-VOCAB",
+    "I-PANEL-GEOMETRY"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

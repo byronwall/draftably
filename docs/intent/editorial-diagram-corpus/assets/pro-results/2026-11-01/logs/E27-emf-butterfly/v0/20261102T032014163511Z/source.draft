@@ -1,0 +1,58 @@
+diagram "Circular economy: biological and technical cycles" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node renewable "Renewables"
+node finite "Finite materials"
+node parts "Parts manufacturer" shape=pill
+node product "Product manufacturer" shape=pill
+node service "Service provider" shape=pill
+node consumer "Consumer" shape=circle
+node user "User" shape=circle
+node bio_collect "Collection: biological"
+node tech_collect "Collection: technical"
+node farm "Farming / collection¹"
+node biosphere "Biosphere: regeneration"
+node biogas "Biogas"
+node digest "Anaerobic digestion"
+node extract "Extract biochemical feedstock²"
+node feedstock "Biochemical feedstock"
+node cascades "Cascades"
+node share "Share"
+node maintain "Maintain / prolong"
+node reuse "Reuse / redistribute"
+node refurbish "Refurbish / remanufacture"
+node recycle "Recycle"
+node leakage "Minimise systematic leakage and negative externalities"
+edge e1 renewable -> parts
+edge e2 finite -> parts
+edge e3 parts -> product
+edge e4 product -> service
+edge e5 service -> consumer
+edge e6 service -> user
+edge e7 consumer -> bio_collect
+edge e8 user -> tech_collect
+edge e9 bio_collect -> cascades
+edge e10 cascades -> consumer constraint=false
+edge e11 bio_collect -> extract
+edge e12 extract -> feedstock
+edge e13 feedstock -> parts constraint=false
+edge e14 farm -> parts constraint=false
+edge e15 bio_collect -> digest
+edge e16 extract -> digest
+edge e17 digest -> biogas
+edge e18 digest -> biosphere
+edge e19 biosphere -> farm constraint=false
+edge e20 tech_collect -> maintain
+edge e21 maintain -> user constraint=false
+edge e22 user -> share
+edge e23 share -> user constraint=false
+edge e24 tech_collect -> reuse
+edge e25 reuse -> service constraint=false
+edge e26 tech_collect -> refurbish
+edge e27 refurbish -> product constraint=false
+edge e28 tech_collect -> recycle
+edge e29 recycle -> parts constraint=false
+edge e30 bio_collect -> leakage
+edge e31 tech_collect -> leakage
+layout root flow direction=down
+note "Renewables flow management on the biological side; stock management on the technical side."
+note "¹ Farming / collection includes hunting and fishing. ² Extraction can accept post-harvest and post-consumer inputs."

@@ -1,0 +1,51 @@
+{
+  "id": "E17",
+  "slug": "e17-go-slice",
+  "title": "Go slice descriptor and backing array after reslicing",
+  "publisher": "The Go Blog",
+  "author": "Andrew Gerrand",
+  "publication_date": "2011-01-05",
+  "access_date": "2026-11-02",
+  "page_url": "https://go.dev/blog/slices-intro",
+  "image_url": "https://go.dev/blog/slices-intro/slice-2.png",
+  "license": "unknown; exact figure-specific reuse license not verified",
+  "figure": "slice-2.png",
+  "patterns": [
+    "memory layout",
+    "cells",
+    "interior cell reference"
+  ],
+  "principal_objects": 10,
+  "reading_path": "Three-field vertical slice descriptor points to the third cell in a five-byte horizontal array.",
+  "merit": "Two perpendicular memory strips distinguish the descriptor from storage. Muted per-field colors and a stronger two-cell range show length versus remaining capacity with minimal text.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "c0008f5a935182449cf759305bfcb4a11fc6f722a89878fda7c13d77c6bfb235",
+  "reference_bytes": 7220,
+  "reference_preview_size": [
+    517,
+    192
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "9d70bfcbd18a66a658e4a01210cb5b0604a6b972a6f1f9f5a13732012863947d",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "c83c36c30b660c3631ff0b0cd156ec6c12db59c88f2e263b6548acba265b2aae",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "8fb7a3b14cd9abc5ca79f05dbf059dea90b772c4dfd4890fcbd88c7a97b0906a",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

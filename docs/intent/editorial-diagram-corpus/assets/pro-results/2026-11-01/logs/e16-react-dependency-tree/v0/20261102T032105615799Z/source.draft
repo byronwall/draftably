@@ -1,0 +1,15 @@
+diagram "Module dependency tree" version=1
+node app "App.js"
+node generator "InspirationGenerator.js"
+node fancy_a "FancyText.js"
+node copyright "Copyright.js"
+node fancy_b "FancyText.js"
+node color "Color.js"
+node inspirations "inspirations.js"
+edge imports1 app -> generator "imports"
+edge imports2 app -> fancy_a "imports"
+edge imports3 app -> copyright "imports"
+edge imports4 generator -> fancy_b "imports"
+edge imports5 generator -> color "imports"
+edge imports6 generator -> inspirations "imports"
+layout root engine=tree root=app direction=down

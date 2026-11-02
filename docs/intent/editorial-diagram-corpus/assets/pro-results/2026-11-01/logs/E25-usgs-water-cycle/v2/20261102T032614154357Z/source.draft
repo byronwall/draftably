@@ -1,0 +1,105 @@
+diagram "The water cycle: pools, fluxes and human use" version=1
+theme drafting canvas="#FFFFFF" connection="#218AAE" radius=3
+subtitle "Bright water pools, named transfers, and explicit human use."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node airsea "Atmospheric moisture: over ocean" color=sky shade=100
+node airland "Atmospheric moisture: over land" color=sky shade=100
+node ice "Ice sheets and glaciers" color=sky shade=100
+node snow "Snowpack" color=sky shade=100
+node permafrost "Permafrost" color=sky shade=100
+node salinelake "Saline lakes" color=teal shade=100
+node freshlake "Freshwater lakes" color=sky shade=100
+node freshwet "Fresh wetlands" color=sky shade=100
+node brackishwet "Brackish wetlands" color=teal shade=100
+node reservoir "Reservoirs" color=sky shade=100
+node river "Rivers" color=sky shade=100
+node soil "Soil moisture" color=sky shade=100
+node ground "Groundwater" color=sky shade=100
+node ocean "Ocean: mixed zone" color=teal shade=100
+node deep "Ocean: deep water zone" color=teal shade=100
+node domestic "Domestic water use" color=stone shade=100
+node municipal "Municipal water use" color=stone shade=100
+node industry "Industrial water use" color=stone shade=100
+node agriculture "Agricultural water use" color=stone shade=100
+node grazing "Grazing water use" color=stone shade=100
+edge e1 ocean -> airsea "Ocean evaporation" constraint=false
+edge e2 airsea -> ocean "Precipitation over ocean" constraint=false
+edge e3 airsea -> airland "Moisture transport to land" constraint=false
+edge e4 airland -> snow "Precipitation"
+edge e5 airland -> ice "Precipitation"
+edge e6 airland -> soil "Precipitation over land"
+edge e7 snow -> river "Snowmelt"
+edge e8 ice -> river "Meltwater"
+edge e9 soil -> salinelake "Streamflow to closed basins"
+edge e10 soil -> river "Runoff"
+edge e11 soil -> ground "Groundwater recharge"
+edge e12 soil -> airland "Evapotranspiration" constraint=false
+edge e13 freshwet -> river "Streamflow"
+edge e14 freshlake -> river "Streamflow"
+edge e15 reservoir -> river "Streamflow"
+edge e16 river -> ocean "Streamflow to ocean" constraint=false
+edge e17 river -> brackishwet "Estuarine flow"
+edge e18 ground -> ocean "Groundwater discharge" constraint=false
+edge e19 ocean -> deep "Ocean circulation"
+edge e20 deep -> ocean "Ocean circulation" constraint=false
+edge e21 river -> domestic "Water supply"
+edge e22 river -> municipal "Water supply"
+edge e23 river -> industry "Water supply"
+edge e24 river -> agriculture "Irrigation"
+edge e25 ground -> agriculture "Groundwater use"
+edge e26 river -> grazing "Water use"
+edge e27 municipal -> river "Urban runoff"
+edge e28 industry -> river "Return flow"
+edge e29 agriculture -> soil "Irrigation"
+edge e30 agriculture -> airland "Evapotranspiration" constraint=false
+layout root engine=layered direction=down ordering=crossings fold=never rank-gap=100 node-gap=48
+note "Pools store water; fluxes move it. Water may be fresh, saline or brackish, and solid, liquid or gas."
+note "Human use changes water quantity, quality, location and timing. The native model omits geographic terrain; see the preserved reference."
+note "Permafrost stores frozen water. Pollution and climate change affect quality, availability and movement."
+legend sky "Fresh water, frozen water and atmospheric moisture" shade=100
+legend teal "Saline or mixed water" shade=100
+legend stone "Human water use" shade=100
+
+# Explicit sizes and parent-relative positions.
+size airsea width=200 height=auto
+pin airsea x=0 y=0
+size airland width=200 height=auto
+pin airland x=900 y=0
+size ice width=200 height=auto
+pin ice x=900 y=160
+size snow width=200 height=auto
+pin snow x=1170 y=160
+size permafrost width=200 height=auto
+pin permafrost x=1660 y=180
+size salinelake width=200 height=auto
+pin salinelake x=460 y=320
+size freshwet width=200 height=auto
+pin freshwet x=750 y=480
+size freshlake width=200 height=auto
+pin freshlake x=280 y=480
+size brackishwet width=200 height=auto
+pin brackishwet x=300 y=1010
+size reservoir width=200 height=auto
+pin reservoir x=1380 y=330
+size river width=200 height=auto
+pin river x=950 y=650
+size soil width=200 height=auto
+pin soil x=1450 y=860
+size ground width=200 height=auto
+pin ground x=1050 y=1060
+size ocean width=200 height=auto
+pin ocean x=0 y=840
+size deep width=200 height=auto
+pin deep x=0 y=1060
+size domestic width=200 height=auto
+pin domestic x=250 y=660
+size municipal width=200 height=auto
+pin municipal x=480 y=830
+size industry width=200 height=auto
+pin industry x=740 y=890
+size agriculture width=200 height=auto
+pin agriculture x=1400 y=650
+size grazing width=200 height=auto
+pin grazing x=1230 y=480
+routing crossing-penalty=900 corner-radius=8 passes=5
+# These physical-zone placements cannot restore the missing landscape or area/volume semantics.

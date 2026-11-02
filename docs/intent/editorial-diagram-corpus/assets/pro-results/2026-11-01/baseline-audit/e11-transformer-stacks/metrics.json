@@ -1,0 +1,557 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 14,
+    "groups": 1,
+    "edges": 18,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1364,
+    "height": 456,
+    "aspect": 2.99,
+    "density": 0.215,
+    "aligned": 1,
+    "crossings": 2,
+    "bends": 22,
+    "bendsPerEdge": 1.22,
+    "maxBends": 6,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 246,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "transformer": 0.34
+    },
+    "groupGaps": {
+      "input | transformer": 28,
+      "output | transformer": 28
+    },
+    "emptyArea": {
+      "share": 0.2,
+      "boxes": 13.3,
+      "w": 600,
+      "h": 212,
+      "x": 764,
+      "y": 244
+    },
+    "edgeStretch": [
+      {
+        "id": "attention3",
+        "kind": "forward",
+        "length": 488,
+        "detour": 1.18,
+        "span": 0.34
+      },
+      {
+        "id": "dec_step3",
+        "kind": "wrap",
+        "length": 1124,
+        "detour": 1.6,
+        "span": 0.78
+      },
+      {
+        "id": "enc_step4",
+        "kind": "wrap",
+        "length": 660,
+        "detour": 1.33,
+        "span": 0.46
+      },
+      {
+        "id": "output_dec",
+        "kind": "forward",
+        "length": 818,
+        "detour": 1.16,
+        "span": 0.57
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 3,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 2,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 1,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 7.8,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "attention2 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "attention3 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "dec_step3 (6)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "dec_step3 along dec4"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "input_enc along input"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "enc6 out D: turns at 264, 324"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "dec4 in D: turns at 264, 284"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "transformer fill 0.34"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "transformer: enc4 → enc5 sit diagonally"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "600×212px at 764,244 (20% of the drawing, room for 13 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 14,
+    "groups": 3,
+    "edges": 18,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 632,
+    "height": 860,
+    "aspect": 0.73,
+    "density": 0.246,
+    "aligned": 1,
+    "crossings": 4,
+    "bends": 18,
+    "bendsPerEdge": 1,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 12,
+    "edgeLengthPerEdge": 224,
+    "theme": "drafting",
+    "fills": 6,
+    "minTextContrast": 4.54,
+    "groupFill": {
+      "decoders": 0.71,
+      "transformer": 0.73,
+      "encoders": 0.71
+    },
+    "groupGaps": {
+      "decoders | encoders": 160,
+      "output | transformer": 48,
+      "input | transformer": 48
+    },
+    "emptyArea": {
+      "share": 0.33,
+      "boxes": 18.7,
+      "w": 208,
+      "h": 860,
+      "x": 404,
+      "y": -120
+    },
+    "edgeStretch": [
+      {
+        "id": "attention1",
+        "kind": "forward",
+        "length": 910,
+        "detour": 1.59,
+        "span": 0.85
+      },
+      {
+        "id": "attention2",
+        "kind": "forward",
+        "length": 810,
+        "detour": 1.66,
+        "span": 0.76
+      },
+      {
+        "id": "attention3",
+        "kind": "forward",
+        "length": 682,
+        "detour": 1.69,
+        "span": 0.64
+      },
+      {
+        "id": "attention4",
+        "kind": "forward",
+        "length": 414,
+        "detour": 1.29,
+        "span": 0.39
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 3,
+      "expectation-failed": 0,
+      "edge-hugs-node": 7,
+      "edge-on-group-border": 2,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 16.1,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "attention3 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along dec1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc1"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "attention1 along transformer"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention2 along dec2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention2 along enc2"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "attention2 along encoders"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention3 along enc5"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention3 along enc6"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "attention3 14px from encoders"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "attention3 between encoders's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention4 along enc6"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈116: gaps 16/33"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "attention1 910px, 0.85 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "attention2 810px, 0.76 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "attention3 682px, 0.64 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "208×860px at 404,-120 (33% of the drawing, room for 19 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 15,
+      "meanMove": 375,
+      "maxMove": 710,
+      "moved": 15,
+      "alignedMean": 336,
+      "alignedMoved": 15,
+      "orderFlips": 55,
+      "shift": {
+        "x": -168,
+        "y": 160
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 375,
+      "maxMove": 710,
+      "moved": 15,
+      "alignedMean": 336,
+      "alignedMoved": 15,
+      "orderFlips": 55,
+      "shift": {
+        "x": -168,
+        "y": 160
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 14,
+    "groups": 1,
+    "edges": 18,
+    "warnings": [
+      "warning line 56: enc1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 57: enc2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 58: enc3's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 59: enc4's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 60: enc5's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 61: enc6's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 62: dec1's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 63: dec2's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 64: dec3's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 65: dec4's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 66: dec5's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "warning line 67: dec6's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]",
+      "Warnings: 14 nodes, 1 group, 18 connections."
+    ],
+    "flowDir": "right",
+    "width": 720,
+    "height": 638,
+    "aspect": 1.13,
+    "density": 0.414,
+    "aligned": 0.86,
+    "crossings": 4,
+    "bends": 10,
+    "bendsPerEdge": 0.56,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 122,
+    "theme": "drafting",
+    "fills": 3,
+    "minTextContrast": 8.49,
+    "groupFill": {
+      "transformer": 0.56
+    },
+    "groupGaps": {
+      "output | transformer": 32,
+      "input | transformer": 10
+    },
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "attention1",
+        "kind": "forward",
+        "length": 490,
+        "detour": 1.11,
+        "span": 0.51
+      },
+      {
+        "id": "attention2",
+        "kind": "forward",
+        "length": 408,
+        "detour": 1.11,
+        "span": 0.42
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 6,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 4,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 1,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11.1,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc3"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc4"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc5"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "attention1 along enc6"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "attention2 & attention4"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "attention3 & attention5"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "attention3 & attention6"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "attention5 & attention6"
+      },
+      {
+        "kind": "tight-group-gap",
+        "detail": "input | transformer 10px apart"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 15,
+      "meanMove": 152,
+      "maxMove": 173,
+      "moved": 15,
+      "alignedMean": 27,
+      "alignedMoved": 4,
+      "orderFlips": 0,
+      "shift": {
+        "x": -148,
+        "y": 12
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 425,
+      "maxMove": 746,
+      "moved": 15,
+      "alignedMean": 320,
+      "alignedMoved": 15,
+      "orderFlips": 55,
+      "shift": {
+        "x": -320,
+        "y": 164
+      }
+    },
+    "checks": []
+  }
+]

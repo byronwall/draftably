@@ -1,0 +1,28 @@
+{
+  "id": "E01",
+  "slug": "cloudflare-tls-handshake",
+  "title": "TLS handshake: TCP and TLS message flights",
+  "publisher": "Cloudflare",
+  "author": "Cloudflare Learning Center",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://www.cloudflare.com/learning/ssl/what-happens-in-a-tls-handshake/",
+  "image_url": "https://images.ctfassets.net/slt3lc6tev37/5aYOr5erfyNBq20X5djTco/3c859532c91f25d961b2884bf521c1eb/tls-ssl-handshake.png",
+  "license": "unknown",
+  "figure": "the TLS Handshake",
+  "patterns": [
+    "sequence",
+    "protocol",
+    "timing"
+  ],
+  "principal_objects": 8,
+  "reading_path": "Client/server columns; follow messages top to bottom; blue TCP then yellow TLS.",
+  "merit": "Protocol flights are bundled into readable blocks. Slanted arrows encode transit while restrained colors partition setup phases.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "4c5ae50684e5141d876736943e58636c37f5a87bb22282faed4d15605d613339",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

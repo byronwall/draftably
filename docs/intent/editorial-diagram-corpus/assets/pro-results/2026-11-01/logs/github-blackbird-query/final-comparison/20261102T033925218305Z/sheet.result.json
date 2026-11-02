@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "--sheet",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/comparison.png",
+    "--cols",
+    "3",
+    "Reference::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/reference-preview.png",
+    "v0 \u2014 default::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/v0.png",
+    "v2 \u2014 refined::/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/v2.png"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:39:25.218758+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 1.4743,
+  "exit_code": 0
+}

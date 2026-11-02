@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v2.draft",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v2.png"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:26:35.931440+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 2.6466,
+  "exit_code": 0
+}

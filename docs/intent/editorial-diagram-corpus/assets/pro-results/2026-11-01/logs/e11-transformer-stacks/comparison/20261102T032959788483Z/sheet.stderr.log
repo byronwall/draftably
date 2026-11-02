@@ -1,0 +1,11 @@
+file:///workspace/scratch/742d8c352255/baseline/scripts/shoot.mjs:57
+  if (!fs.existsSync(file)) throw Error(`No such file: ${target}`);
+                                  ^
+
+Error: No such file: /workspace/scratch/742d8c352255/deliverable/corpus/e11-transformer-stacks/v2.png
+    at urlFor (file:///workspace/scratch/742d8c352255/baseline/scripts/shoot.mjs:57:35)
+    at file:///workspace/scratch/742d8c352255/baseline/scripts/shoot.mjs:75:76
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/742d8c352255/baseline/scripts/shoot.mjs:73:25
+
+Node.js v24.22.1

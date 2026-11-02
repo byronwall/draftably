@@ -1,0 +1,39 @@
+{
+  "id": "E23",
+  "slug": "E23-nasa-star-life",
+  "title": "Life Cycles of Sun-like and Massive Stars",
+  "publisher": "NASA Science",
+  "author": "NASA; Night Sky Network",
+  "publication_date": "2018-05-31",
+  "page_url": "https://science.nasa.gov/asset/webb/life-cycles-of-sun-like-and-massive-stars/",
+  "image_url": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/outreach/migrated/2018/STScI-01HVSD3PAQ79QDG9FMDZKVFTQ2.png",
+  "license": "unknown",
+  "license_observation": "The asset credits NASA and Night Sky Network. No item-specific permission grant was observed; a NASA URL is not treated as a license.",
+  "figure": "Full single illustration, asset STScI-01HVSD3PAQ79QDG9FMDZKVFTQ2; no crop.",
+  "patterns": [
+    "scientific lifecycle",
+    "branching",
+    "circular feedback",
+    "dark composition"
+  ],
+  "principal_objects": 12,
+  "object_count_basis": "Twelve principal stages/illustrated objects, counting the two mass-dependent protostar branches separately in the native model.",
+  "reading_path": "From the shared central nebula, follow the lower-mass left loop or higher-mass right loop; the latter splits into two remnants. Return arrows connect expelled material to the nebula.",
+  "merit": "The double-loop composition makes different stellar timescales and outcomes visible at once. Varied celestial silhouettes, scale, pale cyan labels, and generous black space provide hierarchy without boxes.",
+  "confirmation_case": false,
+  "reference_file": "reference.png",
+  "preview_note": "Full original retained; proportional 1800-pixel-long-edge PNG preview.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "dfc16ae2d360fb26f916cf4a04955536d8f564b3cd538cf1ad278f136e1c0e96",
+  "reference_bytes": 5524755,
+  "reference_preview_dimensions": [
+    1800,
+    1230
+  ],
+  "native_v0_objects": {
+    "nodes": 12,
+    "groups": 0,
+    "edges": 13
+  }
+}

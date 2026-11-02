@@ -1,0 +1,41 @@
+{
+  "id": "E12",
+  "v0_readability_vs_reference": "worse",
+  "reason": "Default flow puts recurrent time steps on different rows and disperses the input/gate relationships. The reference\u2019s cell-state conveyor is much easier to recognize.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "High: the gate topology remains readable in source, but nearly every visible object is pinned and sized, with nine edges receiving explicit endpoint sides. One final correction was spent repairing a pin overlap.",
+  "residuals": [
+    "Ambiguous x + previous h author shorthand for concatenation.",
+    "No subscript/math typesetting or faded neighboring gate diagrams.",
+    "One state edge crosses the cell header.",
+    "Extra state/concat nodes and orthogonal paths enlarge the diagram."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G05",
+    "C-S01"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: fixed gate sizes tolerate short symbols, but longer formulas or a changed time label require resizing and related pin changes.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

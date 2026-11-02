@@ -1,0 +1,27 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Divergent Git history" version=1
+node c1 "98ca9" color=commit
+node c2 "34ac2" color=commit
+node c3 "f30ab" color=commit
+node master_commit "c2b9e" color=commit
+node testing_commit "87ab2" color=commit
+node head "HEAD" color=headcolor
+node master "master" color=branch
+node testing "testing" color=branch
+edge e1 c2 -> c1 constraint=false
+edge e2 c3 -> c2 constraint=false
+edge e3 master_commit -> c3 constraint=false
+edge e4 testing_commit -> c3 constraint=false
+edge e5 head -> master constraint=false
+edge e6 master -> master_commit constraint=false
+edge e7 testing -> testing_commit constraint=false
+layout root row gap=48
+theme drafting canvas="#FFFFFF" title-font=mono padding-x=8 padding-y=8 radius=0
+theme-color commit fill="#EFEFE8" stroke="#EFEFE8" ink="#222222"
+theme-color branch fill="#FF4B23" stroke="#FF4B23" ink="#FFFFFF"
+theme-color headcolor fill="#CAA500" stroke="#CAA500" ink="#FFFFFF"
+order root c1 c2 c3 master_commit testing_commit head master testing
+near testing_commit master_commit side=below gap=34
+near master master_commit side=above gap=28
+near head master side=above gap=28
+near testing testing_commit side=below gap=28

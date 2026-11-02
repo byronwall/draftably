@@ -1,0 +1,32 @@
+diagram "Is it El Ni\u00f1o conditions?" version=1
+theme drafting canvas="#FFFFFF" text="#333333" connection="#333333" radius=18 padding-x=18 padding-y=14
+theme-color charcoal shade=500 fill="#333333" stroke="#333333" ink="#FFFFFF"
+theme-color yes shade=100 fill="#F8DDDF" stroke="#F8DDDF" ink="#B54147"
+theme-color no shade=100 fill="#E3E3E3" stroke="#E3E3E3" ink="#666666"
+subtitle "Start at the ocean-temperature test; all three checks must support El Niño."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node sst "Monthly Niño-3.4 SST anomaly ≥ 0.5°C?" color=charcoal
+node n1 "NO" shape=diamond color=no shade=100
+node y1 "YES" shape=diamond color=yes shade=100
+node persistent "Will Niño-3.4 SST stay ≥ 0.5°C for several seasons?" color=charcoal
+node n2 "NO" shape=diamond color=no shade=100
+node y2 "YES" shape=diamond color=yes shade=100
+node atmosphere "What does the atmosphere look like?" color=charcoal
+node insufficient "Insufficient evidence of a weaker Walker circulation" shape=circle color=no shade=100
+node weak "Weaker Walker circulation: wetter central Pacific; drier Indonesia" shape=circle color=yes shade=100
+node nope "NOPE!" color=charcoal
+node el "El Niño conditions!" color=charcoal
+edge e1 sst -> n1
+edge e2 sst -> y1
+edge e3 n1 -> nope
+edge e4 y1 -> persistent
+edge e5 persistent -> n2
+edge e6 persistent -> y2
+edge e7 n2 -> nope
+edge e8 y2 -> atmosphere
+edge e9 atmosphere -> insufficient
+edge e10 atmosphere -> weak
+edge e11 insufficient -> nope
+edge e12 weak -> el
+layout root engine=layered direction=down fold=never rank-gap=60 node-gap=60
+order root sst n1 y1 persistent n2 y2 atmosphere insufficient weak nope el

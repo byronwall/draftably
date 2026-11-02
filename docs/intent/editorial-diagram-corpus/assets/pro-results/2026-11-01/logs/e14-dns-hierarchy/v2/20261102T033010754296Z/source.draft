@@ -1,0 +1,72 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+diagram "The DNS hierarchy" version=1
+group overview "Three levels of authority"
+group root_panel "Root delegates"
+group com_panel ".com delegates"
+group domain_panel "Domain authority answers"
+group control "Decentralized control: jvns.ca"
+node root_ns "root: authority begins here" in=overview color=violet shade=100
+node com ".com: names ending in .com" in=overview color=green shade=100
+node domain "example.com: domain and subdomains" in=overview color=blue shade=100
+node rq "Address for example.com?" in=root_panel
+node ra "Root returns the .com nameserver address" in=root_panel color=green shade=100
+node cq "Address for example.com?" in=com_panel
+node ca ".com returns the example.com nameserver address" in=com_panel color=red shade=100
+node dq "Address for example.com?" in=domain_panel
+node da "93.184.216.34" in=domain_panel color=blue shade=100
+node cr "root" in=control color=violet shade=100
+node cc ".ca nameserver" in=control color=green shade=100
+node cd "jvns.ca nameserver" in=control color=blue shade=100
+node icann "ICANN controls the root" in=control
+node canada "Canada controls .ca" in=control
+node owner "Domain owner controls jvns.ca" in=control
+edge e1 rq -> ra "delegates"
+edge e2 cq -> ca "delegates"
+edge e3 dq -> da "answers"
+edge e4 cr -> cc "delegate"
+edge e5 cc -> cd "delegate"
+edge e6 icann -> cr "controls"
+edge e7 canada -> cc "controls"
+edge e8 owner -> cd "controls"
+layout root engine=grid
+layout overview row
+layout root_panel column
+layout com_panel column
+layout domain_panel column
+layout control engine=layered direction=down
+theme drafting canvas="#FFFFFF" padding-x=16 padding-y=12
+pin overview x=0 y=0
+pin root_panel x=700 y=0
+pin com_panel x=0 y=300
+pin domain_panel x=350 y=300
+pin control x=700 y=300
+pin root_ns x=0 y=0
+pin com x=205 y=0
+pin domain x=410 y=0
+pin rq x=0 y=0
+pin ra x=0 y=130
+pin cq x=0 y=0
+pin ca x=0 y=130
+pin dq x=0 y=0
+pin da x=0 y=130
+pin cr x=0 y=0
+pin cc x=0 y=110
+pin cd x=0 y=220
+pin icann x=230 y=0
+pin canada x=230 y=110
+pin owner x=230 y=220
+size root_ns width=180 height=84
+size com width=180 height=84
+size domain width=180 height=84
+size rq width=260 height=88
+size ra width=260 height=88
+size cq width=260 height=88
+size ca width=260 height=88
+size dq width=260 height=88
+size da width=260 height=88
+size cr width=190 height=64
+size cc width=190 height=64
+size cd width=190 height=64
+size icann width=190 height=64
+size canada width=190 height=64
+size owner width=190 height=64

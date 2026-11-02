@@ -1,0 +1,46 @@
+{
+  "id": "E10",
+  "v0_readability_vs_reference": "worse",
+  "reason": "v0 produces a valid three-by-three layer grid, but mixes component titles and mechanism captions into one uniformly bold label. The source makes the layer, component, and explanation hierarchy much faster to scan.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Moderate. Nine notes and nine exact node sizes plus three reserved layer heights recreate component/caption pairs. No pins are needed. A longer caption can exceed reserved room, so the source is less resilient than a true card-with-caption recipe.",
+  "residuals": [
+    "Fixed left-aligned group headers lack the source centered hierarchy.",
+    "Native note panels replace true attached card captions/backplates.",
+    "Reserved caption room and exact card widths need manual upkeep."
+  ],
+  "provisional_gaps": [
+    "I-TYPE",
+    "I-LABEL-EXPOSURE",
+    "I-NOTE-LAYOUT",
+    "I-PANEL-GEOMETRY"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": true
+}

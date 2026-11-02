@@ -1,0 +1,21 @@
+{
+  "id": "E22",
+  "slug": "e22-dns-query",
+  "stage": "v2",
+  "noncomment_lines": 98,
+  "declarations": 41,
+  "node_declarations": 21,
+  "group_declarations": 10,
+  "edge_declarations": 10,
+  "layout_refinement_lines": 55,
+  "layouts": 11,
+  "pins": 23,
+  "nudges": 0,
+  "manual_sizes": 21,
+  "styling_override_lines": 4,
+  "endpoint_side_overrides": 8,
+  "notes": 0,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 4.3621,
+  "authoring_time": "not measured"
+}

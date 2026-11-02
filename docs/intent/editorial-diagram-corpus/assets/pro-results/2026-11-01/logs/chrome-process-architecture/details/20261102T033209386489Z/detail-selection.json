@@ -1,0 +1,38 @@
+{
+  "focus": "Renderer/plugin multiplicity and GPU links",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      865,
+      499
+    ],
+    "v0": [
+      842,
+      1036
+    ],
+    "v2": [
+      1360,
+      1452
+    ]
+  },
+  "crops": {
+    "reference": [
+      8,
+      164,
+      847,
+      324
+    ],
+    "v0": [
+      8,
+      372,
+      825,
+      642
+    ],
+    "v2": [
+      27,
+      566,
+      1305,
+      856
+    ]
+  }
+}

@@ -1,0 +1,460 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 39,
+    "groups": 0,
+    "edges": 40,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1676,
+    "height": 2600,
+    "aspect": 0.64,
+    "density": 0.086,
+    "aligned": 1,
+    "crossings": 1,
+    "bends": 14,
+    "bendsPerEdge": 0.35,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 241,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.44,
+      "boxes": 199.3,
+      "w": 1512,
+      "h": 1264,
+      "x": 164,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e20",
+        "kind": "back",
+        "length": 1604,
+        "detour": 1.02,
+        "span": 0.52
+      },
+      {
+        "id": "e21",
+        "kind": "back",
+        "length": 3594,
+        "detour": 3.92,
+        "span": 1.16
+      },
+      {
+        "id": "e22",
+        "kind": "back",
+        "length": 1108,
+        "detour": 1.05,
+        "span": 0.36
+      },
+      {
+        "id": "e33",
+        "kind": "forward",
+        "length": 1112,
+        "detour": 1.09,
+        "span": 0.36
+      },
+      {
+        "id": "e34",
+        "kind": "forward",
+        "length": 856,
+        "detour": 1.13,
+        "span": 0.28
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 2.1,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along lebanon"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along wandle"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e21 3594px return, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1512×1264px at 164,0 (44% of the drawing, room for 199 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 39,
+    "groups": 0,
+    "edges": 40,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1521,
+    "height": 1730,
+    "aspect": 0.88,
+    "density": 0.061,
+    "aligned": 0.97,
+    "crossings": 1,
+    "bends": 15,
+    "bendsPerEdge": 0.38,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 197,
+    "theme": "drafting",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.43,
+      "boxes": 276.1,
+      "w": 1352,
+      "h": 845,
+      "x": 169,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e20",
+        "kind": "back",
+        "length": 1449,
+        "detour": 1.07,
+        "span": 0.63
+      },
+      {
+        "id": "e21",
+        "kind": "back",
+        "length": 2645,
+        "detour": 3.29,
+        "span": 1.15
+      },
+      {
+        "id": "e22",
+        "kind": "back",
+        "length": 1005,
+        "detour": 1.1,
+        "span": 0.44
+      },
+      {
+        "id": "e33",
+        "kind": "forward",
+        "length": 758,
+        "detour": 1.09,
+        "span": 0.33
+      },
+      {
+        "id": "e34",
+        "kind": "forward",
+        "length": 596,
+        "detour": 1.12,
+        "span": 0.26
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 1,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 4,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 3.1,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along lebanon"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along sandilands"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along west"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e21 along west"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e21 2645px return, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1352×845px at 169,0 (43% of the drawing, room for 276 boxes)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "connections on canvas (2.05)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 39,
+      "meanMove": 436,
+      "maxMove": 854,
+      "moved": 38,
+      "alignedMean": 192,
+      "alignedMoved": 37,
+      "orderFlips": 0,
+      "shift": {
+        "x": 5,
+        "y": -435
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 39,
+      "meanMove": 436,
+      "maxMove": 854,
+      "moved": 38,
+      "alignedMean": 192,
+      "alignedMoved": 37,
+      "orderFlips": 0,
+      "shift": {
+        "x": 5,
+        "y": -435
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 39,
+    "groups": 0,
+    "edges": 40,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 3470,
+    "height": 310,
+    "aspect": 11.19,
+    "density": 0.119,
+    "aligned": 0.92,
+    "crossings": 0,
+    "bends": 13,
+    "bendsPerEdge": 0.33,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 60,
+    "theme": "drafting",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.36,
+      "boxes": 119.7,
+      "w": 1450,
+      "h": 270,
+      "x": 0,
+      "y": 20
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 3,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 1,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 5,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 1
+    },
+    "defectIndex": 5,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "e2 into merton"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "e20 into wandle"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "e9 into therapia"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e16 west→wellesley arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e17 wellesley→east arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e2 dundonald→merton arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e7 mitcham→mitcham_j arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e9 beddington→therapia arrives sideways"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1450×270px at 0,20 (36% of the drawing, room for 120 boxes)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "connections on canvas (2.05)"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "3470×310px (11.2:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 39,
+      "meanMove": 1840,
+      "maxMove": 3551,
+      "moved": 39,
+      "alignedMean": 1114,
+      "alignedMoved": 39,
+      "orderFlips": 347,
+      "shift": {
+        "x": 1290,
+        "y": -763
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 39,
+      "meanMove": 2039,
+      "maxMove": 3821,
+      "moved": 39,
+      "alignedMean": 1229,
+      "alignedMoved": 39,
+      "orderFlips": 347,
+      "shift": {
+        "x": 1293,
+        "y": -1198
+      }
+    },
+    "checks": []
+  }
+]

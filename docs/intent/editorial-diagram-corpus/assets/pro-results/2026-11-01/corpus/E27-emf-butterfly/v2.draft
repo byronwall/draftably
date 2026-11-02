@@ -1,0 +1,112 @@
+diagram "Circular economy: biological and technical cycles" version=1
+theme drafting canvas="#FFFFFF" text="#111111" connection="#555555" padding-x=18 padding-y=12
+theme-color bio shade=100 fill="#ECF1DF" stroke="#8F9F67" ink="#354724"
+theme-color tech shade=100 fill="#E5F0F9" stroke="#438DCA" ink="#16456A"
+subtitle "Biological return paths on the left; technical value-preserving loops on the right."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node renewable "Renewables" color=bio shade=100
+node finite "Finite materials" color=tech shade=100
+node parts "Parts manufacturer" shape=pill color=stone shade=100
+node product "Product manufacturer" shape=pill color=stone shade=100
+node service "Service provider" shape=pill color=stone shade=100
+node consumer "Consumer" shape=circle color=bio shade=100
+node user "User" shape=circle color=tech shade=100
+node bio_collect "Collection: biological" color=bio shade=100
+node tech_collect "Collection: technical" color=tech shade=100
+node farm "Farming / collection¹" color=bio shade=100
+node biosphere "Biosphere: regeneration" color=bio shade=100
+node biogas "Biogas" color=bio shade=100
+node digest "Anaerobic digestion" color=bio shade=100
+node extract "Extract biochemical feedstock²" color=bio shade=100
+node feedstock "Biochemical feedstock" color=bio shade=100
+node cascades "Cascades" color=bio shade=100
+node share "Share" color=tech shade=100
+node maintain "Maintain / prolong" color=tech shade=100
+node reuse "Reuse / redistribute" color=tech shade=100
+node refurbish "Refurbish / remanufacture" color=tech shade=100
+node recycle "Recycle" color=tech shade=100
+node leakage "Minimise systematic leakage and negative externalities" color=stone shade=100
+edge e1 renewable -> parts
+edge e2 finite -> parts
+edge e3 parts -> product from=bottom to=top
+edge e4 product -> service from=bottom to=top
+edge e5 service -> consumer from=left to=top
+edge e6 service -> user from=right to=top
+edge e7 consumer -> bio_collect from=bottom to=top
+edge e8 user -> tech_collect from=bottom to=top
+edge e9 bio_collect -> cascades
+edge e10 cascades -> consumer constraint=false
+edge e11 bio_collect -> extract
+edge e12 extract -> feedstock
+edge e13 feedstock -> parts constraint=false
+edge e14 farm -> parts constraint=false
+edge e15 bio_collect -> digest
+edge e16 extract -> digest
+edge e17 digest -> biogas
+edge e18 digest -> biosphere
+edge e19 biosphere -> farm constraint=false
+edge e20 tech_collect -> maintain from=right to=bottom
+edge e21 maintain -> user constraint=false from=left to=right
+edge e22 user -> share
+edge e23 share -> user constraint=false
+edge e24 tech_collect -> reuse from=right to=bottom
+edge e25 reuse -> service constraint=false from=left to=right
+edge e26 tech_collect -> refurbish from=right to=bottom
+edge e27 refurbish -> product constraint=false from=left to=right
+edge e28 tech_collect -> recycle from=right to=bottom
+edge e29 recycle -> parts constraint=false from=left to=right
+edge e30 bio_collect -> leakage
+edge e31 tech_collect -> leakage
+layout root engine=layered direction=down fold=never ordering=crossings rank-gap=80 node-gap=40
+note "Renewables flow management on the biological side; stock management on the technical side."
+note "¹ Farming / collection includes hunting and fishing. ² Extraction can accept post-harvest and post-consumer inputs."
+legend bio "Biological cycle" shade=100
+legend tech "Technical cycle" shade=100
+
+# Explicit sizes and parent-relative positions.
+size renewable width=200 height=auto
+pin renewable x=670 y=0
+size finite width=200 height=auto
+pin finite x=920 y=0
+size parts width=220 height=60
+pin parts x=800 y=180
+size product width=220 height=60
+pin product x=800 y=320
+size service width=220 height=60
+pin service x=800 y=460
+size consumer width=160 height=120
+pin consumer x=650 y=650
+size user width=160 height=120
+pin user x=1000 y=650
+size bio_collect width=200 height=auto
+pin bio_collect x=620 y=830
+size tech_collect width=200 height=auto
+pin tech_collect x=1010 y=830
+size farm width=200 height=auto
+pin farm x=350 y=180
+size biosphere width=200 height=auto
+pin biosphere x=70 y=360
+size biogas width=200 height=auto
+pin biogas x=0 y=620
+size digest width=200 height=auto
+pin digest x=230 y=740
+size extract width=200 height=auto
+pin extract x=350 y=950
+size feedstock width=200 height=auto
+pin feedstock x=430 y=340
+size cascades width=200 height=auto
+pin cascades x=420 y=600
+size share width=140 height=60
+pin share x=1080 y=490
+size maintain width=200 height=auto
+pin maintain x=1250 y=650
+size reuse width=200 height=auto
+pin reuse x=1390 y=500
+size refurbish width=200 height=auto
+pin refurbish x=1490 y=340
+size recycle width=200 height=auto
+pin recycle x=1650 y=170
+size leakage width=320 height=80
+pin leakage x=825 y=1100
+routing corner-radius=16 crossing-penalty=900 passes=5
+# Native routing cannot preserve the source’s nested smooth loops or independently colored streams.

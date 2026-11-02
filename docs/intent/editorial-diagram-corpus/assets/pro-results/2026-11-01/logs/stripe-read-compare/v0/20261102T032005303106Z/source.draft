@@ -1,0 +1,15 @@
+diagram "Read and compare results" version=1
+group customers "Customers"
+group lisa "Lisa Spiers" in=customers
+group nested "subscriptions:" in=lisa
+node tv "tv_service" in=nested
+node internet "internet_service" in=nested
+node phone "phone_service" in=nested
+group subscriptions "Subscriptions"
+node stv "lisa_tv_service" in=subscriptions
+node sint "lisa_internet_service" in=subscriptions
+node sph "lisa_phone_service" in=subscriptions
+node compare "Read and compare results"
+edge read_customer customers -> compare
+edge read_subscription subscriptions -> compare
+layout root flow direction=down

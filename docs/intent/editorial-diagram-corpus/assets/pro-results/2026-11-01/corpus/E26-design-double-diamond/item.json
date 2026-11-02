@@ -1,0 +1,39 @@
+{
+  "id": "E26",
+  "slug": "E26-design-double-diamond",
+  "title": "The Double Diamond",
+  "publisher": "Design Council",
+  "author": "Design Council",
+  "publication_date": "unknown",
+  "page_url": "https://www.designcouncil.org.uk/resources/framework-for-innovation/",
+  "image_url": "https://www.designcouncil.org.uk/fileadmin/uploads/dc/Photos/banners/Double_Diamond.png",
+  "license": "unknown",
+  "license_observation": "The page includes a CC BY 4.0 statement for its Framework for Innovation work. Its exact scope for this separately linked Double Diamond asset is not made explicit in the downloaded image; retained conservatively as unknown pending publication review.",
+  "figure": "Standalone red Double Diamond graphic linked from Framework for Innovation, all four phase labels and full outlines.",
+  "patterns": [
+    "conceptual process",
+    "divergence/convergence",
+    "nonrectangular containment",
+    "minimal typography"
+  ],
+  "principal_objects": 4,
+  "object_count_basis": "Four phase labels inside two continuous diamond-shaped process regions. Deliberate small-count exception to the usual 5–30 range.",
+  "reading_path": "Left to right: Discover then Define in the first expansion/contraction cycle, followed by Develop and Deliver in the second.",
+  "merit": "Two continuous diamond boundaries encode opening and narrowing choices. The sloped phase labels and directional perimeter arrows make the outline itself explanatory, with almost no incidental decoration.",
+  "confirmation_case": false,
+  "reference_file": "reference.png",
+  "preview_note": "Original transparent PNG retained. Raster preview composites the transparency onto white for the intended page context without changing diagram content.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "96e8206d125a36f4a95f1512f95e10cba9953764b555c1b8036cff97b87199d7",
+  "reference_bytes": 65874,
+  "reference_preview_dimensions": [
+    936,
+    453
+  ],
+  "native_v0_objects": {
+    "nodes": 4,
+    "groups": 2,
+    "edges": 3
+  }
+}

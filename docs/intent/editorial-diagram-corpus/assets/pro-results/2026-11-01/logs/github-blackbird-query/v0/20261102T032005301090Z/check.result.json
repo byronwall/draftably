@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "check",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/github-blackbird-query/v0.draft"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:05.301668+00:00",
+  "elapsed_seconds": 0.5905,
+  "exit_code": 0
+}

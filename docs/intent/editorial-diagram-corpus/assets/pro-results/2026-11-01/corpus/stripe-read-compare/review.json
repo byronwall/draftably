@@ -1,0 +1,46 @@
+{
+  "id": "E08",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default preserves the two data sources and convergence but makes nested data look like nested service boxes. The source type hierarchy and sweeping arrows communicate record structure much more directly.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "Moderate. Four nested scopes, quiet custom shades, two cell recipes, three pins, one exact node size, and several minimum widths express what is largely typographic record layout. The hierarchy stays readable in source, but the workaround is verbose and exact typography remains unavailable.",
+  "residuals": [
+    "Uniform small bold type loses entity/field/value hierarchy and italic values.",
+    "Large manual panels contain excessive blank area.",
+    "Curved read paths and indentation details are absent.",
+    "Source stack marks may indicate collection/record multiplicity; that cue is lost and semantic ratings are conservatively 4."
+  ],
+  "provisional_gaps": [
+    "I-TYPE",
+    "I-LABEL-EXPOSURE",
+    "I-PANEL-GEOMETRY"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

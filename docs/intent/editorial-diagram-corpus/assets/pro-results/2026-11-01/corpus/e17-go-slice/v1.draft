@@ -1,0 +1,18 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Slice after s = s[2:4]" version=1
+group slice "[]byte"
+group array "[5]byte"
+node ptr "pointer" in=slice color=sky shade=100
+node length "2" in=slice color=violet shade=100
+node capacity "3" in=slice color=rose shade=100
+node b0 "byte" in=array color=amber shade=50
+node b1 "" in=array color=amber shade=50
+node b2 "" in=array color=amber shade=200
+node b3 "" in=array color=amber shade=200
+node b4 "" in=array color=amber shade=50
+edge ptr_array ptr -> b2
+layout root row
+layout slice cells direction=down
+layout array cells
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=8 radius=0
+near array slice side=right gap=84 offset=30

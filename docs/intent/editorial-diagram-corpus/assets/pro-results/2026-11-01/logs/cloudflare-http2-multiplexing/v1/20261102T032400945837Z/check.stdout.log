@@ -1,0 +1,6 @@
+info    line 41: 5 accent colors (quiet, clientblue, server, resource, clientorange). Use two to four, each for one role, with slate or stone for the rest, and say what each one means with legend lines.
+info    line 11: h1.out, h1.in, h2.out, h2.in repeat their containers’ colors. Drop the color to inherit it, or give the member a family of its own.
+warning Edge h1.c0f (h1.client -> h1.o0) crosses the title of h1.out. The layout could not avoid it; move or resize a neighbour. [edge-through-title]
+warning Edge h1.c1f (h1.client -> h1.o1) crosses the title of h1.out. The layout could not avoid it; move or resize a neighbour. [edge-through-title]
+warning Edge h1.c2f (h1.client -> h1.o2) crosses the title of h1.out. The layout could not avoid it; move or resize a neighbour. [edge-through-title]
+Warnings: 16 nodes, 6 groups, 24 connections.

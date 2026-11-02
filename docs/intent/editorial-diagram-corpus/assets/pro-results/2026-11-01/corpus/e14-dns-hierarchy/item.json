@@ -1,0 +1,55 @@
+{
+  "id": "E14",
+  "slug": "e14-dns-hierarchy",
+  "title": "The DNS hierarchy comic",
+  "publisher": "Wizard Zines",
+  "author": "Julia Evans",
+  "publication_date": "2022-04-21",
+  "access_date": "2026-11-02",
+  "page_url": "https://wizardzines.com/comics/dns-hierarchy/",
+  "image_url": "https://wizardzines.com/images/uploads/dns-hierarchy-updated.png",
+  "license": "unknown; no reuse license observed on page",
+  "figure": "dns-hierarchy-updated.png",
+  "patterns": [
+    "explanatory comic",
+    "hierarchy",
+    "comparison panels",
+    "annotations"
+  ],
+  "principal_objects": 20,
+  "reading_path": "Top-left introduction, top-right root response, then lower-row delegation, answer and governance example.",
+  "merit": "Five panels organize a conceptual explanation rather than a raw network. Characters and colored phrases separate authority, delegation and ownership while preserving a friendly reading path.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "930c220fff84a093a8158a96e6ec3b7302ac4d9be4e71e469d6ac7c195bd3db7",
+  "reference_bytes": 422784,
+  "reference_preview_size": [
+    1700,
+    1100
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "3effbbdd535ad137c0b5d09bc57ad18a56c85bed59de5b916e561e4b2100f39d",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "3d618ee9ab72eb6ccd00fa5c1ada4c54a7002c99b601d6dc58c88e390c0745c2",
+      "warning_count": 2,
+      "warnings": [
+        "warning line 38: near root_panel gave way by 62 px to keep root clear. Remove line 38, or run format --drop-stale. [relaxed]",
+        "warning line 41: near control gave way by 49 px to keep root clear. Remove line 41, or run format --drop-stale. [relaxed]"
+      ]
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "7e79501bff6291cc6041a7a37079ddd7248e6441f1d2d4dd62d9bbb40ad68059",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

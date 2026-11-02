@@ -1,0 +1,41 @@
+diagram "Synchronized retries" version=1
+theme signal canvas="#ffffff" annotation-font=sans padding-x=8 padding-y=10 radius=0
+theme-color cblue fill="#dceafe" stroke="#5593d1" ink="#174670"
+theme-color ccyan fill="#d5f5f9" stroke="#45becb" ink="#14515a"
+theme-color cgreen fill="#dcf5d4" stroke="#6cc455" ink="#285c24"
+theme-color quiet shade=100 fill="#ffffff" stroke="#ffffff" ink="#424b57"
+note "Server fails all requests at t0. Clients retry together; time increases to the right."
+group c1 "Client 1" color=quiet shade=100
+node c1e0 "Failure\nt0" in=c1 color=cblue
+node c1e1 "1st retry\nt0+1" in=c1 color=cblue
+node c1e2 "2nd retry\nt0+2" in=c1 color=cblue
+node c1e3 "3rd retry\nt0+4" in=c1 color=cblue
+node c1e4 "4th retry\nt0+8" in=c1 color=cblue
+edge c1next0 c1e0 -> c1e1
+edge c1next1 c1e1 -> c1e2
+edge c1next2 c1e2 -> c1e3
+edge c1next3 c1e3 -> c1e4
+layout c1 row gap=48
+group c2 "Client 2" color=quiet shade=100
+node c2e0 "Failure\nt0" in=c2 color=ccyan
+node c2e1 "1st retry\nt0+1" in=c2 color=ccyan
+node c2e2 "2nd retry\nt0+2" in=c2 color=ccyan
+node c2e3 "3rd retry\nt0+4" in=c2 color=ccyan
+node c2e4 "4th retry\nt0+8" in=c2 color=ccyan
+edge c2next0 c2e0 -> c2e1
+edge c2next1 c2e1 -> c2e2
+edge c2next2 c2e2 -> c2e3
+edge c2next3 c2e3 -> c2e4
+layout c2 row gap=48
+group c3 "Client 3" color=quiet shade=100
+node c3e0 "Failure\nt0" in=c3 color=cgreen
+node c3e1 "1st retry\nt0+1" in=c3 color=cgreen
+node c3e2 "2nd retry\nt0+2" in=c3 color=cgreen
+node c3e3 "3rd retry\nt0+4" in=c3 color=cgreen
+node c3e4 "4th retry\nt0+8" in=c3 color=cgreen
+edge c3next0 c3e0 -> c3e1
+edge c3next1 c3e1 -> c3e2
+edge c3next2 c3e2 -> c3e3
+edge c3next3 c3e3 -> c3e4
+layout c3 row gap=48
+layout root column

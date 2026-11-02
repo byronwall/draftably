@@ -1,0 +1,40 @@
+{
+  "id": "E24",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default remains logically readable, but oversized yes/no diamonds and narrow multi-line evidence ellipses turn a compact diagonal chart into a long portrait. It requires far more scanning than the original.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "Moderate. Eleven sizes, eleven pins and explicit ports on all twelve edges are required to recover the stair. Three complete custom swatches are verbose for a small palette. The source is readable, but a diagram that is visually simple has accumulated substantial geometry.",
+  "residuals": [
+    "Four text-overflow warnings on final 52-pixel yes/no diamonds; visible words remain inside the outlines.",
+    "Native diamonds are square, whereas source yes/no marks are flatter.",
+    "No inline weight/color emphasis or panel double outlines.",
+    "Manual placement and fixed heights reduce resilience to longer labels."
+  ],
+  "provisional_gaps": [
+    "compact-diamond-label-measurement",
+    "native-text-scale-control",
+    "rich-label-hierarchy"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

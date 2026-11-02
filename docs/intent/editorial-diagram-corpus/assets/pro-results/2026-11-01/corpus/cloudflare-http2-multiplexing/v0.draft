@@ -1,0 +1,54 @@
+diagram "Multiplexing" version=1
+group h1 "HTTP 1.1 — 3 TCP connections"
+node h1.client "HTTP 1.1" in=h1
+node h1.server "Server" in=h1
+group h1.out "Client resources" in=h1
+group h1.in "Server resources" in=h1
+node h1.o0 "jquery.js" in=h1.out
+node h1.i0 "jquery.js" in=h1.in
+node h1.o1 "example.css" in=h1.out
+node h1.i1 "example.css" in=h1.in
+node h1.o2 "image.png" in=h1.out
+node h1.i2 "image.png" in=h1.in
+edge h1.c0f h1.client -> h1.o0
+edge h1.c0b h1.o0 -> h1.client constraint=false
+edge h1.t0f h1.o0 -> h1.i0
+edge h1.t0b h1.i0 -> h1.o0 constraint=false
+edge h1.s0f h1.i0 -> h1.server
+edge h1.s0b h1.server -> h1.i0 constraint=false
+edge h1.c1f h1.client -> h1.o1
+edge h1.c1b h1.o1 -> h1.client constraint=false
+edge h1.t1f h1.o1 -> h1.i1
+edge h1.t1b h1.i1 -> h1.o1 constraint=false
+edge h1.s1f h1.i1 -> h1.server
+edge h1.s1b h1.server -> h1.i1 constraint=false
+edge h1.c2f h1.client -> h1.o2
+edge h1.c2b h1.o2 -> h1.client constraint=false
+edge h1.t2f h1.o2 -> h1.i2
+edge h1.t2b h1.i2 -> h1.o2 constraint=false
+edge h1.s2f h1.i2 -> h1.server
+edge h1.s2b h1.server -> h1.i2 constraint=false
+layout h1 row
+layout h1.out column
+layout h1.in column
+group h2 "HTTP/2 — 1 TCP connection"
+node h2.client "HTTP/2" in=h2
+node h2.server "Server" in=h2
+group h2.out "Client resources" in=h2
+group h2.in "Server resources" in=h2
+node h2.o0 "jquery.js" in=h2.out
+node h2.i0 "jquery.js" in=h2.in
+node h2.o1 "example.css" in=h2.out
+node h2.i1 "example.css" in=h2.in
+node h2.o2 "image.png" in=h2.out
+node h2.i2 "image.png" in=h2.in
+edge h2.cf h2.client -> h2.out
+edge h2.cb h2.out -> h2.client constraint=false
+edge h2.tf h2.out -> h2.in "1 TCP connection"
+edge h2.tb h2.in -> h2.out constraint=false
+edge h2.sf h2.in -> h2.server
+edge h2.sb h2.server -> h2.in constraint=false
+layout h2 row
+layout h2.out column
+layout h2.in column
+layout root column

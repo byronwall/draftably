@@ -1,0 +1,26 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+group slice "[]byte"
+group array "[5]byte"
+node ptr "pointer" in=slice color=sky shade=100
+node length "2" in=slice color=violet shade=100
+node capacity "3" in=slice color=rose shade=100
+node b0 "byte" in=array color=amber shade=50
+node b1 "" in=array color=amber shade=50
+node b2 "" in=array color=amber shade=200
+node b3 "" in=array color=amber shade=200
+node b4 "" in=array color=amber shade=50
+edge ptr_array ptr -> b2
+layout root row
+layout slice cells direction=down
+layout array cells
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=8 radius=0
+pin slice x=0 y=0
+pin array x=220 y=65
+size ptr width=80 height=58
+size length width=80 height=58
+size capacity width=80 height=58
+size b0 width=64 height=58
+size b1 width=64 height=58
+size b2 width=64 height=58
+size b3 width=64 height=58
+size b4 width=64 height=58

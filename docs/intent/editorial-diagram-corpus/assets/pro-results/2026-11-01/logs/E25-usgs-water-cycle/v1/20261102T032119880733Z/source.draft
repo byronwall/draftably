@@ -1,0 +1,61 @@
+diagram "The water cycle: pools, fluxes and human use" version=1
+theme drafting canvas="#FFFFFF" connection="#218AAE" radius=3
+subtitle "Bright water pools, named transfers, and explicit human use."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node airsea "Atmospheric moisture: over ocean" color=sky shade=100
+node airland "Atmospheric moisture: over land" color=sky shade=100
+node ice "Ice sheets and glaciers" color=sky shade=100
+node snow "Snowpack" color=sky shade=100
+node permafrost "Permafrost" color=sky shade=100
+node salinelake "Saline lakes" color=teal shade=100
+node freshlake "Freshwater lakes" color=sky shade=100
+node freshwet "Fresh wetlands" color=sky shade=100
+node brackishwet "Brackish wetlands" color=teal shade=100
+node reservoir "Reservoirs" color=sky shade=100
+node river "Rivers" color=sky shade=100
+node soil "Soil moisture" color=sky shade=100
+node ground "Groundwater" color=sky shade=100
+node ocean "Ocean: mixed zone" color=teal shade=100
+node deep "Ocean: deep water zone" color=teal shade=100
+node domestic "Domestic water use" color=stone shade=100
+node municipal "Municipal water use" color=stone shade=100
+node industry "Industrial water use" color=stone shade=100
+node agriculture "Agricultural water use" color=stone shade=100
+node grazing "Grazing water use" color=stone shade=100
+edge e1 ocean -> airsea "Ocean evaporation" constraint=false
+edge e2 airsea -> ocean "Precipitation over ocean" constraint=false
+edge e3 airsea -> airland "Moisture transport to land" constraint=false
+edge e4 airland -> snow "Precipitation"
+edge e5 airland -> ice "Precipitation"
+edge e6 airland -> soil "Precipitation over land"
+edge e7 snow -> river "Snowmelt"
+edge e8 ice -> river "Meltwater"
+edge e9 soil -> salinelake "Streamflow to closed basins"
+edge e10 soil -> river "Runoff"
+edge e11 soil -> ground "Groundwater recharge"
+edge e12 soil -> airland "Evapotranspiration" constraint=false
+edge e13 freshwet -> river "Streamflow"
+edge e14 freshlake -> river "Streamflow"
+edge e15 reservoir -> river "Streamflow"
+edge e16 river -> ocean "Streamflow to ocean" constraint=false
+edge e17 river -> brackishwet "Estuarine flow"
+edge e18 ground -> ocean "Groundwater discharge" constraint=false
+edge e19 ocean -> deep "Ocean circulation"
+edge e20 deep -> ocean "Ocean circulation" constraint=false
+edge e21 river -> domestic "Water supply"
+edge e22 river -> municipal "Water supply"
+edge e23 river -> industry "Water supply"
+edge e24 river -> agriculture "Irrigation"
+edge e25 ground -> agriculture "Groundwater use"
+edge e26 river -> grazing "Water use"
+edge e27 municipal -> river "Urban runoff"
+edge e28 industry -> river "Return flow"
+edge e29 agriculture -> soil "Irrigation"
+edge e30 agriculture -> airland "Evapotranspiration" constraint=false
+layout root engine=layered direction=down ordering=crossings fold=never rank-gap=100 node-gap=48
+note "Pools store water; fluxes move it. Water may be fresh, saline or brackish, and solid, liquid or gas."
+note "Human use changes water quantity, quality, location and timing. The native model omits geographic terrain; see the preserved reference."
+note "Permafrost stores frozen water. Pollution and climate change affect quality, availability and movement."
+legend sky "Fresh water, frozen water and atmospheric moisture" shade=100
+legend teal "Saline or mixed water" shade=100
+legend stone "Human water use" shade=100

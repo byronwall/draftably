@@ -1,0 +1,47 @@
+{
+  "checked_utc": "2026-11-02T04:01:25.462889+00:00",
+  "scope": "Synthetic isolated orchestration tests with a fake pnpm exit 7; not native case execution or application regression tests.",
+  "passed": true,
+  "records": [
+    {
+      "test": "child failures propagate and do not freeze an unsuccessful v0",
+      "expected": "nonzero wrapper exit",
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": "[v0/20261102T040125274520Z] check: exit 7\n[v0/20261102T040125274520Z] inspect: exit 7\n[v0/20261102T040125274520Z] svg: exit 7\n[v0/20261102T040125274520Z] shoot: exit 7\n{\"case\": \"fixture\", \"stages_run\": 1, \"failed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "test": "missing requested stage is unsuccessful",
+      "expected": "nonzero wrapper exit",
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": "Missing <temporary-test-root>/study/corpus/fixture/v1.draft; not marked complete.\n{\"case\": \"fixture\", \"stages_run\": 0, \"failed\": true}\n",
+      "stderr": ""
+    },
+    {
+      "test": "changed frozen v0 is refused",
+      "expected": "nonzero wrapper exit",
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "Refusing to rerun a changed frozen v0 source: <temporary-test-root>/study/corpus/fixture/v0.draft\n"
+    },
+    {
+      "test": "comparison child failure propagates",
+      "expected": "nonzero wrapper exit",
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": "[final-comparison/20261102T040125387447Z] sheet: exit 7\n{\n  \"complete\": 0,\n  \"failed\": [\n    {\n      \"case\": \"fixture\",\n      \"exit_code\": 7\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "detail crop child failure propagates",
+      "expected": "nonzero wrapper exit",
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": "[details/20261102T040125442438Z] reference: exit 7\n[details/20261102T040125442438Z] v0: exit 7\n[details/20261102T040125442438Z] v2: exit 7\n{\n  \"complete\": 0,\n  \"incomplete\": [\n    \"fixture\"\n  ]\n}\n",
+      "stderr": ""
+    }
+  ]
+}

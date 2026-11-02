@@ -1,0 +1,21 @@
+{
+  "id": "E11",
+  "slug": "e11-transformer-stacks",
+  "stage": "v0",
+  "noncomment_lines": 36,
+  "declarations": 33,
+  "node_declarations": 14,
+  "group_declarations": 1,
+  "edge_declarations": 18,
+  "layout_refinement_lines": 2,
+  "layouts": 2,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 0,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 5.2019,
+  "authoring_time": "not measured"
+}

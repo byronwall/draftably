@@ -1,0 +1,18 @@
+diagram "The Double Diamond" version=1
+theme ink canvas="#FFFFFF" text="#303030" connection="#E91922" radius=0
+theme-color design shade=100 fill="#FFFFFF" stroke="#E91922" ink="#303030"
+subtitle "Discover and Develop expand possibilities; Define and Deliver narrow them."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+group first "First diamond"
+group second "Second diamond"
+node discover "Discover" in=first color=design shade=100 shape=diamond
+node define "Define" in=first color=design shade=100 shape=diamond
+node develop "Develop" in=second color=design shade=100 shape=diamond
+node deliver "Deliver" in=second color=design shade=100 shape=diamond
+edge e1 discover -> define
+edge e2 define -> develop
+edge e3 develop -> deliver
+layout root row gap=52
+layout first row gap=24
+layout second row gap=24
+note "The reference uses two continuous diamond-shaped regions, not four decision nodes. Native groups cannot draw that boundary."

@@ -1,0 +1,58 @@
+diagram "Plagiarism in a submitted manuscript" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node reviewer "Reviewer flags possible plagiarism"
+node evidence "Thank reviewer; gather complete evidence and investigate"
+node degree "Assess extent of copying" shape=diamond
+node clear "Substantial unattributed text or data presented as original"
+node redundancy "Author has reused their own work"
+node minor "Brief copied phrases; no false attribution of data"
+node none "No plagiarism issue"
+node ask "Write to corresponding author with evidence and the signed originality statement"
+node otherchart "Use redundancy flowchart"
+node rephrase "Ask author to rephrase or quote and cite; explain journal policy"
+node proceed "Discuss with reviewer; continue peer review"
+node responds "Author responds"
+node noresponse "No response"
+node otherauthors "Try other authors; locate current affiliations or email"
+node stillnone "Still no response"
+node unsatisfactory "Inadequate explanation or admission"
+node satisfactory "Credible error, unclear instructions or inexperienced author"
+node reject "Notify all authors of rejection, reasons and future expectations"
+node revise "Explain expectations; decide whether to reject or request revision"
+node institution "Ask institution to refer concerns to supervisor or research governance lead"
+node informreviewer "Tell reviewer the outcome and action"
+node superior "Consider notifying supervisor, research governance and potential victims"
+node informauthors "Tell authors about the action taken"
+node keepcontact "Keep contacting the institution every 3–6 months; consider other authorities if unresolved"
+edge e1 reviewer -> evidence
+edge e2 evidence -> degree
+edge e3 degree -> clear
+edge e4 degree -> redundancy
+edge e5 degree -> minor
+edge e6 degree -> none
+edge e7 clear -> ask
+edge e8 redundancy -> otherchart
+edge e9 minor -> rephrase
+edge e10 rephrase -> proceed
+edge e11 none -> proceed
+edge e12 ask -> responds
+edge e13 ask -> noresponse
+edge e14 noresponse -> otherauthors
+edge e15 otherauthors -> responds constraint=false
+edge e16 otherauthors -> stillnone
+edge e17 responds -> unsatisfactory
+edge e18 responds -> satisfactory
+edge e19 unsatisfactory -> reject
+edge e20 reject -> superior
+edge e21 reject -> informreviewer
+edge e22 superior -> informauthors
+edge e23 informauthors -> informreviewer
+edge e24 superior -> keepcontact
+edge e25 satisfactory -> revise
+edge e26 revise -> informreviewer
+edge e27 stillnone -> institution
+edge e28 institution -> informreviewer
+edge e29 institution -> keepcontact
+layout root flow direction=down
+note "Author instructions should define plagiarism and explain the journal’s policy."
+note "COPE flowchart; labels paraphrased for the editable study. Consult the preserved original for exact editorial guidance."

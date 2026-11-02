@@ -1,0 +1,14 @@
+diagram "TLS handshake" version=1
+theme signal canvas="#f5f5f5" text="#232323" connection="#315888" title-font=sans annotation-font=sans padding-x=20 padding-y=16 radius=3
+theme-color actor fill="#ffffff" stroke="#555555" ink="#232323"
+node client "Client" color=actor
+node server "Server" color=actor
+edge syn client -> server "SYN"
+edge synack server -> client "SYN ACK"
+edge hello client -> server "ACK / ClientHello"
+edge serverhello server -> client "ServerHello / Certificate / ServerHelloDone"
+edge key client -> server "ClientKeyExchange / ChangeCipherSpec / Finished"
+edge finished server -> client "ChangeCipherSpec / Finished"
+layout root sequence
+phase tcp "TCP · 50 ms" syn synack
+phase tls "TLS · 110 ms" hello serverhello key finished

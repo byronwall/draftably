@@ -1,0 +1,29 @@
+diagram "Read and compare results" version=1
+theme fieldnotes canvas="#ffffff" text="#4e5262" connection="#596075" title-font=sans annotation-font=sans padding-x=20 padding-y=12 radius=0
+theme-color customer shade=100 fill="#fff3d3" stroke="#e1bf6c" ink="#666571"
+theme-color customer shade=200 fill="#fff3d3" stroke="#fff3d3" ink="#666571"
+theme-color customer shade=300 fill="#fff3d3" stroke="#fff3d3" ink="#666571"
+theme-color subscription shade=100 fill="#d8f3ef" stroke="#81d2bc" ink="#666571"
+theme-color blank fill="#ffffff" stroke="#ffffff" ink="#666571"
+group customers "Customers" color=customer shade=100
+group lisa "Lisa Spiers" in=customers color=customer shade=200
+group nested "subscriptions:" in=lisa color=customer shade=300
+node tv "tv_service" in=nested shape=text
+node internet "internet_service" in=nested shape=text
+node phone "phone_service" in=nested shape=text
+group subscriptions "Subscriptions" color=subscription shade=100
+node stv "lisa_tv_service" in=subscriptions shape=text
+node sint "lisa_internet_service" in=subscriptions shape=text
+node sph "lisa_phone_service" in=subscriptions shape=text
+node compare "Read and compare results" color=blank shape=text
+edge read_customer customers -> compare from=bottom to=left
+edge read_subscription subscriptions -> compare from=bottom to=right
+layout root flow direction=down
+layout nested cells direction=down min-width=254
+layout subscriptions cells direction=down min-width=350 min-height=360
+layout customers column min-width=350 min-height=360
+layout lisa column min-width=302
+pin customers x=0 y=0
+pin subscriptions x=550 y=0
+pin compare x=285 y=480
+size compare width=330 height=64

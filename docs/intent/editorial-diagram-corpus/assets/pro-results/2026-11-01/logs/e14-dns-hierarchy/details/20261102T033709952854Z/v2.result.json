@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/v2.png",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v2.png",
+    "--crop",
+    "1424,716,1048,824"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:37:13.206955+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 2.2103,
+  "exit_code": 0
+}

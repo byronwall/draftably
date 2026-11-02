@@ -1,0 +1,38 @@
+{
+  "id": "E17",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "Native cells immediately preserve the three descriptor fields and five adjacent array slots, with an unmistakable pointer to the correct third slot. Default loses range color but adds a helpful pointer label.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 4,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Low to moderate: two pins and eight exact cell sizes. Cells avoid having to pin each field, so the source is concise and the underlying memory order remains obvious.",
+  "residuals": [
+    "External record labels become title bands.",
+    "Pointer arrives at outer cell boundary through orthogonal route.",
+    "Added pointer label and different stroke weights."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: cell ordering survives label edits and resizing; fixed widths may wrap a longer descriptor label, but only two group pins need maintenance.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

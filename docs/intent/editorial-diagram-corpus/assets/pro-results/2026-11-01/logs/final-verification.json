@@ -1,0 +1,159 @@
+{
+  "checked_utc": "2026-11-02T04:02:08.074342+00:00",
+  "baseline_packet_files": 388,
+  "baseline_mismatches": [],
+  "cases": [
+    {
+      "id": "E01",
+      "folder": "cloudflare-tls-handshake",
+      "verified": true
+    },
+    {
+      "id": "E02",
+      "folder": "stripe-synchronized-retries",
+      "verified": true
+    },
+    {
+      "id": "E03",
+      "folder": "github-blackbird-query",
+      "verified": true
+    },
+    {
+      "id": "E04",
+      "folder": "figma-database-migration",
+      "verified": true
+    },
+    {
+      "id": "E05",
+      "folder": "vercel-fluid-transport",
+      "verified": true
+    },
+    {
+      "id": "E06",
+      "folder": "chrome-process-architecture",
+      "verified": true
+    },
+    {
+      "id": "E07",
+      "folder": "cloudflare-http2-multiplexing",
+      "verified": true
+    },
+    {
+      "id": "E08",
+      "folder": "stripe-read-compare",
+      "verified": true
+    },
+    {
+      "id": "E09",
+      "folder": "figma-journal-checkpoints",
+      "verified": true
+    },
+    {
+      "id": "E10",
+      "folder": "github-security-layers",
+      "verified": true
+    },
+    {
+      "id": "E11",
+      "folder": "e11-transformer-stacks",
+      "verified": true
+    },
+    {
+      "id": "E12",
+      "folder": "e12-lstm-recurrent-cell",
+      "verified": true
+    },
+    {
+      "id": "E13",
+      "folder": "e13-cqrs",
+      "verified": true
+    },
+    {
+      "id": "E14",
+      "folder": "e14-dns-hierarchy",
+      "verified": true
+    },
+    {
+      "id": "E15",
+      "folder": "e15-js-agent-cluster",
+      "verified": true
+    },
+    {
+      "id": "E16",
+      "folder": "e16-react-dependency-tree",
+      "verified": true
+    },
+    {
+      "id": "E17",
+      "folder": "e17-go-slice",
+      "verified": true
+    },
+    {
+      "id": "E18",
+      "folder": "e18-git-divergent-history",
+      "verified": true
+    },
+    {
+      "id": "E19",
+      "folder": "e19-pixel-pipeline",
+      "verified": true
+    },
+    {
+      "id": "E20",
+      "folder": "e20-compiler-mountain",
+      "verified": true
+    },
+    {
+      "id": "E21",
+      "folder": "e21-open-upvalue",
+      "verified": true
+    },
+    {
+      "id": "E22",
+      "folder": "e22-dns-query",
+      "verified": true
+    },
+    {
+      "id": "E23",
+      "folder": "E23-nasa-star-life",
+      "verified": true
+    },
+    {
+      "id": "E24",
+      "folder": "E24-noaa-enso",
+      "verified": true
+    },
+    {
+      "id": "E25",
+      "folder": "E25-usgs-water-cycle",
+      "verified": true
+    },
+    {
+      "id": "E26",
+      "folder": "E26-design-double-diamond",
+      "verified": true
+    },
+    {
+      "id": "E27",
+      "folder": "E27-emf-butterfly",
+      "verified": true
+    },
+    {
+      "id": "E28",
+      "folder": "E28-tfl-tram",
+      "verified": true
+    },
+    {
+      "id": "E29",
+      "folder": "E29-cope-plagiarism",
+      "verified": true
+    },
+    {
+      "id": "E30",
+      "folder": "E30-openstax-cell-cycle",
+      "verified": true
+    }
+  ],
+  "issues": [],
+  "passed": true
+}

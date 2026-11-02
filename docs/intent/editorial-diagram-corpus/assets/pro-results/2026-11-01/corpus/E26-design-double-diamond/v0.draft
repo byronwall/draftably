@@ -1,0 +1,14 @@
+diagram "The Double Diamond" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+group first "First diamond"
+group second "Second diamond"
+node discover "Discover" in=first
+node define "Define" in=first
+node develop "Develop" in=second
+node deliver "Deliver" in=second
+edge e1 discover -> define
+edge e2 define -> develop
+edge e3 develop -> deliver
+layout root row
+layout first row
+layout second row

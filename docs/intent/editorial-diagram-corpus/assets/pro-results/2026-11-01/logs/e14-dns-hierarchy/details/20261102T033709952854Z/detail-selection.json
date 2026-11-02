@@ -1,0 +1,24 @@
+{
+  "focus": "Decentralized authority and control example",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      1090,
+      560,
+      580,
+      470
+    ],
+    "v0": [
+      24,
+      1524,
+      2054,
+      768
+    ],
+    "v2": [
+      1424,
+      716,
+      1048,
+      824
+    ]
+  }
+}

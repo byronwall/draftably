@@ -1,0 +1,393 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 0,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 548,
+    "height": 524,
+    "aspect": 1.05,
+    "density": 0.393,
+    "aligned": 1,
+    "crossings": 2,
+    "bends": 16,
+    "bendsPerEdge": 1.23,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 2,
+    "edgeLengthPerEdge": 239,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.09,
+      "boxes": 2.9,
+      "w": 170,
+      "h": 160,
+      "x": 378,
+      "y": 140
+    },
+    "edgeStretch": [
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 784,
+        "detour": 2.2,
+        "span": 1.03
+      },
+      {
+        "id": "e3",
+        "kind": "wrap",
+        "length": 778,
+        "detour": 1.68,
+        "span": 1.03
+      },
+      {
+        "id": "e9",
+        "kind": "wrap",
+        "length": 778,
+        "detour": 1.68,
+        "span": 1.03
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 3,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 7.7,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along supergiant"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along supernova"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 144px at y=156"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e13 784px return, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e3 778px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e9 778px wrap, longer than the diagonal"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 0,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 942,
+    "height": 360,
+    "aspect": 2.62,
+    "density": 0.239,
+    "aligned": 1,
+    "crossings": 1,
+    "bends": 15,
+    "bendsPerEdge": 1.15,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 2,
+    "edgeLengthPerEdge": 243,
+    "theme": "blueprint",
+    "fills": 8,
+    "minTextContrast": 4.57,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 939,
+        "detour": 1.53,
+        "span": 0.93
+      },
+      {
+        "id": "e6",
+        "kind": "back",
+        "length": 939,
+        "detour": 1.52,
+        "span": 0.93
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 3.1,
+    "issues": [
+      {
+        "kind": "empty-band",
+        "detail": "column 132px at x=392"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 12,
+      "meanMove": 358,
+      "maxMove": 536,
+      "moved": 12,
+      "alignedMean": 283,
+      "alignedMoved": 11,
+      "orderFlips": 22,
+      "shift": {
+        "x": 436,
+        "y": -162
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 12,
+      "meanMove": 358,
+      "maxMove": 536,
+      "moved": 12,
+      "alignedMean": 283,
+      "alignedMoved": 11,
+      "orderFlips": 22,
+      "shift": {
+        "x": 436,
+        "y": -162
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 12,
+    "groups": 0,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1120,
+    "height": 745,
+    "aspect": 1.5,
+    "density": 0.249,
+    "aligned": 0.17,
+    "crossings": 0,
+    "bends": 15,
+    "bendsPerEdge": 1.15,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 204,
+    "theme": "blueprint",
+    "fills": 8,
+    "minTextContrast": 4.57,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.1,
+      "boxes": 4.9,
+      "w": 370,
+      "h": 230,
+      "x": 10,
+      "y": 560
+    },
+    "edgeStretch": [
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 425,
+        "detour": 1.29,
+        "span": 0.32
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 4,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 5,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e3 along sun"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e12 supernova→black arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e6 planetary→nebula arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e7 nebula→protostar_high arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e9 massive→supergiant arrives sideways"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 12,
+      "meanMove": 460,
+      "maxMove": 722,
+      "moved": 12,
+      "alignedMean": 419,
+      "alignedMoved": 12,
+      "orderFlips": 31,
+      "shift": {
+        "x": 88,
+        "y": 210
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 12,
+      "meanMove": 379,
+      "maxMove": 959,
+      "moved": 11,
+      "alignedMean": 319,
+      "alignedMoved": 12,
+      "orderFlips": 22,
+      "shift": {
+        "x": 381,
+        "y": 148
+      }
+    },
+    "checks": []
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.draft",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/v0.png"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:27.205842+00:00",
+  "elapsed_seconds": 6.7675,
+  "exit_code": 0
+}

@@ -1,0 +1,421 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 15,
+    "groups": 5,
+    "edges": 8,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1235,
+    "height": 1032,
+    "aspect": 1.2,
+    "density": 0.131,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 4,
+    "bendsPerEdge": 0.5,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 203,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "com_panel": 0.77,
+      "control": 0.26,
+      "overview": 0.9,
+      "domain_panel": 0.72,
+      "root_panel": 0.75
+    },
+    "groupGaps": {
+      "com_panel | domain_panel": 783,
+      "com_panel | overview": 208,
+      "com_panel | control": 71,
+      "domain_panel | root_panel": 87,
+      "overview | root_panel": 399
+    },
+    "emptyArea": {
+      "share": 0.41,
+      "boxes": 46.9,
+      "w": 831,
+      "h": 627,
+      "x": 188,
+      "y": 120
+    },
+    "edgeStretch": [
+      {
+        "id": "e7",
+        "kind": "forward",
+        "length": 433,
+        "detour": 1.12,
+        "span": 0.27
+      },
+      {
+        "id": "e8",
+        "kind": "forward",
+        "length": 779,
+        "detour": 1.08,
+        "span": 0.48
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 8,
+    "issues": [
+      {
+        "kind": "uneven-padding",
+        "detail": "domain_panel left 24, right 52, bottom 24"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 48–64 across groups"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "control fill 0.26"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "831×627px at 188,120 (41% of the drawing, room for 47 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 15,
+    "groups": 5,
+    "edges": 8,
+    "warnings": [
+      "warning line 38: near root_panel gave way by 62 px to keep root clear. Remove line 38, or run format --drop-stale. [relaxed]",
+      "warning line 41: near control gave way by 49 px to keep root clear. Remove line 41, or run format --drop-stale. [relaxed]",
+      "Warnings: 15 nodes, 5 groups, 8 connections."
+    ],
+    "flowDir": "down",
+    "width": 1288,
+    "height": 665,
+    "aspect": 1.94,
+    "density": 0.155,
+    "aligned": 0.93,
+    "crossings": 0,
+    "bends": 2,
+    "bendsPerEdge": 0.25,
+    "maxBends": 1,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 118,
+    "theme": "drafting",
+    "fills": 6,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "com_panel": 0.72,
+      "control": 0.25,
+      "overview": 0.76,
+      "domain_panel": 0.66,
+      "root_panel": 0.72
+    },
+    "groupGaps": {
+      "com_panel | domain_panel": 28,
+      "com_panel | overview": 32,
+      "control | domain_panel": 28,
+      "control | root_panel": 12,
+      "domain_panel | overview": 52,
+      "overview | root_panel": 28
+    },
+    "emptyArea": {
+      "share": 0.17,
+      "boxes": 16.6,
+      "w": 476,
+      "h": 309,
+      "x": 812,
+      "y": -114
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 1,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11,
+    "issues": [
+      {
+        "kind": "uneven-padding",
+        "detail": "domain_panel left 24, right 52, bottom 24"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 48–64 across groups"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "control fill 0.25"
+      },
+      {
+        "kind": "tight-group-gap",
+        "detail": "control | root_panel 12px apart"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 12–52px"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "476×309px at 812,-114 (17% of the drawing, room for 17 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 20,
+      "meanMove": 464,
+      "maxMove": 1311,
+      "moved": 16,
+      "alignedMean": 434,
+      "alignedMoved": 20,
+      "orderFlips": 75,
+      "shift": {
+        "x": 129,
+        "y": -180
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 20,
+      "meanMove": 464,
+      "maxMove": 1311,
+      "moved": 16,
+      "alignedMean": 434,
+      "alignedMoved": 20,
+      "orderFlips": 75,
+      "shift": {
+        "x": 129,
+        "y": -180
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 15,
+    "groups": 5,
+    "edges": 8,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1168,
+    "height": 656,
+    "aspect": 1.78,
+    "density": 0.334,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 42,
+    "theme": "drafting",
+    "fills": 6,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "com_panel": 0.81,
+      "control": 0.61,
+      "overview": 0.92,
+      "domain_panel": 0.81,
+      "root_panel": 0.81
+    },
+    "groupGaps": {
+      "com_panel | domain_panel": 42,
+      "com_panel | overview": 144,
+      "control | domain_panel": 42,
+      "control | root_panel": 10,
+      "domain_panel | overview": 144,
+      "overview | root_panel": 62
+    },
+    "emptyArea": {
+      "share": 0.2,
+      "boxes": 9.2,
+      "w": 724,
+      "h": 216,
+      "x": 0,
+      "y": 132
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 3,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 1,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 14.5,
+    "issues": [
+      {
+        "kind": "tight-group-gap",
+        "detail": "control | root_panel 10px apart"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 10–144px"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"controls\" 38px from its edge"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"controls\" 38px from its edge"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"controls\" on control"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"controls\" 38px from its edge"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 20,
+      "meanMove": 161,
+      "maxMove": 400,
+      "moved": 18,
+      "alignedMean": 132,
+      "alignedMoved": 20,
+      "orderFlips": 33,
+      "shift": {
+        "x": 8,
+        "y": 133
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 20,
+      "meanMove": 382,
+      "maxMove": 1027,
+      "moved": 17,
+      "alignedMean": 375,
+      "alignedMoved": 17,
+      "orderFlips": 64,
+      "shift": {
+        "x": 34,
+        "y": -43
+      }
+    },
+    "checks": []
+  }
+]

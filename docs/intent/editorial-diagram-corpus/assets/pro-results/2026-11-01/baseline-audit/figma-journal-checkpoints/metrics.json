@@ -1,0 +1,450 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 21,
+    "groups": 11,
+    "edges": 0,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1759,
+    "height": 540,
+    "aspect": 3.26,
+    "density": 0.179,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 0,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "checkpoints": 0.87,
+      "cp1": 0.85,
+      "cp2": 0.69,
+      "cp3": 0.59,
+      "journal": 0.85,
+      "j2": 0.85,
+      "j3": 0.69,
+      "j4": 0.59
+    },
+    "groupGaps": {
+      "checkpoints | journal": 28,
+      "cp0 | cp1": 28,
+      "cp1 | cp2": 28,
+      "cp2 | cp3": 28,
+      "j0 | j1": 28,
+      "j1 | j2": 28,
+      "j2 | j3": 28,
+      "j3 | j4": 28
+    },
+    "emptyArea": {
+      "share": 0.32,
+      "boxes": 37.3,
+      "w": 1759,
+      "h": 172,
+      "x": 0,
+      "y": 208
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 2,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 7,
+    "issues": [
+      {
+        "kind": "uneven-padding",
+        "detail": "j0 left 24, right 39, bottom 24"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j1 left 24, right 88, bottom 24"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1759×172px at 0,208 (32% of the drawing, room for 37 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 21,
+    "groups": 11,
+    "edges": 0,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1759,
+    "height": 540,
+    "aspect": 3.26,
+    "density": 0.165,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 0,
+    "theme": "signal",
+    "fills": 8,
+    "minTextContrast": 3.7,
+    "groupFill": {
+      "checkpoints": 0.86,
+      "cp1": 0.85,
+      "cp2": 0.69,
+      "cp3": 0.54,
+      "journal": 0.84,
+      "j2": 0.85,
+      "j3": 0.69,
+      "j4": 0.54
+    },
+    "groupGaps": {
+      "checkpoints | journal": 28,
+      "cp0 | cp1": 28,
+      "cp1 | cp2": 28,
+      "cp2 | cp3": 28,
+      "j0 | j1": 28,
+      "j1 | j2": 28,
+      "j2 | j3": 28,
+      "j3 | j4": 28
+    },
+    "emptyArea": {
+      "share": 0.32,
+      "boxes": 40.5,
+      "w": 1759,
+      "h": 172,
+      "x": 0,
+      "y": 208
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 3,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 2,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 13,
+    "issues": [
+      {
+        "kind": "uneven-padding",
+        "detail": "j0 left 24, right 39, bottom 24"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j1 left 24, right 88, bottom 24"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1759×172px at 0,208 (32% of the drawing, room for 40 boxes)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 32,
+      "meanMove": 2,
+      "maxMove": 10,
+      "moved": 0,
+      "alignedMean": 2,
+      "alignedMoved": 0,
+      "orderFlips": 0,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 32,
+      "meanMove": 2,
+      "maxMove": 10,
+      "moved": 0,
+      "alignedMean": 2,
+      "alignedMoved": 0,
+      "orderFlips": 0,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 21,
+    "groups": 11,
+    "edges": 0,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1360,
+    "height": 774,
+    "aspect": 1.76,
+    "density": 0.132,
+    "aligned": 0.9,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 0,
+    "theme": "signal",
+    "fills": 8,
+    "minTextContrast": 3.7,
+    "groupFill": {
+      "checkpoints": 0.93,
+      "cp1": 0.89,
+      "cp2": 0.56,
+      "cp3": 0.73,
+      "journal": 0.91,
+      "j2": 0.89,
+      "j3": 0.56,
+      "j4": 0.73
+    },
+    "groupGaps": {
+      "checkpoints | journal": 50,
+      "cp0 | cp1": 28,
+      "cp1 | cp2": 28,
+      "cp2 | cp3": 28,
+      "j0 | j1": 28,
+      "j1 | j2": 28,
+      "j2 | j3": 28,
+      "j3 | j4": 28
+    },
+    "emptyArea": {
+      "share": 0.29,
+      "boxes": 45.5,
+      "w": 1360,
+      "h": 222,
+      "x": 0,
+      "y": 286
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 3,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 8,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 30,
+    "issues": [
+      {
+        "kind": "uneven-padding",
+        "detail": "cp0 left 64, right 76, bottom 142"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "cp1 left 54, right 66, bottom 162"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "cp2 left 54, right 66, bottom 52"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j0 left 34, right 46, bottom 142"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j1 left 24, right 136, bottom 162"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j2 left 24, right 36, bottom 162"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j3 left 24, right 36, bottom 52"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "j4 left 24, right 26, bottom 52"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 24–64 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 48–98 across groups"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 28–50px"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1360×222px at 0,286 (29% of the drawing, room for 46 boxes)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      },
+      {
+        "kind": "low-contrast",
+        "detail": "\"Red\" #FFFFFF on #FF2A49 (3.7)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 32,
+      "meanMove": 173,
+      "maxMove": 447,
+      "moved": 32,
+      "alignedMean": 133,
+      "alignedMoved": 28,
+      "orderFlips": 69,
+      "shift": {
+        "x": 37,
+        "y": 128
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 32,
+      "meanMove": 172,
+      "maxMove": 442,
+      "moved": 32,
+      "alignedMean": 133,
+      "alignedMoved": 28,
+      "orderFlips": 39,
+      "shift": {
+        "x": 37,
+        "y": 128
+      }
+    },
+    "checks": []
+  }
+]

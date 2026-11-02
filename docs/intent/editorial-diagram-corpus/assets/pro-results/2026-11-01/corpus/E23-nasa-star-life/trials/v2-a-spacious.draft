@@ -1,0 +1,60 @@
+diagram "Life cycles of Sun-like and massive stars" version=1
+theme blueprint canvas="#000000" text="#B8E5DF" connection="#9EBFBB" title-font=sans annotation-font=sans
+theme-color slate shade=50 fill="#172120" stroke="#344542" ink="#B8E5DF"
+subtitle "Two mass-dependent paths return material to the star-forming nebula."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node nebula "Star-forming nebula" shape=circle color=rose shade=700
+node protostar_low "Protostar: lower mass" shape=circle color=amber shade=500
+node sun "Sun-like star" shape=circle color=amber shade=500
+node giant "Red giant" shape=circle color=orange shade=500
+node planetary "Planetary nebula" shape=circle color=slate shade=800
+node white "White dwarf" shape=circle color=slate shade=100
+node protostar_high "Protostar: higher mass" shape=circle color=sky shade=500
+node massive "Massive star" shape=circle color=sky shade=400
+node supergiant "Red supergiant" shape=circle color=orange shade=500
+node supernova "Supernova" shape=circle color=slate shade=100
+node neutron "Neutron star" shape=circle color=slate shade=100
+node black "Black hole" shape=circle color=slate shade=950
+edge e1 nebula -> protostar_low from=top to=right
+edge e2 protostar_low -> sun from=left to=right
+edge e3 sun -> giant "Billions of years" from=left to=top
+edge e4 giant -> planetary from=bottom to=left
+edge e5 planetary -> white from=right to=left
+edge e6 planetary -> nebula "Ejected material" constraint=false from=top to=bottom
+edge e7 nebula -> protostar_high from=right to=bottom
+edge e8 protostar_high -> massive from=right to=left
+edge e9 massive -> supergiant "Millions of years" from=right to=top
+edge e10 supergiant -> supernova from=bottom to=right
+edge e11 supernova -> neutron from=left to=top
+edge e12 supernova -> black from=bottom to=top
+edge e13 supernova -> nebula "Ejected material" constraint=false from=left to=right
+layout root engine=layered direction=right fold=never rank-gap=70 node-gap=60
+note "The massive-star branch is for stars more than 8–10 times the Sun’s mass."
+
+
+# Explicit sizes and parent-relative positions.
+size nebula width=200 height=130
+pin nebula x=520 y=300
+size protostar_low width=150 height=90
+pin protostar_low x=340 y=80
+size sun width=110 height=110
+pin sun x=110 y=70
+size giant width=170 height=170
+pin giant x=20 y=350
+size planetary width=170 height=140
+pin planetary x=230 y=610
+size white width=120 height=90
+pin white x=500 y=700
+size protostar_high width=150 height=90
+pin protostar_high x=750 y=100
+size massive width=150 height=150
+pin massive x=980 y=80
+size supergiant width=200 height=200
+pin supergiant x=1200 y=340
+size supernova width=200 height=140
+pin supernova x=1000 y=620
+size neutron width=140 height=90
+pin neutron x=780 y=840
+size black width=140 height=90
+pin black x=1100 y=840
+routing corner-radius=16 bend-penalty=64

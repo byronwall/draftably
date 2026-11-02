@@ -1,0 +1,63 @@
+{
+  "stage": "v0",
+  "source_sha256": "617d9e46f5b131e0627e8385ebf0c65fa1bc863e004744b7f7d872f03b2217a1",
+  "run_id": "20261102T032009013291Z",
+  "log": "logs/github-security-layers/v0/20261102T032009013291Z",
+  "commands": {
+    "check": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "check",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.draft"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:09.013780+00:00",
+      "elapsed_seconds": 0.6253,
+      "exit_code": 0
+    },
+    "inspect": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.draft",
+        "--json",
+        "--metrics"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:09.639264+00:00",
+      "elapsed_seconds": 0.637,
+      "exit_code": 0
+    },
+    "svg": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "draftably",
+        "inspect",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.draft",
+        "--svg"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:10.276508+00:00",
+      "elapsed_seconds": 0.6456,
+      "exit_code": 0
+    },
+    "shoot": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.draft",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:20:10.922462+00:00",
+      "elapsed_seconds": 1.6448,
+      "exit_code": 0
+    }
+  }
+}

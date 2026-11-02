@@ -1,0 +1,39 @@
+{
+  "id": "E29",
+  "slug": "E29-cope-plagiarism",
+  "title": "Plagiarism in a submitted manuscript",
+  "publisher": "Committee on Publication Ethics",
+  "author": "COPE Council",
+  "publication_date": "2021-07-24",
+  "page_url": "https://publicationethics.org/guidance/flowchart/plagiarism-submitted-manuscript",
+  "image_url": "https://publicationethics.org/media/124/download?attachment",
+  "license": "CC BY-NC-ND 4.0",
+  "license_observation": "The preserved 2021 flowchart prints Creative Commons Attribution–NonCommercial–NoDerivatives 4.0. Do not publish derivatives or claim publication permission; the native recreation here is an internal evaluation artifact. Original version 1 is dated 2006; current redesign is 2021.",
+  "figure": "Complete one-page COPE flowchart; DOI 10.24318/cope.2019.2.1.",
+  "patterns": [
+    "publishing process",
+    "decision tree",
+    "long annotations",
+    "escalation workflow"
+  ],
+  "principal_objects": 24,
+  "object_count_basis": "Twenty-four action, evidence, branch, and terminal roles represented natively; side title, logo, icons, and connecting junctions are additional graphic marks.",
+  "reading_path": "Top evidence-gathering spine opens four plagiarism-severity branches. The central response path distinguishes satisfactory from unsatisfactory explanations; the right-hand nonresponse path escalates to authors and institution.",
+  "merit": "A portrait editorial composition separates the long title and brand from the working process. Muted semantic branch colors, small icons with adjacent explanatory text, balanced response branches, and dark terminal panels hold substantial prose without overwhelming the reader.",
+  "confirmation_case": false,
+  "reference_file": "reference.pdf",
+  "preview_note": "Actual single-page PDF retained. Full-page preview rasterized with pdftoppm, long edge 1800 pixels.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "17db47b0a4dd11bfee8594200d319cf8c3d13b008f712acaca7901893cc18aca",
+  "reference_bytes": 108821,
+  "reference_preview_dimensions": [
+    1273,
+    1800
+  ],
+  "native_v0_objects": {
+    "nodes": 24,
+    "groups": 0,
+    "edges": 29
+  }
+}

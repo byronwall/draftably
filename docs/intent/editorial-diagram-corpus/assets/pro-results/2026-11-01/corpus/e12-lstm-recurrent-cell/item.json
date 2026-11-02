@@ -1,0 +1,53 @@
+{
+  "id": "E12",
+  "slug": "e12-lstm-recurrent-cell",
+  "title": "Expanded LSTM cell with recurrent context",
+  "publisher": "Christopher Olah",
+  "author": "Christopher Olah",
+  "publication_date": "2015-08-27",
+  "access_date": "2026-11-02",
+  "page_url": "https://colah.github.io/posts/2015-08-Understanding-LSTMs/",
+  "image_url": "https://colah.github.io/posts/2015-08-Understanding-LSTMs/img/LSTM3-chain.png",
+  "license": "unknown; no reuse license observed on article",
+  "figure": "LSTM3-chain.png",
+  "patterns": [
+    "computational graph",
+    "recurrent state",
+    "mathematical notation"
+  ],
+  "principal_objects": 18,
+  "reading_path": "Left to right through time; cell-state trunk across the top; gates feed upward from the current input.",
+  "merit": "The horizontal memory conveyor and compact gate symbols explain a difficult recurrent computation. Faded repeated cells provide context without competing with the expanded middle.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "9ef0aeb8ba4e3c55e5def82755276bcdd345f716dbb52b8eb437d8bbfd4b2e63",
+  "reference_bytes": 229688,
+  "reference_preview_size": [
+    2233,
+    839
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "93e29b6938050cfba6555202dd9f93467fffd5928b62fd79e981b949f75d7eab",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "f5a76defa0f69992bca2c9423234307b16f31259738a88a32d83774df20301a9",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "121aa28dee311b0f51140621d6a6e06a596a21a195c9c7d33147669b50763bfa",
+      "warning_count": 1,
+      "warnings": [
+        "warning line 50: Edge e4 (cp -> forget) crosses the title of cell. Remove the pin on line 50. [edge-through-title]"
+      ]
+    }
+  }
+}

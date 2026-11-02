@@ -1,0 +1,24 @@
+{
+  "focus": "Syntax, intermediate representation and transpiling paths",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      330,
+      100,
+      900,
+      650
+    ],
+    "v0": [
+      24,
+      396,
+      1538,
+      256
+    ],
+    "v2": [
+      544,
+      116,
+      1292,
+      1020
+    ]
+  }
+}

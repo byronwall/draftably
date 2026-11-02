@@ -1,0 +1,3 @@
+warning line 96: Edge com_records_link (com_a -> com_records) runs through example_ns. Remove the size on line 96, or move example_ns 32px down. [edge-through-node]
+warning line 93: Edge root_records (root_a -> roots) runs through ca_record. Remove the size on line 93, or move ca_record 32px down. [edge-through-node]
+Warnings: 21 nodes, 10 groups, 10 connections.

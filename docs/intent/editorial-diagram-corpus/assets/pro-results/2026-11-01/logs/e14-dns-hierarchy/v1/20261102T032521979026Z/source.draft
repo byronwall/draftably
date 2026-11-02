@@ -1,0 +1,41 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "The DNS hierarchy" version=1
+group overview "Three levels of authority"
+group root_panel "Root delegates"
+group com_panel ".com delegates"
+group domain_panel "Domain authority answers"
+group control "Decentralized control: jvns.ca"
+node root_ns "root: authority begins here" in=overview color=violet shade=100
+node com ".com: names ending in .com" in=overview color=green shade=100
+node domain "example.com: domain and subdomains" in=overview color=blue shade=100
+node rq "Address for example.com?" in=root_panel
+node ra "Root returns the .com nameserver address" in=root_panel color=green shade=100
+node cq "Address for example.com?" in=com_panel
+node ca ".com returns the example.com nameserver address" in=com_panel color=red shade=100
+node dq "Address for example.com?" in=domain_panel
+node da "93.184.216.34" in=domain_panel color=blue shade=100
+node cr "root" in=control color=violet shade=100
+node cc ".ca nameserver" in=control color=green shade=100
+node cd "jvns.ca nameserver" in=control color=blue shade=100
+node icann "ICANN controls the root" in=control
+node canada "Canada controls .ca" in=control
+node owner "Domain owner controls jvns.ca" in=control
+edge e1 rq -> ra "delegates"
+edge e2 cq -> ca "delegates"
+edge e3 dq -> da "answers"
+edge e4 cr -> cc "delegate"
+edge e5 cc -> cd "delegate"
+edge e6 icann -> cr "controls"
+edge e7 canada -> cc "controls"
+edge e8 owner -> cd "controls"
+layout root engine=grid
+layout overview row
+layout root_panel column
+layout com_panel column
+layout domain_panel column
+layout control engine=layered direction=down
+theme drafting canvas="#FFFFFF" padding-x=16 padding-y=12
+near root_panel overview side=right gap=28
+near com_panel overview side=below gap=32
+near domain_panel com_panel side=right gap=28
+near control domain_panel side=right gap=28

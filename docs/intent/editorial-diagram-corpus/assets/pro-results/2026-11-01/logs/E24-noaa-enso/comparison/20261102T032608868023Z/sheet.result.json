@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "--sheet",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/comparison.png",
+    "--cols",
+    "3",
+    "Reference::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/reference-preview.png",
+    "v0 \u2014 default::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/v0.png",
+    "v2 \u2014 refined::/workspace/scratch/742d8c352255/deliverable/corpus/E24-noaa-enso/v2.png"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:26:12.627862+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 1.4884,
+  "exit_code": 0
+}

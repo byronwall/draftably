@@ -1,0 +1,7 @@
+error   pheap overlaps pqueue. Release a pin or give page more room.
+error   wheap overlaps wqueue. Release a pin or give worker more room.
+info    line 49: page needs at least 1046×683 for its contents.
+info    line 50: worker needs at least 1046×535 for its contents.
+warning line 89: po7 overlaps pqueue. Remove the pin on line 89, or change it to x=235 y=251. [node-overlap]
+warning line 94: wo3 overlaps wqueue. Remove the pin on line 94, or change it to x=235 y=151. [node-overlap]
+Problems: 31 nodes, 11 groups, 15 connections.

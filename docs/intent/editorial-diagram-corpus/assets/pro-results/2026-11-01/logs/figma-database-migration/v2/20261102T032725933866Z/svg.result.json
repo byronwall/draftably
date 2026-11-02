@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "inspect",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/figma-database-migration/v2.draft",
+    "--svg"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:27:27.337646+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 0.746,
+  "exit_code": 0
+}

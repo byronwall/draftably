@@ -1,0 +1,46 @@
+{
+  "id": "E02",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The first render preserves every retry label, but equal box spacing hides the growing intervals and the repeated text makes synchronization slower to see than three simple source tracks.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "High for a small figure: 15 pins plus 15 exact sizes encode a timeline that should follow a shared scale. Every new event would require the author to calculate another x coordinate. The graph and timing labels remain understandable.",
+  "residuals": [
+    "No dedicated timeline scale, shared guides, or continuous tracks.",
+    "Fifteen labeled boxes replace thin ticks; the native version is much taller.",
+    "Per-track line colors remain unavailable through native edge declarations."
+  ],
+  "provisional_gaps": [
+    "I-TIME",
+    "I-EDGE-COLOR",
+    "I-PANEL-GEOMETRY",
+    "I-TYPE"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

@@ -1,0 +1,21 @@
+{
+  "id": "E16",
+  "slug": "e16-react-dependency-tree",
+  "stage": "v0",
+  "noncomment_lines": 15,
+  "declarations": 13,
+  "node_declarations": 7,
+  "group_declarations": 0,
+  "edge_declarations": 6,
+  "layout_refinement_lines": 1,
+  "layouts": 1,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 0,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 2,
+  "current_stage_command_seconds": 3.903,
+  "authoring_time": "not measured"
+}

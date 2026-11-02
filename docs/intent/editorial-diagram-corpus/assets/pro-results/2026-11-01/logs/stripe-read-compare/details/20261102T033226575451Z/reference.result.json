@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/reference-preview.png",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-read-compare/details/reference.png",
+    "--crop",
+    "57,126,1238,1098"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:32:26.575814+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 1.5092,
+  "exit_code": 0
+}

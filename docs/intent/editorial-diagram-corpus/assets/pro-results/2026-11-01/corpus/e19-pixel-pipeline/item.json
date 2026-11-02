@@ -1,0 +1,51 @@
+{
+  "id": "E19",
+  "slug": "e19-pixel-pipeline",
+  "title": "The browser pixel pipeline",
+  "publisher": "web.dev",
+  "author": "Paul Lewis",
+  "publication_date": "unknown; article last updated 2023-12-13",
+  "access_date": "2026-11-02",
+  "page_url": "https://web.dev/articles/rendering-performance",
+  "image_url": "https://web.dev/static/articles/rendering-performance/image/the-full-pixel-pipeline-45b24543207ea.jpg",
+  "license": "CC BY 4.0; explicit page footer",
+  "figure": "the-full-pixel-pipeline-45b24543207ea.jpg",
+  "patterns": [
+    "pipeline",
+    "contiguous stages",
+    "meaningful color"
+  ],
+  "principal_objects": 5,
+  "reading_path": "One left-to-right line, five consecutive rendering stages.",
+  "merit": "A tightly joined chevron ribbon communicates order without separate connectors. Three restrained color families separate script, geometry and pixel work. Included as a compact deliberate counterpoint to dense references.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "c60f4da9baa4ed4a7ae4f38e77344db7fe57fc25cc2a4d9deaf02a82d4bb39b4",
+  "reference_bytes": 12548,
+  "reference_preview_size": [
+    1093,
+    167
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "25da534af7a45044291a022c171b96187fb822582dc4f6c287beda0f049c3c9f",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "6e379fcc78db87abf2f2f8d12699bf7b117157f95fad1139ee29cf4c3a6537cb",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "e7a801e6766f44c13881b292e2f8b8a8fa02dd3be37353d4ed959c05ec2bcb4e",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

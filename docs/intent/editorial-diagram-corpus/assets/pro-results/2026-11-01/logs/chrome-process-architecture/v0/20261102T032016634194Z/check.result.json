@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "check",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/chrome-process-architecture/v0.draft"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:16.634566+00:00",
+  "elapsed_seconds": 0.8702,
+  "exit_code": 0
+}

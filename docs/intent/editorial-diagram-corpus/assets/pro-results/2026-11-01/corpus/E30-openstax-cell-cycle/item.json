@@ -1,0 +1,39 @@
+{
+  "id": "E30",
+  "slug": "E30-openstax-cell-cycle",
+  "title": "The cell cycle",
+  "publisher": "OpenStax / Rice University",
+  "author": "OpenStax; Biology 2e",
+  "publication_date": "2018-03-28",
+  "page_url": "https://openstax.org/books/biology-2e/pages/10-2-the-cell-cycle",
+  "image_url": "https://openstax.org/apps/archive/20260604.144757/resources/418e5abd3be4fb9a0f0f1c81b82f0d51f93c81d4",
+  "license": "CC BY-NC-SA 4.0",
+  "license_observation": "The currently retrieved Biology 2e page states Creative Commons Attribution–NonCommercial–ShareAlike 4.0; the book page has a 2026 copyright update. This records the observed current statement rather than assuming the historical OpenStax license. Figure-specific exception was not observed.",
+  "figure": "Figure 10.5, complete radial cell-cycle illustration including the daughter-cell outcome label.",
+  "patterns": [
+    "scientific cycle",
+    "radial bands",
+    "phase containment",
+    "sector annotation"
+  ],
+  "principal_objects": 6,
+  "object_count_basis": "Five named phases plus one text outcome, Formation of 2 daughter cells. The two phase-group labels are not counted as principal objects. Native attempts use the same six nodes plus two groups.",
+  "reading_path": "Follow the circular red arrows through G₁, S, G₂, mitosis, and cytokinesis. Read the outer Interphase and Mitotic phase bands as membership/extent; cytokinesis produces two daughter cells.",
+  "merit": "A nearly complete radial band makes interphase visually dominant, while a small peach mitotic sector and outer bracket separate the short division stage. Color follows phase membership, and a concise daughter-cell outcome label anchors the biological result.",
+  "confirmation_case": true,
+  "reference_file": "reference.jpg",
+  "preview_note": "Actual 800×561 JPEG retained; lossless PNG preview at original resolution.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "08df4b4ad10580a0c4bd0a603022e7e38067b17e35d9d1e48ace713adcfd7e36",
+  "reference_bytes": 163227,
+  "reference_preview_dimensions": [
+    800,
+    561
+  ],
+  "native_v0_objects": {
+    "nodes": 6,
+    "groups": 2,
+    "edges": 6
+  }
+}

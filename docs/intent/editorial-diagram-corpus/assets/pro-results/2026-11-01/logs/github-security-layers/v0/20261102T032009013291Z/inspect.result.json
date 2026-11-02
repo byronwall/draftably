@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "inspect",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/github-security-layers/v0.draft",
+    "--json",
+    "--metrics"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:09.639264+00:00",
+  "elapsed_seconds": 0.637,
+  "exit_code": 0
+}

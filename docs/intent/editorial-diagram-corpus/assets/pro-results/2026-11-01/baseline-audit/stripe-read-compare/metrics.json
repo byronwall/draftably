@@ -1,0 +1,423 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 4,
+    "edges": 2,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 548,
+    "height": 532,
+    "aspect": 1.03,
+    "density": 0.23,
+    "aligned": 0.86,
+    "crossings": 0,
+    "bends": 3,
+    "bendsPerEdge": 1.5,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 293,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "nested": 0.78,
+      "subscriptions": 0.78
+    },
+    "groupGaps": {
+      "customers | subscriptions": 28,
+      "compare | customers": 28
+    },
+    "emptyArea": {
+      "share": 0.29,
+      "boxes": 8.7,
+      "w": 312,
+      "h": 268,
+      "x": 236,
+      "y": 264
+    },
+    "edgeStretch": [
+      {
+        "id": "read_subscription",
+        "kind": "forward",
+        "length": 486,
+        "detour": 1.41,
+        "span": 0.64
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 3,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "read_customer along compare"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "read_subscription subscriptions→compare arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "read_subscription 486px, 0.64 of the diagonal"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 4,
+    "edges": 2,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 602,
+    "height": 385,
+    "aspect": 1.56,
+    "density": 0.217,
+    "aligned": 0.86,
+    "crossings": 0,
+    "bends": 3,
+    "bendsPerEdge": 1.5,
+    "maxBends": 3,
+    "hooks": 1,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 504,
+    "theme": "fieldnotes",
+    "fills": 2,
+    "minTextContrast": 4.91,
+    "groupFill": {
+      "nested": 1,
+      "subscriptions": 1
+    },
+    "groupGaps": {
+      "customers | subscriptions": 160,
+      "compare | customers": 25
+    },
+    "emptyArea": {
+      "share": 0.35,
+      "boxes": 11.1,
+      "w": 208,
+      "h": 385,
+      "x": 205,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "read_subscription",
+        "kind": "forward",
+        "length": 984,
+        "detour": 2.82,
+        "span": 1.38
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 1,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 16,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "read_subscription along compare"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "read_subscription 10px from customers"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 0–24 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 33–51 across groups"
+      },
+      {
+        "kind": "hook",
+        "detail": "read_subscription subscriptions→compare into its far side"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "read_subscription subscriptions→compare arrives sideways"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 160px at x=253"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "read_subscription 984px, 2.8× the direct way"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "208×385px at 205,0 (35% of the drawing, room for 11 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 11,
+      "meanMove": 76,
+      "maxMove": 141,
+      "moved": 11,
+      "alignedMean": 60,
+      "alignedMoved": 7,
+      "orderFlips": 0,
+      "shift": {
+        "x": -27,
+        "y": -58
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 11,
+      "meanMove": 76,
+      "maxMove": 141,
+      "moved": 11,
+      "alignedMean": 60,
+      "alignedMoved": 7,
+      "orderFlips": 0,
+      "shift": {
+        "x": -27,
+        "y": -58
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 4,
+    "edges": 2,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 900,
+    "height": 544,
+    "aspect": 1.65,
+    "density": 0.126,
+    "aligned": 0.86,
+    "crossings": 0,
+    "bends": 2,
+    "bendsPerEdge": 1,
+    "maxBends": 1,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 367,
+    "theme": "fieldnotes",
+    "fills": 2,
+    "minTextContrast": 5.24,
+    "groupFill": {
+      "nested": 1,
+      "subscriptions": 1
+    },
+    "groupGaps": {
+      "customers | subscriptions": 200,
+      "compare | customers": 120,
+      "compare | subscriptions": 330
+    },
+    "emptyArea": {
+      "share": 0.47,
+      "boxes": 26.1,
+      "w": 695,
+      "h": 330,
+      "x": 205,
+      "y": 150
+    },
+    "edgeStretch": [
+      {
+        "id": "read_subscription",
+        "kind": "forward",
+        "length": 472,
+        "detour": 1.43,
+        "span": 0.45
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 3,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 15,
+    "issues": [
+      {
+        "kind": "edge-on-group-border",
+        "detail": "read_subscription along subscriptions"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "customers left 24, right 24, bottom 84"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "nested left 0, right 97, bottom 0"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "subscriptions left 0, right 161, bottom 0"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 0–24 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 33–51 across groups"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "read_customer customers→compare arrives sideways"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "695×330px at 205,150 (47% of the drawing, room for 26 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 11,
+      "meanMove": 114,
+      "maxMove": 400,
+      "moved": 8,
+      "alignedMean": 97,
+      "alignedMoved": 9,
+      "orderFlips": 10,
+      "shift": {
+        "x": 49,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 11,
+      "meanMove": 153,
+      "maxMove": 368,
+      "moved": 11,
+      "alignedMean": 125,
+      "alignedMoved": 9,
+      "orderFlips": 7,
+      "shift": {
+        "x": 21,
+        "y": -63
+      }
+    },
+    "checks": []
+  }
+]

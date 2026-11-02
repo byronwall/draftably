@@ -1,0 +1,34 @@
+diagram "Command/query separation" version=1
+group service "Service"
+group query "Query model" in=service
+group command "Command model" in=service
+node db "Database"
+node ui "UI"
+node qi "Query interface" in=service shape=pill
+node ci "Command interface" in=service shape=pill
+node query1 "" in=query
+node query2 "" in=query
+node query3 "" in=query
+node command1 "" in=command
+node command2 "" in=command
+node command3 "" in=command
+edge e1 query1 -> query2
+edge e2 query3 -> query1
+edge e3 query3 -> query2
+edge e4 command1 -> command2
+edge e5 command3 -> command2
+edge e6 db -> query1
+edge e7 query2 -> qi
+edge e8 qi -> ui
+edge e9 ui -> ci
+edge e10 ci -> command3
+edge e11 command1 -> db
+note "The query side reads persistent data."
+note "Query services refresh the UI from the read model."
+note "A user action changes the UI."
+note "Presentation logic turns that action into a command."
+note "Commands run validation and business rules, then update storage."
+layout root flow
+layout service column
+layout query flow
+layout command flow

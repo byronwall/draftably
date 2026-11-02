@@ -1,0 +1,30 @@
+{
+  "full": [
+    "upload/pro-prompt(20261102-031322).md",
+    "baseline/SOURCE-CONTEXT.md",
+    "baseline/AGENTS.md",
+    "baseline/skills/draftably/SKILL.md",
+    "baseline/docs/DSL.md",
+    "baseline/src/model/appearance.ts",
+    "baseline/src/model/fonts.ts",
+    "baseline/src/model/labels.ts",
+    "baseline/src/model/heading.ts",
+    "baseline/src/model/note.ts",
+    "baseline/src/model/legend.ts",
+    "baseline/scripts/shoot.mjs",
+    "baseline/tests/themes.test.ts",
+    "baseline/tests/theme-slots.test.ts",
+    "baseline/tests/notes.test.ts",
+    "baseline/tests/heading.test.ts",
+    "baseline/tests/legend.test.ts",
+    "baseline/tests/cells.test.ts",
+    "baseline/tests/sequence.test.ts",
+    "baseline/tests/edge-labels.test.ts",
+    "baseline/tests/title-wrap.test.ts",
+    "baseline/src/dsl/cells.ts",
+    "baseline/src/model/types.ts"
+  ],
+  "partial": [
+    "baseline/scripts/diagram-audit.mjs (1\u2013260, 450\u2013750, 810\u2013856, 1130\u20131285, 1550\u20131645; exact rule blocks for metric review)"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "inspect",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E27-emf-butterfly/v0.draft",
+    "--svg"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:22.259793+00:00",
+  "elapsed_seconds": 4.1718,
+  "exit_code": 0
+}

@@ -1,0 +1,36 @@
+diagram "Synchronized retries" version=1
+note "Server fails all requests at t0. Clients retry together; time increases to the right."
+group c1 "Client 1"
+node c1e0 "Failure\nt0" in=c1
+node c1e1 "1st retry\nt0+1" in=c1
+node c1e2 "2nd retry\nt0+2" in=c1
+node c1e3 "3rd retry\nt0+4" in=c1
+node c1e4 "4th retry\nt0+8" in=c1
+edge c1next0 c1e0 -> c1e1
+edge c1next1 c1e1 -> c1e2
+edge c1next2 c1e2 -> c1e3
+edge c1next3 c1e3 -> c1e4
+layout c1 row
+group c2 "Client 2"
+node c2e0 "Failure\nt0" in=c2
+node c2e1 "1st retry\nt0+1" in=c2
+node c2e2 "2nd retry\nt0+2" in=c2
+node c2e3 "3rd retry\nt0+4" in=c2
+node c2e4 "4th retry\nt0+8" in=c2
+edge c2next0 c2e0 -> c2e1
+edge c2next1 c2e1 -> c2e2
+edge c2next2 c2e2 -> c2e3
+edge c2next3 c2e3 -> c2e4
+layout c2 row
+group c3 "Client 3"
+node c3e0 "Failure\nt0" in=c3
+node c3e1 "1st retry\nt0+1" in=c3
+node c3e2 "2nd retry\nt0+2" in=c3
+node c3e3 "3rd retry\nt0+4" in=c3
+node c3e4 "4th retry\nt0+8" in=c3
+edge c3next0 c3e0 -> c3e1
+edge c3next1 c3e1 -> c3e2
+edge c3next2 c3e2 -> c3e3
+edge c3next3 c3e3 -> c3e4
+layout c3 row
+layout root column

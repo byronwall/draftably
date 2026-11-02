@@ -1,0 +1,93 @@
+{
+  "case": "e14-dns-hierarchy",
+  "focus": "Decentralized authority and control example",
+  "log": "logs/e14-dns-hierarchy/details/20261102T033709952854Z",
+  "selection_sha256": "8cf28bf825ed6a8e98fc0f5cfec2d6a83b3f5b931487ce1070c74ee8282eb68a",
+  "source_sha256": {
+    "reference-preview.png": "21e207dd4310dab8e1a60c7e434cfdcb992be86f4a92fe0b4ffb4afaf3e841ef",
+    "v0.png": "09511dfd26691d96a9ffb6c18768f0d5c2488750bf9cb3d3d1b7f1cc64cadaed",
+    "v2.png": "25889f33ab657900743f712ced259582871969fbada345c62926caf105f5e5ee"
+  },
+  "commands": {
+    "reference": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/reference-preview.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/reference.png",
+        "--crop",
+        "1090,560,580,470"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:09.953185+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.5447,
+      "exit_code": 0
+    },
+    "v0": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/v0.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v0.png",
+        "--crop",
+        "24,1524,2054,768"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:11.498226+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.7079,
+      "exit_code": 0
+    },
+    "v2": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/v2.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v2.png",
+        "--crop",
+        "1424,716,1048,824"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:13.206955+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.2103,
+      "exit_code": 0
+    },
+    "sheet": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "--sheet",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/comparison.png",
+        "--cols",
+        "3",
+        "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/reference.png",
+        "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v0.png",
+        "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e14-dns-hierarchy/details/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:15.417439+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 2.0036,
+      "exit_code": 0
+    }
+  },
+  "status": "complete"
+}

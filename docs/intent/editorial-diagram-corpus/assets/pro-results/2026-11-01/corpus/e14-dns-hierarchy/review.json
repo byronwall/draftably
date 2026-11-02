@@ -1,0 +1,39 @@
+{
+  "id": "E14",
+  "v0_readability_vs_reference": "worse",
+  "reason": "Default grid leaves large empty areas and expands governance into a horizontal flow, weakening the comic\u2019s five-panel reading order.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "High for such a short explanation: twenty pins and fifteen sizes are needed to obtain the chosen two-row panel composition. The declarations remain simple and explicit.",
+  "residuals": [
+    "Characters, speech balloons and handwritten/inline emphasis absent.",
+    "Governance becomes a vertical graph.",
+    "Uniform panel headers and fills replace thin comic frames."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G05",
+    "C-S01"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: longer dialogue would need new heights or panel positions because the final panel grid is explicitly pinned.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

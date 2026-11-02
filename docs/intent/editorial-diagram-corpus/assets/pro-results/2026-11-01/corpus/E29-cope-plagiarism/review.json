@@ -1,0 +1,42 @@
+{
+  "id": "E29",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default carries a large amount of usable decision content, but dense boxes and longer multi-line titles slow scanning relative to the original’s icons, balanced branches and separated prose. Five measured crossings add ambiguity.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "High. Twenty-four manual sizes and pins plus a long order line increase cost substantially over the already-useful default. The explicit IDs make the workflow intelligible, but every wording change may need another layout review. The source is verbose because the real process is verbose; that part is legitimate content cost.",
+  "residuals": [
+    "Long source guidance is paraphrased; exact wording and some examples are in the preserved original.",
+    "No icon-centered route nodes with separately anchored multiline captions.",
+    "No side title/credit composition or source logo.",
+    "Mixed font weight/size and inline emphasis are flattened.",
+    "One final measured crossing; manual layout requires review after wording changes."
+  ],
+  "provisional_gaps": [
+    "external-label-roles",
+    "native-image-icon-serializability",
+    "rich-label-hierarchy",
+    "native-text-scale-control"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

@@ -1,0 +1,17 @@
+diagram "The cell cycle" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+group interphase "Interphase"
+group mitotic "Mitotic phase"
+node g1 "G₁ · Cell growth" in=interphase
+node s "S · DNA synthesis" in=interphase
+node g2 "G₂ · Cell growth" in=interphase
+node mitosis "Mitosis" in=mitotic
+node cytokinesis "Cytokinesis" in=mitotic
+node daughters "Formation of 2 daughter cells"
+edge e1 g1 -> s
+edge e2 s -> g2
+edge e3 g2 -> mitosis
+edge e4 mitosis -> cytokinesis
+edge e5 cytokinesis -> g1 "Cycle repeats" constraint=false
+edge e6 cytokinesis -> daughters
+layout root flow direction=right

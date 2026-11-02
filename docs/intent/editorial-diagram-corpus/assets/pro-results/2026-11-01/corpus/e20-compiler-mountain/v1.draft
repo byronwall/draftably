@@ -1,0 +1,23 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Language implementation paths" version=1
+node source "SOURCE CODE" shape=text
+node tokens "TOKENS" shape=text
+node syntax "SYNTAX TREE" shape=text
+node ir "INTERMEDIATE REPRESENTATION(S)" shape=text
+node high "HIGH-LEVEL LANGUAGE" shape=text
+node bytecode "BYTECODE" shape=text
+node machine "MACHINE CODE" shape=text
+node interpreter "TREE-WALK INTERPRETER" shape=text
+node vm "VIRTUAL MACHINE" shape=text
+edge scan source -> tokens "Scanning"
+edge parse tokens -> syntax "Parsing"
+edge analyse syntax -> ir "Analysis"
+edge optimize ir -> ir "Optimizing" constraint=false
+edge interpret syntax -> interpreter
+edge transpile_tree syntax -> high "Transpiling"
+edge transpile_ir ir -> high "Transpiling"
+edge gen_byte ir -> bytecode "Code Generation"
+edge gen_machine ir -> machine "Code Generation"
+edge execute bytecode -> vm
+layout root engine=layered direction=right fold=never
+theme ink canvas="#FFFFFF" text="#171717" connection="#171717" padding-x=8 padding-y=8 radius=0

@@ -1,0 +1,372 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 2,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 288,
+    "height": 56,
+    "aspect": 5.14,
+    "density": 0.722,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 184,
+    "theme": "drafting",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 16,
+      "y": 0
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 5,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 13.5,
+    "issues": [
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN\" & \"SYN ACK\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN ACK\" & \"ACK / ClientHello\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"ACK / ClientHello\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "288×56px (5.1:1)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 2,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 282,
+    "height": 48,
+    "aspect": 5.88,
+    "density": 0.738,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 178,
+    "theme": "signal",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 110,
+      "y": 0
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 5,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 13.5,
+    "issues": [
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN\" & \"SYN ACK\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN ACK\" & \"ACK / ClientHello\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"ACK / ClientHello\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "282×48px (5.9:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 2,
+      "meanMove": 91,
+      "maxMove": 94,
+      "moved": 2,
+      "alignedMean": 3,
+      "alignedMoved": 0,
+      "orderFlips": 0,
+      "shift": {
+        "x": 94,
+        "y": -4
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 2,
+      "meanMove": 91,
+      "maxMove": 94,
+      "moved": 2,
+      "alignedMean": 3,
+      "alignedMoved": 0,
+      "orderFlips": 0,
+      "shift": {
+        "x": 94,
+        "y": -4
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 2,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 248,
+    "height": 40,
+    "aspect": 6.2,
+    "density": 0.839,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 0,
+    "bendsPerEdge": 0,
+    "maxBends": 0,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 144,
+    "theme": "signal",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 110,
+      "y": 0
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 5,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 13.5,
+    "issues": [
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN\" & \"SYN ACK\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"SYN ACK\" & \"ACK / ClientHello\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"ACK / ClientHello\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "248×40px (6.2:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 2,
+      "meanMove": 19,
+      "maxMove": 34,
+      "moved": 1,
+      "alignedMean": 17,
+      "alignedMoved": 1,
+      "orderFlips": 0,
+      "shift": {
+        "x": 0,
+        "y": -4
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 2,
+      "meanMove": 74,
+      "maxMove": 94,
+      "moved": 2,
+      "alignedMean": 20,
+      "alignedMoved": 1,
+      "orderFlips": 0,
+      "shift": {
+        "x": 94,
+        "y": -8
+      }
+    },
+    "checks": []
+  }
+]

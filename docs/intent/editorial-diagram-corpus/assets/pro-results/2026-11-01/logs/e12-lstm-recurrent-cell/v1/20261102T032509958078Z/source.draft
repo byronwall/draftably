@@ -1,0 +1,56 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "LSTM: one expanded recurrent step" version=1
+group cell "A at time t" color=mint
+node prev "A at t−1" color=green shade=100
+node next "A at t+1" color=green shade=100
+node xp "x at t−1" shape=circle color=sky shade=200
+node xt "x at t" shape=circle color=sky shade=200
+node xn "x at t+1" shape=circle color=sky shade=200
+node hp "h at t−1" shape=circle color=violet shade=200
+node ht "h at t" shape=circle color=violet shade=200
+node hn "h at t+1" shape=circle color=violet shade=200
+node cp "C at t−1"
+node cn "C at t"
+node concat "x and previous h" in=cell shape=box
+node f "σ" in=cell shape=box color=amber shade=200
+node i "σ" in=cell shape=box color=amber shade=200
+node candidate "tanh" in=cell shape=box color=amber shade=200
+node o "σ" in=cell shape=box color=amber shade=200
+node forget "×" in=cell shape=circle color=rose shade=200
+node update "×" in=cell shape=circle color=rose shade=200
+node add "+" in=cell shape=circle color=rose shade=200
+node squash "tanh" in=cell shape=pill color=rose shade=200
+node output "×" in=cell shape=circle color=rose shade=200
+edge e1 xp -> prev
+edge e2 prev -> hp
+edge e3 prev -> cp
+edge e4 cp -> forget
+edge e5 hp -> concat
+edge e6 xt -> concat
+edge e7 concat -> f
+edge e8 concat -> i
+edge e9 concat -> candidate
+edge e10 concat -> o
+edge e11 f -> forget
+edge e12 forget -> add
+edge e13 i -> update
+edge e14 candidate -> update
+edge e15 update -> add
+edge e16 add -> cn
+edge e17 add -> squash
+edge e18 squash -> output
+edge e19 o -> output
+edge e20 output -> ht
+edge e21 ht -> next
+edge e22 cn -> next
+edge e23 xn -> next
+edge e24 next -> hn
+layout root flow direction=right fold=never
+layout cell engine=layered direction=right fold=never
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=8 radius=14
+near xp prev side=below gap=100
+near hp prev side=above gap=80
+near xt cell side=below gap=100
+near xn next side=below gap=100
+near ht cell side=above gap=80
+near hn next side=above gap=80

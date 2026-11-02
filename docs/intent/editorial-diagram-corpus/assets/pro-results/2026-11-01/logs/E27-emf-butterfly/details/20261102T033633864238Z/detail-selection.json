@@ -1,0 +1,35 @@
+{
+  "focus": "Technical recovery loops and ordered returns to the manufacturing/service spine",
+  "crops": {
+    "reference": [
+      850,
+      100,
+      950,
+      880
+    ],
+    "v0": [
+      128,
+      586,
+      2760,
+      1224
+    ],
+    "v2": [
+      1664,
+      714,
+      2228,
+      1560
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "parts",
+    "product",
+    "service",
+    "user",
+    "tech_collect",
+    "maintain",
+    "reuse",
+    "refurbish",
+    "recycle"
+  ]
+}

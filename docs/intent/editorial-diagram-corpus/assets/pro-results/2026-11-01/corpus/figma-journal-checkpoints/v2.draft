@@ -1,0 +1,96 @@
+diagram "Checkpoints and journal entries" version=1
+theme signal canvas="#d4bce9" text="#201b25" connection="#6a4b7b" title-font=sans annotation-font=sans padding-x=10 padding-y=10 radius=0
+theme-color panel shade=100 fill="#f0eef1" stroke="#27212a" ink="#27212a"
+theme-color region shade=100 fill="#d4bce9" stroke="#d4bce9" ink="#27212a"
+theme-color blue fill="#4545ed" stroke="#4545ed" ink="#ffffff"
+theme-color yellow fill="#ffe61f" stroke="#ffe61f" ink="#161616"
+theme-color red fill="#ff2a49" stroke="#ff2a49" ink="#ffffff"
+theme-color muted fill="#c7c5c8" stroke="#c7c5c8" ink="#505054"
+theme-color green fill="#03b955" stroke="#03b955" ink="#05301c"
+group checkpoints "Check points" color=region shade=100
+group journal "Journal (incremental changes)" color=region shade=100
+group cp0 "Checkpoint" in=checkpoints color=panel shade=100
+node cp0.empty "Empty canvas" in=cp0
+layout cp0 row min-width=300 min-height=290
+group cp1 "Checkpoint" in=checkpoints color=panel shade=100
+node cp1.b "Blue" in=cp1 shape=circle color=blue
+node cp1.y "Yellow" in=cp1 shape=circle color=yellow
+layout cp1 row min-width=300 min-height=290
+group cp2 "Checkpoint" in=checkpoints color=panel shade=100
+node cp2.b "Blue" in=cp2 shape=circle color=blue
+node cp2.y "Yellow" in=cp2 shape=circle color=yellow
+node cp2.r "Red" in=cp2 shape=diamond color=red
+layout cp2 row min-width=300 min-height=290
+group cp3 "Current state" in=checkpoints color=panel shade=100
+node cp3.b "Blue" in=cp3 shape=circle color=blue
+node cp3.y "Yellow" in=cp3 shape=circle color=yellow
+node cp3.r "Red" in=cp3 shape=diamond color=red
+node cp3.g "Green" in=cp3 shape=pill color=green
+layout cp3 row min-width=300 min-height=290
+group j0 "Entry: create canvas" in=journal color=panel shade=100
+node j0.empty "Empty canvas" in=j0
+layout j0 row min-width=240 min-height=290
+group j1 "Entry: add blue" in=journal color=panel shade=100
+node j1.b "Blue" in=j1 shape=circle color=blue
+layout j1 row min-width=240 min-height=290
+group j2 "Entry: add yellow" in=journal color=panel shade=100
+node j2.b "Blue" in=j2 shape=circle color=muted
+node j2.y "Yellow" in=j2 shape=circle color=yellow
+layout j2 row min-width=240 min-height=290
+group j3 "Entry: add red" in=journal color=panel shade=100
+node j3.b "Blue" in=j3 shape=circle color=muted
+node j3.y "Yellow" in=j3 shape=circle color=muted
+node j3.r "Red" in=j3 shape=diamond color=red
+layout j3 row min-width=240 min-height=290
+group j4 "Entry: add green" in=journal color=panel shade=100
+node j4.b "Blue" in=j4 shape=circle color=muted
+node j4.y "Yellow" in=j4 shape=circle color=muted
+node j4.r "Red" in=j4 shape=diamond color=muted
+node j4.g "Green" in=j4 shape=pill color=green
+layout j4 row min-width=240 min-height=290
+layout checkpoints row
+layout journal row
+layout root column gap=50
+note "Native approximation: red diamond represents the octagon; green pill represents the freeform path. Muted prior journal content, bright new content."
+pin cp0.empty x=40 y=50
+size cp0.empty width=160 height=50
+pin cp1.b x=30 y=0
+size cp1.b width=80 height=80
+pin cp1.y x=130 y=0
+size cp1.y width=80 height=80
+pin cp2.b x=30 y=0
+size cp2.b width=80 height=80
+pin cp2.y x=130 y=0
+size cp2.y width=80 height=80
+pin cp2.r x=30 y=110
+size cp2.r width=80 height=80
+pin cp3.b x=30 y=0
+size cp3.b width=80 height=80
+pin cp3.y x=130 y=0
+size cp3.y width=80 height=80
+pin cp3.r x=30 y=110
+size cp3.r width=80 height=80
+pin cp3.g x=130 y=110
+size cp3.g width=90 height=80
+pin j0.empty x=10 y=50
+size j0.empty width=160 height=50
+pin j1.b x=0 y=0
+size j1.b width=80 height=80
+pin j2.b x=0 y=0
+size j2.b width=80 height=80
+pin j2.y x=100 y=0
+size j2.y width=80 height=80
+pin j3.b x=0 y=0
+size j3.b width=80 height=80
+pin j3.y x=100 y=0
+size j3.y width=80 height=80
+pin j3.r x=0 y=110
+size j3.r width=80 height=80
+pin j4.b x=0 y=0
+size j4.b width=80 height=80
+pin j4.y x=100 y=0
+size j4.y width=80 height=80
+pin j4.r x=0 y=110
+size j4.r width=80 height=80
+pin j4.g x=100 y=110
+size j4.g width=90 height=80

@@ -1,0 +1,46 @@
+{
+  "id": "E06",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The five process names survive, but v0 makes a tall column with return routes and loses the source illustrated thread/activity explanation. The reference makes process position and multiplicity much easier to scan.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 3
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "Low to moderate for the valid sources: five pins and five exact sizes in v2. The final attempted cycle used x=-40 and failed validation. Rather than spend an unauthorized fourth cycle, the earlier successful v2 is restored. v1 is the better compact communication result.",
+  "residuals": [
+    "Thread loops and responsibility illustrations are missing, reducing semantic completeness.",
+    "The valid v2 is over-tall; v1 is the preferred communication version.",
+    "No top-positioned component captions, endpoint dots, or source hand-drawn line treatment.",
+    "Third-cycle negative pin failed; the earlier successful v2 was restored without a fourth edit."
+  ],
+  "provisional_gaps": [
+    "I-VISUAL-VOCAB",
+    "I-LABEL-EXPOSURE",
+    "I-TYPE"
+  ],
+  "preferred_communication_stage": "v1",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": true
+}

@@ -1,0 +1,115 @@
+diagram "Plagiarism in a submitted manuscript" version=1
+theme drafting canvas="#FFFFFF" text="#555555" connection="#444444" radius=12 padding-x=16 padding-y=12
+theme-color end shade=500 fill="#233B3C" stroke="#233B3C" ink="#FFFFFF"
+theme-color concern shade=100 fill="#EADFEB" stroke="#946A95" ink="#674469"
+theme-color satisfactory shade=100 fill="#E9F2E1" stroke="#62984B" ink="#39642B"
+subtitle "A publishing decision process with four initial branches and two escalation routes."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node reviewer "Reviewer flags possible plagiarism" color=end
+node evidence "Thank reviewer; gather complete evidence and investigate"
+node degree "Assess extent of copying" shape=diamond
+node clear "Substantial unattributed text or data presented as original" color=concern shade=100
+node redundancy "Author has reused their own work" color=concern shade=100
+node minor "Brief copied phrases; no false attribution of data" color=satisfactory shade=100
+node none "No plagiarism issue" color=satisfactory shade=100
+node ask "Write to corresponding author with evidence and the signed originality statement"
+node otherchart "Use redundancy flowchart" color=end
+node rephrase "Ask author to rephrase or quote and cite; explain journal policy"
+node proceed "Discuss with reviewer; continue peer review" color=end
+node responds "Author responds" color=satisfactory shade=100
+node noresponse "No response" color=concern shade=100
+node otherauthors "Try other authors; locate current affiliations or email"
+node stillnone "Still no response" color=concern shade=100
+node unsatisfactory "Inadequate explanation or admission" color=concern shade=100
+node satisfactory "Credible error, unclear instructions or inexperienced author" color=satisfactory shade=100
+node reject "Notify all authors of rejection, reasons and future expectations" color=concern shade=100
+node revise "Explain expectations; decide whether to reject or request revision"
+node institution "Ask institution to refer concerns to supervisor or research governance lead"
+node informreviewer "Tell reviewer the outcome and action" color=end
+node superior "Consider notifying supervisor, research governance and potential victims" color=concern shade=100
+node informauthors "Tell authors about the action taken"
+node keepcontact "Keep contacting the institution every 3–6 months; consider other authorities if unresolved" color=concern shade=100
+edge e1 reviewer -> evidence
+edge e2 evidence -> degree
+edge e3 degree -> clear
+edge e4 degree -> redundancy
+edge e5 degree -> minor
+edge e6 degree -> none
+edge e7 clear -> ask
+edge e8 redundancy -> otherchart
+edge e9 minor -> rephrase
+edge e10 rephrase -> proceed
+edge e11 none -> proceed
+edge e12 ask -> responds
+edge e13 ask -> noresponse
+edge e14 noresponse -> otherauthors
+edge e15 otherauthors -> responds constraint=false
+edge e16 otherauthors -> stillnone
+edge e17 responds -> unsatisfactory
+edge e18 responds -> satisfactory
+edge e19 unsatisfactory -> reject
+edge e20 reject -> superior
+edge e21 reject -> informreviewer
+edge e22 superior -> informauthors
+edge e23 informauthors -> informreviewer
+edge e24 superior -> keepcontact
+edge e25 satisfactory -> revise
+edge e26 revise -> informreviewer
+edge e27 stillnone -> institution
+edge e28 institution -> informreviewer
+edge e29 institution -> keepcontact
+layout root engine=layered direction=down fold=never ordering=stable rank-gap=56 node-gap=50
+note "Author instructions should define plagiarism and explain the journal’s policy."
+note "COPE flowchart; labels paraphrased for the editable study. Consult the preserved original for exact editorial guidance."
+order root reviewer evidence degree clear redundancy minor none ask otherchart rephrase proceed responds noresponse otherauthors stillnone unsatisfactory satisfactory reject revise institution superior informauthors informreviewer keepcontact
+
+# Explicit sizes and parent-relative positions.
+size reviewer width=280 height=auto
+pin reviewer x=460 y=0
+size evidence width=280 height=auto
+pin evidence x=460 y=150
+size degree width=190 height=190
+pin degree x=480 y=310
+size clear width=240 height=auto
+pin clear x=0 y=560
+size redundancy width=240 height=auto
+pin redundancy x=300 y=560
+size minor width=260 height=auto
+pin minor x=620 y=560
+size none width=240 height=auto
+pin none x=940 y=560
+size ask width=260 height=auto
+pin ask x=0 y=750
+size otherchart width=240 height=auto
+pin otherchart x=320 y=750
+size rephrase width=260 height=auto
+pin rephrase x=620 y=750
+size proceed width=240 height=auto
+pin proceed x=940 y=800
+size noresponse width=240 height=auto
+pin noresponse x=940 y=1010
+size otherauthors width=260 height=auto
+pin otherauthors x=940 y=1140
+size stillnone width=240 height=auto
+pin stillnone x=940 y=1350
+size responds width=200 height=auto
+pin responds x=40 y=1140
+size unsatisfactory width=240 height=auto
+pin unsatisfactory x=0 y=1350
+size satisfactory width=300 height=auto
+pin satisfactory x=460 y=1350
+size reject width=240 height=auto
+pin reject x=0 y=1550
+size revise width=300 height=auto
+pin revise x=460 y=1550
+size institution width=260 height=auto
+pin institution x=940 y=1550
+size superior width=240 height=auto
+pin superior x=0 y=1780
+size informauthors width=150 height=auto
+pin informauthors x=300 y=1840
+size informreviewer width=250 height=auto
+pin informreviewer x=520 y=1800
+size keepcontact width=260 height=auto
+pin keepcontact x=940 y=1850
+routing crossing-penalty=900 corner-radius=10 passes=5

@@ -1,0 +1,24 @@
+{
+  "focus": "InspirationGenerator subtree and repeated import labels",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      0,
+      205,
+      1000,
+      350
+    ],
+    "v0": [
+      24,
+      332,
+      1192,
+      472
+    ],
+    "v2": [
+      24,
+      344,
+      1512,
+      560
+    ]
+  }
+}

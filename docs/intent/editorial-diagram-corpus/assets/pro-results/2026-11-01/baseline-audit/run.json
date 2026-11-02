@@ -1,0 +1,463 @@
+{
+  "argv": [
+    "node",
+    "scripts/diagram-audit.mjs",
+    "/tmp/draftably-editorial-audit-rhgqqap4",
+    "/workspace/scratch/742d8c352255/deliverable/baseline-audit",
+    "--no-shots"
+  ],
+  "started_utc": "2026-11-02T03:37:02.158143+00:00",
+  "exit_code": 0,
+  "mapping": [
+    {
+      "case": "E23-nasa-star-life",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E23-nasa-star-life",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E23-nasa-star-life",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E24-noaa-enso",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E24-noaa-enso",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E24-noaa-enso",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E25-usgs-water-cycle",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E25-usgs-water-cycle",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E25-usgs-water-cycle",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E26-design-double-diamond",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E26-design-double-diamond",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E26-design-double-diamond",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E27-emf-butterfly",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E27-emf-butterfly",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E27-emf-butterfly",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E28-tfl-tram",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E28-tfl-tram",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E28-tfl-tram",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E29-cope-plagiarism",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E29-cope-plagiarism",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E29-cope-plagiarism",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "E30-openstax-cell-cycle",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "E30-openstax-cell-cycle",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "E30-openstax-cell-cycle",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "chrome-process-architecture",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "chrome-process-architecture",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "chrome-process-architecture",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "cloudflare-http2-multiplexing",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "cloudflare-http2-multiplexing",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "cloudflare-http2-multiplexing",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "cloudflare-tls-handshake",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "cloudflare-tls-handshake",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "cloudflare-tls-handshake",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e11-transformer-stacks",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e11-transformer-stacks",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e11-transformer-stacks",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e12-lstm-recurrent-cell",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e12-lstm-recurrent-cell",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e12-lstm-recurrent-cell",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e13-cqrs",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e13-cqrs",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e13-cqrs",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e14-dns-hierarchy",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e14-dns-hierarchy",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e14-dns-hierarchy",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e15-js-agent-cluster",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e15-js-agent-cluster",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e15-js-agent-cluster",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e16-react-dependency-tree",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e16-react-dependency-tree",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e16-react-dependency-tree",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e17-go-slice",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e17-go-slice",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e17-go-slice",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e18-git-divergent-history",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e18-git-divergent-history",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e18-git-divergent-history",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e19-pixel-pipeline",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e19-pixel-pipeline",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e19-pixel-pipeline",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e20-compiler-mountain",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e20-compiler-mountain",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e20-compiler-mountain",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e21-open-upvalue",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e21-open-upvalue",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e21-open-upvalue",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "e22-dns-query",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "e22-dns-query",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "e22-dns-query",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "figma-database-migration",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "figma-database-migration",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "figma-database-migration",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "figma-journal-checkpoints",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "figma-journal-checkpoints",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "figma-journal-checkpoints",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "github-blackbird-query",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "github-blackbird-query",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "github-blackbird-query",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "github-security-layers",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "github-security-layers",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "github-security-layers",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "stripe-read-compare",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "stripe-read-compare",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "stripe-read-compare",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "stripe-synchronized-retries",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "stripe-synchronized-retries",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "stripe-synchronized-retries",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    },
+    {
+      "case": "vercel-fluid-transport",
+      "audit_name": "v0.draft",
+      "corpus_name": "v0.draft"
+    },
+    {
+      "case": "vercel-fluid-transport",
+      "audit_name": "e1.draft",
+      "corpus_name": "v1.draft"
+    },
+    {
+      "case": "vercel-fluid-transport",
+      "audit_name": "e2.draft",
+      "corpus_name": "v2.draft"
+    }
+  ]
+}

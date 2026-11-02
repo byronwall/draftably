@@ -1,0 +1,46 @@
+{
+  "id": "E01",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "The default has stronger text contrast and a conventional top-to-bottom message order. The reference is quicker at separating TCP from TLS and showing transit time. Those gains and losses balance for reading the message names, but not for temporal fidelity.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Low. Two participants, six messages, two phases, one custom actor color, and a few explicit line breaks. No geometry refinements; sequence intentionally ignores them.",
+  "residuals": [
+    "No sloped or time-proportional message flight.",
+    "ACK/ClientHello straddles a semantic phase boundary that the native single message row cannot color separately.",
+    "Device illustrations, exterior colored message blocks, and exact source typography are absent."
+  ],
+  "provisional_gaps": [
+    "I-TIME",
+    "I-EDGE-COLOR",
+    "I-LABEL-EXPOSURE",
+    "I-VISUAL-VOCAB"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

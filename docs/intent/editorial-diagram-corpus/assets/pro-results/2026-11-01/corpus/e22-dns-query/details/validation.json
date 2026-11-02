@@ -1,0 +1,93 @@
+{
+  "case": "e22-dns-query",
+  "focus": "Root-server exchange and shown NS record context",
+  "log": "logs/e22-dns-query/details/20261102T033736657186Z",
+  "selection_sha256": "90f6ddf793fa4ef1fb1c5edd38589376f679c21ff167dba2cbebc0e854ca1298",
+  "source_sha256": {
+    "reference-preview.png": "d624c55b704937badec4edb1c3eed8cf9e4a1eab2cf2978fb3e16c8a3c8caf4f",
+    "v0.png": "88906b8d9356e0237f89c971bb96f6a1dd8510f016f721cee2b8df138f88d002",
+    "v2.png": "2286540bb3736c597d34b637e73cc9977f6b3bd59787bdca467f6e3c21af4d34"
+  },
+  "commands": {
+    "reference": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/reference-preview.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/reference.png",
+        "--crop",
+        "70,505,1570,240"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:36.657562+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.5498,
+      "exit_code": 0
+    },
+    "v0": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v0.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v0.png",
+        "--crop",
+        "838,1362,412,348"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:38.207772+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4923,
+      "exit_code": 0
+    },
+    "v2": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/v2.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v2.png",
+        "--crop",
+        "24,776,2412,714"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:39.700425+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.6024,
+      "exit_code": 0
+    },
+    "sheet": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "--sheet",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/comparison.png",
+        "--cols",
+        "3",
+        "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/reference.png",
+        "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v0.png",
+        "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/e22-dns-query/details/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:37:41.303050+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4812,
+      "exit_code": 0
+    }
+  },
+  "status": "complete"
+}

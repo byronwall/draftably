@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.draft",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/cloudflare-http2-multiplexing/v0.png"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:23.414258+00:00",
+  "elapsed_seconds": 6.1686,
+  "exit_code": 0
+}

@@ -1,0 +1,19 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Module dependency tree" version=1
+node app "App.js" color=module
+node generator "InspirationGenerator.js" color=module
+node fancy_a "FancyText.js" color=module
+node copyright "Copyright.js" color=module
+node fancy_b "FancyText.js" color=module
+node color "Color.js" color=module
+node inspirations "inspirations.js" color=module
+edge imports1 app -> generator "imports" directed=false
+edge imports2 app -> fancy_a "imports" directed=false
+edge imports3 app -> copyright "imports" directed=false
+edge imports4 generator -> fancy_b "imports" directed=false
+edge imports5 generator -> color "imports" directed=false
+edge imports6 generator -> inspirations "imports" directed=false
+layout root engine=tree root=app direction=down
+theme blueprint canvas="#23272F" text="#FFFFFF" connection="#FFFFFF" title-font=sans padding-x=12 padding-y=12 radius=10
+theme-color module fill="#303944" stroke="#FFFFFF" ink="#FFFFFF"
+order root app generator fancy_a copyright fancy_b color inspirations

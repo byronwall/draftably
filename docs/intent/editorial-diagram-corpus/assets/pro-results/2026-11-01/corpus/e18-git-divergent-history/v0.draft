@@ -1,0 +1,17 @@
+diagram "Divergent Git history" version=1
+node c1 "98ca9"
+node c2 "34ac2"
+node c3 "f30ab"
+node master_commit "c2b9e"
+node testing_commit "87ab2"
+node head "HEAD"
+node master "master"
+node testing "testing"
+edge e1 c2 -> c1
+edge e2 c3 -> c2
+edge e3 master_commit -> c3
+edge e4 testing_commit -> c3
+edge e5 head -> master
+edge e6 master -> master_commit
+edge e7 testing -> testing_commit
+layout root flow

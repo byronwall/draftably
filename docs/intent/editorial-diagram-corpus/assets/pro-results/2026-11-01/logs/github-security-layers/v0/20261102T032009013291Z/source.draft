@@ -1,0 +1,17 @@
+diagram "Agentic Workflows security layers" version=1
+group planning "Planning layer"
+node safe "Safe Outputs MCP\nGitHub write operations" in=planning
+node filter "Call filtering\nCall availability, volume" in=planning
+node sanitize "Output sanitization\nSecret removal, moderation" in=planning
+layout planning row
+group configuration "Configuration layer"
+node compiler "Compiler\nGH AW extension" in=configuration
+node firewall "Firewall policies\nAllowlist" in=configuration
+node mcp "MCP config\nDocker image, auth token" in=configuration
+layout configuration row
+group substrate "Substrate layer"
+node runner "Action runner VM\nOS, Hypervisor" in=substrate
+node containers "Docker containers\nDocker daemon, network" in=substrate
+node trusted "Trusted containers\nFirewall, MCP Gateway, API proxy" in=substrate
+layout substrate row
+layout root column

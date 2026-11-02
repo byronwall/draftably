@@ -1,0 +1,32 @@
+{
+  "focus": "Water-use sites, river, soil and groundwater: physical cutaway versus schematic transfers",
+  "crops": {
+    "reference": [
+      420,
+      420,
+      1280,
+      620
+    ],
+    "v0": [
+      334,
+      1194,
+      1992,
+      902
+    ],
+    "v2": [
+      1132,
+      1842,
+      2468,
+      1092
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "river",
+    "soil",
+    "ground",
+    "agriculture",
+    "municipal",
+    "industry"
+  ]
+}

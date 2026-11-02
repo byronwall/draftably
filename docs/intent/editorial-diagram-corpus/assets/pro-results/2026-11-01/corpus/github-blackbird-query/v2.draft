@@ -1,0 +1,32 @@
+diagram "Blackbird query architecture" version=1
+theme signal canvas="#ffffff" connection="#747474" annotation-font=sans padding-x=24 padding-y=18 radius=2
+theme-color neutral fill="#f0f0f0" stroke="#d1d1d1" ink="#292929"
+theme-color band fill="#b3d4ff" stroke="#4f9de6" ink="#234d7a"
+theme-color search shade=100 fill="#c2ddff" stroke="#5e9fea" ink="#234d7a"
+theme-color shard fill="#ffd267" stroke="#d6aa3e" ink="#5e4719"
+node github "GitHub.com" color=neutral
+node query "Blackbird Query Service" color=band
+node redis "Redis" color=neutral
+node git "Git" color=neutral
+group engine "Blackbird Search Engine" color=search shade=100
+node s1 "Shard" in=engine color=shard
+node s2 "Shard" in=engine color=shard
+node s3 "Shard" in=engine color=shard
+node s4 "Shard" in=engine color=shard
+note "Cache of repository permissions; rate limiting quotas" near=redis side=below width=180
+note "Validate blob accessibility" near=git side=below width=160
+layout engine row
+layout root column
+pin github x=0 y=0
+size github width=1200 height=64
+pin query x=0 y=104
+size query width=1200 height=64
+pin redis x=0 y=232
+size redis width=160 height=64
+pin git x=216 y=232
+size git width=150 height=64
+pin engine x=420 y=210
+size s1 width=150 height=80
+size s2 width=150 height=80
+size s3 width=150 height=80
+size s4 width=150 height=80

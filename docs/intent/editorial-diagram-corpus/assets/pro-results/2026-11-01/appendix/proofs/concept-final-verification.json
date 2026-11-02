@@ -1,0 +1,288 @@
+{
+  "verified_utc": "2026-11-02T03:47:21.625092+00:00",
+  "cases": [
+    {
+      "id": "E11",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E12",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E13",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E14",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E15",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E16",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E17",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E18",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E19",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E20",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E21",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    },
+    {
+      "id": "E22",
+      "original_hash_matches": true,
+      "v0_freeze_matches": true,
+      "retained_stages": [
+        {
+          "stage": "v0",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v1",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        },
+        {
+          "stage": "v2",
+          "hash_matches": true,
+          "all_commands_exit_0": true
+        }
+      ],
+      "detail_sheet_exists": true
+    }
+  ],
+  "reference_count": 12,
+  "retained_stage_count": 36,
+  "remaining_local_execution": "none for these 12 cases; parent generated supplied-script detail crops/sheets",
+  "detail_visual_review": [
+    "E15 detail revised to make both realm labels readable; initial wide detail archived.",
+    "E21 field-level detail visually inspected against actual original/v0/v2."
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "E16",
+  "slug": "e16-react-dependency-tree",
+  "title": "React module dependency tree \u2014 dark illustration",
+  "publisher": "React",
+  "author": "React documentation team",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://react.dev/learn/understanding-your-ui-as-a-tree",
+  "image_url": "https://react.dev/images/docs/diagrams/module_dependency_tree.dark.png",
+  "license": "CC BY 4.0 observed in reactjs/react.dev LICENSE-DOCS.md",
+  "figure": "module_dependency_tree.dark.png",
+  "patterns": [
+    "dependency tree",
+    "dark editorial",
+    "shared routing trunks"
+  ],
+  "principal_objects": 7,
+  "reading_path": "Root module at the top; imports expand downward into two generations.",
+  "merit": "Large readable module names, an asymmetric but balanced subtree and shared rounded branches make import depth apparent. Sparse repeated verb labels avoid labeling every branch.",
+  "confirmation_case": true,
+  "domain": "software/computing",
+  "reference_sha256": "6bb088e7aa77a2724d1da1b43fbb4329edbfedd91f8c1ed64216ede1f7c7f816",
+  "reference_bytes": 16577,
+  "reference_preview_size": [
+    1473,
+    560
+  ],
+  "reference_preview_method": "Original raster flattened onto #23272f dark page ground with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "c55a2ccb2c4987a7df18b30e0c20574da8bb429d58f1da063175646cd3d8ad07",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "171b4530b3a0619ac8bff0220e90393141e50943d3339459443b2a4d25609a73",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "bcea583970070080e30f3e959b4c7ebd21b3bec064b1f4b3311dc8e9bfb67fa1",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

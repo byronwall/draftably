@@ -1,0 +1,15 @@
+diagram "Slice after s = s[2:4]" version=1
+group slice "[]byte"
+group array "[5]byte"
+node ptr "pointer" in=slice
+node length "2" in=slice
+node capacity "3" in=slice
+node b0 "byte" in=array
+node b1 "" in=array
+node b2 "" in=array
+node b3 "" in=array
+node b4 "" in=array
+edge ptr_array ptr -> b2
+layout root row
+layout slice cells direction=down
+layout array cells

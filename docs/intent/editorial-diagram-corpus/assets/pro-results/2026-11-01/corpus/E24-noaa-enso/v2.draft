@@ -1,0 +1,57 @@
+diagram "Is it El Niño conditions?" version=1
+theme drafting canvas="#FFFFFF" text="#333333" connection="#333333" radius=18 padding-x=18 padding-y=14
+theme-color charcoal shade=500 fill="#333333" stroke="#333333" ink="#FFFFFF"
+theme-color yes shade=100 fill="#F8DDDF" stroke="#F8DDDF" ink="#B54147"
+theme-color no shade=100 fill="#E3E3E3" stroke="#E3E3E3" ink="#666666"
+subtitle "Start at the ocean-temperature test; all three checks must support El Niño."
+# v2: manual-native refinement; all geometry remains editable in this source.
+node sst "Monthly Niño-3.4 SST anomaly ≥ 0.5°C?" color=charcoal
+node n1 "NO" shape=diamond color=no shade=100
+node y1 "YES" shape=diamond color=yes shade=100
+node persistent "Will Niño-3.4 SST stay ≥ 0.5°C for several seasons?" color=charcoal
+node n2 "NO" shape=diamond color=no shade=100
+node y2 "YES" shape=diamond color=yes shade=100
+node atmosphere "What does the atmosphere look like?" color=charcoal
+node insufficient "Insufficient evidence of a weaker Walker circulation" shape=circle color=no shade=100
+node weak "Weaker Walker circulation: wetter central Pacific; drier Indonesia" shape=circle color=yes shade=100
+node nope "NOPE!" color=charcoal
+node el "El Niño conditions!" color=charcoal
+edge e1 sst -> n1 from=left to=right
+edge e2 sst -> y1 from=right to=left
+edge e3 n1 -> nope from=bottom to=top
+edge e4 y1 -> persistent from=bottom to=top
+edge e5 persistent -> n2 from=left to=right
+edge e6 persistent -> y2 from=right to=left
+edge e7 n2 -> nope from=bottom to=right
+edge e8 y2 -> atmosphere from=bottom to=top
+edge e9 atmosphere -> insufficient from=left to=top
+edge e10 atmosphere -> weak from=right to=top
+edge e11 insufficient -> nope from=bottom to=bottom
+edge e12 weak -> el from=bottom to=top
+layout root engine=layered direction=down fold=never rank-gap=60 node-gap=60
+order root sst n1 y1 persistent n2 y2 atmosphere insufficient weak nope el
+
+# Explicit sizes and parent-relative positions.
+size sst width=230 height=76
+pin sst x=100 y=0
+size n1 width=52 height=52
+pin n1 x=0 y=10
+size y1 width=52 height=52
+pin y1 x=380 y=10
+size persistent width=260 height=94
+pin persistent x=280 y=130
+size n2 width=52 height=52
+pin n2 x=150 y=148
+size y2 width=52 height=52
+pin y2 x=640 y=148
+size atmosphere width=260 height=65
+pin atmosphere x=520 y=300
+size insufficient width=240 height=145
+pin insufficient x=300 y=450
+size weak width=300 height=160
+pin weak x=760 y=450
+size nope width=120 height=60
+pin nope x=0 y=580
+size el width=250 height=60
+pin el x=800 y=710
+routing corner-radius=0 bend-penalty=64

@@ -1,0 +1,42 @@
+{
+  "id": "E30",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "The default is a clear grouped phase sequence with an explicit cycle-return edge and daughter-cell outcome. It is comparable for reading phase order, while the source is substantially better at communicating continuous cyclic form and phase extent. The latter loss is reflected in semantic and fidelity scores.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Moderate source cost, weak payoff. Six sizes and pins and six port pairs are understandable, but cannot express a continuous cyclic band. v0 is the most maintainable explanation of ordering. This held-out confirmation case supports testing future features, not choosing numerical routing or layout constants.",
+  "residuals": [
+    "No annular sectors, radial bands or phase-sized wedges.",
+    "Interphase soft group is visibly split in v2; check reports this with one informational warning counted in metrics.",
+    "No radial arrow path, sector leader lines or phase bracket.",
+    "The outcome is retained as text; no daughter-cell illustration existed to reproduce.",
+    "v2 quality is lower than the simpler default despite increased authoring effort."
+  ],
+  "provisional_gaps": [
+    "nonrectangular-containment",
+    "curved-directed-paths",
+    "external-label-roles",
+    "edge-semantic-styling"
+  ],
+  "confirmation_case": true,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

@@ -1,0 +1,99 @@
+# Refinement cycle 3: closest faithful attempt with documented native manual controls.
+diagram "Life of a DNS query" version=1
+group p1 "1. Navigate"
+group p2 "2. Ask a resolver"
+group p3 "3. Inspect the resolver cache"
+group p4 "4. Ask a root nameserver"
+group p5 "5. Ask a .com nameserver"
+group p6 "6. Ask the domain nameserver"
+node user "User opens https://example.com" in=p1
+node browser "Browser has no cached address" in=p1
+node question "Browser: address for example.com?" in=p2
+node resolver "Resolver checks its cache" in=p2
+group cache "Cached addresses" in=p3
+node archived "archive.org → 207.241.224.2" in=cache
+node jvns "jvns.ca → 172.64.80.1" in=cache
+node miss "No example.com entry. Use built-in root server addresses." in=p3
+node root_q "Resolver: address for example.com?" in=p4
+node root_a "Root: ask the .com nameserver a.gtld-servers.net" in=p4 color=rose shade=100
+group roots "Root NS records" in=p4
+node com_record "com NS a.gtld-servers.net" in=roots
+node ca_record "ca NS a.ca-servers.net" in=roots
+node horse_record "horse NS a.nic.horse" in=roots
+node root_note "NS records identify nameservers. This example assumes no .com address is cached." in=p4 shape=text
+node com_q "Resolver: address for example.com?" in=p5
+node com_a ".com: ask example.com's nameserver a.iana-servers.net" in=p5 color=orange shade=100
+group com_records ".com NS records" in=p5
+node neopets "neopets.com NS ns-42.awsdns-05.com" in=com_records
+node example_ns "example.com NS a.iana-servers.net" in=com_records
+node domain_q "Resolver: address for example.com?" in=p6
+node domain_a "Domain authority: 93.184.216.34" in=p6 color=blue shade=100
+group answer "Domain A record" in=p6
+node example_a "example.com A 93.184.216.34" in=answer
+node return "Resolver returns the address to the browser" in=p6 shape=text
+edge navigate user -> browser
+edge ask question -> resolver
+edge cached cache -> miss from=bottom to=top
+edge root_query root_q -> root_a
+edge root_records root_a -> roots directed=false from=right to=left
+edge com_query com_q -> com_a
+edge com_records_link com_a -> com_records directed=false from=right to=left
+edge domain_query domain_q -> domain_a
+edge domain_record domain_a -> answer directed=false from=right to=left
+edge return_address domain_a -> return
+layout root engine=grid
+layout p1 column
+layout p2 column
+layout p3 column
+layout p4 row min-width=1150
+layout p5 row min-width=1150
+layout p6 row min-width=1150
+layout cache cells direction=down
+layout roots cells direction=down
+layout com_records cells direction=down
+layout answer cells
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=8 radius=10
+pin p1 x=0 y=0
+pin p2 x=390 y=0
+pin p3 x=780 y=0
+pin p4 x=0 y=330
+pin p5 x=0 y=640
+pin p6 x=0 y=910
+pin user x=0 y=0
+pin browser x=0 y=140
+pin question x=0 y=0
+pin resolver x=0 y=140
+pin cache x=0 y=0
+pin miss x=0 y=145
+pin root_q x=0 y=40
+pin root_a x=300 y=40
+pin roots x=650 y=0
+pin root_note x=0 y=175
+pin com_q x=0 y=40
+pin com_a x=300 y=40
+pin com_records x=650 y=0
+pin domain_q x=0 y=40
+pin domain_a x=300 y=40
+pin answer x=650 y=0
+pin return x=300 y=165
+size user width=300 height=66
+size browser width=300 height=66
+size question width=300 height=66
+size resolver width=300 height=66
+size miss width=300 height=72
+size archived width=300 height=40
+size jvns width=300 height=40
+size root_q width=240 height=80
+size com_q width=240 height=80
+size domain_q width=240 height=80
+size root_a width=280 height=92
+size com_a width=280 height=92
+size domain_a width=280 height=92
+size com_record width=400 height=40
+size ca_record width=400 height=40
+size horse_record width=400 height=40
+size neopets width=400 height=40
+size example_ns width=400 height=40
+size example_a width=400 height=40
+size root_note width=580 height=54
+size return width=400 height=54

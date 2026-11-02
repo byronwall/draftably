@@ -1,0 +1,29 @@
+diagram "Life cycles of Sun-like and massive stars" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node nebula "Star-forming nebula"
+node protostar_low "Protostar: lower mass"
+node sun "Sun-like star"
+node giant "Red giant"
+node planetary "Planetary nebula"
+node white "White dwarf"
+node protostar_high "Protostar: higher mass"
+node massive "Massive star"
+node supergiant "Red supergiant"
+node supernova "Supernova"
+node neutron "Neutron star"
+node black "Black hole"
+edge e1 nebula -> protostar_low
+edge e2 protostar_low -> sun
+edge e3 sun -> giant "Billions of years"
+edge e4 giant -> planetary
+edge e5 planetary -> white
+edge e6 planetary -> nebula "Ejected material" constraint=false
+edge e7 nebula -> protostar_high
+edge e8 protostar_high -> massive
+edge e9 massive -> supergiant "Millions of years"
+edge e10 supergiant -> supernova
+edge e11 supernova -> neutron
+edge e12 supernova -> black
+edge e13 supernova -> nebula "Ejected material" constraint=false
+layout root flow direction=right
+note "The massive-star branch is for stars more than 8–10 times the Sun’s mass."

@@ -1,0 +1,29 @@
+{
+  "id": "E09",
+  "slug": "figma-journal-checkpoints",
+  "title": "Checkpoints and incremental journal entries",
+  "publisher": "Figma",
+  "author": "Darren Tsung",
+  "publication_date": "2022-10-20",
+  "access_date": "2026-11-02",
+  "page_url": "https://www.figma.com/blog/making-multiplayer-more-reliable/",
+  "image_url": "https://cdn.sanity.io/images/599r6htc/regionalized/e8b2ed7c0498b39321d50b8078740cd145883f96-2120x1109.png",
+  "license": "unknown",
+  "figure": "A diagram showing current states",
+  "patterns": [
+    "comparison-panels",
+    "state-snapshots",
+    "timeline"
+  ],
+  "principal_objects": 28,
+  "reading_path": "Read full checkpoint snapshots across the upper row and incremental additions across the lower row.",
+  "merit": "A shared canvas motif, faded prior content, and bright new shapes explain whole-state versus incremental persistence.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "b9a7679ac7dae53afb353276d6f3750f4745bf6041f88f87c9116d0172accea7",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC",
+  "object_count_note": "9 scene panels plus 19 colored/gray shape instances; native empty-canvas labels and row wrappers are additional encoding objects."
+}

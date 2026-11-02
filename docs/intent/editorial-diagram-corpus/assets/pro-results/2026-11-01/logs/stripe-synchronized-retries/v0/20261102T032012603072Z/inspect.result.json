@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "inspect",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/stripe-synchronized-retries/v0.draft",
+    "--json",
+    "--metrics"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:20:13.283057+00:00",
+  "elapsed_seconds": 0.6966,
+  "exit_code": 0
+}

@@ -1,0 +1,137 @@
+# Refinement cycle 3: closest faithful attempt with documented native manual controls.
+group page "HTML page"
+group worker "Worker"
+group pheap "Heap" in=page
+group pstack "Stack" in=page
+group pqueue "Queue" in=page
+group wheap "Heap" in=worker
+group wstack "Stack" in=worker
+group wqueue "Queue" in=worker
+node po1 "" in=pheap shape=circle color=green shade=400
+node po2 "" in=pheap shape=circle color=green shade=400
+node po3 "" in=pheap shape=circle color=green shade=400
+node po4 "" in=pheap shape=circle color=green shade=400
+node po5 "" in=pheap shape=circle color=green shade=400
+node po6 "" in=pheap shape=circle color=green shade=400
+node po7 "SharedArrayBuffer" in=pheap shape=circle color=green shade=400
+node po8 "" in=pheap shape=circle color=green shade=400
+node po9 "" in=pheap shape=circle color=green shade=400
+node wo1 "" in=wheap shape=circle color=green shade=400
+node wo2 "" in=wheap shape=circle color=green shade=400
+node wo3 "SharedArrayBuffer" in=wheap shape=circle color=green shade=400
+node wo4 "" in=wheap shape=circle color=green shade=400
+node wo5 "" in=wheap shape=circle color=green shade=400
+node pf1 "Execution context\nc = null; d = 0" in=pstack color=amber shade=400
+node pf2 "Execution context\na = {...}; b = 4" in=pstack color=teal shade=300
+node pf3 "Execution context\na = {...}; b = 2" in=pstack color=teal shade=300
+node wf1 "Execution context\na = {...}; c = 0" in=wstack color=teal shade=300
+node wf2 "Execution context\na = {...}; c = 0" in=wstack color=teal shade=300
+node pj1 "Job\n() => {...}" in=pqueue color=amber shade=400
+node pj2 "Job\n() => {...}" in=pqueue color=teal shade=300
+node wj1 "Job\n() => {...}" in=wqueue color=teal shade=300
+node wj2 "Job\n() => {...}" in=wqueue color=teal shade=300
+edge ref1 window_1 -> po1 kind=async
+edge ref2 window_2 -> po2 kind=async
+edge ref3 window_3 -> po3 kind=async
+edge ref4 iframe_1 -> po4 kind=async
+edge ref5 iframe_2 -> po5 kind=async
+edge ref6 iframe_3 -> po6 kind=async
+edge ref7 pf2 -> po8 kind=async
+edge ref8 pf3 -> po9 kind=async
+edge ref9 wr_1 -> wo1 kind=async
+edge ref10 wr_2 -> wo2 kind=async
+edge ref11 wf1 -> wo4 kind=async
+edge ref12 wf2 -> wo5 kind=async
+edge shared po7 -> wo3 "Share memory" directed=false kind=async
+edge pexec pj2 -> pf3 "Execute"
+edge wexec wj2 -> wf2 "Execute"
+layout root column
+layout page engine=grid aspect=1.6 min-width=1020 min-height=610
+layout worker engine=grid aspect=1.6 min-width=1020 min-height=510
+layout pheap engine=grid aspect=1
+layout wheap engine=grid aspect=1
+layout pstack column
+layout wstack column
+layout pqueue row
+layout wqueue row
+group window "Window realm" in=page
+node window_1 "Array" in=window
+node window_2 "Array.prototype" in=window
+node window_3 "HTMLElement" in=window
+layout window cells direction=down
+group iframe "<iframe> realm" in=page
+node iframe_1 "Array" in=iframe
+node iframe_2 "Array.prototype" in=iframe
+node iframe_3 "HTMLElement" in=iframe
+layout iframe cells direction=down
+group wr "WorkerGlobalScope realm" in=worker
+node wr_1 "Array" in=wr
+node wr_2 "Array.prototype" in=wr
+layout wr cells direction=down
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=10 radius=4
+pin page x=0 y=0
+pin worker x=0 y=800
+pin window x=0 y=0
+pin iframe x=0 y=235
+pin wr x=0 y=65
+pin pheap x=300 y=0
+pin wheap x=300 y=0
+pin pstack x=750 y=0
+pin wstack x=750 y=0
+pin pqueue x=300 y=480
+pin wqueue x=300 y=380
+pin po1 x=0 y=0
+pin po2 x=0 y=100
+pin po3 x=0 y=200
+pin po4 x=120 y=30
+pin po5 x=120 y=130
+pin po6 x=120 y=230
+pin po7 x=235 y=270
+pin po8 x=240 y=0
+pin po9 x=240 y=125
+pin wo1 x=0 y=0
+pin wo2 x=0 y=100
+pin wo3 x=235 y=170
+pin wo4 x=240 y=0
+pin wo5 x=120 y=90
+pin pf1 x=0 y=0
+pin pf2 x=0 y=125
+pin pf3 x=0 y=250
+pin wf1 x=0 y=0
+pin wf2 x=0 y=125
+pin pj1 x=0 y=0
+pin pj2 x=185 y=0
+pin wj1 x=0 y=0
+pin wj2 x=185 y=0
+size po1 width=56 height=56
+size po2 width=56 height=56
+size po3 width=56 height=56
+size po4 width=56 height=56
+size po5 width=56 height=56
+size po6 width=56 height=56
+size po7 width=100 height=100
+size po8 width=56 height=56
+size po9 width=56 height=56
+size wo1 width=56 height=56
+size wo2 width=56 height=56
+size wo3 width=100 height=100
+size wo4 width=56 height=56
+size wo5 width=56 height=56
+size pf1 width=200 height=72
+size pf2 width=200 height=72
+size pf3 width=200 height=72
+size wf1 width=200 height=72
+size wf2 width=200 height=72
+size pj1 width=160 height=60
+size pj2 width=160 height=60
+size wj1 width=160 height=60
+size wj2 width=160 height=60
+size window_1 width=210 height=44
+size window_2 width=210 height=44
+size window_3 width=210 height=44
+size iframe_1 width=210 height=44
+size iframe_2 width=210 height=44
+size iframe_3 width=210 height=44
+size wr_1 width=210 height=44
+size wr_2 width=210 height=44
+theme-color green shade=400 fill="#C6DBA1" stroke="#749537" ink="#172118"

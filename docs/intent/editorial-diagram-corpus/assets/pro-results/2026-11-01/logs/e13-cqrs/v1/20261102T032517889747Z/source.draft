@@ -1,0 +1,41 @@
+# Refinement cycle 1: documented structure and appearance controls.
+diagram "Command/query separation" version=1
+group service "Service"
+group query "Query model" in=service
+group command "Command model" in=service
+node db "Database" shape=pill color=amber shade=600
+node ui "UI" color=slate shade=50
+node qi "Query interface" in=service shape=pill color=slate shade=200
+node ci "Command interface" in=service shape=pill color=slate shade=200
+node query1 "" in=query color=blue shade=700
+node query2 "" in=query color=blue shade=700
+node query3 "" in=query color=blue shade=700
+node command1 "" in=command color=blue shade=700
+node command2 "" in=command color=blue shade=700
+node command3 "" in=command color=blue shade=700
+edge e1 query1 -> query2
+edge e2 query3 -> query1
+edge e3 query3 -> query2
+edge e4 command1 -> command2
+edge e5 command3 -> command2
+edge e6 db -> query1
+edge e7 query2 -> qi
+edge e8 qi -> ui
+edge e9 ui -> ci
+edge e10 ci -> command3
+edge e11 command1 -> db
+note "The query side reads persistent data." near=db side=above width=180
+note "Query services refresh the UI from the read model." near=qi side=above width=200
+note "A user action changes the UI." near=ui side=below width=200
+note "Presentation logic turns that action into a command." near=ci side=below width=220
+note "Commands run validation and business rules, then update storage." near=command side=below width=280
+layout root row gap=100
+layout service engine=grid aspect=1
+layout query flow
+layout command flow
+theme drafting canvas="#FFFFFF" padding-x=10 padding-y=12 radius=12
+order root db service ui
+near command query side=below gap=48
+near qi query side=right gap=48
+near ci command side=right gap=48
+align x qi ci

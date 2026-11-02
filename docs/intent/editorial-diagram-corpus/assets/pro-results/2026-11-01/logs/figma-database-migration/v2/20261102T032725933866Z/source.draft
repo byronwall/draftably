@@ -1,0 +1,93 @@
+diagram "Database migration" version=1
+theme signal canvas="#05aa5b" text="#072e1a" connection="#08281a" annotation-font=sans padding-x=16 padding-y=20 radius=0
+theme-color backdrop shade=100 fill="#05aa5b" stroke="#05aa5b" ink="#072e1a"
+theme-color app fill="#ffffff" stroke="#111111" ink="#111111"
+theme-color pooler fill="#ffd42a" stroke="#111111" ink="#111111"
+theme-color database fill="#6699f2" stroke="#111111" ink="#111111"
+group prepare "Prepare" color=backdrop shade=100
+node prepare.app "Application backend" in=prepare color=app
+node prepare.pg1 "PgBouncer-1" in=prepare color=pooler
+node prepare.pg2 "PgBouncer-2" in=prepare color=pooler
+node prepare.original "Original" in=prepare color=database shape=pill
+edge prepare.a prepare.app -> prepare.pg1 from=bottom to=top
+edge prepare.b prepare.app -> prepare.pg2 from=bottom to=top
+edge prepare.c prepare.pg1 -> prepare.original from=bottom to=top
+edge prepare.d prepare.pg2 -> prepare.original from=bottom to=top
+layout prepare flow direction=down min-height=620
+group replicate "Replicate" color=backdrop shade=100
+node replicate.app "Application backend" in=replicate color=app
+node replicate.pg1 "PgBouncer-1" in=replicate color=pooler
+node replicate.pg2 "PgBouncer-2" in=replicate color=pooler
+node replicate.original "Original" in=replicate color=database shape=pill
+node replicate.replica "Replica" in=replicate color=database shape=pill
+edge replicate.a replicate.app -> replicate.pg1 from=bottom to=top
+edge replicate.b replicate.app -> replicate.pg2 from=bottom to=top
+edge replicate.c replicate.pg1 -> replicate.original from=bottom to=top
+edge replicate.d replicate.pg2 -> replicate.original from=bottom to=top
+edge replicate.r replicate.original -> replicate.replica from=right to=left
+layout replicate flow direction=down min-height=620
+group pause "Pause" color=backdrop shade=100
+node pause.app "Application backend" in=pause color=app
+node pause.pg1 "PgBouncer-1" in=pause color=pooler
+node pause.pg2 "PgBouncer-2" in=pause color=pooler
+node pause.original "Original" in=pause color=database shape=pill
+node pause.replica "Replica" in=pause color=database shape=pill
+edge pause.a pause.app -> pause.pg1 from=bottom to=top
+edge pause.b pause.app -> pause.pg2 from=bottom to=top
+edge pause.c pause.pg1 -> pause.original from=bottom to=top
+edge pause.r pause.original -> pause.replica from=right to=left
+layout pause flow direction=down min-height=620
+group reroute "Reroute" color=backdrop shade=100
+node reroute.app "Application backend" in=reroute color=app
+node reroute.pg1 "PgBouncer-1" in=reroute color=pooler
+node reroute.pg2 "PgBouncer-2" in=reroute color=pooler
+node reroute.original "Original" in=reroute color=database shape=pill
+node reroute.replica "Promoted" in=reroute color=database shape=pill
+edge reroute.a reroute.app -> reroute.pg1 from=bottom to=top
+edge reroute.b reroute.app -> reroute.pg2 from=bottom to=top
+edge reroute.c reroute.pg1 -> reroute.original from=bottom to=top
+edge reroute.d reroute.pg2 -> reroute.replica from=bottom to=top
+edge reroute.r reroute.replica -> reroute.original from=left to=right
+layout reroute flow direction=down min-height=620
+edge next1 prepare -> replicate from=top to=top
+edge next2 replicate -> pause from=top to=top
+edge next3 pause -> reroute from=top to=top
+layout root row gap=50
+pin prepare.app x=90 y=0
+size prepare.app width=120 height=110
+pin prepare.pg1 x=0 y=200
+size prepare.pg1 width=120 height=110
+pin prepare.pg2 x=180 y=200
+size prepare.pg2 width=120 height=110
+pin prepare.original x=90 y=400
+size prepare.original width=120 height=110
+pin replicate.app x=90 y=0
+size replicate.app width=120 height=110
+pin replicate.pg1 x=0 y=200
+size replicate.pg1 width=120 height=110
+pin replicate.pg2 x=180 y=200
+size replicate.pg2 width=120 height=110
+pin replicate.original x=0 y=400
+size replicate.original width=120 height=110
+pin replicate.replica x=180 y=400
+size replicate.replica width=120 height=110
+pin pause.app x=90 y=0
+size pause.app width=120 height=110
+pin pause.pg1 x=0 y=200
+size pause.pg1 width=120 height=110
+pin pause.pg2 x=180 y=200
+size pause.pg2 width=120 height=110
+pin pause.original x=0 y=400
+size pause.original width=120 height=110
+pin pause.replica x=180 y=400
+size pause.replica width=120 height=110
+pin reroute.app x=90 y=0
+size reroute.app width=120 height=110
+pin reroute.pg1 x=0 y=200
+size reroute.pg1 width=120 height=110
+pin reroute.pg2 x=180 y=200
+size reroute.pg2 width=120 height=110
+pin reroute.original x=0 y=400
+size reroute.original width=120 height=110
+pin reroute.replica x=180 y=400
+size reroute.replica width=120 height=110

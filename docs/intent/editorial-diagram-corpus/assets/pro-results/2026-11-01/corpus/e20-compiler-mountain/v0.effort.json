@@ -1,0 +1,21 @@
+{
+  "id": "E20",
+  "slug": "e20-compiler-mountain",
+  "stage": "v0",
+  "noncomment_lines": 21,
+  "declarations": 19,
+  "node_declarations": 9,
+  "group_declarations": 0,
+  "edge_declarations": 10,
+  "layout_refinement_lines": 1,
+  "layouts": 1,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 0,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 2,
+  "current_stage_command_seconds": 5.3802,
+  "authoring_time": "not measured"
+}

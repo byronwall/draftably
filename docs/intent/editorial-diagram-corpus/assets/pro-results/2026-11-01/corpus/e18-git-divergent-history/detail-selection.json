@@ -1,0 +1,24 @@
+{
+  "focus": "Divergent branch junction and branch pointers",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      275,
+      95,
+      320,
+      290
+    ],
+    "v0": [
+      24,
+      116,
+      1208,
+      672
+    ],
+    "v2": [
+      584,
+      174,
+      632,
+      702
+    ]
+  }
+}

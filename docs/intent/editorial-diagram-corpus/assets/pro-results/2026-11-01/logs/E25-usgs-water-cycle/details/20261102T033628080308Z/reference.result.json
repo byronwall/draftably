@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/reference-preview.png",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/E25-usgs-water-cycle/details/reference.png",
+    "--crop",
+    "420,420,1280,620"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:36:28.080900+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 2.0695,
+  "exit_code": 0
+}

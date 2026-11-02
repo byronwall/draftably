@@ -1,0 +1,17 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+node js "JavaScript" color=amber shade=400
+node style "Style" color=violet shade=500
+node layout "Layout" color=violet shade=500
+node paint "Paint" color=green shade=600
+node composite "Composite" color=green shade=600
+edge e1 js -> style
+edge e2 style -> layout
+edge e3 layout -> paint
+edge e4 paint -> composite
+layout root row gap=8
+theme signal padding-x=12 padding-y=12 radius=0
+size js width=180 height=58
+size style width=120 height=58
+size layout width=130 height=58
+size paint width=120 height=58
+size composite width=180 height=58

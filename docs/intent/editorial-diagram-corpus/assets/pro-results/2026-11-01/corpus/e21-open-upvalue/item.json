@@ -1,0 +1,64 @@
+{
+  "id": "E21",
+  "slug": "e21-open-upvalue",
+  "title": "Open upvalue and closure object graph",
+  "publisher": "Crafting Interpreters",
+  "author": "Robert Nystrom",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://craftinginterpreters.com/closures.html",
+  "image_url": "https://craftinginterpreters.com/image/closures/open-upvalue.png",
+  "license": "CC BY-NC-ND 4.0 for PNG illustrations; explicit repository LICENSE",
+  "figure": "open-upvalue.png",
+  "patterns": [
+    "memory layout",
+    "cells",
+    "pointer graph",
+    "annotation"
+  ],
+  "principal_objects": 16,
+  "reading_path": "Stack function points to closure; closure branches to function metadata and upvalue array; upvalue points back to stack slot a.",
+  "merit": "Field-level reference circles, irregular hand-drawn records and a long returning pointer explain aliasing while retaining the physical order of fields. The compact branch/back-reference composition challenges automatic routing.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "a4d278565b2493558ad2bd35f4f0478633d7159f5dd6292e1c028f05bfa12297",
+  "reference_bytes": 32687,
+  "reference_preview_size": [
+    1152,
+    463
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "bc1792a2e8414357b84ae22c39c7121cc0c5c1040410e84a0542abbe13a2b01d",
+      "warning_count": 3,
+      "warnings": [
+        "warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]"
+      ]
+    },
+    "v1": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "bc5167528ee21f831db629b65c399e3a3c59501d1fac1b8387ee86f8bb23bbd6",
+      "warning_count": 5,
+      "warnings": [
+        "warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning Edge upvalue_stack (location -> a) runs through idx0. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+        "warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the near on line 38. [edge-through-title]"
+      ]
+    },
+    "v2": {
+      "status": "rendered-validated-with-warnings",
+      "source_sha256": "9bd3c22a36617026c8d758e59333a6fc06af18d8b5a571d3d6edf9efdcd99af7",
+      "warning_count": 1,
+      "warnings": [
+        "warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the pin on line 38. [edge-through-title]"
+      ]
+    }
+  }
+}

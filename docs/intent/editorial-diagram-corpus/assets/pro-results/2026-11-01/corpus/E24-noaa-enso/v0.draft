@@ -1,0 +1,26 @@
+diagram "Is it El Ni\u00f1o conditions?" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node sst "Monthly Niño-3.4 SST anomaly ≥ 0.5°C?"
+node n1 "NO" shape=diamond
+node y1 "YES" shape=diamond
+node persistent "Will Niño-3.4 SST stay ≥ 0.5°C for several seasons?"
+node n2 "NO" shape=diamond
+node y2 "YES" shape=diamond
+node atmosphere "What does the atmosphere look like?"
+node insufficient "Insufficient evidence of a weaker Walker circulation" shape=circle
+node weak "Weaker Walker circulation: wetter central Pacific; drier Indonesia" shape=circle
+node nope "NOPE!"
+node el "El Niño conditions!"
+edge e1 sst -> n1
+edge e2 sst -> y1
+edge e3 n1 -> nope
+edge e4 y1 -> persistent
+edge e5 persistent -> n2
+edge e6 persistent -> y2
+edge e7 n2 -> nope
+edge e8 y2 -> atmosphere
+edge e9 atmosphere -> insufficient
+edge e10 atmosphere -> weak
+edge e11 insufficient -> nope
+edge e12 weak -> el
+layout root flow direction=down

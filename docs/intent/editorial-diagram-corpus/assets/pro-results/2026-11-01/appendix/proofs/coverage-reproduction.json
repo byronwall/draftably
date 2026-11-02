@@ -1,0 +1,29 @@
+{
+  "purpose": "Archive-only coverage reproduction from an arbitrary cwd with no working directory",
+  "temporary_copy": "/tmp/draftably-coverage-repro-yyrocvxg",
+  "cwd": "/tmp",
+  "exit_code": 0,
+  "working_directory_present": false,
+  "source_inputs": "30 corpus item.json records, appendix/candidates/*.csv, scripts/build-coverage.py only",
+  "candidate_records": 39,
+  "original_rows_preserved": true,
+  "outputs": {
+    "coverage.md": {
+      "sha256": "9d9af7d635f7bd810047647221083c5ece0e1048cd1fff04978111b8718c43bb",
+      "bytes": 24338,
+      "identical_from_minimal_copy": true
+    },
+    "candidate-log.csv": {
+      "sha256": "21815996295c8683bdc0897e80067e56652699bdfb38d6788d98c70de3360046",
+      "bytes": 40960,
+      "identical_from_minimal_copy": true
+    },
+    "appendix/coverage-counts.json": {
+      "sha256": "be4e5b07baf2d9c9a5f743d2544d10f16ba4f87bec9feba396c34098a579cfc1",
+      "bytes": 481,
+      "identical_from_minimal_copy": true
+    }
+  },
+  "stdout": "{\n  \"accepted\": 30,\n  \"software\": 22,\n  \"adjacent\": 8,\n  \"publisher_labels\": 24,\n  \"publisher_groups\": 22,\n  \"pattern_families\": 16,\n  \"principal_objects\": {\n    \"min\": 4,\n    \"median\": 14.0,\n    \"max\": 39,\n    \"within_5_30\": 27\n  },\n  \"confirmation_ids\": [\n    \"E06\",\n    \"E10\",\n    \"E16\",\n    \"E20\",\n    \"E28\",\n    \"E30\"\n  ],\n  \"candidate_records\": 39,\n  \"candidate_statuses\": {\n    \"accepted\": 30,\n    \"rejected\": 6,\n    \"not_selected\": 2,\n    \"superseded_acquisition\": 1\n  }\n}\n",
+  "stderr": ""
+}

@@ -1,0 +1,30 @@
+{
+  "focus": "Supernova remnant split and return toward the central nebula",
+  "crops": {
+    "reference": [
+      820,
+      500,
+      960,
+      700
+    ],
+    "v0": [
+      188,
+      200,
+      1224,
+      1208
+    ],
+    "v2": [
+      776,
+      586,
+      1328,
+      1300
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "nebula",
+    "supernova",
+    "neutron",
+    "black"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "focus": "Four severity branches: compact symbol with adjacent explanatory prose versus full text boxes",
+  "crops": {
+    "reference": [
+      350,
+      430,
+      900,
+      510
+    ],
+    "v0": [
+      64,
+      802,
+      1608,
+      1192
+    ],
+    "v2": [
+      16,
+      994,
+      2488,
+      1252
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "degree",
+    "clear",
+    "redundancy",
+    "minor",
+    "none",
+    "ask",
+    "otherchart",
+    "rephrase",
+    "proceed"
+  ]
+}

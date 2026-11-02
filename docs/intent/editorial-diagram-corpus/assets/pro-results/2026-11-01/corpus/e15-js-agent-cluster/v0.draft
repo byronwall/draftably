@@ -1,0 +1,59 @@
+diagram "Agent cluster" version=1
+group page "HTML page"
+group worker "Worker"
+group pheap "Heap" in=page
+group pstack "Stack" in=page
+group pqueue "Queue" in=page
+group wheap "Heap" in=worker
+group wstack "Stack" in=worker
+group wqueue "Queue" in=worker
+node window "Window realm\nArray\nArray.prototype\nHTMLElement" in=page
+node iframe "<iframe> realm\nArray\nArray.prototype\nHTMLElement" in=page
+node wr "WorkerGlobalScope realm\nArray\nArray.prototype" in=worker
+node po1 "" in=pheap shape=circle
+node po2 "" in=pheap shape=circle
+node po3 "" in=pheap shape=circle
+node po4 "" in=pheap shape=circle
+node po5 "" in=pheap shape=circle
+node po6 "" in=pheap shape=circle
+node po7 "SharedArrayBuffer" in=pheap shape=circle
+node po8 "" in=pheap shape=circle
+node po9 "" in=pheap shape=circle
+node wo1 "" in=wheap shape=circle
+node wo2 "" in=wheap shape=circle
+node wo3 "SharedArrayBuffer" in=wheap shape=circle
+node wo4 "" in=wheap shape=circle
+node wo5 "" in=wheap shape=circle
+node pf1 "Execution context\nc = null; d = 0" in=pstack
+node pf2 "Execution context\na = {...}; b = 4" in=pstack
+node pf3 "Execution context\na = {...}; b = 2" in=pstack
+node wf1 "Execution context\na = {...}; c = 0" in=wstack
+node wf2 "Execution context\na = {...}; c = 0" in=wstack
+node pj1 "Job\n() => {...}" in=pqueue
+node pj2 "Job\n() => {...}" in=pqueue
+node wj1 "Job\n() => {...}" in=wqueue
+node wj2 "Job\n() => {...}" in=wqueue
+edge ref1 window -> po1 kind=async
+edge ref2 window -> po2 kind=async
+edge ref3 window -> po3 kind=async
+edge ref4 iframe -> po4 kind=async
+edge ref5 iframe -> po5 kind=async
+edge ref6 iframe -> po6 kind=async
+edge ref7 pf2 -> po8 kind=async
+edge ref8 pf3 -> po9 kind=async
+edge ref9 wr -> wo1 kind=async
+edge ref10 wr -> wo2 kind=async
+edge ref11 wf1 -> wo4 kind=async
+edge ref12 wf2 -> wo5 kind=async
+edge shared po7 -> wo3 "Share memory" directed=false kind=async
+edge pexec pj2 -> pf3 "Execute"
+edge wexec wj2 -> wf2 "Execute"
+layout root column
+layout page row
+layout worker row
+layout pheap engine=grid
+layout wheap engine=grid
+layout pstack column
+layout wstack column
+layout pqueue row
+layout wqueue row

@@ -1,0 +1,24 @@
+{
+  "focus": "Upper encoder fanout and upper decoder stages",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      120,
+      100,
+      1000,
+      390
+    ],
+    "v0": [
+      456,
+      492,
+      1208,
+      536
+    ],
+    "v2": [
+      72,
+      280,
+      1452,
+      512
+    ]
+  }
+}

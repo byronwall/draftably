@@ -1,0 +1,21 @@
+{
+  "id": "E12",
+  "slug": "e12-lstm-recurrent-cell",
+  "stage": "v0",
+  "noncomment_lines": 48,
+  "declarations": 45,
+  "node_declarations": 20,
+  "group_declarations": 1,
+  "edge_declarations": 24,
+  "layout_refinement_lines": 2,
+  "layouts": 2,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 0,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 8.9692,
+  "authoring_time": "not measured"
+}

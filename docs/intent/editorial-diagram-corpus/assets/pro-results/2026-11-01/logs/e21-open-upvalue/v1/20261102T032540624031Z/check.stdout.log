@@ -1,0 +1,8 @@
+info    line 39: near chunk_rest gave way by 6 px to keep root clear.
+info    line 40: near constants_rest gave way by 6 px to keep root clear.
+warning Edge array_upvalue (idx0 -> upvalue) runs through location. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge closure_array (ups -> up_array) runs through constants. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge closure_fn (fn -> function) runs through chunk. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge upvalue_stack (location -> a) runs through idx0. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the near on line 38. [edge-through-title]
+Warnings: 12 nodes, 5 groups, 7 connections.

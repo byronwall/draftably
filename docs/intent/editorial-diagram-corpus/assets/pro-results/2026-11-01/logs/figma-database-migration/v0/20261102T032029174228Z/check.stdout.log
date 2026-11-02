@@ -1,0 +1,3 @@
+warning Edge next1 (prepare -> replicate) runs through replicate.pg1. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+warning Edge next1 (prepare -> replicate) runs through replicate.pg2. The layout could not avoid it; move or resize a neighbour. [edge-through-node]
+Warnings: 19 nodes, 4 groups, 21 connections.

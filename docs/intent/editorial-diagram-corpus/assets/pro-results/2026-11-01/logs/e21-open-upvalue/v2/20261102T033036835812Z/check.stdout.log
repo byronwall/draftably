@@ -1,0 +1,4 @@
+warning line 46: Edge array_upvalue (idx0 -> upvalue) runs through location. Remove the size on line 46, or move location 38px up. [edge-through-node]
+warning line 45: Edge upvalue_stack (location -> a) runs through idx0. Remove the size on line 45, or move idx0 38px up. [edge-through-node]
+warning line 38: Edge upvalue_stack (location -> a) crosses the title of stack. Remove the pin on line 38. [edge-through-title]
+Warnings: 12 nodes, 5 groups, 7 connections.

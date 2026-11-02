@@ -1,0 +1,28 @@
+{
+  "focus": "First divergence/convergence diamond and its two independently positioned phase words",
+  "crops": {
+    "reference": [
+      0,
+      0,
+      470,
+      453
+    ],
+    "v0": [
+      64,
+      188,
+      840,
+      272
+    ],
+    "v2": [
+      16,
+      272,
+      688,
+      720
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "discover",
+    "define"
+  ]
+}

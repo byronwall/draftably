@@ -1,0 +1,978 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 26,
+    "groups": 8,
+    "edges": 15,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 2122,
+    "height": 781,
+    "aspect": 2.72,
+    "density": 0.149,
+    "aligned": 0.96,
+    "crossings": 20,
+    "bends": 87,
+    "bendsPerEdge": 5.8,
+    "maxBends": 15,
+    "hooks": 0,
+    "backEdges": 12,
+    "edgeLengthPerEdge": 1300,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "page": 0.44,
+      "pstack": 0.79,
+      "pqueue": 0.92,
+      "pheap": 0.79,
+      "wstack": 0.84,
+      "worker": 0.59,
+      "wqueue": 0.92,
+      "wheap": 0.81
+    },
+    "groupGaps": {
+      "pheap | pstack": 28,
+      "pqueue | pstack": 86,
+      "pqueue | window": 28,
+      "page | worker": 49,
+      "wheap | wstack": 28,
+      "wqueue | wstack": 86,
+      "wqueue | wr": 28
+    },
+    "emptyArea": {
+      "share": 0.24,
+      "boxes": 42,
+      "w": 1036,
+      "h": 385,
+      "x": 0,
+      "y": 176
+    },
+    "edgeStretch": [
+      {
+        "id": "pexec",
+        "kind": "wrap",
+        "length": 572,
+        "detour": 1.26,
+        "span": 0.25
+      },
+      {
+        "id": "ref1",
+        "kind": "back",
+        "length": 2228,
+        "detour": 1.38,
+        "span": 0.99
+      },
+      {
+        "id": "ref10",
+        "kind": "back",
+        "length": 1500,
+        "detour": 1.37,
+        "span": 0.66
+      },
+      {
+        "id": "ref2",
+        "kind": "back",
+        "length": 2120,
+        "detour": 1.4,
+        "span": 0.94
+      },
+      {
+        "id": "ref3",
+        "kind": "back",
+        "length": 2024,
+        "detour": 1.44,
+        "span": 0.9
+      },
+      {
+        "id": "ref4",
+        "kind": "back",
+        "length": 2062,
+        "detour": 1.38,
+        "span": 0.91
+      },
+      {
+        "id": "ref5",
+        "kind": "back",
+        "length": 2008,
+        "detour": 1.44,
+        "span": 0.89
+      },
+      {
+        "id": "ref6",
+        "kind": "back",
+        "length": 1892,
+        "detour": 1.47,
+        "span": 0.84
+      },
+      {
+        "id": "ref9",
+        "kind": "back",
+        "length": 1616,
+        "detour": 1.35,
+        "span": 0.71
+      },
+      {
+        "id": "shared",
+        "kind": "wrap",
+        "length": 1951,
+        "detour": 2.71,
+        "span": 0.86
+      },
+      {
+        "id": "wexec",
+        "kind": "wrap",
+        "length": 472,
+        "detour": 1.33,
+        "span": 0.21
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 3,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 8,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 24,
+      "edge-on-group-border": 4,
+      "edge-near-group-border": 12,
+      "edge-in-slot": 3,
+      "edges-too-close": 2,
+      "uneven-channel": 3,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 4,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 70,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "ref1 (7)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref2 (11)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref3 (15)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref4 (12)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref5 (7)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref6 (7)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref9 (7)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "shared (6)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "pexec along pf3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "pexec 11px from pstack"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "pexec between pstack's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref1 along po1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref1 along po2"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref1 14px from page"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref1 10px from pstack"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref10 along wo2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref10 along wo3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref10 14px from worker"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref10 10px from wstack"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref11 along wf2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref11 along wo4"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref11 along wo5"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref11 14px from wheap"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref2 along po2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref2 along po3"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "ref2 along page"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref3 along po3"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref3 along po4"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "ref3 along page"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref4 along iframe"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref4 along po4"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref4 along po5"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref4 14px from page"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref4 10px from pstack"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref5 along po5"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref5 along po6"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "ref5 along page"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref6 along po6"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref6 along po7"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref6 14px from page"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref6 10px from pstack"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref8 along pf3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref8 11px from pstack"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "ref8 between pstack's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref9 along wo1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref9 along wo2"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "ref9 along worker"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "shared along po7"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "shared along po8"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "shared 11px from pheap"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "shared between pheap's members and its border"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "ref2 & ref3"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "ref3 & ref5"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈284: gaps 16/16/16/16/16/8/6/2/16/6/10/4"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "x≈960: gaps 4/6/10/6/10/6/21"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "x≈1213: gaps 21/10/6/10/16"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "window out D: turns at 316, 332, 364"
+      },
+      {
+        "kind": "jog",
+        "detail": "ref2 has a 4px step"
+      },
+      {
+        "kind": "jog",
+        "detail": "ref3 has a 6px step"
+      },
+      {
+        "kind": "jog",
+        "detail": "ref5 has a 4px step"
+      },
+      {
+        "kind": "jog",
+        "detail": "ref6 has a 6px step"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 28–86px"
+      },
+      {
+        "kind": "shared-segment",
+        "detail": "ref1 & ref4 (262px)"
+      },
+      {
+        "kind": "shared-segment",
+        "detail": "ref1 & ref6 (232px)"
+      },
+      {
+        "kind": "shared-segment",
+        "detail": "ref2 & ref5 (258px)"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"Share memory\" 652px from its edge"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1036×385px at 0,176 (24% of the drawing, room for 42 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 31,
+    "groups": 11,
+    "edges": 15,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1827,
+    "height": 1929,
+    "aspect": 0.95,
+    "density": 0.06,
+    "aligned": 1,
+    "crossings": 7,
+    "bends": 27,
+    "bendsPerEdge": 1.8,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 945,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 4.59,
+    "groupFill": {
+      "page": 0.19,
+      "iframe": 1,
+      "pstack": 0.74,
+      "pqueue": 0.92,
+      "pheap": 0.79,
+      "wstack": 0.79,
+      "worker": 0.19,
+      "window": 1,
+      "wqueue": 0.92,
+      "wheap": 0.81,
+      "wr": 1
+    },
+    "groupGaps": {
+      "iframe | window": 435,
+      "iframe | pstack": 466,
+      "pheap | pqueue": 315,
+      "pqueue | window": 164,
+      "page | worker": 49,
+      "wqueue | wr": 329
+    },
+    "emptyArea": {
+      "share": 0.21,
+      "boxes": 107.4,
+      "w": 507,
+      "h": 1451,
+      "x": 1320,
+      "y": 478
+    },
+    "edgeStretch": [
+      {
+        "id": "pexec",
+        "kind": "forward",
+        "length": 617,
+        "detour": 1.21,
+        "span": 0.23
+      },
+      {
+        "id": "ref1",
+        "kind": "forward",
+        "length": 1045,
+        "detour": 1.06,
+        "span": 0.39
+      },
+      {
+        "id": "ref10",
+        "kind": "forward",
+        "length": 795,
+        "detour": 1.25,
+        "span": 0.3
+      },
+      {
+        "id": "ref11",
+        "kind": "forward",
+        "length": 822,
+        "detour": 1.09,
+        "span": 0.31
+      },
+      {
+        "id": "ref12",
+        "kind": "forward",
+        "length": 1006,
+        "detour": 1.07,
+        "span": 0.38
+      },
+      {
+        "id": "ref2",
+        "kind": "forward",
+        "length": 1213,
+        "detour": 1.15,
+        "span": 0.46
+      },
+      {
+        "id": "ref3",
+        "kind": "forward",
+        "length": 1181,
+        "detour": 1.05,
+        "span": 0.44
+      },
+      {
+        "id": "ref4",
+        "kind": "forward",
+        "length": 778,
+        "detour": 1.08,
+        "span": 0.29
+      },
+      {
+        "id": "ref5",
+        "kind": "forward",
+        "length": 846,
+        "detour": 1.07,
+        "span": 0.32
+      },
+      {
+        "id": "ref6",
+        "kind": "forward",
+        "length": 914,
+        "detour": 1.07,
+        "span": 0.34
+      },
+      {
+        "id": "ref7",
+        "kind": "forward",
+        "length": 1195,
+        "detour": 1.06,
+        "span": 0.45
+      },
+      {
+        "id": "ref8",
+        "kind": "forward",
+        "length": 1379,
+        "detour": 1.05,
+        "span": 0.52
+      },
+      {
+        "id": "ref9",
+        "kind": "forward",
+        "length": 627,
+        "detour": 1.1,
+        "span": 0.24
+      },
+      {
+        "id": "shared",
+        "kind": "wrap",
+        "length": 1363,
+        "detour": 1.06,
+        "span": 0.51
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 6,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 3,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 2,
+      "group-staircase": 2,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 21.3,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "ref10 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref2 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref10 along wo1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref10 along wo2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref10 along wr_2"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref10 14px from wheap"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref2 along po1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref2 along po2"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref2 14px from pheap"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "ref2 15px from pqueue"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref3 along window_3"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 0–24 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 30–48 across groups"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "page fill 0.19"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "worker fill 0.19"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "page: pqueue → pstack sit diagonally"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "worker: wqueue → wstack sit diagonally"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"Share memory\" 597px from its edge"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "507×1451px at 1320,478 (21% of the drawing, room for 107 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 34,
+      "meanMove": 1012,
+      "maxMove": 1731,
+      "moved": 34,
+      "alignedMean": 835,
+      "alignedMoved": 34,
+      "orderFlips": 352,
+      "shift": {
+        "x": -104,
+        "y": 554
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 34,
+      "meanMove": 1012,
+      "maxMove": 1731,
+      "moved": 34,
+      "alignedMean": 835,
+      "alignedMoved": 34,
+      "orderFlips": 352,
+      "shift": {
+        "x": -104,
+        "y": 554
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 31,
+    "groups": 11,
+    "edges": 15,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1046,
+    "height": 1400,
+    "aspect": 0.75,
+    "density": 0.165,
+    "aligned": 1,
+    "crossings": 5,
+    "bends": 36,
+    "bendsPerEdge": 2.4,
+    "maxBends": 6,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 303,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 8.32,
+    "groupFill": {
+      "page": 0.63,
+      "iframe": 1,
+      "pstack": 0.67,
+      "pqueue": 0.93,
+      "pheap": 0.28,
+      "wstack": 0.73,
+      "worker": 0.54,
+      "window": 1,
+      "wqueue": 0.93,
+      "wheap": 0.25,
+      "wr": 1
+    },
+    "groupGaps": {
+      "iframe | pheap": 90,
+      "iframe | window": 73,
+      "pheap | pstack": 67,
+      "pheap | pqueue": 38,
+      "pheap | window": 90,
+      "page | worker": 52,
+      "wheap | wr": 86,
+      "wheap | wstack": 67,
+      "wheap | wqueue": 38
+    },
+    "emptyArea": {
+      "share": 0.19,
+      "boxes": 34.8,
+      "w": 1046,
+      "h": 260,
+      "x": 0,
+      "y": 636
+    },
+    "edgeStretch": [
+      {
+        "id": "ref4",
+        "kind": "forward",
+        "length": 420,
+        "detour": 1.15,
+        "span": 0.24
+      },
+      {
+        "id": "shared",
+        "kind": "forward",
+        "length": 919,
+        "detour": 1.53,
+        "span": 0.53
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 3,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 4,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 2,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 2,
+      "group-staircase": 2,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 1,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 27.3,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "ref4 (6)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "ref5 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "shared (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref4 along po4"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref5 along po5"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "ref8 along po9"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "shared along wo3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "shared 13px from pqueue"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈324: gaps 16/39"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "page left 24, right 24, bottom 88"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "worker left 24, right 24, bottom 40"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 0–24 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 30–48 across groups"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "pheap fill 0.28"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "wheap fill 0.25"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "page: pqueue → pstack sit diagonally"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "worker: wqueue → wstack sit diagonally"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 38–90px"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"Share memory\" 197px from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "shared through the \"Share memory\" text"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1046×260px at 0,636 (19% of the drawing, room for 35 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 42,
+      "meanMove": 551,
+      "maxMove": 1139,
+      "moved": 42,
+      "alignedMean": 488,
+      "alignedMoved": 42,
+      "orderFlips": 341,
+      "shift": {
+        "x": -150,
+        "y": -189
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 34,
+      "meanMove": 561,
+      "maxMove": 1905,
+      "moved": 34,
+      "alignedMean": 489,
+      "alignedMoved": 34,
+      "orderFlips": 209,
+      "shift": {
+        "x": -112,
+        "y": 323
+      }
+    },
+    "checks": []
+  }
+]

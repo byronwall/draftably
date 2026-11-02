@@ -1,0 +1,2 @@
+info    line 9: interphase's members are apart, so its tint is drawn in 2 pieces. Place its members together, or use frame=box.
+OK: 6 nodes, 2 groups, 6 connections.

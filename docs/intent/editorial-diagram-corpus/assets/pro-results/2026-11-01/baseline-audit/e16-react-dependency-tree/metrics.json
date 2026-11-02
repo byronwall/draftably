@@ -1,0 +1,463 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 916,
+    "height": 288,
+    "aspect": 3.18,
+    "density": 0.254,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 9,
+    "bendsPerEdge": 1.5,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 226,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.14,
+      "boxes": 3.8,
+      "w": 188,
+      "h": 196,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 1,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 3,
+    "issues": [
+      {
+        "kind": "label-on-edge",
+        "detail": "\"imports\" over imports4"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1460,
+    "height": 41,
+    "aspect": 35.61,
+    "density": 0.786,
+    "aligned": 1,
+    "crossings": 3,
+    "bends": 16,
+    "bendsPerEdge": 2.67,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 614,
+    "theme": "blueprint",
+    "fills": 1,
+    "minTextContrast": 11.7,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 8
+    },
+    "edgeStretch": [
+      {
+        "id": "imports2",
+        "kind": "forward",
+        "length": 411,
+        "detour": 1.53,
+        "span": 0.28
+      },
+      {
+        "id": "imports3",
+        "kind": "forward",
+        "length": 627,
+        "detour": 1.29,
+        "span": 0.43
+      },
+      {
+        "id": "imports4",
+        "kind": "forward",
+        "length": 597,
+        "detour": 1.23,
+        "span": 0.41
+      },
+      {
+        "id": "imports5",
+        "kind": "forward",
+        "length": 875,
+        "detour": 1.25,
+        "span": 0.6
+      },
+      {
+        "id": "imports6",
+        "kind": "forward",
+        "length": 1123,
+        "detour": 1.23,
+        "span": 0.77
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 6,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 5,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 1,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 36,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "imports4 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "imports3 along copyright"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "imports4 along fancy_b"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "imports4 along generator"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "imports5 along color"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "imports6 along inspirations"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports5 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "imports6 1123px, 0.77 of the diagonal"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "1460×41px (35.6:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 7,
+      "meanMove": 513,
+      "maxMove": 949,
+      "moved": 7,
+      "alignedMean": 475,
+      "alignedMoved": 6,
+      "orderFlips": 10,
+      "shift": {
+        "x": 28,
+        "y": -115
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 7,
+      "meanMove": 513,
+      "maxMove": 949,
+      "moved": 7,
+      "alignedMean": 475,
+      "alignedMoved": 6,
+      "orderFlips": 10,
+      "shift": {
+        "x": 28,
+        "y": -115
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 7,
+    "groups": 0,
+    "edges": 6,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1120,
+    "height": 384,
+    "aspect": 2.92,
+    "density": 0.191,
+    "aligned": 0.86,
+    "crossings": 0,
+    "bends": 7,
+    "bendsPerEdge": 1.17,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 281,
+    "theme": "blueprint",
+    "fills": 1,
+    "minTextContrast": 11.7,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.17,
+      "boxes": 6.2,
+      "w": 454,
+      "h": 160,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "imports1",
+        "kind": "forward",
+        "length": 445,
+        "detour": 1.97,
+        "span": 0.38
+      },
+      {
+        "id": "imports3",
+        "kind": "forward",
+        "length": 435,
+        "detour": 1.7,
+        "span": 0.37
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 6,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 6,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 54,
+    "issues": [
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports1 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports2 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports3 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports4 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports5 through the \"imports\" text"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"imports\" Infinitypx from its edge"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "imports6 through the \"imports\" text"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 7,
+      "meanMove": 562,
+      "maxMove": 898,
+      "moved": 7,
+      "alignedMean": 508,
+      "alignedMoved": 6,
+      "orderFlips": 11,
+      "shift": {
+        "x": 12,
+        "y": 159
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 7,
+      "meanMove": 130,
+      "maxMove": 207,
+      "moved": 7,
+      "alignedMean": 72,
+      "alignedMoved": 7,
+      "orderFlips": 0,
+      "shift": {
+        "x": 85,
+        "y": 43
+      }
+    },
+    "checks": []
+  }
+]

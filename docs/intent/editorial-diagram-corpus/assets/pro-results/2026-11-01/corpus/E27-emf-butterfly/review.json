@@ -1,0 +1,43 @@
+{
+  "id": "E27",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default’s large rectangular return corridors and 19 measured crossings obscure the bilateral cycle and the order of shorter versus longer recovery loops. The original communicates that hierarchy immediately through nested colored arcs.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "High. Twenty-two manual sizes and pins, fourteen explicit port pairs and a custom palette produce a recognizable silhouette, but the important curves remain impossible. Node/edge declarations are readable; routing and spatial maintenance would be brittle as the system changes.",
+  "residuals": [
+    "No independently colored biological and technical edge streams.",
+    "No nested smooth return curves with ordered loop priority.",
+    "No icon medallions or exterior role labels.",
+    "Four final measured crossings and long return corridors remain.",
+    "The final source explains relationships but does not retain the source’s full value-preservation visual hierarchy."
+  ],
+  "provisional_gaps": [
+    "edge-semantic-styling",
+    "curved-directed-paths",
+    "native-image-icon-serializability",
+    "external-label-roles",
+    "native-text-scale-control"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

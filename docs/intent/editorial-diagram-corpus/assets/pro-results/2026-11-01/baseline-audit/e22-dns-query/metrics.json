@@ -1,0 +1,487 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 6,
+    "groups": 0,
+    "edges": 12,
+    "warnings": [
+      "warning The labels on m5 and m6 overlap. The layout could not avoid it; move or resize a neighbour. [label-collision]",
+      "Warnings: 6 nodes, 0 groups, 12 connections."
+    ],
+    "flowDir": "right",
+    "width": 923,
+    "height": 72,
+    "aspect": 12.82,
+    "density": 0.636,
+    "aligned": 0.83,
+    "crossings": 0,
+    "bends": 6,
+    "bendsPerEdge": 0.5,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 218,
+    "theme": "drafting",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 2.68,
+      "boxes": 25.3,
+      "w": 349,
+      "h": 510,
+      "x": 590,
+      "y": 72
+    },
+    "edgeStretch": [
+      {
+        "id": "m10",
+        "kind": "forward",
+        "length": 486,
+        "detour": 1.38,
+        "span": 0.52
+      },
+      {
+        "id": "m11",
+        "kind": "back",
+        "length": 486,
+        "detour": 1.38,
+        "span": 0.52
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 1,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 7,
+      "empty-area": 1,
+      "wide-aspect": 1
+    },
+    "defectIndex": 22.5,
+    "issues": [
+      {
+        "kind": "labels-too-close",
+        "detail": "\"No cached address\" & \"\" 7px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 22px apart"
+      },
+      {
+        "kind": "label-overlap",
+        "detail": "\"\" × \"\""
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"93.184.216.34\" 13px apart"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "349×510px at 590,72 (268% of the drawing, room for 25 boxes)"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "923×72px (12.8:1)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 6,
+    "groups": 0,
+    "edges": 12,
+    "warnings": [
+      "warning The labels on m5 and m6 overlap. The layout could not avoid it; move or resize a neighbour. [label-collision]",
+      "Warnings: 6 nodes, 0 groups, 12 connections."
+    ],
+    "flowDir": "right",
+    "width": 960,
+    "height": 56,
+    "aspect": 17.14,
+    "density": 0.576,
+    "aligned": 0.83,
+    "crossings": 0,
+    "bends": 6,
+    "bendsPerEdge": 0.5,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 240,
+    "theme": "signal",
+    "fills": 0,
+    "minTextContrast": null,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 3.46,
+      "boxes": 36.1,
+      "w": 374,
+      "h": 498,
+      "x": 717,
+      "y": 56
+    },
+    "edgeStretch": [
+      {
+        "id": "m10",
+        "kind": "forward",
+        "length": 531,
+        "detour": 1.34,
+        "span": 0.55
+      },
+      {
+        "id": "m11",
+        "kind": "back",
+        "length": 531,
+        "detour": 1.34,
+        "span": 0.55
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 1,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 7,
+      "empty-area": 1,
+      "wide-aspect": 1
+    },
+    "defectIndex": 22.5,
+    "issues": [
+      {
+        "kind": "labels-too-close",
+        "detail": "\"No cached address\" & \"\" 7px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 22px apart"
+      },
+      {
+        "kind": "label-overlap",
+        "detail": "\"\" × \"\""
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"Ask .com: a.gtld-servers.net\" 13px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"Ask .com: a.gtld-servers.net\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"\" 8px apart"
+      },
+      {
+        "kind": "labels-too-close",
+        "detail": "\"\" & \"93.184.216.34\" 13px apart"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "374×498px at 717,56 (346% of the drawing, room for 36 boxes)"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "960×56px (17.1:1)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 6,
+      "meanMove": 132,
+      "maxMove": 152,
+      "moved": 6,
+      "alignedMean": 21,
+      "alignedMoved": 3,
+      "orderFlips": 0,
+      "shift": {
+        "x": 152,
+        "y": -8
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 6,
+      "meanMove": 132,
+      "maxMove": 152,
+      "moved": 6,
+      "alignedMean": 21,
+      "alignedMoved": 3,
+      "orderFlips": 0,
+      "shift": {
+        "x": 152,
+        "y": -8
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 21,
+    "groups": 10,
+    "edges": 10,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1150,
+    "height": 1217,
+    "aspect": 0.94,
+    "density": 0.292,
+    "aligned": 0.9,
+    "crossings": 0,
+    "bends": 3,
+    "bendsPerEdge": 0.3,
+    "maxBends": 1,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 70,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "p6": 0.41,
+      "cache": 1,
+      "p1": 0.64,
+      "roots": 1,
+      "p3": 0.84,
+      "p5": 0.64,
+      "com_records": 1,
+      "p2": 0.64,
+      "p4": 0.57
+    },
+    "groupGaps": {
+      "answer | domain_a": 70,
+      "answer | return": 95,
+      "cache | miss": 35,
+      "com_a | com_records": 70,
+      "p1 | p2": 42,
+      "p1 | p4": 52,
+      "p2 | p3": 42,
+      "p2 | p4": 52,
+      "p3 | p4": 41,
+      "p4 | p5": 9,
+      "p5 | p6": 66,
+      "root_a | roots": 70
+    },
+    "emptyArea": {
+      "share": 0.14,
+      "boxes": 9.9,
+      "w": 1150,
+      "h": 168,
+      "x": 0,
+      "y": 820
+    },
+    "edgeStretch": [],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 2,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 2,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 3,
+      "padding-varies": 2,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 1,
+      "tight-group-gap": 1,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 20,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "com_records_link into com_records"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "root_records into roots"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "com_records_link along com_records"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "domain_record along answer"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "p4 left 24, right 76, bottom 24"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "p5 left 24, right 76, bottom 24"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "p6 left 24, right 76, bottom 40"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "left padding 0–24 across groups"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 30–48 across groups"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "p5: com_a → com_records sit diagonally"
+      },
+      {
+        "kind": "tight-group-gap",
+        "detail": "p4 | p5 9px apart"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 9–66px"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 2,
+      "meanMove": 238,
+      "maxMove": 257,
+      "moved": 2,
+      "alignedMean": 123,
+      "alignedMoved": 1,
+      "orderFlips": 0,
+      "shift": {
+        "x": 86,
+        "y": 201
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 2,
+      "meanMove": 236,
+      "maxMove": 273,
+      "moved": 2,
+      "alignedMean": 122,
+      "alignedMoved": 1,
+      "orderFlips": 0,
+      "shift": {
+        "x": 193,
+        "y": 193
+      }
+    },
+    "checks": []
+  }
+]

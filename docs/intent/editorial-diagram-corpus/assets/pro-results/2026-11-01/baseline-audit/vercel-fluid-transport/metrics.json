@@ -1,0 +1,441 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 5,
+    "groups": 2,
+    "edges": 8,
+    "warnings": [
+      "warning Edge lambda_return (lambda -> api) runs through nodejs. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "warning Edge tunnel (rust -> router) runs through nodejs. The layout could not avoid it; move or resize a neighbour. [edge-through-node]",
+      "Warnings: 5 nodes, 2 groups, 8 connections."
+    ],
+    "flowDir": "right",
+    "width": 1298,
+    "height": 200,
+    "aspect": 6.49,
+    "density": 0.187,
+    "aligned": 0.6,
+    "crossings": 0,
+    "bends": 5,
+    "bendsPerEdge": 0.63,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 249,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {},
+    "groupGaps": {
+      "api | lambda": 74
+    },
+    "emptyArea": {
+      "share": 0,
+      "boxes": 0,
+      "w": 0,
+      "h": 0,
+      "x": 0,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "lambda_http",
+        "kind": "forward",
+        "length": 406,
+        "detour": 5.49,
+        "span": 0.31
+      },
+      {
+        "id": "lambda_return",
+        "kind": "back",
+        "length": 406,
+        "detour": 5.49,
+        "span": 0.31
+      },
+      {
+        "id": "tunnel",
+        "kind": "back",
+        "length": 624,
+        "detour": 1.86,
+        "span": 0.48
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 2,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 1,
+      "edge-through-title-band": 1,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 1
+    },
+    "defectIndex": 27,
+    "issues": [
+      {
+        "kind": "edge-through-title-band",
+        "detail": "lambda_http through lambda's title band"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "lambda_return through nodejs"
+      },
+      {
+        "kind": "edge-through-group",
+        "detail": "lambda_return through rust"
+      },
+      {
+        "kind": "edge-through-node",
+        "detail": "tunnel through nodejs"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "lambda_http along lambda"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "lambda_http api→lambda arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "lambda_http 406px, 5.5× the direct way"
+      },
+      {
+        "kind": "wide-aspect",
+        "detail": "1298×200px (6.5:1)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 5,
+    "groups": 2,
+    "edges": 8,
+    "warnings": [
+      "warning line 24: Edge tunnel (rust -> router) runs through api. Remove the near on line 24, or move api 32px up. [edge-through-node]",
+      "Warnings: 5 nodes, 2 groups, 8 connections."
+    ],
+    "flowDir": "right",
+    "width": 762,
+    "height": 322,
+    "aspect": 2.37,
+    "density": 0.202,
+    "aligned": 0.8,
+    "crossings": 0,
+    "bends": 1,
+    "bendsPerEdge": 0.13,
+    "maxBends": 1,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 231,
+    "theme": "blueprint",
+    "fills": 2,
+    "minTextContrast": 16.16,
+    "groupFill": {},
+    "groupGaps": {
+      "api | lambda": 160,
+      "lambda | proxy": 54
+    },
+    "emptyArea": {
+      "share": 0.23,
+      "boxes": 5.8,
+      "w": 226,
+      "h": 253,
+      "x": 0,
+      "y": 62
+    },
+    "edgeStretch": [
+      {
+        "id": "tunnel",
+        "kind": "forward",
+        "length": 544,
+        "detour": 1.96,
+        "span": 0.66
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 1,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 13.5,
+    "issues": [
+      {
+        "kind": "edge-through-node",
+        "detail": "tunnel through api"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "tunnel rust→router arrives sideways"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 150px at x=448"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "tunnel 544px, 0.66 of the diagonal"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 7,
+      "meanMove": 417,
+      "maxMove": 867,
+      "moved": 5,
+      "alignedMean": 397,
+      "alignedMoved": 7,
+      "orderFlips": 9,
+      "shift": {
+        "x": -202,
+        "y": 113
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 7,
+      "meanMove": 417,
+      "maxMove": 867,
+      "moved": 5,
+      "alignedMean": 397,
+      "alignedMoved": 7,
+      "orderFlips": 9,
+      "shift": {
+        "x": -202,
+        "y": 113
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 5,
+    "groups": 2,
+    "edges": 8,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1480,
+    "height": 460,
+    "aspect": 3.22,
+    "density": 0.171,
+    "aligned": 0.6,
+    "crossings": 2,
+    "bends": 5,
+    "bendsPerEdge": 0.63,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 361,
+    "theme": "blueprint",
+    "fills": 2,
+    "minTextContrast": 16.16,
+    "groupFill": {},
+    "groupGaps": {
+      "api | lambda": 370,
+      "lambda | proxy": 80
+    },
+    "emptyArea": {
+      "share": 0.29,
+      "boxes": 8.5,
+      "w": 548,
+      "h": 360,
+      "x": 0,
+      "y": 100
+    },
+    "edgeStretch": [
+      {
+        "id": "tunnel",
+        "kind": "forward",
+        "length": 620,
+        "detour": 1.31,
+        "span": 0.4
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 1,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 2,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 1,
+      "uneven-channel": 1,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 2,
+      "jog": 0,
+      "uneven-padding": 2,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 19.5,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "lambda_http into lambda"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "lambda_http along lambda"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "lambda_return & tunnel"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈320: gaps 4/26"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "lambda left 24, right 36, bottom 41"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "rust left 24, right 96, bottom 61"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "lambda_return lambda→api arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "tunnel rust→router arrives sideways"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 300px at x=200"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 310px at x=840"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 7,
+      "meanMove": 385,
+      "maxMove": 655,
+      "moved": 7,
+      "alignedMean": 155,
+      "alignedMoved": 6,
+      "orderFlips": 1,
+      "shift": {
+        "x": 356,
+        "y": 81
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 7,
+      "meanMove": 459,
+      "maxMove": 671,
+      "moved": 7,
+      "alignedMean": 460,
+      "alignedMoved": 7,
+      "orderFlips": 7,
+      "shift": {
+        "x": 18,
+        "y": 194
+      }
+    },
+    "checks": []
+  }
+]

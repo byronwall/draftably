@@ -1,0 +1,38 @@
+diagram "Agentic Workflows security layers" version=1
+theme signal canvas="#ffffff" text="#09162c" connection="#5b75a4" title-font=sans annotation-font=mono padding-x=18 padding-y=20 radius=7
+theme-color layer shade=100 fill="#f9fbff" stroke="#abc8ed" ink="#09162c"
+theme-color component fill="#8bb9ed" stroke="#567cae" ink="#102646"
+group planning "Planning layer" color=layer shade=100
+node safe "Safe Outputs MCP" in=planning color=component
+node filter "Call filtering" in=planning color=component
+node sanitize "Output sanitization" in=planning color=component
+layout planning row gap=40 min-height=250
+group configuration "Configuration layer" color=layer shade=100
+node compiler "Compiler" in=configuration color=component
+node firewall "Firewall policies" in=configuration color=component
+node mcp "MCP config" in=configuration color=component
+layout configuration row gap=40 min-height=250
+group substrate "Substrate layer" color=layer shade=100
+node runner "Action runner VM" in=substrate color=component
+node containers "Docker containers" in=substrate color=component
+node trusted "Trusted containers" in=substrate color=component
+layout substrate row gap=40 min-height=250
+layout root column gap=36
+note "GitHub write operations" near=safe side=below width=230
+note "Call availability, volume" near=filter side=below width=230
+note "Secret removal, moderation" near=sanitize side=below width=230
+note "GH AW extension" near=compiler side=below width=230
+note "Allowlist" near=firewall side=below width=230
+note "Docker image, auth token" near=mcp side=below width=230
+note "OS, Hypervisor" near=runner side=below width=230
+note "Docker daemon, network" near=containers side=below width=230
+note "Firewall, MCP Gateway, API proxy" near=trusted side=below width=230
+size safe width=230 height=90
+size filter width=230 height=90
+size sanitize width=230 height=90
+size compiler width=230 height=90
+size firewall width=230 height=90
+size mcp width=230 height=90
+size runner width=230 height=90
+size containers width=230 height=90
+size trusted width=230 height=90

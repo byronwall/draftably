@@ -1,0 +1,45 @@
+{
+  "id": "E09",
+  "v0_readability_vs_reference": "worse",
+  "reason": "v0 shows all state memberships but gives panels wildly different sizes, expands all shapes into labeled objects, and does not fade prior journal content. It obscures whole-state versus incremental-state comparison.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 1,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Very high. Twenty-one pins and twenty-one sizes plus nine panel minimum dimensions maintain only nine temporal scenes. Native geometry is duplicated for every snapshot. A label or shape change needs repeated edits. The original red octagon and green freeform path still cannot be expressed.",
+  "residuals": [
+    "Red octagon, green freeform path, and overlapping canvas geometry are substituted explicitly.",
+    "Current-state dashed border and full canvas motif are missing.",
+    "Forty-two object geometry lines plus nine minimum-sized panels are brittle."
+  ],
+  "provisional_gaps": [
+    "I-VISUAL-VOCAB",
+    "I-PANEL-GEOMETRY",
+    "I-TYPE"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

@@ -1,0 +1,52 @@
+{
+  "id": "E20",
+  "slug": "e20-compiler-mountain",
+  "title": "Compiler routes across a conceptual mountain",
+  "publisher": "Crafting Interpreters",
+  "author": "Robert Nystrom",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://craftinginterpreters.com/a-map-of-the-territory.html",
+  "image_url": "https://craftinginterpreters.com/image/a-map-of-the-territory/mountain.png",
+  "license": "CC BY-NC-ND 4.0 for PNG illustrations; explicit repository LICENSE",
+  "figure": "mountain.png",
+  "patterns": [
+    "conceptual map",
+    "branching pipeline",
+    "annotation leaders",
+    "illustrated metaphor"
+  ],
+  "principal_objects": 15,
+  "reading_path": "Ascend from source through tokens and syntax to analysis; descend by transpiling or code generation to high-level code, bytecode or machine code.",
+  "merit": "Terrain encodes abstraction and branching paths. Underlined artifacts, handwritten process labels and small destination buildings create a memorable conceptual map, a demanding non-box stress case.",
+  "confirmation_case": true,
+  "domain": "software/computing",
+  "reference_sha256": "ddec81e3b0cc3890ba1150356149525aaf4a5b7cf8ec626d384ae78ccbab68ed",
+  "reference_bytes": 131250,
+  "reference_preview_size": [
+    1824,
+    833
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "0d7a21b1437c909a7da30eee57c125e9a3d1010667254e314e7035c17cc7d6a3",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "eaedc6a1896c2014902af970c199e0ef025c1ecbd372e374a5338a42699d1189",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "c0a05130af15e84cd5c227656dc79abc8fac1f91a1b998895cb9b1a37e5bd101",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}

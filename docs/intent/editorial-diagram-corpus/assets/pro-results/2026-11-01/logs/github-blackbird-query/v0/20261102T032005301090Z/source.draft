@@ -1,0 +1,14 @@
+diagram "Blackbird query architecture" version=1
+node github "GitHub.com"
+node query "Blackbird Query Service"
+node redis "Redis"
+node git "Git"
+group engine "Blackbird Search Engine"
+node s1 "Shard" in=engine
+node s2 "Shard" in=engine
+node s3 "Shard" in=engine
+node s4 "Shard" in=engine
+note "Cache of repository permissions; rate limiting quotas" near=redis side=below
+note "Validate blob accessibility" near=git side=below
+layout engine row
+layout root column

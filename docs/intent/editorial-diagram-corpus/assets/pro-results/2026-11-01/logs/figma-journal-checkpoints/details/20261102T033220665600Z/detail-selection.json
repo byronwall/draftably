@@ -1,0 +1,38 @@
+{
+  "focus": "Current state and final journal entry: prior versus new content",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      2120,
+      1109
+    ],
+    "v0": [
+      3678,
+      1470
+    ],
+    "v2": [
+      2880,
+      1938
+    ]
+  },
+  "crops": {
+    "reference": [
+      1505,
+      44,
+      593,
+      1009
+    ],
+    "v0": [
+      2574,
+      191,
+      1066,
+      1205
+    ],
+    "v2": [
+      2044,
+      251,
+      806,
+      1589
+    ]
+  }
+}

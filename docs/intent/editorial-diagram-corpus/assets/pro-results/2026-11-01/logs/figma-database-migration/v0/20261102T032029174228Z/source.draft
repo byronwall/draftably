@@ -1,0 +1,50 @@
+diagram "Database migration" version=1
+group prepare "Prepare"
+node prepare.app "Application backend" in=prepare
+node prepare.pg1 "PgBouncer-1" in=prepare
+node prepare.pg2 "PgBouncer-2" in=prepare
+node prepare.original "Original" in=prepare
+edge prepare.a prepare.app -> prepare.pg1
+edge prepare.b prepare.app -> prepare.pg2
+edge prepare.c prepare.pg1 -> prepare.original
+edge prepare.d prepare.pg2 -> prepare.original
+layout prepare flow direction=down
+group replicate "Replicate"
+node replicate.app "Application backend" in=replicate
+node replicate.pg1 "PgBouncer-1" in=replicate
+node replicate.pg2 "PgBouncer-2" in=replicate
+node replicate.original "Original" in=replicate
+node replicate.replica "Replica" in=replicate
+edge replicate.a replicate.app -> replicate.pg1
+edge replicate.b replicate.app -> replicate.pg2
+edge replicate.c replicate.pg1 -> replicate.original
+edge replicate.d replicate.pg2 -> replicate.original
+edge replicate.r replicate.original -> replicate.replica
+layout replicate flow direction=down
+group pause "Pause"
+node pause.app "Application backend" in=pause
+node pause.pg1 "PgBouncer-1" in=pause
+node pause.pg2 "PgBouncer-2" in=pause
+node pause.original "Original" in=pause
+node pause.replica "Replica" in=pause
+edge pause.a pause.app -> pause.pg1
+edge pause.b pause.app -> pause.pg2
+edge pause.c pause.pg1 -> pause.original
+edge pause.r pause.original -> pause.replica
+layout pause flow direction=down
+group reroute "Reroute"
+node reroute.app "Application backend" in=reroute
+node reroute.pg1 "PgBouncer-1" in=reroute
+node reroute.pg2 "PgBouncer-2" in=reroute
+node reroute.original "Original" in=reroute
+node reroute.replica "Promoted" in=reroute
+edge reroute.a reroute.app -> reroute.pg1
+edge reroute.b reroute.app -> reroute.pg2
+edge reroute.c reroute.pg1 -> reroute.original
+edge reroute.d reroute.pg2 -> reroute.replica
+edge reroute.r reroute.replica -> reroute.original
+layout reroute flow direction=down
+edge next1 prepare -> replicate
+edge next2 replicate -> pause
+edge next3 pause -> reroute
+layout root row

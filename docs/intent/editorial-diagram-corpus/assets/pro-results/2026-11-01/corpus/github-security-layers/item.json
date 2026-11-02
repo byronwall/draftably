@@ -1,0 +1,28 @@
+{
+  "id": "E10",
+  "slug": "github-security-layers",
+  "title": "Agentic Workflows security layers",
+  "publisher": "GitHub",
+  "author": "Landon Cox and Jiaxiao Zhou",
+  "publication_date": "2026-03-09",
+  "access_date": "2026-11-02",
+  "page_url": "https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/",
+  "image_url": "https://github.blog/wp-content/uploads/2026/03/image1.jpg",
+  "license": "unknown",
+  "figure": "Diagram of a three-layer system architecture with labeled sections Planning layer, Configuration layer, and Substrate layer. Each layer contains three blue tiles:\n\nPlanning: Safe Outputs MCP (GitHub write operations), Call filtering (call availability, volume), Output sanitization (secret removal, moderation).\nConfiguration: Compiler (GH AW extension), Firewall policies (allowlist), MCP config (Docker image, auth token).\nSubstrate: Action runner VM (OS, hypervisor), Docker containers (Docker daemon, network), Trusted containers (firewall, MCP gateway, API proxy).",
+  "patterns": [
+    "layered-stack",
+    "taxonomy",
+    "type-hierarchy"
+  ],
+  "principal_objects": 12,
+  "reading_path": "Read Planning, Configuration, Substrate down the page; inspect three capability cards per layer.",
+  "merit": "A disciplined three-by-three card grid separates component names from monospace mechanism captions while containing each layer quietly.",
+  "confirmation_case": true,
+  "domain": "software/computing",
+  "reference_file": "reference.jpg",
+  "reference_sha256": "d636d83d678c93c2771a0f641873c2ae81716ad541f8ac431e1cfd13dc9daf3f",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

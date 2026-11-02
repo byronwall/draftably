@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "shoot",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/v2.png",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e12-lstm-recurrent-cell/details/v2.png",
+    "--crop",
+    "604,224,1588,860"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:37:06.795223+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 1.6195,
+  "exit_code": 0
+}

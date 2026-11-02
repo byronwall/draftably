@@ -1,0 +1,31 @@
+{
+  "focus": "Continuous interphase band and narrow mitotic sector versus native grouping and split soft tint",
+  "crops": {
+    "reference": [
+      135,
+      40,
+      550,
+      515
+    ],
+    "v0": [
+      64,
+      188,
+      1114,
+      592
+    ],
+    "v2": [
+      36,
+      352,
+      1808,
+      1080
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "g1",
+    "s",
+    "g2",
+    "mitosis",
+    "cytokinesis"
+  ]
+}

@@ -1,0 +1,37 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+node c1 "98ca9" color=commit
+node c2 "34ac2" color=commit
+node c3 "f30ab" color=commit
+node master_commit "c2b9e" color=commit
+node testing_commit "87ab2" color=commit
+node head "HEAD" color=headcolor
+node master "master" color=branch
+node testing "testing" color=branch
+edge e1 c2 -> c1 constraint=false
+edge e2 c3 -> c2 constraint=false
+edge e3 master_commit -> c3 constraint=false
+edge e4 testing_commit -> c3 constraint=false
+edge e5 head -> master constraint=false
+edge e6 master -> master_commit constraint=false
+edge e7 testing -> testing_commit constraint=false
+layout root row gap=48
+theme drafting canvas="#FFFFFF" title-font=mono padding-x=8 padding-y=8 radius=0
+theme-color commit fill="#EFEFE8" stroke="#EFEFE8" ink="#222222"
+theme-color branch fill="#FF4B23" stroke="#FF4B23" ink="#FFFFFF"
+theme-color headcolor fill="#CAA500" stroke="#CAA500" ink="#FFFFFF"
+pin c1 x=0 y=150
+pin c2 x=140 y=150
+pin c3 x=280 y=150
+pin master_commit x=440 y=150
+pin testing_commit x=440 y=255
+pin head x=440 y=0
+pin master x=440 y=75
+pin testing x=440 y=330
+size c1 width=100 height=40
+size c2 width=100 height=40
+size c3 width=100 height=40
+size master_commit width=100 height=40
+size testing_commit width=100 height=40
+size head width=100 height=40
+size master width=100 height=40
+size testing width=100 height=40

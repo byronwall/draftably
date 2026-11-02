@@ -1,0 +1,38 @@
+{
+  "focus": "Retry interval spacing and vertical synchronization across clients",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      1324,
+      506
+    ],
+    "v0": [
+      2120,
+      1336
+    ],
+    "v2": [
+      2376,
+      1318
+    ]
+  },
+  "crops": {
+    "reference": [
+      331,
+      10,
+      979,
+      480
+    ],
+    "v0": [
+      636,
+      293,
+      1441,
+      961
+    ],
+    "v2": [
+      570,
+      316,
+      1758,
+      922
+    ]
+  }
+}

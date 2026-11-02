@@ -1,0 +1,545 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 11,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 868,
+    "height": 624,
+    "aspect": 1.39,
+    "density": 0.17,
+    "aligned": 1,
+    "crossings": 2,
+    "bends": 19,
+    "bendsPerEdge": 1.73,
+    "maxBends": 4,
+    "hooks": 2,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 450,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "service": 0.58,
+      "command": 0.55,
+      "query": 0.9
+    },
+    "groupGaps": {
+      "command | query": 28,
+      "command | qi": 28,
+      "db | service": 28
+    },
+    "emptyArea": {
+      "share": 0.39,
+      "boxes": 23,
+      "w": 448,
+      "h": 472,
+      "x": 420,
+      "y": 152
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "forward",
+        "length": 934,
+        "detour": 1.36,
+        "span": 0.87
+      },
+      {
+        "id": "e6",
+        "kind": "wrap",
+        "length": 584,
+        "detour": 1.8,
+        "span": 0.55
+      },
+      {
+        "id": "e7",
+        "kind": "wrap",
+        "length": 716,
+        "detour": 1.3,
+        "span": 0.67
+      },
+      {
+        "id": "e8",
+        "kind": "forward",
+        "length": 922,
+        "detour": 1.12,
+        "span": 0.86
+      },
+      {
+        "id": "e9",
+        "kind": "wrap",
+        "length": 1022,
+        "detour": 1.13,
+        "span": 0.96
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 2,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 2,
+      "expectation-failed": 0,
+      "edge-hugs-node": 6,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 2,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 22.7,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e11 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e3 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along ci"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "e10 between service's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along command1"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along command2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along db"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along ui"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "e3 between query's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e7 along qi"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "service left 40, right 40, bottom 24"
+      },
+      {
+        "kind": "hook",
+        "detail": "e11 command1→db doubles back"
+      },
+      {
+        "kind": "hook",
+        "detail": "e6 db→query1 doubles back"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e11 934px, 0.87 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e8 922px, 0.86 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "448×472px at 420,152 (39% of the drawing, room for 23 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 11,
+    "warnings": [
+      "warning line 40: near ci gave way by 96 px to keep service clear. Remove line 40, or run format --drop-stale. [relaxed]",
+      "warning line 29: The note beside ui covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]",
+      "warning line 30: The note beside ci covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]",
+      "Warnings: 10 nodes, 3 groups, 11 connections."
+    ],
+    "flowDir": "right",
+    "width": 1384,
+    "height": 445,
+    "aspect": 3.11,
+    "density": 0.107,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 13,
+    "bendsPerEdge": 1.18,
+    "maxBends": 3,
+    "hooks": 1,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 290,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 6.06,
+    "groupFill": {
+      "service": 0.56,
+      "command": 0.51,
+      "query": 0.9
+    },
+    "groupGaps": {
+      "ci | command": 144,
+      "command | query": 48,
+      "qi | query": 48,
+      "db | service": 100,
+      "service | ui": 100
+    },
+    "emptyArea": {
+      "share": 0.21,
+      "boxes": 19.3,
+      "w": 312,
+      "h": 405,
+      "x": 0,
+      "y": 40
+    },
+    "edgeStretch": [
+      {
+        "id": "e10",
+        "kind": "wrap",
+        "length": 596,
+        "detour": 1.63,
+        "span": 0.41
+      },
+      {
+        "id": "e11",
+        "kind": "back",
+        "length": 579,
+        "detour": 1.21,
+        "span": 0.4
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 424,
+        "detour": 1.93,
+        "span": 0.29
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 579,
+        "detour": 1.46,
+        "span": 0.4
+      },
+      {
+        "id": "e9",
+        "kind": "wrap",
+        "length": 481,
+        "detour": 1.27,
+        "span": 0.33
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 1,
+      "arrives-below": 2,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 12.3,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "e10 into command3"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "e3 into query2"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along ci"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "e3 between query's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e6 along db"
+      },
+      {
+        "kind": "hook",
+        "detail": "e10 ci→command3 into its far side"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "312×405px at 0,40 (21% of the drawing, room for 19 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 451,
+      "maxMove": 968,
+      "moved": 13,
+      "alignedMean": 230,
+      "alignedMoved": 9,
+      "orderFlips": 29,
+      "shift": {
+        "x": 344,
+        "y": -8
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 451,
+      "maxMove": 968,
+      "moved": 13,
+      "alignedMean": 230,
+      "alignedMoved": 9,
+      "orderFlips": 29,
+      "shift": {
+        "x": 344,
+        "y": -8
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 11,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1110,
+    "height": 538,
+    "aspect": 2.06,
+    "density": 0.15,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 18,
+    "bendsPerEdge": 1.64,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 193,
+    "theme": "drafting",
+    "fills": 5,
+    "minTextContrast": 6.06,
+    "groupFill": {
+      "service": 0.54,
+      "command": 0.34,
+      "query": 0.34
+    },
+    "groupGaps": {
+      "ci | command": 172,
+      "command | query": 18,
+      "qi | query": 172,
+      "db | service": 80,
+      "service | ui": 22
+    },
+    "emptyArea": {
+      "share": 0.18,
+      "boxes": 11.7,
+      "w": 196,
+      "h": 538,
+      "x": 578,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e10",
+        "kind": "back",
+        "length": 444,
+        "detour": 1.48,
+        "span": 0.36
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 1,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 1,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 2,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 14.1,
+    "issues": [
+      {
+        "kind": "arrives-below",
+        "detail": "e10 into command3"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along command3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "e10 11px from command"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "e10 between command's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e8 along ui"
+      },
+      {
+        "kind": "jog",
+        "detail": "e8 has a 11px step"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "query left 24, right 24, bottom 40"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "command fill 0.34"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "query fill 0.34"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "196×538px at 578,0 (18% of the drawing, room for 12 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 187,
+      "maxMove": 334,
+      "moved": 13,
+      "alignedMean": 84,
+      "alignedMoved": 9,
+      "orderFlips": 14,
+      "shift": {
+        "x": -150,
+        "y": 80
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 322,
+      "maxMove": 808,
+      "moved": 11,
+      "alignedMean": 243,
+      "alignedMoved": 10,
+      "orderFlips": 34,
+      "shift": {
+        "x": 195,
+        "y": 77
+      }
+    },
+    "checks": []
+  }
+]

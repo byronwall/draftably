@@ -1,0 +1,962 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 22,
+    "groups": 0,
+    "edges": 31,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1316,
+    "height": 832,
+    "aspect": 1.58,
+    "density": 0.197,
+    "aligned": 1,
+    "crossings": 19,
+    "bends": 67,
+    "bendsPerEdge": 2.16,
+    "maxBends": 7,
+    "hooks": 0,
+    "backEdges": 7,
+    "edgeLengthPerEdge": 451,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.41,
+      "boxes": 45.7,
+      "w": 1112,
+      "h": 404,
+      "x": 204,
+      "y": 56
+    },
+    "edgeStretch": [
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 946,
+        "detour": 1.73,
+        "span": 0.61
+      },
+      {
+        "id": "e19",
+        "kind": "wrap",
+        "length": 2006,
+        "detour": 2.17,
+        "span": 1.29
+      },
+      {
+        "id": "e20",
+        "kind": "forward",
+        "length": 518,
+        "detour": 2.09,
+        "span": 0.33
+      },
+      {
+        "id": "e21",
+        "kind": "back",
+        "length": 555,
+        "detour": 1.15,
+        "span": 0.36
+      },
+      {
+        "id": "e24",
+        "kind": "forward",
+        "length": 636,
+        "detour": 1.45,
+        "span": 0.41
+      },
+      {
+        "id": "e25",
+        "kind": "back",
+        "length": 942,
+        "detour": 1.14,
+        "span": 0.61
+      },
+      {
+        "id": "e26",
+        "kind": "forward",
+        "length": 889,
+        "detour": 1.41,
+        "span": 0.57
+      },
+      {
+        "id": "e27",
+        "kind": "back",
+        "length": 1202,
+        "detour": 1.09,
+        "span": 0.77
+      },
+      {
+        "id": "e28",
+        "kind": "forward",
+        "length": 1163,
+        "detour": 1.41,
+        "span": 0.75
+      },
+      {
+        "id": "e29",
+        "kind": "back",
+        "length": 1690,
+        "detour": 1.21,
+        "span": 1.09
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 6,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 4,
+      "expectation-failed": 0,
+      "edge-hugs-node": 31,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 3,
+      "uneven-channel": 3,
+      "ragged-bends": 2,
+      "uneven-ports": 0,
+      "off-axis-port": 7,
+      "jog": 1,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 27.6,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e10 (6)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e13 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e14 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e19 (7)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e20 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e30 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along bio_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along cascades"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along tech_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along digest"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along feedstock"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along parts"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along product"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along farm"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along renewable"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along digest"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e17 along feedstock"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along biosphere"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along farm"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e20 along cascades"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e20 along maintain"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e20 along tech_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e24 along share"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along refurbish"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e28 along recycle"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e29 along parts"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e29 along product"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along bio_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along cascades"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along extract"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e30 along leakage"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e31 along share"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e31 along tech_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e6 along user"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e8 along user"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along bio_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along extract"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "e10 & e30"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "e20 & e30"
+      },
+      {
+        "kind": "edges-too-close",
+        "detail": "e30 & e9"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈360: gaps 16/16/16/21/16/5/38"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈480: gaps 16/30/3"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "x≈253: gaps 16/32"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "tech_collect out R: turns at 374, 369"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "tech_collect out U: turns at 429, 360"
+      },
+      {
+        "kind": "jog",
+        "detail": "e10 has a 8px step"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e14 farm→parts arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e2 finite→parts arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e20 tech_collect→maintain arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e26 tech_collect→refurbish arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e28 tech_collect→recycle arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e30 bio_collect→leakage arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e9 bio_collect→cascades arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e19 2006px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e20 518px, 2.1× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e28 1163px, 0.75 of the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e29 1690px return, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1112×404px at 204,56 (41% of the drawing, room for 46 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 22,
+    "groups": 0,
+    "edges": 31,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1388,
+    "height": 1184,
+    "aspect": 1.17,
+    "density": 0.108,
+    "aligned": 1,
+    "crossings": 7,
+    "bends": 54,
+    "bendsPerEdge": 1.74,
+    "maxBends": 5,
+    "hooks": 2,
+    "backEdges": 6,
+    "edgeLengthPerEdge": 504,
+    "theme": "drafting",
+    "fills": 3,
+    "minTextContrast": 8.68,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.23,
+      "boxes": 46.7,
+      "w": 586,
+      "h": 640,
+      "x": 0,
+      "y": 48
+    },
+    "edgeStretch": [
+      {
+        "id": "e10",
+        "kind": "wrap",
+        "length": 640,
+        "detour": 1.4,
+        "span": 0.35
+      },
+      {
+        "id": "e11",
+        "kind": "forward",
+        "length": 434,
+        "detour": 1.28,
+        "span": 0.24
+      },
+      {
+        "id": "e12",
+        "kind": "forward",
+        "length": 748,
+        "detour": 1.16,
+        "span": 0.41
+      },
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 2120,
+        "detour": 2.65,
+        "span": 1.16
+      },
+      {
+        "id": "e15",
+        "kind": "forward",
+        "length": 1308,
+        "detour": 5.11,
+        "span": 0.72
+      },
+      {
+        "id": "e16",
+        "kind": "forward",
+        "length": 560,
+        "detour": 1.24,
+        "span": 0.31
+      },
+      {
+        "id": "e19",
+        "kind": "wrap",
+        "length": 2490,
+        "detour": 2.05,
+        "span": 1.36
+      },
+      {
+        "id": "e21",
+        "kind": "back",
+        "length": 423,
+        "detour": 1.76,
+        "span": 0.23
+      },
+      {
+        "id": "e25",
+        "kind": "back",
+        "length": 670,
+        "detour": 1.52,
+        "span": 0.37
+      },
+      {
+        "id": "e27",
+        "kind": "back",
+        "length": 850,
+        "detour": 1.12,
+        "span": 0.47
+      },
+      {
+        "id": "e28",
+        "kind": "forward",
+        "length": 480,
+        "detour": 1.38,
+        "span": 0.26
+      },
+      {
+        "id": "e29",
+        "kind": "back",
+        "length": 1394,
+        "detour": 1.26,
+        "span": 0.76
+      },
+      {
+        "id": "e31",
+        "kind": "forward",
+        "length": 440,
+        "detour": 1.36,
+        "span": 0.24
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 2,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 3,
+      "expectation-failed": 0,
+      "edge-hugs-node": 15,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 1,
+      "uneven-ports": 1,
+      "off-axis-port": 3,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 14.2,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e10 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along bio_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along cascades"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along consumer"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e10 along leakage"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along feedstock"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along feedstock"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along farm"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along biosphere"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e21 along maintain"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e21 along share"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along consumer"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e25 along reuse"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e25 along tech_collect"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along refurbish"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along reuse"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈932: gaps 16/28"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "tech_collect out D: turns at 800, 838, 780, 784"
+      },
+      {
+        "kind": "uneven-ports",
+        "detail": "share top: 82, 150 of 164"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e12 extract→feedstock arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e16 extract→digest arrives sideways"
+      },
+      {
+        "kind": "hook",
+        "detail": "e19 biosphere→farm into its far side"
+      },
+      {
+        "kind": "hook",
+        "detail": "e25 reuse→service doubles back"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e26 tech_collect→refurbish arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e13 2120px return, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e15 1308px, 5.1× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e19 2490px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "586×640px at 0,48 (23% of the drawing, room for 47 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 22,
+      "meanMove": 471,
+      "maxMove": 664,
+      "moved": 22,
+      "alignedMean": 258,
+      "alignedMoved": 22,
+      "orderFlips": 35,
+      "shift": {
+        "x": 432,
+        "y": 280
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 22,
+      "meanMove": 471,
+      "maxMove": 664,
+      "moved": 22,
+      "alignedMean": 258,
+      "alignedMoved": 22,
+      "orderFlips": 35,
+      "shift": {
+        "x": 432,
+        "y": 280
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 22,
+    "groups": 0,
+    "edges": 31,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1850,
+    "height": 1180,
+    "aspect": 1.57,
+    "density": 0.109,
+    "aligned": 0.59,
+    "crossings": 4,
+    "bends": 48,
+    "bendsPerEdge": 1.55,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 8,
+    "edgeLengthPerEdge": 349,
+    "theme": "drafting",
+    "fills": 3,
+    "minTextContrast": 8.68,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.14,
+      "boxes": 28.9,
+      "w": 640,
+      "h": 490,
+      "x": 1210,
+      "y": 690
+    },
+    "edgeStretch": [
+      {
+        "id": "e12",
+        "kind": "back",
+        "length": 682,
+        "detour": 1.2,
+        "span": 0.31
+      },
+      {
+        "id": "e15",
+        "kind": "back",
+        "length": 424,
+        "detour": 1.77,
+        "span": 0.19
+      },
+      {
+        "id": "e16",
+        "kind": "back",
+        "length": 902,
+        "detour": 5.31,
+        "span": 0.41
+      },
+      {
+        "id": "e18",
+        "kind": "back",
+        "length": 500,
+        "detour": 1.47,
+        "span": 0.23
+      },
+      {
+        "id": "e24",
+        "kind": "wrap",
+        "length": 582,
+        "detour": 1.24,
+        "span": 0.27
+      },
+      {
+        "id": "e25",
+        "kind": "back",
+        "length": 440,
+        "detour": 1.19,
+        "span": 0.2
+      },
+      {
+        "id": "e26",
+        "kind": "wrap",
+        "length": 868,
+        "detour": 1.22,
+        "span": 0.4
+      },
+      {
+        "id": "e27",
+        "kind": "forward",
+        "length": 476,
+        "detour": 1.01,
+        "span": 0.22
+      },
+      {
+        "id": "e28",
+        "kind": "wrap",
+        "length": 1180,
+        "detour": 1.11,
+        "span": 0.54
+      },
+      {
+        "id": "e29",
+        "kind": "forward",
+        "length": 650,
+        "detour": 1.03,
+        "span": 0.3
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 9,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 1,
+      "uneven-ports": 1,
+      "off-axis-port": 4,
+      "jog": 2,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 9.7,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e12 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e25 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along cascades"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e12 along feedstock"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along digest"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e17 along biogas"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e20 along maintain"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along user"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e25 along reuse"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e25 along service"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along reuse"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈670: gaps 33/7"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "tech_collect out R: turns at 1226, 1223, 1223"
+      },
+      {
+        "kind": "uneven-ports",
+        "detail": "share bottom: 16, 70 of 140"
+      },
+      {
+        "kind": "jog",
+        "detail": "e24 has a 8px step"
+      },
+      {
+        "kind": "jog",
+        "detail": "e26 has a 8px step"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e11 bio_collect→extract arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e21 maintain→user arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e23 share→user arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e30 bio_collect→leakage arrives sideways"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 130px at y=40"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 22,
+      "meanMove": 468,
+      "maxMove": 883,
+      "moved": 22,
+      "alignedMean": 384,
+      "alignedMoved": 22,
+      "orderFlips": 96,
+      "shift": {
+        "x": 234,
+        "y": -8
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 22,
+      "meanMove": 620,
+      "maxMove": 970,
+      "moved": 22,
+      "alignedMean": 347,
+      "alignedMoved": 22,
+      "orderFlips": 91,
+      "shift": {
+        "x": 640,
+        "y": 98
+      }
+    },
+    "checks": []
+  }
+]

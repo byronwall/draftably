@@ -1,0 +1,15 @@
+diagram "The Double Diamond" version=1
+theme ink canvas="#FFFFFF" text="#303030" connection="#E91922" radius=0
+theme-color design shade=100 fill="#FFFFFF" stroke="#E91922" ink="#303030"
+subtitle "Discover / Define, then Develop / Deliver: expand possibilities and narrow them."
+# v2: the four phase words are retained in two editable composite diamonds.
+# Trade-off: phase labels are no longer independent objects; no non-rectangular native group exists.
+node first "Discover\n\nDefine" shape=diamond color=design shade=100
+node second "Develop\n\nDeliver" shape=diamond color=design shade=100
+edge e1 first -> second directed=false from=right to=left
+layout root row gap=0
+size first width=280 height=280
+pin first x=0 y=0
+size second width=280 height=280
+pin second x=280 y=0
+note "The original labels follow sloping diamond edges. Native labels remain horizontal, and perimeter arrows are not representable."

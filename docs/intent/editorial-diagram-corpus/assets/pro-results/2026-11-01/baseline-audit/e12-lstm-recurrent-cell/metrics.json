@@ -1,0 +1,679 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 1,
+    "edges": 24,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1412,
+    "height": 664,
+    "aspect": 2.13,
+    "density": 0.166,
+    "aligned": 0.8,
+    "crossings": 5,
+    "bends": 32,
+    "bendsPerEdge": 1.33,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 301,
+    "theme": "drafting",
+    "fills": 2,
+    "minTextContrast": 9.21,
+    "groupFill": {
+      "cell": 0.3
+    },
+    "groupGaps": {
+      "cell | cp": 28
+    },
+    "emptyArea": {
+      "share": 0.29,
+      "boxes": 35,
+      "w": 948,
+      "h": 288,
+      "x": 464,
+      "y": 376
+    },
+    "edgeStretch": [
+      {
+        "id": "e16",
+        "kind": "wrap",
+        "length": 1576,
+        "detour": 1.21,
+        "span": 1.01
+      },
+      {
+        "id": "e19",
+        "kind": "forward",
+        "length": 663,
+        "detour": 1.09,
+        "span": 0.43
+      },
+      {
+        "id": "e20",
+        "kind": "wrap",
+        "length": 1660,
+        "detour": 1.05,
+        "span": 1.06
+      },
+      {
+        "id": "e23",
+        "kind": "forward",
+        "length": 438,
+        "detour": 1.39,
+        "span": 0.28
+      },
+      {
+        "id": "e4",
+        "kind": "forward",
+        "length": 570,
+        "detour": 1.31,
+        "span": 0.37
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 544,
+        "detour": 1.25,
+        "span": 0.35
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 2,
+      "expectation-failed": 0,
+      "edge-hugs-node": 9,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11.3,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e23 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e6 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along i"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along candidate"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e23 along xn"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e3 along cp"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e3 along hp"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along concat"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along f"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along forget"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "e4 along cell"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e6 along xt"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "e6 12px from cell"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "concat in R: turns at 472, 504"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "cell left 24, right 24, bottom 40"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "cell fill 0.3"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e16 1576px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e20 1660px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "948×288px at 464,376 (29% of the drawing, room for 35 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 1,
+    "edges": 24,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1808,
+    "height": 636,
+    "aspect": 2.84,
+    "density": 0.101,
+    "aligned": 1,
+    "crossings": 3,
+    "bends": 33,
+    "bendsPerEdge": 1.38,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 2,
+    "edgeLengthPerEdge": 259,
+    "theme": "drafting",
+    "fills": 8,
+    "minTextContrast": 5.86,
+    "groupFill": {
+      "cell": 0.26
+    },
+    "groupGaps": {
+      "cell | cp": 28,
+      "cell | cn": 28,
+      "cell | ht": 80,
+      "cell | xt": 100
+    },
+    "emptyArea": {
+      "share": 0.2,
+      "boxes": 39.2,
+      "w": 864,
+      "h": 264,
+      "x": 1052,
+      "y": 212
+    },
+    "edgeStretch": [
+      {
+        "id": "e16",
+        "kind": "forward",
+        "length": 568,
+        "detour": 1.42,
+        "span": 0.3
+      },
+      {
+        "id": "e19",
+        "kind": "forward",
+        "length": 593,
+        "detour": 1.12,
+        "span": 0.31
+      },
+      {
+        "id": "e20",
+        "kind": "back",
+        "length": 668,
+        "detour": 1.14,
+        "span": 0.35
+      },
+      {
+        "id": "e21",
+        "kind": "forward",
+        "length": 819,
+        "detour": 1.05,
+        "span": 0.43
+      },
+      {
+        "id": "e4",
+        "kind": "forward",
+        "length": 507,
+        "detour": 1.05,
+        "span": 0.26
+      },
+      {
+        "id": "e5",
+        "kind": "forward",
+        "length": 642,
+        "detour": 1.23,
+        "span": 0.33
+      },
+      {
+        "id": "e6",
+        "kind": "back",
+        "length": 638,
+        "detour": 1.28,
+        "span": 0.33
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 6,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 1,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 7.9,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e4 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e5 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along add"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along forget"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e19 along output"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along f"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e4 along o"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e8 along concat"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈88: gaps 16/10/5/21/4/12/16"
+      },
+      {
+        "kind": "jog",
+        "detail": "e4 has a 10px step"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "cell fill 0.26"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e19 o→output arrives sideways"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "864×264px at 1052,212 (20% of the drawing, room for 39 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 21,
+      "meanMove": 484,
+      "maxMove": 1796,
+      "moved": 19,
+      "alignedMean": 467,
+      "alignedMoved": 19,
+      "orderFlips": 113,
+      "shift": {
+        "x": 60,
+        "y": -12
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 21,
+      "meanMove": 484,
+      "maxMove": 1796,
+      "moved": 19,
+      "alignedMean": 467,
+      "alignedMoved": 19,
+      "orderFlips": 113,
+      "shift": {
+        "x": 60,
+        "y": -12
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 20,
+    "groups": 1,
+    "edges": 24,
+    "warnings": [
+      "warning line 50: Edge e4 (cp -> forget) crosses the title of cell. Remove the pin on line 50. [edge-through-title]",
+      "Warnings: 20 nodes, 1 group, 24 connections."
+    ],
+    "flowDir": "right",
+    "width": 1270,
+    "height": 605,
+    "aspect": 2.1,
+    "density": 0.205,
+    "aligned": 0.85,
+    "crossings": 4,
+    "bends": 39,
+    "bendsPerEdge": 1.63,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 3,
+    "edgeLengthPerEdge": 236,
+    "theme": "drafting",
+    "fills": 8,
+    "minTextContrast": 5.86,
+    "groupFill": {
+      "cell": 0.17
+    },
+    "groupGaps": {
+      "cell | cp": 10,
+      "cell | cn": 62,
+      "cell | ht": 20,
+      "cell | xt": 51
+    },
+    "emptyArea": {
+      "share": 0.16,
+      "boxes": 15.8,
+      "w": 700,
+      "h": 178,
+      "x": 240,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e16",
+        "kind": "forward",
+        "length": 468,
+        "detour": 1.08,
+        "span": 0.33
+      },
+      {
+        "id": "e24",
+        "kind": "forward",
+        "length": 532,
+        "detour": 10.64,
+        "span": 0.38
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 518,
+        "detour": 518,
+        "span": 0.37
+      },
+      {
+        "id": "e5",
+        "kind": "forward",
+        "length": 974,
+        "detour": 1.41,
+        "span": 0.69
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 1,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 3,
+      "expectation-failed": 0,
+      "edge-hugs-node": 7,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 2,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 7,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 1,
+      "tight-group-gap": 1,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 15.6,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e21 (4)"
+      },
+      {
+        "kind": "edge-through-title-band",
+        "detail": "e4 through cell's title band"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e5 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e16 along cn"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "e20 8px from cell"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e21 along ht"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e24 along next"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e3 along prev"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "e4 10px from cell"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along concat"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along i"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along candidate"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "cell left 64, right 24, bottom 24"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "cell fill 0.17"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "cell: add → squash sit diagonally"
+      },
+      {
+        "kind": "tight-group-gap",
+        "detail": "cell | cp 10px apart"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e15 update→add arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e17 add→squash arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e19 o→output arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e20 output→ht arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e22 cn→next arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e4 cp→forget arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e5 hp→concat arrives sideways"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e24 532px, 10.6× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e3 518px, 518.0× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e5 974px, 0.69 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "700×178px at 240,0 (16% of the drawing, room for 16 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 21,
+      "meanMove": 417,
+      "maxMove": 727,
+      "moved": 21,
+      "alignedMean": 222,
+      "alignedMoved": 21,
+      "orderFlips": 47,
+      "shift": {
+        "x": -424,
+        "y": 152
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 21,
+      "meanMove": 530,
+      "maxMove": 1178,
+      "moved": 21,
+      "alignedMean": 491,
+      "alignedMoved": 20,
+      "orderFlips": 132,
+      "shift": {
+        "x": -143,
+        "y": 90
+      }
+    },
+    "checks": []
+  }
+]

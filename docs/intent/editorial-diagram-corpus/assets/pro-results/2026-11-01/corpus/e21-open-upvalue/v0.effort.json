@@ -1,0 +1,21 @@
+{
+  "id": "E21",
+  "slug": "e21-open-upvalue",
+  "stage": "v0",
+  "noncomment_lines": 32,
+  "declarations": 24,
+  "node_declarations": 12,
+  "group_declarations": 5,
+  "edge_declarations": 7,
+  "layout_refinement_lines": 6,
+  "layouts": 6,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 0,
+  "endpoint_side_overrides": 0,
+  "notes": 1,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 4.6223,
+  "authoring_time": "not measured"
+}

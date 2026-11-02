@@ -1,0 +1,58 @@
+# Refinement cycle 3: closest faithful attempt with documented native manual controls.
+group service "Service"
+group query "Query model" in=service
+group command "Command model" in=service
+node db "Database" shape=pill color=amber shade=600
+node ui "UI" color=slate shade=50
+node qi "Query interface" in=service shape=pill color=slate shade=200
+node ci "Command interface" in=service shape=pill color=slate shade=200
+node query1 "" in=query color=blue shade=700
+node query2 "" in=query color=blue shade=700
+node query3 "" in=query color=blue shade=700
+node command1 "" in=command color=blue shade=700
+node command2 "" in=command color=blue shade=700
+node command3 "" in=command color=blue shade=700
+edge e1 query1 -> query2 from=right to=left
+edge e2 query3 -> query1
+edge e3 query3 -> query2
+edge e4 command1 -> command2 from=right to=left
+edge e5 command3 -> command2
+edge e6 db -> query1 from=top to=left
+edge e7 query2 -> qi from=right to=left
+edge e8 qi -> ui from=right to=top
+edge e9 ui -> ci from=bottom to=right
+edge e10 ci -> command3 from=left to=bottom
+edge e11 command1 -> db from=left to=bottom
+note "The query side reads persistent data." near=db side=above width=180
+note "Query services refresh the UI from the read model." near=qi side=above width=200
+note "A user action changes the UI." near=ui side=right width=200
+note "Presentation logic turns that action into a command." near=ci side=below width=220
+note "Commands run validation and business rules, then update storage." near=command side=below width=280
+layout root row gap=100
+layout service engine=grid aspect=1 min-width=740
+layout query flow
+layout command flow
+theme drafting canvas="#FFFFFF" padding-x=10 padding-y=12 radius=12
+pin db x=0 y=170
+pin service x=230 y=0
+pin ui x=1000 y=170
+pin query x=0 y=0
+pin command x=0 y=250
+pin qi x=520 y=90
+pin ci x=520 y=340
+pin query1 x=0 y=0
+pin query2 x=210 y=0
+pin query3 x=105 y=90
+pin command1 x=0 y=0
+pin command2 x=210 y=0
+pin command3 x=105 y=90
+size db width=150 height=150
+size ui width=110 height=150
+size qi width=180 height=60
+size ci width=180 height=60
+size query1 width=90 height=54
+size query2 width=90 height=54
+size query3 width=90 height=54
+size command1 width=90 height=54
+size command2 width=90 height=54
+size command3 width=90 height=54

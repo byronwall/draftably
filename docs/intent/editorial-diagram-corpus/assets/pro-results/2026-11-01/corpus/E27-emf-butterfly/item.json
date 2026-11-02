@@ -1,0 +1,39 @@
+{
+  "id": "E27",
+  "slug": "E27-emf-butterfly",
+  "title": "Circular economy butterfly diagram",
+  "publisher": "Ellen MacArthur Foundation",
+  "author": "Ellen MacArthur Foundation; based on Braungart and McDonough, Cradle to Cradle",
+  "publication_date": "2021-02-12",
+  "page_url": "https://www.ellenmacarthurfoundation.org/circular-economy-diagram",
+  "image_url": "https://content.ellenmacarthurfoundation.org/m/49c4d7d7545f580a/original/Circular-economy-butterfly-diagram.png",
+  "license": "unknown",
+  "license_observation": "The original prints its Foundation credit and February 2019 diagram date. No explicit reuse license was observed on the item page.",
+  "figure": "Full February 2019 biological/technical material-cycle diagram, including footnotes and leakage outlet.",
+  "patterns": [
+    "industrial material flow",
+    "nested feedback loops",
+    "bilateral comparison",
+    "flow hierarchy"
+  ],
+  "principal_objects": 22,
+  "object_count_basis": "Twenty-two labeled material, service, use, recovery, and leakage roles represented natively; repeated icons and return arcs are additional graphic marks.",
+  "reading_path": "Top resource inputs feed the central manufacturer/service stack. Biological paths return through left-hand systems; technical loops on the right return to successively earlier stages. Bottom leakage is a common escape.",
+  "merit": "The narrow central stack provides orientation while large green and blue loops communicate two different cycles and the value of shorter returns. Restrained colors, generous white space, small role icons, and aligned terminals handle considerable complexity.",
+  "confirmation_case": false,
+  "reference_file": "reference.png",
+  "preview_note": "Full original retained; proportional 1800-pixel-long-edge preview.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "5489163ca80a53773c5b9cfadd6007f93a0f6ca5b1dc112da69c1952a2c92c42",
+  "reference_bytes": 275235,
+  "reference_preview_dimensions": [
+    1800,
+    1203
+  ],
+  "native_v0_objects": {
+    "nodes": 22,
+    "groups": 0,
+    "edges": 31
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "E05",
+  "v0_readability_vs_reference": "worse",
+  "reason": "v0 lays almost the entire architecture on one row and routes two group connections through Node.js. The source separates the high-level request path from the lower execution boundary and colors the response tunnel.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 3,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "Moderate to high. Five object pins, five exact node sizes, two minimum-sized containers, explicit ports, a custom dark palette, and a special note-surface override. Paired reverse edges and a dash legend replace source semantics that one colored/two-headed connector should carry.",
+  "residuals": [
+    "Global connection color cannot preserve green request and blue response paths.",
+    "Two directed edges replace one duplex connector; the diagonal TCP route becomes an orthogonal return.",
+    "Small labels relative to manual box sizes; missing component icons.",
+    "v1 dark-note contrast failed and needs a case-specific slate-50 override.",
+    "The solid-arrow legend overgeneralizes the neutral duplex API/VM exchange; lambda_return is solid too. This is an authoring residual, not a tool gap."
+  ],
+  "provisional_gaps": [
+    "I-EDGE-COLOR",
+    "I-DUPLEX",
+    "I-LABEL-EXPOSURE",
+    "I-TYPE",
+    "I-VISUAL-VOCAB",
+    "I-DARK-NOTE",
+    "I-GROUP-ROUTING"
+  ],
+  "preferred_communication_stage": "v2",
+  "observed_visual_inspection": [
+    "reference-preview.png",
+    "v0.png",
+    "v1.png",
+    "v2.png",
+    "comparison.png"
+  ],
+  "authoring_time": "not measured",
+  "confirmation_case": false
+}

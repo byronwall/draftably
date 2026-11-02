@@ -1,0 +1,21 @@
+{
+  "id": "E15",
+  "slug": "e15-js-agent-cluster",
+  "stage": "v1",
+  "noncomment_lines": 73,
+  "declarations": 57,
+  "node_declarations": 31,
+  "group_declarations": 11,
+  "edge_declarations": 15,
+  "layout_refinement_lines": 14,
+  "layouts": 12,
+  "pins": 0,
+  "nudges": 0,
+  "manual_sizes": 0,
+  "styling_override_lines": 24,
+  "endpoint_side_overrides": 0,
+  "notes": 0,
+  "refinement_cycles": 3,
+  "current_stage_command_seconds": 18.1149,
+  "authoring_time": "not measured"
+}

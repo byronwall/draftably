@@ -1,0 +1,93 @@
+{
+  "case": "E29-cope-plagiarism",
+  "focus": "Four severity branches: compact symbol with adjacent explanatory prose versus full text boxes",
+  "log": "logs/E29-cope-plagiarism/details/20261102T033640140278Z",
+  "selection_sha256": "eec50c15a9332214dcde8ea4dd716dd1c1a3576483e3f17325d70a272c546484",
+  "source_sha256": {
+    "reference-preview.png": "518520a7229b731505c98443c036224b5ea377bb31d846ddef6f61b81436bd3b",
+    "v0.png": "4576cd72a67e2ee7b93491de4f580932dd3fcd7572592665dab1ff0351a05969",
+    "v2.png": "64ef4b51ff6d9bb1134868208b3e86c9ababda0facff843e835383de9d554d2e"
+  },
+  "commands": {
+    "reference": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/reference-preview.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/reference.png",
+        "--crop",
+        "350,430,900,510"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:40.140587+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4234,
+      "exit_code": 0
+    },
+    "v0": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v0.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v0.png",
+        "--crop",
+        "64,802,1608,1192"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:41.564282+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4556,
+      "exit_code": 0
+    },
+    "v2": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/v2.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v2.png",
+        "--crop",
+        "16,994,2488,1252"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:43.020244+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.8193,
+      "exit_code": 0
+    },
+    "sheet": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "--sheet",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/comparison.png",
+        "--cols",
+        "3",
+        "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/reference.png",
+        "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v0.png",
+        "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/E29-cope-plagiarism/details/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:36:44.839786+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.483,
+      "exit_code": 0
+    }
+  },
+  "status": "complete"
+}

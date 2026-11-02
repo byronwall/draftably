@@ -1,0 +1,122 @@
+[
+  {
+    "case": "E23-nasa-star-life",
+    "exit_code": 0
+  },
+  {
+    "case": "E24-noaa-enso",
+    "exit_code": 0
+  },
+  {
+    "case": "E25-usgs-water-cycle",
+    "exit_code": 0
+  },
+  {
+    "case": "E26-design-double-diamond",
+    "exit_code": 0
+  },
+  {
+    "case": "E27-emf-butterfly",
+    "exit_code": 0
+  },
+  {
+    "case": "E28-tfl-tram",
+    "exit_code": 0
+  },
+  {
+    "case": "E29-cope-plagiarism",
+    "exit_code": 0
+  },
+  {
+    "case": "E30-openstax-cell-cycle",
+    "exit_code": 0
+  },
+  {
+    "case": "chrome-process-architecture",
+    "exit_code": 0
+  },
+  {
+    "case": "cloudflare-http2-multiplexing",
+    "exit_code": 0
+  },
+  {
+    "case": "cloudflare-tls-handshake",
+    "exit_code": 0
+  },
+  {
+    "case": "e11-transformer-stacks",
+    "exit_code": 0
+  },
+  {
+    "case": "e12-lstm-recurrent-cell",
+    "exit_code": 0
+  },
+  {
+    "case": "e13-cqrs",
+    "exit_code": 0
+  },
+  {
+    "case": "e14-dns-hierarchy",
+    "exit_code": 0
+  },
+  {
+    "case": "e15-js-agent-cluster",
+    "exit_code": 0
+  },
+  {
+    "case": "e16-react-dependency-tree",
+    "exit_code": 0
+  },
+  {
+    "case": "e17-go-slice",
+    "exit_code": 0
+  },
+  {
+    "case": "e18-git-divergent-history",
+    "exit_code": 0
+  },
+  {
+    "case": "e19-pixel-pipeline",
+    "exit_code": 0
+  },
+  {
+    "case": "e20-compiler-mountain",
+    "exit_code": 0
+  },
+  {
+    "case": "e21-open-upvalue",
+    "exit_code": 0
+  },
+  {
+    "case": "e22-dns-query",
+    "exit_code": 0
+  },
+  {
+    "case": "figma-database-migration",
+    "exit_code": 0
+  },
+  {
+    "case": "figma-journal-checkpoints",
+    "exit_code": 0
+  },
+  {
+    "case": "github-blackbird-query",
+    "exit_code": 0
+  },
+  {
+    "case": "github-security-layers",
+    "exit_code": 0
+  },
+  {
+    "case": "stripe-read-compare",
+    "exit_code": 0
+  },
+  {
+    "case": "stripe-synchronized-retries",
+    "exit_code": 0
+  },
+  {
+    "case": "vercel-fluid-transport",
+    "exit_code": 0
+  }
+]

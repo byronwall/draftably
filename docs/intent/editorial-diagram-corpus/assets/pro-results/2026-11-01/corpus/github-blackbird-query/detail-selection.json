@@ -1,0 +1,38 @@
+{
+  "focus": "Redis/Git support annotations; v0 note collision",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      1376,
+      682
+    ],
+    "v0": [
+      1736,
+      1212
+    ],
+    "v2": [
+      2560,
+      998
+    ]
+  },
+  "crops": {
+    "reference": [
+      27,
+      286,
+      591,
+      375
+    ],
+    "v0": [
+      17,
+      460,
+      607,
+      533
+    ],
+    "v2": [
+      51,
+      479,
+      896,
+      479
+    ]
+  }
+}

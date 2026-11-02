@@ -1,0 +1,28 @@
+{
+  "id": "E05",
+  "slug": "vercel-fluid-transport",
+  "title": "Fluid custom transport layer (dark figure)",
+  "publisher": "Vercel",
+  "author": "Tom Lienard",
+  "publication_date": "2025-07-28",
+  "access_date": "2026-11-02",
+  "page_url": "https://vercel.com/blog/fluid-how-we-built-serverless-servers",
+  "image_url": "https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5c0SLj3ZIjC6koRDXlc8IT/bc244d4d35e5549f0b6449b5a9519b47/1920w_x_vh-1.png",
+  "license": "unknown",
+  "figure": "Fluid custom transport layer (dark figure)",
+  "patterns": [
+    "architecture",
+    "request-response",
+    "deployment-boundary"
+  ],
+  "principal_objects": 7,
+  "reading_path": "Client through proxy and router across the top; down into Lambda API, then through Lambda VM and TCP response tunnel.",
+  "merit": "Sparse nested boundaries, large negative space, and green/blue paths distinguish request and streaming return traffic.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_file": "reference.png",
+  "reference_sha256": "8fbf37eac2b1cc8163f9d78aca324fd181ac669e74eb36062cb64d46b637afff",
+  "reference_status": "downloaded-original",
+  "reference_source": "Original public image asset; URL query transformations removed where applicable; original bytes retained.",
+  "accessed_at": "2026-11-02 UTC"
+}

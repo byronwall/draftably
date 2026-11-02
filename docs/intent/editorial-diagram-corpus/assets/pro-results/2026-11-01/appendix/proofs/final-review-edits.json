@@ -1,0 +1,16 @@
+{
+  "reviewed_utc": "2026-11-02T03:53:55.018943+00:00",
+  "scope": "consolidated gap and methodology factual review; no native or baseline edits",
+  "before": {
+    "methodology.md": "7d8372280ca76a0a9e7661c79f0602223d82e85a9df8c6949d589cf9f425cbd4",
+    "gaps.json": "f07e1d0fa5c6ba3c86ef72e780985bba688ab6c3d1c08c3dee6d7e1c1122a0b0"
+  },
+  "after": {
+    "methodology.md": "41901b6ca81d7a2b3b2c5c576a209a8b3d930f02f96c9e2d7f25d80451f2ba5a",
+    "gaps.json": "16f1b66aee32cb496446cad54d7f3de10c6ad1769e5431aae9d8e9dd6be2ec64"
+  },
+  "native_source_count": 90,
+  "native_sources_unchanged": true,
+  "g08_previous_boundary": "Existing compare and emphasis-state panels are useful, but their graph/version semantics do not directly express arbitrary editorial panels with shared positions. The study did not implement or test a template system.",
+  "g08_current_boundary": "Existing compare and emphasis-state panels are useful, but their graph/version semantics do not directly express arbitrary editorial panels with shared positions. In particular, native state declarations and inspect --states already draw labeled panels from one layout and can fade nonfocused objects; compare already aligns before/after version panels. E09's rejected state=muted node attribute is an authoring error, not evidence that focus or dimming is absent. The study did not exhaustively evaluate those existing panel paths or implement a template system, so assess their applicability before adding new shared-geometry syntax."
+}

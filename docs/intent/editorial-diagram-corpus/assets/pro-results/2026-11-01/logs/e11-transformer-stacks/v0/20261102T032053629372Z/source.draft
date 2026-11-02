@@ -1,0 +1,36 @@
+diagram "Encoder and decoder stacks" version=1
+group transformer "Transformer"
+node input "INPUT: Je suis étudiant"
+node output "OUTPUT: I am a student"
+node enc1 "ENCODER" in=transformer
+node enc2 "ENCODER" in=transformer
+node enc3 "ENCODER" in=transformer
+node enc4 "ENCODER" in=transformer
+node enc5 "ENCODER" in=transformer
+node enc6 "ENCODER" in=transformer
+node dec1 "DECODER" in=transformer
+node dec2 "DECODER" in=transformer
+node dec3 "DECODER" in=transformer
+node dec4 "DECODER" in=transformer
+node dec5 "DECODER" in=transformer
+node dec6 "DECODER" in=transformer
+edge input_enc input -> enc1
+edge output_dec dec6 -> output
+edge enc_step1 enc1 -> enc2
+edge enc_step2 enc2 -> enc3
+edge enc_step3 enc3 -> enc4
+edge enc_step4 enc4 -> enc5
+edge enc_step5 enc5 -> enc6
+edge dec_step1 dec1 -> dec2
+edge dec_step2 dec2 -> dec3
+edge dec_step3 dec3 -> dec4
+edge dec_step4 dec4 -> dec5
+edge dec_step5 dec5 -> dec6
+edge attention1 enc6 -> dec1
+edge attention2 enc6 -> dec2
+edge attention3 enc6 -> dec3
+edge attention4 enc6 -> dec4
+edge attention5 enc6 -> dec5
+edge attention6 enc6 -> dec6
+layout root flow
+layout transformer flow

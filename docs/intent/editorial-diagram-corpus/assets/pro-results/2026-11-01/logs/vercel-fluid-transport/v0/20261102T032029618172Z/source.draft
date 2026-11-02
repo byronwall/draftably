@@ -1,0 +1,17 @@
+diagram "Fluid custom transport" version=1
+node client "Client"
+node proxy "Vercel Proxy"
+node router "Vercel Function Router"
+node api "Lambda API"
+group lambda "Lambda VM"
+group rust "Rust Core" in=lambda
+node nodejs "Node.js" in=rust
+edge request1 client -> proxy "HTTP request"
+edge request2 proxy -> router "HTTP request"
+edge invoke router -> api "HTTP"
+edge lambda_http api -> lambda "HTTP"
+edge lambda_return lambda -> api "HTTP" constraint=false
+edge tunnel rust -> router "TCP response" constraint=false
+edge response2 router -> proxy "response" constraint=false
+edge response1 proxy -> client "response" constraint=false
+layout root flow direction=right

@@ -1,0 +1,40 @@
+{
+  "id": "E22",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default sequence is orderly, but its tall lifelines and detached record notes make the original\u2019s short numbered story harder to scan at publication scale.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "High for matching panel composition: v2 has 98 non-comment lines, twenty-three pins and twenty-one sizes. The sequence representation is much shorter; the panel representation trades concise semantics for closer editorial structure.",
+  "residuals": [
+    "Characters, speech balloons and colored cross-panel identity paths absent.",
+    "Native headers/padding produce a taller page.",
+    "Panel-local duplicates cost substantially more source than sequence recipe."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G04",
+    "C-G05",
+    "C-S01"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: nameserver-record edits may fit within fixed widths, but longer sentences require resizing panels and adjusting pinned row positions; the v1 sequence is more resilient.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

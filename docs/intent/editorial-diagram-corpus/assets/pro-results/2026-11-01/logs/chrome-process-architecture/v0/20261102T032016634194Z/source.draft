@@ -1,0 +1,13 @@
+diagram "Chrome multi-process architecture" version=1
+node browser "Browser Process"
+node utility "Utility Process"
+node gpu "GPU Process"
+node renderer "Renderer Process" count=many
+node plugin "Plugin Process" count=many
+edge bu browser -> utility directed=false kind=async
+edge bg browser -> gpu directed=false kind=async
+edge br browser -> renderer directed=false kind=async
+edge bp browser -> plugin directed=false kind=async
+edge rg renderer -> gpu directed=false kind=async
+edge pg plugin -> gpu directed=false kind=async
+layout root flow direction=down

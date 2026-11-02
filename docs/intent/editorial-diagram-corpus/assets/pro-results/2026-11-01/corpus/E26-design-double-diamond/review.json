@@ -1,0 +1,42 @@
+{
+  "id": "E26",
+  "v0_readability_vs_reference": "comparable",
+  "reason": "For reading the four phase names and their order, the default is compact, clear and comparable. It loses the divergence/convergence mechanism encoded by the source’s two outlines; that semantic loss is scored separately rather than hidden by the readability verdict.",
+  "stages": {
+    "v0": {
+      "quality": 4,
+      "fidelity": 2,
+      "semantic": 3
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 2
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 3
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "The final source is short, but brevity is purchased by losing structure. Four sizes/pins are not the problem; the awkward part is encoding two meaningful phases in one string and documenting the missing independent placement. The default is the most maintainable of the three.",
+  "residuals": [
+    "Nonrectangular native groups cannot hold the four independent phase objects.",
+    "Final v2 merges four phase objects into two composite labels.",
+    "No sloped/rotated labels or perimeter arrows.",
+    "Thin native outline differs from the bold continuous source contour.",
+    "Initial v2 gap=0 was an authoring error, rejected by the DSL; preserved and corrected to gap=8 within the third cycle."
+  ],
+  "provisional_gaps": [
+    "nonrectangular-containment",
+    "external-label-roles",
+    "curved-directed-paths",
+    "rich-label-hierarchy"
+  ],
+  "confirmation_case": false,
+  "observed": "Original, v0, v1 and v2 images visually inspected; final native CLI checks, geometry, SVG and PNG were executed.",
+  "predicted": "Label-edit resilience is an unexecuted assessment; no edit-resilience experiment or pixel-error registration was performed.",
+  "authoring_time_measured": false
+}

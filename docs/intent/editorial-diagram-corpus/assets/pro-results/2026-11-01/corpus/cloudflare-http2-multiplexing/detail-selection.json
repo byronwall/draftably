@@ -1,0 +1,38 @@
+{
+  "focus": "Three TCP lanes above versus the single bundled lane below",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      800,
+      473
+    ],
+    "v0": [
+      2144,
+      1780
+    ],
+    "v2": [
+      2356,
+      1748
+    ]
+  },
+  "crops": {
+    "reference": [
+      192,
+      23,
+      416,
+      435
+    ],
+    "v0": [
+      686,
+      178,
+      1286,
+      1477
+    ],
+    "v2": [
+      518,
+      227,
+      1225,
+      1380
+    ]
+  }
+}

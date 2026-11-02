@@ -1,0 +1,41 @@
+{
+  "id": "E24",
+  "slug": "E24-noaa-enso",
+  "title": "How do we decide if El Niño conditions are present?",
+  "publisher": "NOAA Climate.gov",
+  "author": "NOAA Climate.gov; drawing by Glen Becker and Fiona Martin",
+  "publication_date": "2023-05-11",
+  "page_url": "https://www.climate.gov/media/15232",
+  "image_url": "https://www.climate.gov/sites/default/files/2023-05/Nino_DiagnosticFlowchart_2500.gif",
+  "download_url": "https://content-drupal.climate.gov/sites/default/files/2023-05/Nino_DiagnosticFlowchart_2500.gif",
+  "archive_page_url": "https://content-drupal.climate.gov/media/15232",
+  "license": "unknown",
+  "license_observation": "No image-specific reuse license was observed. Attribution is printed on the source. The archived official Climate.gov host supplied the same linked asset after the public page was blocked.",
+  "figure": "Complete diagnostic flowchart; single GIF frame, frame 0 of 1.",
+  "patterns": [
+    "decision tree",
+    "staircase composition",
+    "scientific classification",
+    "semantic color"
+  ],
+  "principal_objects": 11,
+  "object_count_basis": "Three question boxes, four yes/no diamonds, two atmospheric-evidence circles, two terminal outcomes.",
+  "reading_path": "Start at the upper-left ocean-temperature question and descend diagonally through persistence and atmospheric tests. Rejection branches collect on the left; positive evidence ends at lower right.",
+  "merit": "Charcoal question boxes anchor a readable diagonal stair. Pale red and gray decision marks carry meaning without overpowering the white page; rounded explanation circles distinguish evidence from questions.",
+  "confirmation_case": false,
+  "reference_file": "reference.gif",
+  "preview_note": "GIF is not animated: exactly one frame; preview is frame 0 at the original 2500×1693 resolution.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "7f91aa9d31de2ae92f9cda7f8cc6e1aa673a0724511c1a40be70e402fa59b69e",
+  "reference_bytes": 101458,
+  "reference_preview_dimensions": [
+    2500,
+    1693
+  ],
+  "native_v0_objects": {
+    "nodes": 11,
+    "groups": 0,
+    "edges": 12
+  }
+}

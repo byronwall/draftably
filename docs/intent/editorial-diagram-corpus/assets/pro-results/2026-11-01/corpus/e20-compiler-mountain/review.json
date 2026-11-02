@@ -1,0 +1,40 @@
+{
+  "id": "E20",
+  "v0_readability_vs_reference": "worse",
+  "reason": "The default preserves compiler-path relations but turns the mountain metaphor into a folded box graph. It loses the terrain\u2019s compact explanation of abstraction and branching.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 1,
+      "semantic": 4
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 1,
+      "semantic": 4
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 4
+    }
+  },
+  "refinement_cycles": 2,
+  "stopping_reason": "unsupported primitive",
+  "dsl_nastiness": "Moderate source cost for an inherently partial reconstruction: nine pins and nine sizes create the ascent/descent landmarks, but cannot recover illustrated terrain or hand-lettered route labels.",
+  "residuals": [
+    "Terrain/altitude metaphor, hatching and destination buildings absent.",
+    "No underlined mixed-scale hand-lettered captions.",
+    "Approximate spatial matching creates excessive empty area."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G03",
+    "C-S01"
+  ],
+  "confirmation_case": true,
+  "label_edit_resilience": "Predicted: artifact wording fits existing fixed sizes, but changes to route labels or added compiler paths would need manual repositioning; no label-edit test was run.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

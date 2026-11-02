@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "pnpm",
+    "--silent",
+    "draftably",
+    "check",
+    "/workspace/scratch/742d8c352255/deliverable/corpus/e15-js-agent-cluster/v1.draft"
+  ],
+  "cwd": "/workspace/scratch/742d8c352255/baseline",
+  "started_utc": "2026-11-02T03:25:21.982400+00:00",
+  "environment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+    "DRAFTABLY_NO_UPDATE_CHECK": "1"
+  },
+  "elapsed_seconds": 4.3011,
+  "exit_code": 0
+}

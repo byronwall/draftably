@@ -1,0 +1,35 @@
+diagram "The DNS hierarchy" version=1
+group overview "Three levels of authority"
+group root_panel "Root delegates"
+group com_panel ".com delegates"
+group domain_panel "Domain authority answers"
+group control "Decentralized control: jvns.ca"
+node root "root: authority begins here" in=overview
+node com ".com: names ending in .com" in=overview
+node domain "example.com: domain and subdomains" in=overview
+node rq "Address for example.com?" in=root_panel
+node ra "Root returns the .com nameserver address" in=root_panel
+node cq "Address for example.com?" in=com_panel
+node ca ".com returns the example.com nameserver address" in=com_panel
+node dq "Address for example.com?" in=domain_panel
+node da "93.184.216.34" in=domain_panel
+node cr "root" in=control
+node cc ".ca nameserver" in=control
+node cd "jvns.ca nameserver" in=control
+node icann "ICANN controls the root" in=control
+node canada "Canada controls .ca" in=control
+node owner "Domain owner controls jvns.ca" in=control
+edge e1 rq -> ra "delegates"
+edge e2 cq -> ca "delegates"
+edge e3 dq -> da "answers"
+edge e4 cr -> cc "delegate"
+edge e5 cc -> cd "delegate"
+edge e6 icann -> cr "controls"
+edge e7 canada -> cc "controls"
+edge e8 owner -> cd "controls"
+layout root engine=grid
+layout overview row
+layout root_panel column
+layout com_panel column
+layout domain_panel column
+layout control flow

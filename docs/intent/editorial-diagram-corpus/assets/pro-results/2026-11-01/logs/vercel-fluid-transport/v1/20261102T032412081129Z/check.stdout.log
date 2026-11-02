@@ -1,0 +1,2 @@
+warning line 24: Edge tunnel (rust -> router) runs through api. Remove the near on line 24, or move api 32px up. [edge-through-node]
+Warnings: 5 nodes, 2 groups, 8 connections.

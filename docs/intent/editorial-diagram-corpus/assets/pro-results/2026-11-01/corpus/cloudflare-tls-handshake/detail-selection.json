@@ -1,0 +1,38 @@
+{
+  "focus": "TLS message bundles and phase/timing boundary",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      2918,
+      1667
+    ],
+    "v0": [
+      912,
+      1140
+    ],
+    "v2": [
+      1026,
+      1100
+    ]
+  },
+  "crops": {
+    "reference": [
+      116,
+      866,
+      2655,
+      750
+    ],
+    "v0": [
+      200,
+      547,
+      620,
+      456
+    ],
+    "v2": [
+      348,
+      506,
+      492,
+      440
+    ]
+  }
+}

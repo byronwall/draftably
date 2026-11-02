@@ -1,0 +1,31 @@
+{
+  "focus": "Atmospheric evidence, two outcomes, and the negative collector",
+  "crops": {
+    "reference": [
+      0,
+      750,
+      2500,
+      943
+    ],
+    "v0": [
+      96,
+      1084,
+      840,
+      894
+    ],
+    "v2": [
+      16,
+      728,
+      2248,
+      1100
+    ]
+  },
+  "coordinate_system": "Intrinsic PNG pixels; reference uses reference-preview.png. All full reference/native images remain alongside these crops.",
+  "selected_native_nodes": [
+    "atmosphere",
+    "insufficient",
+    "weak",
+    "nope",
+    "el"
+  ]
+}

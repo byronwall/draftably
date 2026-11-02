@@ -1,0 +1,24 @@
+{
+  "focus": "Query model, service interface and UI with annotations",
+  "selection_note": "These are diagnostic detail crops, not image registration or pixel-difference inputs. The full original/reference | v0 | v2 sheet retains all content and original aspect ratios.",
+  "crops": {
+    "reference": [
+      205,
+      45,
+      425,
+      250
+    ],
+    "v0": [
+      104,
+      740,
+      1768,
+      1048
+    ],
+    "v2": [
+      532,
+      120,
+      1824,
+      656
+    ]
+  }
+}

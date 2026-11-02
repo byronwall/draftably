@@ -1,0 +1,87 @@
+diagram "London Trams" version=1
+theme drafting canvas="#FFFFFF" text="#232F8A" connection="#81C82C" padding-x=4 padding-y=4 radius=0
+subtitle "Complete station topology; exact service-line colors and interchange pictograms are absent."
+# v1: structural and appearance refinement; no pins, nudges or manual sizes.
+node wimbledon "Wimbledon · rail / District" shape=text
+node dundonald "Dundonald Road" shape=text
+node merton "Merton Park" shape=text
+node morden "Morden Road" shape=text
+node phipps "Phipps Bridge" shape=text
+node belgrave "Belgrave Walk" shape=text
+node mitcham "Mitcham" shape=text
+node mitcham_j "Mitcham Junction · rail" shape=text
+node beddington "Beddington Lane" shape=text
+node therapia "Therapia Lane" shape=text
+node ampere "Ampere Way" shape=text
+node waddon "Waddon Marsh" shape=text
+node wandle "Wandle Park" shape=text
+node reeves "Reeves Corner" shape=text
+node centrale "Centrale" shape=text
+node west "West Croydon · rail / bus / Windrush" shape=text
+node wellesley "Wellesley Road" shape=text
+node east "East Croydon · rail / bus" shape=text
+node george "George Street" shape=text
+node church "Church Street" shape=text
+node lebanon "Lebanon Road" shape=text
+node sandilands "Sandilands" shape=text
+node addiscombe "Addiscombe" shape=text
+node blackhorse "Blackhorse Lane" shape=text
+node woodside "Woodside" shape=text
+node arena "Arena" shape=text
+node harrington "Harrington Road" shape=text
+node birkbeck "Birkbeck · rail" shape=text
+node avenue "Avenue Road" shape=text
+node beckenham_r "Beckenham Road" shape=text
+node beckenham_j "Beckenham Junction · rail" shape=text
+node lloyd "Lloyd Park" shape=text
+node coombe "Coombe Lane" shape=text
+node gravel "Gravel Hill" shape=text
+node addington_v "Addington Village · bus" shape=text
+node fieldway "Fieldway" shape=text
+node king "King Henry’s Drive" shape=text
+node new_addington "New Addington · bus" shape=text
+node elmers "Elmers End · rail" shape=text
+edge e1 wimbledon -> dundonald directed=false
+edge e2 dundonald -> merton directed=false
+edge e3 merton -> morden directed=false
+edge e4 morden -> phipps directed=false
+edge e5 phipps -> belgrave directed=false
+edge e6 belgrave -> mitcham directed=false
+edge e7 mitcham -> mitcham_j directed=false
+edge e8 mitcham_j -> beddington directed=false
+edge e9 beddington -> therapia directed=false
+edge e10 therapia -> ampere directed=false
+edge e11 ampere -> waddon directed=false
+edge e12 waddon -> wandle directed=false
+edge e13 wandle -> reeves
+edge e14 reeves -> centrale
+edge e15 centrale -> west
+edge e16 west -> wellesley
+edge e17 wellesley -> east
+edge e18 east -> george
+edge e19 george -> church
+edge e20 church -> wandle
+edge e21 church -> centrale
+edge e22 east -> lebanon directed=false
+edge e23 lebanon -> sandilands directed=false
+edge e24 sandilands -> addiscombe directed=false
+edge e25 addiscombe -> blackhorse directed=false
+edge e26 blackhorse -> woodside directed=false
+edge e27 woodside -> arena directed=false
+edge e28 arena -> harrington directed=false
+edge e29 harrington -> birkbeck directed=false
+edge e30 birkbeck -> avenue directed=false
+edge e31 avenue -> beckenham_r directed=false
+edge e32 beckenham_r -> beckenham_j directed=false
+edge e33 arena -> elmers directed=false
+edge e34 sandilands -> lloyd directed=false
+edge e35 lloyd -> coombe directed=false
+edge e36 coombe -> gravel directed=false
+edge e37 gravel -> addington_v directed=false
+edge e38 addington_v -> fieldway directed=false
+edge e39 fieldway -> king directed=false
+edge e40 king -> new_addington directed=false
+layout root engine=layered direction=right fold=never ordering=stable rank-gap=28 node-gap=30
+note "Step-free access across the network. Track and stop works may affect journeys; check TfL."
+note "Arrows show the Croydon one-way loop; other links represent travel in both directions. Reference: Version A, 09.2024."
+

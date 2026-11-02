@@ -1,0 +1,84 @@
+diagram "London Trams" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node wimbledon "Wimbledon · rail / District"
+node dundonald "Dundonald Road"
+node merton "Merton Park"
+node morden "Morden Road"
+node phipps "Phipps Bridge"
+node belgrave "Belgrave Walk"
+node mitcham "Mitcham"
+node mitcham_j "Mitcham Junction · rail"
+node beddington "Beddington Lane"
+node therapia "Therapia Lane"
+node ampere "Ampere Way"
+node waddon "Waddon Marsh"
+node wandle "Wandle Park"
+node reeves "Reeves Corner"
+node centrale "Centrale"
+node west "West Croydon · rail / bus / Windrush"
+node wellesley "Wellesley Road"
+node east "East Croydon · rail / bus"
+node george "George Street"
+node church "Church Street"
+node lebanon "Lebanon Road"
+node sandilands "Sandilands"
+node addiscombe "Addiscombe"
+node blackhorse "Blackhorse Lane"
+node woodside "Woodside"
+node arena "Arena"
+node harrington "Harrington Road"
+node birkbeck "Birkbeck · rail"
+node avenue "Avenue Road"
+node beckenham_r "Beckenham Road"
+node beckenham_j "Beckenham Junction · rail"
+node lloyd "Lloyd Park"
+node coombe "Coombe Lane"
+node gravel "Gravel Hill"
+node addington_v "Addington Village · bus"
+node fieldway "Fieldway"
+node king "King Henry’s Drive"
+node new_addington "New Addington · bus"
+node elmers "Elmers End · rail"
+edge e1 wimbledon -> dundonald directed=false
+edge e2 dundonald -> merton directed=false
+edge e3 merton -> morden directed=false
+edge e4 morden -> phipps directed=false
+edge e5 phipps -> belgrave directed=false
+edge e6 belgrave -> mitcham directed=false
+edge e7 mitcham -> mitcham_j directed=false
+edge e8 mitcham_j -> beddington directed=false
+edge e9 beddington -> therapia directed=false
+edge e10 therapia -> ampere directed=false
+edge e11 ampere -> waddon directed=false
+edge e12 waddon -> wandle directed=false
+edge e13 wandle -> reeves
+edge e14 reeves -> centrale
+edge e15 centrale -> west
+edge e16 west -> wellesley
+edge e17 wellesley -> east
+edge e18 east -> george
+edge e19 george -> church
+edge e20 church -> wandle
+edge e21 church -> centrale
+edge e22 east -> lebanon directed=false
+edge e23 lebanon -> sandilands directed=false
+edge e24 sandilands -> addiscombe directed=false
+edge e25 addiscombe -> blackhorse directed=false
+edge e26 blackhorse -> woodside directed=false
+edge e27 woodside -> arena directed=false
+edge e28 arena -> harrington directed=false
+edge e29 harrington -> birkbeck directed=false
+edge e30 birkbeck -> avenue directed=false
+edge e31 avenue -> beckenham_r directed=false
+edge e32 beckenham_r -> beckenham_j directed=false
+edge e33 arena -> elmers directed=false
+edge e34 sandilands -> lloyd directed=false
+edge e35 lloyd -> coombe directed=false
+edge e36 coombe -> gravel directed=false
+edge e37 gravel -> addington_v directed=false
+edge e38 addington_v -> fieldway directed=false
+edge e39 fieldway -> king directed=false
+edge e40 king -> new_addington directed=false
+layout root engine=layered direction=right
+note "Step-free access across the network. Track and stop works may affect journeys; check TfL."
+note "Arrows show the Croydon one-way loop; other links represent travel in both directions. Reference: Version A, 09.2024."

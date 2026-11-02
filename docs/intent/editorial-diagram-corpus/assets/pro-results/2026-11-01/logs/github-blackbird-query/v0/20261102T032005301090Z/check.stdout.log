@@ -1,0 +1,2 @@
+warning line 11: The note beside redis covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]
+Warnings: 8 nodes, 1 group, 0 connections.

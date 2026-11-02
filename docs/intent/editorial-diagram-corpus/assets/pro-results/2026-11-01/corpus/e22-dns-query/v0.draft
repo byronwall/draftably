@@ -1,0 +1,23 @@
+diagram "Life of a DNS query" version=1
+node person "User"
+node browser "Browser"
+node resolver "Resolver"
+node root_ns "Root authority"
+node com ".com authority"
+node domain "example.com authority"
+edge m1 person -> browser "Navigate to https://example.com"
+edge m2 browser -> browser "No cached address"
+edge m3 browser -> resolver "Find the address of example.com"
+edge m4 resolver -> resolver "Check cache: archive.org → 207.241.224.2; jvns.ca → 172.64.80.1"
+edge m5 resolver -> resolver "Cache miss; use built-in root server addresses"
+edge m6 resolver -> root_ns "Find the address of example.com"
+edge m7 root_ns -> resolver "Ask .com: a.gtld-servers.net" kind=async
+edge m8 resolver -> com "Find the address of example.com"
+edge m9 com -> resolver "Ask example.com: a.iana-servers.net" kind=async
+edge m10 resolver -> domain "Find the address of example.com"
+edge m11 domain -> resolver "93.184.216.34" kind=async
+edge m12 resolver -> browser "Return the address" kind=async
+note "This example assumes no .com entry is cached; otherwise the root lookup can be skipped."
+note "NS records name nameservers. Root examples: com → a.gtld-servers.net; ca → a.ca-servers.net; horse → a.nic.horse."
+note ".com records shown: neopets.com NS ns-42.awsdns-05.com; example.com NS a.iana-servers.net. Domain answer: example.com A 93.184.216.34."
+layout root sequence

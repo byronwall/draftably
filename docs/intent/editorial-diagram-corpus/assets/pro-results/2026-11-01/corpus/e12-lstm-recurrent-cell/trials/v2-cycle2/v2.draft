@@ -1,0 +1,90 @@
+# Refinement cycle 2: closest faithful attempt with documented native manual controls.
+group cell "A at time t" color=mint
+node prev "A at t−1" color=green shade=100
+node next "A at t+1" color=green shade=100
+node xp "x at t−1" shape=circle color=sky shade=200
+node xt "x at t" shape=circle color=sky shade=200
+node xn "x at t+1" shape=circle color=sky shade=200
+node hp "h at t−1" shape=circle color=violet shade=200
+node ht "h at t" shape=circle color=violet shade=200
+node hn "h at t+1" shape=circle color=violet shade=200
+node cp "C at t−1"
+node cn "C at t"
+node concat "x + previous h" in=cell shape=box
+node f "σ" in=cell shape=box color=amber shade=200
+node i "σ" in=cell shape=box color=amber shade=200
+node candidate "tanh" in=cell shape=box color=amber shade=200
+node o "σ" in=cell shape=box color=amber shade=200
+node forget "×" in=cell shape=circle color=rose shade=200
+node update "×" in=cell shape=circle color=rose shade=200
+node add "+" in=cell shape=circle color=rose shade=200
+node squash "tanh" in=cell shape=pill color=rose shade=200
+node output "×" in=cell shape=circle color=rose shade=200
+edge e1 xp -> prev
+edge e2 prev -> hp
+edge e3 prev -> cp
+edge e4 cp -> forget
+edge e5 hp -> concat
+edge e6 xt -> concat
+edge e7 concat -> f
+edge e8 concat -> i
+edge e9 concat -> candidate
+edge e10 concat -> o
+edge e11 f -> forget
+edge e12 forget -> add
+edge e13 i -> update
+edge e14 candidate -> update
+edge e15 update -> add
+edge e16 add -> cn
+edge e17 add -> squash
+edge e18 squash -> output
+edge e19 o -> output
+edge e20 output -> ht
+edge e21 ht -> next
+edge e22 cn -> next
+edge e23 xn -> next
+edge e24 next -> hn
+layout root flow direction=right fold=never
+layout cell engine=layered direction=right fold=never
+theme drafting canvas="#FFFFFF" padding-x=8 padding-y=8 radius=14
+pin cell x=250 y=100
+pin prev x=0 y=130
+pin next x=1110 y=130
+pin xp x=40 y=470
+pin hp x=40 y=0
+pin xt x=540 y=470
+pin ht x=940 y=0
+pin xn x=1150 y=470
+pin hn x=1150 y=0
+pin cp x=80 y=90
+pin cn x=1050 y=90
+pin concat x=210 y=260
+pin f x=40 y=180
+pin i x=210 y=180
+pin candidate x=330 y=180
+pin o x=520 y=180
+pin forget x=50 y=30
+pin add x=350 y=30
+pin update x=270 y=110
+pin squash x=510 y=90
+pin output x=650 y=90
+size prev width=160 height=240
+size next width=160 height=240
+size xp width=80 height=80
+size xt width=80 height=80
+size xn width=80 height=80
+size hp width=80 height=80
+size ht width=80 height=80
+size hn width=80 height=80
+size cp width=160 height=40
+size cn width=160 height=40
+size concat width=180 height=42
+size f width=60 height=48
+size i width=60 height=48
+size o width=60 height=48
+size candidate width=86 height=48
+size forget width=40 height=40
+size add width=40 height=40
+size update width=40 height=40
+size output width=40 height=40
+size squash width=70 height=40

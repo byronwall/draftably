@@ -1,0 +1,4 @@
+warning line 40: near ci gave way by 96 px to keep service clear. Remove line 40, or run format --drop-stale. [relaxed]
+warning line 29: The note beside ui covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]
+warning line 30: The note beside ci covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame. [note-overlap]
+Warnings: 10 nodes, 3 groups, 11 connections.

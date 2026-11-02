@@ -1,0 +1,41 @@
+{
+  "id": "E13",
+  "v0_readability_vs_reference": "worse",
+  "reason": "Default flow places the database and UI on one side and separates notes from their subjects, obscuring the compact read-top/write-bottom circuit.",
+  "stages": {
+    "v0": {
+      "quality": 3,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 4,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "diminishing returns",
+  "dsl_nastiness": "Moderate: thirteen pins, ten exact sizes and explicit sides on eight relations recover the U-shaped story. Five notes remain ordinary native notes; there is no hidden custom drawing.",
+  "residuals": [
+    "Cylinder, gradients and browser chrome replaced by simple native shapes.",
+    "No curved note leaders or italic annotation hierarchy.",
+    "Larger nested frames and thin process arrows."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G03",
+    "C-G05",
+    "C-S01"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: note text rewraps automatically, but exact interface dimensions and pinned frame layout would need checking after longer labels.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

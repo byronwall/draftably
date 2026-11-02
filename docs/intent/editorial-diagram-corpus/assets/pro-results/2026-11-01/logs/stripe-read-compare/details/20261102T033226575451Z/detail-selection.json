@@ -1,0 +1,38 @@
+{
+  "focus": "Customer record: entity, field, and value type hierarchy",
+  "coordinate_system": "intrinsic PNG pixels; each crop retains a meaningful region, full publication sheet is separate",
+  "image_dimensions": {
+    "reference": [
+      2880,
+      1800
+    ],
+    "v0": [
+      1256,
+      1316
+    ],
+    "v2": [
+      1960,
+      1340
+    ]
+  },
+  "crops": {
+    "reference": [
+      57,
+      126,
+      1238,
+      1098
+    ],
+    "v0": [
+      25,
+      171,
+      640,
+      855
+    ],
+    "v2": [
+      58,
+      160,
+      764,
+      750
+    ]
+  }
+}

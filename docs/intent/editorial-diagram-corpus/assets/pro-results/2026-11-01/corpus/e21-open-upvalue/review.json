@@ -1,0 +1,42 @@
+{
+  "id": "E21",
+  "v0_readability_vs_reference": "worse",
+  "reason": "Default cells preserve field structure but pointer routing overlaps and obscures object boundaries; the original\u2019s pointer circles and compact return path make aliasing easier to follow.",
+  "stages": {
+    "v0": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v1": {
+      "quality": 2,
+      "fidelity": 2,
+      "semantic": 5
+    },
+    "v2": {
+      "quality": 3,
+      "fidelity": 3,
+      "semantic": 5
+    }
+  },
+  "refinement_cycles": 3,
+  "stopping_reason": "effort limit",
+  "dsl_nastiness": "High relative to sixteen principal objects: seven object pins, twelve sizes and fourteen explicit endpoint-side assignments are needed. The source is understandable as records plus pointers, but manual route repair is disproportionately large.",
+  "residuals": [
+    "Return pointer crosses Stack title and blends with record edges.",
+    "Source pointer circles and external labels absent.",
+    "Taller spatial composition than original.",
+    "Far-side default attachments required explicit correction."
+  ],
+  "provisional_gaps": [
+    "C-G01",
+    "C-G02",
+    "C-G03",
+    "C-G04",
+    "C-G05"
+  ],
+  "confirmation_case": false,
+  "label_edit_resilience": "Predicted: cell widths/order remain meaningful, but a title-width change stretches a record and can alter pins/routes. The fragile returning pointer must be rechecked.",
+  "authoring_time": "not measured",
+  "visual_review": "Original, v0, v1, v2 and full comparison sheet inspected by corpus author. Native sources frozen after final allowed cycle."
+}

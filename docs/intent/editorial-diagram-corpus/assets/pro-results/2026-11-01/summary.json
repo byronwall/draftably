@@ -1,0 +1,172 @@
+{
+  "accepted": 30,
+  "publishers": [
+    "Christopher Olah",
+    "Cloudflare",
+    "Committee on Publication Ethics",
+    "Crafting Interpreters",
+    "Design Council",
+    "Ellen MacArthur Foundation",
+    "Figma",
+    "GitHub",
+    "Google / Chrome for Developers",
+    "Jay Alammar",
+    "MDN Web Docs",
+    "Martin Fowler",
+    "NASA Science",
+    "NOAA Climate.gov",
+    "OpenStax / Rice University",
+    "Pro Git",
+    "React",
+    "Stripe",
+    "The Go Blog",
+    "Transport for London",
+    "U.S. Geological Survey",
+    "Vercel",
+    "Wizard Zines",
+    "web.dev"
+  ],
+  "independent_publisher_groups": [
+    "Christopher Olah",
+    "Cloudflare",
+    "Committee on Publication Ethics",
+    "Crafting Interpreters",
+    "Design Council",
+    "Ellen MacArthur Foundation",
+    "Figma",
+    "GitHub",
+    "Google (Chrome, web.dev, Go)",
+    "Jay Alammar",
+    "MDN Web Docs",
+    "Martin Fowler",
+    "NASA Science",
+    "NOAA Climate.gov",
+    "OpenStax / Rice University",
+    "Pro Git",
+    "React",
+    "Stripe",
+    "Transport for London",
+    "U.S. Geological Survey",
+    "Vercel",
+    "Wizard Zines"
+  ],
+  "authored": 90,
+  "validated": 90,
+  "rendered": 90,
+  "comparisons": 30,
+  "detail_comparisons": 30,
+  "confirmation_cases": [
+    "E06",
+    "E10",
+    "E16",
+    "E20",
+    "E28",
+    "E30"
+  ],
+  "v0_freeze_mismatches": [],
+  "v0_restriction_violations": [],
+  "readability_counts": {
+    "comparable": 6,
+    "worse": 24
+  },
+  "ratings_by_stage": {
+    "v0": {
+      "quality": {
+        "median": 3.0,
+        "counts": {
+          "2": 9,
+          "3": 15,
+          "4": 6
+        }
+      },
+      "fidelity": {
+        "median": 2.0,
+        "counts": {
+          "1": 8,
+          "2": 19,
+          "3": 3
+        }
+      },
+      "semantic": {
+        "median": 4.0,
+        "counts": {
+          "2": 1,
+          "3": 7,
+          "4": 11,
+          "5": 11
+        }
+      }
+    },
+    "v1": {
+      "quality": {
+        "median": 3.0,
+        "counts": {
+          "2": 7,
+          "3": 13,
+          "4": 10
+        }
+      },
+      "fidelity": {
+        "median": 2.5,
+        "counts": {
+          "1": 3,
+          "2": 12,
+          "3": 14,
+          "4": 1
+        }
+      },
+      "semantic": {
+        "median": 4.0,
+        "counts": {
+          "2": 2,
+          "3": 5,
+          "4": 9,
+          "5": 14
+        }
+      }
+    },
+    "v2": {
+      "quality": {
+        "median": 3.0,
+        "counts": {
+          "3": 16,
+          "4": 14
+        }
+      },
+      "fidelity": {
+        "median": 3.0,
+        "counts": {
+          "2": 5,
+          "3": 18,
+          "4": 7
+        }
+      },
+      "semantic": {
+        "median": 4.5,
+        "counts": {
+          "2": 1,
+          "3": 4,
+          "4": 10,
+          "5": 15
+        }
+      }
+    }
+  },
+  "effort_by_stage": {
+    "v0": {
+      "median_lines": 26.5,
+      "total_pins": 0,
+      "total_nudges": 0
+    },
+    "v1": {
+      "median_lines": 30.5,
+      "total_pins": 0,
+      "total_nudges": 0
+    },
+    "v2": {
+      "median_lines": 55.0,
+      "total_pins": 376,
+      "total_nudges": 0
+    }
+  }
+}

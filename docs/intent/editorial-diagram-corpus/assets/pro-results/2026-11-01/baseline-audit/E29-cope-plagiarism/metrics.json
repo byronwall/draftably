@@ -1,0 +1,599 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [],
+    "nodes": 24,
+    "groups": 0,
+    "edges": 29,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 740,
+    "height": 1408,
+    "aspect": 0.53,
+    "density": 0.332,
+    "aligned": 0.92,
+    "crossings": 4,
+    "bends": 38,
+    "bendsPerEdge": 1.31,
+    "maxBends": 6,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 222,
+    "theme": "drafting",
+    "fills": 1,
+    "minTextContrast": 15.59,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.21,
+      "boxes": 15.2,
+      "w": 576,
+      "h": 380,
+      "x": 164,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "forward",
+        "length": 550,
+        "detour": 2.18,
+        "span": 0.35
+      },
+      {
+        "id": "e21",
+        "kind": "forward",
+        "length": 482,
+        "detour": 1.49,
+        "span": 0.3
+      },
+      {
+        "id": "e26",
+        "kind": "forward",
+        "length": 454,
+        "detour": 1.29,
+        "span": 0.29
+      },
+      {
+        "id": "e28",
+        "kind": "forward",
+        "length": 1302,
+        "detour": 6.38,
+        "span": 0.82
+      },
+      {
+        "id": "e5",
+        "kind": "forward",
+        "length": 594,
+        "detour": 2.03,
+        "span": 0.37
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 658,
+        "detour": 1.36,
+        "span": 0.41
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 3,
+      "expectation-failed": 0,
+      "edge-hugs-node": 15,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 9.5,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e15 (6)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along proceed"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along ask"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e14 along proceed"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along otherauthors"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along responds"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e2 along evidence"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e21 along informreviewer"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e24 along institution"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along institution"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along keepcontact"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e26 along revise"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e27 along revise"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e28 along informreviewer"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e28 along keepcontact"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e5 along degree"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "informreviewer in D: turns at 1322, 1280, 1322"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e11 550px, 2.2× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e28 1302px, 6.4× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e5 594px, 2.0× the direct way"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "576×380px at 164,0 (21% of the drawing, room for 15 boxes)"
+      }
+    ],
+    "checks": []
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [],
+    "nodes": 24,
+    "groups": 0,
+    "edges": 29,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 806,
+    "height": 1544,
+    "aspect": 0.52,
+    "density": 0.232,
+    "aligned": 1,
+    "crossings": 2,
+    "bends": 43,
+    "bendsPerEdge": 1.48,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 251,
+    "theme": "drafting",
+    "fills": 4,
+    "minTextContrast": 6.02,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.11,
+      "boxes": 11.7,
+      "w": 321,
+      "h": 440,
+      "x": 485,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "forward",
+        "length": 489,
+        "detour": 1.91,
+        "span": 0.28
+      },
+      {
+        "id": "e15",
+        "kind": "back",
+        "length": 438,
+        "detour": 1.27,
+        "span": 0.25
+      },
+      {
+        "id": "e21",
+        "kind": "forward",
+        "length": 954,
+        "detour": 2.24,
+        "span": 0.55
+      },
+      {
+        "id": "e26",
+        "kind": "forward",
+        "length": 408,
+        "detour": 1.09,
+        "span": 0.23
+      },
+      {
+        "id": "e28",
+        "kind": "forward",
+        "length": 909,
+        "detour": 4.21,
+        "span": 0.52
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 433,
+        "detour": 1.67,
+        "span": 0.25
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 2,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 2.6,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e15 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e15 along responds"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "informreviewer in D: turns at 1464, 1448, 1442, 1464"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e21 954px, 2.2× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "e28 909px, 4.2× the direct way"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 24,
+      "meanMove": 192,
+      "maxMove": 352,
+      "moved": 24,
+      "alignedMean": 82,
+      "alignedMoved": 19,
+      "orderFlips": 11,
+      "shift": {
+        "x": 151,
+        "y": 100
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 24,
+      "meanMove": 192,
+      "maxMove": 352,
+      "moved": 24,
+      "alignedMean": 82,
+      "alignedMoved": 19,
+      "orderFlips": 11,
+      "shift": {
+        "x": 151,
+        "y": 100
+      }
+    },
+    "checks": []
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [],
+    "nodes": 24,
+    "groups": 0,
+    "edges": 29,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 1200,
+    "height": 1922,
+    "aspect": 0.62,
+    "density": 0.152,
+    "aligned": 0.75,
+    "crossings": 0,
+    "bends": 21,
+    "bendsPerEdge": 0.72,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 303,
+    "theme": "drafting",
+    "fills": 4,
+    "minTextContrast": 6.02,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.16,
+      "boxes": 25.4,
+      "w": 680,
+      "h": 544,
+      "x": 260,
+      "y": 806
+    },
+    "edgeStretch": [
+      {
+        "id": "e13",
+        "kind": "forward",
+        "length": 1010,
+        "detour": 1.16,
+        "span": 0.45
+      },
+      {
+        "id": "e15",
+        "kind": "forward",
+        "length": 700,
+        "detour": 1,
+        "span": 0.31
+      },
+      {
+        "id": "e18",
+        "kind": "forward",
+        "length": 632,
+        "detour": 1.62,
+        "span": 0.28
+      },
+      {
+        "id": "e21",
+        "kind": "forward",
+        "length": 514,
+        "detour": 1.08,
+        "span": 0.23
+      },
+      {
+        "id": "e24",
+        "kind": "forward",
+        "length": 914,
+        "detour": 1.31,
+        "span": 0.4
+      },
+      {
+        "id": "e28",
+        "kind": "forward",
+        "length": 498,
+        "detour": 1.43,
+        "span": 0.22
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 515,
+        "detour": 1.72,
+        "span": 0.23
+      },
+      {
+        "id": "e6",
+        "kind": "forward",
+        "length": 577,
+        "detour": 1.75,
+        "span": 0.25
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 5,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 1,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 5,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 6.9,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e24 along keepcontact"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "informreviewer in R: turns at 380, 485"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e13 ask→noresponse arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e21 reject→informreviewer arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e24 superior→keepcontact arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e28 institution→informreviewer arrives sideways"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "e4 degree→redundancy arrives sideways"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 134px at y=616"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 154px at y=856"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 154px at y=1196"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 144px at y=1406"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "row 158px at y=1622"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "680×544px at 260,806 (16% of the drawing, room for 25 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 24,
+      "meanMove": 396,
+      "maxMove": 755,
+      "moved": 24,
+      "alignedMean": 265,
+      "alignedMoved": 24,
+      "orderFlips": 6,
+      "shift": {
+        "x": 197,
+        "y": 244
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 24,
+      "meanMove": 566,
+      "maxMove": 1020,
+      "moved": 24,
+      "alignedMean": 319,
+      "alignedMoved": 24,
+      "orderFlips": 25,
+      "shift": {
+        "x": 336,
+        "y": 348
+      }
+    },
+    "checks": []
+  }
+]

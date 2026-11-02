@@ -1,0 +1,93 @@
+{
+  "case": "figma-journal-checkpoints",
+  "focus": "Current state and final journal entry: prior versus new content",
+  "log": "logs/figma-journal-checkpoints/details/20261102T033220665600Z",
+  "selection_sha256": "039cbee210a512ce762d2efc2c1ae3b4ef11066af365ae92bf4d4357d0a0d9d6",
+  "source_sha256": {
+    "reference-preview.png": "b9a7679ac7dae53afb353276d6f3750f4745bf6041f88f87c9116d0172accea7",
+    "v0.png": "4d960587c8b3b4e5e07b5b855cbaa862f4dcf4e844fb8eb190b635eecdfabab3",
+    "v2.png": "127b5bd106dbbe975769a03a493559ffa0ac6f5673f9172f8180ab6cd51becc6"
+  },
+  "commands": {
+    "reference": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/reference-preview.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/reference.png",
+        "--crop",
+        "1505,44,593,1009"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:20.666166+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.361,
+      "exit_code": 0
+    },
+    "v0": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/v0.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v0.png",
+        "--crop",
+        "2574,191,1066,1205"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:22.027467+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4497,
+      "exit_code": 0
+    },
+    "v2": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/v2.png",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v2.png",
+        "--crop",
+        "2044,251,806,1589"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:23.477447+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4038,
+      "exit_code": 0
+    },
+    "sheet": {
+      "argv": [
+        "pnpm",
+        "--silent",
+        "shoot",
+        "--sheet",
+        "/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/comparison.png",
+        "--cols",
+        "3",
+        "Reference detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/reference.png",
+        "v0 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v0.png",
+        "v2 detail::/workspace/scratch/742d8c352255/deliverable/corpus/figma-journal-checkpoints/details/v2.png"
+      ],
+      "cwd": "/workspace/scratch/742d8c352255/baseline",
+      "started_utc": "2026-11-02T03:32:24.881691+00:00",
+      "environment": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/draftably-browsers",
+        "DRAFTABLY_NO_UPDATE_CHECK": "1"
+      },
+      "elapsed_seconds": 1.4586,
+      "exit_code": 0
+    }
+  },
+  "status": "complete"
+}

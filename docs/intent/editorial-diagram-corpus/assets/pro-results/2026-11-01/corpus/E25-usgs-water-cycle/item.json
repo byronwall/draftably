@@ -1,0 +1,40 @@
+{
+  "id": "E25",
+  "slug": "E25-usgs-water-cycle",
+  "title": "The Water Cycle",
+  "publisher": "U.S. Geological Survey",
+  "author": "USGS VizLab and Water Science School; Corson-Dosch, Nell, Volentine, Archer, Bechtel, Bruce, Felts, Gross, Lopez-Trujillo, Riggs, and Read",
+  "publication_date": "2022-10-13",
+  "page_url": "https://www.usgs.gov/media/images/water-cycle-png",
+  "image_url": "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/images/USGS_WaterCycle_English_ONLINE_20230302.png",
+  "license": "Public Domain",
+  "license_observation": "The USGS image page explicitly marks this media as Public Domain. The downloaded filename records a 2023-03-02 revision.",
+  "figure": "Complete English landscape cutaway and footer explanations; source original 11400×7800 pixels.",
+  "patterns": [
+    "scientific physical system",
+    "geographic cutaway",
+    "labeled fluxes",
+    "dense stress case",
+    "human/natural comparison"
+  ],
+  "principal_objects": 20,
+  "object_count_basis": "Twenty named water pools and human-use sites represented as native nodes. Terrain, weather, landscape structures, and repeated flux marks add many visual objects beyond this deliberately limited principal count.",
+  "reading_path": "Read the atmospheric band and precipitation, scan the mountain-to-ocean landscape, then the subsurface cutaway. The legend and footer explain storage, movement, human use, water quality, and climate.",
+  "merit": "A pale terrain block allows saturated blue water to stand out. Geographic position, depth, repeated directional flux marks, italic process labels, and compact explanatory prose integrate natural and human systems.",
+  "confirmation_case": false,
+  "reference_file": "reference.png",
+  "preview_note": "Original 11400×7800 raster retained; 1800×1232 preview is a full proportional reduction. Dense labels require the original or detail crop.",
+  "access_date": "2026-11-02",
+  "access_timezone": "UTC",
+  "reference_sha256": "bb62f4cd2c0fc098d0ec0dbbc10a4771f6ef91bbb59811fb199947159166340d",
+  "reference_bytes": 14937701,
+  "reference_preview_dimensions": [
+    1800,
+    1232
+  ],
+  "native_v0_objects": {
+    "nodes": 20,
+    "groups": 0,
+    "edges": 30
+  }
+}

@@ -1,0 +1,56 @@
+diagram "The water cycle: pools, fluxes and human use" version=1
+# v0: first native model; unmodified appearance; frozen before refinement.
+node airsea "Atmospheric moisture: over ocean"
+node airland "Atmospheric moisture: over land"
+node ice "Ice sheets and glaciers"
+node snow "Snowpack"
+node permafrost "Permafrost"
+node salinelake "Saline lakes"
+node freshlake "Freshwater lakes"
+node freshwet "Fresh wetlands"
+node brackishwet "Brackish wetlands"
+node reservoir "Reservoirs"
+node river "Rivers"
+node soil "Soil moisture"
+node ground "Groundwater"
+node ocean "Ocean: mixed zone"
+node deep "Ocean: deep water zone"
+node domestic "Domestic water use"
+node municipal "Municipal water use"
+node industry "Industrial water use"
+node agriculture "Agricultural water use"
+node grazing "Grazing water use"
+edge e1 ocean -> airsea "Ocean evaporation" constraint=false
+edge e2 airsea -> ocean "Precipitation over ocean" constraint=false
+edge e3 airsea -> airland "Moisture transport to land" constraint=false
+edge e4 airland -> snow "Precipitation"
+edge e5 airland -> ice "Precipitation"
+edge e6 airland -> soil "Precipitation over land"
+edge e7 snow -> river "Snowmelt"
+edge e8 ice -> river "Meltwater"
+edge e9 soil -> salinelake "Streamflow to closed basins"
+edge e10 soil -> river "Runoff"
+edge e11 soil -> ground "Groundwater recharge"
+edge e12 soil -> airland "Evapotranspiration" constraint=false
+edge e13 freshwet -> river "Streamflow"
+edge e14 freshlake -> river "Streamflow"
+edge e15 reservoir -> river "Streamflow"
+edge e16 river -> ocean "Streamflow to ocean" constraint=false
+edge e17 river -> brackishwet "Estuarine flow"
+edge e18 ground -> ocean "Groundwater discharge" constraint=false
+edge e19 ocean -> deep "Ocean circulation"
+edge e20 deep -> ocean "Ocean circulation" constraint=false
+edge e21 river -> domestic "Water supply"
+edge e22 river -> municipal "Water supply"
+edge e23 river -> industry "Water supply"
+edge e24 river -> agriculture "Irrigation"
+edge e25 ground -> agriculture "Groundwater use"
+edge e26 river -> grazing "Water use"
+edge e27 municipal -> river "Urban runoff"
+edge e28 industry -> river "Return flow"
+edge e29 agriculture -> soil "Irrigation"
+edge e30 agriculture -> airland "Evapotranspiration" constraint=false
+layout root flow direction=down
+note "Pools store water; fluxes move it. Water may be fresh, saline or brackish, and solid, liquid or gas."
+note "Human use changes water quantity, quality, location and timing. The native model omits geographic terrain; see the preserved reference."
+note "Permafrost stores frozen water. Pollution and climate change affect quality, availability and movement."

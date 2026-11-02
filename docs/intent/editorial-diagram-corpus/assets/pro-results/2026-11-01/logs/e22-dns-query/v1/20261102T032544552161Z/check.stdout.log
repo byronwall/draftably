@@ -1,0 +1,2 @@
+warning The labels on m5 and m6 overlap. The layout could not avoid it; move or resize a neighbour. [label-collision]
+Warnings: 6 nodes, 0 groups, 12 connections.

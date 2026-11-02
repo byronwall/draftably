@@ -1,0 +1,51 @@
+{
+  "id": "E18",
+  "slug": "e18-git-divergent-history",
+  "title": "Git divergent history and branch pointers",
+  "publisher": "Pro Git",
+  "author": "Scott Chacon and Ben Straub",
+  "publication_date": "unknown",
+  "access_date": "2026-11-02",
+  "page_url": "https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell",
+  "image_url": "https://raw.githubusercontent.com/progit/progit2/main/images/advance-master.png",
+  "license": "CC BY-NC-SA 3.0; progit/progit2 LICENSE.asc",
+  "figure": "Divergent history; publisher page image path /book/en/v2/images/advance-master.png returned HTTP 403, exact original recovered from publisher progit2 repository.",
+  "patterns": [
+    "timeline",
+    "dependency graph",
+    "pointer hierarchy"
+  ],
+  "principal_objects": 8,
+  "reading_path": "Read commit time left to right, while parent-reference arrows point left; branch names and HEAD point vertically.",
+  "merit": "The reference distinguishes two directions at once: history extends right, ownership pointers descend or ascend. Small role colors separate branch labels from commits without a legend.",
+  "confirmation_case": false,
+  "domain": "software/computing",
+  "reference_sha256": "fd98bcb7253b9baa6b5fa14899d9ab31c99a3b3286ad0539c1da08a56c10cba9",
+  "reference_bytes": 16264,
+  "reference_preview_size": [
+    616,
+    394
+  ],
+  "reference_preview_method": "Original raster flattened onto white with aspect and complete content unchanged.",
+  "status": "rendered-validated",
+  "stage_status": {
+    "v0": {
+      "status": "rendered-validated",
+      "source_sha256": "980ba054369644e7efc8113db3f7ddfbec786ee36afc8030f57409d57e80b0a4",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v1": {
+      "status": "rendered-validated",
+      "source_sha256": "eb3008a73315bdcc0d79d10a1c38233a85a8cf1badaf22bf533cb4589977eb14",
+      "warning_count": 0,
+      "warnings": []
+    },
+    "v2": {
+      "status": "rendered-validated",
+      "source_sha256": "4bc64620af6a901ef40fffc481406534e44b2dbff665351eeca88f6abd40c3b5",
+      "warning_count": 0,
+      "warnings": []
+    }
+  }
+}
