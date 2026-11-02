@@ -18,10 +18,10 @@
 - Submission: 2026-11-01 about 22:50 UTC. Sent message, durable URL, Thinking and Stop verified.
 - Pro completed: 129m 49s displayed. Main trials ended 2026-11-02 00:29 UTC; results packaged 00:55 UTC.
 - Collection: 2026-11-02 about 02:49 UTC, after the user requested an immediate check.
-- Phase: results collected and integrated; final validation and PR pending.
+- Phase: complete. Results preserved, reviewed, integrated, validated, and published in PR #372.
 - Follow-up count: 0. No material follow-up needed; limitations are explicit and deliverables usable.
-- Heartbeat: `collect-draftably-layout-evaluation`, ACTIVE, hourly at minute 49 in this chat.
-  Stop when the PR is verified or essential user input is needed. No further Pro wait is required.
+- Heartbeat: `collect-draftably-layout-evaluation`, PAUSED after verified PR completion.
+  No further automatic work is scheduled for this run.
 - Approval history: initial automation request was rejected as an unbounded recurring side effect.
   The user explicitly approved scheduling, collection, integration, and the PR on 2026-11-01.
   Automation creation then succeeded; saved schedule and target chat were verified.
@@ -58,5 +58,9 @@
   `tmp/pro/layout-config-evaluation/collection-check.log`.
 - Original assets are excluded from formatting/lint to preserve their bytes. Typecheck and Vitest
   already target source/site/tests, so archived source companions are not executed.
-- PR: pending. Use one docs/research PR, preserve all original assets, and verify body/file inventory.
-- Automation shutdown: pending verified PR.
+- PR: https://github.com/byronwall/draftably/pull/372 (OPEN; main ← codex/layout-config-evaluation).
+  Body read back; two images use GitHub attachment URLs. No local image references remain.
+  All 21,708 remote asset blobs match the local Git tree. PR changed-file count matches the
+  21,719-file baseline diff. Head commit was verified before the final run-record-only update.
+- Automation shutdown: tool confirmed PAUSED after completion; saved status verified.
+- Terminal condition: ready for user review. No product implementation, merge, or deployment occurred.
