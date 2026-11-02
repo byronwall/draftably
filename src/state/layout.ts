@@ -289,7 +289,11 @@ async function showRecipe(
 }
 
 /** Run with the lab's scope. `mode` is a bounded pass or a full rebuild. */
-export function runLabLayout(mode: 'pass' | 'rebuild' = 'pass', preview = false) {
+export function runLabLayout(
+  mode: 'pass' | 'rebuild' = 'pass',
+  preview = false,
+  settings: LayoutOptions = {},
+) {
   const scope = state.labScope(),
     engine = state.labEngine();
   if (fileMode() && mode === 'rebuild' && !engine) return previewShape({});
@@ -298,7 +302,23 @@ export function runLabLayout(mode: 'pass' | 'rebuild' = 'pass', preview = false)
     mode,
     preview,
     ...(engine ? { algorithm: engine } : {}),
+    ...settings,
   });
+}
+
+/**
+ * Preview a browser diagram with a new direction or format, on top of any already being previewed.
+ * The settings change only with the preview, so Discard puts them back too.
+ */
+export async function previewSettings(patch: Partial<Pick<LayoutOptions, 'direction' | 'aspect'>>) {
+  const next = {
+    ...(state.preview() ? { direction: doc.settings.direction, aspect: doc.settings.aspect } : {}),
+    ...patch,
+  };
+  cancelLayout();
+  discardPreview();
+  const outcome = await runLabLayout('rebuild', true, next);
+  if (outcome.status === 'preview') updateLayoutSettings(next);
 }
 
 /** The source scope the Arrange panel acts on, or null for a loose selection. */
