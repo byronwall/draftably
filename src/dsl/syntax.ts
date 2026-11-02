@@ -235,6 +235,10 @@ export interface ModelObject {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** With `~`, nodes only: the shape before the change. */
+  wasShape?: DslShape;
+  /** With `~`, nodes only: the count before the change; 1 means a single box. */
+  wasCount?: number | string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
   /**
@@ -369,6 +373,8 @@ export interface Model {
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
   phases: Array<{ id: string; label: string; ids: string[]; line: number }>;
+  /** Sequence diagrams: the `was-order` statement, the older version's message order. */
+  wasOrder?: { ids: string[]; line: number };
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
 }
@@ -455,6 +461,8 @@ export const isIdentifier = (s: string) => ID.test(s);
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
+/** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
+export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker');
 const FRAMES = ['box', 'soft', 'none'] as const;
 /** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
@@ -520,9 +528,9 @@ export function parseModel(source: string | SourceDoc): Model {
       );
       return n;
     };
-    const countOf = () => {
-      const w = attrs.get('count')!;
-      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num('count', 2, 2, 1_000_000);
+    const countOf = (key: string, min: number) => {
+      const w = attrs.get(key)!;
+      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num(key, min, min, 1_000_000);
     };
     const choice = <T extends string>(key: string, fallback: T, choices: readonly T[]): T => {
       const value = (attrs.get(key)?.value ?? fallback) as T;
@@ -555,10 +563,15 @@ export function parseModel(source: string | SourceDoc): Model {
       `Only node, group and edge lines take a ${s.mark} mark.`,
     );
     const was = () => {
-      const w = attrs.get('was');
-      if (!w) return {};
-      assert(s.mark === '~', 'was= belongs on a changed (~) line.');
-      return { was: w.value };
+      for (const key of ['was', 'was-shape', 'was-count'])
+        assert(!attrs.has(key) || s.mark === '~', `${key}= belongs on a changed (~) line.`);
+      return {
+        ...(attrs.has('was') ? { was: attrs.get('was')!.value } : {}),
+        ...(attrs.has('was-shape')
+          ? { wasShape: choice('was-shape', 'box', PAST_SHAPES) as DslShape }
+          : {}),
+        ...(attrs.has('was-count') ? { wasCount: countOf('was-count', 1) } : {}),
+      };
     };
     const readParams = <K extends string>(table: Record<string, Param<K>>) => {
       const out: Record<string, string | number> = {};
@@ -649,6 +662,12 @@ export function parseModel(source: string | SourceDoc): Model {
         m.phases.push({ id: pid, label: args[1].value, ids: args.slice(2).map(w => id(w)), line });
         break;
       }
+      case 'was-order':
+        assert(args.length, 'was-order lists the older message order: was-order m2 m1.');
+        allow([]);
+        once('was-order');
+        m.wasOrder = { ids: args.map(w => id(w)), line };
+        break;
       case 'subtitle':
         count(1);
         allow([]);
@@ -661,7 +680,18 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shade', 'shape', 'was', 'href', 'count', 'span']
+            ? [
+                'in',
+                'color',
+                'shade',
+                'shape',
+                'was',
+                'was-shape',
+                'was-count',
+                'href',
+                'count',
+                'span',
+              ]
             : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
         );
         const oid = id(args[0]);
@@ -685,7 +715,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
-          ...(attrs.has('count') ? { count: countOf() } : {}),
+          ...(attrs.has('count') ? { count: countOf('count', 2) } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),
@@ -1087,13 +1117,32 @@ function validateReferences(m: Model) {
     const at = m.edges.flatMap((e, i) => (p.ids.includes(e.id) ? [i] : [])),
       skipped = m.edges
         .slice(at[0], at[at.length - 1] + 1)
-        .filter(e => !p.ids.includes(e.id))
+        // A `-` message is only the older version's, so it breaks no run of the newer one.
+        .filter(e => !p.ids.includes(e.id) && e.status !== 'removed')
         .map(e => e.id);
     assert(
       !skipped.length,
       `Phase ${p.id} skips ${skipped.join(', ')}: a phase is a run of consecutive messages. Include it or split the phase.`,
       p.line,
     );
+  }
+  if (m.wasOrder) {
+    const { ids, line } = m.wasOrder,
+      edge = (id: string) => m.edges.find(e => e.id === id),
+      warn = (message: string) => m.warnings.push({ code: 'was-order', message, line });
+    assert(
+      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      'was-order gives the older order of a sequence diagram; use layout root sequence.',
+      line,
+    );
+    assert(new Set(ids).size === ids.length, 'was-order lists a message twice.', line);
+    for (const x of ids) {
+      assert(edge(x)?.status !== 'added', `${x} is added, so was-order can't list it.`, line);
+      if (!edge(x)) warn(`was-order lists ${x}, which is not a message. The panels skip it.`);
+    }
+    for (const e of m.edges)
+      if (e.status !== 'added' && !ids.includes(e.id))
+        warn(`was-order leaves out ${e.id}, so the older panel keeps it on its new row.`);
   }
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {

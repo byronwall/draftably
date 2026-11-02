@@ -27,6 +27,7 @@ import type {
   EdgeLayout,
   NodeLayout,
   SequenceLayout,
+  SequencePhase,
   ShapeKind,
 } from './types';
 
@@ -163,6 +164,10 @@ export function normalize(input: unknown): Diagram {
       id: n.id,
       title: n.title,
       ...(typeof n.was === 'string' ? { was: n.was } : {}),
+      ...(typeof n.wasShape === 'string' ? { wasShape: n.wasShape } : {}),
+      ...(Number.isInteger(n.wasCount) || typeof n.wasCount === 'string'
+        ? { wasCount: n.wasCount }
+        : {}),
       ...(typeof n.href === 'string' ? { href: n.href } : {}),
       ...((Number.isInteger(n.count) && n.count > 1) || typeof n.count === 'string'
         ? { count: n.count }
@@ -369,15 +374,27 @@ export function normalize(input: unknown): Diagram {
     seq &&
     ['x', 'y', 'w', 'h'].every(k => finite((seq.panel as Raw | undefined)?.[k])) &&
     Array.isArray(seq.phases)
-  )
+  ) {
+    const phases = (list: SequencePhase[]) =>
+      list
+        .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
+        .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h }));
     out.layout.sequence = {
       panel: { ...seq.panel },
-      phases: seq.phases
-        .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
-        .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h })),
+      phases: phases(seq.phases),
       ...(finite(seq.phaseX) ? { phaseX: seq.phaseX } : {}),
       ...(Array.isArray(seq.notes) ? { notes: seq.notes } : {}),
+      ...(seq.before && Array.isArray(seq.before.phases)
+        ? {
+            before: {
+              rows: { ...seq.before.rows },
+              phases: phases(seq.before.phases),
+              grow: finite(seq.before.grow) ? seq.before.grow : 0,
+            },
+          }
+        : {}),
     };
+  }
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))
     : [];

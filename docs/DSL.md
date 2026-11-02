@@ -40,6 +40,7 @@ and groups. References may point to later lines.
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `diagram "title" version=1`        | Optional title. At most one. Exports and the Editor draw it above the drawing. `width=` (160–8000) sets the frame's width. See [Title and subtitle](#title-and-subtitle).                                                                                                                                                                                                  |
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                            |
+| `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                             |
 | `subtitle "text"`                  | One line under the title. At most one.                                                                                                                                                                                                                                                                                                                                     |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                                                                                                              |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                       |
@@ -505,14 +506,31 @@ version, and the merged drawing shows the move. A group that moved keeps one pos
 panels draw it in its new container; `compare` names those groups on stderr. A tool that generates
 diagrams only has to write two plain files.
 
-Every changed attribute marks its line `~`, but the file keeps only the old label. `compare`
-reports everything else with no old version on stderr, such as
-`Changes with no old version to draw: a (shape), layout root, message order.` That list covers
-changed attributes, statements other than declarations, and message or participant order in a
-sequence. Both panels draw the new version of these, so read a Before panel with that line.
+Every changed attribute marks its line `~`. The file keeps the old values that a Before panel
+can draw:
 
-Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
-change.
+```draft
+~node gate "Valid card?" shape=diamond was="Card OK?" was-shape=circle
+~node web "Web worker" count=3 was-count=2
+~edge dispatch gate -> web "create" was="start"
+```
+
+| Word         | Goes on                    | Records                                                |
+| ------------ | -------------------------- | ------------------------------------------------------ |
+| `was="old"`  | `~node`, `~group`, `~edge` | The label before the change.                           |
+| `was-shape=` | `~node`                    | The shape before the change. Any shape but `marker`.   |
+| `was-count=` | `~node`                    | The count before the change. `was-count=1` is one box. |
+
+`check` refuses these words on a line with no `~` mark. `compare` writes them for you.
+
+`compare` reports everything else with no old version on stderr, such as
+`Changes with no old version to draw: a (color), layout root, participant order.` That list covers
+other changed attributes, a shape change to or from a `marker`, statements other than
+declarations, and participant order in a sequence. Both panels draw the new version of these, so
+read a Before panel with that line. An image with panels carries the same list in small grey
+text beside the Before label: `Drawn as new: a (color), layout root`.
+
+Unmarked lines are unchanged.
 
 In a file with marks, color means change and nothing else. Unchanged shapes are drawn on the
 theme's neutral surface, containers become quiet outlines, and unchanged lines turn grey, so only
@@ -526,14 +544,37 @@ holds both versions at once, so unchanged objects stay where they are.
 
 Add a `compare` line to draw the two versions as panels instead of one merged
 drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
-leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
-use the merged positions and the merged routes, so every unchanged object and line sits at the same place in each. `direction=right` sets the
+leaves out `+` objects and draws the `was` values; the new panel leaves out `-` objects. Both
+panels use the merged positions and the merged routes, so every unchanged object and line sits at
+the same place in each. A changed shape takes the merged box, in the same place, and only the
+lines that end on it take another path to reach its outline. `direction=right` sets the
 panels side by side, so every row lines up across them; `direction=down` stacks them, so every
 column lines up. Without it, the arrangement whose whole image comes closest to `aspect` (width
 over height, 1.6 by default) wins: a wide flow usually stacks and a tall one sits side by side. Each panel takes
 only the room its version needs along that axis, and a container that lost members in a panel
 shrinks to fit the rest; no object moves, so the alignment holds. The canvas keeps
 showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
+
+When a sequence's messages change order, the merged file holds the new order, and a `was-order`
+line lists the old one:
+
+```draft
+layout root sequence
+node user "Browser"
+node api "API"
+edge token api -> user "token"
+edge login user -> api "login"
+was-order login token
+```
+
+The new panel draws rows in file order. The old panel draws them in `was-order` order, with the
+same lanes, and its phase bands follow its rows. A phase's members come from the `phase` line, so
+a changed phase is on the `compare` report. List every message of the older version. `+` messages
+aren't in the list, and they keep their own rows, so the old panel leaves a gap there. `check`
+refuses `was-order` outside a sequence, a repeated message and a `+` message. It only warns on an
+unknown or missing message, so a visual edit that adds or deletes a message leaves the file open;
+a missing message stays on its new row in the old panel. Panels draw every note in the frame, so a
+note on a message sits on no row in either panel.
 
 ## Emphasis states
 
@@ -1215,6 +1256,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 ### Marks, states and themes
 
 - [Checkout: add refunds](https://draftably.dev/app/?example=checkout-change): Change marks: `+` added, `-` removed, `~` changed, `.` unchanged context.
+- [Order intake: check cards first](https://draftably.dev/app/?example=worker-pool-change): Before and After panels that draw the old shape and count from `was-shape=` and `was-count=`.
 - [Order service paths](https://draftably.dev/app/?example=emphasis): Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
 - [Field service intake](https://draftably.dev/app/?example=theme-proof): The `fieldnotes` theme: serif titles, wrapped labels, a diamond and nested groups.
 

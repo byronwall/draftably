@@ -120,7 +120,7 @@ layout services row gap=56
 | `diagram "title" version=1`        | Optional, at most one. Exports and the viewer draw the title above the drawing; `width=` widens the frame                                                                                                                                                                                                                                                                                                                      |
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                                                                                                                                                                                                                                      |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                                                                                                                                                                                                                                                                                   |
-| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                                                                                                                                                                                                                                                                             |
+| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`; `~node` also takes `was-shape=` and `was-count=`                                                                                                                                                                                                                                                           |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                                                                                                                                                                                                                                          |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -308,13 +308,16 @@ content area.
     are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - To show a change, write one file with both versions merged and mark only the lines that
-  differ: `+` added, `-` removed, `~` changed (`was="old label"`), `.` unchanged context. Never
+  differ: `+` added, `-` removed, `~` changed (`was="old label"`, `was-shape=circle`,
+  `was-count=2`, with `was-count=1` for one box), `.` unchanged context. Never
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
   the change's size (`3 added, 1 changed, 2 removed.`) on stderr, then any
   `Changes with no old version to draw: …`, which both panels show as they are now; say so when
-  you hand the diagram back. To mark a node that moved
+  you hand the diagram back. `compare` writes the `was` words for you. In a sequence, `was-order`
+  lists the older message order (`was-order m1 m2 m3`), and it leaves out `+` messages. To mark a
+  node that moved
   container by hand, remove the old one as `-node <id>-was ... in=<old>` and add the new one. Add
   `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
   drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the

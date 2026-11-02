@@ -3,7 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
-import { panelDoc } from '../model/panels';
+import { oldDoc, panelDoc } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
@@ -133,8 +133,24 @@ function routesOf(doc: Diagram) {
 }
 
 /**
+ * The older panel's lines: the merged routes, so a line runs where it does in the newer panel,
+ * except where an end changed shape or the messages changed rows. Routing all of them as they
+ * were would move other lines too, since lines from one box share a turn.
+ */
+function oldRoutes(doc: Diagram, merged: Route[]) {
+  const shaped = new Set(doc.graph.nodes.filter(n => n.wasShape).map(n => n.id)),
+    rows = !!doc.layout.sequence?.before;
+  if (!rows && !shaped.size) return merged;
+  const old = routesOf(oldDoc(doc));
+  return merged.map(r => {
+    const e = doc.graph.edges.find(x => x.id === r.id)!;
+    return rows || shaped.has(e.from) || shaped.has(e.to) ? old.find(x => x.id === r.id)! : r;
+  });
+}
+
+/**
  * One drawing's marks in its own coordinates, and the box they need with a margin. A comparison
- * panel passes the merged drawing's routes, so every line it keeps runs exactly where it does in
+ * panel passes routes of the whole merged drawing, so every line it keeps runs where it does in
  * the other panel.
  */
 function sceneMarkup(
@@ -495,9 +511,10 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   const { defs, marker } = markersFor(look, [doc]);
   // With `compare`, each version is its own panel drawn from the merged positions, so the panels
   // share one box and every unchanged object lines up across them.
-  const shared = compare ? routesOf(doc) : undefined,
-    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
-      sceneMarkup(d, look, marker, opts, shared),
+  const merged = compare ? routesOf(doc) : undefined,
+    shared = merged ? [oldRoutes(doc, merged), merged] : [],
+    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map((d, i) =>
+      sceneMarkup(d, look, marker, opts, shared[i]),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),
@@ -556,6 +573,13 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       out.push(
         `<text x="${px + 40}" y="${py + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(name)}</text>`,
       );
+      if (!i && compare.undrawn) {
+        const from = px + 40 + measureText(name, look.groupTitle) + 12,
+          room = (stacked ? bw : spans[0].size) - (from - px) - 40;
+        out.push(
+          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}"><title>${esc(compare.undrawn)}</title>${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
+        );
+      }
       if (i)
         out.push(
           stacked

@@ -83,6 +83,8 @@ export interface DiagramAppearance {
   notes?: Note[];
   /** Panel labels from a `compare` statement: draw the old and new versions side by side. */
   compare?: {
+    /** Set by `draftably compare`: the changes the older panel draws in their new version. */
+    undrawn?: string;
     before: string;
     after: string;
     /** `right` sets the panels side by side, `down` stacks them; chosen by `aspect` when unset. */
