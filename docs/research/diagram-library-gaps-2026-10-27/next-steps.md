@@ -1,8 +1,8 @@
 # Capability bets and next steps
 
 > **Snapshot as of 2026-10-28.** Attached notes and PDF export shipped after this research, and
-> foreign-format import shipped against REC-19. [The plan](../../intent/diagram-library-coverage/plan.md)
-> holds the current decisions.
+> foreign-format import shipped against REC-19. [The closure record](../../initiative-history.json)
+> holds the outcome and what stays open.
 
 These are planning recommendations, not approval to implement. The [summary](summary.md) explains
 the decision; [coverage](coverage.md) and its CSVs retain the comparison evidence.

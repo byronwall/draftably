@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Diagram library coverage",
+    "slug": "diagram-library-coverage",
+    "outcome": "completed",
+    "retired_at": "2026-11-02",
+    "summary": "The comparison, sequence, marker, note, Mermaid sequence and Before panel slices shipped in stack #376. Inspected at c607e0e with no uncommitted changes.",
+    "reason": "Byron chose diagram quality as the lead job, then asked for all the work and a merge when CI passed.",
+    "documentation": [
+      "docs/DSL.md",
+      "docs/IMPORTING.md",
+      "docs/ARCHITECTURE.md",
+      "skills/draftably/SKILL.md",
+      "site/docs/pages/cli.md"
+    ],
+    "revision": "c607e0ec",
+    "follow_ups": [
+      "Decide whether docs/research/diagram-library-gaps-2026-10-27/run.md stays public.",
+      "Keep one CSV set: docs/research or assets/pro-results.",
+      "Close PR 116 if its semantic signature idea is covered.",
+      "Close or rebase PR 331; M2 to M4 stay open there.",
+      "A crossing halo can cut a short marked line.",
+      "An old label taller than its new one can crowd its row in a Before panel.",
+      "The Inspector still shows pin and position fields for sequence participants.",
+      "writeArrangement can still write stay hints from a layout pass.",
+      "# still starts a comment inside a bare word, so an unquoted URL fragment is lost.",
+      "A compare panel keeps the empty side margin of a message note."
+    ]
+  }
+]
