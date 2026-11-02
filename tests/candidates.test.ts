@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  holdSlots,
   pickCandidates,
   readDifference,
   sameDrawing,
@@ -75,5 +76,15 @@ describe('Compare candidates', () => {
     );
     expect(sheet.shown).toEqual([2]);
     expect(sheet.others).toEqual([1]);
+  });
+});
+
+describe('holdSlots', () => {
+  it('keeps a card in its slot and fills only the free ones', () => {
+    expect(holdSlots([4, 5, 6], [4, 6], [9, 5], 3)).toEqual([4, 9, 6]);
+  });
+
+  it('fills a first sheet in order', () => {
+    expect(holdSlots([], [], [7, 8, 9, 10], 3)).toEqual([7, 8, 9]);
   });
 });
