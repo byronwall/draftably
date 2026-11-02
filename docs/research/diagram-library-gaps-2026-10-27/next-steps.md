@@ -1,8 +1,12 @@
 # Capability bets and next steps
 
+> **Snapshot as of 2026-10-28.** Attached notes and PDF export shipped after this research, and
+> foreign-format import shipped against REC-19. [The plan](../../intent/diagram-library-coverage/plan.md)
+> holds the current decisions.
+
 These are planning recommendations, not approval to implement. The [summary](summary.md) explains
 the decision; [coverage](coverage.md) and its CSVs retain the comparison evidence.
-Pro's full examples and proposed syntax remain in [the source conversation](https://chatgpt.com/c/6ae1522f-1664-83ea-aade-5b585e44394d).
+Pro's full examples and proposed syntax remain in [the committed report](../../intent/diagram-library-coverage/assets/pro-results/diagram-library-gaps-2026-10-27/capability-bets.md).
 
 ## Ranked bets
 

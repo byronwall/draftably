@@ -4,11 +4,11 @@
     "title": "Diagram library coverage",
     "slug": "diagram-library-coverage",
     "scale": "capability",
-    "current_phase": "intent",
+    "current_phase": "execution",
     "last_updated": "2026-11-01",
     "summary": "Decide which diagram types and features draftably gains next, starting from the PR 221 gap analysis against 15 alternatives.",
-    "status": "planned",
-    "next_action": "Build the slices in plan.md, then retire the initiative."
+    "status": "active",
+    "next_action": "Merge the stack, then retire this initiative."
   },
   "artifacts": {
     "intent_brief": {
@@ -243,6 +243,10 @@
     {
       "date": "2026-11-01",
       "event": "Byron chose diagram quality as the lead job, honest then faithful Before panels, four added slices, and a merge of PR 221 without a refresh. plan.md records the order."
+    },
+    {
+      "date": "2026-11-01",
+      "event": "All six slices are built and in review as one stack. Retirement waits for the merge."
     }
   ],
   "closure": null

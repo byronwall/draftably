@@ -1,5 +1,9 @@
 # Draftably: gaps worth closing
 
+> **Snapshot as of 2026-10-28.** Attached notes and PDF export shipped after this research, and
+> foreign-format import shipped against REC-19. [The plan](../../intent/diagram-library-coverage/plan.md)
+> holds the current decisions.
+
 Improve the depth of current diagrams before adding many new diagram families. Start with truthful
 before/after comparisons. Then add relationship ends, typed field rows, attached notes, and sequence
 branches. Explore structural views after their inclusion and layout rules are clear.
@@ -12,7 +16,7 @@ This recommendation comes from a comparison with 15 alternatives across 28 diagr
 The research used commit `2995a98eef31803fa8669a7ada5c8f8892486bb7` and primary sources checked
 October 28, 2026. Codex reviewed the findings against this checkout. The baseline source files
 remain unchanged. The full Pro report and detailed syntax proposals are available in
-[the research conversation](https://chatgpt.com/c/6ae1522f-1664-83ea-aade-5b585e44394d).
+[the committed report](../../intent/diagram-library-coverage/assets/pro-results/diagram-library-gaps-2026-10-27/gap-analysis.md).
 
 ## What Draftably already covers
 
