@@ -574,7 +574,7 @@ aren't in the list, and they keep their own rows, so the old panel leaves a gap 
 refuses `was-order` outside a sequence, a repeated message and a `+` message. It only warns on an
 unknown or missing message, so a visual edit that adds or deletes a message leaves the file open;
 a missing message stays on its new row in the old panel. Panels draw every note in the frame, so a
-note on a message sits on no row in either panel.
+note on a message sits on no row in either panel, and no panel keeps a side margin for it.
 
 ## Emphasis states
 

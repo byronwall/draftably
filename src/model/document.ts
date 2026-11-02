@@ -384,6 +384,7 @@ export function normalize(input: unknown): Diagram {
       phases: phases(seq.phases),
       ...(finite(seq.phaseX) ? { phaseX: seq.phaseX } : {}),
       ...(Array.isArray(seq.notes) ? { notes: seq.notes } : {}),
+      ...(seq.inner ? { inner: { ...seq.inner } } : {}),
       ...(seq.before && Array.isArray(seq.before.phases)
         ? {
             before: {

@@ -3,7 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
-import { oldDoc, panelDoc } from '../model/panels';
+import { oldDoc, panelDoc, withoutMargins } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
@@ -412,7 +412,7 @@ function openSvg(
  */
 function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): string {
   const states = doc.appearance.states ?? [],
-    docs = states.map(s => withState(doc, s.id)),
+    docs = states.map(s => withState(withoutMargins(doc), s.id)),
     { defs, marker } = markersFor(look, docs),
     shared = routesOf(doc),
     scenes = docs.map(d => sceneMarkup(d, look, marker, opts, shared));
