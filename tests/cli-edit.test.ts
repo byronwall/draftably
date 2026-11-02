@@ -17,6 +17,24 @@ const source = [
 ].join('\n');
 
 describe('set, rm and mv', () => {
+  it('rm takes messages out of phases, by message or by participant', () => {
+    const file = [
+      'node a "A"',
+      'node b "B"',
+      'node c "C"',
+      'edge m1 a -> b "1"',
+      'edge m2 b -> c "2"',
+      'edge m3 a -> c "3"',
+      'phase p "P" m1 m2',
+      'phase q "Q" m3',
+      'layout root sequence',
+    ].join('\n');
+    expect(removeIds(file, ['m1'])).toContain('phase p "P" m2\n');
+    const out = removeIds(file, ['b']);
+    expect(out).not.toContain('phase p');
+    expect(out).toContain('phase q "Q" m3');
+  });
+
   it('sets a label with an apostrophe and attributes, and removes one with key=', () => {
     const out = setFields(source, 'node.open', [
       "label=Open the record's page",

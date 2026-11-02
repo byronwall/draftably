@@ -79,10 +79,15 @@ export function addRefinement(doc: SourceDoc, s: Statement) {
 export const clearPosition = (doc: SourceDoc, id: string) =>
   removeWhere(doc, s => POSITION_HINTS.includes(s.command as never) && s.args[0]?.value === id);
 
-/** Every statement that mentions `id` as an object: refinements, edges and alignment lists. */
+/**
+ * Every statement that mentions `id` as an object: refinements, edges and alignment lists. Its
+ * messages go with it, and they leave the phases and states that list them.
+ */
 export function removeReferences(doc: SourceDoc, id: string) {
+  statements(doc)
+    .filter(s => s.command === 'edge' && (s.args[1]?.value === id || s.args[3]?.value === id))
+    .forEach(s => removeEdge(doc, s.args[0].value));
   removeWhere(doc, s => {
-    if (s.command === 'edge') return s.args[1]?.value === id || s.args[3]?.value === id;
     if (s.command === 'near') return s.args[0]?.value === id || s.args[1]?.value === id;
     if (['nudge', 'stay', 'pin', 'size'].includes(s.command)) return s.args[0]?.value === id;
     if (s.command === 'layout' || s.command === 'order') return s.args[0]?.value === id;
@@ -106,6 +111,24 @@ export function removeFromStates(doc: SourceDoc, id: string) {
     if (s.command === 'state')
       s.args = s.args.filter((w, i) => i === 0 || w.quoted || w.value !== id);
   removeWhere(doc, s => s.command === 'state' && !s.args.slice(1).some(w => !w.quoted));
+}
+
+/**
+ * Remove a connection and each mention of it, so its `phase` and `state` lines still compile. A
+ * phase left with no messages goes too; a comment on its line stays, on a line of its own.
+ */
+export function removeEdge(doc: SourceDoc, id: string) {
+  removeWhere(doc, s => s.command === 'edge' && s.args[0]?.value === id);
+  removeFromStates(doc, id);
+  for (const s of statements(doc))
+    if (s.command === 'phase') s.args = s.args.filter((w, i) => i < 2 || w.value !== id);
+  doc.lines = doc.lines.flatMap(line =>
+    !isStatement(line) || line.command !== 'phase' || line.args.length > 2
+      ? [line]
+      : line.comment
+        ? [{ kind: 'comment', text: line.comment }]
+        : [],
+  );
 }
 
 export const num = (n: number) => bare(String(Math.round(n)));
