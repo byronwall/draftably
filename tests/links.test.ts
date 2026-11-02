@@ -5,6 +5,13 @@ import { compile } from '../src/dsl/compile';
 import { baseUrl, editorUrl, joinPath, linkMark, linkTarget } from '../src/model/link';
 
 describe('links', () => {
+  it('keeps the path of an unquoted URL, while // after a space or quote is a comment', () => {
+    const { objects } = parseModel(
+      'node a "A" href=https://example.com/path // docs\nnode b "B"// note\n',
+    );
+    expect(objects.map(o => o.href)).toEqual(['https://example.com/path', undefined]);
+  });
+
   it('keeps URLs as written and reads a line and column off a file path', () => {
     expect(linkTarget('https://github.com/o/r/blob/main/a.ts#L4')).toEqual({
       kind: 'url',

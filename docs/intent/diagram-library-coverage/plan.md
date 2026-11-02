@@ -24,14 +24,14 @@ is the current decision. Where the review or the research disagrees with it, thi
 
 ## Slices, in order
 
-| #   | Slice                   | Scope                                                                                                             | Status      |
-| --- | ----------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
-| 1   | Comparison honesty      | Any parsed field marks a line `~`. `compare` lists changes with no old version. No new grammar.                   | In review   |
-| 2   | Sequence correctness    | PR 331 M1: group order, contiguous phases, deletion of a phased message, label clearance. No new grammar.         | Next        |
-| 3   | Endpoint markers        | A small marker set. Plain edges keep their meaning. DOT and Mermaid imports use the markers instead of a refusal. | Needs shape |
-| 4   | Notes on messages       | `note … near=m1`, and the sequence text in `docs/DSL.md`.                                                         | Needs shape |
-| 5   | Mermaid sequence import | Your 20 Mermaid sequences come across. `alt` and `loop` need a mapping or a clear refusal.                        | Needs shape |
-| 6   | Faithful Before panels  | Real old values for shape, count and message order.                                                               | Needs shape |
+| #   | Slice                   | Scope                                                                                                             | Status    |
+| --- | ----------------------- | ----------------------------------------------------------------------------------------------------------------- | --------- |
+| 1   | Comparison honesty      | Any parsed field marks a line `~`. `compare` lists changes with no old version. No new grammar.                   | In review |
+| 2   | Sequence correctness    | PR 331 M1: group order, contiguous phases, deletion of a phased message, label clearance. No new grammar.         | In review |
+| 3   | Endpoint markers        | A small marker set. Plain edges keep their meaning. DOT and Mermaid imports use the markers instead of a refusal. | In review |
+| 4   | Notes on messages       | `note … near=m1`, and the sequence text in `docs/DSL.md`.                                                         | In review |
+| 5   | Mermaid sequence import | Your 20 Mermaid sequences come across. `alt` and `loop` need a mapping or a clear refusal.                        | In review |
+| 6   | Faithful Before panels  | Real old values for shape, count and message order.                                                               | In review |
 
 Slice 2 comes before the new language because it fixes meaning in a family that you use often.
 Slice 5 follows 2 and 4, so that imported sequences land on a correct renderer. Slice 6 is last
@@ -71,9 +71,16 @@ These stay below the line. Reopen one only with a real diagram that needs it.
 
 ## For retirement
 
-- Mark notes and PDF as shipped in the research, and note that import shipped against REC-19.
-- Replace the ChatGPT links in `summary.md` and `next-steps.md`, and keep one CSV set.
+Retire this initiative after the stack merges. These items stay open until then:
+
 - Decide whether `run.md` stays. It holds local paths and heartbeat notes in a public repository.
-- Close PR 116 if slice 1 and slice 6 cover its semantic signature idea.
-- Reconcile PR 331, which conflicts with `main`, with slice 2.
-- Fix unquoted `href=https://…`, which loses its path with no error. This is a separate small bug.
+- Keep one CSV set. `docs/research` and `assets/pro-results` both hold one.
+- Close PR 116 if slices 1 and 6 cover its semantic signature idea.
+- Close or rebase PR 331. Slice 2 builds its first milestone, and M2 to M4 stay open there.
+- Check these limits, which the slices report but don't fix:
+  - A crossing halo can cut a short marked line.
+  - An old label taller than its new one can crowd its row in a Before panel.
+  - The Inspector still shows pin and position fields for sequence participants.
+  - `writeArrangement` can still write `stay` hints from a layout pass.
+  - `#` still starts a comment inside a bare word, so an unquoted URL fragment is lost.
+  - A compare panel keeps the empty side margin of a message note, because panels draw notes in the frame.

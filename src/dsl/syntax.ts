@@ -130,7 +130,9 @@ export function tokenize(
       token += c;
       continue;
     }
-    if (!inQuote && (c === '#' || (c === '/' && text[i + 1] === '/'))) {
+    // `//` inside a bare word is text, so an unquoted URL keeps its path.
+    const slashes = c === '/' && text[i + 1] === '/' && !/[^\s"]/.test(text[i - 1] ?? ' ');
+    if (!inQuote && (c === '#' || slashes)) {
       push();
       return { tokens, columns, comment: text.slice(i).trim() };
     }
