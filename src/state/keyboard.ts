@@ -25,7 +25,8 @@ import {
   tool,
   type Tool,
 } from './editor';
-import { importText, insertImage } from './files';
+import { importForeignText, importText, insertImage } from './files';
+import { detectSource } from '../import/detect';
 import { cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
 import { cancelGesture } from './pointer';
 import { visibleScene } from './scene';
@@ -38,6 +39,10 @@ const isEditable = (el: EventTarget | null) =>
   el instanceof Element && el.matches('input,textarea,select,[contenteditable=true]');
 
 const modalOpen = () => !!dialog() || comparison.open;
+
+/** Keyboard focus on a button keeps Space. A button a click left focused still lets Space pan. */
+const keepsSpace = (el: EventTarget | null) =>
+  el instanceof Element && el.matches('button:focus-visible,summary:focus-visible');
 
 const ARROW_SIDES: Record<string, Side> = {
   ArrowRight: 'right',
@@ -102,8 +107,11 @@ export function handleKeyDown(e: KeyboardEvent) {
     focusCanvas();
     return;
   }
+  // Finding a command works from anywhere, even while typing in a field.
+  if (mod && key === 'k') return (e.preventDefault(), runCommand('palette'));
   if (isEditable(target)) return;
 
+  if (e.code === 'Space' && keepsSpace(target)) return;
   if (e.code === 'Space' && !e.repeat) {
     e.preventDefault();
     setSpaceHeld(true);
@@ -118,8 +126,11 @@ export function handleKeyDown(e: KeyboardEvent) {
       d: () => runCommand('duplicate'),
       g: () => runCommand(e.shiftKey ? 'ungroup' : 'group'),
       s: () => runCommand('export-json'),
-      o: () => runCommand('open'),
+      // A served folder has no file dialog; its way to open a diagram is the same as ⌘P.
+      o: () => runCommand(commandEnabled('find-file') ? 'find-file' : 'open'),
     };
+    // ⇧⌘C copies the diagram, or the selection, as an image; ⌘C stays an object copy.
+    if (key === 'c' && e.shiftKey) shortcuts.c = () => runCommand('copy-image');
     // ⌘P goes to a diagram in the served folder; without one the browser prints as usual.
     if (key === 'p' && commandEnabled('find-file')) shortcuts.p = () => runCommand('find-file');
     if (shortcuts[key]) {
@@ -248,6 +259,16 @@ export async function handlePaste(e: ClipboardEvent) {
       return;
     }
     const text = e.clipboardData.getData('text/plain').trim();
+    const detected = detectSource(text);
+    if (detected.status === 'detected' && ['dot', 'mermaid', 'd2'].includes(detected.format)) {
+      e.preventDefault();
+      await importForeignText(text);
+      return;
+    }
+    if (detected.status === 'choose-fence') {
+      e.preventDefault();
+      throw Error('This text has more than one diagram. Paste one diagram at a time.');
+    }
     if (text.includes('\n') && !text.startsWith('{')) {
       e.preventDefault();
       openQuickBuild(text);

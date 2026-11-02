@@ -1,0 +1,30 @@
+{
+  "status": "failed",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_TWO_ENDED_ARROW_UNSUPPORTED",
+      "severity": "error",
+      "impact": "semantics",
+      "message": "A two-ended relationship cannot become two native relationships without changing edge multiplicity.",
+      "foreignIds": [
+        "(a <-> b)[0]"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

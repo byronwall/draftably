@@ -1,0 +1,1 @@
+digraph G { a[shape=record,label="<p> field|other"]; a:p -> b; }

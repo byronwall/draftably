@@ -6,14 +6,14 @@ import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
 import { FileBanner } from './components/FileBanner';
-import { FilesPanel } from './components/FilesPanel';
 import { Inspector } from './components/Inspector';
 import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
-import { ObjectsPanel } from './components/ObjectsPanel';
+import { Sidebar } from './components/Sidebar';
 import { StartScreen } from './components/StartScreen';
 import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
+import { Tips } from './components/Tips';
 import { Toolbar } from './components/Toolbar';
 import { finishInlineEdit } from './state/actions';
 import { setFilePicker } from './state/commands';
@@ -21,15 +21,23 @@ import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
-import { exampleEdited, exampleMode, fileMode } from './state/file-session';
-import { openFile } from './state/files';
+import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
+import { importForeignText, openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
 import { resetModifiers } from './state/pointer';
 import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
-import { filesShown, inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
+import {
+  filesShown,
+  inspectorOpen,
+  inspectorWidth,
+  layoutLabOpen,
+  objectsOpen,
+  showError,
+  sidebarWidth,
+} from './state/ui';
 import './styles/app.css';
 
 /** Add an event listener and return a function that removes it. */
@@ -50,21 +58,33 @@ export default function App() {
   let diagramInput!: HTMLInputElement;
   let imageInput!: HTMLInputElement;
   let replaceImageId: string | null = null;
+  let foreignOnly = false;
 
   setFilePicker((replaceId, accept) => {
     replaceImageId = replaceId;
+    foreignOnly = accept === 'foreign';
     const input = accept === 'image' ? imageInput : diagramInput;
+    if (input === diagramInput)
+      input.accept = foreignOnly
+        ? '.dot,.gv,.mmd,.mermaid,.d2,.md,.txt'
+        : '.json,.svg,.dot,.gv,.mmd,.mermaid,.d2,image/png,image/jpeg,image/webp,image/gif';
     input.value = '';
     input.click();
   });
 
   const onFiles = async (e: Event & { currentTarget: HTMLInputElement }) => {
     try {
-      for (const file of e.currentTarget.files ?? []) await openFile(file, replaceImageId);
+      for (const file of e.currentTarget.files ?? []) {
+        if (foreignOnly) {
+          if (file.size > 256 * 1024) throw Error('Use a diagram smaller than 256 KB.');
+          await importForeignText(await file.text(), file.name);
+        } else await openFile(file, replaceImageId);
+      }
     } catch (error) {
       showError(error instanceof Error ? error.message : String(error));
     } finally {
       replaceImageId = null;
+      foreignOnly = false;
     }
   };
 
@@ -102,9 +122,15 @@ export default function App() {
       resetModifiers();
       setSpaceHeld(false);
     };
-    // Leaving an edited example would lose its edits; the browser asks first.
+    // Edits to an example are not in any file; the browser asks first. A label or field still
+    // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (exampleEdited()) e.preventDefault();
+      finishInlineEdit(true);
+      (document.activeElement as HTMLElement | null)?.blur?.();
+      if (!exampleEdited() || leaveAgreed()) return;
+      e.preventDefault();
+      // Older Chrome and Safari show the prompt only when returnValue is set.
+      e.returnValue = '';
     };
     const onUnload = () => {
       sculptBeforeUnload();
@@ -134,6 +160,10 @@ export default function App() {
   return (
     <div
       class="app"
+      style={{
+        '--sidebar-width': `${sidebarWidth()}px`,
+        '--inspector-width': `${inspectorWidth()}px`,
+      }}
       classList={{
         'objects-open': objectsOpen(),
         'inspector-open': inspectorOpen(),
@@ -147,11 +177,8 @@ export default function App() {
         </Show>
       </div>
       <div class="workspace">
-        <Show when={filesShown()}>
-          <FilesPanel />
-        </Show>
-        <Show when={objectsOpen()}>
-          <ObjectsPanel />
+        <Show when={filesShown() || objectsOpen()}>
+          <Sidebar />
         </Show>
         <Canvas />
         <FileBanner />
@@ -167,6 +194,7 @@ export default function App() {
       <Dialogs />
       <ComparisonDialog />
       <Toast />
+      <Tips />
       <Show when={startOpen()}>
         <StartScreen variant="dialog" />
       </Show>
@@ -174,7 +202,7 @@ export default function App() {
         ref={diagramInput}
         type="file"
         hidden
-        accept=".json,.svg,image/png,image/jpeg,image/webp,image/gif"
+        accept=".json,.svg,.dot,.gv,.mmd,.mermaid,.d2,image/png,image/jpeg,image/webp,image/gif"
         onChange={onFiles}
       />
       <input

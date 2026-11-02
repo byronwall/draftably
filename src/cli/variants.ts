@@ -159,7 +159,12 @@ export function applyEdits(source: string, edits: Edit[]) {
     else if (edit.kind !== 'group') {
       const next =
         edit.kind === 'layout'
-          ? fresh('layout', [bare(edit.scope)], edit.attrs)
+          ? // Without an engine a layout line needs a recipe; `flow` is the one with a direction.
+            fresh(
+              'layout',
+              edit.attrs.engine ? [bare(edit.scope)] : [bare(edit.scope), bare('flow')],
+              edit.attrs,
+            )
           : fresh(edit.kind, [], edit.attrs);
       if (next.attrs.length) added.push(printStatement(next));
     }

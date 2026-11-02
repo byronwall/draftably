@@ -36,6 +36,7 @@ function workspace(root: string | undefined, file: string | undefined): Plugin |
 }
 
 export default defineConfig({
+  worker: { format: 'es' },
   // Relative asset paths let the static build run from any subdirectory.
   base: './',
   // App state lives in module-level stores. Hot-swapping components would split them from that

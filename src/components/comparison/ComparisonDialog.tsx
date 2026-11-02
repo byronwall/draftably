@@ -35,7 +35,9 @@ function Dialog() {
   let dialog!: HTMLDialogElement;
   onMount(() => {
     rememberFocus(document.activeElement);
+    dialog.tabIndex = -1;
     dialog.showModal();
+    dialog.focus();
   });
   onCleanup(() => dialog.open && dialog.close());
 

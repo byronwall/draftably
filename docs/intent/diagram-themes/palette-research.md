@@ -1,7 +1,7 @@
 # Palette research: the Drafting set
 
 Byron found the five themes "good, not great". He asked for an opinionated base look that makes a
-Draftably diagram easy to recognize. The textured "Pressed paper" try is off the table
+draftably diagram easy to recognize. The textured "Pressed paper" try is off the table
 ([texture-research.md](texture-research.md)). This round changes color only. The goals come from
 [FEEL.md](../diagram-quality/FEEL.md): color carries meaning, two to four accent families plus
 neutrals, a legend gives the coloring a schema, and the frame never shouts over the content.

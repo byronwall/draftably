@@ -1,0 +1,2923 @@
+{
+  "baseline": "dd2ababcbe3b9ac011bc23e652309c10cf31cd02",
+  "researchDate": "2026-10-31",
+  "cases": [
+    {
+      "id": "d2/arrowSubset",
+      "input": "a -> b: forward\na <- b: backward\na -- b: neither\na -> b: parallel\n",
+      "expected": {
+        "status": "ready",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> b)[0]",
+            "native": "d2_edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a <- b)[0]",
+            "native": "d2_edge_2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -- b)[0]",
+            "native": "d2_edge_3"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> b)[1]",
+            "native": "d2_edge_4"
+          }
+        ],
+        "requires": [
+          "IMP-02-native-undirected"
+        ],
+        "nativeSource": "diagram \"D2 arrowSubset\" version=1\nnode a \"a\"\nnode b \"b\"\nedge d2_edge_1 a -> b \"forward\"\nedge d2_edge_2 b -> a \"backward\"\nedge d2_edge_3 a -> b \"neither\" directed=false\nedge d2_edge_4 a -> b \"parallel\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 arrowSubset",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "kind": "node",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "forward",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_2",
+              "from": "b",
+              "to": "a",
+              "label": "backward",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_3",
+              "from": "a",
+              "to": "b",
+              "label": "neither",
+              "directed": false
+            },
+            {
+              "id": "d2_edge_4",
+              "from": "a",
+              "to": "b",
+              "label": "parallel",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/arrows",
+      "input": "a -> b: forward\na <- b: backward\na <-> b: both\na -- b: neither\na -> b: parallel\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_TWO_ENDED_ARROW_UNSUPPORTED",
+            "severity": "error",
+            "impact": "semantics",
+            "message": "A two-ended relationship cannot become two native relationships without changing edge multiplicity.",
+            "foreignIds": [
+              "(a <-> b)[0]"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "d2/boards",
+      "input": "a -> b\nlayers: {alternative: {c -> d}}\nscenarios: {x: {a -> c}}\nsteps: {first: {b -> c}; second: {c -> d}}\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_BOARD_SELECTION_REQUIRED",
+            "severity": "error",
+            "impact": "semantics",
+            "message": "This file has layers, scenarios, or steps. Select one board explicitly; this companion does not merge or discard boards."
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "d2/configuration",
+      "input": "vars: {d2-config: {theme-id: 4; layout-engine: elk; data: {intent: example}}}\na -> b\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PROGRAM_SNAPSHOT",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "D2 configuration, variables become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+          },
+          {
+            "code": "D2_CONFIG_IGNORED",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "Import uses fixed compiler options and native layout/styling; D2 source configuration is not retained."
+          },
+          {
+            "code": "D2_CONFIG_DATA_DROPPED",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "Custom D2 configuration data has no native model field and is omitted."
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> b)[0]",
+            "native": "d2_edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 configuration\" version=1\nnode a \"a\"\nnode b \"b\"\nedge d2_edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 configuration",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "kind": "node",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/generative",
+      "input": "vars: {name: Outer}\nclasses: {service: {shape: diamond; style.fill: \"#ffeecc\"}}\ncluster: Cluster {\n  vars: {name: Inner}\n  a: ${name}\n  b: B\n  *.class: service\n  a -> *: call\n}\noutside: ${name}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PROGRAM_SNAPSHOT",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "D2 classes, globs, variables become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+          },
+          {
+            "code": "D2_STYLE_DROPPED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "Explicit D2 styles omitted by this companion: fill.",
+            "foreignIds": [
+              "cluster.a"
+            ]
+          },
+          {
+            "code": "D2_STYLE_DROPPED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "Explicit D2 styles omitted by this companion: fill.",
+            "foreignIds": [
+              "cluster.b"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "group",
+            "foreign": "cluster",
+            "native": "cluster"
+          },
+          {
+            "kind": "node",
+            "foreign": "cluster.a",
+            "native": "cluster.a"
+          },
+          {
+            "kind": "node",
+            "foreign": "cluster.b",
+            "native": "cluster.b"
+          },
+          {
+            "kind": "node",
+            "foreign": "outside",
+            "native": "outside"
+          },
+          {
+            "kind": "edge",
+            "foreign": "cluster.(a -> b)[0]",
+            "native": "d2_edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 generative\" version=1\ngroup cluster \"Cluster\"\nnode cluster.a \"Inner\" in=cluster shape=diamond\nnode cluster.b \"B\" in=cluster shape=diamond\nnode outside \"Outer\"\nedge d2_edge_1 cluster.a -> cluster.b \"call\"\nlayout root flow direction=down\nlayout cluster flow direction=down\n",
+        "facts": {
+          "title": "D2 generative",
+          "objects": [
+            {
+              "id": "cluster",
+              "kind": "group",
+              "label": "Cluster"
+            },
+            {
+              "id": "cluster.a",
+              "kind": "node",
+              "label": "Inner",
+              "parent": "cluster",
+              "shape": "diamond"
+            },
+            {
+              "id": "cluster.b",
+              "kind": "node",
+              "label": "B",
+              "parent": "cluster",
+              "shape": "diamond"
+            },
+            {
+              "id": "outside",
+              "kind": "node",
+              "label": "Outer",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "cluster.a",
+              "to": "cluster.b",
+              "label": "call",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "cluster",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/hiddenDirection",
+      "input": "a -> b: {target-arrowhead.shape: none}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_ARROW_APPEARANCE_CHANGED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "Native arrowheads show the declared connection direction; foreign arrowhead suppression is not preserved.",
+            "foreignIds": [
+              "(a -> b)[0]"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> b)[0]",
+            "native": "d2_edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 hiddenDirection\" version=1\nnode a \"a\"\nnode b \"b\"\nedge d2_edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 hiddenDirection",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "kind": "node",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/image",
+      "input": "remote: Image {shape: image; icon: https://importer-probe.invalid/never-fetch.png}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SHAPE_APPROXIMATED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "D2 shape \"image\" becomes a native box.",
+            "foreignIds": [
+              "remote"
+            ]
+          },
+          {
+            "code": "D2_ACTIVE_RESOURCE_DROPPED",
+            "severity": "warning",
+            "impact": "security",
+            "message": "Image/icon and link references are omitted; no input resource is opened.",
+            "foreignIds": [
+              "remote"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "remote",
+            "native": "remote"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 image\" version=1\nnode remote \"Image\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 image",
+          "objects": [
+            {
+              "id": "remote",
+              "kind": "node",
+              "label": "Image",
+              "shape": "box"
+            }
+          ],
+          "edges": [],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/literalRules",
+      "input": "a: 'vars classes * ${keep}'\n",
+      "expected": {
+        "status": "ready",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 literalRules\" version=1\nnode a \"vars classes * ${keep}\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 literalRules",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "vars classes * ${keep}",
+              "shape": "box"
+            }
+          ],
+          "edges": [],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/malformed",
+      "input": "a: {\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PARSE_OR_COMPILE_ERROR",
+            "severity": "error",
+            "impact": "syntax",
+            "message": "Error: [{\"range\":\"input.d2,0:3:3-1:0:5\",\"errmsg\":\"input.d2:1:4: maps must be terminated with }\"}]"
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "d2/markdownImage",
+      "input": "a: |md\n![do not fetch](https://importer-probe.invalid/never-fetch.png)\n|\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_LABEL_MARKUP_LITERAL",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "The \"markdown\" label is retained as literal text.",
+            "foreignIds": [
+              "a"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 markdownImage\" version=1\nnode a \"![do not fetch](https://importer-probe.invalid/never-fetch.png)\" shape=text\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 markdownImage",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "![do not fetch](https://importer-probe.invalid/never-fetch.png)",
+              "shape": "text"
+            }
+          ],
+          "edges": [],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/missingImport",
+      "input": "a: @missing\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PARSE_OR_COMPILE_ERROR",
+            "severity": "error",
+            "impact": "syntax",
+            "message": "Error: [{\"range\":\"input.d2,0:3:3-0:11:11\",\"errmsg\":\"input.d2:1:4: failed to import \\\"missing.d2\\\": file does not exist\"}]"
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "d2/nested",
+      "input": "direction: right\nservice: Service {\n  api: API\n  cache: Cache {shape: cylinder}\n  api -> cache: lookup\n}\nclient: Client\nclient -> service.api: request\nservice.api -> client: response\nservice.api -> service.cache: refresh\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SHAPE_APPROXIMATED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "D2 shape \"cylinder\" becomes a native box.",
+            "foreignIds": [
+              "service.cache"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "group",
+            "foreign": "service",
+            "native": "service"
+          },
+          {
+            "kind": "node",
+            "foreign": "service.api",
+            "native": "service.api"
+          },
+          {
+            "kind": "node",
+            "foreign": "service.cache",
+            "native": "service.cache"
+          },
+          {
+            "kind": "node",
+            "foreign": "client",
+            "native": "client"
+          },
+          {
+            "kind": "edge",
+            "foreign": "service.(api -> cache)[0]",
+            "native": "d2_edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(client -> service.api)[0]",
+            "native": "d2_edge_2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(service.api -> client)[0]",
+            "native": "d2_edge_3"
+          },
+          {
+            "kind": "edge",
+            "foreign": "service.(api -> cache)[1]",
+            "native": "d2_edge_4"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 nested\" version=1\ngroup service \"Service\"\nnode service.api \"API\" in=service\nnode service.cache \"Cache\" in=service\nnode client \"Client\"\nedge d2_edge_1 service.api -> service.cache \"lookup\"\nedge d2_edge_2 client -> service.api \"request\"\nedge d2_edge_3 service.api -> client \"response\"\nedge d2_edge_4 service.api -> service.cache \"refresh\"\nlayout root flow direction=right\nlayout service flow direction=right\n",
+        "facts": {
+          "title": "D2 nested",
+          "objects": [
+            {
+              "id": "service",
+              "kind": "group",
+              "label": "Service"
+            },
+            {
+              "id": "service.api",
+              "kind": "node",
+              "label": "API",
+              "parent": "service",
+              "shape": "box"
+            },
+            {
+              "id": "service.cache",
+              "kind": "node",
+              "label": "Cache",
+              "parent": "service",
+              "shape": "box"
+            },
+            {
+              "id": "client",
+              "kind": "node",
+              "label": "Client",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "service.api",
+              "to": "service.cache",
+              "label": "lookup",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_2",
+              "from": "client",
+              "to": "service.api",
+              "label": "request",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_3",
+              "from": "service.api",
+              "to": "client",
+              "label": "response",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_4",
+              "from": "service.api",
+              "to": "service.cache",
+              "label": "refresh",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "right"
+            },
+            {
+              "scope": "service",
+              "kind": "flow",
+              "direction": "right"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/nullOverride",
+      "input": "a: A\nb: B\na -> b\nb: null\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PROGRAM_SNAPSHOT",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "D2 null overrides become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 nullOverride\" version=1\nnode a \"A\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 nullOverride",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "A",
+              "shape": "box"
+            }
+          ],
+          "edges": [],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/quoted",
+      "input": "a: A\n\"a.b\": Dotted {\n  \"x.y\": Leaf\n  inner: {z}\n}\na -> \"a.b\".\"x.y\"\n\"a.b\".inner.z -> \"a.b\".\"x.y\"\n",
+      "expected": {
+        "status": "ready",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "group",
+            "foreign": "\"a.b\"",
+            "native": "_u22_a.b_u22_"
+          },
+          {
+            "kind": "node",
+            "foreign": "\"a.b\".\"x.y\"",
+            "native": "_u22_a.b_u22_._u22_x.y_u22_"
+          },
+          {
+            "kind": "group",
+            "foreign": "\"a.b\".inner",
+            "native": "_u22_a.b_u22_.inner"
+          },
+          {
+            "kind": "node",
+            "foreign": "\"a.b\".inner.z",
+            "native": "_u22_a.b_u22_.inner.z"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> \"a.b\".\"x.y\")[0]",
+            "native": "d2_edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "\"a.b\".(inner.z -> \"x.y\")[0]",
+            "native": "d2_edge_2"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 quoted\" version=1\nnode a \"A\"\ngroup _u22_a.b_u22_ \"Dotted\"\nnode _u22_a.b_u22_._u22_x.y_u22_ \"Leaf\" in=_u22_a.b_u22_\ngroup _u22_a.b_u22_.inner \"inner\" in=_u22_a.b_u22_\nnode _u22_a.b_u22_.inner.z \"z\" in=_u22_a.b_u22_.inner\nedge d2_edge_1 a -> _u22_a.b_u22_._u22_x.y_u22_ \"\"\nedge d2_edge_2 _u22_a.b_u22_.inner.z -> _u22_a.b_u22_._u22_x.y_u22_ \"\"\nlayout root flow direction=down\nlayout _u22_a.b_u22_ flow direction=down\nlayout _u22_a.b_u22_.inner flow direction=down\n",
+        "facts": {
+          "title": "D2 quoted",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "A",
+              "shape": "box"
+            },
+            {
+              "id": "_u22_a.b_u22_",
+              "kind": "group",
+              "label": "Dotted"
+            },
+            {
+              "id": "_u22_a.b_u22_._u22_x.y_u22_",
+              "kind": "node",
+              "label": "Leaf",
+              "parent": "_u22_a.b_u22_",
+              "shape": "box"
+            },
+            {
+              "id": "_u22_a.b_u22_.inner",
+              "kind": "group",
+              "label": "inner",
+              "parent": "_u22_a.b_u22_"
+            },
+            {
+              "id": "_u22_a.b_u22_.inner.z",
+              "kind": "node",
+              "label": "z",
+              "parent": "_u22_a.b_u22_.inner",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "a",
+              "to": "_u22_a.b_u22_._u22_x.y_u22_",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "d2_edge_2",
+              "from": "_u22_a.b_u22_.inner.z",
+              "to": "_u22_a.b_u22_._u22_x.y_u22_",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "_u22_a.b_u22_",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "_u22_a.b_u22_.inner",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/sequence",
+      "input": "shape: sequence_diagram\nalice: Alice\nbob: Bob\nalice -> bob: hello\nbob -> alice: hi\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_SEQUENCE_UNSUPPORTED",
+            "severity": "error",
+            "impact": "semantics",
+            "message": "Sequence compilation introduces lifeline geometry; use a dedicated semantic sequence adapter."
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "d2/styles",
+      "input": "classes: {service: {style.fill: \"#ffcc00\"}}\na: A {class: service; style.stroke: \"#003366\"}\nb: B {shape: diamond}\na -> b: request {style.stroke-dash: 3}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_PROGRAM_SNAPSHOT",
+            "severity": "warning",
+            "impact": "semantics",
+            "message": "D2 classes become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+          },
+          {
+            "code": "D2_STYLE_DROPPED",
+            "severity": "warning",
+            "impact": "appearance",
+            "message": "Explicit D2 styles omitted by this companion: stroke, fill.",
+            "foreignIds": [
+              "a"
+            ]
+          },
+          {
+            "code": "D2_SNAPSHOT_MODE",
+            "severity": "info",
+            "impact": "semantics",
+            "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+          },
+          {
+            "code": "D2_LAYOUT_RECOMPUTED",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "(a -> b)[0]",
+            "native": "d2_edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"D2 styles\" version=1\nnode a \"A\"\nnode b \"B\" shape=diamond\nedge d2_edge_1 a -> b \"request\" kind=async\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "D2 styles",
+          "objects": [
+            {
+              "id": "a",
+              "kind": "node",
+              "label": "A",
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "kind": "node",
+              "label": "B",
+              "shape": "diamond"
+            }
+          ],
+          "edges": [
+            {
+              "id": "d2_edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "request",
+              "directed": true,
+              "dashed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "d2/table",
+      "input": "users: {shape: sql_table; id: int {constraint: primary_key}; name: text}\nposts: {shape: sql_table; user_id: int}\nposts.user_id -> users.id\n",
+      "expected": {
+        "status": "failed",
+        "format": "d2",
+        "family": "general graph",
+        "diagnostics": [
+          {
+            "code": "D2_COMPARTMENTS_UNSUPPORTED",
+            "severity": "error",
+            "impact": "semantics",
+            "message": "SQL-table and class compartments require field/member mapping; this companion does not flatten them."
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/anonymousRank",
+      "input": "digraph Ranking {\n  node [shape=box];\n  {rank=same; a; b;}\n  a -> b;\n}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_RANK_CONSTRAINT",
+            "message": "A subgraph rank constraint is not reproduced by native layout.",
+            "severity": "warning",
+            "impact": "layout",
+            "line": 3
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Ranking\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Ranking",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/compassApproximation",
+      "input": "digraph Compass {\n  node [shape=box];\n  a:ne -> b:c;\n}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_COMPASS",
+            "message": "Compass port ne becomes a native automatic boundary attachment.",
+            "severity": "warning",
+            "impact": "layout"
+          },
+          {
+            "code": "DOT_COMPASS",
+            "message": "Compass port c becomes a native automatic boundary attachment.",
+            "severity": "warning",
+            "impact": "layout"
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Compass\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Compass",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/directionAndStyle",
+      "input": "digraph Appearance {\n  rankdir=RL;\n  node [shape=box];\n  a [shape=cylinder,image=\"https://import.invalid/logo.svg\"];\n  a -> b [color=\"#ff0000\",style=bold];\n}\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_SHAPE",
+            "message": "Shape cylinder becomes box.",
+            "severity": "warning",
+            "impact": "appearance",
+            "line": 4,
+            "foreignIds": [
+              "a"
+            ]
+          },
+          {
+            "code": "DOT_RESOURCE_OMITTED",
+            "message": "a: image is not mapped; no resource was loaded or link activated.",
+            "severity": "warning",
+            "impact": "security",
+            "line": 4,
+            "foreignIds": [
+              "a"
+            ]
+          },
+          {
+            "code": "DOT_EDGE_STYLE",
+            "message": "Edge style bold becomes a regular native stroke.",
+            "severity": "warning",
+            "impact": "appearance",
+            "line": 5
+          },
+          {
+            "code": "DOT_ATTRIBUTE_OMITTED",
+            "message": "edge_1: color is not mapped.",
+            "severity": "warning",
+            "impact": "appearance",
+            "line": 5,
+            "foreignIds": [
+              "edge_1"
+            ]
+          },
+          {
+            "code": "DOT_LAYOUT_DIRECTION",
+            "message": "Native layout supports right/down; RL becomes right without reversing edge meaning.",
+            "severity": "warning",
+            "impact": "layout"
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Appearance\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=right\n",
+        "facts": {
+          "title": "Appearance",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "right"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/entityLabel",
+      "input": "digraph G { node[shape=box]; a[label=\"&beta;\"]; }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_LABEL_ENTITY",
+            "message": "Graphviz character entities need a verified text decoder; entity text is not imported literally.",
+            "severity": "error",
+            "impact": "semantics",
+            "line": 1
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          }
+        ],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/htmlLabel",
+      "input": "digraph G { a[label=<<TABLE><TR><TD PORT=\"p\">Field</TD></TR></TABLE>>]; }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_HTML_LABEL",
+            "message": "HTML-like labels need a compartment/text mapper; they are not silently stripped.",
+            "severity": "error",
+            "impact": "semantics",
+            "line": 1
+          },
+          {
+            "code": "DOT_SHAPE",
+            "message": "Shape ellipse becomes pill.",
+            "severity": "warning",
+            "impact": "appearance",
+            "foreignIds": [
+              "a"
+            ]
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          }
+        ],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/malformed",
+      "input": "digraph Broken { a -> }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_PARSE_REJECTED",
+            "severity": "error",
+            "impact": "syntax",
+            "message": "The supported DOT grammar rejected this input: Expected \"<\", \"\\\"\", \"{\", NUMBER, or UNICODE_STRING but \"}\" found. Some valid DOT forms (string concatenation, repeated attribute lists, full subgraph endpoints) are outside this parser profile.",
+            "line": 1,
+            "column": 23
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/nested",
+      "input": "digraph Pipeline {\n  rankdir=LR;\n  node [shape=box];\n  subgraph cluster_backend {\n    label=\"Backend\";\n    api [label=\"API\",style=filled,fillcolor=\"#dbeafe\",color=\"#2563eb\",fontcolor=\"#172033\"];\n    subgraph cluster_data {\n      label=\"Data\";\n      db [label=\"Store\",shape=circle];\n    }\n  }\n  user -> api [label=\"request\"];\n  api -> db [label=\"read\"];\n  api -> db [label=\"write\",style=dashed];\n}\n",
+      "expected": {
+        "status": "ready",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_CLUSTER_LAYOUT",
+            "message": "Each cluster uses native flow with the global rankdir intent; Graphviz ranking and cluster packing are recomputed.",
+            "severity": "info",
+            "impact": "layout"
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "group",
+            "foreign": "cluster_backend",
+            "native": "cluster_backend"
+          },
+          {
+            "kind": "group",
+            "foreign": "cluster_data",
+            "native": "cluster_data"
+          },
+          {
+            "kind": "node",
+            "foreign": "api",
+            "native": "api"
+          },
+          {
+            "kind": "node",
+            "foreign": "db",
+            "native": "db"
+          },
+          {
+            "kind": "node",
+            "foreign": "user",
+            "native": "user"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "2",
+            "native": "edge_2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "3",
+            "native": "edge_3"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Pipeline\" version=1\ntheme-color import_1 shade=500 fill=\"#dbeafe\" stroke=\"#2563eb\" ink=\"#172033\"\ngroup cluster_backend \"Backend\"\ngroup cluster_data \"Data\" in=cluster_backend\nnode api \"API\" in=cluster_backend color=import_1 shade=500\nnode db \"Store\" in=cluster_data shape=circle\nnode user \"user\"\nedge edge_1 user -> api \"request\"\nedge edge_2 api -> db \"read\"\nedge edge_3 api -> db \"write\" kind=async\nlayout root flow direction=right\nlayout cluster_backend flow direction=right\nlayout cluster_data flow direction=right\n",
+        "facts": {
+          "title": "Pipeline",
+          "objects": [
+            {
+              "kind": "group",
+              "id": "cluster_backend",
+              "label": "Backend"
+            },
+            {
+              "kind": "group",
+              "id": "cluster_data",
+              "label": "Data",
+              "parent": "cluster_backend"
+            },
+            {
+              "kind": "node",
+              "id": "api",
+              "label": "API",
+              "parent": "cluster_backend",
+              "shape": "box",
+              "color": "import_1",
+              "shade": 500
+            },
+            {
+              "kind": "node",
+              "id": "db",
+              "label": "Store",
+              "parent": "cluster_data",
+              "shape": "circle"
+            },
+            {
+              "kind": "node",
+              "id": "user",
+              "label": "user",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "user",
+              "to": "api",
+              "label": "request",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "api",
+              "to": "db",
+              "label": "read",
+              "directed": true
+            },
+            {
+              "id": "edge_3",
+              "from": "api",
+              "to": "db",
+              "label": "write",
+              "directed": true,
+              "dashed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "right"
+            },
+            {
+              "scope": "cluster_backend",
+              "kind": "flow",
+              "direction": "right"
+            },
+            {
+              "scope": "cluster_data",
+              "kind": "flow",
+              "direction": "right"
+            }
+          ],
+          "colors": [
+            {
+              "name": "import_1",
+              "fill": "#dbeafe",
+              "stroke": "#2563eb",
+              "ink": "#172033"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dot/nonPrefixCluster",
+      "input": "digraph G { node[shape=box]; subgraph service { cluster=true; label=\"Service\"; a; b; } }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_CLUSTER_ATTRIBUTE",
+            "message": "cluster=true on a non-prefix or anonymous subgraph requires a separate cluster mapper; it is not flattened.",
+            "severity": "error",
+            "impact": "semantics",
+            "line": 1
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/parserSubgraphOperand",
+      "input": "digraph G { a -> subgraph selected { b; c; } }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_PARSER_DIALECT",
+            "message": "An unquoted DOT keyword was parsed as an identifier: subgraph. Quote actual identifiers; full subgraph edge operands are outside this parser profile.",
+            "severity": "error",
+            "impact": "syntax",
+            "line": 1
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/recordPorts",
+      "input": "digraph G { a[shape=record,label=\"<p> field|other\"]; a:p -> b; }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_RECORD",
+            "message": "Record fields/ports need a cells mapper.",
+            "severity": "error",
+            "impact": "semantics"
+          },
+          {
+            "code": "DOT_SHAPE",
+            "message": "Shape ellipse becomes pill.",
+            "severity": "warning",
+            "impact": "appearance",
+            "foreignIds": [
+              "b"
+            ]
+          },
+          {
+            "code": "DOT_NAMED_PORT",
+            "message": "Named port p has no native field target.",
+            "severity": "error",
+            "impact": "semantics"
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          }
+        ],
+        "requires": []
+      }
+    },
+    {
+      "id": "dot/safeIdsAndLabels",
+      "input": "digraph Named {\n  node [shape=box];\n  subgraph cluster_named { label=\"\\G\"; \"root\" [label=\"line\\nnext\"]; }\n  subgraph cluster_empty { \"a\\nb\" [label=\"Explicit escaped-ID label\"]; }\n  \"a b\" -> \"a_u20_b\";\n  edge_1 -> \"root\";\n  \"__proto__\" -> \"constructor\";\n}\n",
+      "expected": {
+        "status": "ready",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_CLUSTER_LAYOUT",
+            "message": "Each cluster uses native flow with the global rankdir intent; Graphviz ranking and cluster packing are recomputed.",
+            "severity": "info",
+            "impact": "layout"
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "group",
+            "foreign": "cluster_named",
+            "native": "cluster_named"
+          },
+          {
+            "kind": "group",
+            "foreign": "cluster_empty",
+            "native": "cluster_empty"
+          },
+          {
+            "kind": "node",
+            "foreign": "root",
+            "native": "node_root"
+          },
+          {
+            "kind": "node",
+            "foreign": "a\\nb",
+            "native": "a_u5c_nb"
+          },
+          {
+            "kind": "node",
+            "foreign": "a b",
+            "native": "a_u20_b"
+          },
+          {
+            "kind": "node",
+            "foreign": "a_u20_b",
+            "native": "a_u20_b__2"
+          },
+          {
+            "kind": "node",
+            "foreign": "edge_1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "node",
+            "foreign": "__proto__",
+            "native": "node___proto__"
+          },
+          {
+            "kind": "node",
+            "foreign": "constructor",
+            "native": "node_constructor"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1__2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "2",
+            "native": "edge_2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "3",
+            "native": "edge_3"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Named\" version=1\ngroup cluster_named \"cluster_named\"\ngroup cluster_empty \"\"\nnode node_root \"line\\nnext\" in=cluster_named\nnode a_u5c_nb \"Explicit escaped-ID label\" in=cluster_empty\nnode a_u20_b \"a b\"\nnode a_u20_b__2 \"a_u20_b\"\nnode edge_1 \"edge_1\"\nnode node___proto__ \"__proto__\"\nnode node_constructor \"constructor\"\nedge edge_1__2 a_u20_b -> a_u20_b__2 \"\"\nedge edge_2 edge_1 -> node_root \"\"\nedge edge_3 node___proto__ -> node_constructor \"\"\nlayout root flow direction=down\nlayout cluster_named flow direction=down\nlayout cluster_empty flow direction=down\n",
+        "facts": {
+          "title": "Named",
+          "objects": [
+            {
+              "kind": "group",
+              "id": "cluster_named",
+              "label": "cluster_named"
+            },
+            {
+              "kind": "group",
+              "id": "cluster_empty",
+              "label": ""
+            },
+            {
+              "kind": "node",
+              "id": "node_root",
+              "label": "line\nnext",
+              "parent": "cluster_named",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "a_u5c_nb",
+              "label": "Explicit escaped-ID label",
+              "parent": "cluster_empty",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "a_u20_b",
+              "label": "a b",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "a_u20_b__2",
+              "label": "a_u20_b",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "edge_1",
+              "label": "edge_1",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "node___proto__",
+              "label": "__proto__",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "node_constructor",
+              "label": "constructor",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1__2",
+              "from": "a_u20_b",
+              "to": "a_u20_b__2",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "edge_1",
+              "to": "node_root",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_3",
+              "from": "node___proto__",
+              "to": "node_constructor",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "cluster_named",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "cluster_empty",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/scopedDefaults",
+      "input": "digraph Scopes {\n  node [shape=box,label=\"Root default\"];\n  a;\n  subgraph local {\n    node [label=\"Local default\"];\n    b;\n    a [label=\"Shared identity\"];\n  }\n  c;\n  edge [headport=n];\n  a:e -> b:s [label=\"explicit endpoint beats default\"];\n  b -> c [label=\"non-ranking\",constraint=0];\n}\n",
+      "expected": {
+        "status": "ready",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "node",
+            "foreign": "c",
+            "native": "c"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "2",
+            "native": "edge_2"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Scopes\" version=1\nnode a \"Shared identity\"\nnode b \"Local default\"\nnode c \"Root default\"\nedge edge_1 a -> b \"explicit endpoint beats default\" from=right to=bottom\nedge edge_2 b -> c \"non-ranking\" constraint=false to=top\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Scopes",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "Shared identity",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "Local default",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "c",
+              "label": "Root default",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "explicit endpoint beats default",
+              "directed": true,
+              "fromSide": "right",
+              "toSide": "bottom"
+            },
+            {
+              "id": "edge_2",
+              "from": "b",
+              "to": "c",
+              "label": "non-ranking",
+              "directed": true,
+              "constraint": false,
+              "toSide": "top"
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/strictUndirected",
+      "input": "strict graph Relationships {\n  node [shape=box];\n  a:e -- b:w [label=\"first\"];\n  b:s -- a:n [label=\"latest\"];\n  b -- b [label=\"self\"];\n}\n",
+      "expected": {
+        "status": "ready",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "2",
+            "native": "edge_2"
+          }
+        ],
+        "requires": [
+          "IMP-02-native-undirected"
+        ],
+        "nativeSource": "diagram \"Relationships\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"latest\" directed=false from=top to=bottom\nedge edge_2 b -> b \"self\" directed=false\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Relationships",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "b",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "b",
+              "label": "latest",
+              "directed": false,
+              "fromSide": "top",
+              "toSide": "bottom"
+            },
+            {
+              "id": "edge_2",
+              "from": "b",
+              "to": "b",
+              "label": "self",
+              "directed": false
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/uniqueSets",
+      "input": "digraph Sets {\n  node [shape=box];\n  {a:n a:s b:e} -> {c c d} -> e [label=\"work\"];\n}\n",
+      "expected": {
+        "status": "ready",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "node",
+            "foreign": "c",
+            "native": "c"
+          },
+          {
+            "kind": "node",
+            "foreign": "d",
+            "native": "d"
+          },
+          {
+            "kind": "node",
+            "foreign": "e",
+            "native": "e"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge",
+            "foreign": "2",
+            "native": "edge_2"
+          },
+          {
+            "kind": "edge",
+            "foreign": "3",
+            "native": "edge_3"
+          },
+          {
+            "kind": "edge",
+            "foreign": "4",
+            "native": "edge_4"
+          },
+          {
+            "kind": "edge",
+            "foreign": "5",
+            "native": "edge_5"
+          },
+          {
+            "kind": "edge",
+            "foreign": "6",
+            "native": "edge_6"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Sets\" version=1\nnode a \"a\"\nnode b \"b\"\nnode c \"c\"\nnode d \"d\"\nnode e \"e\"\nedge edge_1 a -> c \"work\"\nedge edge_2 a -> d \"work\"\nedge edge_3 b -> c \"work\"\nedge edge_4 b -> d \"work\"\nedge edge_5 c -> e \"work\"\nedge edge_6 d -> e \"work\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Sets",
+          "objects": [
+            {
+              "kind": "node",
+              "id": "a",
+              "label": "a",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "b",
+              "label": "b",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "c",
+              "label": "c",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "d",
+              "label": "d",
+              "shape": "box"
+            },
+            {
+              "kind": "node",
+              "id": "e",
+              "label": "e",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "a",
+              "to": "c",
+              "label": "work",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "a",
+              "to": "d",
+              "label": "work",
+              "directed": true
+            },
+            {
+              "id": "edge_3",
+              "from": "b",
+              "to": "c",
+              "label": "work",
+              "directed": true
+            },
+            {
+              "id": "edge_4",
+              "from": "b",
+              "to": "d",
+              "label": "work",
+              "directed": true
+            },
+            {
+              "id": "edge_5",
+              "from": "c",
+              "to": "e",
+              "label": "work",
+              "directed": true
+            },
+            {
+              "id": "edge_6",
+              "from": "d",
+              "to": "e",
+              "label": "work",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "dot/unsupportedArrow",
+      "input": "digraph G { node[shape=box]; a -> b[dir=both]; }\n",
+      "expected": {
+        "status": "failed",
+        "format": "dot",
+        "family": "graph",
+        "diagnostics": [
+          {
+            "code": "DOT_ARROW_ENDS",
+            "message": "dir=both requires a native start/both-arrow model; endpoints are not reversed or duplicated.",
+            "severity": "error",
+            "impact": "semantics",
+            "line": 1
+          },
+          {
+            "code": "IMPORT_NATIVE_LAYOUT",
+            "severity": "info",
+            "impact": "layout",
+            "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "a",
+            "native": "a"
+          },
+          {
+            "kind": "node",
+            "foreign": "b",
+            "native": "b"
+          },
+          {
+            "kind": "edge",
+            "foreign": "1",
+            "native": "edge_1"
+          }
+        ],
+        "requires": [
+          "IMP-02-native-undirected"
+        ]
+      }
+    },
+    {
+      "id": "mermaid/explicitUndirected",
+      "input": "flowchart RL\nA request@--> B\nB --- C\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_REVERSED_LAYOUT",
+            "message": "RL layout is normalized to right; edge endpoints keep their semantic order.",
+            "impact": "layout",
+            "severity": "warning",
+            "foreignIds": [
+              "root"
+            ]
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "A",
+            "native": "A"
+          },
+          {
+            "kind": "node",
+            "foreign": "B",
+            "native": "B"
+          },
+          {
+            "kind": "node",
+            "foreign": "C",
+            "native": "C"
+          },
+          {
+            "kind": "edge-id",
+            "foreign": "request",
+            "native": "request"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "2",
+            "native": "edge_2"
+          }
+        ],
+        "requires": [
+          "IMP-02-native-undirected"
+        ],
+        "nativeSource": "diagram \"Mermaid explicitUndirected\" version=1\nnode A \"A\"\nnode B \"B\"\nnode C \"C\"\nedge request A -> B \"\"\nedge edge_2 B -> C \"\" directed=false\nlayout root flow direction=right\n",
+        "facts": {
+          "title": "Mermaid explicitUndirected",
+          "objects": [
+            {
+              "id": "A",
+              "kind": "node",
+              "label": "A",
+              "shape": "box"
+            },
+            {
+              "id": "B",
+              "kind": "node",
+              "label": "B",
+              "shape": "box"
+            },
+            {
+              "id": "C",
+              "kind": "node",
+              "label": "C",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "request",
+              "from": "A",
+              "to": "B",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "B",
+              "to": "C",
+              "label": "",
+              "directed": false
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "right"
+            }
+          ],
+          "colors": []
+        }
+      }
+    },
+    {
+      "id": "mermaid/malformed",
+      "input": "flowchart LR\nA[Missing\n",
+      "expected": {
+        "status": "failed",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_PARSE_ERROR",
+            "severity": "error",
+            "impact": "syntax",
+            "message": "Parse error on line 4:\n...chart LRA[Missing\n--------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'STADIUMEND', 'SUBROUTINEEND', 'PIPE', 'CYLINDEREND', 'DIAMOND_STOP', 'TAGEND', 'TRAPEND', 'INVTRAPEND', 'UNICODE_TEXT', 'TEXT', 'TAGSTART', got '1' (Parser-relative line 2, column 3; original-source mapping is unavailable.)"
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    },
+    {
+      "id": "mermaid/nested",
+      "input": "flowchart LR\nsubgraph system[System]\n  direction TB\n  A[API]\n  subgraph workers[Workers]\n    B{Ready?}\n    C[Store]\n  end\nend\nX --> system\nA -->|send| B --> C\nB -. retry .-> A\nA --> B\nclassDef ok fill:#dbeafe,stroke:#123456,color:#000\nclass A ok\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_INHERITED_LAYOUT",
+            "message": "This group has no declared direction. Native flow layout uses the nearest declared ancestor/root direction; Mermaid can use another direction depending on its layout engine and external connections.",
+            "impact": "layout",
+            "severity": "warning",
+            "foreignIds": [
+              "workers"
+            ]
+          },
+          {
+            "code": "MERMAID_SUBGRAPH_LAYOUT",
+            "message": "The native group retains its declared direction. Mermaid can ignore a subgraph direction when its members connect outside, so the resulting layout may differ.",
+            "impact": "layout",
+            "severity": "warning",
+            "foreignIds": [
+              "system"
+            ]
+          },
+          {
+            "code": "MERMAID_DASH_STYLE",
+            "message": "Dotted Mermaid stroke uses native kind=async only for its dashed visual treatment; no asynchronous execution semantics are inferred.",
+            "impact": "appearance",
+            "severity": "info",
+            "foreignIds": [
+              "L_B_A_0"
+            ]
+          }
+        ],
+        "ids": [
+          {
+            "kind": "group",
+            "foreign": "workers",
+            "native": "workers"
+          },
+          {
+            "kind": "group",
+            "foreign": "system",
+            "native": "system"
+          },
+          {
+            "kind": "node",
+            "foreign": "A",
+            "native": "A"
+          },
+          {
+            "kind": "node",
+            "foreign": "B",
+            "native": "B"
+          },
+          {
+            "kind": "node",
+            "foreign": "C",
+            "native": "C"
+          },
+          {
+            "kind": "node",
+            "foreign": "X",
+            "native": "X"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "2",
+            "native": "edge_2"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "3",
+            "native": "edge_3"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "4",
+            "native": "edge_4"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "5",
+            "native": "edge_5"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Mermaid nested\" version=1\ntheme-color import_1 shade=500 fill=\"#dbeafe\" stroke=\"#123456\" ink=\"#000000\"\ngroup workers \"Workers\" in=system\ngroup system \"System\"\nnode A \"API\" in=system color=import_1 shade=500\nnode B \"Ready?\" in=workers shape=diamond\nnode C \"Store\" in=workers\nnode X \"X\"\nedge edge_1 X -> system \"\"\nedge edge_2 A -> B \"send\"\nedge edge_3 B -> C \"\"\nedge edge_4 B -> A \"retry\" kind=async\nedge edge_5 A -> B \"\"\nlayout root flow direction=right\nlayout workers flow direction=down\nlayout system flow direction=down\n",
+        "facts": {
+          "title": "Mermaid nested",
+          "objects": [
+            {
+              "id": "workers",
+              "kind": "group",
+              "label": "Workers",
+              "parent": "system"
+            },
+            {
+              "id": "system",
+              "kind": "group",
+              "label": "System"
+            },
+            {
+              "id": "A",
+              "kind": "node",
+              "label": "API",
+              "shape": "box",
+              "parent": "system",
+              "color": "import_1",
+              "shade": 500
+            },
+            {
+              "id": "B",
+              "kind": "node",
+              "label": "Ready?",
+              "shape": "diamond",
+              "parent": "workers"
+            },
+            {
+              "id": "C",
+              "kind": "node",
+              "label": "Store",
+              "shape": "box",
+              "parent": "workers"
+            },
+            {
+              "id": "X",
+              "kind": "node",
+              "label": "X",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "X",
+              "to": "system",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "A",
+              "to": "B",
+              "label": "send",
+              "directed": true
+            },
+            {
+              "id": "edge_3",
+              "from": "B",
+              "to": "C",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_4",
+              "from": "B",
+              "to": "A",
+              "label": "retry",
+              "directed": true,
+              "dashed": true
+            },
+            {
+              "id": "edge_5",
+              "from": "A",
+              "to": "B",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "right"
+            },
+            {
+              "scope": "workers",
+              "kind": "flow",
+              "direction": "down"
+            },
+            {
+              "scope": "system",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": [
+            {
+              "name": "import_1",
+              "fill": "#dbeafe",
+              "stroke": "#123456",
+              "ink": "#000000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "mermaid/richLabels",
+      "input": "flowchart BT\nA[\"<b>API</b><br/>#9829;\"] --> B[(Store)]\nB --> D(Complete)\nclick A \"https://import.invalid/private\"\nstyle A fill:#abc,stroke:#def,color:#123,font-size:20px\nC@{ img: \"https://import.invalid/logo.svg\", label: \"Asset\" }\n",
+      "expected": {
+        "status": "needs-review",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_INTERACTION_IGNORED",
+            "severity": "warning",
+            "impact": "security",
+            "message": "Mermaid click links and callbacks are data only; no interactions are installed.",
+            "line": 4
+          },
+          {
+            "code": "MERMAID_HTML_LABEL",
+            "message": "HTML label formatting was reduced to plain text; line breaks are retained and no HTML is inserted into the diagram.",
+            "impact": "appearance",
+            "severity": "warning",
+            "foreignIds": [
+              "A"
+            ]
+          },
+          {
+            "code": "MERMAID_SHAPE_APPROXIMATION",
+            "message": "Mermaid shape cylinder becomes native box; the shape-specific visual meaning is not fully preserved.",
+            "impact": "semantics",
+            "severity": "warning",
+            "foreignIds": [
+              "B"
+            ]
+          },
+          {
+            "code": "MERMAID_SHAPE_APPROXIMATION",
+            "message": "Mermaid shape round becomes native pill; the shape-specific visual meaning is not fully preserved.",
+            "impact": "semantics",
+            "severity": "warning",
+            "foreignIds": [
+              "D"
+            ]
+          },
+          {
+            "code": "MERMAID_MARKDOWN_LABEL",
+            "message": "Markdown label markers remain literal text in this profile.",
+            "impact": "appearance",
+            "severity": "warning",
+            "foreignIds": [
+              "C"
+            ]
+          },
+          {
+            "code": "MERMAID_REVERSED_LAYOUT",
+            "message": "BT layout is normalized to down; edge endpoints keep their semantic order.",
+            "impact": "layout",
+            "severity": "warning",
+            "foreignIds": [
+              "root"
+            ]
+          },
+          {
+            "code": "MERMAID_STYLE_PROPERTY",
+            "message": "Unsupported style declaration was omitted: font-size:20px",
+            "impact": "appearance",
+            "severity": "warning",
+            "foreignIds": [
+              "A"
+            ]
+          },
+          {
+            "code": "MERMAID_LINK_OMITTED",
+            "message": "External link was omitted; the native object has no active link.",
+            "impact": "security",
+            "severity": "warning",
+            "foreignIds": [
+              "A"
+            ]
+          },
+          {
+            "code": "MERMAID_ASSET_OMITTED",
+            "message": "Image/icon references are not fetched or embedded; the object remains a labeled native shape.",
+            "impact": "security",
+            "severity": "warning",
+            "foreignIds": [
+              "C"
+            ]
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "A",
+            "native": "A"
+          },
+          {
+            "kind": "node",
+            "foreign": "B",
+            "native": "B"
+          },
+          {
+            "kind": "node",
+            "foreign": "D",
+            "native": "D"
+          },
+          {
+            "kind": "node",
+            "foreign": "C",
+            "native": "C"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "1",
+            "native": "edge_1"
+          },
+          {
+            "kind": "edge-occurrence",
+            "foreign": "2",
+            "native": "edge_2"
+          }
+        ],
+        "requires": [],
+        "nativeSource": "diagram \"Mermaid richLabels\" version=1\ntheme-color import_1 shade=500 fill=\"#aabbcc\" stroke=\"#ddeeff\" ink=\"#112233\"\nnode A \"API\\n♥\" color=import_1 shade=500\nnode B \"Store\"\nnode D \"Complete\" shape=pill\nnode C \"Asset\"\nedge edge_1 A -> B \"\"\nedge edge_2 B -> D \"\"\nlayout root flow direction=down\n",
+        "facts": {
+          "title": "Mermaid richLabels",
+          "objects": [
+            {
+              "id": "A",
+              "kind": "node",
+              "label": "API\n♥",
+              "shape": "box",
+              "color": "import_1",
+              "shade": 500
+            },
+            {
+              "id": "B",
+              "kind": "node",
+              "label": "Store",
+              "shape": "box"
+            },
+            {
+              "id": "D",
+              "kind": "node",
+              "label": "Complete",
+              "shape": "pill"
+            },
+            {
+              "id": "C",
+              "kind": "node",
+              "label": "Asset",
+              "shape": "box"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge_1",
+              "from": "A",
+              "to": "B",
+              "label": "",
+              "directed": true
+            },
+            {
+              "id": "edge_2",
+              "from": "B",
+              "to": "D",
+              "label": "",
+              "directed": true
+            }
+          ],
+          "layouts": [
+            {
+              "scope": "root",
+              "kind": "flow",
+              "direction": "down"
+            }
+          ],
+          "colors": [
+            {
+              "name": "import_1",
+              "fill": "#aabbcc",
+              "stroke": "#ddeeff",
+              "ink": "#112233"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "mermaid/unsupportedArrow",
+      "input": "flowchart LR\nA <--> B\n",
+      "expected": {
+        "status": "failed",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_ARROW_UNSUPPORTED",
+            "message": "Edge terminal semantics are unsupported: double_arrow_point. The import is blocked rather than replacing them with ordinary arrows.",
+            "impact": "semantics",
+            "severity": "error",
+            "foreignIds": [
+              "L_A_B_0"
+            ]
+          }
+        ],
+        "ids": [
+          {
+            "kind": "node",
+            "foreign": "A",
+            "native": "A"
+          },
+          {
+            "kind": "node",
+            "foreign": "B",
+            "native": "B"
+          }
+        ],
+        "requires": []
+      }
+    },
+    {
+      "id": "mermaid/unsupportedFamily",
+      "input": "sequenceDiagram\nparticipant A as Alice\nparticipant B as Bob\nA->>B: Hello\n",
+      "expected": {
+        "status": "failed",
+        "format": "mermaid",
+        "family": "flowchart",
+        "diagnostics": [
+          {
+            "code": "MERMAID_FAMILY_UNSUPPORTED",
+            "severity": "error",
+            "impact": "syntax",
+            "message": "This adapter supports Mermaid flowcharts only. Sequence, class, ER, state, chart and other families require separate semantic adapters."
+          }
+        ],
+        "ids": [],
+        "requires": []
+      }
+    }
+  ]
+}

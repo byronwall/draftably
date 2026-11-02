@@ -37,7 +37,7 @@ import {
   undoStack,
 } from './document';
 import { tool } from './editor';
-import { exportSvg, importText } from './files';
+import { exportSvg, importText, sceneReady } from './files';
 import { svgToPng } from '../lib/svg-export';
 import {
   acceptPreview,
@@ -48,7 +48,13 @@ import {
   runLayout,
 } from './layout';
 import { measured } from '../dsl/project';
-import { currentSource, fileCompiling, fileDiagnostics, fileStatus } from './file-session';
+import {
+  currentSource,
+  fileCompiling,
+  fileDiagnostics,
+  fileScene,
+  fileStatus,
+} from './file-session';
 import { routes, routesPending, routingReport, sceneRects, visibleScene } from './scene';
 import {
   activateBrush,
@@ -62,8 +68,24 @@ import {
 
 import { activeState, showState } from './emphasis';
 
+/** Resolves once the canvas is mounted and the open file is laid out and routed. */
+async function ready(timeoutMs = 10_000) {
+  const start = performance.now(),
+    params = new URLSearchParams(location.search),
+    opensFile = params.has('file') || params.has('example');
+  for (;;) {
+    const canvas = sceneReady(),
+      busy = (opensFile && !fileScene()) || fileCompiling() || routesPending();
+    if (canvas && !busy) return;
+    if (performance.now() - start > timeoutMs)
+      throw Error(`Not ready after ${timeoutMs}ms: ${canvas ? 'still laying out' : 'no canvas'}.`);
+    await new Promise(r => setTimeout(r, 50));
+  }
+}
+
 export function installDebugApi() {
   const api = {
+    ready,
     get: snapshotDoc,
     set: (input: unknown) => openDocument(input),
     select: (ids: string | string[], options = {}) => {
@@ -85,9 +107,14 @@ export function installDebugApi() {
     samples: () => clone(SAMPLES),
     loadSample: openSample,
     import: importText,
-    exportSvg,
+    /** The SVG export, once the canvas is ready. */
+    exportSvg: async (...args: Parameters<typeof exportSvg>) => {
+      await ready();
+      return exportSvg(...args);
+    },
     /** The PNG export as a data URL. */
     exportPng: async () => {
+      await ready();
       const blob = await svgToPng(exportSvg());
       return await new Promise<string>(resolve => {
         const reader = new FileReader();

@@ -1,13 +1,23 @@
-import { createSignal, Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
 import { downloadText } from '../lib/svg-export';
 import {
   currentSource,
   exampleEdited,
+  exampleRestored,
   fileSession,
+  scratchName,
   markExampleSaved,
   resetExample,
 } from '../state/file-session';
-import { createDiagramFile, fileUrl, startUrl, workspace } from '../state/launch';
+import {
+  cameFromPlayground,
+  createDiagramFile,
+  fileUrl,
+  siteUrl,
+  startUrl,
+  workspace,
+} from '../state/launch';
+import { savingExample, setSavingExample } from '../state/ui';
 import { Icon } from './Icon';
 
 /**
@@ -15,16 +25,16 @@ import { Icon } from './Icon';
  * the ways out: save the example as a new file, reset it, or go back to the start screen.
  */
 export function ExampleBar() {
-  const [saving, setSaving] = createSignal(false);
   const [path, setPath] = createSignal('');
   const [error, setError] = createSignal('');
   const id = () => fileSession()?.example ?? 'example';
+  const fromPlay = cameFromPlayground();
 
-  const startSave = () => {
+  createEffect(() => {
+    if (!savingExample()) return;
     setPath(`${id()}.draft`);
     setError('');
-    setSaving(true);
-  };
+  });
   const save = async (e: Event) => {
     e.preventDefault();
     setError('');
@@ -42,19 +52,23 @@ export function ExampleBar() {
     <div class="example-bar" role="status">
       <span class="example-badge">
         <Icon name="spark" />
-        Example
+        {scratchName()}
       </span>
       <Show
-        when={saving()}
+        when={savingExample()}
         fallback={
           <>
             <span class="example-text">
-              <strong>{fileSession()?.name}</strong>
               <span class="example-note">
-                {exampleEdited()
-                  ? 'Your edits are only in this tab. Save as a file to keep them.'
-                  : 'A scratch copy. Edits stay in this tab and are not written to disk.'}
+                {exampleRestored() && exampleEdited()
+                  ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
+                  : exampleEdited()
+                    ? 'Your edits are kept in this browser only. Save as a file to keep them.'
+                    : 'A scratch copy. Edits stay in this browser and are not written to disk.'}
               </span>
+              <a class="example-help" href={siteUrl('docs/saving')} target="_blank" rel="noopener">
+                Where is my work saved?
+              </a>
             </span>
             <span class="example-actions">
               <Show
@@ -70,7 +84,11 @@ export function ExampleBar() {
                   </button>
                 }
               >
-                <button type="button" class="button small primary" onClick={startSave}>
+                <button
+                  type="button"
+                  class="button small primary"
+                  onClick={() => setSavingExample(true)}
+                >
                   <Icon name="file" />
                   Save as file…
                 </button>
@@ -83,9 +101,27 @@ export function ExampleBar() {
               >
                 Reset
               </button>
-              <a class="button small ghost" href={startUrl()}>
-                Close example
-              </a>
+              <Show
+                when={fromPlay}
+                fallback={
+                  <a class="button small ghost" href={startUrl()}>
+                    Close {scratchName().toLowerCase()}
+                  </a>
+                }
+              >
+                {/* Back keeps the Playground as it was left; the link covers a reloaded tab. */}
+                <a
+                  class="button small ghost"
+                  href={siteUrl('play')}
+                  onClick={e => {
+                    if (history.length < 2) return;
+                    e.preventDefault();
+                    history.back();
+                  }}
+                >
+                  Back to Playground (separate copy)
+                </a>
+              </Show>
             </span>
           </>
         }
@@ -104,14 +140,18 @@ export function ExampleBar() {
               })
             }
             onInput={e => setPath(e.currentTarget.value)}
-            onKeyDown={e => e.key === 'Escape' && setSaving(false)}
+            onKeyDown={e => e.key === 'Escape' && setSavingExample(false)}
           />
           <span class="example-note">in {workspace()?.root}</span>
           <span class="example-error" role="alert">
             {error()}
           </span>
           <span class="example-actions">
-            <button type="button" class="button small ghost" onClick={() => setSaving(false)}>
+            <button
+              type="button"
+              class="button small ghost"
+              onClick={() => setSavingExample(false)}
+            >
               Cancel
             </button>
             <button type="submit" class="button small primary" disabled={!path().trim()}>

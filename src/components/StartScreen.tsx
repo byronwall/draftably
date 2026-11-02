@@ -3,7 +3,8 @@ import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { EXAMPLES, type ExampleInfo } from '../model/examples';
-import { newDocument } from '../state/actions';
+import { runCommand } from '../state/commands';
+import { exampleMode } from '../state/file-session';
 import {
   createDiagramFile,
   exampleUrl,
@@ -19,6 +20,7 @@ import {
   workspace,
 } from '../state/launch';
 import type { WorkspaceFile } from '../server/workspace';
+import { AppNav, Brand } from './Brand';
 import { IconButton } from './controls';
 import { FileOrderSwitch, FileTime, FolderHeading } from './FilesPanel';
 import { Icon } from './Icon';
@@ -53,10 +55,18 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
     >
       <div class="start-frame">
         <header class="start-header">
-          <h1>Diagram Studio</h1>
+          <h1>
+            <Brand />
+          </h1>
           <Show
             when={workspace()}
-            fallback={<span class="start-where">Browser copy · saved on this device</span>}
+            fallback={
+              <span class="start-where">
+                {exampleMode()
+                  ? 'Scratch copy · not on disk'
+                  : 'Browser copy · saved on this device'}
+              </span>
+            }
           >
             {info => (
               <span class="start-where" title={info().root}>
@@ -66,6 +76,11 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             )}
           </Show>
           <span class="grow" />
+          <button type="button" class="button small" onClick={() => runCommand('import-diagram')}>
+            <Icon name="folder" />
+            Import text diagram…
+          </button>
+          <AppNav />
           <Show when={props.variant === 'dialog'}>
             <IconButton icon="close" label="Close" onClick={() => setStartOpen(false)} />
           </Show>
@@ -104,7 +119,7 @@ function NewDiagram() {
     e.preventDefault();
     setError('');
     if (!workspace()) {
-      newDocument();
+      runCommand('new-diagram');
       setStartOpen(false);
       return;
     }
@@ -125,7 +140,11 @@ function NewDiagram() {
         when={workspace()}
         fallback={
           <form class="start-new" onSubmit={create}>
-            <p class="start-hint">Replaces the diagram kept in this browser. Undo restores it.</p>
+            <p class="start-hint">
+              {exampleMode()
+                ? 'Opens a blank draft. The diagram kept in this browser stays as it is.'
+                : 'Replaces the diagram kept in this browser. Undo restores it.'}
+            </p>
             <button type="submit" class="button primary">
               <Icon name="plus" />
               Blank diagram
@@ -194,8 +213,8 @@ function FolderFiles() {
         when={workspace()}
         fallback={
           <p class="start-hint">
-            Run <code>pnpm draftably open</code> in a folder to list and edit its{' '}
-            <code>.draft</code> files here.
+            Run <code>npx draftably open</code> in a folder to list and edit its <code>.draft</code>{' '}
+            files here.
           </p>
         }
       >
@@ -362,22 +381,49 @@ const ExampleGallery = () => (
 const nesting = (depth: number) =>
   depth === 0 ? 'Flat' : `${depth} level${depth === 1 ? '' : 's'} deep`;
 
+const thumbnails = new Map<string, string>();
+let turn = Promise.resolve();
+
+/** One thumbnail at a time, each after a paint, so 25 of them never freeze the dialog. */
+function drawThumbnail(source: string, wanted: () => boolean) {
+  const known = thumbnails.get(source);
+  if (known != null) return Promise.resolve(known);
+  const drawn = turn
+    .then(() => new Promise(resolve => setTimeout(resolve)))
+    .then(async () => {
+      if (!wanted()) return '';
+      // Compiling is async: a file can name a layout engine.
+      const svg = renderSvg(projectScene(await compile(source)));
+      const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      thumbnails.set(source, url);
+      return url;
+    })
+    .catch(() => '');
+  turn = drawn.then(() => {});
+  return drawn;
+}
+
 function ExampleCard(props: { example: ExampleInfo }) {
-  // Compiling is async: a file can name a layout engine.
+  const [seen, setSeen] = createSignal(false);
+  let open = true;
+  onCleanup(() => (open = false));
+  // A card below the fold draws when it scrolls into view.
+  const watch = (el: HTMLElement) => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setSeen(true);
+      observer.disconnect();
+    });
+    observer.observe(el);
+    onCleanup(() => observer.disconnect());
+  };
   const [thumbnail] = createResource(
-    () => props.example.source,
-    async source => {
-      try {
-        const svg = renderSvg(projectScene(await compile(source)));
-        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-      } catch {
-        return '';
-      }
-    },
+    () => seen() && props.example.source,
+    source => drawThumbnail(source, () => open),
   );
   return (
     <li>
-      <a class="start-example" href={exampleUrl(props.example.id)}>
+      <a ref={watch} class="start-example" href={exampleUrl(props.example.id)}>
         <span class="start-thumb">
           <Show when={thumbnail()}>
             <img src={thumbnail()} alt="" loading="lazy" />

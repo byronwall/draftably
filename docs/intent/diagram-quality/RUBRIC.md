@@ -1,6 +1,6 @@
 # Diagram quality audit: rubric and loop
 
-Goal: measure how good Draftably's drawings look for real software-explanation diagrams, both
+Goal: measure how good draftably's drawings look for real software-explanation diagrams, both
 the **first render** and **after a few follow-up requests**, then fix the biggest defects and
 measure again. The corpus stays fixed across rounds so results compare.
 

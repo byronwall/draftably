@@ -1,0 +1,59 @@
+Browser tab: 9, Title: "Soft groups · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/soft-groups".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 456-537
+~0 AXWebArea Soft groups · Draftably docs, URL: byronwall.github.io/draftably/docs/soft-groups
+~			443 text Soft groups
+~			51 heading Soft groups, Value: 1
+~				52 text Soft groups
+~				445 text A boxed group pads its members, reserves a title band and takes one place in its container's layout, so its members move as one block. A title wider than the members wraps to their width (at least 240px for the frame), up to three lines, and the band grows a line for each; only a title that still needs more than three lines widens the frame.  frame=soft  keeps the group but not the box:
+~				450 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=XcxBCoAwDETRvacIOYbQw8Sa1oJJStreX0Gh4u4zPCa7jQpiWrp50QyoJNwqRV4_M0K00zyQbOyQ_DahWeqL2s5Q3YT7waMBzkYoGubFQ7NTIiXAN37oAg
+~				451 text entry area (settable) Description: Diagram source, Value: group monitoring "namespace: monitoring" color=amber frame=soft
+node prometheus "prometheus" in=monitoring
+node grafana "grafana" in=monitoring
+~						454 text namespace: monitoring
+~						455 text prometheus
++						456 text grafana
++			457 container
++				458 text A soft group's members are laid out with the nearest boxed container around the group (or the root), each ranked by its own connections, as if the group line were not there. The drawing then puts a light tint of the group's color behind them, with its title small at the top left. Lines cross a tint freely.  frame=none  lays out the same way and draws nothing; the members still belong to the group, so  color=auto  still inherits its family.  frame=box  is the default.
++			459 container
++				460 text Layout still keeps a soft group's members together where it can: within each rank they sit side by side, and the gaps where a tint starts or ends widen to fit its padding and label, as does a box that holds soft groups. The tint is one rectangle round the members when that covers nothing else. Otherwise it is the members' own padded boxes, joined by strips across the gaps between them that cover nothing else;  check  notes  soft-split  when some members cannot be joined, and  soft-overlap  when a tint still covers an object outside the group.
++			461 container
++				462 text A soft group has no layout or position of its own:  layout ,  order ,  near ,  align ,  nudge ,  stay  and  pin  on it are errors. Place its members instead; refinements between a member and an object beside the group work, since they share a container.
+~				441 link Description: ← Previous Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+~				119 link Description: Next → Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#soft-groups
+The focused UI element is 28 link Description: Soft groups, URL: byronwall.github.io/draftably/docs/soft-groups
+
+VISIBLE MAIN TEXT
+Language
+/
+Soft groups
+Soft groups
+
+A boxed group pads its members, reserves a title band and takes one place in its container's layout, so its members move as one block. A title wider than the members wraps to their width (at least 240px for the frame), up to three lines, and the band grows a line for each; only a title that still needs more than three lines widens the frame. frame=soft keeps the group but not the box:
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+group monitoring "namespace: monitoring" color=amber frame=soft
+node prometheus "prometheus" in=monitoring
+node grafana "grafana" in=monitoring
+
+namespace: monitoring
+prometheus
+grafana
+
+A soft group's members are laid out with the nearest boxed container around the group (or the root), each ranked by its own connections, as if the group line were not there. The drawing then puts a light tint of the group's color behind them, with its title small at the top left. Lines cross a tint freely. frame=none lays out the same way and draws nothing; the members still belong to the group, so color=auto still inherits its family. frame=box is the default.
+
+Layout still keeps a soft group's members together where it can: within each rank they sit side by side, and the gaps where a tint starts or ends widen to fit its padding and label, as does a box that holds soft groups. The tint is one rectangle round the members when that covers nothing else. Otherwise it is the members' own padded boxes, joined by strips across the gaps between them that cover nothing else; check notes soft-split when some members cannot be joined, and soft-overlap when a tint still covers an object outside the group.
+
+A soft group has no layout or position of its own: layout, order, near, align, nudge, stay and pin on it are errors. Place its members instead; refinements between a member and an object beside the group work, since they share a container.
+
+← Previous
+Themes and colors
+Next →
+Change marks

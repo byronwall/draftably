@@ -1,0 +1,111 @@
+Browser tab: 10, Title: "Example: Checkout architecture · Draftably", URL: "https://byronwall.github.io/draftably/app/?example=checkout".
+1 AXWebArea Example: Checkout architecture · Draftably, URL: byronwall.github.io/draftably/app/?example=checkout
+	2 container root
+		3 container
+			4 pop up button (collapsed) Description: File and examples, Secondary Actions: Expand
+			5 text field (settable) Description: Diagram title, Value: Checkout architecture
+			6 text Example · not on disk
+			7 toolbar Drawing tools
+				8 checkbox Description: Edit / select, Help: Edit / select · V, Value: 1
+				9 checkbox Description: Navigate, Help: Navigate · H, Value: 0
+				10 checkbox Description: Rectangle, Help: Rectangle · R, Value: 0
+				11 checkbox Description: Diamond, Help: Diamond · D, Value: 0
+				12 checkbox Description: Ellipse, Help: Ellipse · O, Value: 0
+				13 checkbox Description: Text, Help: Text · T, Value: 0
+				14 checkbox Description: Container, Help: Container · G, Value: 0
+				15 checkbox Description: Connect, Help: Connect · C, Value: 0
+			16 button (disabled) Description: Undo, Help: Undo · ⌘Z
+			17 button (disabled) Description: Redo, Help: Redo · ⇧⌘Z
+			18 pop up button (collapsed) Edit, Help: Duplicate, group, align, pin, delete, Secondary Actions: Expand
+			19 button Description: Build from a list, Help: Build from a list · B
+			20 button Tidy positions, Help: Tidy current positions · L
+			21 button (collapsed) Description: Layout options, Help: Layout options · ⌥L, Secondary Actions: Expand
+			22 button (collapsed) Automatic layout…, Help: Set automatic layout, Secondary Actions: Expand
+			23 checkbox Description: Layout timeline · ⌥T, Value: 0
+			24 checkbox Description: Layout brush, Help: Layout brush · W, Value: 0
+			25 button Compare layouts and routing parameters · ⌥E
+			26 button Description: Reroute connections, Help: Reroute connections · ⌥R
+			27 pop up button (collapsed) Description: Routing options, Secondary Actions: Expand
+			28 pop up button (collapsed) Description: Appearance, Secondary Actions: Expand
+			29 checkbox Description: Objects, Help: Objects · [, Value: 0
+			30 checkbox Description: Inspector, Help: Inspector · ], Value: 0
+			31 button Description: Keyboard shortcuts, Help: Keyboard shortcuts · ?
+			32 pop up button (collapsed) Description: Save and export, Secondary Actions: Expand
+		33 container
+			34 text EXAMPLE Checkout architecture A scratch copy. Edits stay in this tab and are not written to disk.
+			35 button Download .draft
+			36 button (disabled) Reset
+			37 link Description: Close example, Value: byronwall.github.io/draftably/app/
+		38 container Diagram workspace
+			39 container Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.
+				40 text Checkout architecture
+				41 text Double-click to add a subtitle
+				42 splitter Frame width. Drag to widen the frame.
+				43 checkbox Description: Customer channels, container, 2 shapes, Value: 0
+					44 text Customer channels
+					45 container Collapse container
+				46 checkbox Description: Commerce platform, container, 3 shapes, Value: 0
+					47 text Commerce platform
+					48 container Collapse container
+				49 checkbox Description: Domain services, container, 2 shapes, Value: 0
+					50 text Domain services
+					51 container Collapse container
+				52 button Description: Web app to API gateway, HTTPS, Help: HTTPS
+					53 text HTTPS
+				54 button Description: Mobile app to API gateway, HTTPS, Help: HTTPS
+					55 text HTTPS
+				56 button Description: API gateway to Orders, create order, Help: create order
+					57 text create order
+				58 button Description: Orders to Payments, authorize, Help: authorize
+					59 text authorize
+				60 button Description: Orders to Postgres, persist, Help: persist
+					61 text persist
+				62 checkbox Description: Web app, box, Help: Web app, Value: 0
+					63 text Web app
+					64 image Connect from left
+					65 image Connect from right
+					66 image Connect from top
+					67 image Connect from bottom
+				68 checkbox Description: Mobile app, box, Help: Mobile app, Value: 0
+					69 text Mobile app
+					70 image Connect from left
+					71 image Connect from right
+					72 image Connect from top
+					73 image Connect from bottom
+				74 checkbox Description: API gateway, box, Help: API gateway, Value: 0
+					75 text API gateway
+					76 image Connect from left
+					77 image Connect from right
+					78 image Connect from top
+					79 image Connect from bottom
+				80 checkbox Description: Orders, box, Help: Orders, Value: 0
+					81 text Orders
+					82 image Connect from left
+					83 image Connect from right
+					84 image Connect from top
+					85 image Connect from bottom
+				86 checkbox Description: Payments, pill, Help: Payments, Value: 0
+					87 text Payments
+					88 image Connect from left
+					89 image Connect from right
+					90 image Connect from top
+					91 image Connect from bottom
+				92 checkbox Description: Postgres, box, Help: Postgres, Value: 0
+					93 text Postgres
+					94 image Connect from left
+					95 image Connect from right
+					96 image Connect from top
+					97 image Connect from bottom
+			98 toolbar Zoom
+				99 button Description: Fit diagram, Help: Fit diagram · 1
+				100 button Description: Zoom out, Help: Zoom out · −
+				101 button 100%, Help: Zoom to 100% · 0
+					102 text 100
+					103 text %
+				104 button Description: Zoom in, Help: Zoom in · +
+		105 container
+			106 text 6 shapes · 5 connections Drag shapes to edit · background pans · Shift drag selects
+			107 button (disabled, collapsed) Layout follows the file, Secondary Actions: Expand
+			108 button ?, Help: Keyboard shortcuts
+
+The focused UI element is 1 AXWebArea Example: Checkout architecture · Draftably, URL: byronwall.github.io/draftably/app/?example=checkout

@@ -1,0 +1,10 @@
+vars: {name: Outer}
+classes: {service: {shape: diamond; style.fill: "#ffeecc"}}
+cluster: Cluster {
+  vars: {name: Inner}
+  a: ${name}
+  b: B
+  *.class: service
+  a -> *: call
+}
+outside: ${name}

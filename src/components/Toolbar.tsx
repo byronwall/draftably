@@ -10,25 +10,29 @@ import {
   fileStatusText,
 } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
-import { layoutBusy, cancelLayout } from '../state/layout';
+import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
-import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
-import { workspace } from '../state/launch';
-import { IconButton } from './controls';
+import { filesShown, inspectorOpen, menu, objectsOpen, openMenu } from '../state/ui';
+import { AppNav, Brand } from './Brand';
+import { startUrl, workspace } from '../state/launch';
+import { CommandButton, IconButton, tip } from './controls';
 import { Icon } from './Icon';
+import { MenuBar } from './MenuBar';
 import './toolbar.css';
 
-const NAV_TOOLS: [Tool, string, string, string][] = [
-  ['select', 'cursor', 'Edit / select', 'V'],
-  ['pan', 'hand', 'Navigate', 'H'],
+type ToolInfo = [Tool, string, string, string, string];
+
+const NAV_TOOLS: ToolInfo[] = [
+  ['select', 'cursor', 'Select', 'V', 'Click to select, drag to move. Dragging empty space pans.'],
+  ['pan', 'hand', 'Pan', 'H', 'Drag anywhere to move around. Nothing can be edited by accident.'],
 ];
-const DRAW_TOOLS: [Tool, string, string, string][] = [
-  ['box', 'box', 'Rectangle', 'R'],
-  ['diamond', 'diamond', 'Diamond', 'D'],
-  ['circle', 'circle', 'Ellipse', 'O'],
-  ['text', 'text', 'Text', 'T'],
-  ['container', 'group', 'Container', 'G'],
-  ['connect', 'connect', 'Connect', 'C'],
+const DRAW_TOOLS: ToolInfo[] = [
+  ['box', 'box', 'Rectangle', 'R', 'Click or drag on the canvas to add a rectangle.'],
+  ['diamond', 'diamond', 'Diamond', 'D', 'Click or drag to add a decision diamond.'],
+  ['circle', 'circle', 'Ellipse', 'O', 'Click or drag to add an ellipse.'],
+  ['text', 'text', 'Text', 'T', 'Click to add a label with no box.'],
+  ['container', 'group', 'Container', 'G', 'Drag around shapes to group them in a frame.'],
+  ['connect', 'connect', 'Connect', 'C', 'Click one shape, then another, to draw a line.'],
 ];
 
 export function Toolbar() {
@@ -41,14 +45,10 @@ export function Toolbar() {
   return (
     <header class="toolbar">
       <div class="toolbar-group">
-        <IconButton
-          icon="menu"
-          label="File and examples"
-          aria-haspopup="menu"
-          aria-expanded={menuOpen('file')}
-          onClick={menuButton('file')}
-        />
+        <Brand />
+        <span class="divider" />
         <DocumentTitle />
+        <MenuBar />
       </div>
 
       <div class="toolbar-scroll">
@@ -56,164 +56,63 @@ export function Toolbar() {
           <ToolButtons tools={NAV_TOOLS} disabled={locked()} />
           <span class="divider" />
           <ToolButtons tools={DRAW_TOOLS} disabled={locked()} />
+          <span class="divider" />
+          <CommandButton command="brush-toggle" pressed={brushActive()} />
         </div>
         <span class="divider" />
         <div class="toolbar-group">
-          <IconButton
-            icon="undo"
-            label="Undo"
-            keys="⌘Z"
-            disabled={!commandEnabled('undo')}
-            onClick={run('undo')}
-          />
-          <IconButton
-            icon="redo"
-            label="Redo"
-            keys="⇧⌘Z"
-            disabled={!commandEnabled('redo')}
-            onClick={run('redo')}
-          />
-          <button
-            type="button"
-            class="button ghost"
-            title="Duplicate, group, align, pin, delete"
-            aria-haspopup="menu"
-            aria-expanded={menuOpen('edit')}
-            onClick={menuButton('edit')}
-          >
-            Edit
-            <Icon name="chevron" />
-          </button>
-          <IconButton
-            icon="layers"
-            label="Build from a list"
-            keys="B"
-            onClick={run('quick-build')}
-          />
+          <CommandButton command="undo" />
+          <CommandButton command="redo" />
         </div>
 
         <span class="grow" />
 
-        <div class="toolbar-group layout-group">
-          <div class="split-button">
-            <Show
-              when={!layoutBusy()}
-              fallback={
-                <button type="button" class="button danger" onClick={cancelLayout}>
-                  Cancel
-                </button>
-              }
-            >
-              <button
-                type="button"
-                class="button primary"
-                title="Tidy current positions · L"
-                disabled={locked() || !commandEnabled('layout')}
-                onClick={run('layout')}
-              >
-                <Icon name="layout" />
-                <span class="label keep">Tidy positions</span>
-                <kbd>L</kbd>
-              </button>
-            </Show>
-            <IconButton
-              variant="primary"
-              icon="chevron"
-              label="Layout options"
-              keys="⌥L"
-              aria-expanded={layoutLabOpen()}
-              onClick={run('layout-menu')}
-            />
-          </div>
+        <Show
+          when={!layoutBusy()}
+          fallback={
+            <button type="button" class="button danger" onClick={cancelLayout}>
+              Cancel
+            </button>
+          }
+        >
           <button
             type="button"
-            class="button"
-            title="Set automatic layout"
-            aria-expanded={layoutLabOpen()}
-            onClick={run('layout-menu')}
+            class="button primary"
+            {...tip('Tidy positions', 'L', `Small moves in ${layoutTarget()}. Undo restores them.`)}
+            disabled={locked() || !commandEnabled('layout')}
+            onClick={run('layout')}
           >
-            Automatic layout…
+            <Icon name="layout" />
+            Tidy positions
           </button>
-          <button
-            type="button"
-            class="button ghost"
-            title="Layout timeline · ⌥T"
-            aria-pressed={timelineOpen()}
-            onClick={run('timeline-toggle')}
-          >
-            <Icon name="journey" />
-            <span class="label">Timeline</span>
-          </button>
-          <IconButton
-            icon="brush"
-            label="Layout brush"
-            keys="W"
-            pressed={brushActive()}
-            onClick={run('brush-toggle')}
-          />
-          <button
-            type="button"
-            class="button ghost"
-            title="Compare layouts and routing parameters · ⌥E"
-            onClick={run('compare-layouts')}
-          >
-            <Icon name="compare" />
-            <span class="label">Compare</span>
-          </button>
-          <div class="split-button">
-            <IconButton
-              icon="branch"
-              label="Reroute connections"
-              keys="⌥R"
-              onClick={run('reroute')}
-            />
-            <IconButton
-              icon="chevron"
-              label="Routing options"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen('routing')}
-              onClick={menuButton('routing')}
-            />
-          </div>
-        </div>
+        </Show>
       </div>
 
       <div class="toolbar-group toolbar-panels">
+        <AppNav />
+        <CommandButton command="palette" />
         <IconButton
           icon="palette"
           label="Appearance"
+          hint="Choose the diagram's theme and node padding."
           aria-haspopup="menu"
           aria-expanded={menuOpen('appearance')}
           onClick={menuButton('appearance')}
         />
         <Show when={workspace()}>
-          <IconButton
-            icon="folder"
-            label="Diagrams in this folder"
-            keys="F"
-            pressed={filesShown()}
-            onClick={run('toggle-files')}
-          />
+          <CommandButton command="toggle-files" pressed={filesShown()} />
         </Show>
-        <IconButton
-          icon="panel-left"
-          label="Objects"
-          keys="["
-          pressed={objectsOpen()}
-          onClick={run('toggle-objects')}
-        />
-        <IconButton
-          icon="panel-right"
-          label="Inspector"
-          keys="]"
-          pressed={inspectorOpen()}
-          onClick={run('toggle-inspector')}
-        />
-        <IconButton icon="help" label="Keyboard shortcuts" keys="?" onClick={run('help')} />
+        <CommandButton command="toggle-objects" pressed={objectsOpen()} />
+        <CommandButton command="toggle-inspector" pressed={inspectorOpen()} />
         <button
           type="button"
           class="button ghost"
           aria-label="Save and export"
+          {...tip(
+            'Save and export',
+            undefined,
+            'Save the file, copy an image or export a picture.',
+          )}
           aria-haspopup="menu"
           aria-expanded={menuOpen('export')}
           onClick={menuButton('export')}
@@ -243,7 +142,7 @@ export function Toolbar() {
           aria-pressed={inspectorOpen()}
           onClick={run('toggle-inspector')}
         >
-          <Icon name="panel-right" />
+          <Icon name="sliders" />
           Properties
         </button>
         <button type="button" class="button ghost" onClick={run('fit')}>
@@ -265,14 +164,15 @@ export function Toolbar() {
   );
 }
 
-function ToolButtons(props: { tools: [Tool, string, string, string][]; disabled: boolean }) {
+function ToolButtons(props: { tools: ToolInfo[]; disabled: boolean }) {
   return (
     <For each={props.tools}>
-      {([id, icon, label, key]) => (
+      {([id, icon, label, key, hint]) => (
         <IconButton
           icon={icon}
           label={label}
           keys={key}
+          hint={hint}
           pressed={tool() === id}
           disabled={props.disabled}
           onClick={() => setTool(id)}
@@ -329,7 +229,7 @@ function DocumentTitle() {
       />
       <span
         class="save-status"
-        title={fileSession()?.path || undefined}
+        {...(fileSession()?.path ? tip(fileSession()!.path!, undefined, status()) : {})}
         classList={{
           'on-disk': fileMode() && !exampleMode(),
           'in-example': exampleMode(),
@@ -340,7 +240,21 @@ function DocumentTitle() {
         aria-live="polite"
       >
         <Show when={fileMode()}>
-          <Icon name={exampleMode() ? 'spark' : 'file'} size={10} />
+          <Icon name={exampleMode() ? 'spark' : 'file'} size={11} />
+        </Show>
+        <Show when={fileMode() && !exampleMode() && workspace()}>
+          {info => (
+            <>
+              <a
+                class="status-folder"
+                href={startUrl()}
+                {...tip(`All diagrams in ${info().name}`, undefined, info().root)}
+              >
+                {info().name}
+              </a>
+              {' / '}
+            </>
+          )}
         </Show>
         {status()}
       </span>

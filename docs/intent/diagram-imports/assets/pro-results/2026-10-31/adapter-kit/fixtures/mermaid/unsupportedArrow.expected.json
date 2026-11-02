@@ -1,0 +1,29 @@
+{
+  "status": "failed",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_ARROW_UNSUPPORTED",
+      "message": "Edge terminal semantics are unsupported: double_arrow_point. The import is blocked rather than replacing them with ordinary arrows.",
+      "impact": "semantics",
+      "severity": "error",
+      "foreignIds": [
+        "L_A_B_0"
+      ]
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "A",
+      "native": "A"
+    },
+    {
+      "kind": "node",
+      "foreign": "B",
+      "native": "B"
+    }
+  ],
+  "requires": []
+}

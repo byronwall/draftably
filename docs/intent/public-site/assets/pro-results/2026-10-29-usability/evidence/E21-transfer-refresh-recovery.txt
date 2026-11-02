@@ -1,0 +1,3 @@
+Browser tab: 5, Title: "Audit lesson · Draftably playground", URL: "https://byronwall.github.io/draftably/play/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA".
+There has been no change in the accessibility tree.
+The focused UI element is 1 AXWebArea Audit lesson · Draftably playground, URL: byronwall.github.io/draftably/play/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA

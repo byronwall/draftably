@@ -1,0 +1,5 @@
+Browser tab: 9, Title: "draftably.dev", URL: "https://draftably.dev/".
+0 AXWebArea draftably.dev/
+	1 text upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+
+The focused UI element is 0 AXWebArea draftably.dev/

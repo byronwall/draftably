@@ -10,7 +10,7 @@ last_updated: '2026-10-26'
 
 ## My read
 
-Draftably draws boxes, groups and lines well. Byron wants it to draw everything he now reaches
+draftably draws boxes, groups and lines well. Byron wants it to draw everything he now reaches
 for Graphviz DOT to draw, so it can become his general diagram tool. Today some pictures still
 send him back to DOT or to hand-drawn images. Four kinds stand out:
 

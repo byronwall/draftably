@@ -4,7 +4,7 @@
  * images" in docs/DSL.md for the stable format.
  *
  * PNG: an `iTXt` chunk with keyword `draftably`, holding the UTF-8 source (zlib-compressed or not),
- * and a `tEXt` chunk `draftably-version` naming the Draftably version that drew it.
+ * and a `tEXt` chunk `draftably-version` naming the draftably version that drew it.
  * SVG: `<metadata id="draftably-source" data-draftably-version="…">` with the XML-escaped source.
  */
 import { version } from '../../packages/cli/package.json';

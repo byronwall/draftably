@@ -1,0 +1,13 @@
+Browser tab: 3, Title: "Example: Checkout architecture · Draftably", URL: "https://byronwall.github.io/draftably/app/?example=checkout".
+0 AXWebArea Example: Checkout architecture · Draftably, URL: byronwall.github.io/draftably/app/?example=checkout
+	1 container New diagram?
+		2 container
+			3 heading New diagram?, Value: 2
+				4 text New diagram?
+			5 button Close dialog
+		6 text The current diagram is saved in this browser. Starting a new diagram replaces it. Undo can restore it until you close this page.
+		7 container
+			8 button Cancel
+			9 button New diagram
+
+The focused UI element is 5 button Close dialog

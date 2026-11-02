@@ -1,4 +1,4 @@
-# Draftably releases
+# draftably releases
 
 The release flow follows explorEDA and Product Grid:
 

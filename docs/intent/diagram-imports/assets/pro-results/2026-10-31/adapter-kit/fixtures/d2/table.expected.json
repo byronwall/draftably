@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_COMPARTMENTS_UNSUPPORTED",
+      "severity": "error",
+      "impact": "semantics",
+      "message": "SQL-table and class compartments require field/member mapping; this companion does not flatten them."
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

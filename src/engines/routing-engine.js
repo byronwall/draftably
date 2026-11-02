@@ -305,7 +305,9 @@ const STEPS = [
   [0, -1, 1],
 ];
 const FAR = 100000;
-function search(start, end, obs, used, s, near = [], limit = 16000) {
+/** Search window margins round the two boxes, tried in turn; null is the whole grid. */
+const WINDOWS = [80, null];
+function search(start, end, obs, used, s, near = [], limit = 16000, win = null) {
   const xs = [start.x, end.x],
     ys = [start.y, end.y];
   // A wall's far side (`obsFor`) lies millions of units out: a line there would let a search
@@ -331,8 +333,15 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
     }
   xs.push(Math.min(...xs) - 32, Math.max(...xs) + 32);
   ys.push(Math.min(...ys) - 32, Math.max(...ys) + 32);
-  const X = [...new Set(xs.map(round))].sort((a, b) => a - b),
-    Y = [...new Set(ys.map(round))].sort((a, b) => a - b),
+  // A window keeps only the grid lines inside it, with its own edges as the outermost lanes.
+  const inX = v => !win || (v >= win.x0 && v <= win.x1),
+    inY = v => !win || (v >= win.y0 && v <= win.y1);
+  if (win) {
+    xs.push(win.x0, win.x1);
+    ys.push(win.y0, win.y1);
+  }
+  const X = [...new Set(xs.filter(inX).map(round))].sort((a, b) => a - b),
+    Y = [...new Set(ys.filter(inY).map(round))].sort((a, b) => a - b),
     nx = X.length,
     ny = Y.length;
   const startCell = Y.indexOf(round(start.y)) * nx + X.indexOf(round(start.x)),
@@ -1159,10 +1168,25 @@ function compute(input, rawOptions = {}) {
         path = [];
       let ok = true;
       for (let i = 1; i < points.length; i++) {
-        // The standoff makes some searches wander; a failed one gets a larger budget once.
-        const part =
-          // Its first 16000 steps are the smaller search's, so one call returns the same path.
-          search(points[i - 1], points[i], c.obs, used, s, near, near.length ? 64000 : 16000);
+        const p = points[i - 1],
+          q = points[i];
+        // Crossing and standoff costs dwarf the distance heuristic, so an open search floods most
+        // of the grid. It searches the two boxes' span plus a margin first, and widens only when
+        // that fails.
+        const span = {
+            x0: Math.min(a.x, b.x, p.x, q.x),
+            y0: Math.min(a.y, b.y, p.y, q.y),
+            x1: Math.max(a.x + a.w, b.x + b.w, p.x, q.x),
+            y1: Math.max(a.y + a.h, b.y + b.h, p.y, q.y),
+          },
+          grow = (r, m) => ({ x0: r.x0 - m, y0: r.y0 - m, x1: r.x1 + m, y1: r.y1 + m });
+        let part = null;
+        for (const m of rawOptions.window === false ? [null] : WINDOWS) {
+          const win = m === null ? null : grow(span, m);
+          // The standoff makes some searches wander; it gets a larger budget.
+          part = search(p, q, c.obs, used, s, near, near.length ? 64000 : 16000, win);
+          if (part) break;
+        }
         if (!part) {
           ok = false;
           break;

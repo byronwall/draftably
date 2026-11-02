@@ -1,0 +1,382 @@
+Browser tab: 9, Title: "CLI details · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/command-line".
+0 AXWebArea CLI details · Draftably docs, URL: byronwall.github.io/draftably/docs/command-line
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 button Search docs
+				5 text Search docs
+				6 text Ctrl K
+			7 container Site
+				8 link Description: Playground, Value: byronwall.github.io/draftably/play
+				9 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				10 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				11 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				12 link Description: GitHub, Value: github.com/byronwall/draftably
+		13 container Docs topics
+			14 container
+				15 heading START HERE, Value: 2
+					16 text START HERE
+				17 link Description: Get started, Value: byronwall.github.io/draftably/docs/get-started
+				18 link Description: CLI, Value: byronwall.github.io/draftably/docs/cli
+				19 link Description: Themes, Value: byronwall.github.io/draftably/docs/themes
+				20 link Description: Agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+			21 container
+				22 heading LANGUAGE, Value: 2
+					23 text LANGUAGE
+				24 link Description: Overview, Value: byronwall.github.io/draftably/docs/overview
+				25 link Description: Rules, Value: byronwall.github.io/draftably/docs/rules
+				26 link Description: Refinements, Value: byronwall.github.io/draftably/docs/refinements
+				27 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+				28 link Description: Soft groups, Value: byronwall.github.io/draftably/docs/soft-groups
+				29 link Description: Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+				30 link Description: Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+			31 container
+				32 heading DIAGRAM KINDS, Value: 2
+					33 text DIAGRAM KINDS
+				34 link Description: Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+				35 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+				36 link Description: Cells, Value: byronwall.github.io/draftably/docs/cells
+			37 container
+				38 heading LAYOUT, Value: 2
+					39 text LAYOUT
+				40 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+				41 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+				42 link Description: Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+			43 container
+				44 heading TOOLS, Value: 2
+					45 text TOOLS
+				46 link Description: CLI details, Value: byronwall.github.io/draftably/docs/command-line
+				47 link Description: Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+				48 link Description: Examples, Value: byronwall.github.io/draftably/docs/examples
+		49 container
+			442 text Tools CLI details
+			51 heading CLI details, Value: 1
+				52 text CLI details
+			443 container
+				444 button Copy
+				445 container
+					446 text pnpm draftably check examples/checkout.draft       # errors, diagnostics, conflicts; exit 1 on errors 
+pnpm draftably check examples/checkout.draft --hints   # also: how far each refinement moved its target 
+pnpm draftably check examples/ --quiet             # every .draft in a folder (or several files); no info notes 
+pnpm draftably format examples/checkout.draft      # print formatted source (--write to save) 
+pnpm draftably format diagram.draft --drop-stale --write   # also drop refinements that no longer hold 
+pnpm draftably inspect examples/checkout.draft     # canonical node and route geometry as JSON 
+pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm draftably compare old.draft new.draft         # one file with + - ~ marks (--write, --svg) 
+pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
+pnpm draftably extract checkout.png               # print the source embedded in a PNG or SVG export 
+pnpm draftably set f.draft node.api label="API" color=teal   # change a declaration by id (key= removes) 
+pnpm draftably rm f.draft cache                   # remove it with its edges, refinements and state mentions 
+pnpm draftably mv f.draft cache store             # rename an id everywhere 
+pnpm draftably vary examples/checkout.draft        # layout variants: contact sheet, metrics, ranking 
+pnpm draftably vary examples/checkout.draft --apply v1   # write variant v1 into the file 
+pnpm draftably open examples/checkout.draft        # serve the viewer for this file (after pnpm build) 
+pnpm draftably open                               # start page for the current folder's diagrams 
+pnpm draftably open --status                      # running viewers: URL, folder, version (open reuses one) 
+pnpm draftably vary --help                        # any command's options; --version for the version 
+pnpm draftably skill install                      # agent skill into ./.claude/skills/draftably 
+pnpm draftably docs legend                        # one section of this guide; docs alone lists them
+			447 container
+				448 text check ,  format ,  inspect ,  compare  and  open  also take a PNG or SVG export in place of a  .draft  file, and read the source embedded in it.  open  writes that source to a  .draft  beside the image first.  extract --write file.draft  saves the source instead of printing it.  extract  exits 1 when the image carries no source.
+			449 heading Source in exported images#, Value: 2, ID: source-in-exported-images
+				450 link Description: Source in exported images#, Value: byronwall.github.io/draftably/docs/command-line#source-in-exported-images
+			451 container
+				452 text inspect --png ,  inspect --svg ,  compare --png  and  compare --svg  embed the formatted source, and the viewer's PNG and SVG exports embed the open file's source. A  compare  export embeds the marked file, so both versions come back.  --no-source , or the checkbox in the viewer's export dialog, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new scratch diagram. The format is stable, so other tools can read it:
+			453 content list
+				454 container
+					455 AXListMarker • 
+					456 text PNG:  an  iTXt  chunk with keyword  draftably . Its text is the UTF-8 source, with the compression flag set to 1 (zlib) or 0 (none); readers accept both. A  tEXt  chunk with keyword  draftably-version  names the Draftably version that drew it. Both sit before  IEND . The chunks do not change the pixels.
+				457 container
+					458 AXListMarker • 
+					459 text SVG:  a  <metadata id="draftably-source" data-draftably-version="…">  element inside the root  <svg> , holding the XML-escaped source.
+				460 container
+					461 AXListMarker • 
+					462 text PDF: draftably pdf  attaches each file's formatted source as an embedded file (the catalog's  EmbeddedFiles  name tree) named after the file, such as  checkout.draft , with the diagram's title as its description.  check ,  extract  and  open  read every attachment whose name ends in  .draft ;  diagrams.pdf#checkout.draft  names one.
+			463 text Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+			464 heading Layout variants#, Value: 2, ID: layout-variants
+				465 link Description: Layout variants#, Value: byronwall.github.io/draftably/docs/command-line#layout-variants
+			466 container
+				467 text vary  tries other  layout  and  routing  lines for a file, draws each one as the CLI does, and ranks them against the file as it is. It reads the diagram's shape (groups, the longest chain of connections, a tree with one start, long connection labels) and tries the engines and settings that suit it:  compound-flow  for groups and  layered  without, in both reading directions,  ordering=crossings ,  flow  for a long chain,  tree  for a tree, a wider  rank-gap  for long labels, and a router that avoids crossings harder. Files whose root uses  lanes ,  sequence  or  cells  get routing variants only.
+			468 container
+				469 button Copy
+				470 text $ pnpm draftably vary examples/checkout.draft
+5 variants tried, 2 kept. Sheet: examples/checkout.vary/contact-sheet.png
+id  change               crossings  bends    size            warnings  moved  notes
+v0  current              0          8        1143×462        0                fewest bends
+v1  compound-flow down   0          9 (+1)   598×713 (-19%)  0         349px  recommended, smallest
+v2  compound-flow right  0          11 (+3)  1143×451 (-2%)  0         46px   least moved
+v1: 3 groups, reading down.
+v2: 3 groups, reading right.
+Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
+			471 content list
+				472 container
+					473 AXListMarker • 
+					474 text Output goes to  <name>.vary/  beside the file, or to  --out <folder> :  contact-sheet.png  with every variant as a labeled tile,  v0.png  (the file as it is),  v1.png  and on, and  variants.json . Each PNG embeds its variant's source.
+				475 container
+					476 AXListMarker • 
+					477 text Metrics:  crossings, bends, canvas size, the warnings  check  would print (plus  soft-split  notes, since a soft group drawn in pieces no longer reads as one group), and  moved , the mean distance a box moved from where the file draws it. Changes from  v0  show in brackets.
+				478 container
+					479 AXListMarker • 
+					480 text Ranking:  variants that draw the same picture as an earlier one are dropped. A variant counts as better than the file when it has fewer warnings and no more crossings, or when it has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends.  --limit N  keeps N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
+				481 container
+					482 AXListMarker • 
+					483 text Recommended  is the first variant better than the file, or  v0  when none is.
+				484 container
+					485 AXListMarker • 
+					486 text From the file itself , the suggestions also try:
+					487 content list
+						488 container
+							489 AXListMarker ◦ 
+							490 text dropping the refinement lines  check  blames for drawing conflicts, so layout places those objects ( no line 15 );
+						491 container
+							492 AXListMarker ◦ 
+							493 text for a file with change marks or a  compare  line, panels side by side and stacked;
+						494 container
+							495 AXListMarker ◦ 
+							496 text fewer containers:  frame=soft  on leaf groups, then also on groups whose members span more than one rank, never on the group that holds most of the drawing. Only groups with no  layout  or position lines of their own qualify, so applying one changes only  group  lines.
+				497 container
+					498 AXListMarker • 
+					499 text --try key=a,b  tries exactly those values instead of suggesting, in order, and keeps every one. A second  --try  makes a grid (12 variants at most), with the first axis varying fastest.  --try key  alone uses the steps the viewer's Compare offers ( rank-gap  → 28, 52, 88). Keys are  engine ,  direction , the engine settings in 
+					500 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+					501 text  and the settings in 
+					502 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+					503 text . An engine setting on a scope with a built-in recipe also sets the engine: the scope's own, else  compound-flow  with groups or  layered  without.
+				504 container
+					505 AXListMarker • 
+					506 text --grid  tries  layered ,  compound-flow  and  flow , plus  tree  for a tree with one start, each reading right and then down. Sweeps keep a variant that draws the same picture as an earlier one and tag it  same as v1 , so a setting with no effect shows. On a  lanes  root,  --grid  and  --try engine=…  try engines while  v0  keeps the lanes, so lanes are one more option to compare.
+				507 container
+					508 AXListMarker • 
+					509 text --budget 60s  (or  2m ,  5000ms ) stops trying new variants after that long and ranks the ones found; the table says how many were left. Each variant prints a line to stderr as it finishes, with its crossings, size and time, so a long run shows its progress.
+				510 container
+					511 AXListMarker • 
+					512 text --fit wide|slide|square|page|tall  aims for an image shape (aspect 2, 1.78, 1, 0.77, 0.6). It changes what is tried (the matching direction first, and the engine's  aspect  with folding) and what ranks first: closeness to the shape comes right after warnings. A variant then counts as better when it fits the shape better and grows by at most half; more growth is empty space, not a better fit. With  --fit  the table adds an  aspect  column.
+				513 container
+					514 AXListMarker • 
+					515 text --prefer fewer-crossings|compact|stable  sets the order after warnings: crossings then area (the default), area then crossings, or the least movement from the current drawing.
+				516 container
+					517 AXListMarker • 
+					518 text --from <id>  searches around a variant of the last run: that variant as it was, the other direction, the other rank ordering and folding,  rank-gap ,  node-gap  and  group-gap  one step either way, and two router settings. Each keeps the variant's own edits, so the loop is:  vary , look,  vary --from v2 , look,  vary --apply v1 .
+				519 container
+					520 AXListMarker • 
+					521 text --scope <group>  varies that group's  layout  line instead of the root's. The suggestions then use the group's own shape, and routing (which is the whole file's) stays as it is.
+				522 container
+					523 AXListMarker • 
+					524 text --json  prints  variants.json : for each variant its id, title, reason, the exact lines it changes ( before  and  after ), its edits and metrics.
+				525 container
+					526 AXListMarker • 
+					527 text --apply <id>  writes that variant from the last run into the file and prints the lines it changed;  --apply best  takes the recommended one. It changes only those lines and keeps comments, IDs and refinements. An engine that replaces a built-in recipe drops the recipe and its  gap . It then checks the file. It refuses when the file changed since the run.
+			528 heading Drawing conflicts#, Value: 2, ID: drawing-conflicts
+				529 link Description: Drawing conflicts#, Value: byronwall.github.io/draftably/docs/command-line#drawing-conflicts
+			530 container
+				531 text check  also measures the drawing and reports conflicts as warnings. Layout and routing avoid them on their own, so a conflict usually comes from a refinement. Each warning ends with its rule:
+			532 table
+				533 row
+					534 cell
+						535 text Rule
+					536 cell
+						537 text Meaning
+				538 row
+					539 cell
+						540 text edge-through-node
+					541 cell
+						542 text A line runs through a box that is not one of its ends.
+				543 row
+					544 cell
+						545 text edge-through-title
+					546 cell
+						547 text A line crosses a group's title.
+				548 row
+					549 cell
+						550 text node-overlap
+					551 cell
+						552 text Two boxes overlap (across scopes; siblings are an 
+						553 text overlap
+						554 text  error).
+				555 row
+					556 cell
+						557 text label-collision
+					558 cell
+						559 text An edge label covers a box or another label.
+				560 row
+					561 cell
+						562 text outside-group
+					563 cell
+						564 text A box sits outside its group's frame.
+				565 row
+					566 cell
+						567 text note-overlap
+					568 cell
+						569 text A 
+						570 text note
+						571 text  with 
+						572 text near=
+						573 text  found no clear spot beside its object.
+			574 text When a refinement on one of the objects caused it, the warning names its line and a fix:
+			575 container
+				576 button Copy
+				577 text warning line 13: Edge call (web -> api) runs through cache. Remove the pin on line 13, or change it to x=0 y=-64. [edge-through-node]
+			578 container
+				579 text check --hints  adds a table with one row for each object a refinement names: its id, the refinement and line, where layout alone puts it (raw), where it is drawn (final), and the distance between them. A last line lists objects that moved only because a refinement pushed them.  inspect --json --hints  adds  raw: {x, y}  to every node a refinement moved. Raw positions come from the same file compiled without its refinement lines.
+			580 container
+				581 text check --metrics  measures the drawing as  vary  does and prints one line: size and aspect, crossings, bends, total line length and warnings. It also warns on how the drawing reads:
+			582 table
+				583 row
+					584 cell
+						585 text Rule
+					586 cell
+						587 text Meaning
+				588 row
+					589 cell
+						590 text crossing
+					591 cell
+						592 text Two edges that share no end cross. (The metrics line counts every crossing the router sees.)
+				593 row
+					594 cell
+						595 text detour
+					596 cell
+						597 text A route is over 2.5 times, and 300px more than, the distance between its ends.
+				598 row
+					599 cell
+						600 text stranded
+					601 cell
+						602 text A node is over 480px from every node it connects to.
+				603 row
+					604 cell
+						605 text aspect
+					606 cell
+						607 text Wider or taller than 3:1, or with 
+						608 text --fit <shape>
+						609 text , more than 1.5 times off that shape's aspect.
+			610 container
+				611 text inspect --json --metrics  adds the same numbers as a  metrics  object, so a script can compare two versions of a file without drawing an image.
+			612 container
+				613 text skill install  copies the agent skill in 
+				614 link Description: skills/draftably, Value: github.com/byronwall/draftably/blob/main/skills/draftably/SKILL.md
+				615 text , which teaches coding agents to write and check  .draft  files.  --global  installs it under  ~/.claude/skills ,  --dir  names another skills folder, and  --force  replaces an existing copy.  npx skills add byronwall/draftably  installs the same skill from the repository.
+			616 container
+				617 text open  serves a folder: the current folder, the folder you name, or the current folder around the file you name. Without a file, the viewer starts on a page that lists every  .draft  file in the folder (skipping dot folders and  node_modules ), creates a new one, or opens an example. Each file opens at  ?file=path/in/folder.draft , so links and reloads keep it.
+			618 container
+				619 text open  watches the open file. Edits made in another program appear in the viewer at once. If the source becomes invalid, the viewer keeps the last valid drawing and shows the error line. During development,  DIAGRAM_ROOT=folder pnpm dev  serves the same folder from Vite;  DIAGRAM_FILE=path/to/file.draft  serves the current folder and prints the file's address.
+			118 container Previous and next
+				441 link Description: ← Previous Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+				119 link Description: Next → Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+		120 container On this page
+			620 heading On this page, Value: 2
+				621 text On this page
+			622 link Description: Source in exported images, Value: byronwall.github.io/draftably/docs/command-line#source-in-exported-images
+			623 link Description: Layout variants, Value: byronwall.github.io/draftably/docs/command-line#layout-variants
+			624 link Description: Drawing conflicts, Value: byronwall.github.io/draftably/docs/command-line#drawing-conflicts
+			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#command-line
+
+The focused UI element is 46 link Description: CLI details, URL: byronwall.github.io/draftably/docs/command-line
+
+VISIBLE MAIN TEXT
+Tools
+/
+CLI details
+CLI details
+Copy
+pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflicts; exit 1 on errors
+pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
+pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
+pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
+pnpm draftably format diagram.draft --drop-stale --write  # also drop refinements that no longer hold
+pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
+pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
+pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
+pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
+pnpm draftably set f.draft node.api label="API" color=teal  # change a declaration by id (key= removes)
+pnpm draftably rm f.draft cache                  # remove it with its edges, refinements and state mentions
+pnpm draftably mv f.draft cache store            # rename an id everywhere
+pnpm draftably vary examples/checkout.draft       # layout variants: contact sheet, metrics, ranking
+pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
+pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
+pnpm draftably open                              # start page for the current folder's diagrams
+pnpm draftably open --status                     # running viewers: URL, folder, version (open reuses one)
+pnpm draftably vary --help                       # any command's options; --version for the version
+pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
+pnpm draftably docs legend                       # one section of this guide; docs alone lists them
+
+check, format, inspect, compare and open also take a PNG or SVG export in place of a .draft file, and read the source embedded in it. open writes that source to a .draft beside the image first. extract --write file.draft saves the source instead of printing it. extract exits 1 when the image carries no source.
+
+Source in exported images
+
+inspect --png, inspect --svg, compare --png and compare --svg embed the formatted source, and the viewer's PNG and SVG exports embed the open file's source. A compare export embeds the marked file, so both versions come back. --no-source, or the checkbox in the viewer's export dialog, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new scratch diagram. The format is stable, so other tools can read it:
+
+PNG: an iTXt chunk with keyword draftably. Its text is the UTF-8 source, with the compression flag set to 1 (zlib) or 0 (none); readers accept both. A tEXt chunk with keyword draftably-version names the Draftably version that drew it. Both sit before IEND. The chunks do not change the pixels.
+SVG: a <metadata id="draftably-source" data-draftably-version="…"> element inside the root <svg>, holding the XML-escaped source.
+PDF: draftably pdf attaches each file's formatted source as an embedded file (the catalog's EmbeddedFiles name tree) named after the file, such as checkout.draft, with the diagram's title as its description. check, extract and open read every attachment whose name ends in .draft; diagrams.pdf#checkout.draft names one.
+
+Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+
+Layout variants
+
+vary tries other layout and routing lines for a file, draws each one as the CLI does, and ranks them against the file as it is. It reads the diagram's shape (groups, the longest chain of connections, a tree with one start, long connection labels) and tries the engines and settings that suit it: compound-flow for groups and layered without, in both reading directions, ordering=crossings, flow for a long chain, tree for a tree, a wider rank-gap for long labels, and a router that avoids crossings harder. Files whose root uses lanes, sequence or cells get routing variants only.
+
+Copy
+$ pnpm draftably vary examples/checkout.draft
+5 variants tried, 2 kept. Sheet: examples/checkout.vary/contact-sheet.png
+id  change               crossings  bends    size            warnings  moved  notes
+v0  current              0          8        1143×462        0                fewest bends
+v1  compound-flow down   0          9 (+1)   598×713 (-19%)  0         349px  recommended, smallest
+v2  compound-flow right  0          11 (+3)  1143×451 (-2%)  0         46px   least moved
+v1: 3 groups, reading down.
+v2: 3 groups, reading right.
+Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
+Output goes to <name>.vary/ beside the file, or to --out <folder>: contact-sheet.png with every variant as a labeled tile, v0.png (the file as it is), v1.png and on, and variants.json. Each PNG embeds its variant's source.
+Metrics: crossings, bends, canvas size, the warnings check would print (plus soft-split notes, since a soft group drawn in pieces no longer reads as one group), and moved, the mean distance a box moved from where the file draws it. Changes from v0 show in brackets.
+Ranking: variants that draw the same picture as an earlier one are dropped. A variant counts as better than the file when it has fewer warnings and no more crossings, or when it has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends. --limit N keeps N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
+Recommended is the first variant better than the file, or v0 when none is.
+From the file itself, the suggestions also try:
+dropping the refinement lines check blames for drawing conflicts, so layout places those objects (no line 15);
+for a file with change marks or a compare line, panels side by side and stacked;
+fewer containers: frame=soft on leaf groups, then also on groups whose members span more than one rank, never on the group that holds most of the drawing. Only groups with no layout or position lines of their own qualify, so applying one changes only group lines.
+--try key=a,b tries exactly those values instead of suggesting, in order, and keeps every one. A second --try makes a grid (12 variants at most), with the first axis varying fastest. --try key alone uses the steps the viewer's Compare offers (rank-gap → 28, 52, 88). Keys are engine, direction, the engine settings in Layout engines and the settings in Routing. An engine setting on a scope with a built-in recipe also sets the engine: the scope's own, else compound-flow with groups or layered without.
+--grid tries layered, compound-flow and flow, plus tree for a tree with one start, each reading right and then down. Sweeps keep a variant that draws the same picture as an earlier one and tag it same as v1, so a setting with no effect shows. On a lanes root, --grid and --try engine=… try engines while v0 keeps the lanes, so lanes are one more option to compare.
+--budget 60s (or 2m, 5000ms) stops trying new variants after that long and ranks the ones found; the table says how many were left. Each variant prints a line to stderr as it finishes, with its crossings, size and time, so a long run shows its progress.
+--fit wide|slide|square|page|tall aims for an image shape (aspect 2, 1.78, 1, 0.77, 0.6). It changes what is tried (the matching direction first, and the engine's aspect with folding) and what ranks first: closeness to the shape comes right after warnings. A variant then counts as better when it fits the shape better and grows by at most half; more growth is empty space, not a better fit. With --fit the table adds an aspect column.
+--prefer fewer-crossings|compact|stable sets the order after warnings: crossings then area (the default), area then crossings, or the least movement from the current drawing.
+--from <id> searches around a variant of the last run: that variant as it was, the other direction, the other rank ordering and folding, rank-gap, node-gap and group-gap one step either way, and two router settings. Each keeps the variant's own edits, so the loop is: vary, look, vary --from v2, look, vary --apply v1.
+--scope <group> varies that group's layout line instead of the root's. The suggestions then use the group's own shape, and routing (which is the whole file's) stays as it is.
+--json prints variants.json: for each variant its id, title, reason, the exact lines it changes (before and after), its edits and metrics.
+--apply <id> writes that variant from the last run into the file and prints the lines it changed; --apply best takes the recommended one. It changes only those lines and keeps comments, IDs and refinements. An engine that replaces a built-in recipe drops the recipe and its gap. It then checks the file. It refuses when the file changed since the run.
+Drawing conflicts
+
+check also measures the drawing and reports conflicts as warnings. Layout and routing avoid them on their own, so a conflict usually comes from a refinement. Each warning ends with its rule:
+
+Rule	Meaning
+edge-through-node	A line runs through a box that is not one of its ends.
+edge-through-title	A line crosses a group's title.
+node-overlap	Two boxes overlap (across scopes; siblings are an overlap error).
+label-collision	An edge label covers a box or another label.
+outside-group	A box sits outside its group's frame.
+note-overlap	A note with near= found no clear spot beside its object.
+
+When a refinement on one of the objects caused it, the warning names its line and a fix:
+
+Copy
+warning line 13: Edge call (web -> api) runs through cache. Remove the pin on line 13, or change it to x=0 y=-64. [edge-through-node]
+
+check --hints adds a table with one row for each object a refinement names: its id, the refinement and line, where layout alone puts it (raw), where it is drawn (final), and the distance between them. A last line lists objects that moved only because a refinement pushed them. inspect --json --hints adds raw: {x, y} to every node a refinement moved. Raw positions come from the same file compiled without its refinement lines.
+
+check --metrics measures the drawing as vary does and prints one line: size and aspect, crossings, bends, total line length and warnings. It also warns on how the drawing reads:
+
+Rule	Meaning
+crossing	Two edges that share no end cross. (The metrics line counts every crossing the router sees.)
+detour	A route is over 2.5 times, and 300px more than, the distance between its ends.
+stranded	A node is over 480px from every node it connects to.
+aspect	Wider or taller than 3:1, or with --fit <shape>, more than 1.5 times off that shape's aspect.
+
+inspect --json --metrics adds the same numbers as a metrics object, so a script can compare two versions of a file without drawing an image.
+
+skill install copies the agent skill in skills/draftably, which teaches coding agents to write and check .draft files. --global installs it under ~/.claude/skills, --dir names another skills folder, and --force replaces an existing copy. npx skills add byronwall/draftably installs the same skill from the repository.
+
+open serves a folder: the current folder, the folder you name, or the current folder around the file you name. Without a file, the viewer starts on a page that lists every .draft file in the folder (skipping dot folders and node_modules), creates a new one, or opens an example. Each file opens at ?file=path/in/folder.draft, so links and reloads keep it.
+
+open watches the open file. Edits made in another program appear in the viewer at once. If the source becomes invalid, the viewer keeps the last valid drawing and shows the error line. During development, DIAGRAM_ROOT=folder pnpm dev serves the same folder from Vite; DIAGRAM_FILE=path/to/file.draft serves the current folder and prints the file's address.
+
+← Previous
+Layout tools
+Next →
+Editing in the viewer

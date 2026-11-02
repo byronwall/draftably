@@ -1,0 +1,3 @@
+diagram "D2 image" version=1
+node remote "Image"
+layout root flow direction=down

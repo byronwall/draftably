@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 export const SKILL_NAME = 'draftably';
 
 /** The folder of the nearest package.json above this module. */
-function packageRoot() {
+export function packageRoot() {
   let project = path.dirname(fileURLToPath(import.meta.url));
   while (!fs.existsSync(path.join(project, 'package.json')) && path.dirname(project) !== project)
     project = path.dirname(project);

@@ -16,6 +16,7 @@ import {
   edgeLabelSize,
   GROUP_TITLE_LINES,
   groupHeaderFor,
+  diamondMeasure,
   titleArea,
   titleHeight,
   wrapTitle,
@@ -35,6 +36,7 @@ import {
   contentOrigin,
 } from './frame';
 import { projectScene } from './project';
+import { legendNotes } from './legend-notes';
 import {
   DslError,
   FITS,
@@ -651,7 +653,7 @@ function governingLayout(m: Model, scope: string): ModelLayout | undefined {
  * World positions from the layout engines named in the file, outermost scope first. The engines
  * start from the built-in recipes with sizes but no position refinements.
  */
-async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined> {
+async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | undefined> {
   const engines = m.layouts.filter(l => l.engine);
   if (!engines.length) return undefined;
   const depth = (scope: string) => {
@@ -706,7 +708,10 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
     doc = result.document;
   }
   return new Map(
-    Object.entries(doc.layout.nodes).map(([id, r]) => [original.get(id) ?? id, { x: r.x, y: r.y }]),
+    Object.entries(doc.layout.nodes).map(([id, r]) => [
+      original.get(id) ?? id,
+      { x: r.x, y: r.y, w: r.w, h: r.h },
+    ]),
   );
 }
 
@@ -860,6 +865,7 @@ export function leafSize(
   look: ResolvedAppearance,
 ) {
   const base = defaultShapeSize(o.shape);
+  if (o.shape === 'diamond') return diamondSize(o, size, base, look);
   const w = size?.width ?? fitWidth(o, base, look);
   const area = titleArea(o.shape, w, size?.height ?? base.h, look),
     lines = wrapTitle(o.label, area.width, look).length;
@@ -867,15 +873,34 @@ export function leafSize(
     return { w, h: size.height, overflow: lines * look.title.lineHeight > area.maxHeight + 0.5 };
   return {
     w,
-    h: titleHeight(
-      o.shape,
-      lines,
-      o.shape === 'circle' || o.shape === 'diamond' ? base.h : 0,
-      look,
-    ),
+    h: titleHeight(o.shape, lines, o.shape === 'circle' ? base.h : 0, look),
     overflow: false,
   };
 }
+
+/**
+ * A diamond is square. A requested size keeps its larger side; otherwise the default side grows
+ * in 4px steps until the title, wrapped to the wider measure the larger square gives, fits.
+ */
+function diamondSize(
+  o: ModelObject,
+  size: { width: number; height?: number } | undefined,
+  base: { w: number; h: number },
+  look: ResolvedAppearance,
+) {
+  const need = widestPiece(o.label, look.title),
+    fits = (s: number) => (diamondMeasure(o.label, s, look) ?? 0) >= need;
+  if (size) {
+    const s = Math.max(size.width, size.height ?? 0);
+    return { w: s, h: s, overflow: !fits(s) };
+  }
+  let s = base.w;
+  while (!fits(s)) s += 4;
+  return { w: s, h: s, overflow: false };
+}
+
+/** A diamond grown past this many times its default side reads as much larger than its neighbours. */
+const BIG_DIAMOND = 1.4;
 
 /**
  * Longest-path ranks, in declaration order. Cycles are broken first: a depth-first walk from the
@@ -1568,17 +1593,22 @@ function besideCallers(
  * Pack an engine-arranged scope tight. Members take local ranks from the edges between them, so a
  * chain reads as a straight row or column in the reading direction instead of stepping across the
  * engine's global rank columns. Each rank keeps the engine's order across it, and every rank is
- * centred on one line. A gap next to a group is the drawing's one group gap.
+ * centred on one line. A gap next to a group is the drawing's one group gap. Where members are
+ * linked, a member with no edge to another member has nothing here to order it by: the engine
+ * centres it under the linked ones. It sits across where its `outside` neighbours are instead, so
+ * two outcomes fed by one node outside the group sit together on that node's side. In a scope with
+ * no inner edges the engine's order already follows the outside neighbours, and it stays.
  */
 function packed(
   items: Item[],
-  arranged: Map<string, Pos>,
+  arranged: Map<string, Pos & Size>,
   axis: 'right' | 'down',
   pairs: Array<[string, string]>,
   rooms: LabelRoom[],
   gaps: PackGaps,
   sinks = false,
   lines: ScopeLine[] = [],
+  outside = new Map<string, string[]>(),
 ) {
   const by = new Map(items.map(n => [n.id, n])),
     ids = items.map(n => n.id),
@@ -1586,7 +1616,14 @@ function packed(
   const major = (id: string) => (right ? by.get(id)!.w : by.get(id)!.h),
     minor = (id: string) => (right ? by.get(id)!.h : by.get(id)!.w),
     group = (id: string) => by.get(id)!.type === 'group';
+  const centre = (p: Pos & Size) => (right ? p.y + p.h / 2 : p.x + p.w / 2),
+    linked = new Set(pairs.flat());
   const across = (id: string) => {
+    const ns =
+      !linked.size || linked.has(id)
+        ? []
+        : (outside.get(id) ?? []).flatMap(o => arranged.get(o) ?? []);
+    if (ns.length) return ns.reduce((s, p) => s + centre(p), 0) / ns.length;
     const p = arranged.get(id)!;
     return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
   };
@@ -2234,7 +2271,7 @@ const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SL
  * than the scope's gap can absorb (`SLOT_SPILL`), or where spilling would bring two boxes closer
  * than `MIN_GAP`. With `slots`, objects come out at their slot size (the engines' input).
  */
-export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
+export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots = false): Scene {
   // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
   if (slots) return layoutPass(m, arranged, true);
   // A `near` whose reference sits inside a sibling group places against that group, lined up
@@ -2290,13 +2327,13 @@ const packFolds = new WeakMap<Scene, PackFold>();
 
 function layoutPass(
   m: Model,
-  arranged?: Map<string, Pos>,
+  arranged?: Map<string, Pos & Size>,
   slots = false,
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
-  /** Edges that rank and order objects: all but `constraint=false`, which are only drawn. */
-  const ranking = m.edges.filter(e => e.constraint !== false);
+  /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
+  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false);
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -2577,6 +2614,14 @@ function layoutPass(
             ref: { w: round(r.w), h: round(r.h) },
           });
         }
+        if (o.shape === 'diamond' && !hint && leaf.w > defaultShapeSize('diamond').w * BIG_DIAMOND)
+          diagnostics.push({
+            level: 'info',
+            code: 'big-diamond',
+            message: `${o.id}'s question makes its diamond ${round(leaf.w)}px square, much larger than the shapes around it. Shorten the question, or move the detail onto its edges' labels.`,
+            line: o.line,
+            ids: [o.id],
+          });
         if (leaf.overflow)
           diagnostics.push({
             level: 'warning',
@@ -2606,6 +2651,14 @@ function layoutPass(
     });
     // Label rooms are measured on the reference appearance too; a theme's label may use up to
     // one `LABEL_RUN` of the line beside it before the room grows.
+    // Each member's neighbours outside the scope, for ordering members with no edge inside it.
+    const outside = new Map<string, string[]>();
+    for (const e of ranking) {
+      const a = immediate(e.source, scope),
+        b = immediate(e.target, scope);
+      if (a && !b) outside.set(a, [...(outside.get(a) ?? []), e.target]);
+      if (b && !a) outside.set(b, [...(outside.get(b) ?? []), e.source]);
+    }
     const rooms = m.edges.flatMap(e => {
       const a = immediate(e.source, scope),
         b = immediate(e.target, scope);
@@ -2695,6 +2748,7 @@ function layoutPass(
               packGaps,
               scope === 'root',
               lines,
+              outside,
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
@@ -3088,7 +3142,7 @@ function layoutPass(
         ids: [g.id],
       });
   }
-  diagnostics.push(...paletteNotes(m));
+  diagnostics.push(...paletteNotes(m), ...legendNotes(m));
   for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));

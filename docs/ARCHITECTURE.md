@@ -1,6 +1,6 @@
 # Architecture
 
-Diagram Studio is a SolidJS single-page app. All state lives in the browser; computation-heavy work
+draftably is a SolidJS single-page app. All state lives in the browser; computation-heavy work
 runs in a Web Worker. The code is split into three layers, each depending only on the ones below it.
 
 ```
@@ -54,6 +54,12 @@ Each module owns one concern and exposes signals plus the actions that change th
 - **Finish pending work before an edit.** Modules register `onBeforeEdit` handlers to commit an
   inline label, accept a layout preview, close a timeline or finish a drag.
 - **Camera movement is not an edit.** It saves with the document but never creates undo steps.
+
+## import/ — foreign diagram source
+
+`import/` detects supported text formats and converts DOT, Mermaid flowchart and D2 graph
+facts to validated native source. It reports unsupported meaning and loss before opening. The CLI `import`
+command writes a new `.draft` file. Viewer entry points are planned separately.
 
 ## dsl/ and cli/ — diagram files
 

@@ -1,0 +1,199 @@
+Browser tab: 4, Title: "Kubernetes cluster · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=kubernetes-cluster".
+0 AXWebArea Kubernetes cluster · Draftably playground, URL: byronwall.github.io/draftably/play/?example=kubernetes-cluster
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+			10 button Copy link
+			11 button (collapsed) Download, Secondary Actions: Expand
+			16 button Open in the editor
+		17 container Source
+			153 button (collapsed) Kubernetes cluster, Secondary Actions: Expand
+				154 text Kubernetes cluster
+			20 container
+				21 text Theme
+				22 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					23 menu
+						24 (selected) Drafting
+						25 Fieldnotes
+						26 Signal
+						27 Ink
+						28 Blueprint
+			29 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			30 container
+				31 text entry area (settable) Description: Diagram source, Value: diagram "Kubernetes cluster" version=1
+
+
+# Three levels: cluster > namespace > deployment, with pods inside each deployment.
+node users "Users" shape=pill color=slate
+node lb "Cloud load balancer" color=slate
+
+
+group cluster "Production cluster" color=blue
+node ingress "Ingress controller" in=cluster
+
+
+group ns_shop "namespace: shop" in=cluster color=mint
+group web_deploy "deploy: web" in=ns_shop
+node web_1 "web-7f9c" in=web_deploy
+node web_2 "web-a21d" in=web_deploy
+group cart_deploy "deploy: cart" in=ns_shop
+node cart_1 "cart-5b0e" in=cart_deploy
+node redis "redis" in=ns_shop shape=circle
+
+
+group ns_data "namespace: data" in=cluster color=violet
+group pg_set "statefulset: postgres" in=ns_data
+node pg_0 "postgres-0" in=pg_set
+node pg_1 "postgres-1" in=pg_set
+node backup "backup cronjob" in=ns_data
+
+
+group ns_ops "namespace: monitoring" in=cluster color=amber
+node prom "prometheus" in=ns_ops
+node grafana "grafana" in=ns_ops
+
+
+node bucket "Object storage" color=slate
+
+
+edge e1 users -> lb "HTTPS"
+edge e2 lb -> ingress
+edge e3 ingress -> web_1
+edge e4 ingress -> web_2
+edge e5 web_1 -> cart_1
+edge e6 web_2 -> cart_1
+edge e7 cart_1 -> redis
+edge e8 cart_1 -> pg_0
+edge rep pg_0 -> pg_1 "replicate" kind=async
+edge bk backup -> bucket "nightly" kind=async
+edge sc prom -> web_1 "scrape" kind=async
+edge g prom -> grafana
+
+
+layout root flow gap=56 direction=right
+layout cluster flow gap=40 direction=down
+layout web_deploy row gap=16
+layout pg_set row gap=16
+
+
+					32 container
+						33 text diagram "Kubernetes cluster" version = 1
+					155 text # Three levels: cluster > namespace > deployment, with pods inside each deployment.
+					156 container
+						157 text node users "Users" shape = pill color = slate
+					158 container
+						159 text node lb "Cloud load balancer" color = slate
+					160 container
+						161 text group cluster "Production cluster" color = blue
+					162 container
+						163 text node ingress "Ingress controller" in = cluster
+					164 container
+						165 text group ns_shop "namespace: shop" in = cluster color = mint
+					166 container
+						167 text group web_deploy "deploy: web" in = ns_shop
+					168 container
+						169 text node web_1 "web-7f9c" in = web_deploy
+					170 container
+						171 text node web_2 "web-a21d" in = web_deploy
+					172 container
+						173 text group cart_deploy "deploy: cart" in = ns_shop
+					174 container
+						175 text node cart_1 "cart-5b0e" in = cart_deploy
+					176 container
+						177 text node redis "redis" in = ns_shop shape = circle
+					178 container
+						179 text group ns_data "namespace: data" in = cluster color = violet
+					180 container
+						181 text group pg_set "statefulset: postgres" in = ns_data
+					182 container
+						183 text node pg_0 "postgres-0" in = pg_set
+					184 container
+						185 text node pg_1 "postgres-1" in = pg_set
+					186 container
+						187 text node backup "backup cronjob" in = ns_data
+					188 container
+						189 text group ns_ops "namespace: monitoring" in = cluster color = amber
+					190 container
+						191 text node prom "prometheus" in = ns_ops
+					192 container
+						193 text node grafana "grafana" in = ns_ops
+					194 container
+						195 text node bucket "Object storage" color = slate
+					196 container
+						197 text edge e1 users -> lb "HTTPS"
+					198 container
+						199 text edge e2 lb -> ingress
+					200 container
+						201 text edge e3 ingress -> web_1
+					202 container
+						203 text edge e4 ingress -> web_2
+					204 container
+						205 text edge e5 web_1 -> cart_1
+					206 container
+						207 text edge e6 web_2 -> cart_1
+					208 container
+						209 text edge e7 cart_1 -> redis
+					210 container
+						211 text edge e8 cart_1 -> pg_0
+					212 container
+						213 text edge rep pg_0 -> pg_1 "replicate" kind = async
+					214 container
+						215 text edge bk backup -> bucket "nightly" kind = async
+					216 container
+						217 text edge sc prom -> web_1 "scrape" kind = async
+					218 container
+						219 text edge g prom -> grafana
+					220 container
+						221 text layout root flow gap = 56 direction = right
+					222 container
+						223 text layout cluster flow gap = 40 direction = down
+					224 container
+						225 text layout web_deploy row gap = 16
+					226 container
+						227 text layout pg_set row gap = 16
+			40 button (disabled) No problems · drawn in 37 ms Click a shape to find its line
+				152 text No problems · drawn in 37 ms Click a shape to find its line
+		43 splitter Description: Resize panes, Value: 38
+		44 container Diagram
+			45 container
+				228 image Kubernetes cluster
+					229 text Kubernetes cluster
+					230 text Production cluster
+					231 text namespace: shop
+					232 text namespace: data
+					233 text namespace:
+					234 text monitoring
+					235 text deploy: web
+					236 text deploy: cart
+					237 text statefulset: postgres
+					238 text nightly
+					239 text HTTPS
+					240 text replicate
+					241 text scrape
+					242 text Users
+					243 text Cloud load balancer
+					244 text Ingress controller
+					245 text web-7f9c
+					246 text web-a21d
+					247 text cart-5b0e
+					248 text redis
+					249 text postgres-0
+					250 text postgres-1
+					251 text backup cronjob
+					252 text prometheus
+					253 text grafana
+					254 text Object storage
+				50 button Zoom out
+				51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					52 text 56
+					53 text %
+				54 button Zoom in
+				55 button Full screen
+
+The focused UI element is 51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)

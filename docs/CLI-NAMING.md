@@ -7,12 +7,12 @@ The name uses a familiar drafting root with a suffix, rather than a compound nam
 It suggests editable visual work and keeps the user in control.
 
 The final pass favored suffix and prefix forms, especially names ending in `ly`.
-Draftably, Graphably, Shapeably, and Sketchably each returned npm 404 and zero GitHub repository-name matches.
+draftably, Graphably, Shapeably, and Sketchably each returned npm 404 and zero GitHub repository-name matches.
 The parent repeated those registry and repository checks.
-Wider searches found no exact-name Draftably software product.
-[Draftably.com](https://www.atom.com/name/Draftably) was listed for resale.
+Wider searches found no exact-name draftably software product.
+[draftably.com](https://www.atom.com/name/Draftably) was listed for resale.
 
-Draftably closely resembles the existing [Draftable document-comparison product](https://www.draftable.com/compare).
+draftably closely resembles the existing [Draftable document-comparison product](https://www.draftable.com/compare).
 That similarity remains the main naming tradeoff. The npm name is not reserved by these checks.
 The package stays private until the CLI is ready. See [release setup](RELEASING.md).
 

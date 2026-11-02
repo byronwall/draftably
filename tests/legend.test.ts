@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderSvg } from '../src/cli/svg';
 import { checkSource } from '../src/dsl/compile';
+import { legendNotes } from '../src/dsl/legend-notes';
 import { projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
@@ -15,6 +16,21 @@ legend red "Failure path" shade=600
 `;
 
 describe('legend', () => {
+  it('warns when a swatch shade matches no node of its family', () => {
+    const notes = legendNotes(
+      parseModel(`diagram "K" version=1
+node drop "Dropped" color=rose shade=200
+node api "API" color=blue
+legend rose "Dropped when nobody waits"
+legend blue "Entry points"
+legend violet "Unused family"
+`),
+    );
+    expect(notes.map(n => [n.line, n.message])).toEqual([
+      [4, 'legend rose is shade 500; rose nodes use 200. Add `shade=200`.'],
+    ]);
+  });
+
   it('reads entries in file order, with optional shades', () => {
     expect(parseModel(SOURCE).appearance.legend).toEqual([
       { family: 'blue', label: 'Public entry points' },

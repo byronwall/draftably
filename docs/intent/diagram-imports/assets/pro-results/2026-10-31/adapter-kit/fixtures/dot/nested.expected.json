@@ -1,0 +1,150 @@
+{
+  "status": "ready",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_CLUSTER_LAYOUT",
+      "message": "Each cluster uses native flow with the global rankdir intent; Graphviz ranking and cluster packing are recomputed.",
+      "severity": "info",
+      "impact": "layout"
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "group",
+      "foreign": "cluster_backend",
+      "native": "cluster_backend"
+    },
+    {
+      "kind": "group",
+      "foreign": "cluster_data",
+      "native": "cluster_data"
+    },
+    {
+      "kind": "node",
+      "foreign": "api",
+      "native": "api"
+    },
+    {
+      "kind": "node",
+      "foreign": "db",
+      "native": "db"
+    },
+    {
+      "kind": "node",
+      "foreign": "user",
+      "native": "user"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "2",
+      "native": "edge_2"
+    },
+    {
+      "kind": "edge",
+      "foreign": "3",
+      "native": "edge_3"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Pipeline\" version=1\ntheme-color import_1 shade=500 fill=\"#dbeafe\" stroke=\"#2563eb\" ink=\"#172033\"\ngroup cluster_backend \"Backend\"\ngroup cluster_data \"Data\" in=cluster_backend\nnode api \"API\" in=cluster_backend color=import_1 shade=500\nnode db \"Store\" in=cluster_data shape=circle\nnode user \"user\"\nedge edge_1 user -> api \"request\"\nedge edge_2 api -> db \"read\"\nedge edge_3 api -> db \"write\" kind=async\nlayout root flow direction=right\nlayout cluster_backend flow direction=right\nlayout cluster_data flow direction=right\n",
+  "facts": {
+    "title": "Pipeline",
+    "objects": [
+      {
+        "kind": "group",
+        "id": "cluster_backend",
+        "label": "Backend"
+      },
+      {
+        "kind": "group",
+        "id": "cluster_data",
+        "label": "Data",
+        "parent": "cluster_backend"
+      },
+      {
+        "kind": "node",
+        "id": "api",
+        "label": "API",
+        "parent": "cluster_backend",
+        "shape": "box",
+        "color": "import_1",
+        "shade": 500
+      },
+      {
+        "kind": "node",
+        "id": "db",
+        "label": "Store",
+        "parent": "cluster_data",
+        "shape": "circle"
+      },
+      {
+        "kind": "node",
+        "id": "user",
+        "label": "user",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "user",
+        "to": "api",
+        "label": "request",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "api",
+        "to": "db",
+        "label": "read",
+        "directed": true
+      },
+      {
+        "id": "edge_3",
+        "from": "api",
+        "to": "db",
+        "label": "write",
+        "directed": true,
+        "dashed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "right"
+      },
+      {
+        "scope": "cluster_backend",
+        "kind": "flow",
+        "direction": "right"
+      },
+      {
+        "scope": "cluster_data",
+        "kind": "flow",
+        "direction": "right"
+      }
+    ],
+    "colors": [
+      {
+        "name": "import_1",
+        "fill": "#dbeafe",
+        "stroke": "#2563eb",
+        "ink": "#172033"
+      }
+    ]
+  }
+}

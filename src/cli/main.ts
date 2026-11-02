@@ -1,9 +1,10 @@
 /**
- * Draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
+ * draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { isMainThread, workerData } from 'node:worker_threads';
 import { compile, type Diagnostic } from '../dsl/compile';
 import { compareDetailed } from '../dsl/compare';
 import { hintMoves, sceneConflicts } from '../dsl/conflicts';
@@ -17,12 +18,17 @@ import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
 import { cliVersion, staleSkills } from './skill';
 import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
+import { updateNotice } from './update';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
-Any <file> may also be a PNG or SVG that Draftably exported: its embedded source is read.
+Any <file> may also be a PNG, SVG or PDF that draftably exported: its embedded source is read.
+A PDF holds several; name one as diagrams.pdf#name.draft, or check reads them all.
 
 Commands:
+  import <file> [--output <new.draft>] [--from dot|mermaid|d2] [--accept-lossy]
+                            Convert a text diagram to a new .draft file, or print native source.
+                            Warnings require --accept-lossy. The input stays unchanged.
   check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
        [--quiet]            errors. Several files or a folder check each .draft in turn.
@@ -45,6 +51,17 @@ Commands:
                             Save the drawing as a PNG (needs Chrome or Chromium). --max-width
                             lowers the scale so the image is at most that many pixels wide.
                             PNG and SVG output embed the source; --no-source leaves it out.
+  inspect <file> --clipboard [--scale 2]
+                            Put the drawing on the macOS clipboard: a PNG with its source, and
+                            the SVG as text.
+  pdf <file|folder>… -o <out.pdf>
+                            Save the diagrams as one vector PDF, one per page, each with its
+       [--order <how>]      heading and key (needs Chrome or Chromium). --order: given (default;
+                            a folder's files by name), name or title. --page: fit (default,
+       [--page <size>]      each page the diagram's size), letter, a4 or slide; a fixed size
+                            scales the drawing to fit. --title adds a cover and contents.
+       [--title "…"]        --states prints a page per emphasis state. Each file's source is
+       [--states]           attached (--no-source leaves it out). Stops on a file with errors.
   compare <before> <after>  Print one file holding both versions, with + - ~ change marks.
        [--write <file>]     Save it instead of printing it.
        [--svg]              Print it as an SVG drawing instead.
@@ -77,7 +94,7 @@ Commands:
                             state mentions; a group's members move to its container.
   mv <file> <old> <new>     Rename an id everywhere it is used.
                             set, rm and mv rewrite the file through the formatter, then check it.
-  extract <image>           Print the .draft source embedded in a PNG or SVG export.
+  extract <image>           Print the .draft source embedded in a PNG, SVG or PDF export.
        [--write <file>]     Save it instead of printing it.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
        [--port N]           Without a file, start on a picker for the folder's diagrams,
@@ -86,7 +103,11 @@ Commands:
                             --port 0 picks any free port. The Viewer line has the URL.
        [--replace]          Without --port, a viewer already serving the folder is reused;
        [--status]           --replace stops it and starts this version. --status lists the
-                            running viewers: URL, folder, version and pid.
+                            running viewers: URL, folder, version and pid. A viewer stops
+                            after 2 hours with no open tab, or when its folder is deleted.
+  docs [topic]              Print the language guide (DSL.md) for this version: its contents,
+                            the sections whose heading matches topic (docs legend, docs
+                            count), or all of it with docs all.
   skill install             Install the agent skill for writing .draft files into
        [--global]           ./.claude/skills/draftably, or ~/.claude/skills with --global.
        [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
@@ -94,7 +115,8 @@ Commands:
   skill print               Print the skill's SKILL.md.
   --version                 Print the installed version.
 
-Any command with --help prints its own part of this text.
+Any command with --help prints its own part of this text. Once a day the CLI checks npm for a
+newer version and notes it on stderr; set DRAFTABLY_NO_UPDATE_CHECK=1 to skip that.
 `;
 
 /** The usage lines for `command`, or all of them. */
@@ -126,19 +148,41 @@ function hintTable({ rows, pushed }: Awaited<ReturnType<typeof hintMoves>>) {
   return lines.join('\n');
 }
 
-/** A file's source; a PNG or SVG export gives the source embedded in it. */
+/** A file's source; a PNG, SVG or PDF export gives the source embedded in it. */
 async function read(file: string | undefined) {
   if (!file) throw new UsageError('A .draft file is required.');
+  const pdf = /^(.*\.pdf)(?:#(.+))?$/i.exec(file);
+  if (pdf) {
+    const sources = await pdfSources(pdf[1]),
+      picked = pdf[2] ? sources.filter(s => s.name === pdf[2]) : sources;
+    if (picked.length === 1) return picked[0].source;
+    throw Error(
+      picked.length
+        ? `${pdf[1]} holds ${sources.length} diagrams; name one as ${pdf[1]}#<name>: ${sources.map(s => s.name).join(', ')}.`
+        : `${pdf[1]} has no diagram ${pdf[2]}. It holds: ${sources.map(s => s.name).join(', ')}.`,
+    );
+  }
   if (!isImageName(file)) return fs.readFileSync(path.resolve(file), 'utf8');
   const source = await readImageSource(fs.readFileSync(path.resolve(file)));
   if (source === null)
     throw Error(
-      `${file} has no embedded Draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
+      `${file} has no embedded draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
     );
   return source;
 }
 
 class UsageError extends Error {}
+
+/** The sources attached to a PDF export; throws when it has none. */
+async function pdfSources(file: string) {
+  const { readPdfSources } = await import('./pdf');
+  const sources = await readPdfSources(fs.readFileSync(path.resolve(file)));
+  if (!sources.length)
+    throw Error(
+      `${file} has no embedded draftably source. It was exported with --no-source or by another tool.`,
+    );
+  return sources;
+}
 
 /** Every value given for a repeatable option, such as `--try a --try b`. */
 function options(args: string[], name: string) {
@@ -175,9 +219,11 @@ function fitOption(args: string[]) {
   return fit as Fit | undefined;
 }
 
+const counted = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
 /** One line of what `vary` measures: size and aspect, crossings, bends, line length, warnings. */
 const metricsLine = (m: Omit<Metrics, 'moved'>) =>
-  `Metrics: ${m.width}×${m.height} (aspect ${(m.width / m.height).toFixed(2)}), ${m.crossings} crossings, ${m.bends} bends, ${m.length}px of lines, ${m.warnings} warnings.`;
+  `Metrics: ${m.width}×${m.height} (aspect ${(m.width / m.height).toFixed(2)}), ${counted(m.crossings, 'crossing')}, ${counted(m.bends, 'bend')}, ${m.length}px of lines, ${counted(m.warnings, 'warning')}.`;
 
 /** The document in emphasis state `id`, or as it is without one. */
 function drawnState(doc: Diagram, id: string | undefined) {
@@ -231,10 +277,10 @@ async function checkFile(
     warnings = diagnostics.filter(d => d.level === 'warning');
   for (const d of diagnostics) if (!quiet || d.level !== 'info') console.log(tag + describe(d));
   if (hints) console.log(hintTable(await hintMoves(source, scene)));
-  if (drawn) console.log(tag + metricsLine(drawn.metrics));
+  if (drawn) console.log(tag + metricsLine({ ...drawn.metrics, warnings: warnings.length }));
   const nodes = scene.objects.filter(o => o.type === 'node').length;
   console.log(
-    `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
+    `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${counted(nodes, 'node')}, ${counted(scene.objects.length - nodes, 'group')}, ${counted(scene.edges.length, 'connection')}.`,
   );
   return errors.length ? 1 : 0;
 }
@@ -259,6 +305,28 @@ export async function main(argv: string[]): Promise<number> {
   };
   try {
     switch (command) {
+      case 'import': {
+        if (!file || file.startsWith('--'))
+          throw new UsageError('import needs a foreign diagram file.');
+        for (let i = 0; i < rest.length; i++) {
+          if (rest[i] === '--accept-lossy') continue;
+          if (rest[i] === '--from' || rest[i] === '--output') {
+            if (!rest[i + 1] || rest[i + 1].startsWith('--'))
+              throw new UsageError(`${rest[i]} needs a value.`);
+            i++;
+          } else throw new UsageError(`Unknown import option: ${rest[i]}`);
+        }
+        const { importFile } = await import('./import');
+        return await importFile(
+          file,
+          {
+            from: option(rest, '--from'),
+            output: option(rest, '--output'),
+            acceptLossy: flag('--accept-lossy'),
+          },
+          new URL('./main.js', import.meta.url),
+        );
+      }
       case 'check': {
         const args = [file, ...rest],
           files = args.filter(
@@ -274,6 +342,10 @@ export async function main(argv: string[]): Promise<number> {
                 .map(n => path.join(f, n))
             : [f],
         );
+        // A PDF export checks each diagram it holds.
+        for (let i = all.length - 1; i >= 0; i--)
+          if (/\.pdf$/i.test(all[i]))
+            all.splice(i, 1, ...(await pdfSources(all[i])).map(s => `${all[i]}#${s.name}`));
         if (!all.length) throw new UsageError(`No .draft files in ${files.join(', ')}.`);
         let failed = 0;
         for (const f of all) {
@@ -344,6 +416,15 @@ export async function main(argv: string[]): Promise<number> {
           if (!doc.appearance.states?.length) throw new UsageError('The file has no state lines.');
           if (doc.appearance.compare)
             throw new UsageError('--states draws panels, and so does compare; use one at a time.');
+        }
+        if (flag('--clipboard')) {
+          const scale = Number(option(rest, '--scale') ?? 2);
+          if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
+          const { copyToClipboard } = await import('./png');
+          const svg = renderSvg(doc, opts),
+            { w, h } = await copyToClipboard(svg, withSource(svg, source), scale, embed(source));
+          console.log(`Copied the drawing as a PNG (${w}×${h}) and SVG text.`);
+          return 0;
         }
         if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));
@@ -457,8 +538,37 @@ export async function main(argv: string[]): Promise<number> {
         );
         return checkFile(file, '', false, flag('--quiet'));
       }
+      case 'pdf': {
+        const args = [file, ...rest].filter((a): a is string => !!a),
+          out = option(args, '-o') ?? option(args, '--out'),
+          order = option(args, '--order') ?? 'given',
+          page = option(args, '--page') ?? 'fit';
+        const { buildPdf, pdfInputs, PDF_ORDERS, PDF_PAGES } = await import('./pdf');
+        if (!out) throw new UsageError('pdf needs -o <out.pdf>.');
+        if (!PDF_ORDERS.includes(order as never))
+          throw new UsageError(`--order must be ${PDF_ORDERS.join(', ')}.`);
+        if (!PDF_PAGES.includes(page as never))
+          throw new UsageError(`--page must be ${PDF_PAGES.join(', ')}.`);
+        const valued = new Set(['-o', '--out', '--order', '--page', '--title']),
+          targets = args.filter((a, i) => !a.startsWith('-') && !valued.has(args[i - 1] ?? ''));
+        if (!targets.length) throw new UsageError('pdf needs .draft files or a folder.');
+        const inputs = pdfInputs(targets);
+        if (!inputs.length) throw new UsageError(`No .draft files in ${targets.join(', ')}.`);
+        const { bytes, pages } = await buildPdf(inputs, {
+          order: order as 'given',
+          page: page as 'fit',
+          title: option(args, '--title'),
+          states: args.includes('--states'),
+          source: !args.includes('--no-source'),
+        });
+        fs.writeFileSync(path.resolve(out), bytes);
+        const n = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`;
+        console.log(`Wrote ${out} (${n(pages, 'page')}, ${n(inputs.length, 'diagram')}).`);
+        return 0;
+      }
       case 'extract': {
-        if (!file || !isImageName(file)) throw new UsageError('extract needs a .png or .svg file.');
+        if (!file || !(isImageName(file) || /\.pdf(#|$)/i.test(file)))
+          throw new UsageError('extract needs a .png, .svg or .pdf file.');
         const source = await read(file),
           out = option(rest, '--write');
         if (out) {
@@ -483,6 +593,19 @@ export async function main(argv: string[]): Promise<number> {
         if (!Number.isInteger(port) || port < 0 || port > 65535)
           throw new UsageError('--port must be an integer from 0 to 65535.');
         let target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
+        // A PDF opens as a folder of its diagrams beside it, named after the PDF.
+        if (target && /\.pdf$/i.test(target)) {
+          const folder = target.replace(/\.pdf$/i, '');
+          fs.mkdirSync(folder, { recursive: true });
+          for (const { name, source } of await pdfSources(target)) {
+            const draft = path.join(folder, name);
+            if (fs.existsSync(draft) && fs.readFileSync(draft, 'utf8') !== source)
+              throw Error(`${draft} already exists with other content. Move it, then open again.`);
+            if (!fs.existsSync(draft)) fs.writeFileSync(draft, source);
+          }
+          console.log(`Wrote the diagrams in ${target} to ${folder}/.`);
+          target = folder;
+        }
         // An image opens through a .draft beside it, since the viewer saves edits to a file.
         if (target && isImageName(target)) {
           const source = await read(target),
@@ -523,6 +646,11 @@ export async function main(argv: string[]): Promise<number> {
         });
         return -1;
       }
+      case 'docs': {
+        const { docs } = await import('./docs');
+        console.log(docs(file).trimEnd());
+        return 0;
+      }
       case 'skill': {
         const { installSkill, skillSource } = await import('./skill');
         if (file === 'print') {
@@ -556,7 +684,11 @@ export async function main(argv: string[]): Promise<number> {
 }
 
 // Tests import `main` and call it themselves.
-if (!process.env.VITEST)
+if (!isMainThread && workerData?.kind === 'foreign-import') {
+  void import('./import-worker').then(module => module.runImportWorker());
+} else if (!process.env.VITEST) {
+  updateNotice();
   void main(process.argv.slice(2)).then(code => {
     if (code >= 0) process.exitCode = code;
   });
+}

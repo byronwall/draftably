@@ -9,6 +9,7 @@
  * --hints` can say how far each refinement moved its target.
  */
 import { measureText } from '../model/fonts';
+import { placeNotes } from '../model/note';
 import { groupHeaderFor, groupTitleLines } from '../model/labels';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Diagram, Point, Rect } from '../model/types';
@@ -136,6 +137,8 @@ export function findConflicts(
   const tinted = new Set(doc.graph.groups.filter(g => scene.byId.get(g.id)?.frame).map(g => g.id));
   const boxes = [...rects].filter(([id]) => !tinted.has(id)).map(([id, r]) => ({ id, r }));
   const leaves = boxes.filter(b => !groups.has(b.id));
+  // A marker takes no room: its bar sits on a seam and runs past the cells on purpose.
+  const solid = boxes.filter(b => scene.byId.get(b.id)?.shape !== 'marker');
   const edges = new Map(doc.graph.edges.map(e => [e.id, e]));
   const look = scene.look;
   const warn = (code: string, ids: string[], message: string, cause: ReturnType<typeof blame>) =>
@@ -155,10 +158,10 @@ export function findConflicts(
   const reported = new Set(
     scene.diagnostics.filter(d => d.code === 'overlap').map(d => [...d.ids].sort().join(' ')),
   );
-  for (let i = 0; i < boxes.length; i++)
-    for (let j = i + 1; j < boxes.length; j++) {
-      const a = boxes[i],
-        b = boxes[j];
+  for (let i = 0; i < solid.length; i++)
+    for (let j = i + 1; j < solid.length; j++) {
+      const a = solid[i],
+        b = solid[j];
       if (related(a.id, b.id) || !covers(a.r, b.r)) continue;
       if (reported.has([a.id, b.id].sort().join(' '))) continue;
       warn(
@@ -170,7 +173,7 @@ export function findConflicts(
     }
 
   // A box outside its group's frame.
-  for (const { id, r } of boxes) {
+  for (const { id, r } of solid) {
     const p = parent.get(id),
       frame = p && !tinted.has(p) && rects.get(p);
     if (!frame) continue;
@@ -288,7 +291,29 @@ export function sceneConflicts(scene: Scene): Diagnostic[] {
   const doc = projectScene(scene);
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
-  return findConflicts(scene, doc, rects, routes);
+  return [...findConflicts(scene, doc, rects, routes), ...noteConflicts(scene, doc, rects, routes)];
+}
+
+/** An anchored note with no clear spot beside its object, so it covers part of the drawing. */
+function noteConflicts(
+  scene: Scene,
+  doc: Diagram,
+  rects: Map<string, Rect>,
+  routes: DrawnRoute[],
+): Diagnostic[] {
+  return placeNotes(doc, scene.look, rects, routes).flatMap((n, i) =>
+    n.overlaps
+      ? [
+          {
+            level: 'warning' as const,
+            code: 'note-overlap',
+            message: `The note beside ${n.note.near} covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame.`,
+            line: scene.model.noteLines[i],
+            ids: [n.note.near!],
+          },
+        ]
+      : [],
+  );
 }
 
 export interface HintMove {

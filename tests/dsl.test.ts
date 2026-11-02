@@ -30,6 +30,13 @@ describe('syntax', () => {
     expect(errorLine('layout root grid')).toBe(1);
   });
 
+  it('refuses attributes that have no effect', () => {
+    for (const attr of ['kind=database', 'detail="x"', 'priority=3'])
+      expect(errorLine(`node a "A" ${attr}`)).toBe(1);
+    for (const attr of ['kind=data', 'importance=2'])
+      expect(errorLine(`node a "A"\nnode b "B"\nedge e a -> b ${attr}`)).toBe(3);
+  });
+
   it('formats consistently and keeps comments and unrelated statements', () => {
     const messy =
       '\n\n# heading\n  node   a  "A"   color=blue   # inline note\n\n\n\nnode b "B" // other style\n\n';
@@ -86,6 +93,17 @@ describe('compile', () => {
       checkout.replace('layout services row gap=56', 'layout services row gap=56 min-width=100'),
     );
     expect(small.diagnostics.some(d => d.code === 'group-grew')).toBe(true);
+  });
+
+  it('points a bare inner quote at its column and suggests the escape', () => {
+    expect(() => parseModel('node a "Says "hi" now"')).toThrow(/Line 1, column 14: .*\\"/);
+    expect(parseModel('node a "Says \\"hi\\""').objects[0].label).toBe('Says "hi"');
+  });
+
+  it('takes a count as a number or a short symbol', () => {
+    const counts = parseModel('node a "A" count=12\nnode b "B" count=N').objects.map(o => o.count);
+    expect(counts).toEqual([12, 'N']);
+    expect(() => parseModel('node a "A" count=1')).toThrow(/count/);
   });
 
   it('rejects relative placement cycles with a line', () => {

@@ -1,0 +1,145 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_SHAPE_APPROXIMATED",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "D2 shape \"cylinder\" becomes a native box.",
+      "foreignIds": [
+        "service.cache"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "group",
+      "foreign": "service",
+      "native": "service"
+    },
+    {
+      "kind": "node",
+      "foreign": "service.api",
+      "native": "service.api"
+    },
+    {
+      "kind": "node",
+      "foreign": "service.cache",
+      "native": "service.cache"
+    },
+    {
+      "kind": "node",
+      "foreign": "client",
+      "native": "client"
+    },
+    {
+      "kind": "edge",
+      "foreign": "service.(api -> cache)[0]",
+      "native": "d2_edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "(client -> service.api)[0]",
+      "native": "d2_edge_2"
+    },
+    {
+      "kind": "edge",
+      "foreign": "(service.api -> client)[0]",
+      "native": "d2_edge_3"
+    },
+    {
+      "kind": "edge",
+      "foreign": "service.(api -> cache)[1]",
+      "native": "d2_edge_4"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 nested\" version=1\ngroup service \"Service\"\nnode service.api \"API\" in=service\nnode service.cache \"Cache\" in=service\nnode client \"Client\"\nedge d2_edge_1 service.api -> service.cache \"lookup\"\nedge d2_edge_2 client -> service.api \"request\"\nedge d2_edge_3 service.api -> client \"response\"\nedge d2_edge_4 service.api -> service.cache \"refresh\"\nlayout root flow direction=right\nlayout service flow direction=right\n",
+  "facts": {
+    "title": "D2 nested",
+    "objects": [
+      {
+        "id": "service",
+        "kind": "group",
+        "label": "Service"
+      },
+      {
+        "id": "service.api",
+        "kind": "node",
+        "label": "API",
+        "parent": "service",
+        "shape": "box"
+      },
+      {
+        "id": "service.cache",
+        "kind": "node",
+        "label": "Cache",
+        "parent": "service",
+        "shape": "box"
+      },
+      {
+        "id": "client",
+        "kind": "node",
+        "label": "Client",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "d2_edge_1",
+        "from": "service.api",
+        "to": "service.cache",
+        "label": "lookup",
+        "directed": true
+      },
+      {
+        "id": "d2_edge_2",
+        "from": "client",
+        "to": "service.api",
+        "label": "request",
+        "directed": true
+      },
+      {
+        "id": "d2_edge_3",
+        "from": "service.api",
+        "to": "client",
+        "label": "response",
+        "directed": true
+      },
+      {
+        "id": "d2_edge_4",
+        "from": "service.api",
+        "to": "service.cache",
+        "label": "refresh",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "right"
+      },
+      {
+        "scope": "service",
+        "kind": "flow",
+        "direction": "right"
+      }
+    ],
+    "colors": []
+  }
+}

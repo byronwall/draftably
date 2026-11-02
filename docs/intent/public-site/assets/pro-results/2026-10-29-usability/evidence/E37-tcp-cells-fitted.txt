@@ -1,0 +1,169 @@
+Browser tab: 4, Title: "TCP header · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=tcp-header".
+0 AXWebArea TCP header · Draftably playground, URL: byronwall.github.io/draftably/play/?example=tcp-header
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+			10 button Copy link
+			11 button (collapsed) Download, Secondary Actions: Expand
+			16 button Open in the editor
+		17 container Source
+			255 button (collapsed) TCP header, Secondary Actions: Expand
+				256 text TCP header
+			20 container
+				21 text Theme
+				22 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					23 menu
+						24 (selected) Drafting
+						25 Fieldnotes
+						26 Signal
+						27 Ink
+						28 Blueprint
+			29 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			30 container
+				31 text entry area (settable) Description: Diagram source, Value: diagram "TCP header" version=1
+subtitle "RFC 9293, section 3.1. Each row is 32 bits."
+
+
+# A bit layout: unit=bit with 32 columns, fields sized in bits, and options of variable length.
+
+
+group tcp "TCP header" color=blue
+layout tcp cells unit=bit columns=32 unit-width=26
+node sport "Source Port" in=tcp span=16
+node dport "Destination Port" in=tcp span=16
+node seq "Sequence Number" in=tcp span=32
+node ack "Acknowledgment Number" in=tcp span=32
+node doff "Data Offset" in=tcp span=4
+node rsrvd "Rsrvd" in=tcp span=4
+node cwr "C" in=tcp
+node ece "E" in=tcp
+node urg "U" in=tcp
+node ackf "A" in=tcp
+node psh "P" in=tcp
+node rst "R" in=tcp
+node syn "S" in=tcp
+node fin "F" in=tcp
+node window "Window" in=tcp span=16
+node checksum "Checksum" in=tcp span=16
+node urgent "Urgent Pointer" in=tcp span=16
+node options "Options" in=tcp span=var color=amber shade=100
+
+
+					32 container
+						33 text diagram "TCP header" version = 1
+					257 container
+						258 text subtitle "RFC 9293, section 3.1. Each row is 32 bits."
+					259 text # A bit layout: unit=bit with 32 columns, fields sized in bits, and options of variable length.
+					260 container
+						261 text group tcp "TCP header" color = blue
+					262 container
+						263 text layout tcp cells unit = bit columns = 32 unit-width = 26
+					264 container
+						265 text node sport "Source Port" in = tcp span = 16
+					266 container
+						267 text node dport "Destination Port" in = tcp span = 16
+					268 container
+						269 text node seq "Sequence Number" in = tcp span = 32
+					270 container
+						271 text node ack "Acknowledgment Number" in = tcp span = 32
+					272 container
+						273 text node doff "Data Offset" in = tcp span = 4
+					274 container
+						275 text node rsrvd "Rsrvd" in = tcp span = 4
+					276 container
+						277 text node cwr "C" in = tcp
+					278 container
+						279 text node ece "E" in = tcp
+					280 container
+						281 text node urg "U" in = tcp
+					282 container
+						283 text node ackf "A" in = tcp
+					284 container
+						285 text node psh "P" in = tcp
+					286 container
+						287 text node rst "R" in = tcp
+					288 container
+						289 text node syn "S" in = tcp
+					290 container
+						291 text node fin "F" in = tcp
+					292 container
+						293 text node window "Window" in = tcp span = 16
+					294 container
+						295 text node checksum "Checksum" in = tcp span = 16
+					296 container
+						297 text node urgent "Urgent Pointer" in = tcp span = 16
+					298 container
+						299 text node options "Options" in = tcp span = var color = amber shade = 100
+			40 button (disabled) No problems · drawn in 7 ms Click a shape to find its line
+				152 text No problems · drawn in 7 ms Click a shape to find its line
+		43 splitter Description: Resize panes, Value: 38
+		44 container Diagram
+			45 container
+				300 image TCP header
+					301 text TCP header
+					302 text RFC 9293, section 3.1. Each row is 32 bits.
+					303 text 0
+					304 text 1
+					305 text 2
+					306 text 3
+					307 text 4
+					308 text 5
+					309 text 6
+					310 text 7
+					311 text 8
+					312 text 9
+					313 text 10
+					314 text 11
+					315 text 12
+					316 text 13
+					317 text 14
+					318 text 15
+					319 text 16
+					320 text 17
+					321 text 18
+					322 text 19
+					323 text 20
+					324 text 21
+					325 text 22
+					326 text 23
+					327 text 24
+					328 text 25
+					329 text 26
+					330 text 27
+					331 text 28
+					332 text 29
+					333 text 30
+					334 text 31
+					335 text TCP header
+					336 text Source Port
+					337 text Destination Port
+					338 text Sequence Number
+					339 text Acknowledgment Number
+					340 text Data Offset
+					341 text Rsrvd
+					342 text C
+					343 text E
+					344 text U
+					345 text A
+					346 text P
+					347 text R
+					348 text S
+					349 text F
+					350 text Window
+					351 text Checksum
+					352 text Urgent Pointer
+					353 text Options
+				50 button Zoom out
+				51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					52 text 85
+					53 text %
+				54 button Zoom in
+				55 button Full screen
+
+The focused UI element is 51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)

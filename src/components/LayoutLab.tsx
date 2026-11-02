@@ -5,6 +5,7 @@ import { runCommand } from '../state/commands';
 import { doc, selection } from '../state/document';
 import {
   currentScope,
+  layoutTarget,
   labScope,
   layoutCheckpoint,
   layoutReport,
@@ -170,7 +171,9 @@ export function LayoutLab() {
         <p class="hint">
           {fileMode()
             ? 'Automatic layout saves a rule. Tidy positions saves the current placement.'
-            : 'Automatic layout starts a new arrangement. Tidy positions makes small adjustments.'}
+            : 'Automatic layout starts a new arrangement. Tidy positions makes small adjustments.'}{' '}
+          Tidy positions changes {layoutTarget()}. A preview changes nothing until you keep it, and
+          Undo restores the drawing.
         </p>
         <SelectField<LabScope>
           label="Scope"

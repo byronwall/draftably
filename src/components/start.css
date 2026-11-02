@@ -38,9 +38,14 @@
 }
 
 .start-header h1 {
+  display: inline-flex;
   margin: 0;
-  font-size: var(--text-lg);
-  font-weight: 700;
+}
+
+/* The same size as the site's wordmark, with the mark on the content's left edge. */
+.start-header .brand {
+  margin-left: -5px;
+  font-size: 19px;
 }
 
 .start-where {
@@ -224,7 +229,7 @@
 }
 
 .start-example:hover {
-  border-color: var(--accent);
+  border-color: var(--ink);
 }
 
 .start-example:active {

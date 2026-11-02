@@ -32,18 +32,17 @@ export function FileNotes() {
   const errors = () => notes().filter(n => n.level !== 'info').length;
   return (
     <span class="file-notes">
-      <button
-        type="button"
-        class="button ghost small"
-        classList={{ warning: errors() > 0 }}
-        aria-expanded={open()}
-        disabled={!notes().length}
-        onClick={() => setOpen(!open())}
-      >
-        {notes().length
-          ? `${notes().length} layout note${notes().length === 1 ? '' : 's'}`
-          : 'Layout follows the file'}
-      </button>
+      <Show when={notes().length} fallback={<span>Layout follows the file</span>}>
+        <button
+          type="button"
+          class="button ghost small"
+          classList={{ warning: errors() > 0 }}
+          aria-expanded={open()}
+          onClick={() => setOpen(!open())}
+        >
+          {notes().length} layout note{notes().length === 1 ? '' : 's'}
+        </button>
+      </Show>
       <Show when={open() && notes().length}>
         <div class="file-notes-panel floating-panel" role="dialog" aria-label="Layout notes">
           <For each={notes()}>

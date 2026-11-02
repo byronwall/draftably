@@ -1,0 +1,11 @@
+diagram "D2 nested" version=1
+group service "Service"
+node service.api "API" in=service
+node service.cache "Cache" in=service
+node client "Client"
+edge d2_edge_1 service.api -> service.cache "lookup"
+edge d2_edge_2 client -> service.api "request"
+edge d2_edge_3 service.api -> client "response"
+edge d2_edge_4 service.api -> service.cache "refresh"
+layout root flow direction=right
+layout service flow direction=right

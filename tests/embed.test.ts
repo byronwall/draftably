@@ -68,3 +68,18 @@ describe.skipIf(!hasChrome)('source embedded in exported PNGs', () => {
     expect((await run('extract', png)).code).toBe(1);
   }, 60_000);
 });
+
+describe.skipIf(!hasChrome)('source attached to a PDF of several diagrams', () => {
+  it('gives back each file and stops on a file with errors', async () => {
+    const pdf = path.join(dir, 'set.pdf');
+    const files = ['examples/checkout.draft', 'examples/emphasis.draft'];
+    expect((await run('pdf', ...files, '-o', pdf, '--title', 'Set')).code).toBe(0);
+    expect((await run('extract', `${pdf}#emphasis.draft`)).out).toBe(
+      formatSource(fs.readFileSync(files[1], 'utf8')),
+    );
+    expect((await run('check', pdf, '--quiet')).code).toBe(0);
+    const broken = write('broken.draft', 'diagram "B" version=1\nedge ab a -> b\n');
+    expect((await run('pdf', files[0], broken, '-o', path.join(dir, 'no.pdf'))).code).toBe(1);
+    expect(fs.existsSync(path.join(dir, 'no.pdf'))).toBe(false);
+  }, 60_000);
+});

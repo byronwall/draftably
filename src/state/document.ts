@@ -4,13 +4,13 @@
  */
 import { batch, createRoot, createSignal } from 'solid-js';
 import { createStore, produce, reconcile, unwrap } from 'solid-js/store';
+import { STORAGE_KEY } from '../lib/saved-diagram';
 import { normalize } from '../model/document';
 import { findEntity } from '../model/graph';
 import { DEFAULT_SAMPLE, loadSample } from '../model/samples';
 import type { Camera, Diagram } from '../model/types';
 import { toast } from './toast';
 
-const STORAGE_KEY = 'diagram-studio-v5';
 const LEGACY_KEYS = ['diagram-studio-v4', 'diagram-studio-v3', 'diagram-studio-v2'];
 const HISTORY_LIMIT = 80;
 

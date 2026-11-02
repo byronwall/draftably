@@ -1,0 +1,6 @@
+Browser tab: 5, Title: "Get started · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/get-started".
+There has been no change in the accessibility tree.
+The focused UI element is 148 text entry area (settable) Description: Diagram source, Value: diagram "Audit lesson" version=1
+node app "Audit learner"
+node api "API"
+edge request app -> missing

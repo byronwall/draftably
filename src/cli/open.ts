@@ -196,4 +196,33 @@ export async function openSession(
   };
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
+  stopWhenIdle(server, workspace.root, stop);
+}
+
+/**
+ * Stop once the folder is gone, or after `DRAFTABLY_IDLE_MS` (2 hours by default) with no request
+ * and no open connection. An open file keeps an event stream connected, so a viewer with a tab
+ * open never counts as idle.
+ */
+function stopWhenIdle(server: http.Server, root: string, stop: () => void) {
+  const idle = Number(process.env.DRAFTABLY_IDLE_MS) || 2 * 60 * 60 * 1000;
+  const sockets = new Set<net.Socket>();
+  let last = Date.now();
+  server.on('connection', socket => {
+    sockets.add(socket);
+    socket.on('close', () => sockets.delete(socket));
+  });
+  server.on('request', () => (last = Date.now()));
+  setInterval(
+    () => {
+      if (!fs.existsSync(root)) console.log(`Stopping: ${root} no longer exists.`);
+      else if (!sockets.size && Date.now() - last > idle)
+        console.log(
+          `Stopping: unused for ${idle < 60_000 ? `${idle / 1000} seconds` : `${Math.round(idle / 60_000)} minutes`}.`,
+        );
+      else return;
+      stop();
+    },
+    Math.min(60_000, Math.max(50, idle / 4)),
+  );
 }

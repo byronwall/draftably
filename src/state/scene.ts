@@ -6,6 +6,10 @@ import { createMemo, createRoot, createSignal } from 'solid-js';
 import type { PriorRoute, RoutingResult } from '../engines/routing-engine.js';
 import { routingFingerprint } from '../model/document';
 import { drawingBounds } from '../model/bounds';
+import { resolveAppearance } from '../model/appearance';
+import { diagramFrame, FRAME_PAD } from '../model/frame';
+import { placeNotes } from '../model/note';
+import { drawnLegend, usedStatuses } from '../model/status';
 import { frameRect, makeGeometry, styleOf, visibleGraph, type VisibleGraph } from '../model/graph';
 import { startEngineTask, type RunningTask } from '../lib/engine-tasks';
 import {
@@ -220,4 +224,17 @@ export const blockedRouteIds = () =>
 /** Bounds of everything drawn: shapes with labels, containers, and connections. */
 export function sceneBounds(): Rect {
   return drawingBounds(doc, visibleScene(), sceneRects(), routes());
+}
+
+/** The frame the viewer draws round the drawing, which the editor's exports draw as well. */
+export function viewerFrame() {
+  const look = resolveAppearance(doc.appearance);
+  return diagramFrame(
+    look,
+    doc.appearance.heading,
+    drawnLegend(doc),
+    usedStatuses(doc),
+    drawingBounds(doc, visibleScene(), sceneRects(), routes(), FRAME_PAD),
+    placeNotes(doc, look, sceneRects(), routes()),
+  );
 }

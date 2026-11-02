@@ -10,6 +10,8 @@ cpSync(path.join(root, 'dist'), path.join(pkg, 'dist'), { recursive: true });
 await build({
   root,
   configFile: false,
+  // The package has no runtime dependencies, so pdf-lib is bundled into the CLI.
+  ssr: { noExternal: ['pdf-lib', '@ts-graphviz/ast', '@ts-graphviz/common'] },
   build: {
     ssr: 'src/cli/main.ts',
     target: 'node22',
@@ -30,6 +32,18 @@ writeFileSync(
     readFileSync(path.join(root, 'reference/meld/original/LICENSE'), 'utf8') +
     '\n\nSolidJS\n\n' +
     readFileSync(path.join(root, 'node_modules/solid-js/LICENSE'), 'utf8') +
+    '\n\npdf-lib\n\n' +
+    readFileSync(path.join(root, 'node_modules/pdf-lib/LICENSE.md'), 'utf8') +
+    '\n\n@ts-graphviz/ast and @ts-graphviz/common\n\n' +
+    readFileSync(path.join(root, 'node_modules/@ts-graphviz/ast/LICENSE'), 'utf8') +
+    '\n\nMermaid\n\n' +
+    readFileSync(path.join(root, 'node_modules/mermaid/LICENSE'), 'utf8') +
+    '\n\njsdom\n\n' +
+    readFileSync(path.join(root, 'node_modules/jsdom/LICENSE.txt'), 'utf8') +
+    '\n\nD2\n\n' +
+    readFileSync(path.join(root, 'node_modules/@d2lang/d2/LICENSE.txt'), 'utf8') +
+    '\n\nD2 third-party notices\n\n' +
+    readFileSync(path.join(root, 'node_modules/@d2lang/d2/THIRD_PARTY_NOTICES.txt'), 'utf8') +
     // Diagram fonts, embedded in the viewer and in exported SVG files.
     ['Inter', 'SourceSerif4', 'JetBrainsMono']
       .map(

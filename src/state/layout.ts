@@ -24,7 +24,7 @@ import {
   setPersistenceBlocked,
   snapshot,
 } from './document';
-import { fitView, reducedMotion, stageSize } from './editor';
+import { diagramClipped, fitView, reducedMotion, stageSize } from './editor';
 import {
   commitSource,
   fileBlocked,
@@ -85,6 +85,14 @@ export function currentScope(): { scope: LayoutScope; containerId?: string } {
   return { scope: 'all' };
 }
 
+/** What Tidy positions changes now, as the menu and the toolbar say it. */
+export function layoutTarget() {
+  const scope = state.labScope() === 'auto' ? currentScope().scope : state.labScope();
+  if (scope === 'all') return 'the whole diagram';
+  if (scope === 'neighbourhood') return 'the selection and its neighbours';
+  return scope === 'container' ? 'this group' : 'the selection';
+}
+
 /** Ids that layout must not move: brush holds. Set by the brush module. */
 let fixedIdsProvider: () => string[] = () => [];
 export const setFixedIdsProvider = (provider: () => string[]) => (fixedIdsProvider = provider);
@@ -118,7 +126,8 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
   prepareForEdit();
   const before = snapshot(),
     startRevision = revision(),
-    thisJob = ++job;
+    thisJob = ++job,
+    whole = !diagramClipped();
   const { preview, fit, ...overrides } = options;
   const opts: LayoutOptions = {
     ...doc.settings,
@@ -151,7 +160,8 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
       setPersistenceBlocked(true);
     } else commit(before, 'Layout: ' + result.report.name, 'arrangement');
     await animateLayout(old, clone(doc.layout.nodes));
-    if (fit) fitView();
+    // A preview, or a result that grew past a diagram shown whole, is fitted so all of it shows.
+    if (fit || ((preview || whole) && diagramClipped())) fitView();
     const r = result.report;
     toast(
       `${r.mode === 'rebuild' ? 'Rebuild' : 'Pass'} · ${r.name} · ${r.moved} moved · max ${r.maxDisplacement}px` +
@@ -203,6 +213,7 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
   const before = snapshot(),
     startRevision = revision(),
     thisJob = ++job,
+    whole = !diagramClipped(),
     name = engineName(settings.algorithm);
   const where = scope === 'root' ? 'the diagram' : scope;
   const file = {
@@ -226,7 +237,8 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
     } else if (!(await commitSource(file.source, file.label, file.message)))
       return { status: 'cancelled' };
     await animateLayout(old, clone(doc.layout.nodes));
-    if (fit) fitView();
+    // A preview, or a result that grew past a diagram shown whole, is fitted so all of it shows.
+    if (fit || ((preview || whole) && diagramClipped())) fitView();
     if (preview) toast(`Preview · ${where} with ${name} · Keep saves it to the file`);
     return { status: preview ? 'recipe-preview' : 'recipe', source: file.source };
   } finally {

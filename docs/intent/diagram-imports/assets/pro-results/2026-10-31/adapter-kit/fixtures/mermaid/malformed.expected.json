@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_PARSE_ERROR",
+      "severity": "error",
+      "impact": "syntax",
+      "message": "Parse error on line 4:\n...chart LRA[Missing\n--------------------^\nExpecting 'SQE', 'DOUBLECIRCLEEND', 'PE', '-)', 'STADIUMEND', 'SUBROUTINEEND', 'PIPE', 'CYLINDEREND', 'DIAMOND_STOP', 'TAGEND', 'TRAPEND', 'INVTRAPEND', 'UNICODE_TEXT', 'TEXT', 'TAGSTART', got '1' (Parser-relative line 2, column 3; original-source mapping is unavailable.)"
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

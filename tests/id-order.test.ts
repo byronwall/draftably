@@ -76,3 +76,45 @@ describe('order in an engine layout', () => {
     }
   });
 });
+
+describe('members with no edge inside their group', () => {
+  // Two outcomes fed by one node in another group (#236). Before, the engine centred them under
+  // the group's chain, one on each side, so one return line crossed the whole drawing.
+  const source = [
+    'diagram "Outcomes" version=1',
+    'group client "Browser"',
+    'node click "Click Pay" in=client',
+    'node req "submitPayment" in=client',
+    'node ok "paid" in=client shape=pill',
+    'node err "declined" in=client shape=pill',
+    'group server "Server"',
+    'node seen "Charge in flight?" in=server shape=diamond',
+    'node cancel "Cancel queued retry" in=server',
+    'node wait "Wait for running charge" in=server',
+    'node join "Join existing charge" in=server',
+    'node first "Authorize" in=server',
+    'node rest "Capture" in=server',
+    'node drop "Dropped" in=server shape=pill',
+    'node resp "status, retries" in=server',
+    'edge s1 click -> req',
+    'edge s2 req -> seen',
+    'edge s3 seen -> cancel',
+    'edge s4 seen -> wait',
+    'edge s5 seen -> join',
+    'edge s6 cancel -> first',
+    'edge s7 wait -> first',
+    'edge s8 join -> resp',
+    'edge s9 first -> rest',
+    'edge s10 first -> drop kind=async',
+    'edge s11 rest -> resp',
+    'edge s12 resp -> ok',
+    'edge s13 resp -> err',
+    'layout root engine=compound-flow direction=down',
+  ].join('\n');
+
+  it('sit together on the side of the node that feeds them', async () => {
+    const scene = await compile(source);
+    const x = (id: string) => scene.byId.get(id)!.x;
+    expect(Math.sign(x('ok') - x('click'))).toBe(Math.sign(x('err') - x('click')));
+  });
+});

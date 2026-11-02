@@ -48,6 +48,34 @@ describe('translating editor edits', () => {
     expect(db.x).toBe(platform.x + platform.w + 40);
   });
 
+  it('places a node dropped under a neighbour below it, not beside the one across the gap', () => {
+    // Issue #237: `paid` dropped under `declined` in submitPayment's row was saved right of it.
+    const source = [
+      'group client "Browser"',
+      'node click "Click Pay" in=client',
+      'node req "submitPayment" in=client',
+      'node ok "paid" in=client shape=pill',
+      'node err "declined (try again)" in=client shape=pill',
+      'edge s1 click -> req',
+      'layout root flow direction=down',
+      'stay ok x=0 y=0',
+      'stay click x=188 y=0',
+      'stay err x=376 y=0',
+      'stay req x=188 y=85',
+      '',
+    ].join('\n');
+    const { text, scene, result } = edit(source, 'Move objects', ['ok'], d => {
+      const req = d.layout.nodes.req;
+      d.layout.nodes.ok.x = req.x + req.w + 24;
+      d.layout.nodes.ok.y = req.y;
+    });
+    expect(text).toMatch(/^near ok err side=below gap=29$/m);
+    expect(result.notes[0]).toBe('ok below err');
+    const req = scene.byId.get('req')!;
+    expect(scene.byId.get('ok')).toMatchObject({ x: req.x + req.w + 24, y: req.y });
+    expect(result.drops).toEqual([expect.objectContaining({ id: 'ok', x: req.x + req.w + 24 })]);
+  });
+
   it('moves a soft group by giving each member a stay', () => {
     const source = [
       'node ingress "Ingress"',

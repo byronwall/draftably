@@ -1,0 +1,1 @@
+digraph G { node[shape=box]; a -> b[dir=both]; }

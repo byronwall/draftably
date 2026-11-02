@@ -24,7 +24,8 @@ import { NodeView } from '../scene/NodeView';
 import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
-import { Legend } from './Legend';
+import { Frame } from './Frame';
+import { Notes } from './Notes';
 import { StateBar } from './StateBar';
 import { drawnDoc } from '../../state/emphasis';
 import { ZoomControls } from './ZoomControls';
@@ -145,6 +146,9 @@ export function Canvas() {
           classList={{ connecting: tool() === 'connect' }}
           transform={`translate(${camera().x},${camera().y}) scale(${camera().k})`}
         >
+          <Show when={!empty()}>
+            <Frame />
+          </Show>
           <SequenceBackdrop doc={shown()} part="panel" />
           <g>
             <For each={groupIds()}>
@@ -205,6 +209,9 @@ export function Canvas() {
               )}
             </For>
           </g>
+          <Show when={doc.appearance.notes?.length}>
+            <Notes />
+          </Show>
           <Overlay />
         </g>
       </svg>
@@ -221,7 +228,6 @@ export function Canvas() {
         </div>
       </Show>
       <InlineEditor />
-      <Legend />
       <StateBar />
       <ZoomControls />
       <TimelineDeck />

@@ -1,0 +1,17 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_PARSE_REJECTED",
+      "severity": "error",
+      "impact": "syntax",
+      "message": "The supported DOT grammar rejected this input: Expected \"<\", \"\\\"\", \"{\", NUMBER, or UNICODE_STRING but \"}\" found. Some valid DOT forms (string concatenation, repeated attribute lists, full subgraph endpoints) are outside this parser profile.",
+      "line": 1,
+      "column": 23
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

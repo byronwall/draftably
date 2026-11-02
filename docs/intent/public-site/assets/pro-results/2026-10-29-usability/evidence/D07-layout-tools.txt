@@ -1,0 +1,31 @@
+Browser tab: 9, Title: "Layout tools · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/layout-tools".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 446-453
+~0 AXWebArea Layout tools · Draftably docs, URL: byronwall.github.io/draftably/docs/layout-tools
+~			130 text Layout tools
+~			51 heading Layout tools, Value: 1
+~				52 text Layout tools
+~				443 text A rebuild arranges a scope from scratch, so it is saved as a recipe.  Preview automatic layout  in Layout options, and every rebuild candidate in  Compare , compile the file with the new  layout  line. What you see is exactly what the file will draw, and  Keep  or  Apply  saves that line. Soft position refinements inside the scope are removed so the engine's arrangement shows; pins, sizes and the nested groups' own  layout  lines stay. Layout options shows the scope's current line and the one a rebuild would write. The routing menu and routing comparisons write the  routing  line.
+~				445 text Tidy positions ,  Preview tidy , a kept  timeline  step, a  brush  stroke, and warm-start or pass candidates in Compare all start from the current drawing, so a recipe could not reproduce them. They are saved as an arrangement instead: each object that moved gets a soft  stay  at its new position relative to its parent (an existing  stay  is updated in place), and the objects around them are anchored as for a drag. Groups follow their contents, so a group whose children moved left or up moves with them. Pins never move. A root-level  stay  may be negative, because the root has no frame.
++			446 text Checkpoints are unavailable while a file is open, because undo steps through the file's versions. Connection bends, label positions, start/end preferences and images are unavailable because the file cannot store them yet.
+~				441 link Description: ← Previous Routing, Value: byronwall.github.io/draftably/docs/routing
+~				119 link Description: Next → CLI details, Value: byronwall.github.io/draftably/docs/command-line
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#layout-tools
+The focused UI element is 42 link Description: Layout tools, URL: byronwall.github.io/draftably/docs/layout-tools
+
+VISIBLE MAIN TEXT
+Layout
+/
+Layout tools
+Layout tools
+
+A rebuild arranges a scope from scratch, so it is saved as a recipe. Preview automatic layout in Layout options, and every rebuild candidate in Compare, compile the file with the new layout line. What you see is exactly what the file will draw, and Keep or Apply saves that line. Soft position refinements inside the scope are removed so the engine's arrangement shows; pins, sizes and the nested groups' own layout lines stay. Layout options shows the scope's current line and the one a rebuild would write. The routing menu and routing comparisons write the routing line.
+
+Tidy positions, Preview tidy, a kept timeline step, a brush stroke, and warm-start or pass candidates in Compare all start from the current drawing, so a recipe could not reproduce them. They are saved as an arrangement instead: each object that moved gets a soft stay at its new position relative to its parent (an existing stay is updated in place), and the objects around them are anchored as for a drag. Groups follow their contents, so a group whose children moved left or up moves with them. Pins never move. A root-level stay may be negative, because the root has no frame.
+
+Checkpoints are unavailable while a file is open, because undo steps through the file's versions. Connection bends, label positions, start/end preferences and images are unavailable because the file cannot store them yet.
+
+← Previous
+Routing
+Next →
+CLI details

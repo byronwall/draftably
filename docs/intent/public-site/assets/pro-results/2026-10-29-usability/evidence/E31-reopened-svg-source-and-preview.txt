@@ -1,0 +1,3 @@
+Browser tab: 1, Title: "Audit lesson · Draftably playground", URL: "https://byronwall.github.io/draftably/play#s=TYxBDoIwEEX3PcWkrpuAUeKmJi5NXBhvUO1IJoG2Mi3C7S0Cxt3M--9_S6buTAvylCxFaJDZOwk9dkze6VI4bxFMCKvREyfTAOZbriHl8HpeXodvdfcDyBs-kEK20NYIHb4ScvxOqeNUmvmiq2llrS652MDFjD7FXH6SwxZdZMHRjD9z0GVRwaiLGU_jgy7-AWWw3R8yUrtKfAA".
+There has been no change in the accessibility tree.
+The focused UI element is 11 button Copy link

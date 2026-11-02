@@ -1,0 +1,144 @@
+Browser tab: 4, Title: "Support ticket triage · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=support-triage".
+0 AXWebArea Support ticket triage · Draftably playground, URL: byronwall.github.io/draftably/play/?example=support-triage
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+			10 button Copy link
+			11 button (collapsed) Download, Secondary Actions: Expand
+			16 button Open in the editor
+		17 container Source
+			443 button (collapsed) Support ticket triage, Secondary Actions: Expand
+				444 text Support ticket triage
+			20 container
+				21 text Theme
+				22 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					23 menu
+						24 (selected) Drafting
+						25 Fieldnotes
+						26 Signal
+						27 Ink
+						28 Blueprint
+			29 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			30 container
+				31 text entry area (settable) Description: Diagram source, Value: diagram "Support ticket triage" version=1
+
+
+# A flat decision flow: no containers, decision diamonds, and labeled branches.
+node intake "Ticket received" shape=pill color=blue
+node classify "Auto-classify topic"
+node outage "Known outage?" shape=diamond color=amber
+node link "Link to incident" color=rose
+node billing "Billing question?" shape=diamond color=amber
+node finance "Route to billing team"
+node vip "Enterprise plan?" shape=diamond color=amber
+node priority "Priority queue" color=violet
+node general "General queue"
+node resolved "Resolved" shape=pill color=mint
+
+
+edge e1 intake -> classify
+edge e2 classify -> outage
+edge e3 outage -> link "yes"
+edge e4 outage -> billing "no"
+edge e5 billing -> finance "yes"
+edge e6 billing -> vip "no"
+edge e7 vip -> priority "yes"
+edge e8 vip -> general "no"
+edge e9 link -> resolved kind=async
+edge e10 finance -> resolved
+edge e11 priority -> resolved
+edge e12 general -> resolved
+
+
+layout root flow gap=40 direction=right
+
+
+					32 container
+						33 text diagram "Support ticket triage" version = 1
+					445 text # A flat decision flow: no containers, decision diamonds, and labeled branches.
+					446 container
+						447 text node intake "Ticket received" shape = pill color = blue
+					448 container
+						449 text node classify "Auto-classify topic"
+					450 container
+						451 text node outage "Known outage?" shape = diamond color = amber
+					452 container
+						453 text node link "Link to incident" color = rose
+					454 container
+						455 text node billing "Billing question?" shape = diamond color = amber
+					456 container
+						457 text node finance "Route to billing team"
+					458 container
+						459 text node vip "Enterprise plan?" shape = diamond color = amber
+					460 container
+						461 text node priority "Priority queue" color = violet
+					462 container
+						463 text node general "General queue"
+					464 container
+						465 text node resolved "Resolved" shape = pill color = mint
+					466 container
+						467 text edge e1 intake -> classify
+					468 container
+						469 text edge e2 classify -> outage
+					470 container
+						471 text edge e3 outage -> link "yes"
+					472 container
+						473 text edge e4 outage -> billing "no"
+					474 container
+						475 text edge e5 billing -> finance "yes"
+					476 container
+						477 text edge e6 billing -> vip "no"
+					478 container
+						479 text edge e7 vip -> priority "yes"
+					480 container
+						481 text edge e8 vip -> general "no"
+					482 container
+						483 text edge e9 link -> resolved kind = async
+					484 container
+						485 text edge e10 finance -> resolved
+					486 container
+						487 text edge e11 priority -> resolved
+					488 container
+						489 text edge e12 general -> resolved
+					490 container
+						491 text layout root flow gap = 40 direction = right
+			40 button (disabled) No problems · drawn in 346 ms Click a shape to find its line
+				152 text No problems · drawn in 346 ms Click a shape to find its line
+		43 splitter Description: Resize panes, Value: 38
+		44 container Diagram
+			45 container
+				492 image Support ticket triage
+					493 text Support ticket triage
+					494 text yes
+					495 text no
+					496 text yes
+					497 text no
+					498 text yes
+					499 text no
+					500 text Ticket received
+					501 text Auto-classify topic
+					502 container
+						503 text Known outage?
+					504 text Link to incident
+					505 container
+						506 text Billing question?
+					507 text Route to billing team
+					508 container
+						509 text Enterprise plan?
+					510 text Priority queue
+					511 text General queue
+					512 text Resolved
+				50 button Zoom out
+				51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					52 text 71
+					53 text %
+				54 button Zoom in
+				55 button Full screen
+
+The focused UI element is 51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)

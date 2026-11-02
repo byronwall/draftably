@@ -22,7 +22,7 @@ fs.writeFileSync(
   path.join(dir, 'package.json'),
   JSON.stringify({ name: 'install-proof', private: true }),
 );
-execFileSync('pnpm', ['--dir', dir, 'add', '--offline', '--ignore-scripts', packed.filename], {
+execFileSync('pnpm', ['--dir', dir, 'add', '--ignore-scripts', packed.filename], {
   cwd: dir,
   stdio: 'inherit',
 });
@@ -38,6 +38,8 @@ assert.match(run('check', file), /OK:/);
 const first = run('inspect', file, '--json');
 assert.equal(run('inspect', file, '--json'), first);
 assert.match(run('inspect', file, '--svg'), /<svg/);
+assert.match(run('docs'), /node_modules\/draftably\/DSL\.md/);
+assert.match(run('docs', 'legend'), /^### Legend/);
 run('skill', 'install');
 assert.ok(fs.existsSync(path.join(dir, '.claude/skills/draftably/SKILL.md')));
 assert.equal(spawnSync(bin, ['skill', 'install'], { cwd: dir, timeout: 10000 }).status, 1);
@@ -53,6 +55,26 @@ assert.equal(
   spawnSync(bin, ['open', file, '--port', '-1'], { cwd: dir, timeout: 10000 }).status,
   1,
 );
+
+// Import through the installed package so parser workers and runtime dependencies are exercised.
+for (const [name, source] of [
+  ['proof.mmd', 'flowchart LR\nA[API] -->|reads| B[Store]\n'],
+  ['proof.d2', 'a: API\nb: Store\na -> b: reads\n'],
+] as const) {
+  const input = path.join(dir, name),
+    output = path.join(dir, name + '.draft');
+  fs.writeFileSync(input, source);
+  execFileSync(bin, ['import', input, '--output', output], {
+    cwd: dir,
+    encoding: 'utf8',
+    timeout: 60000,
+    env: { ...process.env, DRAFTABLY_NO_UPDATE_CHECK: '1' },
+  });
+  assert.match(run('check', output), /2 nodes, 0 groups, 1 connection\./);
+  assert.equal(fs.readFileSync(input, 'utf8'), source);
+  fs.unlinkSync(input);
+  fs.unlinkSync(output);
+}
 
 const probe = net.createServer();
 probe.listen(0, '127.0.0.1');

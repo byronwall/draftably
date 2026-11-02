@@ -1,0 +1,16 @@
+diagram "Named" version=1
+group cluster_named "cluster_named"
+group cluster_empty ""
+node node_root "line\nnext" in=cluster_named
+node a_u5c_nb "Explicit escaped-ID label" in=cluster_empty
+node a_u20_b "a b"
+node a_u20_b__2 "a_u20_b"
+node edge_1 "edge_1"
+node node___proto__ "__proto__"
+node node_constructor "constructor"
+edge edge_1__2 a_u20_b -> a_u20_b__2 ""
+edge edge_2 edge_1 -> node_root ""
+edge edge_3 node___proto__ -> node_constructor ""
+layout root flow direction=down
+layout cluster_named flow direction=down
+layout cluster_empty flow direction=down

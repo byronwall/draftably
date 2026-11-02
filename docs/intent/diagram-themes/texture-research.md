@@ -10,7 +10,7 @@ last_updated: '2026-10-26'
 
 Byron's voice memo (Oct 26) says the themes are "good, not great". He asks for a more opinionated base
 style: a neutral but textured background, a little texture on shapes and edges, a hint of embossed
-depth, and some planned variation in stroke width. The goal is a look that is clearly Draftably.
+depth, and some planned variation in stroke width. The goal is a look that is clearly draftably.
 
 He chose to ship this as a new theme first. The five current presets stay as they are.
 
@@ -49,7 +49,7 @@ the depth treatment.
 
 The dimensions come from the memo and from [FEEL.md](../diagram-quality/FEEL.md):
 
-- **Recognizable** means a stranger can tell a Draftably diagram at thumbnail size.
+- **Recognizable** means a stranger can tell a draftably diagram at thumbnail size.
 - **Label legibility** covers 11px connection labels and 13px titles on the textured ground.
 - **Four roles** means the palette carries two to four meaning colors plus neutrals, as FEEL.md asks.
 - **Export survival** covers SVG and PNG from the CLI, plus downscaled PR and doc thumbnails, where

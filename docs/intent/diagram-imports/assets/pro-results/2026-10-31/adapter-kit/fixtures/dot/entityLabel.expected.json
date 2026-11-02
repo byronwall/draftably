@@ -1,0 +1,28 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_LABEL_ENTITY",
+      "message": "Graphviz character entities need a verified text decoder; entity text is not imported literally.",
+      "severity": "error",
+      "impact": "semantics",
+      "line": 1
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    }
+  ],
+  "requires": []
+}

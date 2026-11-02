@@ -1,0 +1,8 @@
+digraph Named {
+  node [shape=box];
+  subgraph cluster_named { label="\G"; "root" [label="line\nnext"]; }
+  subgraph cluster_empty { "a\nb" [label="Explicit escaped-ID label"]; }
+  "a b" -> "a_u20_b";
+  edge_1 -> "root";
+  "__proto__" -> "constructor";
+}

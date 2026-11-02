@@ -37,7 +37,6 @@ export function titleArea(
 /** Height a shape needs for `lines` title lines; never less than `base`. */
 export function titleHeight(shape: ShapeKind, lines: number, base: number, r: ResolvedAppearance) {
   const text = lines * r.title.lineHeight;
-  if (shape === 'diamond') return Math.max(base, Math.ceil(text / 0.45));
   if (shape === 'circle') return Math.max(base, Math.ceil(text / 0.7));
   if (shape === 'text') return text + 2 * Math.min(r.paddingY, 11);
   return text + 2 * r.paddingY;
@@ -45,6 +44,22 @@ export function titleHeight(shape: ShapeKind, lines: number, base: number, r: Re
 
 export const wrapTitle = (text: string, width: number, r: ResolvedAppearance) =>
   wrapLines(text, width, r.title);
+
+/** Room kept between a diamond's title and its outline. */
+const DIAMOND_PAD = 6;
+
+/**
+ * Line width for a diamond's title, `s` its side. A text block W wide and H tall fits inside a
+ * square diamond when W + H <= s, so this takes the widest measure whose wrapped lines still fit:
+ * the title reads in as few lines as the shape allows. Undefined when no measure fits.
+ */
+export function diamondMeasure(title: string, s: number, r: ResolvedAppearance) {
+  const room = s - 2 * DIAMOND_PAD;
+  for (let n = 1; n * r.title.lineHeight < room; n++) {
+    const width = room - n * r.title.lineHeight;
+    if (width >= 40 && wrapTitle(title, width, r).length <= n) return width;
+  }
+}
 
 /** Most lines a group title wraps to; past that the frame widens instead. */
 export const GROUP_TITLE_LINES = 3;
@@ -92,7 +107,10 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
   const iconInside = mode === 'center' && !!style.icon && ['box', 'pill'].includes(style.shape);
   let x = r.w / 2 + (iconInside ? 15 : 0),
     y = r.h / 2,
-    width = cfg.width || titleArea(style.shape, r.w, r.h, look, iconInside).width;
+    width =
+      cfg.width ||
+      (style.shape === 'diamond' && diamondMeasure(title, Math.min(r.w, r.h), look)) ||
+      titleArea(style.shape, r.w, r.h, look, iconInside).width;
   if (mode !== 'center') width = cfg.width || Math.max(142, r.w);
   const lines = wrapTitle(title, width, look),
     height = lines.length * lineHeight;

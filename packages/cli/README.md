@@ -1,6 +1,6 @@
-# Draftably
+# draftably
 
-Draftably is a local diagram DSL and viewer. Write a readable `.draft` file, open it in the browser,
+draftably is a local diagram DSL and viewer. Write a readable `.draft` file, open it in the browser,
 and refine its automatic layout. Viewer edits save to the file; external edits update the viewer.
 
 Requires Node 22.21 or later. The package includes the compiled CLI, viewer, and computation workers.
@@ -39,7 +39,11 @@ On other systems, open the printed URL. Use `--port 5190` to choose another port
 
 ## Commands
 
+Convert a DOT, Mermaid flowchart or D2 graph into a new native file. The input stays unchanged.
+Some supported syntax needs `--accept-lossy` after you review the warnings.
+
 ```sh
+draftably import architecture.mmd --output architecture.draft
 draftably check architecture.draft
 draftably format architecture.draft --write
 draftably inspect architecture.draft --json

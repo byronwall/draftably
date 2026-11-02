@@ -1,0 +1,78 @@
+{
+  "status": "needs-review",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_COMPASS",
+      "message": "Compass port ne becomes a native automatic boundary attachment.",
+      "severity": "warning",
+      "impact": "layout"
+    },
+    {
+      "code": "DOT_COMPASS",
+      "message": "Compass port c becomes a native automatic boundary attachment.",
+      "severity": "warning",
+      "impact": "layout"
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Compass\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Compass",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

@@ -1,0 +1,81 @@
+Browser tab: 9, Title: "Swim lanes · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/swim-lanes".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 129-130, 443-553
+~0 AXWebArea Swim lanes · Draftably docs, URL: byronwall.github.io/draftably/docs/swim-lanes
+~			442 text Diagram kinds Swim lanes
++			51 heading Swim lanes, Value: 1
++				52 text Swim lanes
++			443 container
++				444 text layout root lanes  draws a process by who does each step. Every top-level group is a lane, and every node must sit in one; a node outside every group is an error on its line.
++			445 container
++				446 text .draft  · editable
++				447 button Copy
++				448 button Expand
++				449 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=VY09DkIxDIP3d4qoOwPssHAABrhA9WpVFaWp2hSJ2xP1B4nJSRx_9oVbpr1V4RcKmeuczOa7Yz2SVDL3ljMXmbvZEjsQZyT1bl0sSdifEEMhnRdw_EkJmiPz6NofBmfYBZXjG05bgEpBfpd_FpxCcJy1h8vkzvtp1aix8lu0H27KYxaKNqF-AQ
++				450 text entry area (settable) Description: Diagram source, Value: group customer "Customer"
+group agents "Support agents"
+node opens "Opens a ticket" in=customer
+node triage "Triage" in=agents
+node resolved "Sees it resolved" in=customer
+edge e1 opens -> triage
+edge e2 triage -> resolved
+layout root lanes
++				451 button Expand the drawing
++					452 image Untitled diagram
++						453 text Customer
++						454 text Support agents
++						455 text Opens a ticket
++						456 text Triage
++						457 text Sees it resolved
++			458 container
++				459 text Each step takes its rank from the connections of the whole drawing, so one rank is one column across every lane, and a step that follows another sits after it even when it is in a different lane. Steps of one lane in one rank stack across it. With  direction=right  (the default) lanes are bands stacked top to bottom, in file order or the order an  order root  line gives; with  direction=down  they are columns side by side and the steps run down the page. Every lane is as long as the drawing.  gap=  sets the least gap between ranks (56 at least).
++			460 container
++				461 text A group inside a lane follows its own  frame= : a boxed group takes one place, and a soft group's members rank on their own. Position refinements inside a lane ( near ,  stay ,  nudge ,  pin ) do not apply yet. Lines that run back against the order take the long way round the lanes.
+~				441 link Description: ← Previous Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+~				119 link Description: Next → Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#swim-lanes
+The focused UI element is 34 link Description: Swim lanes, URL: byronwall.github.io/draftably/docs/swim-lanes
+
+VISIBLE MAIN TEXT
+Diagram kinds
+/
+Swim lanes
+Swim lanes
+
+layout root lanes draws a process by who does each step. Every top-level group is a lane, and every node must sit in one; a node outside every group is an error on its line.
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+group customer "Customer"
+group agents "Support agents"
+node opens "Opens a ticket" in=customer
+node triage "Triage" in=agents
+node resolved "Sees it resolved" in=customer
+edge e1 opens -> triage
+edge e2 triage -> resolved
+layout root lanes
+
+Customer
+Support agents
+Opens a ticket
+Triage
+Sees it resolved
+
+Each step takes its rank from the connections of the whole drawing, so one rank is one column across every lane, and a step that follows another sits after it even when it is in a different lane. Steps of one lane in one rank stack across it. With direction=right (the default) lanes are bands stacked top to bottom, in file order or the order an order root line gives; with direction=down they are columns side by side and the steps run down the page. Every lane is as long as the drawing. gap= sets the least gap between ranks (56 at least).
+
+A group inside a lane follows its own frame=: a boxed group takes one place, and a soft group's members rank on their own. Position refinements inside a lane (near, stay, nudge, pin) do not apply yet. Lines that run back against the order take the long way round the lanes.
+
+← Previous
+Emphasis states
+Next →
+Sequence diagrams

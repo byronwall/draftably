@@ -1,0 +1,10 @@
+direction: right
+service: Service {
+  api: API
+  cache: Cache {shape: cylinder}
+  api -> cache: lookup
+}
+client: Client
+client -> service.api: request
+service.api -> client: response
+service.api -> service.cache: refresh

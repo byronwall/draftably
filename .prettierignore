@@ -1,12 +1,14 @@
+.claude/
 reference/
 tmp/
 dist/
 pnpm-lock.yaml
 dist-cli/
+dist-site/
 packages/cli/dist/
 packages/cli/examples/
 packages/cli/DSL.md
 packages/cli/THIRD_PARTY_NOTICES
 
-# Preserve original Pro artifact bytes.
+# Preserve original Pro result bytes and their supplied manifest.
 docs/intent/**/assets/pro-results/**

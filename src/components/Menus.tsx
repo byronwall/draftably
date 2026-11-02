@@ -1,6 +1,7 @@
-import { For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
+import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { RouteLab } from '../engines/routing-engine.js';
 import { clamp } from '../model/geometry';
+import { EXAMPLES } from '../model/examples';
 import { SAMPLES } from '../model/samples';
 import type { RoutingSettings } from '../model/types';
 import {
@@ -13,18 +14,34 @@ import {
 } from '../model/appearance';
 import { chooseTheme, openSample, setAppearanceOverrides, setTool } from '../state/actions';
 import type { Tool } from '../state/editor';
+import { layoutTarget } from '../state/layout';
 import { timelineOpen } from '../state/sculpt';
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
-import { commitSource, fileBlocked, fileMode, sourceWithRouting } from '../state/file-session';
+import {
+  commitSource,
+  fileBlocked,
+  fileMode,
+  fileSession,
+  sourceWithRouting,
+} from '../state/file-session';
 import { resetRoutes, routingReport } from '../state/scene';
 import { toast } from '../state/toast';
-import { closeMenu, menu, openMenu, type MenuState } from '../state/ui';
-import { RangeField } from './controls';
+import {
+  closeMenu,
+  filesShown,
+  inspectorOpen,
+  menu,
+  objectsOpen,
+  openMenu,
+  type MenuState,
+} from '../state/ui';
+import { RangeField, tip } from './controls';
+import { FileTime } from './FilesPanel';
 import { Icon } from './Icon';
 import './menus.css';
-import { workspace } from '../state/launch';
-import { embedSource, setEmbedSource } from '../state/files';
+import { exampleUrl, fileUrl, go, workspace } from '../state/launch';
+import { baseName } from './workspace-files';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -48,14 +65,17 @@ function Popover(props: { state: MenuState }) {
     let left: number, top: number;
     if (anchor instanceof HTMLElement) {
       const r = anchor.getBoundingClientRect();
-      left = props.state.id === 'file' ? r.left : r.right - width;
-      top = r.bottom + 6;
+      left = anchor.closest('.menubar') ? r.left : r.right - width;
+      top = r.bottom + 4;
     } else {
       left = anchor.x;
       top = anchor.y;
     }
     el.style.left = clamp(left, 8, innerWidth - width - 8) + 'px';
-    el.style.top = clamp(top, 8, innerHeight - height - 8) + 'px';
+    top = clamp(top, 8, innerHeight - height - 8);
+    el.style.top = top + 'px';
+    // A section opened later (the layout test cases) scrolls inside the menu, not off screen.
+    el.style.maxHeight = innerHeight - top - 8 + 'px';
     el.querySelector<HTMLElement>('button,input,select')?.focus({ preventScroll: true });
     const outside = (e: PointerEvent) => {
       const target = e.target as Node;
@@ -76,6 +96,22 @@ function Popover(props: { state: MenuState }) {
       return;
     }
     const target = e.target as HTMLElement;
+    // Left and right walk the menu bar, as they do in a desktop app.
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && anchor instanceof HTMLElement) {
+      const items = [...(anchor.closest('.menubar')?.querySelectorAll('button') ?? [])];
+      const next =
+        items[
+          (items.indexOf(anchor as HTMLButtonElement) +
+            (e.key === 'ArrowRight' ? 1 : -1) +
+            items.length) %
+            items.length
+        ];
+      if (next && items.length) {
+        e.preventDefault();
+        next.click();
+        return;
+      }
+    }
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && target.tagName === 'BUTTON') {
       e.preventDefault();
       const items = [...el.querySelectorAll<HTMLElement>('button:not(:disabled),input,select')],
@@ -88,7 +124,9 @@ function Popover(props: { state: MenuState }) {
     <div
       ref={el}
       class="popover"
-      classList={{ wide: props.state.id === 'routing' || props.state.id === 'appearance' }}
+      classList={{
+        wide: ['routing', 'appearance', 'tools', 'file', 'layout'].includes(props.state.id),
+      }}
       role="menu"
       onKeyDown={onKeyDown}
     >
@@ -98,6 +136,15 @@ function Popover(props: { state: MenuState }) {
         </Match>
         <Match when={props.state.id === 'edit' || props.state.id === 'context'}>
           <EditMenu />
+        </Match>
+        <Match when={props.state.id === 'view'}>
+          <ViewMenu />
+        </Match>
+        <Match when={props.state.id === 'layout'}>
+          <LayoutMenu />
+        </Match>
+        <Match when={props.state.id === 'help'}>
+          <HelpMenu />
         </Match>
         <Match when={props.state.id === 'export'}>
           <ExportMenu />
@@ -116,9 +163,31 @@ function Popover(props: { state: MenuState }) {
   );
 }
 
+/** The layout actions, each saying what it changes and how to reverse it. */
+function LayoutItems() {
+  return (
+    <>
+      <MenuItem
+        command="layout"
+        label="Tidy positions"
+        note={`Small moves in ${layoutTarget()}. Undo restores.`}
+      />
+      <MenuItem
+        command="layout-menu"
+        label="Automatic layout…"
+        note="A new arrangement to preview. Undo restores."
+      />
+      <MenuItem command="timeline-toggle" note="Steps from the current drawing. Undo restores." />
+      <MenuItem command="brush-toggle" note="Paint over shapes to move them. Undo restores." />
+      <MenuItem command="compare-layouts" note="Preview only until you Apply. Undo restores." />
+      <MenuItem command="reroute" note="Redraws connections. Shapes stay." />
+    </>
+  );
+}
+
 const MORE_TOOLS: [Tool, string, string][] = [
   ['select', 'cursor', 'Select'],
-  ['pan', 'hand', 'Navigate'],
+  ['pan', 'hand', 'Pan'],
   ['box', 'box', 'Rectangle'],
   ['diamond', 'diamond', 'Diamond'],
   ['circle', 'circle', 'Ellipse'],
@@ -131,11 +200,14 @@ function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
   return (
     <>
       <div class="menu-scroll">
-        <MenuItem command="undo" />
-        <MenuItem command="redo" />
-        <button type="button" class="menu-item" role="menuitem" onClick={submenu('edit')}>
-          Edit selection…
-        </button>
+        <For each={['file', 'edit', 'view', 'layout', 'help'] as const}>
+          {id => (
+            <button type="button" class="menu-item" role="menuitem" onClick={submenu(id)}>
+              <span class="menu-label">{id[0].toUpperCase() + id.slice(1)}</span>
+              <Icon name="chevron-right" />
+            </button>
+          )}
+        </For>
         <hr />
         <For each={MORE_TOOLS}>
           {([tool, icon, label]) => (
@@ -156,32 +228,20 @@ function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
             </button>
           )}
         </For>
-        <MenuItem command="add-connected" />
-        <MenuItem command="quick-build" />
-        <hr />
-        <MenuItem command="layout" label="Tidy positions" />
-        <MenuItem command="layout-menu" label="Automatic layout…" />
-        <MenuItem command="timeline-toggle" />
-        <MenuItem command="brush-toggle" />
-        <MenuItem command="compare-layouts" />
-        <MenuItem command="reroute" />
-        <button type="button" class="menu-item" role="menuitem" onClick={submenu('routing')}>
-          Routing options…
-        </button>
-        <MenuItem command="toggle-objects" />
-        <MenuItem command="help" />
       </div>
     </>
   );
 }
 
-function MenuItem(props: { command: CommandId; label?: string }) {
+function MenuItem(props: { command: CommandId; label?: string; note?: string; checked?: boolean }) {
   const command = () => commands[props.command] as { label: string; keys?: string; icon?: string };
   return (
     <button
       type="button"
       class="menu-item"
-      role="menuitem"
+      classList={{ 'has-note': !!props.note }}
+      role={props.checked === undefined ? 'menuitem' : 'menuitemcheckbox'}
+      aria-checked={props.checked}
       disabled={!commandEnabled(props.command)}
       onClick={() => {
         closeMenu();
@@ -189,9 +249,16 @@ function MenuItem(props: { command: CommandId; label?: string }) {
       }}
     >
       <span class="menu-icon">
-        <Show when={command().icon}>{icon => <Icon name={icon()} />}</Show>
+        <Show when={props.checked ? 'check' : command().icon}>
+          {icon => <Icon name={icon()} />}
+        </Show>
       </span>
-      <span class="menu-label">{props.label ?? command().label}</span>
+      <span class="menu-label">
+        {props.label ?? command().label}
+        <Show when={props.note}>
+          <small class="menu-note">{props.note}</small>
+        </Show>
+      </span>
       <Show when={command().keys}>
         <kbd>{command().keys}</kbd>
       </Show>
@@ -203,23 +270,310 @@ const Heading = (props: { children: JSX.Element }) => (
   <div class="menu-heading">{props.children}</div>
 );
 
+/** Hands over to another menu, anchored where that menu usually opens. */
+const openFrom = (id: MenuState['id'], selector: string) => () => {
+  const anchor = document.querySelector<HTMLElement>(selector);
+  if (anchor) openMenu(id, anchor);
+};
+
+/** A row that opens a list beside the menu, on hover, click or the right arrow key. */
+function Submenu(props: { label: string; icon: string; children: JSX.Element }) {
+  const [rect, setRect] = createSignal<DOMRect | null>(null);
+  let row!: HTMLButtonElement;
+  let timer = 0;
+  const open = () => setRect(row.getBoundingClientRect());
+  const close = () => {
+    setRect(null);
+    row.focus({ preventScroll: true });
+  };
+  onCleanup(() => clearTimeout(timer));
+
+  const place = (el: HTMLDivElement, at: DOMRect) => {
+    const width = el.offsetWidth;
+    const right = at.right + 4 + width < innerWidth - 8;
+    el.style.left = `${right ? at.right + 4 : at.left - width - 4}px`;
+    const top = clamp(at.top - 6, 8, innerHeight - el.offsetHeight - 8);
+    el.style.top = `${top}px`;
+    el.style.maxHeight = `${innerHeight - top - 8}px`;
+    el.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    const el = e.currentTarget as HTMLElement;
+    e.stopPropagation();
+    if (e.key === 'Escape' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      close();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const items = [...el.querySelectorAll<HTMLElement>('button:not(:disabled)')];
+      const i = items.indexOf(e.target as HTMLElement);
+      items[(i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length]?.focus();
+    }
+  };
+
+  return (
+    <div
+      onPointerEnter={() => {
+        clearTimeout(timer);
+        timer = window.setTimeout(open, 90);
+      }}
+      onPointerLeave={() => {
+        clearTimeout(timer);
+        timer = window.setTimeout(() => setRect(null), 200);
+      }}
+    >
+      <button
+        ref={row}
+        type="button"
+        class="menu-item submenu-row"
+        role="menuitem"
+        aria-haspopup="menu"
+        aria-expanded={!!rect()}
+        onClick={open}
+        onKeyDown={e => {
+          if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            open();
+          }
+        }}
+      >
+        <span class="menu-icon">
+          <Icon name={props.icon} />
+        </span>
+        <span class="menu-label">{props.label}</span>
+        <Icon name="chevron-right" />
+      </button>
+      <Show when={rect()} keyed>
+        {at => (
+          <div
+            ref={el => queueMicrotask(() => place(el, at))}
+            class="popover flyout"
+            role="menu"
+            onKeyDown={onKeyDown}
+          >
+            {props.children}
+          </div>
+        )}
+      </Show>
+    </div>
+  );
+}
+
+function ExamplesSubmenu() {
+  return (
+    <Submenu label="Examples" icon="spark">
+      <p class="menu-note">Opens a scratch copy. Nothing in a folder changes.</p>
+      <For each={EXAMPLES}>
+        {example => (
+          <button
+            type="button"
+            class="menu-item"
+            role="menuitem"
+            aria-current={fileSession()?.example === example.id || undefined}
+            {...tip(example.title, undefined, example.summary)}
+            onClick={() => {
+              closeMenu();
+              location.assign(exampleUrl(example.id));
+            }}
+          >
+            <span class="menu-label">{example.title}</span>
+          </button>
+        )}
+      </For>
+    </Submenu>
+  );
+}
+
+/** The newest diagrams in the folder, leaving out the one already open. */
+function RecentFiles() {
+  const files = () =>
+    [...(workspace()?.files ?? [])]
+      .filter(f => f.path !== fileSession()?.file)
+      .sort((a, b) => b.modified - a.modified)
+      .slice(0, 5);
+  return (
+    <Show when={files().length}>
+      <Heading>Recent in {workspace()?.name}</Heading>
+      <For each={files()}>
+        {file => (
+          <button
+            type="button"
+            class="menu-item"
+            role="menuitem"
+            {...tip(file.title || baseName(file.path), undefined, file.path)}
+            onClick={() => {
+              closeMenu();
+              void go(fileUrl(file.path));
+            }}
+          >
+            <span class="menu-icon">
+              <Icon name="file" />
+            </span>
+            <span class="menu-label">{file.title || baseName(file.path)}</span>
+            <FileTime modified={file.modified} short />
+          </button>
+        )}
+      </For>
+      <hr />
+    </Show>
+  );
+}
+
+/**
+ * File shows what works where you are. A served folder creates and moves between its own files, so
+ * it has no file dialog. Without a folder the diagram lives in the browser and comes and goes
+ * through files you pick.
+ */
 function FileMenu() {
   return (
     <>
-      <MenuItem command="start" />
-      <Show when={workspace()}>
-        <MenuItem command="find-file" />
-      </Show>
       <MenuItem command="new-diagram" />
+      <Show when={commandEnabled('save-example')}>
+        <MenuItem command="save-example" />
+      </Show>
+      <Show
+        when={workspace()}
+        fallback={
+          <>
+            <Show when={!fileMode()}>
+              <MenuItem command="open" />
+              <MenuItem command="insert-image" />
+              <MenuItem command="export-json" />
+            </Show>
+            <MenuItem command="start" />
+          </>
+        }
+      >
+        {info => (
+          <>
+            <MenuItem command="find-file" />
+            <MenuItem command="start" label={`All diagrams in ${info().name}`} />
+          </>
+        )}
+      </Show>
+      <MenuItem command="import-diagram" />
+      <hr />
+      <Show when={workspace()}>
+        <RecentFiles />
+      </Show>
+      <button
+        type="button"
+        class="menu-item"
+        role="menuitem"
+        onClick={openFrom('export', '[aria-label="Save and export"]')}
+      >
+        <span class="menu-icon">
+          <Icon name="export" />
+        </span>
+        <span class="menu-label">Export and copy…</span>
+      </button>
+      <Show when={workspace()}>
+        <MenuItem command="export-folder" />
+      </Show>
+      <MenuItem command="open-playground" />
+      <hr />
+      <ExamplesSubmenu />
+    </>
+  );
+}
+
+function EditMenu() {
+  return (
+    <>
+      <MenuItem command="undo" />
+      <MenuItem command="redo" />
+      <hr />
+      <MenuItem command="add-node" />
+      <MenuItem command="add-connected" />
       <MenuItem command="quick-build" />
-      <MenuItem command="open" />
-      <MenuItem command="insert-image" />
+      <hr />
+      <MenuItem command="duplicate" />
+      <MenuItem command="copy-image" />
+      <MenuItem command="group" />
+      <MenuItem command="ungroup" />
+      <MenuItem command="reflow-group" />
+      <MenuItem command="pin" />
+      <MenuItem command="release-manual" />
+      <Submenu label="Align and distribute" icon="layout">
+        <MenuItem command="align-left" />
+        <MenuItem command="align-top" />
+        <MenuItem command="align-center" />
+        <MenuItem command="align-middle" />
+        <MenuItem command="distribute-x" />
+        <MenuItem command="distribute-y" />
+      </Submenu>
+      <hr />
+      <MenuItem command="delete" />
+    </>
+  );
+}
+
+function ViewMenu() {
+  return (
+    <>
+      <Show when={workspace()}>
+        <MenuItem command="toggle-files" checked={filesShown()} />
+      </Show>
+      <MenuItem command="toggle-objects" checked={objectsOpen()} />
+      <MenuItem command="toggle-inspector" checked={inspectorOpen()} />
+      <MenuItem command="toggle-panels" />
+      <hr />
+      <MenuItem command="fit" />
+      <MenuItem command="reset-camera" />
+      <MenuItem command="zoom-in" />
+      <MenuItem command="zoom-out" />
+      <hr />
+      <button
+        type="button"
+        class="menu-item"
+        role="menuitem"
+        onClick={openFrom('appearance', '[aria-label="Appearance"]')}
+      >
+        <span class="menu-icon">
+          <Icon name="palette" />
+        </span>
+        <span class="menu-label">Diagram theme…</span>
+      </button>
+      <MenuItem command="theme" />
+    </>
+  );
+}
+
+function LayoutMenu() {
+  return (
+    <>
+      <LayoutItems />
+      <hr />
+      <button
+        type="button"
+        class="menu-item"
+        role="menuitem"
+        onClick={openFrom('routing', '.menubar [aria-expanded="true"]')}
+      >
+        <span class="menu-icon">
+          <Icon name="branch" />
+        </span>
+        <span class="menu-label">Routing options…</span>
+      </button>
+      <MenuItem command="compare-routes" />
       <hr />
       <MenuItem command="timeline-reopen" />
       <MenuItem command="timeline-save" />
+    </>
+  );
+}
+
+function HelpMenu() {
+  return (
+    <>
+      <MenuItem command="palette" />
+      <MenuItem command="help" />
+      <MenuItem command="home" />
+      <MenuItem command="docs" />
       <hr />
-      <Heading>Layout test cases</Heading>
-      <div class="menu-scroll">
+      <Submenu label="Layout test cases" icon="layers">
         <For each={SAMPLES}>
           {sample => (
             <button
@@ -238,36 +592,7 @@ function FileMenu() {
             </button>
           )}
         </For>
-      </div>
-      <hr />
-      <MenuItem command="theme" />
-      <MenuItem command="help" />
-    </>
-  );
-}
-
-function EditMenu() {
-  return (
-    <>
-      <MenuItem command="quick-build" />
-      <MenuItem command="add-node" />
-      <MenuItem command="add-connected" />
-      <hr />
-      <MenuItem command="duplicate" />
-      <MenuItem command="group" />
-      <MenuItem command="ungroup" />
-      <MenuItem command="reflow-group" />
-      <MenuItem command="pin" />
-      <MenuItem command="release-manual" />
-      <MenuItem command="delete" />
-      <hr />
-      <Heading>Arrange selection</Heading>
-      <MenuItem command="align-left" />
-      <MenuItem command="align-top" />
-      <MenuItem command="align-center" />
-      <MenuItem command="align-middle" />
-      <MenuItem command="distribute-x" />
-      <MenuItem command="distribute-y" />
+      </Submenu>
     </>
   );
 }
@@ -276,24 +601,24 @@ function ExportMenu() {
   return (
     <>
       <MenuItem command="export-json" />
-      <MenuItem command="export-svg" />
-      <MenuItem command="export-png" />
+      <hr />
+      <MenuItem command="copy-image" />
+      <Heading>Copy as</Heading>
+      <MenuItem command="copy-svg" />
       <Show when={fileMode()}>
-        <label class="menu-item menu-check">
-          <span class="menu-icon">
-            <input
-              type="checkbox"
-              checked={embedSource()}
-              onChange={e => setEmbedSource(e.currentTarget.checked)}
-            />
-          </span>
-          <span class="menu-label">Include .draft source in SVG and PNG</span>
-        </label>
+        <MenuItem command="copy-source" />
+        <MenuItem command="copy-link" />
+      </Show>
+      <hr />
+      <MenuItem command="export-png" />
+      <MenuItem command="export-svg" />
+      <Show when={fileMode() && workspace()}>
+        <MenuItem command="export-pdf" />
       </Show>
       <p class="menu-note">
         {fileMode()
-          ? 'An image with its source opens again as an editable diagram.'
-          : 'Saved diagrams and exported SVGs remain editable. PNG is image-only.'}
+          ? 'Copy takes the selection when something is selected. An image with its source opens again as an editable diagram.'
+          : 'Copy takes the selection when something is selected. Saved diagrams and exported SVGs remain editable.'}
       </p>
     </>
   );

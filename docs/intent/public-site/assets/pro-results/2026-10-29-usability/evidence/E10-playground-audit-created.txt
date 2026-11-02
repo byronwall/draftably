@@ -1,0 +1,14 @@
+Browser tab: 4, Title: "Audit checkout · Draftably playground", URL: "https://byronwall.github.io/draftably/play/#s=S8lMTC9KzFVQcixNySxRSM5ITc7OLy1RUihLLSrOzM-zNeTKy09JVSguSSwqUVByBpJKEJG81AqgQEBiZW5qHlAsNSU9VSE9H6pQ1w4szwUA".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~0 AXWebArea Audit checkout · Draftably playground, URL: byronwall.github.io/draftably/play/#s=S8lMTC9KzFVQcixNySxRSM5ITc7OLy1RUihLLSrOzM-zNeTKy09JVSguSSwqUVByBpJKEJG81AqgQEBiZW5qHlAsNSU9VSE9H6pQ1w4szwUA
+~			66 button (disabled) No problems · drawn in 5 ms Click a shape to find its line
+~				67 text No problems · drawn in 5 ms Click a shape to find its line
+~				101 image Audit checkout
+~					102 text Audit checkout
+~					103 text Cart
+~					104 text Payment
+The focused UI element is 27 text entry area (settable) Description: Diagram source, Value: diagram "Audit checkout" version=1
+node start "Cart"
+node next "Payment"
+edge go start -> next
+

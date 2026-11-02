@@ -1,0 +1,178 @@
+Browser tab: 9, Title: "Draftably: write the diagram, skip the dragging", URL: "https://byronwall.github.io/draftably/".
+0 AXWebArea Draftably: write the diagram, skip the dragging, URL: byronwall.github.io/draftably/
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+		10 container
+			11 heading Write the diagram. Skip the dragging., Value: 1
+				12 text Write the diagram. Skip the dragging.
+			13 container
+				14 text Plain-text  .draft  files in, clean diagrams out. Draftably lays out the boxes and routes the lines. Edit the source below and watch it redraw.
+			15 container
+				16 text Have a Draftably PNG or SVG? Drop or paste it anywhere, or  choose a file
+				17 button choose a file
+				18 text , to keep editing.
+			19 link Description: Open the editor, Value: byronwall.github.io/draftably/app/
+			20 button Copy "npx draftably open"
+				21 text $
+				22 text npx draftably open
+			23 tab group Examples
+				24 tab (selected, settable, boolean) checkout.draft, Value: 1
+				25 tab (selectable, settable, boolean) login-sequence.draft, Value: 0
+				26 tab (selectable, settable, boolean) order-lifecycle.draft, Value: 0
+				27 tab (selectable, settable, boolean) billing-schema.draft, Value: 0
+				28 link Description: Open in the editor, Value: byronwall.github.io/draftably/app/?example=checkout
+			29 text entry area (settable) Description: Diagram source, Value: diagram "Checkout architecture" version=1
+
+# Two levels: a platform group holds the API and a nested group of domain services.
+
+# Customer-facing entry points.
+group clients "Customer channels" color=blue
+node web "Web app" in=clients
+node mobile "Mobile app" in=clients
+
+group platform "Commerce platform" color=mint
+node api "API gateway" in=platform
+group services "Domain services" in=platform
+node orders "Orders" in=services
+node payments "Payments" in=services shape=pill # charges cards
+
+node db "Postgres" color=violet
+
+edge checkout web -> api "HTTPS"
+edge native mobile -> api "HTTPS"
+edge dispatch api -> orders "create order"
+edge charge orders -> payments "authorize"
+edge persist orders -> db "persist" kind=async
+
+layout root flow gap=48
+layout platform column gap=28
+layout services row gap=56
+
+			30 text Drawn in 54 ms
+			31 image Checkout architecture
+				32 text Checkout architecture
+				33 text Customer channels
+				34 text Commerce platform
+				35 text Domain services
+				36 text authorize
+				37 text HTTPS
+				38 text create order
+				39 text HTTPS
+				40 text persist
+				41 text Web app
+				42 text Mobile app
+				43 text API gateway
+				44 text Orders
+				45 text Payments
+				46 text Postgres
+			47 container More than a picture
+				48 heading More than a picture, Value: 2, ID: points-head
+					49 text More than a picture
+				50 heading Review a change as a picture, Value: 3
+					51 checkbox Review a change as a picture, Value: 0
+				52 container
+					53 text Start lines with  + ,  -  or  ~  and the drawing shows what a pull request adds, removes and changes.
+				54 container Review a change as a picture
+					55 checkbox Marked, Value: 1
+					56 checkbox Side by side, Value: 0
+				57 heading Restyle with one line, Value: 3
+					58 checkbox Restyle with one line, Value: 1
+				59 text Five themes ship with the language. A theme changes the look and never moves a box.
+				60 container Restyle with one line
+					61 checkbox Drafting, Value: 0
+					62 checkbox Fieldnotes, Value: 0
+					63 checkbox Signal, Value: 0
+					64 checkbox Ink, Value: 0
+					65 checkbox Blueprint, Value: 1
+				66 heading Trace one path at a time, Value: 3
+					67 checkbox Trace one path at a time, Value: 0
+				68 text Name the objects on a path. That path stays in focus and everything else fades.
+				69 container Trace one path at a time
+					70 checkbox All, Value: 1
+					71 checkbox Write path, Value: 0
+					72 checkbox Read path, Value: 0
+					73 checkbox Events, Value: 0
+				125 image CI/CD pipeline
+					126 text CI/CD pipeline
+					127 text Source
+					128 text Build
+					129 text Test
+					130 text Release
+					131 text approved
+					132 text health check fails
+					133 text Push to main
+					134 text Pull request
+					135 text Install deps
+					136 text Compile
+					137 container
+						138 text Build container image
+					139 text Unit tests
+					140 text Integration tests
+					141 text Lint & typecheck
+					142 text Deploy to staging
+					143 text Smoke tests
+					144 container
+						145 text Manual approval
+					146 container
+						147 text Deploy to production
+					148 text Roll back
+				74 container
+					149 text theme blueprint
+			76 container examples
+				77 heading More examples, Value: 2
+					78 text More examples
+				79 link Description: Open all 25 in the editor, Value: byronwall.github.io/draftably/app/
+				80 link Description: Support ticket triage A flat decision flow: no containers, decision diamonds, and labeled branches., Value: byronwall.github.io/draftably/app/?example=support-triage
+				81 link Description: Incident response Swimlanes: one container per role, with hand-offs crossing between lanes., Value: byronwall.github.io/draftably/app/?example=incident-response
+				82 link Description: Data lakehouse Medallion layers as containers between external sources and consumers., Value: byronwall.github.io/draftably/app/?example=data-lakehouse
+				83 link Value: byronwall.github.io/draftably/app/?example=observability-stack, Description: Observability stack Telemetry flows from instrumented services through collectors into storage and tools.
+				84 link Value: byronwall.github.io/draftably/app/?example=rag-assistant, Description: RAG support assistant Two levels: the platform contains a retrieval subsystem and a generation subsystem.
+				85 link Description: Order saga Event-driven services around a broker. Dashed lines are asynchronous events., Value: byronwall.github.io/draftably/app/?example=order-saga
+				86 link Value: byronwall.github.io/draftably/app/?example=tcp-header, Description: TCP header A bit layout: unit=bit with 32 columns, fields sized in bits, and options of variable length.
+				87 link Description: Kubernetes cluster Three levels: cluster > namespace > deployment, with pods inside each deployment., Value: byronwall.github.io/draftably/app/?example=kubernetes-cluster
+			88 container install
+				89 heading Install, Value: 2
+					90 text Install
+				91 heading Run it on your files, Value: 3
+					92 text Run it on your files
+				93 button Copy "npx draftably open plan.draft"
+					94 text $
+					95 text npx draftably open plan.draft
+				96 container
+					97 text Opens the editor on a local file, and edits save back to it. Needs Node 22.21 or later. Run  npm i -g draftably  to use the commands below.
+				98 definition list
+					99 container draftably check plan.draft
+						100 text draftably check plan.draft
+					101 text Reports errors by line. Exits 1, so CI can fail on them.
+					102 container draftably inspect plan.draft --svg
+						103 text draftably inspect plan.draft --svg
+					104 text Writes an SVG or PNG for docs, READMEs and PRs.
+					105 container draftably compare old.draft new.draft
+						106 text draftably compare old.draft new.draft
+					107 text Marks what changed between two versions.
+					108 container draftably vary plan.draft
+						109 text draftably vary plan.draft
+					110 text Ranks layout variants on one contact sheet.
+				111 heading Teach your coding agent, Value: 3
+					112 text Teach your coding agent
+				113 button Copy "npx draftably skill install"
+					114 text $
+					115 text npx draftably skill install
+				116 container
+					117 text A bundled skill teaches an agent the language, so it can write, check and render  .draft  files on its own.
+				118 container
+					119 text It installs to  .claude/skills/draftably . Add  --global  for every project, or run  npx skills add byronwall/draftably .
+		120 container
+			121 text Draftably
+			122 link Description: Editor, Value: byronwall.github.io/draftably/app/
+			123 link Description: npm, Value: npmjs.com/package/draftably
+			124 link Description: GitHub, Value: github.com/byronwall/draftably
+
+The focused UI element is 58 checkbox Restyle with one line, Value: 1

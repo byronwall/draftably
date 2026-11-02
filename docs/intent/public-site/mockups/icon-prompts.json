@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-28",
+  "tool": "codex exec -m gpt-5.6-sol, $imagegen",
+  "rounds": {
+    "1": "4x3 contact sheet of 12 directions: boxes and elbow, caret to box, D from box and connector, nested group, braces around a diagram, pencil route, text lines to boxes, D monogram with node, three-node flow, folded paper, arrow around a box, two offset squares with elbow. Palette #6650d9 #15171f #2d7a5c #efebfd #ffffff; flat; readable at 32px.",
+    "2": "3x2 refinements on solid violet tiles: D monogram with mint node (white and ink), D as one connector line, two offset squares with elbow, braces with a square, text lines turning into a square.",
+    "3": "Chosen: two text lines, the lower one stepping down through one elbow into a rounded square, white on violet; shown at three sizes, white and mint-square variants. White chosen: the mint square loses contrast on violet at small sizes."
+  },
+  "final": "src/assets/logo.svg, written by hand on a 64-unit grid against round 3. Touch icon: site/public/apple-touch-icon.png (180, full-bleed violet)."
+}

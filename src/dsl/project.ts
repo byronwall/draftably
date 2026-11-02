@@ -83,7 +83,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       to: e.target,
       label: e.label,
       ...(e.was !== undefined ? { was: e.was } : {}),
-      directed: true,
+      directed: e.directed !== false,
       emphasis: false,
       dashed: e.dashed,
       ...(e.status ? { status: e.status } : {}),

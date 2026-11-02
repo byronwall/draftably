@@ -1,0 +1,3 @@
+diagram "D2 literalRules" version=1
+node a "vars classes * ${keep}"
+layout root flow direction=down

@@ -1,0 +1,82 @@
+{
+  "status": "ready",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "2",
+      "native": "edge_2"
+    }
+  ],
+  "requires": [
+    "IMP-02-native-undirected"
+  ],
+  "nativeSource": "diagram \"Relationships\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"latest\" directed=false from=top to=bottom\nedge edge_2 b -> b \"self\" directed=false\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Relationships",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "latest",
+        "directed": false,
+        "fromSide": "top",
+        "toSide": "bottom"
+      },
+      {
+        "id": "edge_2",
+        "from": "b",
+        "to": "b",
+        "label": "self",
+        "directed": false
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

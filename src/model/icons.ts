@@ -40,6 +40,11 @@ export const ICONS: Record<string, string> = {
     '<path d="M7 3H3v4m14-4h4v4M3 17v4h4m14-4v4h-4"/><rect x="7" y="7" width="10" height="10" rx="1.5"/>',
   'box-select': '<path stroke-dasharray="3 3" d="M3 3h18v18H3z"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5m0 3v1"/>',
+  tree: '<path d="M5 4v14h5M5 11h5"/><rect x="10" y="8.5" width="10" height="5" rx="1.5"/><rect x="10" y="15.5" width="10" height="5" rx="1.5"/><rect x="2.5" y="2" width="9" height="4" rx="1.5"/>',
+  sliders:
+    '<path d="M4 7h9m6 0h1M4 17h1m6 0h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  sort: '<path d="M4 6h16M4 12h10M4 18h5"/>',
   'panel-left': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
   'panel-right': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/>',
   user: '<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
@@ -60,6 +65,7 @@ export const ICONS: Record<string, string> = {
   file: '<path d="M14 2H5v20h14V7zM14 2v5h5M8 12h8m-8 4h8"/>',
   folder: '<path d="M2 6V3h7l3 3h10v15H2z"/>',
   mail: '<rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 6 10 7L22 6"/>',
+  home: '<path d="m3 11 9-8 9 8M5 9v12h14V9"/>',
   globe:
     '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
   terminal: '<rect x="2" y="3" width="20" height="18" rx="3"/><path d="m6 8 4 4-4 4m7 0h5"/>',

@@ -1,0 +1,3 @@
+Browser tab: 1, Title: "Draftably: write the diagram, skip the dragging", URL: "https://byronwall.github.io/draftably/app/".
+There has been no change in the accessibility tree.
+The focused UI element is 19 link Description: Open the editor, URL: byronwall.github.io/draftably/app/

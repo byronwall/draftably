@@ -1,0 +1,160 @@
+Browser tab: 5, Title: "Example: Audit lesson · Draftably", URL: "https://byronwall.github.io/draftably/app/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA".
+1 AXWebArea Example: Audit lesson · Draftably, URL: byronwall.github.io/draftably/app/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA
+	2 container root
+		3 container
+			4 pop up button (collapsed) Description: File and examples, Secondary Actions: Expand
+			5 text field (settable) Description: Diagram title, Value: Audit lesson
+			6 text Example · 5 unsaved edits
+			7 toolbar Drawing tools
+				8 checkbox Description: Edit / select, Help: Edit / select · V, Value: 1
+				9 checkbox Description: Navigate, Help: Navigate · H, Value: 0
+				10 checkbox Description: Rectangle, Help: Rectangle · R, Value: 0
+				11 checkbox Description: Diamond, Help: Diamond · D, Value: 0
+				12 checkbox Description: Ellipse, Help: Ellipse · O, Value: 0
+				13 checkbox Description: Text, Help: Text · T, Value: 0
+				14 checkbox Description: Container, Help: Container · G, Value: 0
+				15 checkbox Description: Connect, Help: Connect · C, Value: 0
+			16 button Description: Undo, Help: Undo · ⌘Z
+			17 button (disabled) Description: Redo, Help: Redo · ⇧⌘Z
+			18 pop up button (collapsed) Edit, Help: Duplicate, group, align, pin, delete, Secondary Actions: Expand
+			19 button Description: Build from a list, Help: Build from a list · B
+			20 button Tidy positions, Help: Tidy current positions · L
+			21 button (collapsed) Description: Layout options, Help: Layout options · ⌥L, Secondary Actions: Expand
+			22 button (collapsed) Automatic layout…, Help: Set automatic layout, Secondary Actions: Expand
+			23 checkbox Description: Layout timeline · ⌥T, Value: 0
+			24 checkbox Description: Layout brush, Help: Layout brush · W, Value: 0
+			25 button Compare layouts and routing parameters · ⌥E
+			26 button Description: Reroute connections, Help: Reroute connections · ⌥R
+			27 pop up button (collapsed) Description: Routing options, Secondary Actions: Expand
+			28 pop up button (collapsed) Description: Appearance, Secondary Actions: Expand
+			29 checkbox Description: Objects, Help: Objects · [, Value: 0
+			30 checkbox Description: Inspector, Help: Inspector · ], Value: 1
+			31 button Description: Keyboard shortcuts, Help: Keyboard shortcuts · ?
+			32 pop up button (collapsed) Description: Save and export, Secondary Actions: Expand
+		33 container
+			34 text EXAMPLE Audit lesson Your edits are only in this tab. Save as a file to keep them.
+			35 button Download .draft
+			36 button Reset
+			37 link Description: Close example, Value: byronwall.github.io/draftably/app/
+		81 container
+			82 container Diagram workspace
+				83 container Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.
+					84 text Audit lesson
+					85 text Double-click to add a subtitle
+					86 splitter Frame width. Drag to widen the frame.
+					87 button Description: Audit visual edit to API, Help: Connection
+					88 button Description: Receipt to API, Help: Connection
+					89 checkbox Description: Audit visual edit, box, Help: Audit visual edit, Value: 0
+						90 text Audit visual edit
+						91 image Connect from left
+						92 image Connect from right
+						93 image Connect from top
+						94 image Connect from bottom
+					95 checkbox Description: API, box, Help: API, Value: 1
+						96 text API
+						97 image Connect from left
+						98 image Connect from right
+						99 image Connect from top
+						100 image Connect from bottom
+						101 image Resize shape
+						102 image Resize shape
+						103 image Resize shape
+						104 image Resize shape
+					105 checkbox Description: Receipt, box, Help: Receipt, Value: 0
+						106 text Receipt
+						107 image Connect from left
+						108 image Connect from right
+						109 image Connect from top
+						110 image Connect from bottom
+					111 button Description: Add connected shape right, Help: Add connected shape right · Alt + arrow
+					112 button Description: Add connected shape bottom, Help: Add connected shape bottom · Alt + arrow
+				113 toolbar Zoom
+					114 button Description: Fit diagram, Help: Fit diagram · 1
+					115 button Description: Zoom out, Help: Zoom out · −
+					116 button 100%, Help: Zoom to 100% · 0
+						117 text 100
+						118 text %
+					119 button Description: Zoom in, Help: Zoom in · +
+			120 container Inspector
+				121 container
+					122 heading Inspector, Value: 2
+						123 text Inspector
+					124 button Description: Close inspector, Help: Close inspector · ]
+				125 container
+					126 text Shape Automatic
+					127 container
+						128 text Label
+						129 text field (settable) Label, Value: API
+					130 container
+						131 text Color
+						132 container Color family
+							133 checkbox Description: Theme default, Value: 1
+							134 checkbox Description: primary, Value: 0
+							135 checkbox Description: secondary, Value: 0
+							136 checkbox Description: slate, Value: 0
+							137 checkbox Description: stone, Value: 0
+							138 checkbox Description: blue, Value: 0
+							139 checkbox Description: sky, Value: 0
+							140 checkbox Description: teal, Value: 0
+							141 checkbox Description: mint, Value: 0
+							142 checkbox Description: green, Value: 0
+							143 checkbox Description: amber, Value: 0
+							144 checkbox Description: orange, Value: 0
+							145 checkbox Description: red, Value: 0
+							146 checkbox Description: rose, Value: 0
+							147 checkbox Description: violet, Value: 0
+					148 container
+						149 text Shape
+						150 pop up button (collapsed, settable) Shape, Value: Rectangle, Secondary Actions: Expand
+							151 menu
+								152 (selected) Rectangle
+								153 Pill
+								154 Ellipse
+								155 Diamond
+								156 Text
+								157 Icon
+								158 Image
+					159 heading POSITION, Value: 3
+						160 text POSITION
+					161 container
+						162 text X
+						163 stepper (settable, integer) X, Value: 258
+					164 container
+						165 text Y
+						166 stepper (settable, integer) Y, Value: -57
+					167 container
+						168 text Width
+						169 stepper (settable, integer) Width, Value: 164
+					170 container
+						171 text Height
+						172 stepper (settable, integer) Height, Value: 56
+					173 container
+						174 checkbox (settable, integer) Description: Pin during layout, Value: 0
+						175 text Pin during layout
+					176 text Layout is free to move this object.
+					177 heading LAYOUT INTENT, Value: 3
+						178 text LAYOUT INTENT
+					179 button Start here
+					180 button End here
+					181 text A preferred area, not a fixed coordinate. Pins and container boundaries still win.
+					182 button (collapsed) Label & icon, Secondary Actions: Expand
+						183 text Label & icon
+					184 container
+						185 text Container
+						186 pop up button (collapsed, settable) Container, Value: No container, Secondary Actions: Expand
+							187 menu
+								188 (selected) No container
+					189 button Add connected box ⇧ Enter
+						190 text Add connected box
+						191 text ⇧ Enter
+					192 button Duplicate
+					193 button Delete
+				194 container
+					195 text Toggle panels \
+		76 container
+			77 text 3 shapes · 2 connections · 1 selected Drag shapes to edit · background pans · Shift drag selects
+			78 button (collapsed) 3 layout notes, Secondary Actions: Expand
+			79 button ?, Help: Keyboard shortcuts
+		80 text SVG export created
+
+The focused UI element is 30 checkbox Description: Inspector, Help: Inspector · ], Value: 1

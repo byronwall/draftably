@@ -1,0 +1,90 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_PROGRAM_SNAPSHOT",
+      "severity": "warning",
+      "impact": "semantics",
+      "message": "D2 configuration, variables become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+    },
+    {
+      "code": "D2_CONFIG_IGNORED",
+      "severity": "warning",
+      "impact": "semantics",
+      "message": "Import uses fixed compiler options and native layout/styling; D2 source configuration is not retained."
+    },
+    {
+      "code": "D2_CONFIG_DATA_DROPPED",
+      "severity": "warning",
+      "impact": "semantics",
+      "message": "Custom D2 configuration data has no native model field and is omitted."
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "(a -> b)[0]",
+      "native": "d2_edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 configuration\" version=1\nnode a \"a\"\nnode b \"b\"\nedge d2_edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "D2 configuration",
+    "objects": [
+      {
+        "id": "a",
+        "kind": "node",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "id": "b",
+        "kind": "node",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "d2_edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

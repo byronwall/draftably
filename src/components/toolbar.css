@@ -9,6 +9,33 @@
   background: var(--surface);
 }
 
+.menubar {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.menubar-item {
+  height: var(--control-height);
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+
+.menubar-item:hover,
+.menubar-item[aria-expanded='true'] {
+  background: var(--hover);
+}
+
+.menubar-item[aria-expanded='true'] {
+  background: var(--pressed);
+}
+
 .toolbar-group {
   display: flex;
   flex: none;
@@ -37,16 +64,21 @@
 }
 
 .toolbar .button .icon {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
+}
+
+/* The active drawing tool is the one strong mark in the bar: solid ink, as if inked in. */
+.toolbar [aria-label='Drawing tools'] .button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--ink-on);
 }
 
 .title-block {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: clamp(120px, 13vw, 220px);
-  margin-left: 2px;
+  width: clamp(150px, 15vw, 300px);
 }
 
 .title-input {
@@ -64,7 +96,7 @@
 }
 
 .title-input:focus {
-  border-color: var(--accent);
+  border-color: var(--ink);
   background: var(--surface);
 }
 
@@ -74,8 +106,18 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--muted);
-  font-size: 10px;
-  line-height: 14px;
+  font-size: var(--text-xs);
+  line-height: 15px;
+}
+
+.status-folder {
+  color: inherit;
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.status-folder:hover {
+  color: var(--text);
 }
 
 .save-status.warning {
@@ -96,49 +138,16 @@
   font-weight: 600;
 }
 
-.algorithm-select {
-  width: 160px;
-}
-
-.split-button {
-  display: flex;
-}
-
-.split-button > .button:first-child {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.split-button > .button:last-child {
-  width: 24px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.split-button > .button.primary:last-child {
-  border-left-color: #fff4;
-}
-
-.split-button > .button.ghost:last-child .icon {
-  width: 14px;
-}
-
-.layout-group {
-  gap: 4px;
-}
-
-@media (max-width: 1560px) {
-  .toolbar .label:not(.keep) {
-    display: none;
-  }
-
-  .toolbar .button kbd {
+/* The name gives way while the tools share its row; the mark stays as the link home. */
+@media (min-width: 1101px) and (max-width: 1500px), (max-width: 1000px) {
+  .toolbar .brand-name {
     display: none;
   }
 }
 
-@media (max-width: 1500px) {
-  .algorithm-select {
+/* The site links take spare room only. The menus keep Home, Docs and the Playground. */
+@media (min-width: 1101px) and (max-width: 1900px), (max-width: 1000px) {
+  .toolbar .app-nav {
     display: none;
   }
 }
@@ -157,8 +166,16 @@
     height: 40px;
   }
 
-  .toolbar > .toolbar-group:last-child {
-    margin-left: auto;
+  .toolbar > .toolbar-group:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .title-block {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 420px;
   }
 }
 
@@ -167,7 +184,8 @@
     display: none;
   }
 
-  .toolbar-panels > .button:not([aria-label='Save and export']) {
+  .toolbar-panels > .button:not([aria-label='Save and export']),
+  .menubar {
     display: none;
   }
 
@@ -189,12 +207,16 @@
     font-size: 11px;
   }
 
-  .title-block {
-    width: min(62vw, 260px);
+  .toolbar > .toolbar-group:first-child {
+    flex: 1;
+    min-width: 0;
   }
 
-  .save-status {
-    display: none;
+  .title-block {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    max-width: 260px;
   }
 }
 

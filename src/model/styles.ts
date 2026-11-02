@@ -50,7 +50,7 @@ export const DEFAULT_STYLE: NodeStyle = { shape: 'box', color: 'auto', icon: '' 
 /** Default size for a new shape of the given kind. */
 export function defaultShapeSize(shape: ShapeKind): { w: number; h: number } {
   if (shape === 'circle' || shape === 'icon') return { w: 80, h: 80 };
-  if (shape === 'diamond') return { w: 132, h: 100 };
+  if (shape === 'diamond') return { w: 112, h: 112 };
   if (shape === 'text') return { w: 164, h: 38 };
   return { w: 164, h: 56 };
 }

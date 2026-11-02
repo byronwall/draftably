@@ -1,0 +1,4 @@
+digraph Compass {
+  node [shape=box];
+  a:ne -> b:c;
+}

@@ -47,7 +47,7 @@ Performance PRs paste a before → after table.
 ID. It also checks selection and the active title editor after projection. `tests/edge-labels.test.ts`
 checks labels across short gaps, group headers, existing labels, and long text.
 
-`pnpm cli:build && pnpm prove:installed` packs Draftably, installs the archive in a fresh temporary
+`pnpm cli:build && pnpm prove:installed` packs draftably, installs the archive in a fresh temporary
 project, and runs its executable outside the repository. It checks help, validation, formatting,
 repeatable JSON, SVG, bundled viewer assets, API saves, and conflicts. It then runs the browser proof
 below against the installed CLI. Only the proof harness uses the repository's Playwright dependency.
@@ -74,6 +74,17 @@ machine run `pnpm exec playwright-core install chromium` once; without it the pr
 once and prints that command.
 
 The file proof also switches between more than six diagrams with Chrome’s back/forward cache enabled, then restores a cached page after an external file change. This catches retained EventSource connections that can exhaust the browser’s HTTP/1 pool; Playwright disables that cache by default.
+
+To serve a folder from the dev server instead, run `DIAGRAM_ROOT=folder pnpm dev`.
+`DIAGRAM_FILE=path/to/file.draft pnpm dev` serves the current folder and prints the file's address.
+
+## The public site
+
+`pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in
+Chromium with real clicks and keys. It covers the links between surfaces, narrow Playground panes,
+docs overlays, export blocking, reopening an exported image, and a failed module load. Direct URLs
+miss most of these failures, so a journey clicks what a visitor clicks. Pass a word from a journey's
+name to run one: `pnpm prove:site narrow`. Screenshots go to `tmp/proof-site/`.
 
 ## Themes in file mode
 

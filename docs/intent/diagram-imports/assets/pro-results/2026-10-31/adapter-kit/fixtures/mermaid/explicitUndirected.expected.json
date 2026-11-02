@@ -1,0 +1,94 @@
+{
+  "status": "needs-review",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_REVERSED_LAYOUT",
+      "message": "RL layout is normalized to right; edge endpoints keep their semantic order.",
+      "impact": "layout",
+      "severity": "warning",
+      "foreignIds": [
+        "root"
+      ]
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "A",
+      "native": "A"
+    },
+    {
+      "kind": "node",
+      "foreign": "B",
+      "native": "B"
+    },
+    {
+      "kind": "node",
+      "foreign": "C",
+      "native": "C"
+    },
+    {
+      "kind": "edge-id",
+      "foreign": "request",
+      "native": "request"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "2",
+      "native": "edge_2"
+    }
+  ],
+  "requires": [
+    "IMP-02-native-undirected"
+  ],
+  "nativeSource": "diagram \"Mermaid explicitUndirected\" version=1\nnode A \"A\"\nnode B \"B\"\nnode C \"C\"\nedge request A -> B \"\"\nedge edge_2 B -> C \"\" directed=false\nlayout root flow direction=right\n",
+  "facts": {
+    "title": "Mermaid explicitUndirected",
+    "objects": [
+      {
+        "id": "A",
+        "kind": "node",
+        "label": "A",
+        "shape": "box"
+      },
+      {
+        "id": "B",
+        "kind": "node",
+        "label": "B",
+        "shape": "box"
+      },
+      {
+        "id": "C",
+        "kind": "node",
+        "label": "C",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "request",
+        "from": "A",
+        "to": "B",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "B",
+        "to": "C",
+        "label": "",
+        "directed": false
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "right"
+      }
+    ],
+    "colors": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_SEQUENCE_UNSUPPORTED",
+      "severity": "error",
+      "impact": "semantics",
+      "message": "Sequence compilation introduces lifeline geometry; use a dedicated semantic sequence adapter."
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

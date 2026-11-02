@@ -1,0 +1,16 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_PARSER_DIALECT",
+      "message": "An unquoted DOT keyword was parsed as an identifier: subgraph. Quote actual identifiers; full subgraph edge operands are outside this parser profile.",
+      "severity": "error",
+      "impact": "syntax",
+      "line": 1
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

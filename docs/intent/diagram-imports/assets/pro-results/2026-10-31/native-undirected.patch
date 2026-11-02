@@ -1,0 +1,337 @@
+diff --git a/.changeset/native-undirected-connections.md b/.changeset/native-undirected-connections.md
+new file mode 100644
+--- /dev/null
++++ b/.changeset/native-undirected-connections.md
+@@ -0,0 +1,5 @@
++---
++'draftably': patch
++---
++
++Native edge declarations accept directed=false for undirected connections. Formatting, visual edits, comparison, layout projection, and SVG output preserve the flag.
+diff --git a/docs/DSL.md b/docs/DSL.md
+--- a/docs/DSL.md
++++ b/docs/DSL.md
+@@ -188,6 +188,19 @@
+ A group inside a lane follows its own `frame=`: a boxed group takes one place, and a soft group's
+ members rank on their own. Position refinements inside a lane (`near`, `stay`, `nudge`, `pin`)
+ do not apply yet. Lines that run back against the order take the long way round the lanes.
++
++### Undirected connections
++
++`edge relation a -> b "related" directed=false` joins two endpoints without an arrowhead.
++The existing `->` separates the endpoints; `directed=false` makes the connection undirected.
++Omitting the attribute, or setting `directed=true`, keeps the usual directed connection.
++The same flag survives formatting, visual edits, JSON projection, and SVG export.
++
++Undirected connections do not impose a reading order in the built-in flow or swim-lane recipes.
++Layout engines still receive them as undirected adjacency and can use them to keep connected
++objects near one another. For a relationship graph, try `layout root engine=stress`.
++Use `constraint=false` independently to remove an edge from the layout engine altogether.
++This does not add two-ended arrowheads or new foreign syntax to native files.
+ 
+ ## Sequence diagrams
+ 
+diff --git a/skills/draftably/SKILL.md b/skills/draftably/SKILL.md
+--- a/skills/draftably/SKILL.md
++++ b/skills/draftably/SKILL.md
+@@ -277,6 +277,11 @@
+   and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
+ - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
+ - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
++- Use `directed=false` on an `edge` for an undirected connection. Keep the `->` endpoint
++  separator; no arrowhead is drawn. It does not impose a flow/swim-lane rank, but layout engines
++  may use it as adjacency. Omission or `directed=true` means the usual directed edge.
++  `constraint=false` independently removes it from engine layout. For undirected relationship
++  graphs, try `layout root engine=stress`.
+ - A feedback edge (a refetch, a retry back to the start) pulls the section it points at below its
+   source. Add `constraint=false` to draw it without letting it rank anything.
+ - Use color to mean something, not for decoration:
+diff --git a/src/cli/svg.ts b/src/cli/svg.ts
+--- a/src/cli/svg.ts
++++ b/src/cli/svg.ts
+@@ -229,7 +229,7 @@
+       route.halo
+         ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
+         : '',
+-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''} marker-end="url(#${arrow(ink)})"/>`,
++      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${edge.directed ? ` marker-end="url(#${arrow(ink)})"` : ''}/>`,
+     );
+     const l = route.label,
+       message = doc.layout.edges[route.id]?.row !== undefined,
+diff --git a/src/dsl/compare.ts b/src/dsl/compare.ts
+--- a/src/dsl/compare.ts
++++ b/src/dsl/compare.ts
+@@ -20,7 +20,8 @@
+ 
+ /** Differences that make a declaration `~`; the layout and labels it implies, not its line. */
+ const objectKey = (o: ModelObject) => [o.label, o.parent, o.color, o.shade, o.shape].join('\0');
+-const edgeKey = (e: ModelEdge) => [e.source, e.target, e.label, e.dashed, e.from, e.to].join('\0');
++const edgeKey = (e: ModelEdge) =>
++  [e.source, e.target, e.label, e.dashed, e.from, e.to, e.directed !== false].join('\0');
+ 
+ const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
+ 
+@@ -49,8 +50,8 @@
+   ]);
+   const scopes = new Set(next.layouts.map(l => l.scope));
+   // A node in another container, or an edge that joins other objects or touches such a node, is
+-  // a different thing in each version: the old one is removed under a spare ID and the new one
+-  // added, so each panel draws its own and the merged drawing shows the move.
++  // a different thing in each version, as is a changed direction: remove the old one under a
++  // spare ID and add the new one, so each panel draws its own and the merged drawing shows it.
+   const taken = new Set([...was.keys(), ...now.keys()]),
+     spare = (kind: string, id: string) => {
+       let n = `${id}-was`;
+@@ -65,7 +66,7 @@
+       parentMoved.filter(o => o.type === 'node').map(o => [o.id, spare('object:', o.id)]),
+     ),
+     moved = parentMoved.filter(o => o.type === 'group').map(o => o.id);
+-  const ends = (e: ModelEdge) => e.source + '\0' + e.target,
++  const ends = (e: ModelEdge) => [e.source, e.target, e.directed !== false].join('\0'),
+     split = new Set([
+       ...[...movedNodes.keys()].map(id => 'object:' + id),
+       ...next.edges
+diff --git a/src/dsl/compile.ts b/src/dsl/compile.ts
+--- a/src/dsl/compile.ts
++++ b/src/dsl/compile.ts
+@@ -2332,8 +2332,8 @@
+   channels?: Map<string, Channel>,
+   packFold?: PackFold,
+ ): Scene {
+-  /** Edges that rank and order objects: all but `constraint=false`, which are only drawn. */
+-  const ranking = m.edges.filter(e => e.constraint !== false);
++  /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
++  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false);
+   const diagnostics: Diagnostic[] = [],
+     children = new Map<string, ModelObject[]>([['root', []]]);
+   for (const o of m.objects) {
+diff --git a/src/dsl/project.ts b/src/dsl/project.ts
+--- a/src/dsl/project.ts
++++ b/src/dsl/project.ts
+@@ -83,7 +83,7 @@
+       to: e.target,
+       label: e.label,
+       ...(e.was !== undefined ? { was: e.was } : {}),
+-      directed: true,
++      directed: e.directed !== false,
+       emphasis: false,
+       dashed: e.dashed,
+       ...(e.status ? { status: e.status } : {}),
+diff --git a/src/dsl/syntax.ts b/src/dsl/syntax.ts
+--- a/src/dsl/syntax.ts
++++ b/src/dsl/syntax.ts
+@@ -268,6 +268,8 @@
+   status?: Status;
+   /** With `~`: the label before the change. */
+   was?: string;
++  /** `directed=false`: an undirected connection, drawn without an arrowhead. */
++  directed?: false;
+   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
+   constraint?: false;
+   line: number;
+@@ -723,7 +725,7 @@
+       }
+       case 'edge': {
+         count(4, 5);
+-        allow(['kind', 'from', 'to', 'was', 'importance', 'constraint']);
++        allow(['kind', 'from', 'to', 'was', 'importance', 'constraint', 'directed']);
+         assert(
+           args[2]?.value === '->' && !args[2].quoted,
+           'Edges use: edge id source -> target "label".',
+@@ -740,6 +742,9 @@
+           dashed: choice('kind', 'sync', ['sync', 'async', 'data']) === 'async',
+           from: choice('from', 'auto', SIDES),
+           to: choice('to', 'auto', SIDES),
++          ...(choice('directed', 'true', ['true', 'false']) === 'false'
++            ? { directed: false as const }
++            : {}),
+           ...(choice('constraint', 'true', ['true', 'false']) === 'false'
+             ? { constraint: false as const }
+             : {}),
+diff --git a/src/dsl/translate.ts b/src/dsl/translate.ts
+--- a/src/dsl/translate.ts
++++ b/src/dsl/translate.ts
+@@ -109,8 +109,8 @@
+     if ((a.labelDx ?? 0) !== (b.labelDx ?? 0) || (a.labelDy ?? 0) !== (b.labelDy ?? 0))
+       throw new UnsupportedEdit('Connection label positions are not saved to diagram files yet.');
+     const old = before.graph.edges.find(x => x.id === e.id);
+-    if (e.directed === false || e.emphasis || (old && old.emphasis !== e.emphasis))
+-      throw new UnsupportedEdit('Emphasized and undirected connections are not supported yet.');
++    if (e.emphasis || (old && old.emphasis !== e.emphasis))
++      throw new UnsupportedEdit('Emphasized connections are not supported yet.');
+   }
+   if (!same(before.layout.labels, after.layout.labels))
+     throw new UnsupportedEdit('Label positions are not saved to diagram files yet.');
+@@ -272,6 +272,7 @@
+   const writeEdge = (e: DiagramEdge, s: Statement) => {
+     s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
+     if (e.label) s.args.push(quoted(e.label));
++    setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
+     const kind = getAttr(s, 'kind')?.value;
+     if (e.dashed) setAttr(s, 'kind', bare('async'));
+     else if (kind === 'async') setAttr(s, 'kind', undefined);
+diff --git a/tests/undirected.test.ts b/tests/undirected.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/undirected.test.ts
+@@ -0,0 +1,160 @@
++import { describe, expect, it, vi } from 'vitest';
++import { renderSvg } from '../src/cli/svg';
++import { compareSources } from '../src/dsl/compare';
++import { checkSource, compile } from '../src/dsl/compile';
++import { projectScene } from '../src/dsl/project';
++import { formatSource, parseModel, printSource, readSource } from '../src/dsl/syntax';
++import { translateEdit } from '../src/dsl/translate';
++import { LayoutLab } from '../src/engines/layout-engine.js';
++import { clone } from '../src/model/geometry';
++import type { Diagram } from '../src/model/types';
++
++const nodes = 'node a "A"\nnode b "B"\n';
++const source = nodes + 'edge relation a -> b "related" directed=false\n';
++
++/** Exercise the same source-to-model-to-source seam as committed viewer edits. */
++function edit(text: string, change: (diagram: Diagram) => void) {
++  const scene = checkSource(text);
++  const before = projectScene(scene);
++  const after = clone(before);
++  change(after);
++  const result = translateEdit({
++    source: readSource(text),
++    scene,
++    before,
++    after,
++    label: 'Test edit',
++    selection: ['a'],
++  });
++  return printSource(result.source);
++}
++
++describe('native undirected connections', () => {
++  it('keeps old files directed and validates the new boolean attribute', () => {
++    const directed = projectScene(checkSource(nodes + 'edge relation a -> b\n'));
++    expect(directed.graph.edges[0].directed).toBe(true);
++    expect(
++      projectScene(checkSource(nodes + 'edge relation a -> b directed=true\n')).graph.edges[0]
++        .directed,
++    ).toBe(true);
++    expect(() => checkSource(nodes + 'edge relation a -> b directed=both\n')).toThrow(
++      'directed=true|false',
++    );
++  });
++
++  it('preserves a single undirected edge through formatting and projection', async () => {
++    const formatted = formatSource(source);
++    expect(formatted).toContain('directed=false');
++    const scene = await compile(formatted);
++    expect(scene.edges).toHaveLength(1);
++    expect(scene.edges[0]).toMatchObject({
++      id: 'relation',
++      source: 'a',
++      target: 'b',
++      directed: false,
++    });
++    expect(projectScene(scene).graph.edges).toEqual([
++      expect.objectContaining({ id: 'relation', from: 'a', to: 'b', directed: false }),
++    ]);
++  });
++
++  it('allows an unrelated label edit and still saves the undirected edge', () => {
++    const next = edit(source, diagram => {
++      diagram.graph.nodes[0].title = 'Renamed A';
++    });
++    expect(next).toContain('node a "Renamed A"');
++    expect(next).toContain('directed=false');
++    expect(projectScene(checkSource(next)).graph.edges[0].directed).toBe(false);
++  });
++
++  it('preserves direction when an existing undirected edge is relabeled', () => {
++    const next = edit(source, diagram => {
++      diagram.graph.edges[0].label = 'renamed relation';
++    });
++    expect(next).toContain('"renamed relation" directed=false');
++    expect(projectScene(checkSource(next)).graph.edges[0].directed).toBe(false);
++  });
++
++  it('writes new undirected edges and can change an edge back to directed', () => {
++    const created = edit(nodes, diagram => {
++      diagram.graph.edges.push({
++        id: 'temporary',
++        from: 'a',
++        to: 'b',
++        label: '',
++        directed: false,
++        dashed: false,
++        emphasis: false,
++      });
++    });
++    expect(projectScene(checkSource(created)).graph.edges[0].directed).toBe(false);
++    const directed = edit(created, diagram => {
++      diagram.graph.edges[0].directed = true;
++    });
++    expect(directed).not.toContain('directed=false');
++    expect(projectScene(checkSource(directed)).graph.edges[0].directed).toBe(true);
++  });
++
++  it('does not impose a flow rank for an undirected connection', () => {
++    const layout = 'layout root flow direction=right fold=never\n';
++    const positions = (text: string) =>
++      checkSource(text).objects.map(o => ({ id: o.id, x: o.x, y: o.y }));
++    expect(positions(nodes + 'edge relation b -> a directed=false\n' + layout)).toEqual(
++      positions(nodes + layout),
++    );
++    const directed = checkSource(nodes + 'edge relation b -> a\n' + layout);
++    expect(directed.byId.get('b')!.x).toBeLessThan(directed.byId.get('a')!.x);
++  });
++
++  it('does not impose a swim-lane rank for an undirected connection', () => {
++    const scene = checkSource(
++      'group left "Left"\ngroup right "Right"\n' +
++        'node a "A" in=left\nnode b "B" in=right\n' +
++        'edge relation b -> a directed=false\nlayout root lanes direction=right\n',
++    );
++    expect(scene.byId.get('a')!.x).toBe(scene.byId.get('b')!.x);
++  });
++
++  it('passes undirected adjacency to layout engines unless constraint=false', async () => {
++    const spy = vi.spyOn(LayoutLab, 'compute');
++    try {
++      await compile(source + 'layout root engine=stress\n');
++      expect(spy).toHaveBeenCalled();
++      expect(spy.mock.calls[0][0].graph.edges).toEqual([
++        expect.objectContaining({ id: 'relation', directed: false }),
++      ]);
++      spy.mockClear();
++      await compile(
++        source.replace('directed=false', 'directed=false constraint=false') +
++          'layout root engine=stress\n',
++      );
++      expect(spy.mock.calls[0][0].graph.edges).toEqual([]);
++    } finally {
++      spy.mockRestore();
++    }
++  });
++
++  it('omits the SVG arrow marker only on the undirected edge', () => {
++    const svg = renderSvg(
++      projectScene(checkSource(source + 'edge directed b -> a "reply"\n')),
++    );
++    const relation = /<g data-id="relation"[^>]*>([\s\S]*?)<\/g>/.exec(svg)?.[1];
++    const directed = /<g data-id="directed"[^>]*>([\s\S]*?)<\/g>/.exec(svg)?.[1];
++    expect(relation).toBeDefined();
++    expect(relation).not.toContain('marker-end=');
++    expect(directed).toContain('marker-end=');
++  });
++
++  it('compares a direction change as removed and added edges', () => {
++    const before = nodes + 'edge relation a -> b\n';
++    const merged = compareSources(before, source);
++    const model = parseModel(merged);
++    expect(model.edges).toHaveLength(2);
++    expect(model.edges).toEqual(
++      expect.arrayContaining([
++        expect.objectContaining({ id: 'relation-was', status: 'removed' }),
++        expect.objectContaining({ id: 'relation', status: 'added', directed: false }),
++      ]),
++    );
++  });
++});

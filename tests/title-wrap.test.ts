@@ -63,3 +63,26 @@ describe('default node width', () => {
     expect(scene.byId.get('fixed')!.w).toBe(164);
   });
 });
+
+describe('diamond size', () => {
+  const scene = checkSource(
+    [
+      'diagram "Square" version=1',
+      'node long "First time this worker has seen this file, with rows missing?" shape=diamond',
+      'node short "New file?" shape=diamond',
+      'node sized "Sized" shape=diamond',
+      'size sized width=120 height=160',
+      'edge e1 long -> short',
+    ].join('\n'),
+  );
+
+  it('keeps every diamond square, a long question growing the square', () => {
+    for (const id of ['long', 'short', 'sized']) {
+      const o = scene.byId.get(id)!;
+      expect(o.w).toBe(o.h);
+    }
+    expect(scene.byId.get('long')!.w).toBeGreaterThan(scene.byId.get('short')!.w);
+    expect(scene.byId.get('sized')!.w).toBe(160);
+    expect(scene.diagnostics.map(d => d.code)).toContain('big-diamond');
+  });
+});

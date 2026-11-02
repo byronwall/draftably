@@ -20,7 +20,8 @@ const DECLARATIONS = ['node', 'group', 'edge'];
 
 /** Differences that make a declaration `~`; the layout and labels it implies, not its line. */
 const objectKey = (o: ModelObject) => [o.label, o.parent, o.color, o.shade, o.shape].join('\0');
-const edgeKey = (e: ModelEdge) => [e.source, e.target, e.label, e.dashed, e.from, e.to].join('\0');
+const edgeKey = (e: ModelEdge) =>
+  [e.source, e.target, e.label, e.dashed, e.from, e.to, e.directed !== false].join('\0');
 
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
@@ -49,8 +50,8 @@ export function compareDetailed(before: string, after: string) {
   ]);
   const scopes = new Set(next.layouts.map(l => l.scope));
   // A node in another container, or an edge that joins other objects or touches such a node, is
-  // a different thing in each version: the old one is removed under a spare ID and the new one
-  // added, so each panel draws its own and the merged drawing shows the move.
+  // a different thing in each version, as is a changed direction: remove the old one under a
+  // spare ID and add the new one, so each panel draws its own and the merged drawing shows it.
   const taken = new Set([...was.keys(), ...now.keys()]),
     spare = (kind: string, id: string) => {
       let n = `${id}-was`;
@@ -65,7 +66,7 @@ export function compareDetailed(before: string, after: string) {
       parentMoved.filter(o => o.type === 'node').map(o => [o.id, spare('object:', o.id)]),
     ),
     moved = parentMoved.filter(o => o.type === 'group').map(o => o.id);
-  const ends = (e: ModelEdge) => e.source + '\0' + e.target,
+  const ends = (e: ModelEdge) => [e.source, e.target, e.directed !== false].join('\0'),
     split = new Set([
       ...[...movedNodes.keys()].map(id => 'object:' + id),
       ...next.edges

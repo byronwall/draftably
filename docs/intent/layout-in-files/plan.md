@@ -108,7 +108,7 @@ The diff-based path stays for ordinary drags.
 ## Work required
 
 0. **Rename `.meld` to `.draft`** (PR 1). The extension, the CLI script (`pnpm draftably`), the
-   example and the docs use the Draftably name. The Meld lineage stays in `reference/meld/`.
+   example and the docs use the draftably name. The Meld lineage stays in `reference/meld/`.
 1. **Compiler: engine base layout** (`src/dsl/compile.ts`, `src/dsl/syntax.ts`)
    - Parse `engine=` and the engine's parameter names on `layout`. Validate them against
      `LayoutLab.algorithms[].controls` and report unknown keys with their line.

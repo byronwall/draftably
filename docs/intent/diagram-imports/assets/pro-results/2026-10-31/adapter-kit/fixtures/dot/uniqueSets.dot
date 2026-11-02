@@ -1,0 +1,4 @@
+digraph Sets {
+  node [shape=box];
+  {a:n a:s b:e} -> {c c d} -> e [label="work"];
+}

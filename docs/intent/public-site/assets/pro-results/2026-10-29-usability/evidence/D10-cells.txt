@@ -1,0 +1,337 @@
+Browser tab: 9, Title: "Cells · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/cells".
+0 AXWebArea Cells · Draftably docs, URL: byronwall.github.io/draftably/docs/cells
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 button Search docs
+				5 text Search docs
+				6 text Ctrl K
+			7 container Site
+				8 link Description: Playground, Value: byronwall.github.io/draftably/play
+				9 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				10 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				11 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				12 link Description: GitHub, Value: github.com/byronwall/draftably
+		13 container Docs topics
+			14 container
+				15 heading START HERE, Value: 2
+					16 text START HERE
+				17 link Description: Get started, Value: byronwall.github.io/draftably/docs/get-started
+				18 link Description: CLI, Value: byronwall.github.io/draftably/docs/cli
+				19 link Description: Themes, Value: byronwall.github.io/draftably/docs/themes
+				20 link Description: Agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+			21 container
+				22 heading LANGUAGE, Value: 2
+					23 text LANGUAGE
+				24 link Description: Overview, Value: byronwall.github.io/draftably/docs/overview
+				25 link Description: Rules, Value: byronwall.github.io/draftably/docs/rules
+				26 link Description: Refinements, Value: byronwall.github.io/draftably/docs/refinements
+				27 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+				28 link Description: Soft groups, Value: byronwall.github.io/draftably/docs/soft-groups
+				29 link Description: Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+				30 link Description: Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+			31 container
+				32 heading DIAGRAM KINDS, Value: 2
+					33 text DIAGRAM KINDS
+				34 link Description: Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+				35 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+				36 link Description: Cells, Value: byronwall.github.io/draftably/docs/cells
+			37 container
+				38 heading LAYOUT, Value: 2
+					39 text LAYOUT
+				40 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+				41 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+				42 link Description: Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+			43 container
+				44 heading TOOLS, Value: 2
+					45 text TOOLS
+				46 link Description: CLI details, Value: byronwall.github.io/draftably/docs/command-line
+				47 link Description: Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+				48 link Description: Examples, Value: byronwall.github.io/draftably/docs/examples
+		49 container
+			129 link Description: Diagram kinds, Value: byronwall.github.io/draftably/docs/swim-lanes
+			130 text Cells
+			51 heading Cells, Value: 1
+				52 text Cells
+			442 container
+				443 text layout group cells  draws a group as one object made of parts, like the parts of a request in order. The group's nodes are its cells: they touch and share borders, in declaration order (or the group's  order  line), under a band that holds the group's title. There is no gap and no inset.
+			444 container
+				445 text .draft  · editable
+				446 button Copy
+				447 button Expand
+				448 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=VZDNTsQwDITvfQord6QV9yIh7ggBL5Cms22EG2fjZKFvT_or7cmy_HnGniA9yLFHyGReh6WwSDTkhCW1HRc0Q5ISKeFG5hO3As3HWNlmNGxnKXkFHJi1CYuozkrma9aMiWKSKdYtH9pKbfMswpX4roV6XH3w2UvQR2j0Wu96k3BHUrsApEJXmx4xF8k460ZQFB9OI9LRRrSTTT9Iu2tJgcw7fqko0tqe9PaTnbo6qJs92ufLZTdYxc3H-sfWHRncvTByg34AdcVzf8T59LJlYFUxdQw1GzT6XWEhzsv7GlJN4c_8Aw
+				449 text entry area (settable) Description: Diagram source, Value: node client "Agent loop" color=blue
+group req "Request" color=slate
+layout req cells
+node sys "System prompt" in=req
+node tools "Tool definitions" in=req
+node hist "Conversation so far" in=req
+node cp "cache point" in=req shape=marker
+node turn "New user turn" in=req color=amber shade=200
+node cache "Prompt cache" color=violet
+edge build client -> sys "assembles"
+edge hit cache -> cp "cached prefix"
+				450 button Expand the drawing
+					451 image Untitled diagram
+						452 text Request
+						453 text assembles
+						454 text cached prefix
+						455 text Agent loop
+						456 text System prompt
+						457 text Tool definitions
+						458 text Conversation so far
+						459 text cache point
+						460 text New user turn
+						461 text Prompt cache
+			462 content list
+				463 container
+					464 AXListMarker • 
+					465 text Cells form one row by default;  direction=down  makes one column. Every cell in a row has the row's height; every cell in a column has the column's width.
+				466 container
+					467 AXListMarker • 
+					468 text columns=N  makes a grid, such as a table: cells fill each row of N columns in order. Each column is as wide as its widest cell.  span=N  on a cell covers N columns; a cell that does not fit the rest of its row starts the next row. A spanning cell wider than its columns widens the last of them.
+				469 container
+					470 AXListMarker • 
+					471 text A cell is as wide as its title on one line, from 64 to 240 pixels, and wraps past that. A  size  line sets it exactly. A title band wider than the cells stretches the last cell.
+				472 container
+					473 AXListMarker • 
+					474 text A cell has no color of its own unless it names one, so the band carries the group's color.
+				475 container
+					476 AXListMarker • 
+					477 text shape=marker  marks a seam, such as a cache point. It takes no room: a bar in the theme's text color cuts the object, title band included, before the next cell, and its label sits above. Lines reach a marker from below.
+				478 container
+					479 AXListMarker • 
+					480 text Lines can start or end at any cell. A line meets a cell on a side that lies on the group's outline, facing the line's other end; a cell's top faces the title band, so it is never used. A cell with no such side, inside a grid, is reached across the cells in the way: the line enters the outline facing its other end, is drawn over the cells, and ends with a dot at the cell.  from=  and  to=  still choose a side.
+				481 container
+					482 AXListMarker • 
+					483 text A marker needs one row or one column: it cannot cut a grid.
+				484 container
+					485 AXListMarker • 
+					486 text A cell stays in its place.  near ,  nudge ,  stay  and  pin  on a cell are reported and ignored; move the group instead, by its title band. An engine on the root moves the group as one block.
+				487 container
+					488 AXListMarker • 
+					489 text In the viewer, dragging a cell and dropping it among the others reorders the group: it writes the group's  order  line. A marker keeps its place before the cell it preceded. The inspector's  Span  field writes  span= .
+				490 container
+					491 AXListMarker • 
+					492 text Cells are nodes, so colors, links,  count=  and change marks work on them.
+			493 text A table of a database entity, with a line from one row to another table's row:
+			494 container
+				495 text .draft  · editable
+				496 button Copy
+				497 button Expand
+				498 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=jZDLCgIxDEX38xWhe124r79SahtKITYybQT_3geTOtoR3IV7D8khaWa5gA-BpbQKRicDgYlneyLBifyNpb2pgET1Cci5VHuYCkfs7T5HMDkayMVqNhCugRH5ptJLJpcr54APGZ1UpqEnlenUpoy2axnNBuJD5ge1OPYHub_w7c0YU0edLh4u7Y7rh90B
+				499 text entry area (settable) Description: Diagram source, Value: group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+edge invoice_account invoices.account -> accounts.id
+				500 button Expand the drawing
+					501 image Untitled diagram
+						502 text accounts
+						503 text invoices
+						504 text id
+						505 text uuid
+						506 text id
+						507 text uuid
+						508 text account_id
+						509 text uuid
+			510 heading Byte and bit layouts#, Value: 2, ID: byte-and-bit-layouts
+				511 link Description: Byte and bit layouts#, Value: byronwall.github.io/draftably/docs/cells#byte-and-bit-layouts
+			512 container
+				513 text unit=byte  or  unit=bit  on a cells layout draws an on-disk or on-the-wire structure, like the figures in the PNG spec or an RFC packet header. Every column is one unit of the same width, so a field's width is its size.
+			514 container
+				515 text .draft  · editable
+				516 button Copy
+				517 button Expand
+				518 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=fczBCsIwDIDh-54i9AE8efDS0w5eRMQ3iF3YhjEtbTro22tXhaHgKT_kS8bocwA3ZbmDuZyPLQ04zz5aJeSOsfisb-OIOUGWWe2tKFWXH5LsoRM_UEM7Jhl1AnNap4FZbLtOAcXut1RLIDD9uq39Fw-o-MG1v_GCcctddC997X9-PgE
+				519 text entry area (settable) Description: Diagram source, Value: group chunk "PNG chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data" in=chunk span=var
+node chunk.crc "CRC" in=chunk span=4
+				520 button Expand the drawing
+					521 image Untitled diagram
+						522 text 0
+						523 text 1
+						524 text 2
+						525 text 3
+						526 text 4
+						527 text 5
+						528 text 6
+						529 text 7
+						530 text PNG chunk
+						531 text Length
+						532 text Chunk type
+						533 text Chunk data
+						534 text CRC
+			535 content list
+				536 container
+					537 AXListMarker • 
+					538 text columns=  sets the units in each row: 16 by default for bytes, 32 for bits.  span=N  is the field's size in units; a field without one is one unit.
+				539 container
+					540 AXListMarker • 
+					541 text A field longer than the rest of its row runs on into the next rows. Its title sits in its longest piece; the other pieces show it after an ellipsis.
+				542 container
+					543 AXListMarker • 
+					544 text span=var  is a field of variable length. It fills the rest of its row, or a whole row, and its sides are drawn broken.
+				545 container
+					546 AXListMarker • 
+					547 text A ruler numbers the units between the title band and the first row.  ruler=off  hides it.
+				548 container
+					549 AXListMarker • 
+					550 text unit-width=  sets the width of one unit in pixels: 48 for bytes and 24 for bits by default. Titles wrap to fit their field, so give one-bit flags short titles.
+				551 container
+					552 AXListMarker • 
+					553 text Markers do not apply to byte or bit layouts.
+			118 container Previous and next
+				441 link Description: ← Previous Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+				119 link Description: Next → Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+		120 container On this page
+			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#cells
+
+The focused UI element is 36 link Description: Cells, URL: byronwall.github.io/draftably/docs/cells
+
+VISIBLE MAIN TEXT
+Diagram kinds
+/
+Cells
+Cells
+
+layout group cells draws a group as one object made of parts, like the parts of a request in order. The group's nodes are its cells: they touch and share borders, in declaration order (or the group's order line), under a band that holds the group's title. There is no gap and no inset.
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+node client "Agent loop" color=blue
+group req "Request" color=slate
+layout req cells
+node sys "System prompt" in=req
+node tools "Tool definitions" in=req
+node hist "Conversation so far" in=req
+node cp "cache point" in=req shape=marker
+node turn "New user turn" in=req color=amber shade=200
+node cache "Prompt cache" color=violet
+edge build client -> sys "assembles"
+edge hit cache -> cp "cached prefix"
+
+Request
+assembles
+cached prefix
+Agent loop
+System prompt
+Tool definitions
+Conversation so far
+cache point
+New user turn
+Prompt cache
+Cells form one row by default; direction=down makes one column. Every cell in a row has the row's height; every cell in a column has the column's width.
+columns=N makes a grid, such as a table: cells fill each row of N columns in order. Each column is as wide as its widest cell. span=N on a cell covers N columns; a cell that does not fit the rest of its row starts the next row. A spanning cell wider than its columns widens the last of them.
+A cell is as wide as its title on one line, from 64 to 240 pixels, and wraps past that. A size line sets it exactly. A title band wider than the cells stretches the last cell.
+A cell has no color of its own unless it names one, so the band carries the group's color.
+shape=marker marks a seam, such as a cache point. It takes no room: a bar in the theme's text color cuts the object, title band included, before the next cell, and its label sits above. Lines reach a marker from below.
+Lines can start or end at any cell. A line meets a cell on a side that lies on the group's outline, facing the line's other end; a cell's top faces the title band, so it is never used. A cell with no such side, inside a grid, is reached across the cells in the way: the line enters the outline facing its other end, is drawn over the cells, and ends with a dot at the cell. from= and to= still choose a side.
+A marker needs one row or one column: it cannot cut a grid.
+A cell stays in its place. near, nudge, stay and pin on a cell are reported and ignored; move the group instead, by its title band. An engine on the root moves the group as one block.
+In the viewer, dragging a cell and dropping it among the others reorders the group: it writes the group's order line. A marker keeps its place before the cell it preceded. The inspector's Span field writes span=.
+Cells are nodes, so colors, links, count= and change marks work on them.
+
+A table of a database entity, with a line from one row to another table's row:
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+edge invoice_account invoices.account -> accounts.id
+
+accounts
+invoices
+id
+uuid
+id
+uuid
+account_id
+uuid
+Byte and bit layouts
+
+unit=byte or unit=bit on a cells layout draws an on-disk or on-the-wire structure, like the figures in the PNG spec or an RFC packet header. Every column is one unit of the same width, so a field's width is its size.
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+group chunk "PNG chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data" in=chunk span=var
+node chunk.crc "CRC" in=chunk span=4
+
+0
+1
+2
+3
+4
+5
+6
+7
+PNG chunk
+Length
+Chunk type
+Chunk data
+CRC
+columns= sets the units in each row: 16 by default for bytes, 32 for bits. span=N is the field's size in units; a field without one is one unit.
+A field longer than the rest of its row runs on into the next rows. Its title sits in its longest piece; the other pieces show it after an ellipsis.
+span=var is a field of variable length. It fills the rest of its row, or a whole row, and its sides are drawn broken.
+A ruler numbers the units between the title band and the first row. ruler=off hides it.
+unit-width= sets the width of one unit in pixels: 48 for bytes and 24 for bits by default. Titles wrap to fit their field, so give one-bit flags short titles.
+Markers do not apply to byte or bit layouts.
+← Previous
+Sequence diagrams
+Next →
+Layout engines

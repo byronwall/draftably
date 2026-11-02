@@ -1,0 +1,37 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_HTML_LABEL",
+      "message": "HTML-like labels need a compartment/text mapper; they are not silently stripped.",
+      "severity": "error",
+      "impact": "semantics",
+      "line": 1
+    },
+    {
+      "code": "DOT_SHAPE",
+      "message": "Shape ellipse becomes pill.",
+      "severity": "warning",
+      "impact": "appearance",
+      "foreignIds": [
+        "a"
+      ]
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    }
+  ],
+  "requires": []
+}

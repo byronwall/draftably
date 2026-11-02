@@ -6,8 +6,10 @@ import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/
 import { panelDoc } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
-import { headingMarkup, headingSize } from '../model/heading';
-import { legendMarkup, legendSize } from '../model/legend';
+import { diagramFrame, type DiagramFrame } from '../model/frame';
+import { headingMarkup } from '../model/heading';
+import { legendMarkup } from '../model/legend';
+import { noteMarkup, placeNotes } from '../model/note';
 import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
@@ -227,7 +229,7 @@ function sceneMarkup(
       route.halo
         ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
         : '',
-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''} marker-end="url(#${arrow(ink)})"/>`,
+      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${edge.directed ? ` marker-end="url(#${arrow(ink)})"` : ''}/>`,
     );
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
@@ -306,7 +308,12 @@ function sceneMarkup(
       '</g>',
     );
   }
-  return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };
+  return {
+    markup: out.join('\n'),
+    bounds: drawingBounds(doc, vg, rects, routes, 40),
+    rects,
+    routes,
+  };
 }
 
 /** Height of a panel's label band in a side-by-side comparison, and the gap between panels. */
@@ -333,7 +340,7 @@ function openSvg(
   look: ResolvedAppearance,
   inks: string[],
   arrow: (ink: string) => string,
-  { x, y, w, h }: Rect,
+  { x, y, w, h, heading }: DiagramFrame,
 ) {
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
@@ -348,7 +355,7 @@ function openSvg(
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
     // The title and subtitle sit above the drawing, left-aligned with the legend under it.
-    headingMarkup(look, doc.appearance.heading, x + 40, y + 28),
+    headingMarkup(look, doc.appearance.heading, heading.x, heading.y),
   ];
 }
 
@@ -370,21 +377,27 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
     ch = Math.ceil(b.y + b.h) - y0 + PANEL_LABEL,
     statuses = usedStatuses(doc),
     legend = drawnLegend(doc),
-    key = legendSize(look, legend, statuses),
-    head = headingSize(look, doc.appearance.heading);
+    // Panels repeat the drawing, so every note sits in the frame.
+    notes = placeNotes(doc, look, new Map(), []);
   const target = doc.appearance.compare?.aspect ?? 1.6,
     grid = (cols: number) => {
       const rows = Math.ceil(states.length / cols),
-        w = Math.max(cols * cw, key.w + 80, head.w + 80);
-      return { cols, rows, w, h: rows * ch + key.h + head.h };
+        frame = diagramFrame(
+          look,
+          doc.appearance.heading,
+          legend,
+          statuses,
+          { x: x0, y: y0, w: cols * cw, h: rows * ch },
+          notes,
+        );
+      return { cols, frame, w: frame.w, h: frame.h };
     },
-    { cols, rows, w, h } = states
+    { cols, frame } = states
       .map((_, i) => grid(i + 1))
       .reduce((a, c) =>
         Math.abs(Math.log(c.w / c.h / target)) < Math.abs(Math.log(a.w / a.h / target)) ? c : a,
       ),
-    y1 = y0 - head.h,
-    out = openSvg(doc, look, inks, arrow, { x: x0, y: y1, w, h });
+    out = openSvg(doc, look, inks, arrow, frame);
   scenes.forEach((scene, i) => {
     const col = i % cols,
       row = Math.floor(i / cols),
@@ -407,7 +420,8 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
       '</g>',
     );
   });
-  out.push(legendMarkup(look, legend, x0 + 40, y0 + rows * ch - 12, statuses));
+  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
 }
@@ -463,8 +477,10 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     label = compare ? PANEL_LABEL : 0,
     statuses = usedStatuses(doc),
     legend = drawnLegend(doc),
-    key = legendSize(look, legend, statuses),
-    head = headingSize(look, doc.appearance.heading);
+    // A comparison's panels repeat the drawing, so its notes sit in the frame.
+    notes = compare
+      ? placeNotes(doc, look, new Map(), [])
+      : placeNotes(doc, look, scenes[0].rects, scenes[0].routes);
   // Along the stacking axis each panel takes only the room its own version needs; across it, the
   // panels share the merged extent, which is what keeps unchanged objects aligned: stacked panels
   // line up left to right, side-by-side panels top to bottom.
@@ -479,15 +495,16 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       ),
       total = starts.at(-1)! + spans.at(-1)!.size,
       areaW = stacked ? bw : total,
-      areaH = stacked ? total + label : bh + label;
-    return {
-      stacked,
-      spans,
-      starts,
-      areaH,
-      w: Math.max(areaW, key.w + 80, head.w + 80),
-      h: areaH + key.h + head.h,
-    };
+      areaH = stacked ? total + label : bh + label,
+      frame = diagramFrame(
+        look,
+        doc.appearance.heading,
+        legend,
+        statuses,
+        { x: x0, y: y0, w: areaW, h: areaH },
+        notes,
+      );
+    return { stacked, spans, starts, areaH, frame, w: frame.w, h: frame.h };
   };
   // An explicit direction wins; otherwise take the arrangement whose whole image comes closest to
   // the target aspect ratio.
@@ -496,9 +513,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     options = compare?.direction
       ? [arrange(compare.direction === 'down')]
       : [arrange(true), arrange(false)],
-    { stacked, spans, starts, areaH, w, h } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a)),
-    y1 = y0 - head.h;
-  const out = openSvg(doc, look, inks, arrow, { x: x0, y: y1, w, h });
+    { stacked, spans, starts, areaH, frame } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a));
+  const out = openSvg(doc, look, inks, arrow, frame);
   scenes.forEach((scene, i) => {
     // Panel i's corner, and the shift that brings its own span to that corner.
     const px = stacked ? x0 : x0 + starts[i],
@@ -520,7 +536,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
   });
   // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
-  out.push(legendMarkup(look, legend, x0 + 40, y0 + areaH - 12, statuses));
+  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
 }

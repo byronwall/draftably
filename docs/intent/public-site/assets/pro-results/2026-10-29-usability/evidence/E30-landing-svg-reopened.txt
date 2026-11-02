@@ -1,0 +1,82 @@
+Browser tab: 1, Title: "Audit lesson · Draftably playground", URL: "https://byronwall.github.io/draftably/play".
+1 AXWebArea Audit lesson · Draftably playground, URL: byronwall.github.io/draftably/play
+	2 container root
+		3 container
+			4 link Description: Draftably, Value: byronwall.github.io/draftably/
+			5 container Site
+				6 link Description: Playground, Value: byronwall.github.io/draftably/play
+				7 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				8 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				9 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				10 link Description: GitHub, Value: github.com/byronwall/draftably
+			11 button Copy link
+			12 button (collapsed) Download, Secondary Actions: Expand
+			13 button Open in the editor
+		14 container Source
+			15 button (collapsed) Audit lesson, Secondary Actions: Expand
+				16 text Audit lesson
+			17 container
+				18 text Theme
+				19 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					20 menu
+						21 (selected) Drafting
+						22 Fieldnotes
+						23 Signal
+						24 Ink
+						25 Blueprint
+			26 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			27 container
+				28 text entry area (settable) Description: Diagram source, Value: diagram "Audit lesson" version=1
+node app "Audit visual edit"
+node api "API"
+node new-box "Receipt"
+edge request app -> api
+edge new-box-api new-box -> api
+
+
+# Layout refinements
+stay new-box x=106 y=0
+stay app x=0 y=0
+stay api x=258 y=-46
+
+
+					29 container
+						30 text diagram "Audit lesson" version = 1
+					31 container
+						32 text node app "Audit visual edit"
+					33 container
+						34 text node api "API"
+					35 container
+						36 text node new-box "Receipt"
+					37 container
+						38 text edge request app -> api
+					39 container
+						40 text edge new-box-api new-box -> api
+					41 text # Layout refinements
+					42 container
+						43 text stay new-box x = 106 y = 0
+					44 container
+						45 text stay app x = 0 y = 0
+					46 container
+						47 text stay api x = 258 y = -46
+			48 button Line 9: stay new-box gave way by 37 px to keep root clear. Remove line 9, or run format --drop-stale. · 1 more Click a shape to find its line
+				49 text Line 9: 
+				50 text stay new-box gave way by 37 px to keep root clear. Remove line 9, or run format --drop-stale.
+				51 text  · 1 more
+				52 text Click a shape to find its line
+		53 splitter Description: Resize panes, Value: 38
+		54 container Diagram
+			55 container
+				56 image Audit lesson
+					57 text Audit lesson
+					58 text Audit visual edit
+					59 text API
+					60 text Receipt
+				61 button Zoom out
+				62 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					63 text 144
+					64 text %
+				65 button Zoom in
+				66 button Full screen
+
+The focused UI element is 1 AXWebArea Audit lesson · Draftably playground, URL: byronwall.github.io/draftably/play

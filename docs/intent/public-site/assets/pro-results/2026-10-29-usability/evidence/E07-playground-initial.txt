@@ -1,0 +1,4 @@
+Browser tab: 1, Title: "Get started · Draftably docs", URL: "https://byronwall.github.io/draftably/play".
+0 AXWebArea Get started · Draftably docs, URL: byronwall.github.io/draftably/play
+
+The focused UI element is 0 AXWebArea Get started · Draftably docs, URL: byronwall.github.io/draftably/play

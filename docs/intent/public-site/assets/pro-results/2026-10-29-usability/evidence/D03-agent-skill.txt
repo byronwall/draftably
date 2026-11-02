@@ -1,0 +1,106 @@
+Browser tab: 9, Title: "Agent skill · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/agent-skill".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 131, 442-575
+~0 AXWebArea Agent skill · Draftably docs, URL: byronwall.github.io/draftably/docs/agent-skill
+~			130 text Agent skill
+~			51 heading Agent skill, Value: 1
+~				52 text Agent skill
++			442 container
++				443 text Draftably ships a skill that teaches coding agents such as Claude Code to write  .draft  files, check them, pick a layout and hand the result to you in the editor. The agent edits text, so its diagrams diff and review like code.
++			444 heading Install it#, Value: 2, ID: install-it
++				445 link Description: Install it#, Value: byronwall.github.io/draftably/docs/agent-skill#install-it
++			446 container
++				447 button Copy
++				448 container
++					449 text npx draftably skill install                        # ./.claude/skills/draftably 
+npx draftably skill install --global               # ~/.claude/skills/draftably 
+npx draftably skill install --dir .agents/skills   # any other skills folder 
+npx skills add byronwall/draftably                 # or straight from the repository
++			450 container
++				451 text --force  replaces a copy that is already there.  npx draftably skill print  prints the skill so you can read it first.
++			452 heading What the agent does with it#, Value: 2, ID: what-the-agent-does-with-it
++				453 link Description: What the agent does with it#, Value: byronwall.github.io/draftably/docs/agent-skill#what-the-agent-does-with-it
++			454 text The skill gives the agent one loop, and each step is a CLI command:
++			455 content list
++				456 container
++					457 AXListMarker 1. 
++					458 text Plan the model.  List the boxes, the groups they belong to and the connections, with short IDs and human labels.
++				459 container
++					460 AXListMarker 2. 
++					461 text Write the file : declarations, then edges, then  layout  lines.
++				462 container
++					463 AXListMarker 3. 
++					464 text Check it  with  draftably check . Every warning names the IDs, and a conflict that a refinement caused names its line and a fix.
++				465 container
++					466 AXListMarker 4. 
++					467 text Let the tool choose the layout  with  draftably vary , which ranks layout variants on a contact sheet, then  vary --apply best .
++				468 container
++					469 AXListMarker 5. 
++					470 text Look at it  with  inspect --svg  or  --png , and review  check --metrics .
++				471 container
++					472 AXListMarker 6. 
++					473 text Hand it over  with  draftably open , so you can see it and drag things into place. Your edits save to the same file the agent reads.
++			474 heading Ask for a diagram#, Value: 2, ID: ask-for-a-diagram
++				475 link Description: Ask for a diagram#, Value: byronwall.github.io/draftably/docs/agent-skill#ask-for-a-diagram
++			476 text Once the skill is installed, ask in plain words:
++			477 container
++				478 button Copy
++				479 text Draw the checkout flow in src/checkout as a .draft file next to it, and open it for me.
++			480 container
++				481 text The agent writes the file, runs  check  until no error is left, and prints the editor's URL.
++			482 container
++				483 text The skill's full text is 
++				484 link Description: skills/draftably/SKILL.md, Value: github.com/byronwall/draftably/blob/main/skills/draftably/SKILL.md
++				485 text . It covers the syntax, layout engines, cells and refinements.
+~				441 link Description: ← Previous Themes, Value: byronwall.github.io/draftably/docs/themes
+~				119 link Description: Next → Overview, Value: byronwall.github.io/draftably/docs/overview
++			486 heading On this page, Value: 2
++				487 text On this page
++			488 link Description: Install it, Value: byronwall.github.io/draftably/docs/agent-skill#install-it
++			489 link Description: What the agent does with it, Value: byronwall.github.io/draftably/docs/agent-skill#what-the-agent-does-with-it
++			490 link Description: Ask for a diagram, Value: byronwall.github.io/draftably/docs/agent-skill#ask-for-a-diagram
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/site/docs/pages/agent-skill.md
+The focused UI element is 20 link Description: Agent skill, URL: byronwall.github.io/draftably/docs/agent-skill
+
+VISIBLE MAIN TEXT
+Start here
+/
+Agent skill
+Agent skill
+
+Draftably ships a skill that teaches coding agents such as Claude Code to write .draft files, check them, pick a layout and hand the result to you in the editor. The agent edits text, so its diagrams diff and review like code.
+
+Install it
+Copy
+npx draftably skill install                       # ./.claude/skills/draftably
+npx draftably skill install --global              # ~/.claude/skills/draftably
+npx draftably skill install --dir .agents/skills  # any other skills folder
+npx skills add byronwall/draftably                # or straight from the repository
+
+--force replaces a copy that is already there. npx draftably skill print prints the skill so you can read it first.
+
+What the agent does with it
+
+The skill gives the agent one loop, and each step is a CLI command:
+
+Plan the model. List the boxes, the groups they belong to and the connections, with short IDs and human labels.
+Write the file: declarations, then edges, then layout lines.
+Check it with draftably check. Every warning names the IDs, and a conflict that a refinement caused names its line and a fix.
+Let the tool choose the layout with draftably vary, which ranks layout variants on a contact sheet, then vary --apply best.
+Look at it with inspect --svg or --png, and review check --metrics.
+Hand it over with draftably open, so you can see it and drag things into place. Your edits save to the same file the agent reads.
+Ask for a diagram
+
+Once the skill is installed, ask in plain words:
+
+Copy
+Draw the checkout flow in src/checkout as a .draft file next to it, and open it for me.
+
+The agent writes the file, runs check until no error is left, and prints the editor's URL.
+
+The skill's full text is skills/draftably/SKILL.md. It covers the syntax, layout engines, cells and refinements.
+
+← Previous
+Themes
+Next →
+Overview

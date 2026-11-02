@@ -3,6 +3,7 @@ import { unwrap } from 'solid-js/store';
 import { renderSvg } from '../../cli/svg';
 import { doc } from '../../state/document';
 import { activeState, gridOpen, setGridOpen, showState, states } from '../../state/emphasis';
+import { tip } from '../controls';
 
 /**
  * The file's emphasis states as chips over the canvas: none, each state, and a grid of all of
@@ -11,7 +12,7 @@ import { activeState, gridOpen, setGridOpen, showState, states } from '../../sta
 export function StateBar() {
   return (
     <Show when={states().length}>
-      <nav class="state-bar" aria-label="Emphasis states" title="[ and ] step through states">
+      <nav class="state-bar" aria-label="Emphasis states">
         <button
           type="button"
           class="state-chip"
@@ -153,7 +154,7 @@ function StateGrid() {
       <button
         type="button"
         class="state-grid-fit"
-        title="Show the whole panels"
+        {...tip('Fit', undefined, 'Show the whole panels.')}
         onClick={() => ((view = { k: 1, x: 0, y: 0 }), apply())}
       >
         Fit

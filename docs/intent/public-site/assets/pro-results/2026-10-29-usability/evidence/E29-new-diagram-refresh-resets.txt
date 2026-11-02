@@ -1,0 +1,3 @@
+Browser tab: 3, Title: "Example: Checkout architecture · Draftably", URL: "https://byronwall.github.io/draftably/app/?example=checkout".
+There has been no change in the accessibility tree.
+The focused UI element is 1 AXWebArea Example: Checkout architecture · Draftably, URL: byronwall.github.io/draftably/app/?example=checkout

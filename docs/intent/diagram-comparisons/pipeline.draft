@@ -6,7 +6,7 @@ node analysis "Static analysis" in=prtool
 node before "before.draft" in=prtool shape=pill
 node after "after.draft" in=prtool shape=pill
 
-group draftably "Draftably" color=mint
+group draftably "draftably" color=mint
 node merge "ID-matched merge" in=draftably
 node union "Union layout" in=draftably
 node diff "Diff view" in=draftably
@@ -26,7 +26,7 @@ edge e9 diff -> pr "PNG"
 edge e10 side -> pr "PNG"
 
 legend blue "Owned by the PR summary repo"
-legend mint "Owned by Draftably (proposed)"
+legend mint "Owned by draftably (proposed)"
 legend amber "Output"
 
 layout root engine=layered direction=right

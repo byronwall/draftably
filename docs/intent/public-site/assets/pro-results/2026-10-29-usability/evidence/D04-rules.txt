@@ -1,0 +1,359 @@
+Browser tab: 9, Title: "Rules · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/rules".
+0 AXWebArea Rules · Draftably docs, URL: byronwall.github.io/draftably/docs/rules
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 button Search docs
+				5 text Search docs
+				6 text Ctrl K
+			7 container Site
+				8 link Description: Playground, Value: byronwall.github.io/draftably/play
+				9 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				10 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				11 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				12 link Description: GitHub, Value: github.com/byronwall/draftably
+		13 container Docs topics
+			14 container
+				15 heading START HERE, Value: 2
+					16 text START HERE
+				17 link Description: Get started, Value: byronwall.github.io/draftably/docs/get-started
+				18 link Description: CLI, Value: byronwall.github.io/draftably/docs/cli
+				19 link Description: Themes, Value: byronwall.github.io/draftably/docs/themes
+				20 link Description: Agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+			21 container
+				22 heading LANGUAGE, Value: 2
+					23 text LANGUAGE
+				24 link Description: Overview, Value: byronwall.github.io/draftably/docs/overview
+				25 link Description: Rules, Value: byronwall.github.io/draftably/docs/rules
+				26 link Description: Refinements, Value: byronwall.github.io/draftably/docs/refinements
+				27 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+				28 link Description: Soft groups, Value: byronwall.github.io/draftably/docs/soft-groups
+				29 link Description: Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+				30 link Description: Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+			31 container
+				32 heading DIAGRAM KINDS, Value: 2
+					33 text DIAGRAM KINDS
+				34 link Description: Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+				35 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+				36 link Description: Cells, Value: byronwall.github.io/draftably/docs/cells
+			37 container
+				38 heading LAYOUT, Value: 2
+					39 text LAYOUT
+				40 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+				41 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+				42 link Description: Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+			43 container
+				44 heading TOOLS, Value: 2
+					45 text TOOLS
+				46 link Description: CLI details, Value: byronwall.github.io/draftably/docs/command-line
+				47 link Description: Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+				48 link Description: Examples, Value: byronwall.github.io/draftably/docs/examples
+		49 container
+			129 link Description: Language, Value: byronwall.github.io/draftably/docs/overview
+			130 text Rules
+			51 heading Rules, Value: 1
+				52 text Rules
+			442 container
+				443 text Write one statement per line. Indentation means nothing; containment comes from  in= . Strings use JSON double quotes. Inside a string, write  \"  for a quote,  \\  for a backslash and  \n  for a line break:  node n "Says \"hi\"" . A bare quote inside a string is an error that names its column. IDs match  [A-Za-z_][A-Za-z0-9_.-]*  and must be unique across nodes and groups. References may point to later lines.
+			444 table
+				445 row
+					446 cell
+						447 text Statement
+					448 cell
+						449 text Meaning
+				450 row
+					451 cell
+						452 text diagram "title" version=1
+					453 cell
+						454 text Optional title. At most one. Exports and the viewer draw it above the drawing. 
+						455 text width=
+						456 text  sets the frame's width.
+				457 row
+					458 cell
+						459 text compare "before" "after"
+					460 cell
+						461 text Draw the change marks as two aligned panels. 
+						462 text direction=right|down
+						463 text , 
+						464 text aspect=
+						465 text . At most one.
+				466 row
+					467 cell
+						468 text subtitle "text"
+					469 cell
+						470 text One line under the title. At most one.
+				471 row
+					472 cell
+						473 text node id "label"
+					474 cell
+						475 text A shape. 
+						476 text in=group
+						477 text , 
+						478 text color=
+						479 text , 
+						480 text shade=
+						481 text , 
+						482 text shape=box|pill|circle|diamond|text|marker
+						483 text , 
+						484 text href=
+						485 text , 
+						486 text count=
+						487 text .
+				488 row
+					489 cell
+						490 text group id "label"
+					491 cell
+						492 text A container. 
+						493 text in=group
+						494 text , 
+						495 text color=
+						496 text , 
+						497 text shade=
+						498 text , 
+						499 text frame=box|soft|none
+						500 text , 
+						501 text fold=never
+						502 text . See 
+						503 link Description: Soft groups, Value: byronwall.github.io/draftably/docs/soft-groups
+						504 text .
+				505 row
+					506 cell
+						507 text theme name
+					508 cell
+						509 text The diagram's theme and diagram-wide overrides. See 
+						510 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+						511 text .
+				512 row
+					513 cell
+						514 text theme-color family
+					515 cell
+						516 text One shade of a color family. See 
+						517 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+						518 text .
+				519 row
+					520 cell
+						521 text legend family "meaning"
+					522 cell
+						523 text One row of the color key: a swatch of 
+						524 text family
+						525 text  (
+						526 text shade=
+						527 text  optional, 500 by default) and what it means. See 
+						528 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+						529 text .
+				530 row
+					531 cell
+						532 text note "text"
+					533 cell
+						534 text A sentence on the diagram that never moves anything. 
+						535 text near=id side=below|above|left|right
+						536 text  puts it beside an object; without 
+						537 text near
+						538 text  it sits under the subtitle. 
+						539 text width=
+						540 text . See 
+						541 link Description: Notes, Value: byronwall.github.io/draftably/docs/rules
+						542 text .
+				543 row
+					544 cell
+						545 text edge id source -> target "label"
+					546 cell
+						547 text A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). 
+						548 text kind=async
+						549 text  draws it dashed; 
+						550 text from=
+						551 text /
+						552 text to=
+						553 text  choose sides; 
+						554 text constraint=false
+						555 text  draws it without letting it rank or order anything (for feedback edges).
+				556 row
+					557 cell
+						558 text layout scope flow|row|column
+					559 cell
+						560 text How a scope (
+						561 text root
+						562 text  or a group) arranges its direct children. 
+						563 text gap=
+						564 text , 
+						565 text direction=auto|right|down
+						566 text , 
+						567 text min-width=
+						568 text , 
+						569 text min-height=
+						570 text .
+				571 row
+					572 cell
+						573 text layout root lanes
+					574 cell
+						575 text Swim lanes: each top-level group is a lane. See 
+						576 link Description: Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+						577 text .
+				578 row
+					579 cell
+						580 text layout root sequence
+					581 cell
+						582 text A sequence diagram: nodes are participants, edges are messages in file order. See 
+						583 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+						584 text .
+				585 row
+					586 cell
+						587 text layout group cells
+					588 cell
+						589 text The group's nodes touch, edge to edge, as one object. 
+						590 text columns=
+						591 text , 
+						592 text unit=byte|bit
+						593 text . See 
+						594 link Description: Cells, Value: byronwall.github.io/draftably/docs/cells
+						595 text .
+				596 row
+					597 cell
+						598 text layout scope engine=name
+					599 cell
+						600 text Arrange a scope's whole subtree with a layout engine. See 
+						601 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+						602 text .
+				603 row
+					604 cell
+						605 text layout root … fit=slide
+					606 cell
+						607 text Aim the drawing at a shape: 
+						608 text wide
+						609 text  (2:1), 
+						610 text slide
+						611 text  (16:9), 
+						612 text square
+						613 text , 
+						614 text page
+						615 text  (portrait) or 
+						616 text tall
+						617 text . Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an 
+						618 text info
+						619 text  note.
+				620 row
+					621 cell
+						622 text routing
+					623 cell
+						624 text Router settings for every connection. See 
+						625 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+						626 text .
+				627 row
+					628 cell
+						629 text config key=value
+					630 cell
+						631 text File settings. See 
+						632 link Description: Links and counts, Value: byronwall.github.io/draftably/docs/rules
+						633 text .
+				634 row
+					635 cell
+						636 text state id "label" ids...
+					637 cell
+						638 text A named emphasis state. See 
+						639 link Description: Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+						640 text .
+				641 row
+					642 cell
+						643 text phase id "label" message ids...
+					644 cell
+						645 text Sequence diagrams: a run of messages drawn as a row band. See 
+						646 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+						647 text .
+			648 container
+				649 text Colors are covered in 
+				650 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+				651 text . An  auto  color inherits the family of the nearest colored group. Without a  layout  line,  root  uses  flow gap=48  and groups use  column gap=24 .
+			652 container
+				653 text flow  ranks objects along its direction by their connections. A loop keeps its path in that direction, and only the edge that closes it runs backwards. A run of ranks that is wider than the canvas (1100×720) and more than three times longer than it is deep folds into rows (or columns, for  direction=down ) that each start again at the beginning, like lines of text.  fold=never  keeps it on one line.  engine=layered  folds the same way unless it has  fold=never . Where to fold is decided without edge labels, so labelling or relabelling an edge keeps every object in its row; labels only widen the gaps they need, and add a row only when the labelled rows run more than a quarter past the canvas.
+			654 container
+				655 text Under  engine=layered  or  engine=compound-flow , a drawing that holds groups is packed instead: a drawing wider than the canvas and more than five times longer than it is deep first folds its longest group into rows, one group at a time, so the groups keep their order; only if no group can fold do the groups themselves wrap into rows. A group that only receives lines (an upstream API, a cache) sits beside the group that calls it rather than past it.  fold=never  on the root engine keeps one long line. Stays and pins never change what folds.
+			656 container
+				657 text Title and subtitle. inspect --svg , the viewer's SVG and PNG exports and the viewer's canvas draw the  diagram  title and the  subtitle  line above the drawing, left-aligned with the legend, in one frame round the drawing, so a copied image still says what it shows and why it matters. Like the legend, they never move anything. A file without either draws no heading. The frame is as wide as the drawing, the heading and the legend;  width=  on the  diagram  line makes it wider ( diagram "Checkout" version=1 width=900 ), for a long subtitle or room on the right.
+			658 container
+				659 text Notes. note "A plan is one pricing tier: Free, Team or Enterprise."  adds a sentence that defines a term or explains the drawing. Like the legend, a note never moves anything. Without  near=  it sits in the frame under the subtitle; several notes stack in file order. With  near=id  it is placed after layout beside that node or group:  side=below  (the default),  above ,  left  or  right , at the first spot along that side that is clear of shapes, lines, group borders and other notes. A note wraps at 280px;  width=80..1200  changes that.  check  warns ( note-overlap ) when an anchored note found no clear spot.
+			660 container
+				661 button Copy
+				662 container
+					663 text note "Seats are billed monthly." near = seat side = below width = 220
+			664 container
+				665 text Links and counts. href="src/api.ts"  on a node or group makes it a link in  inspect --svg  and exports, to a source file, a URL or anything else the reader should open. A linked object draws a small ↗ mark at its top-right corner (beside a container's title). In the viewer the mark is the open button, and the Inspector shows the link with an  Open  button; a click elsewhere on the object still selects it. The link opens as written: a URL ( https://… , a GitHub link) in a new tab, a  .draft  in the viewer, and a file path in VS Code. A file path may end in  :42  or  :42:5  to open at that line and column. A relative path starts at the diagram's git root, or its folder outside a repository.
+			666 container
+				667 text In  inspect --svg  and the viewer's SVG export, each linked object is an  <a>  with a tooltip naming its target, and its outline thickens on hover. A URL stays as written and opens in a new tab. A file link is written as a path from the diagram's folder, without its line, so it opens when the SVG is saved beside the  .draft . Each object's group carries  data-id  with its ID.
+			668 container
+				669 text config  lines hold file settings. One line may set several keys, or each key may have its own line; a key set twice is a warning and the later line wins.
+			670 container
+				671 button Copy
+				672 container
+					673 text config link-base = "../.." editor = cursor
+			674 container
+				675 text link-base  is where relative links start, relative to the  .draft  file's folder, for a diagram whose paths don't start at the git root. It may also be a URL, such as source pinned at one commit,  config link-base="https://github.com/org/repo/blob/<sha>/" : then  href="src/parser.py#L40"  joins it, opens as a web link and is written that way into SVG and PNG exports.  check  doesn't look for those files on disk.  editor  is the editor file links open in:  vscode  (the default),  vscode-insiders ,  cursor ,  windsurf  or  zed .  check  warns about a relative link whose file does not exist at the link base, and suggests the path it probably meant: the same path from the diagram's folder, or the one file in the repository whose path ends the same way. It never changes the link.
+			676 container
+				677 text count=42  on a node says the box stands for 42 things: it draws as a stack with a  ×42  badge, so a component used in hundreds of places is one box rather than hundreds. When there is no real number to show, give a letter or short word instead:  count=N  draws  ×N , and  count=many  draws  ×many .
+			118 container Previous and next
+				441 link Description: ← Previous Overview, Value: byronwall.github.io/draftably/docs/overview
+				119 link Description: Next → Refinements, Value: byronwall.github.io/draftably/docs/refinements
+		120 container On this page
+			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#rules
+
+The focused UI element is 25 link Description: Rules, URL: byronwall.github.io/draftably/docs/rules
+
+VISIBLE MAIN TEXT
+Language
+/
+Rules
+Rules
+
+Write one statement per line. Indentation means nothing; containment comes from in=. Strings use JSON double quotes. Inside a string, write \" for a quote, \\ for a backslash and \n for a line break: node n "Says \"hi\"". A bare quote inside a string is an error that names its column. IDs match [A-Za-z_][A-Za-z0-9_.-]* and must be unique across nodes and groups. References may point to later lines.
+
+Statement	Meaning
+diagram "title" version=1	Optional title. At most one. Exports and the viewer draw it above the drawing. width= sets the frame's width.
+compare "before" "after"	Draw the change marks as two aligned panels. direction=right|down, aspect=. At most one.
+subtitle "text"	One line under the title. At most one.
+node id "label"	A shape. in=group, color=, shade=, shape=box|pill|circle|diamond|text|marker, href=, count=.
+group id "label"	A container. in=group, color=, shade=, frame=box|soft|none, fold=never. See Soft groups.
+theme name	The diagram's theme and diagram-wide overrides. See Themes and colors.
+theme-color family	One shade of a color family. See Themes and colors.
+legend family "meaning"	One row of the color key: a swatch of family (shade= optional, 500 by default) and what it means. See Themes and colors.
+note "text"	A sentence on the diagram that never moves anything. near=id side=below|above|left|right puts it beside an object; without near it sits under the subtitle. width=. See Notes.
+edge id source -> target "label"	A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). kind=async draws it dashed; from=/to= choose sides; constraint=false draws it without letting it rank or order anything (for feedback edges).
+layout scope flow|row|column	How a scope (root or a group) arranges its direct children. gap=, direction=auto|right|down, min-width=, min-height=.
+layout root lanes	Swim lanes: each top-level group is a lane. See Swim lanes.
+layout root sequence	A sequence diagram: nodes are participants, edges are messages in file order. See Sequence diagrams.
+layout group cells	The group's nodes touch, edge to edge, as one object. columns=, unit=byte|bit. See Cells.
+layout scope engine=name	Arrange a scope's whole subtree with a layout engine. See Layout engines.
+layout root … fit=slide	Aim the drawing at a shape: wide (2:1), slide (16:9), square, page (portrait) or tall. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an info note.
+routing	Router settings for every connection. See Routing.
+config key=value	File settings. See Links and counts.
+state id "label" ids...	A named emphasis state. See Emphasis states.
+phase id "label" message ids...	Sequence diagrams: a run of messages drawn as a row band. See Sequence diagrams.
+
+Colors are covered in Themes and colors. An auto color inherits the family of the nearest colored group. Without a layout line, root uses flow gap=48 and groups use column gap=24.
+
+flow ranks objects along its direction by their connections. A loop keeps its path in that direction, and only the edge that closes it runs backwards. A run of ranks that is wider than the canvas (1100×720) and more than three times longer than it is deep folds into rows (or columns, for direction=down) that each start again at the beginning, like lines of text. fold=never keeps it on one line. engine=layered folds the same way unless it has fold=never. Where to fold is decided without edge labels, so labelling or relabelling an edge keeps every object in its row; labels only widen the gaps they need, and add a row only when the labelled rows run more than a quarter past the canvas.
+
+Under engine=layered or engine=compound-flow, a drawing that holds groups is packed instead: a drawing wider than the canvas and more than five times longer than it is deep first folds its longest group into rows, one group at a time, so the groups keep their order; only if no group can fold do the groups themselves wrap into rows. A group that only receives lines (an upstream API, a cache) sits beside the group that calls it rather than past it. fold=never on the root engine keeps one long line. Stays and pins never change what folds.
+
+Title and subtitle. inspect --svg, the viewer's SVG and PNG exports and the viewer's canvas draw the diagram title and the subtitle line above the drawing, left-aligned with the legend, in one frame round the drawing, so a copied image still says what it shows and why it matters. Like the legend, they never move anything. A file without either draws no heading. The frame is as wide as the drawing, the heading and the legend; width= on the diagram line makes it wider (diagram "Checkout" version=1 width=900), for a long subtitle or room on the right.
+
+Notes. note "A plan is one pricing tier: Free, Team or Enterprise." adds a sentence that defines a term or explains the drawing. Like the legend, a note never moves anything. Without near= it sits in the frame under the subtitle; several notes stack in file order. With near=id it is placed after layout beside that node or group: side=below (the default), above, left or right, at the first spot along that side that is clear of shapes, lines, group borders and other notes. A note wraps at 280px; width=80..1200 changes that. check warns (note-overlap) when an anchored note found no clear spot.
+
+Copy
+note "Seats are billed monthly." near=seat side=below width=220
+
+Links and counts. href="src/api.ts" on a node or group makes it a link in inspect --svg and exports, to a source file, a URL or anything else the reader should open. A linked object draws a small ↗ mark at its top-right corner (beside a container's title). In the viewer the mark is the open button, and the Inspector shows the link with an Open button; a click elsewhere on the object still selects it. The link opens as written: a URL (https://…, a GitHub link) in a new tab, a .draft in the viewer, and a file path in VS Code. A file path may end in :42 or :42:5 to open at that line and column. A relative path starts at the diagram's git root, or its folder outside a repository.
+
+In inspect --svg and the viewer's SVG export, each linked object is an <a> with a tooltip naming its target, and its outline thickens on hover. A URL stays as written and opens in a new tab. A file link is written as a path from the diagram's folder, without its line, so it opens when the SVG is saved beside the .draft. Each object's group carries data-id with its ID.
+
+config lines hold file settings. One line may set several keys, or each key may have its own line; a key set twice is a warning and the later line wins.
+
+Copy
+config link-base="../.." editor=cursor
+
+link-base is where relative links start, relative to the .draft file's folder, for a diagram whose paths don't start at the git root. It may also be a URL, such as source pinned at one commit, config link-base="https://github.com/org/repo/blob/<sha>/": then href="src/parser.py#L40" joins it, opens as a web link and is written that way into SVG and PNG exports. check doesn't look for those files on disk. editor is the editor file links open in: vscode (the default), vscode-insiders, cursor, windsurf or zed. check warns about a relative link whose file does not exist at the link base, and suggests the path it probably meant: the same path from the diagram's folder, or the one file in the repository whose path ends the same way. It never changes the link.
+
+count=42 on a node says the box stands for 42 things: it draws as a stack with a ×42 badge, so a component used in hundreds of places is one box rather than hundreds. When there is no real number to show, give a letter or short word instead: count=N draws ×N, and count=many draws ×many.
+
+← Previous
+Overview
+Next →
+Refinements

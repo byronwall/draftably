@@ -2,20 +2,31 @@ import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } 
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
 import { buildFromList, setTool } from '../state/actions';
+import { commandEnabled, runCommand } from '../state/commands';
 import { doc, selectedIds } from '../state/document';
+import { siteUrl } from '../state/launch';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';
+import { ExportDialog } from './ExportDialog';
+import { Icon } from './Icon';
+import { Palette } from './Palette';
 import './dialogs.css';
 
 /** The single modal dialog that is open, if any. */
 export function Dialogs() {
   return (
     <Switch>
+      <Match when={dialog() === 'palette'}>
+        <Palette />
+      </Match>
       <Match when={dialog() === 'help'}>
         <HelpDialog />
       </Match>
       <Match when={dialog() === 'quick-build'}>
         <QuickBuildDialog />
+      </Match>
+      <Match when={dialog() === 'export'}>
+        <ExportDialog />
       </Match>
       <Match when={dialog() === 'confirm' && confirmRequest()}>
         {request => (
@@ -40,7 +51,7 @@ export function Dialogs() {
               </>
             }
           >
-            <p>{request().message}</p>
+            <p class="confirm-message">{request().message}</p>
           </Modal>
         )}
       </Match>
@@ -55,7 +66,7 @@ export function Dialogs() {
 }
 
 /** Native modal dialog: traps focus, closes on Escape, and restores focus when it closes. */
-function Modal(props: {
+export function Modal(props: {
   title: string;
   children: JSX.Element;
   footer?: JSX.Element;
@@ -63,7 +74,12 @@ function Modal(props: {
 }) {
   let el!: HTMLDialogElement;
   const previousFocus = document.activeElement as HTMLElement | null;
-  onMount(() => el.showModal());
+  onMount(() => {
+    el.tabIndex = -1;
+    el.showModal();
+    // A dialog opens at rest: Close gets focus only when Tab reaches it. A text field keeps it.
+    if (document.activeElement?.matches('.modal-head .button')) el.focus();
+  });
   onCleanup(() => {
     if (el.open) el.close();
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
@@ -129,6 +145,7 @@ const SHORTCUTS: [string, string][] = [
   ['Delete / with children', 'Delete / Shift Delete'],
   ['Fit / 100%', '1 / 0'],
   ['Diagrams in this folder', 'F'],
+  ['Find any command', 'Ctrl/⌘ K'],
   ['Go to diagram', 'Ctrl/⌘ P'],
   ['Objects / inspector', '[ / ]'],
   ['Hide / restore panels', '\\'],
@@ -139,6 +156,21 @@ const SHORTCUTS: [string, string][] = [
 function HelpDialog() {
   return (
     <Modal title="Keyboard shortcuts" class="wide">
+      <div class="help-links">
+        <a class="button small" href={siteUrl('docs')} target="_blank" rel="noopener">
+          <Icon name="globe" />
+          Docs
+        </a>
+        <button
+          type="button"
+          class="button small"
+          disabled={!commandEnabled('open-playground')}
+          onClick={() => runCommand('open-playground')}
+        >
+          <Icon name="code" />
+          Open in Playground
+        </button>
+      </div>
       <div class="shortcuts">
         <For each={SHORTCUTS}>
           {([action, keys]) => (
@@ -178,8 +210,6 @@ function QuickBuildDialog() {
   const [title, setTitle] = createSignal('');
   const [continueFrom, setContinueFrom] = createSignal(true);
   const [error, setError] = createSignal('');
-  let textarea!: HTMLTextAreaElement;
-  onMount(() => textarea.focus());
 
   const build = () => {
     const lines = text()
@@ -228,7 +258,7 @@ function QuickBuildDialog() {
         <label class="field">
           <span class="field-label">Shape titles</span>
           <textarea
-            ref={textarea}
+            autofocus
             class="quick-lines"
             rows={9}
             value={text()}

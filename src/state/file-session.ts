@@ -11,8 +11,8 @@
  * file changes on disk while an edit is unsaved, the edit is kept aside and the file is shown;
  * the user then keeps the file or explicitly saves the edit over it.
  *
- * An example works the same way, except that nothing is sent to disk: its edits live only in this
- * tab until the user saves the example as a new file.
+ * An example works the same way, except that nothing is sent to disk: its edits live in browser
+ * storage until the user saves the example as a new file.
  */
 import { batch, createRoot, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
@@ -21,6 +21,8 @@ import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
 import {
   anchorSurroundings,
+  type Drop,
+  keepDropped,
   movedOutsideEdit,
   reflowGroup,
   translateEdit,
@@ -50,7 +52,7 @@ import {
   setSelection,
   type EditKind,
 } from './document';
-import { toast } from './toast';
+import { toast, type ToastAction } from './toast';
 
 export interface FileSessionInfo {
   name: string;
@@ -88,7 +90,11 @@ const state = createRoot(() => {
   const [movedByChange, setMovedByChange] = createSignal<string[]>([]);
   /** A revision is being laid out; layout engines run asynchronously. */
   const [compiling, setCompiling] = createSignal(false);
+  /** The open example came back with unsaved edits from an earlier visit. */
+  const [restored, setRestored] = createSignal(false);
   return {
+    restored,
+    setRestored,
     compiling,
     setCompiling,
     movedByChange,
@@ -113,10 +119,18 @@ const state = createRoot(() => {
 /** The open file or example, or null when the editor works on browser storage as usual. */
 export const fileSession = state.info;
 export const fileMode = () => !!state.info();
-/** True while an example is open: edits are kept in this tab only. */
+/** True while an example is open: edits are kept in this browser only. */
 export const exampleMode = () => !!state.info()?.example;
+/** The id of the blank draft that New opens: a scratch copy with no example behind it. */
+export const DRAFT_ID = 'untitled';
+/** What a scratch copy is called on screen. */
+export const scratchName = () => (state.info()?.example === DRAFT_ID ? 'Draft' : 'Example');
 /** The example has edits that are not in any file. */
 export const exampleEdited = () => exampleMode() && state.undoStack().length > 0;
+/** The user already agreed to leave the page, so the browser need not ask again. */
+let leaving = false;
+export const leaveAgreed = () => leaving;
+export const agreeToLeave = () => void (leaving = true);
 export const fileStatus = state.status;
 export const sourceError = state.sourceError;
 export const fileScene = state.scene;
@@ -124,6 +138,8 @@ export const fileDiagnostics = (): Diagnostic[] => state.scene()?.diagnostics ??
 export const conflictProposal = state.proposal;
 export const movedByChange = state.movedByChange;
 export const fileCompiling = state.compiling;
+/** The open example's unsaved edits were restored from browser storage. */
+export const exampleRestored = () => exampleMode() && state.restored();
 
 /** The last source confirmed on disk and its revision. */
 let diskSource = '',
@@ -131,7 +147,7 @@ let diskSource = '',
 /** Selects this file's session on the server: `?file=…`. */
 let fileQuery = '';
 /** What an edit is called once it is kept: saved to disk, or only in the example. */
-const keptLabel = () => (exampleMode() ? 'Example only' : 'Saved');
+const keptLabel = () => (exampleMode() ? `${scratchName()} only` : 'Saved');
 /** The source the viewer shows; it differs from `diskSource` while a save is pending. */
 let localSource = '';
 export const currentSource = () => localSource;
@@ -294,14 +310,18 @@ let saving = false,
   saveAgain = false;
 /** Shown once the server confirms the save, so a refused save never reads as saved. */
 let savedMessage: string | null = null;
+/** A button on that message, such as keeping a drop's exact position. */
+let savedAction: ToastAction | undefined;
 /** A change on disk reported while a save was in flight. */
 let externalDuringSave: { source: string; revision: string } | null = null;
 
 async function save() {
   if (exampleMode()) {
-    // Examples keep their edits in this tab; there is no file to write.
-    if (savedMessage) toast(savedMessage);
+    // Examples keep their edits in browser storage; there is no file to write.
+    keepScratch();
+    if (savedMessage) toast(savedMessage, savedAction);
     savedMessage = null;
+    savedAction = undefined;
     return;
   }
   if (saving) {
@@ -334,8 +354,9 @@ async function save() {
       if (!saveAgain) break;
     }
     state.setStatus('saved');
-    if (savedMessage) toast(savedMessage);
+    if (savedMessage) toast(savedMessage, savedAction);
     savedMessage = null;
+    savedAction = undefined;
   } catch {
     state.setStatus('failed');
     toast('Not saved: the file server is not reachable.');
@@ -353,6 +374,7 @@ async function save() {
 function enterConflict(source: string, revision: string) {
   const unsaved = localSource;
   savedMessage = null;
+  savedAction = undefined;
   diskSource = localSource = source;
   diskRevision = revision;
   resetHistory();
@@ -402,7 +424,12 @@ function arrangementEdit(scene: Scene, label: string) {
   const notes = placed.length
     ? [`${placed.length} positions` + (anchored.length ? ` · anchored ${anchored.length}` : '')]
     : [];
-  return { source, ids: new Map<string, string>(), notes: [label, ...notes] };
+  return {
+    source,
+    ids: new Map<string, string>(),
+    notes: [label, ...notes],
+    drops: [] as Drop[],
+  };
 }
 
 function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boolean {
@@ -442,11 +469,50 @@ function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boo
     state.setRedoStack([]);
   });
   localSource = next;
-  const mapId = (id: string) => result.ids.get(id) ?? id;
-  void showSource(next, () => selectedIds().map(mapId), mapId);
+  const mapId = (id: string) => result.ids.get(id) ?? id,
+    { drops } = result;
+  void showSource(next, () => selectedIds().map(mapId), mapId).then(
+    drawn => drawn && checkDrops(drawn, next, drops),
+  );
   savedMessage = `${keptLabel()} · ${result.notes.length ? result.notes.join(' · ') : label}`;
+  savedAction = drops.length
+    ? { label: 'Keep exact position', run: () => void keepExact(drops) }
+    : undefined;
   void save();
   return true;
+}
+
+/** The source with each dropped object at the exact point it was let go. */
+function exactSource(drops: Drop[]) {
+  const source = readSource(localSource);
+  keepDropped(source, drops);
+  return printSource(source);
+}
+
+/** Save a `stay` where each dropped object was let go, in place of its `near`. */
+function keepExact(drops: Drop[]) {
+  const ids = drops.map(d => d.id).join(', ');
+  return commitSource(exactSource(drops), 'Keep exact position', `kept ${ids} where dropped`);
+}
+
+/**
+ * A `near` that does not draw an object where it was dropped is not what the drop asked for:
+ * save its exact position instead, as part of the same edit.
+ */
+function checkDrops(scene: Scene, source: string, drops: Drop[]) {
+  if (localSource !== source) return;
+  const off = drops.filter(d => {
+    const o = scene.byId.get(d.id);
+    return !o || Math.abs(o.x - d.x) > 1 || Math.abs(o.y - d.y) > 1;
+  });
+  if (!off.length) return;
+  const next = exactSource(off);
+  state.setUndoStack(stack => [...stack.slice(0, -1), { ...stack.at(-1)!, after: next }]);
+  localSource = next;
+  savedMessage = `${keptLabel()} · kept ${off.map(d => d.id).join(', ')} where dropped`;
+  savedAction = undefined;
+  void showSource(next);
+  void save();
 }
 
 /**
@@ -474,6 +540,7 @@ export async function commitSource(next: string, label: string, message: string)
   });
   localSource = next;
   savedMessage = `${keptLabel()} · ${message}`;
+  savedAction = undefined;
   void save();
   await showSource(next);
   return true;
@@ -573,7 +640,7 @@ export async function openFileSession(file: string): Promise<boolean> {
   } catch {
     return false;
   }
-  document.title = `${file} · Diagram Studio`;
+  document.title = `${file} · draftably`;
   await begin(info);
   listen();
   return true;
@@ -605,29 +672,88 @@ export function closeFileSession() {
   state.setInfo(null);
 }
 
-/** Open an example as a scratch copy. Nothing is read from or written to disk. */
-export function openExampleSession(id: string, title: string, source: string) {
-  document.title = `Example: ${title} · Diagram Studio`;
-  return begin({ name: title, path: '', source, revision: 'example', example: id });
+/**
+ * Open an example as a scratch copy. Nothing is read from or written to disk. Edits are kept in
+ * browser storage under `key`, so a reload or a closed tab brings them back as unsaved edits.
+ */
+export async function openExampleSession(
+  id: string,
+  title: string,
+  source: string,
+  key = `example:${id}`,
+) {
+  document.title = `${id === DRAFT_ID ? title : `Example: ${title}`} · draftably`;
+  scratchKey = key;
+  const kept = readScratch()[key]?.source;
+  const restored = kept != null && kept !== source;
+  await begin({
+    name: title,
+    path: '',
+    source: restored ? kept : source,
+    revision: 'example',
+    example: id,
+  });
+  exampleOriginal = source;
+  if (!restored) return;
+  state.setUndoStack([{ before: source, after: kept, label: 'Restore unsaved edits' }]);
+  state.setRestored(true);
 }
 
 /** The source of the example as it was opened, for Reset. */
 let exampleOriginal = '';
+
+// --- Scratch edits ----------------------------------------------------------------------------
+
+/** Unsaved example edits by key: `example:<id>`, or the `#s=` data of a shared diagram. */
+const SCRATCH_STORE = 'draftably.scratch';
+let scratchKey = '';
+
+function readScratch(): Record<string, { source: string; at: number }> {
+  try {
+    return JSON.parse(localStorage.getItem(SCRATCH_STORE) ?? '{}');
+  } catch {
+    return {};
+  }
+}
+
+/** Store the example's edits, or forget them once nothing is unsaved. Keeps the 10 newest. */
+function keepScratch() {
+  if (!scratchKey) return;
+  const all = readScratch();
+  if (state.undoStack().length && localSource !== exampleOriginal)
+    all[scratchKey] = { source: localSource, at: Date.now() };
+  else delete all[scratchKey];
+  const newest = Object.entries(all)
+    .sort((a, b) => b[1].at - a[1].at)
+    .slice(0, 10);
+  try {
+    localStorage.setItem(SCRATCH_STORE, JSON.stringify(Object.fromEntries(newest)));
+  } catch {
+    // Storage is full or blocked; the unload prompt still guards the edits.
+  }
+}
 
 /** Throw away the example's edits and show it as it was opened. */
 export function resetExample() {
   if (!exampleMode()) return;
   localSource = exampleOriginal;
   resetHistory();
+  keepScratch();
+  state.setRestored(false);
   void showSource(localSource);
   clearSelection();
 }
 
 /** The example's edits now live in a file; leaving the page no longer loses them. */
-export const markExampleSaved = () => resetHistory();
+export function markExampleSaved() {
+  resetHistory();
+  keepScratch();
+}
 
 function begin(info: FileSessionInfo): Promise<void> {
   stopListening();
+  if (!info.example) scratchKey = '';
+  state.setRestored(false);
   exampleOriginal = info.example ? info.source : '';
   disableBrowserStorage();
   setCommitHandler(handleEdit);
@@ -695,8 +821,8 @@ export function fileStatusText(): string {
   if (info?.example) {
     const edits = state.undoStack().length;
     return edits
-      ? `Example · ${edits} unsaved edit${edits === 1 ? '' : 's'}`
-      : 'Example · not on disk';
+      ? `${scratchName()} · ${edits} unsaved edit${edits === 1 ? '' : 's'}`
+      : `${scratchName()} · not on disk`;
   }
   const name = info?.file ?? info?.name ?? '';
   switch (state.status()) {

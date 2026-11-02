@@ -1,0 +1,52 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_RECORD",
+      "message": "Record fields/ports need a cells mapper.",
+      "severity": "error",
+      "impact": "semantics"
+    },
+    {
+      "code": "DOT_SHAPE",
+      "message": "Shape ellipse becomes pill.",
+      "severity": "warning",
+      "impact": "appearance",
+      "foreignIds": [
+        "b"
+      ]
+    },
+    {
+      "code": "DOT_NAMED_PORT",
+      "message": "Named port p has no native field target.",
+      "severity": "error",
+      "impact": "semantics"
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    }
+  ],
+  "requires": []
+}

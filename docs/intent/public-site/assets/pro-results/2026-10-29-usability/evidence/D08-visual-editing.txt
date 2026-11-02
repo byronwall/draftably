@@ -1,0 +1,183 @@
+Browser tab: 9, Title: "Editing in the viewer · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/editing-in-the-viewer".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 443-446
+~0 AXWebArea Editing in the viewer · Draftably docs, URL: byronwall.github.io/draftably/docs/editing-in-the-viewer
+~			129 link Description: Tools, Value: byronwall.github.io/draftably/docs/command-line
+~			130 text Editing in the viewer
+~			51 heading Editing in the viewer, Value: 1
+~				52 text Editing in the viewer
+~			442 text Edits made in the viewer are written back to the file as readable statements:
++			443 table
++				444 row
++					445 cell
++						446 text In the viewer
++					447 cell
++						448 text In the file
++				449 row
++					450 cell
++						451 text Drag an object
++					452 cell
++						453 text near
++						454 text  the closest sibling it does not overlap; 
++						455 text nudge
++						456 text  if none.
++				457 row
++					458 cell
++						459 text Drag a soft group's tint
++					460 cell
++						461 text A 
++						462 text stay
++						463 text  for each member at its new place; the group gets none.
++				464 row
++					465 cell
++						466 text Pin or unpin (
++						467 text P
++						468 text )
++					469 cell
++						470 text pin
++						471 text  at its position; unpinning leaves a soft 
++						472 text stay
++						473 text .
++				474 row
++					475 cell
++						476 text Resize a shape or container
++					477 cell
++						478 text size
++						479 text , or 
++						480 text min-width
++						481 text /
++						482 text min-height
++						483 text  on the container's 
++						484 text layout
++						485 text .
++				486 row
++					487 cell
++						488 text Drag a cell among its group's cells
++					489 cell
++						490 text The group's 
++						491 text order
++						492 text  line. 
++						493 text Span
++						494 text  in Inspector writes 
++						495 text span=
++						496 text .
++				497 row
++					498 cell
++						499 text Add, rename, connect, delete, recolor
++					500 cell
++						501 text node
++						502 text , 
++						503 text group
++						504 text  and 
++						505 text edge
++						506 text  declarations, with IDs from the label.
++				507 row
++					508 cell
++						509 text Color family or shade in Inspector
++					510 cell
++						511 text color=
++						512 text  and 
++						513 text shade=
++						514 text  on the declaration.
++				515 row
++					516 cell
++						517 text Theme or padding in 
++						518 text Appearance
++					519 cell
++						520 text The 
++						521 text theme
++						522 text  line; preset changes drop built-in 
++						523 text theme-color
++						524 text  lines.
++				525 row
++					526 cell
++						527 text Double-click the title or subtitle
++					528 cell
++						529 text The 
++						530 text diagram
++						531 text  title and the 
++						532 text subtitle
++						533 text  line.
++				534 row
++					535 cell
++						536 text Drag the frame's right edge
++					537 cell
++						538 text width=
++						539 text  on the 
++						540 text diagram
++						541 text  line; back to its content removes it.
++				542 row
++					543 cell
++						544 text Wrap in a container or ungroup
++					545 cell
++						546 text A 
++						547 text group
++						548 text  and the members' 
++						549 text in=
++						550 text .
++				551 row
++					552 cell
++						553 text Clear manual markers
++					554 cell
++						555 text Removes the object's soft position refinements.
++				556 row
++					557 cell
++						558 text Rebuild, or Apply in Compare
++					559 cell
++						560 text layout scope engine=…
++						561 text  for the diagram or the selected container.
++				562 row
++					563 cell
++						564 text Tidy positions, a timeline step, the brush
++					565 cell
++						566 text stay
++						567 text  for each object that moved, plus anchors around them.
++				568 row
++					569 cell
++						570 text Routing options, or a routing Compare
++					571 cell
++						572 text The 
++						573 text routing
++						574 text  line.
++			575 container
++				576 text An accepted move, pin or resize also writes soft  stay  anchors for the objects around it: every top-level object, and the siblings of the edited object and of its containers. When an agent later adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to give way, the status bar's  layout notes  name it with its line, and the change notice lists the objects outside the edit that moved.  Reflow group  (Edit menu or inspector) removes the soft refinements inside a group so its recipe arranges it again, and anchors what is around it.
++			577 container
++				578 text Each save is checked against the file's revision. If the file changed on disk first, the viewer shows the file and keeps your edit aside:  Keep file  discards the edit, and  Save my edit over it  replaces the newer file. Undo and redo step through the file's versions; a change from outside the viewer clears them, so undo never erases someone else's work.
+~				441 link Description: ← Previous CLI details, Value: byronwall.github.io/draftably/docs/command-line
+~				119 link Description: Next → Examples, Value: byronwall.github.io/draftably/docs/examples
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#editing-in-the-viewer
+The focused UI element is 47 link Description: Editing in the viewer, URL: byronwall.github.io/draftably/docs/editing-in-the-viewer
+
+VISIBLE MAIN TEXT
+Tools
+/
+Editing in the viewer
+Editing in the viewer
+
+Edits made in the viewer are written back to the file as readable statements:
+
+In the viewer	In the file
+Drag an object	near the closest sibling it does not overlap; nudge if none.
+Drag a soft group's tint	A stay for each member at its new place; the group gets none.
+Pin or unpin (P)	pin at its position; unpinning leaves a soft stay.
+Resize a shape or container	size, or min-width/min-height on the container's layout.
+Drag a cell among its group's cells	The group's order line. Span in Inspector writes span=.
+Add, rename, connect, delete, recolor	node, group and edge declarations, with IDs from the label.
+Color family or shade in Inspector	color= and shade= on the declaration.
+Theme or padding in Appearance	The theme line; preset changes drop built-in theme-color lines.
+Double-click the title or subtitle	The diagram title and the subtitle line.
+Drag the frame's right edge	width= on the diagram line; back to its content removes it.
+Wrap in a container or ungroup	A group and the members' in=.
+Clear manual markers	Removes the object's soft position refinements.
+Rebuild, or Apply in Compare	layout scope engine=… for the diagram or the selected container.
+Tidy positions, a timeline step, the brush	stay for each object that moved, plus anchors around them.
+Routing options, or a routing Compare	The routing line.
+
+An accepted move, pin or resize also writes soft stay anchors for the objects around it: every top-level object, and the siblings of the edited object and of its containers. When an agent later adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to give way, the status bar's layout notes name it with its line, and the change notice lists the objects outside the edit that moved. Reflow group (Edit menu or inspector) removes the soft refinements inside a group so its recipe arranges it again, and anchors what is around it.
+
+Each save is checked against the file's revision. If the file changed on disk first, the viewer shows the file and keeps your edit aside: Keep file discards the edit, and Save my edit over it replaces the newer file. Undo and redo step through the file's versions; a change from outside the viewer clears them, so undo never erases someone else's work.
+
+← Previous
+CLI details
+Next →
+Examples

@@ -1,0 +1,7 @@
+Browser tab: 4, Title: "Audit checkout · Draftably playground", URL: "https://byronwall.github.io/draftably/play/#s=LcrNCYAwDEDhu1OE3D04gIK4gCuEJtQgTaA_ottb0Ms7fDxWipkS4NpYK4RDwumtIlySi7rN02DOAqVSroBbL35icnfY6Uli3YSjQPR_HBdIWopaHF4".
+There has been no change in the accessibility tree.
+The focused UI element is 27 text entry area (settable) Description: Diagram source, Value: diagram "Audit checkout" version=1
+node start "Cart"
+node next "Payment"
+edge go start -> missing
+

@@ -1,0 +1,183 @@
+{
+  "status": "ready",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_CLUSTER_LAYOUT",
+      "message": "Each cluster uses native flow with the global rankdir intent; Graphviz ranking and cluster packing are recomputed.",
+      "severity": "info",
+      "impact": "layout"
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "group",
+      "foreign": "cluster_named",
+      "native": "cluster_named"
+    },
+    {
+      "kind": "group",
+      "foreign": "cluster_empty",
+      "native": "cluster_empty"
+    },
+    {
+      "kind": "node",
+      "foreign": "root",
+      "native": "node_root"
+    },
+    {
+      "kind": "node",
+      "foreign": "a\\nb",
+      "native": "a_u5c_nb"
+    },
+    {
+      "kind": "node",
+      "foreign": "a b",
+      "native": "a_u20_b"
+    },
+    {
+      "kind": "node",
+      "foreign": "a_u20_b",
+      "native": "a_u20_b__2"
+    },
+    {
+      "kind": "node",
+      "foreign": "edge_1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "node",
+      "foreign": "__proto__",
+      "native": "node___proto__"
+    },
+    {
+      "kind": "node",
+      "foreign": "constructor",
+      "native": "node_constructor"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1__2"
+    },
+    {
+      "kind": "edge",
+      "foreign": "2",
+      "native": "edge_2"
+    },
+    {
+      "kind": "edge",
+      "foreign": "3",
+      "native": "edge_3"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Named\" version=1\ngroup cluster_named \"cluster_named\"\ngroup cluster_empty \"\"\nnode node_root \"line\\nnext\" in=cluster_named\nnode a_u5c_nb \"Explicit escaped-ID label\" in=cluster_empty\nnode a_u20_b \"a b\"\nnode a_u20_b__2 \"a_u20_b\"\nnode edge_1 \"edge_1\"\nnode node___proto__ \"__proto__\"\nnode node_constructor \"constructor\"\nedge edge_1__2 a_u20_b -> a_u20_b__2 \"\"\nedge edge_2 edge_1 -> node_root \"\"\nedge edge_3 node___proto__ -> node_constructor \"\"\nlayout root flow direction=down\nlayout cluster_named flow direction=down\nlayout cluster_empty flow direction=down\n",
+  "facts": {
+    "title": "Named",
+    "objects": [
+      {
+        "kind": "group",
+        "id": "cluster_named",
+        "label": "cluster_named"
+      },
+      {
+        "kind": "group",
+        "id": "cluster_empty",
+        "label": ""
+      },
+      {
+        "kind": "node",
+        "id": "node_root",
+        "label": "line\nnext",
+        "parent": "cluster_named",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "a_u5c_nb",
+        "label": "Explicit escaped-ID label",
+        "parent": "cluster_empty",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "a_u20_b",
+        "label": "a b",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "a_u20_b__2",
+        "label": "a_u20_b",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "edge_1",
+        "label": "edge_1",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "node___proto__",
+        "label": "__proto__",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "node_constructor",
+        "label": "constructor",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1__2",
+        "from": "a_u20_b",
+        "to": "a_u20_b__2",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "edge_1",
+        "to": "node_root",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_3",
+        "from": "node___proto__",
+        "to": "node_constructor",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "cluster_named",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "cluster_empty",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

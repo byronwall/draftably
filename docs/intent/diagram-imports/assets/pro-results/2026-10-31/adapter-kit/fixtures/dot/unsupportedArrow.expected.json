@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_ARROW_ENDS",
+      "message": "dir=both requires a native start/both-arrow model; endpoints are not reversed or duplicated.",
+      "severity": "error",
+      "impact": "semantics",
+      "line": 1
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    }
+  ],
+  "requires": [
+    "IMP-02-native-undirected"
+  ]
+}

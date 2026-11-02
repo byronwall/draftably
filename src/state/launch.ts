@@ -3,16 +3,24 @@
  *
  * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
+ * - `#s=…`: a scratch copy of source shared from the site's playground, opened like an example.
+ *   With `?new` it is the blank draft that New opens. Unsaved edits to any scratch copy come back
+ *   after a reload.
  * - `draftably open` without a file: the start page, showing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
 import { createRoot, createSignal } from 'solid-js';
+import { decodeSource, encodeSource } from '../lib/source-hash';
+import { readImportedSource } from '../import/scratch';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { clearSelection, prepareForEdit, setDoc } from './document';
 import { fitView } from './editor';
 import {
+  agreeToLeave,
   closeFileSession,
+  DRAFT_ID,
+  currentSource,
   exampleMode,
   fileSession,
   openExampleSession,
@@ -54,7 +62,50 @@ export const fileUrl = (path: string) => `${location.pathname}?file=${encodeURIC
 export const exampleUrl = (id: string) => `${location.pathname}?example=${encodeURIComponent(id)}`;
 export const startUrl = () => location.pathname;
 
+/** The public site serves the editor at `<site>/app/`. `draftably open` serves it at the root. */
+const onSite = () => /\/app\/(index\.html)?$/.test(location.pathname);
+
+/**
+ * A page of the public site (docs, the Playground). `draftably open` and the dev server have no
+ * site, so their links go to draftably.dev.
+ */
+export const siteUrl = (path = '') =>
+  new URL(path, onSite() ? new URL('..', location.href) : 'https://draftably.dev/').href;
+
+/** Home: the served folder's start page, or the public site's landing page. */
+export const homeUrl = () => (state.workspace() ? startUrl() : siteUrl());
+
+/** The editor was opened from the Playground, as its "Open in the editor" does. */
+export const cameFromPlayground = () => {
+  try {
+    return /\/play\/?$/.test(new URL(document.referrer).pathname);
+  } catch {
+    return false;
+  }
+};
+
+/** What happens to the source when it goes to the Playground, said before it goes. */
+export function playgroundNote(): string {
+  const file = fileSession();
+  if (!file) return '';
+  return file.example
+    ? 'The Playground opens in this tab with this source. Your edits here stay in this browser, and Back returns to them.'
+    : `The Playground opens in a new tab with a copy of this source. Edits there are not saved to ${file.file}.`;
+}
+
+/**
+ * Show the current source in the Playground. A file stays open here and the Playground opens in
+ * a new tab; an example goes in this tab, since its source is all it has.
+ */
+export async function openInPlayground() {
+  const url = `${siteUrl('play')}#${await encodeSource(currentSource())}`;
+  if (!exampleMode()) return void window.open(url, '_blank', 'noopener');
+  agreeToLeave();
+  location.assign(url);
+}
+
 async function fetchWorkspace(): Promise<WorkspaceInfo | null> {
+  if (onSite()) return null;
   try {
     const res = await fetch('./api/workspace', { headers: { accept: 'application/json' } });
     if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) return null;
@@ -123,6 +174,23 @@ async function chooseLaunch(): Promise<LaunchMode> {
     }
     state.setLaunchNotice(`There is no example named ${exampleId}.`);
   }
+  const imported = params.get('import');
+  if (imported) {
+    const source = readImportedSource(imported);
+    if (source != null) {
+      const title = /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Imported diagram';
+      await openExampleSession(DRAFT_ID, title, source, `import:${imported}`);
+      return 'example';
+    }
+    state.setLaunchNotice('This imported diagram is no longer available in this browser.');
+  }
+  const shared = await decodeSource(location.hash);
+  if (shared != null) {
+    const title = /^diagram\s+"([^"]*)"/m.exec(shared)?.[1] || 'Shared diagram';
+    const id = params.has('new') ? DRAFT_ID : 'shared';
+    await openExampleSession(id, title, shared, location.hash.slice(1));
+    return 'example';
+  }
   return info ? 'start' : 'static';
 }
 
@@ -184,7 +252,7 @@ export async function go(url: string, { push = true } = {}) {
   } else {
     closeFileSession();
     if (push) history.pushState(null, '', next.href);
-    document.title = 'Diagram Studio';
+    document.title = 'draftably';
     state.setView('start');
     void refreshWorkspace();
   }

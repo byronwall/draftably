@@ -1,0 +1,159 @@
+{
+  "status": "ready",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "node",
+      "foreign": "c",
+      "native": "c"
+    },
+    {
+      "kind": "node",
+      "foreign": "d",
+      "native": "d"
+    },
+    {
+      "kind": "node",
+      "foreign": "e",
+      "native": "e"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "2",
+      "native": "edge_2"
+    },
+    {
+      "kind": "edge",
+      "foreign": "3",
+      "native": "edge_3"
+    },
+    {
+      "kind": "edge",
+      "foreign": "4",
+      "native": "edge_4"
+    },
+    {
+      "kind": "edge",
+      "foreign": "5",
+      "native": "edge_5"
+    },
+    {
+      "kind": "edge",
+      "foreign": "6",
+      "native": "edge_6"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Sets\" version=1\nnode a \"a\"\nnode b \"b\"\nnode c \"c\"\nnode d \"d\"\nnode e \"e\"\nedge edge_1 a -> c \"work\"\nedge edge_2 a -> d \"work\"\nedge edge_3 b -> c \"work\"\nedge edge_4 b -> d \"work\"\nedge edge_5 c -> e \"work\"\nedge edge_6 d -> e \"work\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Sets",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "b",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "c",
+        "label": "c",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "d",
+        "label": "d",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "e",
+        "label": "e",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "c",
+        "label": "work",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "a",
+        "to": "d",
+        "label": "work",
+        "directed": true
+      },
+      {
+        "id": "edge_3",
+        "from": "b",
+        "to": "c",
+        "label": "work",
+        "directed": true
+      },
+      {
+        "id": "edge_4",
+        "from": "b",
+        "to": "d",
+        "label": "work",
+        "directed": true
+      },
+      {
+        "id": "edge_5",
+        "from": "c",
+        "to": "e",
+        "label": "work",
+        "directed": true
+      },
+      {
+        "id": "edge_6",
+        "from": "d",
+        "to": "e",
+        "label": "work",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}
