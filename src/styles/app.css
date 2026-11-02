@@ -1333,6 +1333,18 @@ button.folder-heading:hover {
   padding: var(--space-3);
 }
 
+.arrange > * {
+  flex: none;
+}
+
+.arrange .stack {
+  gap: var(--space-5);
+}
+
+.arrange-more .arrange-field {
+  gap: var(--space-3);
+}
+
 .arrange-subject {
   display: flex;
   flex-direction: column;
@@ -1344,6 +1356,11 @@ button.folder-heading:hover {
   color: var(--muted);
   font: var(--text-xs) / 1.45 var(--mono);
   overflow-wrap: anywhere;
+  transition: color 0.12s;
+}
+
+.arrange-subject code.unsaved {
+  color: var(--text);
 }
 
 .arrange-actions {
@@ -1366,7 +1383,6 @@ button.folder-heading:hover {
 }
 
 .arrange-more summary {
-  color: var(--muted);
   font-size: var(--text-sm);
   font-weight: 550;
   cursor: pointer;
@@ -1374,7 +1390,23 @@ button.folder-heading:hover {
 
 .arrange-more[open] summary {
   margin-bottom: var(--space-3);
-  color: var(--text);
+}
+
+/* A choice waiting on the compiler. Short ones finish before it shows. */
+:is(.segmented, .format-picker) button.pending {
+  animation: choice-pending 0.8s ease-in-out 0.15s infinite alternate;
+}
+
+@keyframes choice-pending {
+  to {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.segmented, .format-picker) button.pending {
+    animation: none;
+  }
 }
 
 .format-picker {
@@ -1390,10 +1422,10 @@ button.folder-heading:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
+  justify-content: center;
+  gap: 2px;
   height: 44px;
-  padding: 3px 0 4px;
+  padding: 0;
   border: 0;
   border-radius: 3px;
   background: transparent;
@@ -1414,6 +1446,14 @@ button.folder-heading:hover {
   background: var(--surface);
   color: var(--text);
   box-shadow: 0 0 0 1px var(--line-strong);
+}
+
+.format-shape {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
 }
 
 .format-glyph {

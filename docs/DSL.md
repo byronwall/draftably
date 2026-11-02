@@ -601,18 +601,18 @@ A scope takes one `layout` line. Each line here is a separate choice:
 Start with `compound-flow` if the drawing has groups, and `layered` if it has none. Change the
 engine only when you can name what is wrong with the drawing.
 
-| Engine            | Name in the Editor | Use it when                                                                                                                                                                                 | Example                                  |
-| ----------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `compound-flow`   | Compound flow      | The drawing has groups and reads in one direction. It orders groups by all their connections and packs them tight. The first engine to try for groups.                                      | Web, service and data tiers              |
-| `layered`         | Layered + fold     | The drawing reads in one direction. It puts objects in ranks and reduces crossings. A long run folds into rows, and `fold=never` keeps one row. The first engine to try without groups.     | A seven-step pipeline in a slide         |
-| `tree`            | Subtree tree       | Each object has one parent. It centers parents next to their children and gives each subtree its own space. `root=` names the top object.                                                   | An org chart                             |
-| `grid`            | Soft grid          | Objects have few connections or none. It packs them into a block that follows `aspect`. Many lines take long routes through a grid.                                                         | Nine services with no lines between them |
-| `boundary-align`  | Boundary alignment | Straight lines between groups matter more than size. It lines up connected objects across groups, so the groups move apart and the drawing grows.                                           | A few groups with many links between     |
-| `compound-spring` | Compound spring    | Packed groups read as a long strip, and you want a shape nearer a square. It relaxes groups by the connections of their members. It follows `aspect`.                                       | Groups for a page or a square slide      |
-| `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                                   | A data platform with many sources        |
-| `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                                | Services that call each other            |
-| `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                     | A map of related topics                  |
-| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Tidy positions**. See [Layout tools](#layout-tools). | A flow with one long line                |
+| Engine            | Name in the Editor | Use it when                                                                                                                                                                             | Example                                  |
+| ----------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `compound-flow`   | Compound flow      | The drawing has groups and reads in one direction. It orders groups by all their connections and packs them tight. The first engine to try for groups.                                  | Web, service and data tiers              |
+| `layered`         | Layered + fold     | The drawing reads in one direction. It puts objects in ranks and reduces crossings. A long run folds into rows, and `fold=never` keeps one row. The first engine to try without groups. | A seven-step pipeline in a slide         |
+| `tree`            | Subtree tree       | Each object has one parent. It centers parents next to their children and gives each subtree its own space. `root=` names the top object.                                               | An org chart                             |
+| `grid`            | Soft grid          | Objects have few connections or none. It packs them into a block that follows `aspect`. Many lines take long routes through a grid.                                                     | Nine services with no lines between them |
+| `boundary-align`  | Boundary alignment | Straight lines between groups matter more than size. It lines up connected objects across groups, so the groups move apart and the drawing grows.                                       | A few groups with many links between     |
+| `compound-spring` | Compound spring    | Packed groups read as a long strip, and you want a shape nearer a square. It relaxes groups by the connections of their members. It follows `aspect`.                                   | Groups for a page or a square slide      |
+| `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                               | A data platform with many sources        |
+| `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                            | Services that call each other            |
+| `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                 | A map of related topics                  |
+| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Improve**. See [Layout tools](#layout-tools).    | A flow with one long line                |
 
 `compound-flow`, `boundary-align` and `compound-spring` differ only when a scope holds groups.
 Without groups, those three, `flow` and `tidy` often draw almost the same result, because each
@@ -648,8 +648,9 @@ and the drawing gets larger.
 To compare engines on your own file, run
 `draftably vary diagram.draft --try engine=layered,tree,grid`, or select **Compare alternatives**
 (**Alt E**) in the Editor. To set one in the Editor, select **Arrange** (**Alt L**), then **Exact
-layout**. **Method** under **Rebuild** lists the engines by the names in the table. Choose one,
-select **Preview rebuild**, then select **Keep** to write the `layout` line.
+layout**. **Rebuild with** lists the engines by the names in the table. Choose one, select
+**Preview rebuild**, then select **Keep** to write the `layout` line. Choose **Built-in recipe** to
+remove an engine.
 
 ### Scopes and groups
 
@@ -755,10 +756,9 @@ edge e4 client -> billing "invoice"
 routing bend-penalty=64 crossing-penalty=900 corner-radius=0
 ```
 
-The **Routing options** menu in the Editor has a slider for each setting except `standoff`, under
-the menu names in the table. **Shared-path cost** and **Routing passes** are under **Advanced
-routing**. The menu also shows the crossings, close lane pairs and bends of the current drawing. A
-change there writes the `routing` line.
+In the Editor, select **Arrange** (**Alt L**), then **Exact routing**, for a slider for each
+setting. **Connections** above it shows the crossings, bends and close lines of the current drawing.
+A preset there previews until you select **Keep**. A slider writes the `routing` line.
 
 When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
 between objects that layout places leaves its source's trailing side and enters its target's
