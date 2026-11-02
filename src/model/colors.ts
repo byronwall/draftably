@@ -63,12 +63,16 @@ export function drawnSwatch(
   const swatch = swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
   // A sequence participant is outlined rather than filled, so the row of headers stays quiet: in
   // its color, which reads as an accent (see `participantAccent`), or else the theme's outline.
-  if (kind === 'node' && doc.layout.sequence)
+  // Its fill is the lane under it, so the header is not a patch of canvas on the lane's tint.
+  if (kind === 'node' && doc.layout.sequence) {
+    const lane = findObject(doc, id)?.parentId,
+      framed = lane && findGroup(doc, lane)?.frame !== 'none';
     return {
-      fill: look.canvas,
+      fill: framed ? drawnSwatch(doc, look, lane!, 'group').fill : look.canvas,
       stroke: participantAccent(doc, look, id) ?? swatch.stroke,
       ink: look.text,
     };
+  }
   return swatch;
 }
 

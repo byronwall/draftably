@@ -20,6 +20,8 @@ export interface WorkspaceFile {
   /** Path relative to the workspace root, with forward slashes. */
   path: string;
   title: string;
+  /** The `subtitle` line, when the file has one near its top. */
+  subtitle?: string;
   modified: number;
 }
 
@@ -32,8 +34,11 @@ export interface WorkspaceInfo {
 const SKIP = new Set(['node_modules', 'dist', 'dist-cli', 'build', 'coverage', 'tmp', 'target']);
 const MAX_FILES = 400;
 
-const titleOf = (source: string) =>
-  /^\s*diagram\s+"((?:[^"\\]|\\.)*)"/m.exec(source)?.[1].replace(/\\(.)/g, '$1') ?? '';
+/** The quoted text after `word` at the start of a line, e.g. `diagram "Checkout"` → "Checkout". */
+const quoted = (word: string, source: string) =>
+  new RegExp(`^\\s*${word}\\s+"((?:[^"\\\\]|\\\\.)*)"`, 'm')
+    .exec(source)?.[1]
+    .replace(/\\(.)/g, '$1') ?? '';
 
 function listFiles(root: string): WorkspaceFile[] {
   const files: WorkspaceFile[] = [];
@@ -56,7 +61,8 @@ function listFiles(root: string): WorkspaceFile[] {
           const head = fs.readFileSync(full, 'utf8').slice(0, 4000);
           files.push({
             path: path.relative(root, full).split(path.sep).join('/'),
-            title: titleOf(head),
+            title: quoted('diagram', head),
+            subtitle: quoted('subtitle', head) || undefined,
             modified: stat.mtimeMs,
           });
         } catch {

@@ -87,6 +87,8 @@ export interface FileConfig {
   linkBase?: string;
   /** The editor file links open in; VS Code when unset. */
   editor?: Editor;
+  /** Strike removed titles through in a diff; off when unset. */
+  strikeRemoved?: boolean;
 }
 
 export const editorUrl = (editor: Editor, file: string, line?: number, col?: number) =>

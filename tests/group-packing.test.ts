@@ -145,6 +145,25 @@ describe('group packing', () => {
   });
 });
 
+describe('straight columns', () => {
+  it('lines each box up with the box it faces in the column before', async () => {
+    // Boxes of uneven height on the left, one line from each into a short box on the right.
+    const left = ['one line', 'two lines of text here', 'three lines of wrapped text in this box'];
+    const scene = await compile(
+      [
+        'group before "Before: a title long enough to wrap onto a second line"',
+        'group after "After"',
+        ...left.map((l, i) => `node a${i} "${l}" in=before`),
+        ...left.map((_, i) => `node b${i} "b${i}" in=after`),
+        ...left.map((_, i) => `edge e${i} a${i} -> b${i}`),
+        'layout root engine=layered direction=right',
+        '',
+      ].join('\n'),
+    );
+    for (const i of left.keys()) expect(cy(scene, `b${i}`)).toBeCloseTo(cy(scene, `a${i}`), 0);
+  });
+});
+
 describe('busy gaps', () => {
   /** A client group whose session sends two lines into the gap above the project. */
   const busy = [

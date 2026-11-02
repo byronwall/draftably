@@ -44,7 +44,9 @@ export function diagramFrame(
     head = inFrame.length
       ? { w: Math.max(lines.w, ...inFrame.map(n => n.rect.w)), h: (lines.h || 20) + block }
       : lines,
-    key = legendSize(look, legend, statuses),
+    // The key flows left to right and wraps to the frame the drawing and heading set.
+    inner = Math.max(area.w, head.w + FRAME_PAD * 2, heading?.width ?? 0) - FRAME_PAD * 2,
+    key = legendSize(look, legend, statuses, inner),
     natural = Math.max(area.w, head.w + FRAME_PAD * 2, key.w + FRAME_PAD * 2),
     y = area.y - head.h,
     left = area.x + FRAME_PAD;

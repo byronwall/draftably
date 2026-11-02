@@ -46,7 +46,7 @@ and groups. References may point to later lines.
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                  |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                          |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                             |
-| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Legend](#legend).                                                                                                                                                                                                                                                                                                          |
+| `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                 |
 | `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                   |
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                                                                                |
@@ -492,12 +492,14 @@ node api "API gateway"
 -edge notify api -> hook "notify"
 ```
 
-| Mark | Meaning                      | Drawn as                                               |
-| ---- | ---------------------------- | ------------------------------------------------------ |
-| `+`  | Added                        | Pale green fill, strong green border; green line       |
-| `~`  | Changed                      | Pale amber fill, strong amber border; amber line       |
-| `-`  | Removed                      | Pale red fill, dashed red border, title struck through |
-| `.`  | Unchanged, shown for context | Neutral and faded                                      |
+| Mark | Meaning                      | Drawn as                                                                        |
+| ---- | ---------------------------- | ------------------------------------------------------------------------------- |
+| `+`  | Added                        | Pale green fill, strong green border; green line                                |
+| `~`  | Changed                      | Pale amber fill, strong amber border; amber line                                |
+| `-`  | Removed                      | Paler red fill, dashed red border, a − disc on the corner; title stays readable |
+| `.`  | Unchanged, shown for context | Neutral and faded                                                               |
+
+`config strike-removed=on` also strikes each removed title through.
 
 `draftably compare before.draft after.draft` writes these marks for you. It matches nodes,
 groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
@@ -541,7 +543,7 @@ theme's neutral surface, containers become quiet outlines, and unchanged lines t
 the marked objects carry a hue. `color=` and `legend` lines are kept but not drawn; remove the
 marks and the file draws in its own colors again. The green, amber and red come from the theme,
 so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
-or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
+or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects carry it and then how many lines (`5 added · 5 lines`). Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
 
 ### Side by side
@@ -709,18 +711,29 @@ not defined is an error on the referencing line. Each family and shade may be de
 
 ### Legend
 
-`legend family "meaning"` adds a row to the diagram's color key, in file order: a
-swatch of that family (`shade=` picks one; 500 by default) and its meaning. The Editor shows the
-key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
-drawing. Each family and shade may appear once. A legend never moves anything. `check` warns
-when a swatch's shade matches none of its family's nodes (`legend-shade`), such as the default
-500 for nodes drawn at `shade=200`.
+`legend family "meaning"` adds an entry to the diagram's key, in file order: a swatch of that
+family (`shade=` picks one; 500 by default) and its meaning. `legend line dashed "meaning"` and
+`legend line solid "meaning"` add a short line in that style and its meaning, for files whose
+dashed lines say something. The viewer, `inspect --svg` and exports draw the key under the
+drawing, left to right, and start a new row only when the next entry would pass the drawing's
+width. Each family and shade, and each line style, may appear once. A legend never moves anything.
+
+A key must explain everything it colors. `check` warns when a file has a legend and an accent
+family in the drawing has no row (`legend-missing`; `slate` and `stone` need none), and when a
+swatch's shade matches none of its family's nodes (`legend-shade`), such as the default 500 for
+nodes drawn at `shade=200`. It notes a file that mixes dashed and solid lines with no
+`legend line` row (`legend-lines`); in a sequence a dashed reply needs none.
 
 ```draft
 group edge "Edge" color=blue
+node api "API" in=edge
 node db "Postgres" color=violet
+edge save api -> db "write"
+edge audit api -> db "audit" kind=async
 legend blue "Public entry points"
 legend violet "Data stores"
+legend line solid "Request path"
+legend line dashed "Background job"
 ```
 
 ## Layout engines

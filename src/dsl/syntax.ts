@@ -12,10 +12,12 @@ import {
   NODE_SHADE,
   HEX_COLOR,
   isBuiltInFamily,
+  LEGEND_LINES,
   OVERRIDE_LIMITS,
   SHADES,
   THEME_IDS,
   type DiagramAppearance,
+  type LegendLine,
   type Shade,
   type ThemeId,
 } from '../model/appearance';
@@ -382,7 +384,11 @@ export interface Model {
 }
 
 /** `config` keys and the setting each sets. */
-export const CONFIG_KEYS = { 'link-base': 'linkBase', editor: 'editor' } as const;
+export const CONFIG_KEYS = {
+  'link-base': 'linkBase',
+  editor: 'editor',
+  'strike-removed': 'strikeRemoved',
+} as const;
 
 /** Theme attributes in the file and the override each sets. */
 export const THEME_ATTRS = {
@@ -625,6 +631,8 @@ export function parseModel(source: string | SourceDoc): Model {
             });
           configLines.set(key, line);
           if (key === 'editor') config.editor = choice('editor', 'vscode', EDITORS);
+          else if (key === 'strike-removed')
+            config.strikeRemoved = choice(key, 'off', ['on', 'off'] as const) === 'on';
           else {
             assert(w.quoted, `Expected ${key}="path" in double quotes.`);
             config.linkBase = w.value;
@@ -876,6 +884,21 @@ export function parseModel(source: string | SourceDoc): Model {
         break;
       }
       case 'legend': {
+        if (args[0]?.value === 'line' && !args[0].quoted) {
+          // `legend line dashed "meaning"`: a short connection in that style, then its meaning.
+          count(3);
+          allow([]);
+          const style = args[1].value as LegendLine;
+          assert(
+            !args[1].quoted && LEGEND_LINES.includes(style),
+            `Expected legend line ${LEGEND_LINES.join('|')} "meaning".`,
+          );
+          once(`legend:line:${style}`);
+          assert(text(args[2]).trim(), 'A legend entry needs its meaning in quotes.');
+          (m.appearance.legend ??= []).push({ line: style, label: text(args[2]) });
+          m.legendLines.push(line);
+          break;
+        }
         count(2);
         allow(['shade']);
         const family = args[0].value;
@@ -1037,7 +1060,7 @@ function validateReferences(m: Model) {
     defined.get(c.family)!.add(c.shade);
   }
   (m.appearance.legend ?? []).forEach((e, i) => {
-    if (isBuiltInFamily(e.family)) return;
+    if (!e.family || isBuiltInFamily(e.family)) return;
     const shades = defined.get(e.family),
       shade = e.shade ?? NODE_SHADE;
     assert(
