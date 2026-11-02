@@ -342,8 +342,13 @@ layout root flow direction=right
       marks = (svg: string) =>
         [...svg.matchAll(/data-id="e1">([\s\S]*?)<\/g>/g)].map(([, g]) => {
           const [, from, to] = /d="M([\d.]+),[\d.]+L([\d.]+)/.exec(g)!,
-            [, x, w] = /<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/.exec(g) ?? [],
-            text = />([^<]+)<\/text>/.exec(g)?.[1];
+            [, x, w] = /<rect x="([\d.]+)" y="-?[\d.]+" width="([\d.]+)"/.exec(g) ?? [],
+            // A long label wraps into tspans; join its lines back into one string.
+            text = /<text[^>]*>([\s\S]*?)<\/text>/
+              .exec(g)?.[1]
+              .split(/<[^>]+>/)
+              .filter(Boolean)
+              .join(' ');
           return { from: +from, to: +to, x: +x, w: +w, text };
         });
     for (const label of [' "new"', '']) {
