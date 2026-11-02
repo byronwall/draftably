@@ -12,7 +12,7 @@ import {
   type ComparisonMode,
 } from '../engines/explorer-engine.js';
 import { LANES_HOLD } from '../dsl/layout-edits';
-import { measure, pickCandidates, type Measure } from '../model/candidates';
+import { holdSlots, measure, pickCandidates, type Measure } from '../model/candidates';
 import { documentIdentity, normalize, routingFingerprint } from '../model/document';
 import { clamp, clone, rectUnion } from '../model/geometry';
 import { findGroup, findNode } from '../model/graph';
@@ -155,6 +155,13 @@ const initial = (): ComparisonState => ({
 const [cmp, setCmp] = createRoot(() => createStore<ComparisonState>(initial()));
 export const comparison = cmp;
 
+interface Sheet {
+  shown: number[];
+  others: number[];
+  failed: number[];
+  alike: number;
+}
+
 const scored = (i: number) => {
   const { measure, scene } = cmp.cells[i];
   return measure && scene ? { index: i, measure, scene } : null;
@@ -162,24 +169,43 @@ const scored = (i: number) => {
 
 /** Which candidates to show: the current drawing, the best few, and the count of the rest. */
 export const comparisonSheet = createRoot(() =>
-  createMemo(() => {
-    const cells = cmp.cells,
-      all = cells.map((_, i) => i);
-    const current = cells.findIndex(c => c.current);
-    const base = current >= 0 ? scored(current) : null;
-    // A parameter grid is read as a whole, and failures need a place to be seen.
-    const failed = all.filter(i => cells[i].status === 'error');
-    if (current < 0 || !base) return { shown: all, others: [], failed, alike: 0 };
-    const ready = all.flatMap(i => (i !== current && scored(i) ? [scored(i)!] : []));
-    const pick = pickCandidates(base, ready, SHOWN);
-    const pending = all.filter(i => cells[i].status === 'pending');
-    return {
-      shown: [current, ...pick.shown, ...pending.slice(0, SHOWN - pick.shown.length)],
-      others: [...pick.others, ...failed],
-      failed,
-      alike: pick.alike,
-    };
-  }),
+  createMemo<Sheet>(
+    before => {
+      const cells = cmp.cells,
+        all = cells.map((_, i) => i);
+      const current = cells.findIndex(c => c.current);
+      const failed = all.filter(i => cells[i].status === 'error');
+      const pending = all.filter(i => cells[i].status === 'pending' && i !== current);
+      // A parameter grid is read as a whole, and failures need a place to be seen.
+      if (current < 0 || cells[current].status === 'error')
+        return { shown: all, others: [], failed, alike: 0 };
+      const base = scored(current);
+      if (!base)
+        return {
+          shown: [current, ...pending.slice(0, SHOWN)],
+          others: pending.slice(SHOWN),
+          failed,
+          alike: 0,
+        };
+      const ready = all.flatMap(i => (i !== current && scored(i) ? [scored(i)!] : []));
+      const pick = pickCandidates(base, ready, SHOWN);
+      // During a run a drawn card keeps its slot, so Apply stays on what is being read. The run's
+      // end re-ranks once, and any card that is still chosen stays where it is.
+      const worthShowing = [...pick.shown, ...pick.others],
+        slots = before.shown.filter(i => i !== current),
+        keep = cmp.busy
+          ? slots.filter(i => cells[i]?.status === 'ready' && worthShowing.includes(i))
+          : slots.filter(i => pick.shown.includes(i));
+      const shown = holdSlots(slots, keep, [...pick.shown, ...pending], SHOWN);
+      return {
+        shown: [current, ...shown],
+        others: [...worthShowing.filter(i => !shown.includes(i)), ...failed],
+        failed,
+        alike: pick.alike,
+      };
+    },
+    { shown: [], others: [], failed: [], alike: 0 },
+  ),
 );
 
 /** Candidates on screen, in order. */
@@ -639,10 +665,14 @@ export function setCameraMode(mode: CameraMode) {
 
 // --- Presentation ----------------------------------------------------------------------------
 
+let controlsBeforeOverlay = true;
+
 export function setPresentation(mode: Presentation) {
+  if (mode === cmp.presentation) return;
   setCmp('presentation', mode);
-  // The overlay's layers are listed in the controls.
-  if (mode === 'overlay') setCmp('controlsHidden', false);
+  // The overlay's layers are listed in the controls. Leaving it puts the controls back.
+  if (mode === 'overlay') controlsBeforeOverlay = cmp.controlsHidden;
+  setCmp('controlsHidden', mode === 'overlay' ? false : controlsBeforeOverlay);
   requestAnimationFrame(() => fitAll());
 }
 
@@ -726,7 +756,11 @@ export function gridColumns(size: { width: number; height: number }) {
   if (count <= 4) cols = Math.min(count, 2);
   if (size.width < 660 && count > 2) cols = 2;
   if (count > 9) cols = 4;
-  const ready = shown.map(i => cmp.cells[i]).filter(c => c.status === 'ready' && c.scene);
+  // The current drawing alone sets the shape, so the grid does not reflow as results arrive.
+  const anchor = cmp.cells.find(c => c.current && c.scene),
+    ready = anchor
+      ? [anchor]
+      : shown.map(i => cmp.cells[i]).filter(c => c.status === 'ready' && c.scene);
   if (ready.length && cmp.expanded === null) {
     let best = -Infinity;
     for (let cc = 1; cc <= Math.min(count, 4); cc++) {

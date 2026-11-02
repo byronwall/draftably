@@ -132,6 +132,21 @@ export interface Candidate {
   scene: StaticScene;
 }
 
+/**
+ * The sheet's slots after a change: each card in `keep` stays where it was, so a card never moves
+ * under the pointer, and `fill` takes the free slots in order.
+ */
+export function holdSlots(before: number[], keep: number[], fill: number[], limit: number) {
+  const coming = fill.filter(i => !keep.includes(i)),
+    slots = before.flatMap(i => {
+      if (keep.includes(i)) return [i];
+      const next = coming.shift();
+      return next === undefined ? [] : [next];
+    });
+  const rest = keep.filter(i => !slots.includes(i));
+  return [...slots, ...rest, ...coming].slice(0, limit);
+}
+
 /** How far apart two drawings are: the mean distance between their boxes, in drawn pixels. */
 function distance(a: StaticScene, b: StaticScene) {
   let sum = 0;

@@ -23,7 +23,8 @@ import {
   toggleShowAll,
   type Candidate,
 } from '../../state/comparison';
-import { IconButton } from '../controls';
+import { rebuildBlocked } from '../../state/layout';
+import { IconButton, tip } from '../controls';
 import { StaticScene } from '../scene/StaticScene';
 import { ComparisonSidebar } from './ComparisonSidebar';
 import { ViewportCanvas } from './ViewportCanvas';
@@ -82,6 +83,8 @@ function Dialog() {
           <button
             type="button"
             aria-pressed={!routing()}
+            disabled={!!rebuildBlocked()}
+            {...tip('Layouts', undefined, rebuildBlocked() ?? undefined)}
             onClick={() => setComparisonMode('layout')}
           >
             Layouts
