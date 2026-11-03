@@ -1,0 +1,1291 @@
+{
+  "schema_version": 1,
+  "review_type": "agent judgment / manual source-semantic audit",
+  "review_date_utc": "2026-11-03",
+  "protocol": "PROTOCOL.md",
+  "requirements": "tasks.json",
+  "scope": "All 15 immutable initial native sources only; no renderer invoked and no output image inspected.",
+  "method": "Read tasks.json, PROTOCOL.md and each initial source in full. Manually compare node labels, directed endpoints, nonempty labels and memberships. Raw SVG paths traced using coordinates and end-marker direction. JSON serialization uses task requirements to record the manually determined matches; it does not perform semantic verification.",
+  "counting_rules": {
+    "nodes": "Semantic node identities, not repeated references, captions, groups, styling declarations or accessibility text.",
+    "edges": "Directed semantic connections, excluding marker-definition triangles and node outlines.",
+    "group_membership": "Each required node-to-enclosing-group pair; zero required memberships is not applicable, not evidence of grouping quality.",
+    "labels": "Exact nonempty strings associated with the matching required directed edge; raw SVG associations inferred from spatial proximity and routing.",
+    "title": "Exact title declaration/text present in source, not proof it appears visibly in renderer output."
+  },
+  "limitations": [
+    "Non-blinded agent review; judgment can miss source interpretation errors.",
+    "No parser validation, compilation success, visible semantic fidelity, typography, overlaps or title display can be concluded from these counts.",
+    "All sources express the required semantics, including sources whose renderer may fail; renderer outcomes must be reported separately.",
+    "Raw SVG path/label associations are manually reconstructed, not declarative graph semantics; visible readability and occlusion need independent rendered-image review."
+  ],
+  "summary": {
+    "cells_reviewed": 15,
+    "cells_with_missing_or_inexact_required_source_semantics": 0,
+    "all_cells_have_exact_title_in_source": true,
+    "visible_semantics_verified": false
+  },
+  "cells": [
+    {
+      "task": "workflow",
+      "tool": "mermaid",
+      "phase": "initial",
+      "source": "cells/workflow/mermaid/initial.mmd",
+      "source_sha256": "2f9f1e34e45fad855c58616a776ab0a546ddf7a442b4ca2c070a14aa005fc284",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 9,
+        "exact_present_count": 9,
+        "exact_present": [
+          "Start",
+          "Validate order",
+          "Payment authorized?",
+          "Reserve stock",
+          "Stock available?",
+          "Pack order",
+          "Ship order",
+          "Cancel order",
+          "End"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 10,
+        "present_count": 10,
+        "present": [
+          ["Start", "Validate order"],
+          ["Validate order", "Payment authorized?"],
+          ["Payment authorized?", "Reserve stock"],
+          ["Payment authorized?", "Cancel order"],
+          ["Reserve stock", "Stock available?"],
+          ["Stock available?", "Pack order"],
+          ["Stock available?", "Cancel order"],
+          ["Pack order", "Ship order"],
+          ["Ship order", "End"],
+          ["Cancel order", "End"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 4,
+        "exact_correct_count": 4,
+        "exact_correct": [
+          ["Payment authorized?", "Reserve stock", "yes"],
+          ["Payment authorized?", "Cancel order", "no"],
+          ["Stock available?", "Pack order", "yes"],
+          ["Stock available?", "Cancel order", "no"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 6,
+        "correct_count": 6
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Order approval workflow",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and --> statements match; nonempty pipe labels are exact. YAML frontmatter declares the exact title. Class/style declarations do not add semantic nodes. Whether the title is visibly rendered is not established here."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "workflow",
+      "tool": "draftably",
+      "phase": "initial",
+      "source": "cells/workflow/draftably/initial.draft",
+      "source_sha256": "84c8f4f3243adda955622a374e8f88dd51c5c1ccb0122ddbd61c430ea02f9bc2",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 9,
+        "exact_present_count": 9,
+        "exact_present": [
+          "Start",
+          "Validate order",
+          "Payment authorized?",
+          "Reserve stock",
+          "Stock available?",
+          "Pack order",
+          "Ship order",
+          "Cancel order",
+          "End"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 10,
+        "present_count": 10,
+        "present": [
+          ["Start", "Validate order"],
+          ["Validate order", "Payment authorized?"],
+          ["Payment authorized?", "Reserve stock"],
+          ["Payment authorized?", "Cancel order"],
+          ["Reserve stock", "Stock available?"],
+          ["Stock available?", "Pack order"],
+          ["Stock available?", "Cancel order"],
+          ["Pack order", "Ship order"],
+          ["Ship order", "End"],
+          ["Cancel order", "End"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 4,
+        "exact_correct_count": 4,
+        "exact_correct": [
+          ["Payment authorized?", "Reserve stock", "yes"],
+          ["Payment authorized?", "Cancel order", "no"],
+          ["Stock available?", "Pack order", "yes"],
+          ["Stock available?", "Cancel order", "no"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 6,
+        "correct_count": 6
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Order approval workflow",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Exact labels are explicit node/edge strings; edge IDs are unique and directed endpoints match the task. Diagram header contains the exact title. This checks source declarations, not renderer support or output."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "workflow",
+      "tool": "d2",
+      "phase": "initial",
+      "source": "cells/workflow/d2/initial.d2",
+      "source_sha256": "3d84ae0eb5c60ee8697f91694800020b1900812e5ad7adac9cd110bfabe57721",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 9,
+        "exact_present_count": 9,
+        "exact_present": [
+          "Start",
+          "Validate order",
+          "Payment authorized?",
+          "Reserve stock",
+          "Stock available?",
+          "Pack order",
+          "Ship order",
+          "Cancel order",
+          "End"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 10,
+        "present_count": 10,
+        "present": [
+          ["Start", "Validate order"],
+          ["Validate order", "Payment authorized?"],
+          ["Payment authorized?", "Reserve stock"],
+          ["Payment authorized?", "Cancel order"],
+          ["Reserve stock", "Stock available?"],
+          ["Stock available?", "Pack order"],
+          ["Stock available?", "Cancel order"],
+          ["Pack order", "Ship order"],
+          ["Ship order", "End"],
+          ["Cancel order", "End"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 4,
+        "exact_correct_count": 4,
+        "exact_correct": [
+          ["Payment authorized?", "Reserve stock", "yes"],
+          ["Payment authorized?", "Cancel order", "no"],
+          ["Stock available?", "Pack order", "yes"],
+          ["Stock available?", "Cancel order", "no"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 6,
+        "correct_count": 6
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Order approval workflow",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Node keys resolve to the declared exact display labels; directed -> statements and their colon labels match. Root label supplies the exact title. Style/class declarations are not counted as semantic nodes. Native parser/render behavior is not established by this audit."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "workflow",
+      "tool": "dot",
+      "phase": "initial",
+      "source": "cells/workflow/dot/initial.dot",
+      "source_sha256": "66fc562e62c91eb6f29a6b9d54354ddf3498c4d0fa2ca9de585b01c91a50e344",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 9,
+        "exact_present_count": 9,
+        "exact_present": [
+          "Start",
+          "Validate order",
+          "Payment authorized?",
+          "Reserve stock",
+          "Stock available?",
+          "Pack order",
+          "Ship order",
+          "Cancel order",
+          "End"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 10,
+        "present_count": 10,
+        "present": [
+          ["Start", "Validate order"],
+          ["Validate order", "Payment authorized?"],
+          ["Payment authorized?", "Reserve stock"],
+          ["Payment authorized?", "Cancel order"],
+          ["Reserve stock", "Stock available?"],
+          ["Stock available?", "Pack order"],
+          ["Stock available?", "Cancel order"],
+          ["Pack order", "Ship order"],
+          ["Ship order", "End"],
+          ["Cancel order", "End"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 4,
+        "exact_correct_count": 4,
+        "exact_correct": [
+          ["Payment authorized?", "Reserve stock", "yes"],
+          ["Payment authorized?", "Cancel order", "no"],
+          ["Stock available?", "Pack order", "yes"],
+          ["Stock available?", "Cancel order", "no"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 6,
+        "correct_count": 6
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Order approval workflow",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and directed -> statements match; graph label supplies the exact title. Rank-only node references do not create duplicate nodes. Compass ports (where used) retain the original node identity."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "workflow",
+      "tool": "svg",
+      "phase": "initial",
+      "source": "cells/workflow/svg/initial.svg",
+      "source_sha256": "23974a3f1b7392893ac70b03eb9834cf4cff301ecae07f0ac058a036a81c0edb",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 9,
+        "exact_present_count": 9,
+        "exact_present": [
+          "Start",
+          "Validate order",
+          "Payment authorized?",
+          "Reserve stock",
+          "Stock available?",
+          "Pack order",
+          "Ship order",
+          "Cancel order",
+          "End"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 10,
+        "present_count": 10,
+        "present": [
+          ["Start", "Validate order"],
+          ["Validate order", "Payment authorized?"],
+          ["Payment authorized?", "Reserve stock"],
+          ["Payment authorized?", "Cancel order"],
+          ["Reserve stock", "Stock available?"],
+          ["Stock available?", "Pack order"],
+          ["Stock available?", "Cancel order"],
+          ["Pack order", "Ship order"],
+          ["Ship order", "End"],
+          ["Cancel order", "End"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 4,
+        "exact_correct_count": 4,
+        "exact_correct": [
+          ["Payment authorized?", "Reserve stock", "yes"],
+          ["Payment authorized?", "Cancel order", "no"],
+          ["Stock available?", "Pack order", "yes"],
+          ["Stock available?", "Cancel order", "no"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 6,
+        "correct_count": 6
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Order approval workflow",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Nodes were mapped manually from shape coordinates and text; edges were traced from start to endpoint and marker-end orientation, not inferred from comments or description text. Marker geometry, background, group rectangles and title are not extra semantic nodes/edges. Text labels are independent SVG objects; association with paths is an agent judgment, not a machine-readable edge relationship.",
+        "All edge paths inherit or specify marker-end:url(#arrow); the triangular marker points toward its tip and orient=auto follows the final path segment. Nodes are painted after edges, so endpoint arrowheads may be partially covered; actual legibility/occlusion requires image inspection. Exact title occurs both in accessibility <title> and visible-text source; this is not two semantic nodes."
+      ],
+      "source_semantic_issues": [],
+      "svg_manual_path_trace": [
+        "M270 132 V170: Start bottom to Validate order top, downward end arrow.",
+        "M270 222 V260: Validate order bottom to Payment authorized? top, downward.",
+        "M270 380 V425: Payment authorized? bottom to Reserve stock top, downward; yes at (295,402).",
+        "M430 320 H620 V655: Payment authorized? right to Cancel order top, downward; no at (480,305).",
+        "M270 477 V520: Reserve stock bottom to Stock available? top, downward.",
+        "M270 640 V685: Stock available? bottom to Pack order top, downward; yes at (295,662).",
+        "M420 580 H550 V655: Stock available? right to Cancel order top, downward; no at (470,565).",
+        "M270 737 V780: Pack order bottom to Ship order top, downward.",
+        "M270 832 V875: Ship order bottom to End top, downward.",
+        "M585 707 V899 H340: Cancel order bottom to End right, leftward end arrow."
+      ]
+    },
+    {
+      "task": "architecture",
+      "tool": "mermaid",
+      "phase": "initial",
+      "source": "cells/architecture/mermaid/initial.mmd",
+      "source_sha256": "1071a4536ee1b89f8f829d4399803c6d4fa4793d60985e01dffcd74a479db7c2",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 8,
+        "exact_present_count": 8,
+        "exact_present": [
+          "Web app",
+          "Mobile app",
+          "API gateway",
+          "Auth service",
+          "Order service",
+          "Worker",
+          "Orders database",
+          "Queue"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Web app", "API gateway"],
+          ["Mobile app", "API gateway"],
+          ["API gateway", "Auth service"],
+          ["API gateway", "Order service"],
+          ["Order service", "Orders database"],
+          ["Order service", "Queue"],
+          ["Queue", "Worker"],
+          ["Worker", "Orders database"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Web app", "API gateway", "HTTPS"],
+          ["Mobile app", "API gateway", "HTTPS"],
+          ["API gateway", "Auth service", "validate token"],
+          ["API gateway", "Order service", "request"],
+          ["Order service", "Orders database", "read/write"],
+          ["Order service", "Queue", "publish"],
+          ["Queue", "Worker", "consume"],
+          ["Worker", "Orders database", "update"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 3,
+        "correct_count": 3,
+        "required_membership_count": 8,
+        "correct_membership_count": 8,
+        "exact_memberships": {
+          "Client": ["Web app", "Mobile app"],
+          "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+          "Data": ["Orders database", "Queue"]
+        },
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Checkout service architecture",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and --> statements match; nonempty pipe labels are exact. YAML frontmatter declares the exact title. Class/style declarations do not add semantic nodes. Whether the title is visibly rendered is not established here.",
+        "The three named subgraphs enclose exactly the required 2/4/2 node sets."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "architecture",
+      "tool": "draftably",
+      "phase": "initial",
+      "source": "cells/architecture/draftably/initial.draft",
+      "source_sha256": "4049e7d0afe743dde8fc3ac859719e5624c810c20a06f77e79d17d6103e6a1ca",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 8,
+        "exact_present_count": 8,
+        "exact_present": [
+          "Web app",
+          "Mobile app",
+          "API gateway",
+          "Auth service",
+          "Order service",
+          "Worker",
+          "Orders database",
+          "Queue"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Web app", "API gateway"],
+          ["Mobile app", "API gateway"],
+          ["API gateway", "Auth service"],
+          ["API gateway", "Order service"],
+          ["Order service", "Orders database"],
+          ["Order service", "Queue"],
+          ["Queue", "Worker"],
+          ["Worker", "Orders database"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Web app", "API gateway", "HTTPS"],
+          ["Mobile app", "API gateway", "HTTPS"],
+          ["API gateway", "Auth service", "validate token"],
+          ["API gateway", "Order service", "request"],
+          ["Order service", "Orders database", "read/write"],
+          ["Order service", "Queue", "publish"],
+          ["Queue", "Worker", "consume"],
+          ["Worker", "Orders database", "update"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 3,
+        "correct_count": 3,
+        "required_membership_count": 8,
+        "correct_membership_count": 8,
+        "exact_memberships": {
+          "Client": ["Web app", "Mobile app"],
+          "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+          "Data": ["Orders database", "Queue"]
+        },
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Checkout service architecture",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Exact labels are explicit node/edge strings; edge IDs are unique and directed endpoints match the task. Diagram header contains the exact title. This checks source declarations, not renderer support or output.",
+        "All eight in= memberships reference the correct three declared groups."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "architecture",
+      "tool": "d2",
+      "phase": "initial",
+      "source": "cells/architecture/d2/initial.d2",
+      "source_sha256": "c3925997f15b2568d5f05446885c9916486a3ac73f46b0cdc1a882be68c62862",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 8,
+        "exact_present_count": 8,
+        "exact_present": [
+          "Web app",
+          "Mobile app",
+          "API gateway",
+          "Auth service",
+          "Order service",
+          "Worker",
+          "Orders database",
+          "Queue"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Web app", "API gateway"],
+          ["Mobile app", "API gateway"],
+          ["API gateway", "Auth service"],
+          ["API gateway", "Order service"],
+          ["Order service", "Orders database"],
+          ["Order service", "Queue"],
+          ["Queue", "Worker"],
+          ["Worker", "Orders database"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Web app", "API gateway", "HTTPS"],
+          ["Mobile app", "API gateway", "HTTPS"],
+          ["API gateway", "Auth service", "validate token"],
+          ["API gateway", "Order service", "request"],
+          ["Order service", "Orders database", "read/write"],
+          ["Order service", "Queue", "publish"],
+          ["Queue", "Worker", "consume"],
+          ["Worker", "Orders database", "update"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 3,
+        "correct_count": 3,
+        "required_membership_count": 8,
+        "correct_membership_count": 8,
+        "exact_memberships": {
+          "Client": ["Web app", "Mobile app"],
+          "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+          "Data": ["Orders database", "Queue"]
+        },
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Checkout service architecture",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Node keys resolve to the declared exact display labels; directed -> statements and their colon labels match. Root label supplies the exact title. Style/class declarations are not counted as semantic nodes. Native parser/render behavior is not established by this audit.",
+        "All eight nodes are nested in the correct Client, Services and Data objects; fully qualified edge endpoints resolve to those nodes."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "architecture",
+      "tool": "dot",
+      "phase": "initial",
+      "source": "cells/architecture/dot/initial.dot",
+      "source_sha256": "fc74e2c20c6cbaa9b6641b5f44a0f20a22b320f749abd79e0d24f79b80d67999",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 8,
+        "exact_present_count": 8,
+        "exact_present": [
+          "Web app",
+          "Mobile app",
+          "API gateway",
+          "Auth service",
+          "Order service",
+          "Worker",
+          "Orders database",
+          "Queue"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Web app", "API gateway"],
+          ["Mobile app", "API gateway"],
+          ["API gateway", "Auth service"],
+          ["API gateway", "Order service"],
+          ["Order service", "Orders database"],
+          ["Order service", "Queue"],
+          ["Queue", "Worker"],
+          ["Worker", "Orders database"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Web app", "API gateway", "HTTPS"],
+          ["Mobile app", "API gateway", "HTTPS"],
+          ["API gateway", "Auth service", "validate token"],
+          ["API gateway", "Order service", "request"],
+          ["Order service", "Orders database", "read/write"],
+          ["Order service", "Queue", "publish"],
+          ["Queue", "Worker", "consume"],
+          ["Worker", "Orders database", "update"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 3,
+        "correct_count": 3,
+        "required_membership_count": 8,
+        "correct_membership_count": 8,
+        "exact_memberships": {
+          "Client": ["Web app", "Mobile app"],
+          "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+          "Data": ["Orders database", "Queue"]
+        },
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Checkout service architecture",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and directed -> statements match; graph label supplies the exact title. Rank-only node references do not create duplicate nodes. Compass ports (where used) retain the original node identity.",
+        "The three labeled cluster subgraphs enclose exactly the required 2/4/2 node sets."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "architecture",
+      "tool": "svg",
+      "phase": "initial",
+      "source": "cells/architecture/svg/initial.svg",
+      "source_sha256": "9bda27ae9f3d93ba94caa0954f94d1ff55d95500ded3c5a87504b159caa6048e",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 8,
+        "exact_present_count": 8,
+        "exact_present": [
+          "Web app",
+          "Mobile app",
+          "API gateway",
+          "Auth service",
+          "Order service",
+          "Worker",
+          "Orders database",
+          "Queue"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Web app", "API gateway"],
+          ["Mobile app", "API gateway"],
+          ["API gateway", "Auth service"],
+          ["API gateway", "Order service"],
+          ["Order service", "Orders database"],
+          ["Order service", "Queue"],
+          ["Queue", "Worker"],
+          ["Worker", "Orders database"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Web app", "API gateway", "HTTPS"],
+          ["Mobile app", "API gateway", "HTTPS"],
+          ["API gateway", "Auth service", "validate token"],
+          ["API gateway", "Order service", "request"],
+          ["Order service", "Orders database", "read/write"],
+          ["Order service", "Queue", "publish"],
+          ["Queue", "Worker", "consume"],
+          ["Worker", "Orders database", "update"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 3,
+        "correct_count": 3,
+        "required_membership_count": 8,
+        "correct_membership_count": 8,
+        "exact_memberships": {
+          "Client": ["Web app", "Mobile app"],
+          "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+          "Data": ["Orders database", "Queue"]
+        },
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Checkout service architecture",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Nodes were mapped manually from shape coordinates and text; edges were traced from start to endpoint and marker-end orientation, not inferred from comments or description text. Marker geometry, background, group rectangles and title are not extra semantic nodes/edges. Text labels are independent SVG objects; association with paths is an agent judgment, not a machine-readable edge relationship.",
+        "Client rectangle spans x40..260/y100..640 and encloses Web/Mobile; Services spans x350..860/y100..640 and encloses Gateway/Auth/Order/Worker; Data spans x960..1250/y100..640 and encloses Database/Queue. All node shapes are entirely inside their intended group bounds.",
+        "All edge paths inherit or specify marker-end:url(#arrow); the triangular marker points toward its tip and orient=auto follows the final path segment. Nodes are painted after edges, so endpoint arrowheads may be partially covered; actual legibility/occlusion requires image inspection. Exact title occurs both in accessibility <title> and visible-text source; this is not two semantic nodes.",
+        "Potential visual-review concern from coordinates only: validate token sits at y156 while its path runs at y270/y200; HTTPS and update also use detached labels. Their exact strings and intended associations are present, but visible clarity is not proven."
+      ],
+      "source_semantic_issues": [],
+      "svg_manual_path_trace": [
+        "M230 230 H310 V265 H400: Web app right to API gateway left, rightward; HTTPS at (270,216).",
+        "M230 380 H330 V295 H400: Mobile app right to API gateway left, rightward; HTTPS at (267,402).",
+        "M550 270 H600 V200 H650: API gateway right to Auth service left, rightward; validate token at (565,156), separated from path (visual association requires review).",
+        "M475 310 V380 H650: API gateway bottom to Order service left, rightward; request at (525,368).",
+        "M830 370 H990: Order service right to Orders database left, rightward; read/write at (871,356).",
+        "M740 350 V290 H1220 V575 H1170: Order service top to Queue right, leftward; publish at (1030,278).",
+        "M990 580 H830: Queue left to Worker right, leftward; consume at (878,605).",
+        "M830 555 H900 V440 H1080 V410: Worker right to Orders database bottom, upward; update at (970,465)."
+      ]
+    },
+    {
+      "task": "state",
+      "tool": "mermaid",
+      "phase": "initial",
+      "source": "cells/state/mermaid/initial.mmd",
+      "source_sha256": "ebaa4bccea64ec89299fc5f982d91ada72e479e840f31db4f9dc0497653d14d9",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 6,
+        "exact_present_count": 6,
+        "exact_present": [
+          "Draft",
+          "In review",
+          "Changes requested",
+          "Approved",
+          "Published",
+          "Archived"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Draft", "In review"],
+          ["In review", "Changes requested"],
+          ["Changes requested", "Draft"],
+          ["In review", "Approved"],
+          ["Approved", "Published"],
+          ["Published", "Archived"],
+          ["Archived", "Draft"],
+          ["Approved", "Draft"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Draft", "In review", "submit"],
+          ["In review", "Changes requested", "request edits"],
+          ["Changes requested", "Draft", "revise"],
+          ["In review", "Approved", "approve"],
+          ["Approved", "Published", "publish"],
+          ["Published", "Archived", "archive"],
+          ["Archived", "Draft", "restore"],
+          ["Approved", "Draft", "withdraw"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Publishing state machine",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and --> statements match; nonempty pipe labels are exact. YAML frontmatter declares the exact title. Class/style declarations do not add semantic nodes. Whether the title is visibly rendered is not established here."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "state",
+      "tool": "draftably",
+      "phase": "initial",
+      "source": "cells/state/draftably/initial.draft",
+      "source_sha256": "8c1845de8731b7e67d5f63b3f609cd65e853de8b0d5f4806f3165339868f7e84",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 6,
+        "exact_present_count": 6,
+        "exact_present": [
+          "Draft",
+          "In review",
+          "Changes requested",
+          "Approved",
+          "Published",
+          "Archived"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Draft", "In review"],
+          ["In review", "Changes requested"],
+          ["Changes requested", "Draft"],
+          ["In review", "Approved"],
+          ["Approved", "Published"],
+          ["Published", "Archived"],
+          ["Archived", "Draft"],
+          ["Approved", "Draft"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Draft", "In review", "submit"],
+          ["In review", "Changes requested", "request edits"],
+          ["Changes requested", "Draft", "revise"],
+          ["In review", "Approved", "approve"],
+          ["Approved", "Published", "publish"],
+          ["Published", "Archived", "archive"],
+          ["Archived", "Draft", "restore"],
+          ["Approved", "Draft", "withdraw"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Publishing state machine",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Exact labels are explicit node/edge strings; edge IDs are unique and directed endpoints match the task. Diagram header contains the exact title. This checks source declarations, not renderer support or output."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "state",
+      "tool": "d2",
+      "phase": "initial",
+      "source": "cells/state/d2/initial.d2",
+      "source_sha256": "5d83b8fd352a37d09fcf4b4cd08c82d0dec985bf682f8282f6d6d71dfb17631f",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 6,
+        "exact_present_count": 6,
+        "exact_present": [
+          "Draft",
+          "In review",
+          "Changes requested",
+          "Approved",
+          "Published",
+          "Archived"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Draft", "In review"],
+          ["In review", "Changes requested"],
+          ["Changes requested", "Draft"],
+          ["In review", "Approved"],
+          ["Approved", "Published"],
+          ["Published", "Archived"],
+          ["Archived", "Draft"],
+          ["Approved", "Draft"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Draft", "In review", "submit"],
+          ["In review", "Changes requested", "request edits"],
+          ["Changes requested", "Draft", "revise"],
+          ["In review", "Approved", "approve"],
+          ["Approved", "Published", "publish"],
+          ["Published", "Archived", "archive"],
+          ["Archived", "Draft", "restore"],
+          ["Approved", "Draft", "withdraw"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Publishing state machine",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Node keys resolve to the declared exact display labels; directed -> statements and their colon labels match. Root label supplies the exact title. Style/class declarations are not counted as semantic nodes. Native parser/render behavior is not established by this audit."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "state",
+      "tool": "dot",
+      "phase": "initial",
+      "source": "cells/state/dot/initial.dot",
+      "source_sha256": "399e5e0f596f614ee03e362fb48ef7ae66f8b8bea71be25a3eed4507e634b8fa",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 6,
+        "exact_present_count": 6,
+        "exact_present": [
+          "Draft",
+          "In review",
+          "Changes requested",
+          "Approved",
+          "Published",
+          "Archived"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Draft", "In review"],
+          ["In review", "Changes requested"],
+          ["Changes requested", "Draft"],
+          ["In review", "Approved"],
+          ["Approved", "Published"],
+          ["Published", "Archived"],
+          ["Archived", "Draft"],
+          ["Approved", "Draft"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Draft", "In review", "submit"],
+          ["In review", "Changes requested", "request edits"],
+          ["Changes requested", "Draft", "revise"],
+          ["In review", "Approved", "approve"],
+          ["Approved", "Published", "publish"],
+          ["Published", "Archived", "archive"],
+          ["Archived", "Draft", "restore"],
+          ["Approved", "Draft", "withdraw"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Publishing state machine",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Explicit node labels and directed -> statements match; graph label supplies the exact title. Rank-only node references do not create duplicate nodes. Compass ports (where used) retain the original node identity."
+      ],
+      "source_semantic_issues": []
+    },
+    {
+      "task": "state",
+      "tool": "svg",
+      "phase": "initial",
+      "source": "cells/state/svg/initial.svg",
+      "source_sha256": "5641ead6fd9c6adb27af26b774d47043ac79ae19843752f6b3db9f0c7ed84019",
+      "judgment_basis": "manual native-source inspection; not automated semantic proof; no rendered images inspected",
+      "nodes": {
+        "required_count": 6,
+        "exact_present_count": 6,
+        "exact_present": [
+          "Draft",
+          "In review",
+          "Changes requested",
+          "Approved",
+          "Published",
+          "Archived"
+        ],
+        "missing_or_inexact": []
+      },
+      "directed_edges": {
+        "required_count": 8,
+        "present_count": 8,
+        "present": [
+          ["Draft", "In review"],
+          ["In review", "Changes requested"],
+          ["Changes requested", "Draft"],
+          ["In review", "Approved"],
+          ["Approved", "Published"],
+          ["Published", "Archived"],
+          ["Archived", "Draft"],
+          ["Approved", "Draft"]
+        ],
+        "missing_or_wrong_direction": []
+      },
+      "nonempty_edge_labels": {
+        "required_count": 8,
+        "exact_correct_count": 8,
+        "exact_correct": [
+          ["Draft", "In review", "submit"],
+          ["In review", "Changes requested", "request edits"],
+          ["Changes requested", "Draft", "revise"],
+          ["In review", "Approved", "approve"],
+          ["Approved", "Published", "publish"],
+          ["Published", "Archived", "archive"],
+          ["Archived", "Draft", "restore"],
+          ["Approved", "Draft", "withdraw"]
+        ],
+        "missing_or_inexact": []
+      },
+      "unlabeled_edges": {
+        "required_count": 0,
+        "correct_count": 0
+      },
+      "groups": {
+        "required_count": 0,
+        "correct_count": 0,
+        "required_membership_count": 0,
+        "correct_membership_count": 0,
+        "exact_memberships": {},
+        "incorrect_or_missing_memberships": [],
+        "extra_groups": []
+      },
+      "extras_and_duplicates": {
+        "extra_nodes": 0,
+        "duplicate_nodes": 0,
+        "extra_edges": 0,
+        "duplicate_edges": 0
+      },
+      "title": {
+        "required": "Publishing state machine",
+        "exact_present_in_source": true,
+        "visible_rendered_presence_verified": false
+      },
+      "notes": [
+        "Nodes were mapped manually from shape coordinates and text; edges were traced from start to endpoint and marker-end orientation, not inferred from comments or description text. Marker geometry, background, group rectangles and title are not extra semantic nodes/edges. Text labels are independent SVG objects; association with paths is an agent judgment, not a machine-readable edge relationship.",
+        "All edge paths inherit or specify marker-end:url(#arrow); the triangular marker points toward its tip and orient=auto follows the final path segment. Nodes are painted after edges, so endpoint arrowheads may be partially covered; actual legibility/occlusion requires image inspection. Exact title occurs both in accessibility <title> and visible-text source; this is not two semantic nodes."
+      ],
+      "source_semantic_issues": [],
+      "svg_manual_path_trace": [
+        "M210 228 H290: Draft right to In review left, rightward; submit at (250,215).",
+        "M360 256 V330: In review bottom to Changes requested top, downward; request edits at (416,298).",
+        "M260 358 H140 V256: Changes requested left to Draft bottom, upward; revise at (200,347).",
+        "M430 228 H530: In review right to Approved left, rightward; approve at (480,215).",
+        "M670 228 H770: Approved right to Published left, rightward; publish at (720,215).",
+        "M910 228 H1010: Published right to Archived left, rightward; archive at (960,215).",
+        "M1080 256 V460 H30 V228 H70: Archived bottom to Draft left, rightward; restore at (600,449).",
+        "M600 200 V112 H140 V200: Approved top to Draft top, downward; withdraw at (370,101)."
+      ]
+    }
+  ]
+}

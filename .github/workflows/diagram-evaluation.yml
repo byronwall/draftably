@@ -1,0 +1,37 @@
+name: Diagram evaluation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/evaluations/agent-diagrams/**'
+      - 'scripts/diagram-compare/**'
+      - '.github/workflows/diagram-evaluation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-renders:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update && sudo apt-get install -y graphviz
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm cli:build
+      - run: pnpm eval:diagrams:test
+      - name: Render all committed initial sources and capture actual images
+        run: node scripts/diagram-compare/ci.mjs
+      - name: Preserve actual results, diagnostics and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagram-evaluation-${{ github.sha }}
+          path: tmp/diagram-eval-ci/
+          if-no-files-found: error

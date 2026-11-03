@@ -1,0 +1,32 @@
+---
+title: Publishing state machine
+config:
+  theme: base
+  themeVariables:
+    primaryColor: '#f1f5f9'
+    primaryTextColor: '#0f172a'
+    primaryBorderColor: '#475569'
+    lineColor: '#475569'
+    edgeLabelBackground: '#ffffff'
+    fontFamily: 'Arial, sans-serif'
+  flowchart:
+    nodeSpacing: 55
+    rankSpacing: 75
+    curve: basis
+---
+flowchart LR
+  draft(["Draft"])
+  review(["In review"])
+  changes(["Changes requested"])
+  approved(["Approved"])
+  published(["Published"])
+  archived(["Archived"])
+
+  draft -->|submit| review
+  review -->|request edits| changes
+  changes -->|revise| draft
+  review -->|approve| approved
+  approved -->|publish| published
+  published -->|archive| archived
+  archived -->|restore| draft
+  approved -->|withdraw| draft

@@ -1,0 +1,80 @@
+digraph CheckoutArchitecture {
+  graph [
+    label="Checkout service architecture",
+    labelloc=t,
+    labeljust=l,
+    fontname="Arial",
+    fontsize=22,
+    fontcolor="#172B4D",
+    bgcolor="white",
+    rankdir=LR,
+    nodesep=0.55,
+    ranksep=1.0,
+    pad=0.3,
+    splines=spline,
+    compound=true
+  ];
+  node [
+    shape=box,
+    style="rounded,filled",
+    fillcolor="white",
+    color="#52647A",
+    fontcolor="#172B4D",
+    fontname="Arial",
+    fontsize=13,
+    penwidth=1.2,
+    margin="0.20,0.14"
+  ];
+  edge [
+    color="#52647A",
+    fontcolor="#263B53",
+    fontname="Arial",
+    fontsize=11,
+    penwidth=1.2,
+    arrowsize=0.8
+  ];
+
+  subgraph cluster_client {
+    label="Client";
+    fontsize=15;
+    style="rounded,filled";
+    color="#AAB7C6";
+    fillcolor="#F4F6F9";
+    margin=20;
+    web [label="Web app"];
+    mobile [label="Mobile app"];
+  }
+
+  subgraph cluster_services {
+    label="Services";
+    fontsize=15;
+    style="rounded,filled";
+    color="#91ABC3";
+    fillcolor="#EEF4FA";
+    margin=20;
+    gateway [label="API gateway"];
+    auth [label="Auth service"];
+    orders [label="Order service"];
+    worker [label="Worker"];
+  }
+
+  subgraph cluster_data {
+    label="Data";
+    fontsize=15;
+    style="rounded,filled";
+    color="#AAB7C6";
+    fillcolor="#F4F6F9";
+    margin=20;
+    database [label="Orders database", shape=cylinder];
+    queue [label="Queue"];
+  }
+
+  web -> gateway [label="HTTPS"];
+  mobile -> gateway [label="HTTPS"];
+  gateway -> auth [label="validate token"];
+  gateway -> orders [label="request"];
+  orders -> database [label="read/write"];
+  orders -> queue [label="publish"];
+  queue -> worker [label="consume", constraint=false];
+  worker -> database [label="update"];
+}

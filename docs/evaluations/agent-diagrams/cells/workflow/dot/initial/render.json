@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "tool": "dot",
+  "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/dot/initial.dot",
+  "status": "success",
+  "startedAt": "2026-11-03T00:34:10.699Z",
+  "nodeVersion": "v24.22.1",
+  "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+  "stdout": "",
+  "stderr": "Fontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\nFontconfig error: No writable cache directories\n",
+  "sourceBytes": 1379,
+  "sourceLines": 34,
+  "renderer": "Graphviz system dot -Tsvg",
+  "rendererVersion": "dot - graphviz version 2.42.4 (0)",
+  "svg": {
+    "widthAttribute": "415pt",
+    "heightAttribute": "744pt",
+    "viewBox": "0.00 0.00 415.40 744.39",
+    "textElementCount": 14,
+    "foreignObjectCount": 0,
+    "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+  },
+  "svgPath": "docs/evaluations/agent-diagrams/cells/workflow/dot/initial/output.svg",
+  "svgBytes": 8564,
+  "durationMs": 405.84,
+  "stdoutLog": "docs/evaluations/agent-diagrams/cells/workflow/dot/initial/stdout.log",
+  "stderrLog": "docs/evaluations/agent-diagrams/cells/workflow/dot/initial/stderr.log",
+  "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error."
+}

@@ -1,0 +1,1 @@
+Uses native enclosing groups and a rightward layered layout to separate clients, services, and data. All eight nodes and eight labeled directed edges are represented exactly once. Restrained styling and edge routing rely on native defaults; the supplied syntax reference does not expose styling or explicit positioning controls. No renderer or feedback was used.

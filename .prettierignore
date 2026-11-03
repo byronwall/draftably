@@ -12,3 +12,9 @@ packages/cli/THIRD_PARTY_NOTICES
 
 # Preserve original Pro result bytes and their supplied manifest.
 docs/intent/**/assets/pro-results/**
+
+# Immutable generated evaluation evidence.
+docs/evaluations/agent-diagrams/cells/
+
+# Preserve preregistered task bytes.
+docs/evaluations/agent-diagrams/tasks.json
