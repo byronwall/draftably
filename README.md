@@ -151,3 +151,7 @@ using `pnpm draftably open`.
 - [Checks](docs/CHECKS.md): test suites, browser proofs, screenshots and performance budgets.
 - [Releasing](docs/RELEASING.md): Changesets and package publishing.
 - [Source record](docs/IMPORT.md): the original release and Meld language prototype.
+
+## License
+
+[MIT](LICENSE) © Byron Wall

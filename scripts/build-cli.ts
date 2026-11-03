@@ -24,6 +24,7 @@ await build({
 chmodSync(path.join(pkg, 'dist/cli/main.js'), 0o755);
 cpSync(path.join(root, 'examples'), path.join(pkg, 'examples'), { recursive: true });
 cpSync(path.join(root, 'docs/DSL.md'), path.join(pkg, 'DSL.md'));
+cpSync(path.join(root, 'LICENSE'), path.join(pkg, 'LICENSE'));
 rmSync(path.join(pkg, 'skills'), { recursive: true, force: true });
 cpSync(path.join(root, 'skills'), path.join(pkg, 'skills'), { recursive: true });
 writeFileSync(
