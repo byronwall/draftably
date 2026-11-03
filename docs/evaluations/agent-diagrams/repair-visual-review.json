@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "parent agent, non-blinded image review",
+  "runId": 41568855771,
+  "dimensions": [
+    "textReadability",
+    "nodeTextOverlap",
+    "edgeClarity",
+    "groupingLayout",
+    "compactness"
+  ],
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "method": "Inspected all three repaired contact sheets and individual display-960 images for all seven changed sources that rendered. The seven retained sources are byte-identical and visually checked in the contact sheets; their original judgments are carried forward explicitly. The failed repair has no visual score. Changes in ordinal dimensions are descriptive, not statistically validated.",
+  "cells": [
+    {
+      "task": "workflow",
+      "tool": "mermaid",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 1
+      },
+      "titleVisible": true,
+      "notes": "Spacing is slightly reduced but the drawing remains tall. Labels, branch directions and arrowheads remain readable; no new collision observed.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "workflow/mermaid/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "workflow",
+      "tool": "draftably",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Clear labeled branches, compact decision diamonds and distinct cancellation path. Pack-to-Ship bends back toward the central column, but arrows remain traceable.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "workflow/draftably/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "workflow",
+      "tool": "d2",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 1
+      },
+      "titleVisible": true,
+      "notes": "The requested title is now visible above Start. Flow remains traceable; tall spacing is substantially unchanged.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "workflow/d2/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "workflow",
+      "tool": "dot",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Readable nodes, differentiated decisions and terminals, and separated rejection branches. Wide shallow diamonds and a diagonal Reserve-to-Stock edge are cosmetic rather than semantic defects.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "workflow/dot/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "workflow",
+      "tool": "svg",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Straight success spine and separate right-side cancellation paths. Labels and arrowheads are clear; fixed geometry uses extra right-side space but remains orderly.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "workflow/svg/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "architecture",
+      "tool": "mermaid",
+      "scores": null,
+      "titleVisible": null,
+      "notes": "Repair failed to parse at linkStyle color syntax on line 33. No rendered image exists; visual dimensions are unscored. Preserve the successful original and failed repair separately.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "architecture/mermaid/render.json"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "failed",
+      "decision": "changed"
+    },
+    {
+      "task": "architecture",
+      "tool": "draftably",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 1,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Clear group boundaries and title. The request path and Worker update path cross in the gap between the service columns; the interrupted line helps but requires tracing. Consume takes a long lower return route.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "architecture/draftably/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "architecture",
+      "tool": "d2",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 1,
+        "edgeClarity": 1,
+        "groupingLayout": 2,
+        "compactness": 1
+      },
+      "titleVisible": true,
+      "notes": "Visible title and larger text improve task compliance/readability. Vertical layout is very tall; consume still intersects a group boundary and read/write runs close to the lower Services border. Improvement is partial.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "architecture/d2/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "architecture",
+      "tool": "dot",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 1,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Readable title, group labels and all nodes. Consume bends under the groups and crosses read/write and update routes; arrows are identifiable but the crossing cluster costs tracing effort.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "architecture/dot/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "architecture",
+      "tool": "svg",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Validate token now sits directly beside its horizontal edge, and shorter group boxes reduce empty space. All required domain relationships remain traceable.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "architecture/svg/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "state",
+      "tool": "mermaid",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 1
+      },
+      "titleVisible": true,
+      "notes": "Top-to-bottom arrangement separates three return endpoints at Draft. Arrows are clearer than the initial tight convergence, at the cost of a much taller diagram.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "state/mermaid/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "state",
+      "tool": "draftably",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. All six states and eight labeled transitions are clear. Separate top and bottom return tracks keep the cycles traceable; no node/text collision observed.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "state/draftably/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    },
+    {
+      "task": "state",
+      "tool": "d2",
+      "scores": {
+        "textReadability": 1,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 1,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Title is now visible and horizontal arrangement is compact. Dashed return edges distinguish cycles, but withdraw still crosses approve and the broad layout makes text smaller at 960px than the initial vertical version.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "state/d2/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "state",
+      "tool": "dot",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 1,
+        "groupingLayout": 2,
+        "compactness": 1
+      },
+      "titleVisible": true,
+      "notes": "Revise is rerouted closer to Approved and the forward spine. It no longer makes the same broad crossing near request edits, but its proximity to Approved/approve still makes tracing awkward; all labels remain readable.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "state/dot/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "changed"
+    },
+    {
+      "task": "state",
+      "tool": "svg",
+      "scores": {
+        "textReadability": 2,
+        "nodeTextOverlap": 2,
+        "edgeClarity": 2,
+        "groupingLayout": 2,
+        "compactness": 2
+      },
+      "titleVisible": true,
+      "notes": "Source retained byte-for-byte. Repaired-run contact sheet shows the same layout; initial review applies. Clear horizontal publication spine with Changes requested below it; distinct upper withdraw and lower restore routes. Exact labels and arrowheads are visible without overlapping nodes.",
+      "evidence": {
+        "artifactId": 13200276793,
+        "runUrl": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+        "path": "state/svg/display-960.png"
+      },
+      "evidenceLocation": "Path inside the linked CI artifact; individual PNGs are not committed.",
+      "renderStatus": "success",
+      "decision": "retained"
+    }
+  ]
+}

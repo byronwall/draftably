@@ -120,6 +120,128 @@ used 57, illustrating why line count alone is not an editing-effort score.
   direct visual control but requires coordinated coordinate edits when structure changes. No
   edit task was timed, so the report does not assign a measured maintenance penalty.
 
+## One repair response: rendering can regress
+
+Each of the fifteen cells received one isolated response with its own source, diagnostic and
+image-review note. Eight changed the source and seven retained it. All remained within the
+200-line limit. The evaluator made no edits to the returned diagrams and allowed no second
+repair attempt.
+
+**Initial rendering: 15/15. After the repair response: 14/15.** The repaired architecture/Mermaid
+source failed native parsing on its new link-style color declaration (line 33). The complete
+error and rejected source are preserved. Its initial drawing still renders; the published
+initial gallery does not silently replace or hide either result. Source-semantic review found
+all requested graph relationships in the repaired text, but that does not make invalid syntax
+renderable.
+
+The other fourteen returned sources rendered and were captured successfully in
+[the repaired run](https://github.com/byronwall/draftably/actions/runs/41568855771). Both canonical
+runs used the same reported Node, Mermaid, D2, Graphviz and Chromium versions. The changed source
+was manually reassessed; seven byte-identical retentions inherit the initial source audit.
+D2's two standalone title text objects and one transparent title wrapper are recorded as
+presentation additions, separately from required domain nodes/groups.
+
+| Task         | Format    | Response  | Initial render | After response | Final source lines | Final source bytes |
+| ------------ | --------- | --------- | -------------- | -------------- | -----------------: | -----------------: |
+| workflow     | mermaid   | changed   | success        | success        |                 32 |               1168 |
+| workflow     | draftably | unchanged | success        | success        |                 21 |                728 |
+| workflow     | d2        | changed   | success        | success        |                 67 |               1253 |
+| workflow     | dot       | unchanged | success        | success        |                 34 |               1379 |
+| workflow     | svg       | unchanged | success        | success        |                 49 |               2308 |
+| architecture | mermaid   | changed   | success        | failed         |                 39 |               1557 |
+| architecture | draftably | unchanged | success        | success        |                 21 |                807 |
+| architecture | d2        | changed   | success        | success        |                108 |               2215 |
+| architecture | dot       | unchanged | success        | success        |                 80 |               1734 |
+| architecture | svg       | changed   | success        | success        |                 57 |               3514 |
+| state        | mermaid   | changed   | success        | success        |                 32 |                758 |
+| state        | draftably | unchanged | success        | success        |                 16 |                585 |
+| state        | d2        | changed   | success        | success        |                 48 |               1011 |
+| state        | dot       | changed   | success        | success        |                 53 |               1286 |
+| state        | svg       | unchanged | success        | success        |                 42 |               2017 |
+
+[Repaired source audit](repair-source-audit.json), [exact feedback and repair responses](cells/),
+and [second-run provenance](runs/41568855771/provenance.json) make the intervention inspectable.
+These are paired case observations, not a claim that feedback generally helps or harms a format.
+
+## What changed visibly after feedback
+
+- **D2 titles:** all three previously missing titles are now visible. Architecture text is larger,
+  but the vertical drawing remains tall and some edge labels still sit against group boundaries.
+  The state layout became compact and horizontal, with smaller text at the same display width
+  and a remaining withdraw/approve crossing.
+- **Raw SVG architecture:** the detached validate-token label now sits beside its intended edge;
+  shorter groups reduce unused space. This is a clear improvement in this pair of outputs.
+- **Mermaid state machine:** the return endpoints at Draft are easier to distinguish, at the cost
+  of a taller drawing. Workflow spacing reduced slightly without changing its compactness score.
+- **Graphviz state machine:** revise takes a different route but remains awkward to trace near
+  Approved/approve. The ordinal scores do not show a clear overall improvement.
+- **Mermaid architecture:** no image could be scored because the repair introduced a parse error.
+  Render validation is a necessary part of an agent loop, even after a successful first pass.
+- **Seven retentions:** the agents chose not to risk an unverified change. Sources are byte-equal;
+  repaired contact sheets were checked and the initial judgments are explicitly carried forward.
+
+The evaluator inspected all seven changed successful drawings individually at 960 CSS pixels,
+plus all repaired contact sheets. The failed cell is unscored, rather than assigned invented
+visual measurements. There is no summed score.
+
+| Task         | Format    | Text | Node/text overlap | Edge clarity | Group/layout | Compactness | Title visible |
+| ------------ | --------- | ---: | ----------------: | -----------: | -----------: | ----------: | ------------- |
+| workflow     | mermaid   |    2 |                 2 |            2 |            2 |           1 | yes           |
+| workflow     | draftably |    2 |                 2 |            2 |            2 |           2 | yes           |
+| workflow     | d2        |    2 |                 2 |            2 |            2 |           1 | yes           |
+| workflow     | dot       |    2 |                 2 |            2 |            2 |           2 | yes           |
+| workflow     | svg       |    2 |                 2 |            2 |            2 |           2 | yes           |
+| architecture | mermaid   |    — |                 — |            — |            — |           — | not rendered  |
+| architecture | draftably |    2 |                 2 |            1 |            2 |           2 | yes           |
+| architecture | d2        |    2 |                 1 |            1 |            2 |           1 | yes           |
+| architecture | dot       |    2 |                 2 |            1 |            2 |           2 | yes           |
+| architecture | svg       |    2 |                 2 |            2 |            2 |           2 | yes           |
+| state        | mermaid   |    2 |                 2 |            2 |            2 |           1 | yes           |
+| state        | draftably |    2 |                 2 |            2 |            2 |           2 | yes           |
+| state        | d2        |    1 |                 2 |            1 |            2 |           2 | yes           |
+| state        | dot       |    2 |                 2 |            1 |            2 |           1 | yes           |
+| state        | svg       |    2 |                 2 |            2 |            2 |           2 | yes           |
+
+[Full repaired-image judgments](repair-visual-review.json) retain concrete notes and artifact
+pointers for every cell.
+
+## Inspect the paired contact sheets
+
+These sheets are navigation aids. Use the docs gallery or full-resolution SVGs for close reading.
+The repaired architecture sheet has four drawings because the Mermaid repair failed.
+
+| Task          | Initial                                                  | After one response                                                                                                                 |
+| ------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Workflow      | [Initial sheet](runs/41554667774/workflow-sheet.png)     | [After-response sheet in captured artifact](https://github.com/byronwall/draftably/actions/runs/41568855771/artifacts/13200276793) |
+| Architecture  | [Initial sheet](runs/41554667774/architecture-sheet.png) | [After-response sheet in captured artifact](https://github.com/byronwall/draftably/actions/runs/41568855771/artifacts/13200276793) |
+| State machine | [Initial sheet](runs/41554667774/state-sheet.png)        | [After-response sheet in captured artifact](https://github.com/byronwall/draftably/actions/runs/41568855771/artifacts/13200276793) |
+
+## Practical conclusion
+
+For these tasks, preserving graph meaning was easier than producing consistently clear layout.
+All formats expressed the requested source relationships; differences appeared in title behavior,
+arrow routing, label placement, whitespace and how much geometry the agent had to write.
+Draftably's sources were concise and its workflow/state outputs were clear, while its architecture
+still needed tracing across a crossing. Raw SVG offered direct placement and a successful local
+label repair, with more source bytes and coordinate responsibilities. Mermaid, D2 and DOT each
+produced usable initial diagrams while exposing different layout or feedback risks.
+
+Choose the native editing model that fits the workflow, then validate the actual drawing. For an
+agent integration, keep the first pass, render every returned revision, and inspect labels and
+edge directions before accepting it. This study supports that small verification loop; it does
+not justify a universal format winner or autonomous acceptance of a repair.
+
+## Replaying failures honestly
+
+The repaired run failed because the architecture/Mermaid source failed native parsing. That
+original run and failure remain unchanged. Local replay returns a nonzero exit status for the
+failed diagram and preserves its diagnostic. The suite does not convert a known failure into a
+success, regenerate that cell or select only favorable images.
+
+The site proof separately follows the landing-page link, loads all fifteen original images and
+checks desktop/mobile document overflow. Initial and repaired native outcomes remain separately
+visible in the docs.
+
 ## Scope and confounds
 
 This is a controlled-prompt case study, not a verified same-model benchmark. Nine cells were

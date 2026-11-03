@@ -44,8 +44,8 @@ format reference, native renderer diagnostics and the same five-dimensional imag
 policy. Each may view its own display-width image and may retain the source unchanged. No
 competitor output, browsing, renderer feedback or second attempt is available. The cap remains
 one response and 200 source lines. Initial source stays immutable; complete repaired source,
-feedback, prompt and decision are stored alongside it. A second uniform CI run measures the
-returned sources. The evaluator does not silently select between initial and repaired drawings.
+feedback, prompt and decision are stored alongside it. Second uniform CI run 41568855771 measured all returned sources: fourteen rendered,
+architecture/Mermaid failed native parsing. The original failed CI conclusion is preserved. The evaluator does not silently select between initial and repaired drawings.
 
 ## Interpretation
 
@@ -53,3 +53,17 @@ Manual source audit and rendered-image review are separate. Both are agent judgm
 review or automated semantic/overlap proofs. Group counts refer to required membership pairs,
 not shape-element counts. No single aggregate winner is inferred from these fifteen samples.
 The original protocol remains unchanged so execution deviations are visible beside it.
+
+## Final verification and cleanup
+
+The repository's existing Check run 41568855743 at head
+2873433741c8dc7582012f6231a57c357645ebba completed successfully, including the standard site-proof
+job with the comparison journey: landing navigation, fifteen loaded original images, desktop
+and mobile widths, and no document overflow. The final journey also checks the fourteen linked
+repaired SVGs. The final commit can be verified by the same standard Check workflow.
+
+The temporary diagram-rendering workflow was used only to obtain actual evidence while local
+Chromium was blocked; it is removed from the final changes, along with its CI-only capture
+orchestration script. The normal repository checks remain. Local native replay, immutable source
+and rendering evidence, the comparison UI proof and the captured workflow provenance are retained.
+There is no permanent expected-failure CI gate or new recurring workflow.

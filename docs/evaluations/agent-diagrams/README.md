@@ -6,8 +6,8 @@ Draftably, D2, Graphviz DOT and raw SVG. The task text is identical across forma
 name and short syntax reference differ.
 
 **Status:** All fifteen initial sources rendered successfully in the canonical CI run, with
-actual images and visual review preserved. One optional repair response per cell is being
-measured separately; initial outputs are never replaced.
+actual images and visual review preserved. One optional repair response per cell produced eight changes and seven retentions: fourteen
+rendered, while the architecture/Mermaid repair failed native parsing. Initial outputs are never replaced.
 
 ## Evidence
 
@@ -18,6 +18,7 @@ measured separately; initial outputs are never replaced.
 - `results.json`: source hashes, sizes, renderer outcomes and repair decisions.
 - `source-audit.json`: manual agent review of source semantics, separate from visible quality.
 - `visual-review.json`: initial image-based agent judgments, with concrete observations.
+- `repair-visual-review.json`: paired after-response image judgments, with the failed render unscored.
 - `repair-source-audit.json`: source-semantic reassessment of the eight changed responses and hash-linked retention of the other seven.
 - `REPORT.md`: findings, per-task comparison and limitations.
 
@@ -38,7 +39,8 @@ pnpm eval:diagrams:replay tmp/diagram-replay-initial initial
 pnpm eval:diagrams:replay tmp/diagram-replay-repaired repaired
 ```
 
-The replay command runs native renderers on the committed source. It does **not** invoke a model,
+The replay command runs native renderers on the committed source. Replaying the repaired phase
+returns exit status 1 for its preserved architecture/Mermaid failure; that is the recorded study outcome. It does **not** invoke a model,
 regenerate source, score a drawing or silently replace the recorded attempt. Use a new destination
 each time. The renderer refuses to overwrite an existing `render.json`.
 
@@ -75,3 +77,13 @@ syntax references are curated and can affect results. The evaluator knows each f
 line counts measure verbosity, not quality or editing time. Semantic checks are manual agent
 judgments, not a general parser or proof. Published results remain in a draft PR until reviewed;
 this work does not deploy the site.
+
+The temporary rendering workflow and CI-only capture orchestration were removed after evidence
+capture. The normal Check workflow runs the comparison UI journey through `pnpm prove:site`.
+To capture a replay locally, use the repository tool, for example:
+
+```sh
+pnpm shoot tmp/diagram-replay-initial/workflow/mermaid/output.svg tmp/workflow-mermaid.png
+pnpm site:build
+pnpm prove:site 'diagram comparison'
+```

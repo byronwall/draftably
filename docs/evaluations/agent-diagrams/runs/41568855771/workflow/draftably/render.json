@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "tool": "draftably",
+  "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/draftably/repaired.draft",
+  "status": "success",
+  "startedAt": "2026-11-03T02:54:21.862Z",
+  "nodeVersion": "v24.22.1",
+  "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+  "stdout": "",
+  "stderr": "",
+  "sourceBytes": 728,
+  "sourceLines": 21,
+  "renderer": "Draftably repository CLI: inspect --svg",
+  "rendererVersion": "2873433741c8dc7582012f6231a57c357645ebba",
+  "svg": {
+    "widthAttribute": "456",
+    "heightAttribute": "1058",
+    "viewBox": "-40 -86 456 1058",
+    "textElementCount": 14,
+    "foreignObjectCount": 0,
+    "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+  },
+  "svgPath": "tmp/diagram-eval-ci/workflow/draftably/output.svg",
+  "svgBytes": 73265,
+  "durationMs": 1134.95,
+  "stdoutLog": "tmp/diagram-eval-ci/workflow/draftably/stdout.log",
+  "stderrLog": "tmp/diagram-eval-ci/workflow/draftably/stderr.log",
+  "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error."
+}

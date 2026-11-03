@@ -91,7 +91,7 @@ const journeys = {
       const images = page.locator('.doc img[src*="/evaluations/agent-diagrams/"]');
       check(
         `Comparison contains all fifteen initial images at ${width}px`,
-        (await images.count()) >= 15,
+        (await images.count()) === 15,
       );
       for (const image of await images.all()) {
         await image.scrollIntoViewIfNeeded();
@@ -101,6 +101,22 @@ const journeys = {
         list.every(img => img.complete && img.naturalWidth > 0),
       );
       check(`Comparison native images load at ${width}px`, loaded);
+      const afterLinks = page.locator(
+        '.doc a[href*="/evaluations/agent-diagrams/"][href$="-repaired.svg"]',
+      );
+      check(
+        `Comparison links all fourteen rendered repairs at ${width}px`,
+        (await afterLinks.count()) === 14,
+      );
+      for (const link of await afterLinks.all()) {
+        const response = await page.request.get(
+          new URL(await link.getAttribute('href'), page.url()).href,
+        );
+        check(
+          `Comparison repaired SVG loads at ${width}px`,
+          response.ok() && (await response.text()).includes('<svg'),
+        );
+      }
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       check(`Comparison has no document overflow at ${width}px`, overflow <= 1, `${overflow}px`);
       await page.evaluate(() => window.scrollTo(0, 0));

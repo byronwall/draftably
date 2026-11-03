@@ -1,0 +1,10 @@
+{
+  "runId": 41568855771,
+  "url": "https://github.com/byronwall/draftably/actions/runs/41568855771",
+  "artifactId": 13200276793,
+  "artifactSha256": "9b685e7cf5c9ca0ad770e7002e397b46ebe36406eb1c6e3a9820b8e728637217",
+  "pullRequest": 415,
+  "headCommit": "2873433741c8dc7582012f6231a57c357645ebba",
+  "phase": "repaired",
+  "note": "Actual second CI run. Fourteen native renders/captures succeeded; architecture/Mermaid failed native parsing. Sources unchanged after the single repair response. Failed overall job is retained as provenance; later expected-outcome regression gate is separate. Individual PNGs and contact sheets remain in the linked artifact; committed repaired evidence includes native SVGs, metadata and diagnostics."
+}

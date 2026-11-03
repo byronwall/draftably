@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "canonicalRenderRun": "docs/evaluations/agent-diagrams/runs/41554667774",
-  "repairedRenderRun": null,
+  "repairedRenderRun": "docs/evaluations/agent-diagrams/runs/41568855771",
   "taskFileSha256": "07850bce7668d94f6340c8fda5ee117dc614a6131b03ace0938471742ac76817",
   "referenceHashes": {
     "mermaid": "2bc52e7a49c64b83360ec49f59a2fc7f2f083914b059557a65e6f954ff14c2fe",
@@ -68,7 +68,39 @@
         "source": "cells/workflow/mermaid/repaired.mmd",
         "sha256": "bc976735b184ba9e9969664dae350988add07666e7d303d079a1929a2bdbe415",
         "sourceBytes": 1168,
-        "sourceLines": 32
+        "sourceLines": 32,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "mermaid",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/mermaid/repaired.mmd",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:18.998Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1168,
+          "sourceLines": 32,
+          "renderer": "Mermaid native browser renderer",
+          "rendererVersion": "12.2.0",
+          "browserVersion": "156.0.8078.4",
+          "svg": {
+            "widthAttribute": "100%",
+            "heightAttribute": null,
+            "viewBox": "4 -49 360 1109",
+            "textElementCount": 1,
+            "foreignObjectCount": 13,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/mermaid/output.svg",
+          "svgBytes": 110531,
+          "durationMs": 531.89,
+          "stdoutLog": "tmp/diagram-eval-ci/workflow/mermaid/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/workflow/mermaid/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/mermaid/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/workflow/mermaid/output.svg"
+        }
       }
     },
     {
@@ -119,7 +151,38 @@
         "source": "cells/workflow/draftably/repaired.draft",
         "sha256": "84c8f4f3243adda955622a374e8f88dd51c5c1ccb0122ddbd61c430ea02f9bc2",
         "sourceBytes": 728,
-        "sourceLines": 21
+        "sourceLines": 21,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "draftably",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/draftably/repaired.draft",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:21.862Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 728,
+          "sourceLines": 21,
+          "renderer": "Draftably repository CLI: inspect --svg",
+          "rendererVersion": "2873433741c8dc7582012f6231a57c357645ebba",
+          "svg": {
+            "widthAttribute": "456",
+            "heightAttribute": "1058",
+            "viewBox": "-40 -86 456 1058",
+            "textElementCount": 14,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/draftably/output.svg",
+          "svgBytes": 73265,
+          "durationMs": 1134.95,
+          "stdoutLog": "tmp/diagram-eval-ci/workflow/draftably/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/workflow/draftably/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/draftably/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/workflow/draftably/output.svg"
+        }
       }
     },
     {
@@ -168,7 +231,38 @@
         "source": "cells/workflow/d2/repaired.d2",
         "sha256": "c9c23f339053f234e6cc37b8a5035b88eac3e2481df279d728e2cabd0b2c6acc",
         "sourceBytes": 1253,
-        "sourceLines": 67
+        "sourceLines": 67,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "d2",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/d2/repaired.d2",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:25.194Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1253,
+          "sourceLines": 67,
+          "renderer": "D2 native WASM Node API (default layout)",
+          "rendererVersion": "0.1.34",
+          "svg": {
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "viewBox": "0 0 625 1625",
+            "textElementCount": 14,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/d2/output.svg",
+          "svgBytes": 16270,
+          "durationMs": 576.14,
+          "stdoutLog": "tmp/diagram-eval-ci/workflow/d2/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/workflow/d2/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/d2/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/workflow/d2/output.svg"
+        }
       }
     },
     {
@@ -217,7 +311,38 @@
         "source": "cells/workflow/dot/repaired.dot",
         "sha256": "66fc562e62c91eb6f29a6b9d54354ddf3498c4d0fa2ca9de585b01c91a50e344",
         "sourceBytes": 1379,
-        "sourceLines": 34
+        "sourceLines": 34,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "dot",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/dot/repaired.dot",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:28.202Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1379,
+          "sourceLines": 34,
+          "renderer": "Graphviz system dot -Tsvg",
+          "rendererVersion": "dot - graphviz version 2.43.0 (0)",
+          "svg": {
+            "widthAttribute": "415pt",
+            "heightAttribute": "744pt",
+            "viewBox": "0.00 0.00 415.40 744.39",
+            "textElementCount": 14,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/dot/output.svg",
+          "svgBytes": 8564,
+          "durationMs": 126.89,
+          "stdoutLog": "tmp/diagram-eval-ci/workflow/dot/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/workflow/dot/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/dot/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/workflow/dot/output.svg"
+        }
       }
     },
     {
@@ -267,7 +392,39 @@
         "source": "cells/workflow/svg/repaired.svg",
         "sha256": "23974a3f1b7392893ac70b03eb9834cf4cff301ecae07f0ac058a036a81c0edb",
         "sourceBytes": 2308,
-        "sourceLines": 49
+        "sourceLines": 49,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "svg",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/svg/repaired.svg",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:30.601Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 2308,
+          "sourceLines": 49,
+          "renderer": "Raw SVG, unchanged, loaded directly in Chromium",
+          "rendererVersion": "156.0.8078.4",
+          "browserVersion": "156.0.8078.4",
+          "svg": {
+            "widthAttribute": "760",
+            "heightAttribute": "940",
+            "viewBox": "0 0 760 940",
+            "textElementCount": 14,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/svg/output.svg",
+          "svgBytes": 2308,
+          "durationMs": 156.94,
+          "stdoutLog": "tmp/diagram-eval-ci/workflow/svg/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/workflow/svg/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/workflow/svg/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/workflow/svg/output.svg"
+        }
       }
     },
     {
@@ -320,7 +477,30 @@
         "source": "cells/architecture/mermaid/repaired.mmd",
         "sha256": "2c4d7ca86dbafad83e5fb202e81b2f3275b6c76b85986fbbc70f347d19839cb1",
         "sourceBytes": 1557,
-        "sourceLines": 39
+        "sourceLines": 39,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "mermaid",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/architecture/mermaid/repaired.mmd",
+          "status": "failed",
+          "startedAt": "2026-11-03T02:54:34.474Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1557,
+          "sourceLines": 39,
+          "renderer": "Mermaid native browser renderer",
+          "rendererVersion": "12.2.0",
+          "browserVersion": "156.0.8078.4",
+          "error": "page.evaluate: Error: Parse error on line 33:\n...e-width:2.2px,color:ﬂ°1d4ed8¶ß  linkSty\n-----------------------^\nExpecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'COLON', 'STYLE', 'NUM', 'COMMA', 'NODE_STRING', 'UNIT', 'BRKT', 'PCT', got 'UNICODE_TEXT'\n    at Parser.parseError (http://127.0.0.1:44119/chunks/mermaid.esm.min/chunk-7P5HNUOW.mjs:9:33414)\n    at Parser.parse (http://127.0.0.1:44119/chunks/mermaid.esm.min/chunk-7P5HNUOW.mjs:11:173)\n    at g1.parse (http://127.0.0.1:44119/chunks/mermaid.esm.min/chunk-7P5HNUOW.mjs:15:14)\n    at Diagram.fromText (http://127.0.0.1:44119/mermaid.esm.min.mjs:3:97)\n    at async renderDiagram (http://127.0.0.1:44119/mermaid.esm.min.mjs:10:1212)\n    at async Object.render (http://127.0.0.1:44119/mermaid.esm.min.mjs:10:2276)\n    at mermaidSvg (/home/runner/work/draftably/draftably/scripts/diagram-compare/render.mjs:61:23)\n    at async renderCell (/home/runner/work/draftably/draftably/scripts/diagram-compare/render.mjs:143:13)\n    at async file:///home/runner/work/draftably/draftably/scripts/diagram-compare/ci.mjs:38:20",
+          "exitCode": null,
+          "durationMs": 1146.59,
+          "stdoutLog": "tmp/diagram-eval-ci/architecture/mermaid/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/architecture/mermaid/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/mermaid/render.json"
+        }
       }
     },
     {
@@ -372,7 +552,38 @@
         "source": "cells/architecture/draftably/repaired.draft",
         "sha256": "4049e7d0afe743dde8fc3ac859719e5624c810c20a06f77e79d17d6103e6a1ca",
         "sourceBytes": 807,
-        "sourceLines": 21
+        "sourceLines": 21,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "draftably",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/architecture/draftably/repaired.draft",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:35.622Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 807,
+          "sourceLines": 21,
+          "renderer": "Draftably repository CLI: inspect --svg",
+          "rendererVersion": "2873433741c8dc7582012f6231a57c357645ebba",
+          "svg": {
+            "widthAttribute": "1177",
+            "heightAttribute": "365",
+            "viewBox": "-40 -86 1177 365",
+            "textElementCount": 20,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/draftably/output.svg",
+          "svgBytes": 76227,
+          "durationMs": 272.28,
+          "stdoutLog": "tmp/diagram-eval-ci/architecture/draftably/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/architecture/draftably/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/draftably/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/architecture/draftably/output.svg"
+        }
       }
     },
     {
@@ -421,7 +632,38 @@
         "source": "cells/architecture/d2/repaired.d2",
         "sha256": "ae14831bd535445a34170020f48f771144be540f80b520aa107073f31cec0b10",
         "sourceBytes": 2215,
-        "sourceLines": 108
+        "sourceLines": 108,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "d2",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/architecture/d2/repaired.d2",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:38.267Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 2215,
+          "sourceLines": 108,
+          "renderer": "D2 native WASM Node API (default layout)",
+          "rendererVersion": "0.1.34",
+          "svg": {
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "viewBox": "0 0 1026 1660",
+            "textElementCount": 20,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/d2/output.svg",
+          "svgBytes": 23105,
+          "durationMs": 616.29,
+          "stdoutLog": "tmp/diagram-eval-ci/architecture/d2/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/architecture/d2/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/d2/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/architecture/d2/output.svg"
+        }
       }
     },
     {
@@ -473,7 +715,38 @@
         "source": "cells/architecture/dot/repaired.dot",
         "sha256": "fc74e2c20c6cbaa9b6641b5f44a0f20a22b320f749abd79e0d24f79b80d67999",
         "sourceBytes": 1734,
-        "sourceLines": 80
+        "sourceLines": 80,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "dot",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/architecture/dot/repaired.dot",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:41.190Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1734,
+          "sourceLines": 80,
+          "renderer": "Graphviz system dot -Tsvg",
+          "rendererVersion": "dot - graphviz version 2.43.0 (0)",
+          "svg": {
+            "widthAttribute": "903pt",
+            "heightAttribute": "364pt",
+            "viewBox": "0.00 0.00 903.20 364.36",
+            "textElementCount": 20,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/dot/output.svg",
+          "svgBytes": 10769,
+          "durationMs": 39.76,
+          "stdoutLog": "tmp/diagram-eval-ci/architecture/dot/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/architecture/dot/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/dot/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/architecture/dot/output.svg"
+        }
       }
     },
     {
@@ -523,7 +796,39 @@
         "source": "cells/architecture/svg/repaired.svg",
         "sha256": "4198e7250c8816b03f9c13ea9630128d74a5c3715cff576f721e37abe47926ef",
         "sourceBytes": 3514,
-        "sourceLines": 57
+        "sourceLines": 57,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "svg",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/architecture/svg/repaired.svg",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:43.396Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 3514,
+          "sourceLines": 57,
+          "renderer": "Raw SVG, unchanged, loaded directly in Chromium",
+          "rendererVersion": "156.0.8078.4",
+          "browserVersion": "156.0.8078.4",
+          "svg": {
+            "widthAttribute": "1280",
+            "heightAttribute": "620",
+            "viewBox": "0 0 1280 620",
+            "textElementCount": 20,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/svg/output.svg",
+          "svgBytes": 3514,
+          "durationMs": 147.43,
+          "stdoutLog": "tmp/diagram-eval-ci/architecture/svg/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/architecture/svg/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/architecture/svg/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/architecture/svg/output.svg"
+        }
       }
     },
     {
@@ -575,7 +880,39 @@
         "source": "cells/state/mermaid/repaired.mmd",
         "sha256": "802e335d0da14d7dc0fd8804d9c814817fb1972b69935ac5f8d9a9a725683541",
         "sourceBytes": 758,
-        "sourceLines": 32
+        "sourceLines": 32,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "mermaid",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/state/mermaid/repaired.mmd",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:46.933Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 758,
+          "sourceLines": 32,
+          "renderer": "Mermaid native browser renderer",
+          "rendererVersion": "12.2.0",
+          "browserVersion": "156.0.8078.4",
+          "svg": {
+            "widthAttribute": "100%",
+            "heightAttribute": null,
+            "viewBox": "4 -49 491.1175842285156 769",
+            "textElementCount": 1,
+            "foreignObjectCount": 14,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/state/mermaid/output.svg",
+          "svgBytes": 278347,
+          "durationMs": 505.86,
+          "stdoutLog": "tmp/diagram-eval-ci/state/mermaid/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/state/mermaid/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/state/mermaid/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/state/mermaid/output.svg"
+        }
       }
     },
     {
@@ -624,7 +961,38 @@
         "source": "cells/state/draftably/repaired.draft",
         "sha256": "8c1845de8731b7e67d5f63b3f609cd65e853de8b0d5f4806f3165339868f7e84",
         "sourceBytes": 585,
-        "sourceLines": 16
+        "sourceLines": 16,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "draftably",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/state/draftably/repaired.draft",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:49.660Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 585,
+          "sourceLines": 16,
+          "renderer": "Draftably repository CLI: inspect --svg",
+          "rendererVersion": "2873433741c8dc7582012f6231a57c357645ebba",
+          "svg": {
+            "widthAttribute": "1258",
+            "heightAttribute": "354",
+            "viewBox": "-40 -117 1258 354",
+            "textElementCount": 15,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/state/draftably/output.svg",
+          "svgBytes": 72716,
+          "durationMs": 162.99,
+          "stdoutLog": "tmp/diagram-eval-ci/state/draftably/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/state/draftably/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/state/draftably/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/state/draftably/output.svg"
+        }
       }
     },
     {
@@ -673,7 +1041,38 @@
         "source": "cells/state/d2/repaired.d2",
         "sha256": "98c6fa380abb28d01d4a26b67a14f1024af78357055e074b50869bf7603f3d05",
         "sourceBytes": 1011,
-        "sourceLines": 48
+        "sourceLines": 48,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "d2",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/state/d2/repaired.d2",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:51.942Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1011,
+          "sourceLines": 48,
+          "renderer": "D2 native WASM Node API (default layout)",
+          "rendererVersion": "0.1.34",
+          "svg": {
+            "widthAttribute": null,
+            "heightAttribute": null,
+            "viewBox": "0 0 1578 537",
+            "textElementCount": 15,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/state/d2/output.svg",
+          "svgBytes": 16763,
+          "durationMs": 510.33,
+          "stdoutLog": "tmp/diagram-eval-ci/state/d2/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/state/d2/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/state/d2/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/state/d2/output.svg"
+        }
       }
     },
     {
@@ -722,7 +1121,38 @@
         "source": "cells/state/dot/repaired.dot",
         "sha256": "ffdfa18583b009035fcbc224e9107a38733e281a31a835a923ff2aa3b8bf0476",
         "sourceBytes": 1286,
-        "sourceLines": 53
+        "sourceLines": 53,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "dot",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/state/dot/repaired.dot",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:54.664Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 1286,
+          "sourceLines": 53,
+          "renderer": "Graphviz system dot -Tsvg",
+          "rendererVersion": "dot - graphviz version 2.43.0 (0)",
+          "svg": {
+            "widthAttribute": "584pt",
+            "heightAttribute": "489pt",
+            "viewBox": "0.00 0.00 583.90 489.40",
+            "textElementCount": 15,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/state/dot/output.svg",
+          "svgBytes": 7770,
+          "durationMs": 45.24,
+          "stdoutLog": "tmp/diagram-eval-ci/state/dot/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/state/dot/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/state/dot/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/state/dot/output.svg"
+        }
       }
     },
     {
@@ -772,7 +1202,39 @@
         "source": "cells/state/svg/repaired.svg",
         "sha256": "5641ead6fd9c6adb27af26b774d47043ac79ae19843752f6b3db9f0c7ed84019",
         "sourceBytes": 2017,
-        "sourceLines": 42
+        "sourceLines": 42,
+        "render": {
+          "schemaVersion": 1,
+          "tool": "svg",
+          "sourcePath": "docs/evaluations/agent-diagrams/cells/state/svg/repaired.svg",
+          "status": "success",
+          "startedAt": "2026-11-03T02:54:56.823Z",
+          "nodeVersion": "v24.22.1",
+          "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+          "stdout": "",
+          "stderr": "",
+          "sourceBytes": 2017,
+          "sourceLines": 42,
+          "renderer": "Raw SVG, unchanged, loaded directly in Chromium",
+          "rendererVersion": "156.0.8078.4",
+          "browserVersion": "156.0.8078.4",
+          "svg": {
+            "widthAttribute": "1200",
+            "heightAttribute": "520",
+            "viewBox": "0 0 1200 520",
+            "textElementCount": 15,
+            "foreignObjectCount": 0,
+            "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+          },
+          "svgPath": "docs/evaluations/agent-diagrams/runs/41568855771/state/svg/output.svg",
+          "svgBytes": 2017,
+          "durationMs": 148.96,
+          "stdoutLog": "tmp/diagram-eval-ci/state/svg/stdout.log",
+          "stderrLog": "tmp/diagram-eval-ci/state/svg/stderr.log",
+          "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error.",
+          "evidenceRecord": "docs/evaluations/agent-diagrams/runs/41568855771/state/svg/render.json",
+          "originalSvgPath": "tmp/diagram-eval-ci/state/svg/output.svg"
+        }
       }
     }
   ]

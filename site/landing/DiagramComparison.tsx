@@ -10,8 +10,12 @@ export function DiagramComparison() {
       </div>
       <p>
         We gave independent agent contexts the same three diagram tasks using Mermaid, Draftably,
-        D2, Graphviz DOT and raw SVG. The native sources are captured; browser renders and image
-        review are running in CI.
+        D2, Graphviz DOT and raw SVG. All fifteen initial sources rendered, but titles, edge clarity
+        and label placement still varied.
+      </p>
+      <p>
+        One feedback response fixed missing titles and a detached label, but introduced one syntax
+        failure: fourteen of fifteen after-response sources rendered.
       </p>
       <p>
         See the actual drawings, native source and image-review notes, with prompts and limitations
