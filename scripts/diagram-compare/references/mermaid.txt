@@ -1,0 +1,9 @@
+# Syntax reference (bounded adapter, not an optimized task solution)
+flowchart LR
+  subgraph g["Group"]
+    a["First"]
+  end
+  b{"Second"}
+  a -->|label| b
+
+Use flowchart TD for top-down. Nodes support rectangles ["Label"], rounded (["Label"]), decisions {"Label"}. Native stateDiagram-v2 is also allowed. Mermaid source only, no Markdown fences. Native output extension .mmd.

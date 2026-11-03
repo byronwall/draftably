@@ -1,0 +1,9 @@
+# Syntax reference (bounded adapter, not an optimized task solution)
+diagram "Example" version=1
+group g "Group"
+node a "First" in=g
+node b "Second" shape=diamond
+edge ab a -> b "label"
+layout root engine=layered direction=right
+
+Nodes may omit group and shape; labels are JSON strings. Groups use in=parent for nesting. Edges have unique IDs. Directions right/down. One statement per line. Native output extension .draft.

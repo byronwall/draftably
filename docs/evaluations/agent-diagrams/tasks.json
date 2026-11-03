@@ -1,0 +1,200 @@
+[
+  {
+    "id": "workflow",
+    "title": "Order approval workflow",
+    "nodes": [
+      "Start",
+      "Validate order",
+      "Payment authorized?",
+      "Reserve stock",
+      "Stock available?",
+      "Pack order",
+      "Ship order",
+      "Cancel order",
+      "End"
+    ],
+    "edges": [
+      [
+        "Start",
+        "Validate order",
+        ""
+      ],
+      [
+        "Validate order",
+        "Payment authorized?",
+        ""
+      ],
+      [
+        "Payment authorized?",
+        "Reserve stock",
+        "yes"
+      ],
+      [
+        "Payment authorized?",
+        "Cancel order",
+        "no"
+      ],
+      [
+        "Reserve stock",
+        "Stock available?",
+        ""
+      ],
+      [
+        "Stock available?",
+        "Pack order",
+        "yes"
+      ],
+      [
+        "Stock available?",
+        "Cancel order",
+        "no"
+      ],
+      [
+        "Pack order",
+        "Ship order",
+        ""
+      ],
+      [
+        "Ship order",
+        "End",
+        ""
+      ],
+      [
+        "Cancel order",
+        "End",
+        ""
+      ]
+    ],
+    "groups": {},
+    "prompt": "Create a diagram titled \"Order approval workflow\".\nRequired nodes (exact labels): [\"Start\", \"Validate order\", \"Payment authorized?\", \"Reserve stock\", \"Stock available?\", \"Pack order\", \"Ship order\", \"Cancel order\", \"End\"].\nRequired directed edges [from, to, label; empty label means unlabeled]: [[\"Start\", \"Validate order\", \"\"], [\"Validate order\", \"Payment authorized?\", \"\"], [\"Payment authorized?\", \"Reserve stock\", \"yes\"], [\"Payment authorized?\", \"Cancel order\", \"no\"], [\"Reserve stock\", \"Stock available?\", \"\"], [\"Stock available?\", \"Pack order\", \"yes\"], [\"Stock available?\", \"Cancel order\", \"no\"], [\"Pack order\", \"Ship order\", \"\"], [\"Ship order\", \"End\", \"\"], [\"Cancel order\", \"End\", \"\"]].\nRequired enclosing groups and their node members: {}.\nCreate a clear readable standalone diagram for a documentation page; use restrained high-contrast styling, preserve all exact labels/directions, avoid overlap; choose layout yourself. Include every node once and no extra semantic nodes or edges. Use the assigned format\u2019s native method; if a feature is unsupported, approximate visibly without changing semantics. Do not embed a diagram produced by another tool, external images, scripts, or remote resources."
+  },
+  {
+    "id": "architecture",
+    "title": "Checkout service architecture",
+    "nodes": [
+      "Web app",
+      "Mobile app",
+      "API gateway",
+      "Auth service",
+      "Order service",
+      "Worker",
+      "Orders database",
+      "Queue"
+    ],
+    "groups": {
+      "Client": [
+        "Web app",
+        "Mobile app"
+      ],
+      "Services": [
+        "API gateway",
+        "Auth service",
+        "Order service",
+        "Worker"
+      ],
+      "Data": [
+        "Orders database",
+        "Queue"
+      ]
+    },
+    "edges": [
+      [
+        "Web app",
+        "API gateway",
+        "HTTPS"
+      ],
+      [
+        "Mobile app",
+        "API gateway",
+        "HTTPS"
+      ],
+      [
+        "API gateway",
+        "Auth service",
+        "validate token"
+      ],
+      [
+        "API gateway",
+        "Order service",
+        "request"
+      ],
+      [
+        "Order service",
+        "Orders database",
+        "read/write"
+      ],
+      [
+        "Order service",
+        "Queue",
+        "publish"
+      ],
+      [
+        "Queue",
+        "Worker",
+        "consume"
+      ],
+      [
+        "Worker",
+        "Orders database",
+        "update"
+      ]
+    ],
+    "prompt": "Create a diagram titled \"Checkout service architecture\".\nRequired nodes (exact labels): [\"Web app\", \"Mobile app\", \"API gateway\", \"Auth service\", \"Order service\", \"Worker\", \"Orders database\", \"Queue\"].\nRequired directed edges [from, to, label; empty label means unlabeled]: [[\"Web app\", \"API gateway\", \"HTTPS\"], [\"Mobile app\", \"API gateway\", \"HTTPS\"], [\"API gateway\", \"Auth service\", \"validate token\"], [\"API gateway\", \"Order service\", \"request\"], [\"Order service\", \"Orders database\", \"read/write\"], [\"Order service\", \"Queue\", \"publish\"], [\"Queue\", \"Worker\", \"consume\"], [\"Worker\", \"Orders database\", \"update\"]].\nRequired enclosing groups and their node members: {\"Client\": [\"Web app\", \"Mobile app\"], \"Services\": [\"API gateway\", \"Auth service\", \"Order service\", \"Worker\"], \"Data\": [\"Orders database\", \"Queue\"]}.\nCreate a clear readable standalone diagram for a documentation page; use restrained high-contrast styling, preserve all exact labels/directions, avoid overlap; choose layout yourself. Include every node once and no extra semantic nodes or edges. Use the assigned format\u2019s native method; if a feature is unsupported, approximate visibly without changing semantics. Do not embed a diagram produced by another tool, external images, scripts, or remote resources."
+  },
+  {
+    "id": "state",
+    "title": "Publishing state machine",
+    "nodes": [
+      "Draft",
+      "In review",
+      "Changes requested",
+      "Approved",
+      "Published",
+      "Archived"
+    ],
+    "groups": {},
+    "edges": [
+      [
+        "Draft",
+        "In review",
+        "submit"
+      ],
+      [
+        "In review",
+        "Changes requested",
+        "request edits"
+      ],
+      [
+        "Changes requested",
+        "Draft",
+        "revise"
+      ],
+      [
+        "In review",
+        "Approved",
+        "approve"
+      ],
+      [
+        "Approved",
+        "Published",
+        "publish"
+      ],
+      [
+        "Published",
+        "Archived",
+        "archive"
+      ],
+      [
+        "Archived",
+        "Draft",
+        "restore"
+      ],
+      [
+        "Approved",
+        "Draft",
+        "withdraw"
+      ]
+    ],
+    "prompt": "Create a diagram titled \"Publishing state machine\".\nRequired nodes (exact labels): [\"Draft\", \"In review\", \"Changes requested\", \"Approved\", \"Published\", \"Archived\"].\nRequired directed edges [from, to, label; empty label means unlabeled]: [[\"Draft\", \"In review\", \"submit\"], [\"In review\", \"Changes requested\", \"request edits\"], [\"Changes requested\", \"Draft\", \"revise\"], [\"In review\", \"Approved\", \"approve\"], [\"Approved\", \"Published\", \"publish\"], [\"Published\", \"Archived\", \"archive\"], [\"Archived\", \"Draft\", \"restore\"], [\"Approved\", \"Draft\", \"withdraw\"]].\nRequired enclosing groups and their node members: {}.\nCreate a clear readable standalone diagram for a documentation page; use restrained high-contrast styling, preserve all exact labels/directions, avoid overlap; choose layout yourself. Include every node once and no extra semantic nodes or edges. Use the assigned format\u2019s native method; if a feature is unsupported, approximate visibly without changing semantics. Do not embed a diagram produced by another tool, external images, scripts, or remote resources."
+  }
+]

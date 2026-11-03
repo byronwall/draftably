@@ -1,0 +1,10 @@
+# Syntax reference (bounded adapter, not an optimized task solution)
+digraph G {
+  graph [rankdir=LR, label="Example", labelloc=t];
+  node [shape=box, fontname="Arial"];
+  subgraph cluster_g { label="Group"; a [label="First"]; }
+  b [label="Second", shape=diamond];
+  a -> b [label="label"];
+}
+
+Use rankdir=TB for top-down. Clusters enclose nodes. DOT is rendered by Graphviz dot engine. Native output extension .dot.

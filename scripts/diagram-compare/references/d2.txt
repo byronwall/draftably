@@ -1,0 +1,9 @@
+# Syntax reference (bounded adapter, not an optimized task solution)
+direction: right
+g: Group {
+  a: First
+}
+b: Second {shape: diamond}
+g.a -> b: label
+
+Use direction: down for top-down. Node/group labels follow colon. IDs can be simple lowercase words; scoped node references use parent.child. Native output extension .d2.
