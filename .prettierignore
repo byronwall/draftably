@@ -18,3 +18,7 @@ docs/evaluations/agent-diagrams/cells/
 
 # Preserve preregistered task bytes.
 docs/evaluations/agent-diagrams/tasks.json
+
+# Preserve captured renderer evidence byte-for-byte.
+docs/evaluations/agent-diagrams/runs/
+site/public/evaluations/agent-diagrams/

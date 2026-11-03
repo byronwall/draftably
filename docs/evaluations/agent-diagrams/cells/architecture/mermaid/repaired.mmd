@@ -1,0 +1,39 @@
+---
+title: Checkout service architecture
+---
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","fontSize":"16px","primaryColor":"#f1f5f9","primaryTextColor":"#172033","primaryBorderColor":"#475569","lineColor":"#475569","secondaryColor":"#ffffff","tertiaryColor":"#f8fafc","clusterBkg":"#f8fafc","clusterBorder":"#94a3b8","edgeLabelBackground":"#ffffff","titleColor":"#172033"},"flowchart":{"nodeSpacing":38,"rankSpacing":65,"curve":"linear"}}}%%
+flowchart LR
+  subgraph clients["Client"]
+    web["Web app"]
+    mobile["Mobile app"]
+  end
+  subgraph services["Services"]
+    gateway["API gateway"]
+    auth["Auth service"]
+    order["Order service"]
+    worker["Worker"]
+  end
+  subgraph data["Data"]
+    database[("Orders database")]
+    queue["Queue"]
+  end
+
+  web -->|HTTPS| gateway
+  mobile -->|HTTPS| gateway
+  gateway -->|validate token| auth
+  gateway -->|request| order
+  order -->|read/write| database
+  order -->|publish| queue
+  queue -->|consume| worker
+  worker -->|update| database
+
+  classDef client fill:#ffffff,stroke:#475569,color:#172033,stroke-width:1.5px;
+  classDef service fill:#edf3f8,stroke:#475569,color:#172033,stroke-width:1.5px;
+  classDef storage fill:#ffffff,stroke:#475569,color:#172033,stroke-width:1.5px;
+  class web,mobile client;
+  class gateway,auth,order,worker service;
+  class database,queue storage;
+
+  linkStyle 5 stroke:#1d4ed8,stroke-width:2.2px,color:#1d4ed8;
+  linkStyle 6 stroke:#166534,stroke-width:2.2px,color:#166534;
+  linkStyle 7 stroke:#7e22ce,stroke-width:2.2px,color:#7e22ce;

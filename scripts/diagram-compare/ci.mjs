@@ -9,6 +9,8 @@ import { renderCell } from './render.mjs';
 const exec = promisify(execFile);
 const base = 'docs/evaluations/agent-diagrams';
 const out = process.argv[2] || 'tmp/diagram-eval-ci';
+const phase = process.argv[3] || 'initial';
+if (!['initial', 'repaired'].includes(phase)) throw Error('Phase must be initial or repaired');
 const tasks = JSON.parse(await fs.readFile(`${base}/tasks.json`, 'utf8'));
 const formats = { mermaid: 'mmd', draftably: 'draft', d2: 'd2', dot: 'dot', svg: 'svg' };
 await fs.mkdir(out, { recursive: true });
@@ -23,7 +25,8 @@ const environment = {
   browserVersion,
   graphviz: (await exec('dot', ['-V'])).stderr.trim(),
   generatedAt: new Date().toISOString(),
-  generation: 'No generation in CI; replays committed initial source only.',
+  generation: `No generation in CI; replays committed ${phase} source only.`,
+  phase,
 };
 await fs.writeFile(path.join(out, 'environment.json'), JSON.stringify(environment, null, 2) + '\n');
 let failures = 0;
@@ -34,7 +37,7 @@ for (const task of tasks) {
     const dir = path.join(out, task.id, tool);
     const result = await renderCell({
       tool,
-      sourcePath: `${base}/cells/${task.id}/${tool}/initial.${ext}`,
+      sourcePath: `${base}/cells/${task.id}/${tool}/${phase}.${ext}`,
       outputDir: dir,
     });
     if (result.status === 'success') {
@@ -60,15 +63,29 @@ for (const task of tasks) {
         failures++;
       }
     } else failures++;
+    await fs.writeFile(
+      path.join(dir, 'capture.json'),
+      JSON.stringify(
+        { status: result.captureStatus || 'not-attempted', error: result.captureError || null },
+        null,
+        2,
+      ) + '\n',
+    );
     results.push(result);
     console.log(`${task.id}/${tool}: ${result.status}`);
   }
-  if (sheet.length)
-    await exec(
-      'pnpm',
-      ['shoot', '--sheet', path.join(out, `${task.id}-sheet.png`), '--cols', '2', ...sheet],
-      { timeout: 120000, maxBuffer: 4 * 1024 * 1024 },
-    );
+  if (sheet.length) {
+    try {
+      await exec(
+        'pnpm',
+        ['shoot', '--sheet', path.join(out, `${task.id}-sheet.png`), '--cols', '2', ...sheet],
+        { timeout: 120000, maxBuffer: 4 * 1024 * 1024 },
+      );
+    } catch (error) {
+      failures++;
+      await fs.writeFile(path.join(out, `${task.id}-sheet-error.txt`), String(error));
+    }
+  }
 }
 await fs.writeFile(
   path.join(out, 'summary.json'),

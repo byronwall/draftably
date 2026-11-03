@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "textReadability": 2,
+    "nodeTextOverlap": 2,
+    "edgeClarity": 1,
+    "groupingLayout": 2,
+    "compactness": 2
+  },
+  "titleVisible": true,
+  "notes": "Readable title, group labels and all nodes. Consume bends under the groups and crosses read/write and update routes; arrows are identifiable but the crossing cluster costs tracing effort.",
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "note": "Non-blinded agent image judgment. This is your own initial output only."
+}

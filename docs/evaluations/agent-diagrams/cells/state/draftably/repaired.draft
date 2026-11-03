@@ -1,0 +1,16 @@
+diagram "Publishing state machine" version=1
+node draft "Draft"
+node review "In review"
+node changes "Changes requested"
+node approved "Approved"
+node published "Published"
+node archived "Archived"
+edge submit draft -> review "submit"
+edge request_edits review -> changes "request edits"
+edge revise changes -> draft "revise"
+edge approve review -> approved "approve"
+edge publish approved -> published "publish"
+edge archive published -> archived "archive"
+edge restore archived -> draft "restore"
+edge withdraw approved -> draft "withdraw"
+layout root engine=layered direction=right

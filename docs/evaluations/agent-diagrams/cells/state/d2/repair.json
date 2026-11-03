@@ -1,0 +1,6 @@
+{
+  "decision": "changed",
+  "rationale": "Replace the invisible root label with a native text title annotation; switch to left-to-right flow and declare the main progression first to address the tall composition. Distinguish return transitions with restrained dashed styling while preserving all state and transition labels and directions.",
+  "responseCount": 1,
+  "limitations": "No post-repair rendering or verification was permitted. Native automatic layout still determines routing and may retain crossings; the standalone title is a nonsemantic text annotation."
+}

@@ -5,9 +5,9 @@ architecture and cyclic publishing state machine. Each task was attempted once i
 Draftably, D2, Graphviz DOT and raw SVG. The task text is identical across formats; the format
 name and short syntax reference differ.
 
-**Draft status:** All fifteen initial sources and nine local native renders are captured. Browser
-renders, visual review, optional repair decisions, final manifest and report are pending the CI
-artifact. Do not interpret the pending files below as delivered results.
+**Status:** All fifteen initial sources rendered successfully in the canonical CI run, with
+actual images and visual review preserved. One optional repair response per cell is being
+measured separately; initial outputs are never replaced.
 
 ## Evidence
 
@@ -17,7 +17,8 @@ artifact. Do not interpret the pending files below as delivered results.
 - [Initial sources, generation prompts, notes and renderer logs](cells/).
 - `results.json`: source hashes, sizes, renderer outcomes and repair decisions.
 - `source-audit.json`: manual agent review of source semantics, separate from visible quality.
-- `visual-review.json`: image-based agent judgments, with concrete observations.
+- `visual-review.json`: initial image-based agent judgments, with concrete observations.
+- `repair-source-audit.json`: source-semantic reassessment of the eight changed responses and hash-linked retention of the other seven.
 - `REPORT.md`: findings, per-task comparison and limitations.
 
 Initial source and rendered evidence are immutable. Formatting tools exclude the cell directory.
@@ -32,9 +33,9 @@ versions are in each attempt's metadata. Different installed system versions may
 
 ```sh
 pnpm cli:build
-# Available after the initial CI artifact is incorporated:
 pnpm eval:diagrams:verify
-pnpm eval:diagrams:replay tmp/diagram-replay-new
+pnpm eval:diagrams:replay tmp/diagram-replay-initial initial
+pnpm eval:diagrams:replay tmp/diagram-replay-repaired repaired
 ```
 
 The replay command runs native renderers on the committed source. It does **not** invoke a model,
@@ -48,7 +49,7 @@ feedback, the same backend configuration and the same response budget. Preserve 
 native source and notes, then render it. The original platform did not expose a verifiable model
 ID, sampling parameters, token usage or inference cost, so exact model replay is unavailable.
 
-`pnpm eval:diagrams:collect` rebuilds the machine-readable manifest from the original attempt
+`pnpm eval:diagrams:collect docs/evaluations/agent-diagrams/runs/41554667774 <repaired-run-directory>` rebuilds the machine-readable manifest from the original attempt
 files. Do not use it to bless edited originals; review changes against the committed hashes.
 
 ## Execution details
@@ -59,11 +60,8 @@ across recovery cannot be verified, so this is a controlled-prompt case study, n
 same-model benchmark.
 
 New Chromium processes were blocked by the execution sandbox (`socket: Operation not permitted`).
-Mermaid and raw SVG remain pending a GitHub Actions run of the same
-native Mermaid module and configuration. `node scripts/diagram-compare/browser.mjs` serves the
-fallback UI locally. Its button records real SVG and diagnostics; it refuses to overwrite evidence.
-The fallback only supports the initial study's named cells. It is a convenience for inspection,
-not a remote service; run it only in a trusted workspace and stop it when done.
+All fifteen sources were then rendered and captured in the canonical GitHub Actions run 41554667774. The unused local fallback server was removed after network isolation prevented it
+from reaching the browser. See EXECUTION.md for exact environment and publication provenance.
 
 D2 uses its native WASM Node API, Graphviz the system `dot -Tsvg`, Draftably its repository CLI.
 Raw SVG is authored directly rather than translated from another format. Browser adapter timing

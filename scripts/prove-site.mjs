@@ -78,6 +78,38 @@ const setSource = async (page, text) => {
 const sourceText = page => page.evaluate(() => document.querySelector('.cm-content')?.textContent);
 
 const journeys = {
+  async 'diagram comparison gallery reaches real images at desktop and mobile widths'() {
+    for (const width of [1440, 390]) {
+      const page = await open('', { width, height: 900 });
+      await page.locator('#diagram-comparison a').click();
+      await wait(
+        page,
+        () => location.pathname.includes('/docs/agent-diagram-evaluation'),
+        'comparison docs',
+      );
+      check(`Comparison landing link reaches docs at ${width}px`, true);
+      const images = page.locator('.doc img[src*="/evaluations/agent-diagrams/"]');
+      check(
+        `Comparison contains all fifteen initial images at ${width}px`,
+        (await images.count()) >= 15,
+      );
+      for (const image of await images.all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate(img => img.decode());
+      }
+      const loaded = await images.evaluateAll(list =>
+        list.every(img => img.complete && img.naturalWidth > 0),
+      );
+      check(`Comparison native images load at ${width}px`, loaded);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      check(`Comparison has no document overflow at ${width}px`, overflow <= 1, `${overflow}px`);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({ path: path.join(proof.out, `comparison-${width}-top.png`) });
+      await images.first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(proof.out, `comparison-${width}-image.png`) });
+      await page.context().close();
+    }
+  },
   async 'landing links reach the editor and carry edits'() {
     const page = await open('');
     await page.click('text=Open the editor');

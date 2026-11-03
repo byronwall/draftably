@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "textReadability": 2,
+    "nodeTextOverlap": 2,
+    "edgeClarity": 2,
+    "groupingLayout": 2,
+    "compactness": 1
+  },
+  "titleVisible": false,
+  "notes": "Nine nodes and four branch labels are visible with clear arrows. The requested diagram title is absent in the rendered image despite the source root label; large vertical gaps increase height.",
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "note": "Non-blinded agent image judgment. This is your own initial output only."
+}

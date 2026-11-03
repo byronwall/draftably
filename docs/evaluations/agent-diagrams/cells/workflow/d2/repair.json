@@ -1,0 +1,6 @@
+{
+  "decision": "changed",
+  "rationale": "Replace the invisible root label with a native, unconnected text title positioned at top-center. Preserve all nine workflow nodes, ten edges, branch labels and the otherwise clear styling and layout.",
+  "responseCount": 1,
+  "limitations": "No post-repair rendering permitted. Title placement remains unverified; existing vertical spacing is retained rather than risking the clear edge layout. The title is decorative text, not an additional workflow node."
+}

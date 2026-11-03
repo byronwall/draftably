@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -26,8 +28,22 @@ jobs:
       - run: pnpm exec playwright-core install --with-deps chromium
       - run: pnpm cli:build
       - run: pnpm eval:diagrams:test
-      - name: Render all committed initial sources and capture actual images
-        run: node scripts/diagram-compare/ci.mjs
+      - name: Render the committed evaluation phase and capture actual images
+        run: |
+          phase=initial
+          if find docs/evaluations/agent-diagrams/cells -name 'repaired.*' -print -quit | grep -q .; then phase=repaired; fi
+          node scripts/diagram-compare/ci.mjs tmp/diagram-eval-ci "$phase"
+      - name: Build comparison docs and landing page
+        run: pnpm site:build
+      - name: Verify comparison gallery on desktop and mobile
+        run: pnpm prove:site 'diagram comparison'
+      - name: Preserve comparison UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagram-comparison-site-${{ github.sha }}
+          path: tmp/proof-site/
+          if-no-files-found: warn
       - name: Preserve actual results, diagnostics and screenshots
         if: always()
         uses: actions/upload-artifact@v4

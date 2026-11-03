@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "textReadability": 2,
+    "nodeTextOverlap": 2,
+    "edgeClarity": 1,
+    "groupingLayout": 2,
+    "compactness": 1
+  },
+  "titleVisible": true,
+  "notes": "Group membership, nodes and arrows are readable. The validate token label floats substantially above its associated bent edge. Tall Client and Services containers leave large empty lower areas.",
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "note": "Non-blinded agent image judgment. This is your own initial output only."
+}

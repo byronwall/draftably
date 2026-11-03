@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "tool": "d2",
+  "sourcePath": "docs/evaluations/agent-diagrams/cells/state/d2/initial.d2",
+  "status": "success",
+  "startedAt": "2026-11-03T00:43:59.439Z",
+  "nodeVersion": "v24.22.1",
+  "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+  "stdout": "",
+  "stderr": "",
+  "sourceBytes": 759,
+  "sourceLines": 34,
+  "renderer": "D2 native WASM Node API (default layout)",
+  "rendererVersion": "0.1.34",
+  "svg": {
+    "widthAttribute": null,
+    "heightAttribute": null,
+    "viewBox": "0 0 728 1026",
+    "textElementCount": 14,
+    "foreignObjectCount": 0,
+    "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+  },
+  "svgPath": "tmp/diagram-eval-ci/state/d2/output.svg",
+  "svgBytes": 16195,
+  "durationMs": 636.55,
+  "stdoutLog": "tmp/diagram-eval-ci/state/d2/stdout.log",
+  "stderrLog": "tmp/diagram-eval-ci/state/d2/stderr.log",
+  "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error."
+}

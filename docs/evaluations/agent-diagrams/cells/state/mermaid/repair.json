@@ -1,0 +1,8 @@
+{
+  "decision": "changed",
+  "rationale": "Changed to top-down layout so the three return arrows approach the wider horizontal boundary of Draft rather than crowding its short side; adjusted spacing to keep the vertical diagram compact while separating branches. All exact nodes and transitions are preserved.",
+  "responseCount": 1,
+  "limitations": [
+    "Layout improvement is unverified because post-repair rendering is prohibited. Native automatic routing may still place return arrowheads close together."
+  ]
+}

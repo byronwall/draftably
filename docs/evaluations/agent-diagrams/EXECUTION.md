@@ -29,10 +29,23 @@ infrastructure failure, not a Mermaid or SVG syntax result. Attempts to serve a 
 existing browser were also blocked by isolated network namespaces. No browser render or visual
 inspection is claimed from those attempts.
 
-A read-only GitHub Actions workflow is provided to run all fifteen originals with native
-renderers and the repository's `pnpm shoot` capture tool. It uploads SVGs, PNGs, diagnostics and
-exact environment metadata as an artifact. The final report will use those actual artifacts.
-Until they return, browser rendering and image review remain pending.
+The read-only GitHub Actions run 41554667774 rendered all fifteen originals successfully and
+captured all full-size/display-width images plus three contact sheets. Canonical images come
+from that single environment. Its synthetic merge commit 7e0507cfab268adbfc03c3827db6469982b687ef
+was compared with PR head 68b8c213d97a15f53e68c0f3b6a643f745511030 through GitHub: no changed files,
+so the renderer source matched the pinned-baseline-derived branch. Future runs explicitly
+checkout the PR head. Local protocol commit 2997711 was published as equivalent-tree remote
+commit 9e3b28b; the local freeze preceded generation, public publication followed generation.
+
+## One optional repair response
+
+Every cell receives one fresh isolated repair context with its own initial source, task,
+format reference, native renderer diagnostics and the same five-dimensional image-review
+policy. Each may view its own display-width image and may retain the source unchanged. No
+competitor output, browsing, renderer feedback or second attempt is available. The cap remains
+one response and 200 source lines. Initial source stays immutable; complete repaired source,
+feedback, prompt and decision are stored alongside it. A second uniform CI run measures the
+returned sources. The evaluator does not silently select between initial and repaired drawings.
 
 ## Interpretation
 

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "tool": "mermaid",
+  "sourcePath": "docs/evaluations/agent-diagrams/cells/workflow/mermaid/initial.mmd",
+  "status": "success",
+  "startedAt": "2026-11-03T00:43:18.574Z",
+  "nodeVersion": "v24.22.1",
+  "durationScope": "Single adapter wall time including startup and SVG validation; excludes generation, PNG capture and review. Not a comparative performance benchmark.",
+  "stdout": "",
+  "stderr": "",
+  "sourceBytes": 1154,
+  "sourceLines": 32,
+  "renderer": "Mermaid native browser renderer",
+  "rendererVersion": "12.2.0",
+  "browserVersion": "156.0.8078.4",
+  "svg": {
+    "widthAttribute": "100%",
+    "heightAttribute": null,
+    "viewBox": "4 -49 360 1137",
+    "textElementCount": 1,
+    "foreignObjectCount": 13,
+    "note": "Structural SVG measurements only; not node/edge counts, text visibility, overlap detection, or visual-quality scores."
+  },
+  "svgPath": "tmp/diagram-eval-ci/workflow/mermaid/output.svg",
+  "svgBytes": 110581,
+  "durationMs": 657.12,
+  "stdoutLog": "tmp/diagram-eval-ci/workflow/mermaid/stdout.log",
+  "stderrLog": "tmp/diagram-eval-ci/workflow/mermaid/stderr.log",
+  "logNote": "Successful SVG payload is output.svg rather than duplicated in stdout.log; browser diagnostics and subprocess error streams are retained. D2 API errors are recorded in error."
+}

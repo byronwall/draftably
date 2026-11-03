@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "textReadability": 2,
+    "nodeTextOverlap": 2,
+    "edgeClarity": 1,
+    "groupingLayout": 2,
+    "compactness": 2
+  },
+  "titleVisible": true,
+  "notes": "All three groups and their members are visible. Several closely spaced bends between Services and Data require careful tracing of publish, consume and update; labels remain readable.",
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "note": "Non-blinded agent image judgment. This is your own initial output only."
+}

@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "textReadability": 2,
+    "nodeTextOverlap": 2,
+    "edgeClarity": 2,
+    "groupingLayout": 2,
+    "compactness": 2
+  },
+  "titleVisible": true,
+  "notes": "Clear horizontal publication spine with Changes requested below it; distinct upper withdraw and lower restore routes. Exact labels and arrowheads are visible without overlapping nodes.",
+  "scale": {
+    "0": "material failure",
+    "1": "usable with visible issues",
+    "2": "clear"
+  },
+  "note": "Non-blinded agent image judgment. This is your own initial output only."
+}

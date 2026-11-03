@@ -6,7 +6,7 @@ export function DiagramComparison() {
     <section class="examples" id="diagram-comparison">
       <div class="section-head">
         <h2>One prompt. Five diagram formats.</h2>
-        <A href="/docs/agent-diagram-evaluation">Follow the evaluation</A>
+        <A href="/docs/agent-diagram-evaluation">See the comparison</A>
       </div>
       <p>
         We gave independent agent contexts the same three diagram tasks using Mermaid, Draftably,
@@ -14,8 +14,9 @@ export function DiagramComparison() {
         review are running in CI.
       </p>
       <p>
-        Draft evaluation: fifteen samples, with the prompts and limitations published. This is a
-        small workflow evaluation, not a ranking of every feature or a benchmark of model quality.
+        See the actual drawings, native source and image-review notes, with prompts and limitations
+        published. This is a small workflow evaluation, not a ranking of every feature or a
+        benchmark of model quality.
       </p>
     </section>
   );

@@ -1,0 +1,21 @@
+diagram "Order approval workflow" version=1
+node start "Start"
+node validate "Validate order"
+node payment "Payment authorized?" shape=diamond
+node reserve "Reserve stock"
+node stock "Stock available?" shape=diamond
+node pack "Pack order"
+node ship "Ship order"
+node cancel "Cancel order"
+node end "End"
+edge start_validate start -> validate ""
+edge validate_payment validate -> payment ""
+edge payment_reserve payment -> reserve "yes"
+edge payment_cancel payment -> cancel "no"
+edge reserve_stock reserve -> stock ""
+edge stock_pack stock -> pack "yes"
+edge stock_cancel stock -> cancel "no"
+edge pack_ship pack -> ship ""
+edge ship_end ship -> end ""
+edge cancel_end cancel -> end ""
+layout root engine=layered direction=down

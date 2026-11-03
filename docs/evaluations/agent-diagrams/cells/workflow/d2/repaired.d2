@@ -1,0 +1,67 @@
+direction: down
+title: Order approval workflow {
+  shape: text
+  near: top-center
+  style: {
+    font-size: 24
+    font-color: "#172B4D"
+    bold: true
+  }
+}
+style: {
+  fill: "#FFFFFF"
+  font-color: "#172B4D"
+  font-size: 24
+}
+classes: {
+  step: {
+    style: {
+      fill: "#F3F6FA"
+      stroke: "#344563"
+      font-color: "#172B4D"
+      stroke-width: 2
+      font-size: 18
+      border-radius: 6
+    }
+  }
+  decision: {
+    shape: diamond
+    style: {
+      fill: "#FFF5D6"
+      stroke: "#66501B"
+      font-color: "#172B4D"
+      stroke-width: 2
+      font-size: 18
+    }
+  }
+  terminal: {
+    shape: oval
+    style: {
+      fill: "#DFEAF5"
+      stroke: "#344563"
+      font-color: "#172B4D"
+      stroke-width: 2
+      font-size: 18
+    }
+  }
+}
+start: Start {class: terminal}
+validate: Validate order {class: step}
+payment: Payment authorized? {class: decision}
+reserve: Reserve stock {class: step}
+stock: Stock available? {class: decision}
+pack: Pack order {class: step}
+ship: Ship order {class: step}
+cancel: Cancel order {class: step}
+end: End {class: terminal}
+
+start -> validate
+validate -> payment
+payment -> reserve: yes
+payment -> cancel: no
+reserve -> stock
+stock -> pack: yes
+stock -> cancel: no
+pack -> ship
+ship -> end
+cancel -> end
