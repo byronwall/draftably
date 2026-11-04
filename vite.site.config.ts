@@ -2,6 +2,7 @@ import { copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 import solid from 'vite-plugin-solid';
+import { analytics } from './vite.config';
 
 /**
  * GitHub Pages serves 404.html for paths it has no file for. A copy of the site's page there lets
@@ -30,6 +31,6 @@ export default defineConfig({
   worker: { format: 'es' },
   root: 'site',
   base: process.env.SITE_BASE ?? '/draftably/',
-  plugins: [solid({ hot: false }), spaFallback()],
+  plugins: [solid({ hot: false }), spaFallback(), analytics()],
   build: { outDir: '../dist-site', emptyOutDir: true },
 });

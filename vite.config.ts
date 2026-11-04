@@ -37,6 +37,30 @@ function workspace(root: string | undefined, file: string | undefined): Plugin |
   };
 }
 
+/**
+ * Adds the Google Analytics tag to built pages when GA_ID is set. Only the draftably.dev deploy
+ * sets it, so dev servers and the viewer that ships in the npm package send nothing.
+ */
+export function analytics(id = process.env.GA_ID): Plugin | null {
+  if (!id) return null;
+  return {
+    name: 'analytics',
+    apply: 'build',
+    transformIndexHtml: () => [
+      {
+        tag: 'script',
+        attrs: { async: true, src: `https://www.googletagmanager.com/gtag/js?id=${id}` },
+        injectTo: 'head',
+      },
+      {
+        tag: 'script',
+        children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');`,
+        injectTo: 'head',
+      },
+    ],
+  };
+}
+
 /** The published package's version, plus the commit for any build that is not a release. */
 function buildVersion() {
   const pkg = JSON.parse(readFileSync('packages/cli/package.json', 'utf8')) as { version: string };
@@ -58,7 +82,11 @@ export default defineConfig({
   base: './',
   // App state lives in module-level stores. Hot-swapping components would split them from that
   // state, so source edits reload the page instead; the diagram restores from browser storage.
-  plugins: [solid({ hot: false }), workspace(process.env.DIAGRAM_ROOT, process.env.DIAGRAM_FILE)],
+  plugins: [
+    solid({ hot: false }),
+    workspace(process.env.DIAGRAM_ROOT, process.env.DIAGRAM_FILE),
+    analytics(),
+  ],
   test: {
     include: ['tests/**/*.test.ts'],
     // The tests cover model code only; they need no DOM.

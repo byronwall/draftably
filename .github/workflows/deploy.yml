@@ -35,6 +35,8 @@ jobs:
         env:
           SITE_BASE: /
           SITE_ORIGIN: https://draftably.dev
+          # Google Analytics stream for draftably.dev, the site and the app.
+          GA_ID: G-QWRVCVQ70Z
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
