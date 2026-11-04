@@ -42,8 +42,9 @@ export function titleHeight(shape: ShapeKind, lines: number, base: number, r: Re
   return text + 2 * r.paddingY;
 }
 
+/** A shape's title in balanced lines no wider than `width` (see `wrapLines`). */
 export const wrapTitle = (text: string, width: number, r: ResolvedAppearance) =>
-  wrapLines(text, width, r.title);
+  wrapLines(text, width, r.title, true);
 
 /** Room kept between a diamond's title and its outline. */
 const DIAMOND_PAD = 6;
@@ -74,7 +75,7 @@ export const groupHeaderFor = (r: ResolvedAppearance, lines = 1) =>
  */
 export function groupTitleLines(title: string, w: number, r: ResolvedAppearance, lines = 1) {
   const width = Math.max(40, w - GROUP_TITLE_CHROME),
-    all = wrapLines(title, width, r.groupTitle);
+    all = wrapLines(title, width, r.groupTitle, true);
   if (all.length <= lines) return all;
   const kept = all.slice(0, lines);
   kept[lines - 1] = truncateText(all.slice(lines - 1).join(' '), width, r.groupTitle);
