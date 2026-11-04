@@ -129,7 +129,7 @@ export function ExportDialog() {
           <button type="button" class="button" onClick={closeDialog}>
             Cancel
           </button>
-          <p class="export-error" role="alert" title={error()}>
+          <p class="export-error" role="alert">
             {error()}
           </p>
           <button

@@ -67,9 +67,7 @@ export function StatusBar() {
       >
         <FileNotes />
       </Show>
-      <span class="status-version" title={BUILD.commit ? `Commit ${BUILD.commit}` : undefined}>
-        {version}
-      </span>
+      <span class="status-version">{version}</span>
     </footer>
   );
 }

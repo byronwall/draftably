@@ -102,10 +102,6 @@ export function EdgeView(props: EdgeViewProps) {
       role={props.interactive ? 'button' : undefined}
       aria-label={props.interactive ? description() : undefined}
     >
-      <title>
-        {(edge().label || 'Connection') +
-          (props.route.blocked ? ' — route obstructed; move overlapping nodes or reset bends' : '')}
-      </title>
       <defs>
         <EndMarkerDef
           id={markerId()}
@@ -227,9 +223,8 @@ export function EdgeView(props: EdgeViewProps) {
             width={10}
             height={10}
             rx={2}
-          >
-            <title>Drag to move bend. Double-click to remove.</title>
-          </rect>
+            aria-label="Bend point"
+          />
         )}
       </For>
     </g>

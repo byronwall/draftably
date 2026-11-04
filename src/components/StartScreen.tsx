@@ -69,7 +69,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             }
           >
             {info => (
-              <span class="start-where" title={info().root}>
+              <span class="start-where">
                 <Icon name="folder" />
                 {info().root}
               </span>

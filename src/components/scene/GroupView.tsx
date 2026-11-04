@@ -257,7 +257,11 @@ export function GroupView(props: GroupViewProps) {
         }}
       </For>
       <Show when={props.interactive}>
-        <g class="group-collapse" data-collapse>
+        <g
+          class="group-collapse"
+          data-collapse
+          aria-label={`${collapsed() ? 'Expand' : 'Collapse'} container`}
+        >
           <rect
             x={w() - 29}
             y={cells() ? band() - 12 : 5}
@@ -272,7 +276,6 @@ export function GroupView(props: GroupViewProps) {
             stroke={color().ink}
             stroke-width={1.4}
           />
-          <title>{collapsed() ? 'Expand' : 'Collapse'} container</title>
         </g>
         <PositionBadge
           id={props.id}

@@ -57,13 +57,12 @@ export interface SvgOptions {
   states?: boolean;
 }
 
-/** Wrap marks in a link, with a tooltip naming the target, when the object has one. */
-function linked(href: string | undefined, title: string, marks: string[], opts: SvgOptions) {
+/** Wrap marks in a link when the object has one. */
+function linked(href: string | undefined, marks: string[], opts: SvgOptions) {
   if (!href) return marks;
   const url = linkTarget(href).kind === 'url';
   return [
     `<a class="link" href="${esc(opts.href?.(href) ?? href)}"${url ? ' target="_blank" rel="noopener"' : ''}>`,
-    `<title>${esc(title)}\n${esc(href)}</title>`,
     ...marks,
     '</a>',
   ];
@@ -200,7 +199,6 @@ function sceneMarkup(
       out.push(
         ...linked(
           g.href,
-          g.title,
           [
             `<g data-id="${esc(g.id)}"${fade(p)}>`,
             ...hull.map(
@@ -218,7 +216,6 @@ function sceneMarkup(
     out.push(
       ...linked(
         g.href,
-        g.title,
         [
           `<g data-id="${esc(g.id)}"${fade(p)}>`,
           p.halo ? haloMarkup('box', r, { ...look, radius: Math.min(10, look.radius + 4) }) : '',
@@ -314,7 +311,6 @@ function sceneMarkup(
     out.push(
       ...linked(
         n.href,
-        n.title,
         [
           `<g data-id="${esc(n.id)}"${fade(p)}>`,
           ...(n.count && style.shape !== 'text'
@@ -615,7 +611,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
         const from = px + 40 + measureText(name, look.groupTitle) + 12,
           room = (stacked ? bw : spans[0].size) - (from - px) - 40;
         out.push(
-          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}"><title>${esc(compare.undrawn)}</title>${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
+          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}">${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
         );
       }
       if (i)

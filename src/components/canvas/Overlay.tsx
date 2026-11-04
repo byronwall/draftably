@@ -110,7 +110,6 @@ function QuickAddButtons() {
                 tabindex="0"
                 aria-label={`Add connected shape ${side}`}
               >
-                <title>Add connected shape {side} · Alt + arrow</title>
                 <circle cx={at().x} cy={at().y} r={size() / 2} />
                 <path
                   d={`M${at().x - size() / 4} ${at().y}h${size() / 2}M${at().x} ${at().y - size() / 4}v${size() / 2}`}

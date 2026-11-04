@@ -95,7 +95,6 @@ export function NodeView(props: NodeViewProps) {
       }
       aria-pressed={props.interactive ? !!props.selected : undefined}
     >
-      <title>{node().title + (node().href ? `\n${node().href}` : '')}</title>
       <Show when={label().leader && label().mode !== 'center'}>
         <path
           class="leader"
@@ -266,9 +265,14 @@ export function NodeView(props: NodeViewProps) {
             const p = () =>
               portPoint(style().shape, { x: 0, y: 0, w: props.rect.w, h: props.rect.h }, side);
             return (
-              <circle class="port" data-port={side} cx={p().x} cy={p().y} r={4.5}>
-                <title>Connect from {side}</title>
-              </circle>
+              <circle
+                class="port"
+                data-port={side}
+                cx={p().x}
+                cy={p().y}
+                r={4.5}
+                aria-label={`Connect from ${side}`}
+              />
             );
           }}
         </For>
