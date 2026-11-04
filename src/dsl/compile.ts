@@ -1701,26 +1701,33 @@ interface PackGaps {
   group: number;
 }
 
+/** How much deeper than the deepest rank a sink's move may make its callers' rank. */
+const DEEPER = 1.25;
+
 /**
  * Move a sink group (one with no way out) back into its callers' rank, beside them, when all its
  * callers share one rank and one of them goes on into another member of the next rank. Called
  * groups such as an upstream API then sit next to the code that calls them instead of opening a
  * rank of their own past it, where they leave the space beside their callers empty and draw long
  * lines back. Of a caller's sinks in the next rank, the longest along the reading direction
- * stays, so the run keeps its next step.
+ * stays, so the run keeps its next step. A sink stays put when the move would make its callers'
+ * rank much deeper (`extent`, across the reading direction) than the deepest rank already is: a
+ * tall group stacked on its caller leaves the rest of the drawing beside empty space.
  */
 function besideCallers(
   layers: string[][],
   pairs: Array<[string, string]>,
   movable: (id: string) => boolean,
   length: (id: string) => number,
+  extent: (layer: string[]) => number,
 ): string[][] {
   const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const))),
     sink = (id: string) => !pairs.some(([a, b]) => a === id && b !== id),
     callers = (id: string) => [
       ...new Set(pairs.filter(([a, b]) => b === id && a !== id).map(p => p[0])),
     ];
-  const moved = new Set<string>();
+  const moved = new Set<string>(),
+    deepest = Math.max(...layers.map(extent));
   for (const [i, layer] of layers.entries()) {
     if (!i) continue;
     for (const id of layer) {
@@ -1733,6 +1740,8 @@ function besideCallers(
         t => t !== id && rank.get(t) === i,
       );
       const longest = [id, ...next].filter(sink).sort((a, b) => length(b) - length(a))[0];
+      const joined = [...layers[i - 1], ...layer.filter(x => moved.has(x)), id];
+      if (extent(joined) > DEEPER * deepest) continue;
       if (next.some(t => !sink(t)) || longest !== id) moved.add(id);
     }
   }
@@ -1785,11 +1794,19 @@ function packed(
     const p = arranged.get(id)!;
     return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
   };
+  const between = (a: string, b: string) =>
+    Math.max(
+      roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right),
+      softRoom(by.get(a)!.soft, by.get(b)!.soft, right),
+    );
+  const extent = (layer: string[]) =>
+    layer.reduce((s, id, j) => s + minor(id) + (j ? between(layer[j - 1], id) : 0), 0);
   const layers = besideCallers(
     rankLayers(ids, pairs),
     pairs,
     sinks ? group : () => false,
     major,
+    extent,
   ).map(layer =>
     clustered(
       [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
@@ -1797,14 +1814,7 @@ function packed(
     ),
   );
   const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
-  const between = (a: string, b: string) =>
-    Math.max(
-      roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right),
-      softRoom(by.get(a)!.soft, by.get(b)!.soft, right),
-    );
-  const extents = layers.map(layer =>
-    layer.reduce((s, id, j) => s + minor(id) + (j ? between(layer[j - 1], id) : 0), 0),
-  );
+  const extents = layers.map(extent);
   const widest = Math.max(...extents);
   // A chain link, a member with one way on into a member with one way in, shares its
   // predecessor's centre line so the chain reads straight. Other members stay centred on the

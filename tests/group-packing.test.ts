@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compile, type Scene } from '../src/dsl/compile';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes } from '../src/model/routes';
 
 /** A server whose jobs feed a store and an API, beside a client: the hn-offline shape. */
 const source = (engine: string, params = '') =>
@@ -112,6 +114,32 @@ describe('group packing', () => {
     // Upstream shares the server's column, and the phone still follows the server.
     expect(upstream.x).toBeLessThan(server.x + server.w);
     expect(box(scene, 'device').x).toBeGreaterThan(server.x + server.w);
+  });
+
+  it('leaves a tall called group in its own rank when stacking it would double the depth', async () => {
+    // A column of claims calls a column of checks and feeds a chain: stacked on the claims, the
+    // checks would leave the chain beside empty space (#428).
+    const text = [
+      'group claims "Claims"',
+      ...[1, 2, 3, 4].map(i => `node c${i} "Claim ${i}" in=claims`),
+      'group checked "Checked"',
+      ...[1, 2, 3].map(i => `node t${i} "Check ${i}" in=checked`),
+      'node expected "Expected"',
+      'node watch "Watch"',
+      'edge g1 claims -> checked',
+      'edge g2 claims -> expected',
+      'edge g3 expected -> watch',
+      'layout root engine=compound-flow',
+      '',
+    ].join('\n');
+    const scene = await compile(text),
+      claims = box(scene, 'claims');
+    expect(box(scene, 'checked').x).toBeGreaterThan(claims.x + claims.w);
+    // Both lines out of the claims group are routed, not left blocked.
+    const doc = projectScene(scene),
+      { vg, rects } = visibleRects(doc),
+      { result } = computeRoutes(doc, vg, rects);
+    expect(result.routes.filter(r => r.blocked).map(r => r.id)).toEqual([]);
   });
 
   it('ranks a group in a cycle with a node by where its members enter (#125)', async () => {

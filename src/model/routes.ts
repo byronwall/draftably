@@ -539,7 +539,8 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
     { sides, crosses } = cellEnds(doc, vg, all);
   // A line to a cell with no free side is routed to its stub outside the outline. A line to an
   // open group ends on the group's frame: a stub the frame's size, inside the group, so the frame
-  // is not an obstacle to its own line.
+  // is not an obstacle to its own line. Lines at one group share its stub; a stub per line would
+  // cover the others' ends and block them.
   const stubs = new Map<string, Rect>(),
     stubParent = new Map<string, string>(),
     framed = new Set(vg.groups.filter(g => !g.frame && !isCollapsed(doc, g.id)).map(g => g.id));
@@ -552,8 +553,8 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
       ['to', e.b],
     ] as const)
       if (framed.has(id) && !c?.[end]) {
-        stubs.set(`${e.id}:${end}`, all.get(id)!);
-        stubParent.set(`${e.id}:${end}`, id);
+        stubs.set(`${id}:frame`, all.get(id)!);
+        stubParent.set(`${id}:frame`, id);
       }
   }
   const rects = all;
@@ -596,8 +597,10 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
     edges: vg.edges
       .filter(e => doc.layout.edges[e.id]?.row === undefined)
       .map(e => {
-        const from = stubs.has(`${e.id}:from`) ? `${e.id}:from` : e.a,
-          to = stubs.has(`${e.id}:to`) ? `${e.id}:to` : e.b,
+        const end = (key: string, id: string) =>
+            stubs.has(key) ? key : stubs.has(`${id}:frame`) ? `${id}:frame` : id,
+          from = end(`${e.id}:from`, e.a),
+          to = end(`${e.id}:to`, e.b),
           side = sides.get(e.id);
         return {
           ...e,
