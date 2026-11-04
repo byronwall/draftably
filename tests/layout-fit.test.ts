@@ -33,6 +33,15 @@ describe('fit= on the root layout', () => {
     expect(wide.diagnostics.find(d => d.code === 'fit')?.message).toContain('reading down');
   });
 
+  it('warns when a stated direction keeps the drawing too wide, but not too tall', async () => {
+    const wide = await compile(chain(' fit=slide').replace('direction=down', 'direction=right'));
+    expect(wide.diagnostics.find(d => d.code === 'fit-direction')?.message).toContain(
+      'Remove direction=',
+    );
+    const tall = await compile(chain(' fit=wide'));
+    expect(tall.diagnostics.some(d => d.code === 'fit-direction')).toBe(false);
+  });
+
   it('keeps the file as written when it already fits best', async () => {
     const tall = await compile(chain(' fit=tall'));
     expect(aspect(tall)).toBeCloseTo(aspect(await compile(chain(''))), 5);

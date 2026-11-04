@@ -153,6 +153,16 @@ export async function compile(source: string): Promise<Scene> {
     line: root.line,
     ids: [],
   });
+  // A stated direction holds, so fit= can only fold. Say so when that leaves the drawing much
+  // wider than the target; taller is fine in a page column.
+  if (root.direction !== 'auto' && aspectOf(best.scene) > target * 1.5)
+    best.scene.diagnostics.push({
+      level: 'warning',
+      code: 'fit-direction',
+      message: `direction=${root.direction} keeps fit=${root.fit} from turning the drawing, so it stays wide. Remove direction= to let fit= try both directions.`,
+      line: root.line,
+      ids: [],
+    });
   return best.scene;
 }
 
