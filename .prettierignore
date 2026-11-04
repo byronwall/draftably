@@ -12,3 +12,8 @@ packages/cli/THIRD_PARTY_NOTICES
 
 # Preserve original Pro result bytes and their supplied manifest.
 docs/intent/**/assets/pro-results/**
+
+# Agent-written diagram sources and their renders, kept as returned.
+docs/evaluations/agent-diagrams/bare/
+docs/evaluations/agent-diagrams/reference/
+site/public/evaluations/agent-diagrams/

@@ -49,6 +49,7 @@ const GROUPS: [string, string[]][] = [
   ['Diagram kinds', ['swim-lanes', 'sequence-diagrams', 'cells']],
   ['Layout', ['layout-engines', 'routing', 'layout-tools']],
   ['Tools', ['command-line', 'editing-in-the-viewer', 'shortcuts', 'examples']],
+  ['Comparisons', ['agent-diagram-evaluation']],
 ];
 
 /** Sidebar titles that differ from the section's heading. */
@@ -248,6 +249,10 @@ const md = new Marked({
           ? ' rel="external"'
           : '';
       return `<a href="${esc(href)}"${attrs}>${this.parser.parseInline(t.tokens)}</a>`;
+    },
+    image(t) {
+      const href = t.href.startsWith('/') ? BASE + t.href.slice(1) : t.href;
+      return `<img src="${esc(href)}" alt="${esc(t.text)}" loading="lazy" style="max-width:100%;height:auto" />`;
     },
     code(t) {
       const lang = t.lang ?? '';

@@ -40,7 +40,10 @@
     "font-metrics": "node scripts/font-metrics.mjs",
     "audit:compare": "node scripts/audit-compare.mjs",
     "shoot": "node scripts/shoot.mjs",
-    "bench": "node scripts/bench/run.mjs"
+    "bench": "node scripts/bench/run.mjs",
+    "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
+    "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",
+    "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",

@@ -78,6 +78,25 @@ const setSource = async (page, text) => {
 const sourceText = page => page.evaluate(() => document.querySelector('.cm-content')?.textContent);
 
 const journeys = {
+  async 'diagram comparison page loads every rendered image at desktop and phone widths'() {
+    for (const width of [1440, 390]) {
+      const page = await open('docs/agent-diagram-evaluation', { width, height: 900 });
+      const images = page.locator('.doc img[src*="/evaluations/agent-diagrams/"]');
+      check(`Comparison shows images at ${width}px`, (await images.count()) > 0);
+      for (const image of await images.all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate(img => img.decode());
+      }
+      const loaded = await images.evaluateAll(list =>
+        list.every(img => img.complete && img.naturalWidth > 0),
+      );
+      check(`Comparison images load at ${width}px`, loaded);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      check(`Comparison has no document overflow at ${width}px`, overflow <= 1, `${overflow}px`);
+      await page.screenshot({ path: path.join(proof.out, `comparison-${width}-top.png`) });
+      await page.context().close();
+    }
+  },
   async 'landing links reach the editor and carry edits'() {
     const page = await open('');
     await page.click('text=Open the editor');

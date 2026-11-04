@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="800" viewBox="0 0 680 800" font-family="Helvetica, Arial, sans-serif" font-size="15">
+  <title>Order approval workflow</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="680" height="800" fill="#ffffff"/>
+  <text x="340" y="30" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">Order approval workflow</text>
+  <g stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <line x1="260" y1="94" x2="260" y2="118"/>
+    <line x1="260" y1="164" x2="260" y2="198"/>
+    <line x1="260" y1="300" x2="260" y2="338"/>
+    <line x1="260" y1="384" x2="260" y2="418"/>
+    <line x1="260" y1="520" x2="260" y2="558"/>
+    <line x1="260" y1="604" x2="260" y2="638"/>
+    <line x1="260" y1="684" x2="260" y2="724"/>
+    <polyline points="350,250 530,250 530,336"/>
+    <polyline points="350,470 530,470 530,388"/>
+    <polyline points="600,362 640,362 640,750 322,750"/>
+  </g>
+  <g stroke="#333" stroke-width="2">
+    <ellipse cx="260" cy="70" rx="60" ry="24" fill="#d4edda"/>
+    <rect x="180" y="120" width="160" height="44" rx="6" fill="#dbe9f7"/>
+    <polygon points="260,200 350,250 260,300 170,250" fill="#fff3cd"/>
+    <rect x="180" y="340" width="160" height="44" rx="6" fill="#dbe9f7"/>
+    <polygon points="260,420 350,470 260,520 170,470" fill="#fff3cd"/>
+    <rect x="180" y="560" width="160" height="44" rx="6" fill="#dbe9f7"/>
+    <rect x="180" y="640" width="160" height="44" rx="6" fill="#dbe9f7"/>
+    <ellipse cx="260" cy="750" rx="60" ry="24" fill="#d4edda"/>
+    <rect x="460" y="338" width="140" height="48" rx="6" fill="#f8d7da"/>
+  </g>
+  <g fill="#222" text-anchor="middle" dominant-baseline="middle">
+    <text x="260" y="70">Start</text>
+    <text x="260" y="142">Validate order</text>
+    <text x="260" y="242">Payment</text>
+    <text x="260" y="260">authorized?</text>
+    <text x="260" y="362">Reserve stock</text>
+    <text x="260" y="462">Stock</text>
+    <text x="260" y="480">available?</text>
+    <text x="260" y="582">Pack order</text>
+    <text x="260" y="662">Ship order</text>
+    <text x="260" y="750">End</text>
+    <text x="530" y="362">Cancel order</text>
+  </g>
+  <g fill="#555" font-size="13" font-weight="bold">
+    <text x="362" y="242">No</text>
+    <text x="362" y="462">No</text>
+    <text x="268" y="322">Yes</text>
+    <text x="268" y="542">Yes</text>
+  </g>
+</svg>
