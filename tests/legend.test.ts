@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { LayoutLab } from '../src/engines/layout-engine.js';
 import { renderSvg } from '../src/cli/svg';
 import { checkSource } from '../src/dsl/compile';
 import { legendNotes } from '../src/dsl/legend-notes';
@@ -67,6 +68,22 @@ node api "API"
     expect(line('node a "A"\nlegend blue\n')).toBe(2);
     expect(line('legend blue "A"\nlegend blue "B"\n')).toBe(2);
     expect(line('node a "A"\nlegend auto "x"\n')).toBe(2);
+  });
+
+  it('keeps line entries through normalize and an editor relayout', async () => {
+    const doc = projectScene(
+      checkSource(`diagram "K" version=1
+node a "A"
+node b "B"
+edge e1 a -> b kind=async
+legend line dashed "Today's signal"
+`),
+    );
+    const line = { line: 'dashed', label: "Today's signal" };
+    expect(normalize(JSON.parse(JSON.stringify(doc))).appearance.legend).toEqual([line]);
+    // The editor normalizes each engine result; this threw before line entries were accepted.
+    const { document: after } = await LayoutLab.compute(doc, { mode: 'rebuild' });
+    expect(normalize(after).appearance.legend).toEqual([line]);
   });
 
   it('survives projection, JSON and formatting, and draws under the SVG', () => {

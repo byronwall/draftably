@@ -77,22 +77,27 @@ export function Toolbar() {
             type="button"
             class="button primary"
             {...tip(
-              'Improve',
+              'Tidy',
               'L',
-              movesBlocked() ?? `Small moves in ${layoutTarget()}. Undo restores them.`,
+              movesBlocked() ??
+                `Small moves in ${layoutTarget()} that shorten long lines. Undo restores them.`,
             )}
             disabled={locked() || !commandEnabled('layout')}
             onClick={run('layout')}
           >
             <Icon name="layout" />
-            Improve
+            Tidy
           </button>
         </Show>
         <button
           type="button"
           class="button ghost"
           aria-pressed={arrangeOpen()}
-          {...tip('Arrange', '⌥L', 'Choose a direction, a format and how connections run.')}
+          {...tip(
+            'Arrange',
+            '⌥L',
+            'Lay out again, or choose a direction, a format and how connections run.',
+          )}
           onClick={run('layout-menu')}
         >
           Arrange

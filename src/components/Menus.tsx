@@ -512,6 +512,7 @@ function LayoutMenu() {
   return (
     <>
       <MenuItem command="layout-menu" checked={arrangeOpen()} />
+      <MenuItem command="layout-rebuild" />
       <MenuItem command="layout" note={`Small moves in ${layoutTarget()}.`} />
       <MenuItem command="compare-layouts" />
       <hr />

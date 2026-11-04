@@ -161,6 +161,10 @@ export function ArrangePanel() {
     <div class="panel-scroll arrange">
       <Subject line={fileMode() ? recipeLine(scope(), shape()) : null} />
 
+      <Show when={canReshape() && !rebuildBlocked()}>
+        <ActionButton command="layout-rebuild" label="Lay out again" primary />
+      </Show>
+
       <Show when={!movesBlocked()} fallback={<p class="hint">{movesBlocked()}</p>}>
         <Show
           when={canReshape()}
@@ -251,12 +255,13 @@ function Subject(props: { line: string | null }) {
   );
 }
 
-function ActionButton(props: { command: CommandId; label: string }) {
+function ActionButton(props: { command: CommandId; label: string; primary?: boolean }) {
   const command = (): Command => commands[props.command];
   return (
     <button
       type="button"
       class="button"
+      classList={{ primary: props.primary }}
       disabled={!commandEnabled(props.command)}
       {...tip(command().label, command().keys, command().hint)}
       onClick={() => runCommand(props.command)}
@@ -385,7 +390,7 @@ function Connections() {
   );
 }
 
-/** Every setting by what it changes: the rebuild, then the small moves of Improve. */
+/** Every setting by what it changes: the rebuild, then the small moves of Tidy. */
 function ExactLayout() {
   const rebuildEngine = () =>
     fileMode() ? (labEngine() ?? (engineOf() as LayoutAlgorithmId | null)) : doc.settings.algorithm;
@@ -439,16 +444,18 @@ function ExactLayout() {
             <RecipeControls />
           </Show>
           <Show when={writes()}>{line => <code class="recipe-line next">{line()}</code>}</Show>
-          <button type="button" class="button" onClick={() => runCommand('layout-rebuild')}>
-            {labEngine() || !fileMode() ? 'Preview rebuild' : 'Reset to the recipe'} <kbd>⇧L</kbd>
-          </button>
+          <Show when={labEngine()}>
+            <button type="button" class="button" onClick={() => runCommand('layout-rebuild')}>
+              Preview rebuild <kbd>⇧L</kbd>
+            </button>
+          </Show>
         </section>
       </Show>
       <section class="arrange-field">
-        <h3>Improve</h3>
+        <h3>Tidy</h3>
         <Show when={fileMode()}>
           <SelectField<LayoutAlgorithmId>
-            label="Improve with"
+            label="Tidy with"
             value={doc.settings.algorithm}
             options={Engine.algorithms.map(a => [a.id, a.name] as const)}
             onChange={value => updateLayoutSettings({ algorithm: value })}

@@ -766,7 +766,7 @@ engine only when you can name what is wrong with the drawing.
 | `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                               | A data platform with many sources        |
 | `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                            | Services that call each other            |
 | `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                 | A map of related topics                  |
-| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Improve**. See [Layout tools](#layout-tools).    | A flow with one long line                |
+| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Tidy**. See [Layout tools](#layout-tools).       | A flow with one long line                |
 
 `compound-flow`, `boundary-align` and `compound-spring` differ only when a scope holds groups.
 Without groups, those three, `flow` and `tidy` often draw almost the same result, because each
@@ -948,7 +948,7 @@ Try these steps in order, and stop when the drawing reads well:
 2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
    `layout root engine=layered ordering=crossings`. In the Editor, the same setting is
    **Order within a stage** → **Reduce crossings** under **Arrange** → **Exact layout** →
-   **Improve**, which applies to small moves. A rebuild always reduces crossings.
+   **Tidy**, which applies to small moves. A rebuild always reduces crossings.
 3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
    `pin` holds a box at an exact place. See [Refinements](#refinements).
 4. **Choose the sides.** `from=` and `to=` on an `edge` line choose the sides a line leaves and
@@ -1329,7 +1329,7 @@ Edits made in the Editor are written back to the file as readable statements:
 | Clear manual markers                   | Removes the object's soft position refinements.                     |
 | Direction or Format in **Arrange**     | `direction=` or `fit=` on the scope's `layout` line.                |
 | Rebuild, or Apply in Compare           | `layout scope engine=…` for the diagram or the selected container.  |
-| Improve, a timeline step, the brush    | `stay` for each object that moved, plus anchors around them.        |
+| Tidy, a timeline step, the brush       | `stay` for each object that moved, plus anchors around them.        |
 | Connections in **Arrange**, or Compare | The `routing` line.                                                 |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
@@ -1360,7 +1360,10 @@ drawing.
 - **Lines cross.** Follow [Fixing line crossings](#fixing-line-crossings).
 - **Lines have too many bends, or run too close.** Change one setting on the `routing` line. See
   [Routing](#routing).
-- **Shapes are close, but a few lines are stretched or uneven.** Select **Improve** (**L**).
+- **Shapes overlap or crowd after a resize or other edits.** Select **Lay out again** (**Shift L**)
+  at the top of **Arrange**. It runs the automatic layout from the file's recipe and previews the
+  result. Soft position refinements inside the scope go; pins and sizes stay.
+- **Shapes are close, but a few lines are stretched or uneven.** Select **Tidy** (**L**).
 - **A group is out of shape after edits.** Select **Reflow group**. It removes the soft refinements
   inside the group. To clear one object, select **Clear manual markers**.
 - **The whole drawing has the wrong shape.** Choose a **Direction** or **Format** in **Arrange**
@@ -1374,7 +1377,8 @@ drawing.
 
 | Action               | What it changes                              | Applies to                                  | How to reverse                         |
 | -------------------- | -------------------------------------------- | ------------------------------------------- | -------------------------------------- |
-| Improve              | Small moves from the current drawing         | The selection, a group or the whole diagram | Undo                                   |
+| Tidy                 | Small moves from the current drawing         | The selection, a group or the whole diagram | Undo                                   |
+| Lay out again        | A preview of the recipe, without refinements | The whole diagram or one group              | Discard the preview, or Undo           |
 | Direction or Format  | A preview of the scope's `layout` line       | The whole diagram or one group              | Discard the preview, or Undo           |
 | Compare alternatives | Nothing until you Apply a candidate          | The whole diagram or one group              | Close it, or Undo after Apply          |
 | Layout timeline      | Steps from the current drawing               | The diagram                                 | Close it, or Undo a kept step          |
@@ -1382,7 +1386,11 @@ drawing.
 | Reroute              | Connection paths. Shapes stay where they are | Every connection                            | Not needed: the source does not change |
 
 The **Arrange** panel (**Alt L**) follows the selection: with nothing selected it arranges the whole
-diagram, and with one group selected it arranges that group. **Direction** and **Format** show what
+diagram, and with one group selected it arranges that group. **Lay out again** at its top runs the
+automatic layout once more.
+
+A resize in the Editor saves a `size` line and compiles the file again, so the layout runs from
+the recipe and neighbours move to make room. **Direction** and **Format** show what
 the scope's `layout` line says. Choosing another preview it at once, and further choices add to the
 same preview. Each rebuild candidate in **Compare** also compiles the file with a new `layout` line.
 What you see is exactly what the file will draw, and **Keep** (**Enter**) or **Apply** saves that
@@ -1400,7 +1408,7 @@ shows every other result, including any that failed. The sliders button holds th
 parameter grids, cameras and export. For connections, **Compare** tries `clearance=4`, `clearance=22`
 and `port-gap=28`. Each is a trade: more clearance can block a route in a tight drawing.
 
-**Improve**, a kept **timeline** step, a **brush** stroke, and warm-start or pass candidates in
+**Tidy**, a kept **timeline** step, a **brush** stroke, and warm-start or pass candidates in
 Compare all start from the current drawing, so a recipe could not reproduce them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
 new position relative to its parent (an existing `stay` is updated in place), and the objects
 around them are anchored as for a drag. Groups follow their contents, so a group whose children

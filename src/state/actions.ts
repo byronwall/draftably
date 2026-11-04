@@ -461,7 +461,7 @@ export function setLayoutIntent(role: IntentRole, id: string | null, placement?:
     transact('Set ' + role + ' preference', d => edits.setIntent(d, role, id, placement));
     toast(
       id
-        ? 'Layout preference saved. Improve or compare to arrange it.'
+        ? 'Layout preference saved. Tidy or compare to arrange it.'
         : 'Cleared ' + role + ' preference',
     );
   } catch (error) {

@@ -309,8 +309,8 @@ export const commands = {
   'mark-end': { label: 'End here', run: () => actions.markSelectedAs('end') },
 
   layout: {
-    hint: 'Nudge shapes into line with small moves. Your arrangement stays.',
-    label: 'Improve positions',
+    hint: 'Small moves that shorten long lines and line up neighbours. Your arrangement stays.',
+    label: 'Tidy',
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
@@ -318,8 +318,8 @@ export const commands = {
     endsBrush: true,
   },
   'layout-rebuild': {
-    hint: 'Preview the recipe again, without hand placements.',
-    label: 'Rearrange from scratch',
+    hint: "Run the automatic layout again from the file's recipe, without hand placements.",
+    label: 'Lay out again',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
     blocked: rebuildBlocked,
@@ -334,7 +334,7 @@ export const commands = {
   'layout-accept': { label: 'Keep preview', run: acceptPreview },
   'layout-discard': { label: 'Discard', run: discardPreview },
   'layout-menu': {
-    hint: 'Choose a direction, a format and how connections run.',
+    hint: 'Lay out again, or choose a direction, a format and how connections run.',
     label: 'Arrange',
     keys: '⌥L',
     icon: 'layers',

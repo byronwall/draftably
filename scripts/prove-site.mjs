@@ -413,7 +413,7 @@ const journeys = {
   async 'layout actions say what they change'() {
     const page = await open('app/?example=checkout');
     await editorReady(page);
-    const button = page.locator('.toolbar button:has-text("Improve")');
+    const button = page.locator('.toolbar button:has-text("Tidy")');
     await page.click('.menubar-item:has-text("Layout")');
     await page.click('.popover .menu-item:has-text("Arrange")');
     const panel = page.locator('.arrange-subject strong');
