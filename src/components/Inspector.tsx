@@ -226,7 +226,7 @@ function MultipleSelected(props: { count: number }) {
           <Show when={!doc.layout.sequence}>
             <CommandButton command="pin">Pin</CommandButton>
           </Show>
-          <CommandButton command="layout">Improve</CommandButton>
+          <CommandButton command="layout">Tidy</CommandButton>
         </div>
       </Section>
       <Section title="Color">
@@ -577,7 +577,7 @@ function ContainerSections(props: { id: string }) {
                 }
               />
               <div class="fields-2">
-                <CommandButton command="layout">Improve inside</CommandButton>
+                <CommandButton command="layout">Tidy inside</CommandButton>
                 <CommandButton command="fit-container">Fit contents</CommandButton>
               </div>
             </>

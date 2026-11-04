@@ -67,8 +67,8 @@ To connect from the keyboard, select a source, press `C`, press `Tab` to reach t
 
 | Action                       | Keys               |
 | ---------------------------- | ------------------ |
-| Improve positions            | `L`                |
-| Rearrange from scratch       | `Shift L`          |
+| Tidy                         | `L`                |
+| Lay out again                | `Shift L`          |
 | Arrange panel                | `Alt L`            |
 | Compare alternatives         | `Alt E`            |
 | Layout timeline              | `Alt T`            |

@@ -31,7 +31,7 @@ export function RightPanel() {
             type="button"
             role="tab"
             aria-selected={rightTab() === 'arrange'}
-            {...tip('Arrange', '⌥L', 'Direction, format and connections.')}
+            {...tip('Arrange', '⌥L', 'Lay out again, direction, format and connections.')}
             onClick={() => setRightTab('arrange')}
           >
             Arrange
