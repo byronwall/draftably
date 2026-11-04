@@ -7,6 +7,7 @@ import {
   HEX_COLOR,
   isBuiltInFamily,
   isShade,
+  LEGEND_LINES,
   OVERRIDE_LIMITS,
   THEME_IDS,
   type AppearanceOverrides,
@@ -469,6 +470,11 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
   }
   const legend: LegendEntry[] = [];
   for (const e of Array.isArray(input.legend) ? input.legend : []) {
+    if (e && LEGEND_LINES.includes(e.line)) {
+      if (typeof e.label !== 'string') throw Error(`Legend line ${e.line}: a label is required.`);
+      legend.push({ line: e.line, label: e.label });
+      continue;
+    }
     if (!e || typeof e.family !== 'string' || !/^[A-Za-z_][A-Za-z0-9_-]*$/.test(e.family))
       throw Error('Legend entries need a color family.');
     if (typeof e.label !== 'string') throw Error(`Legend ${e.family}: a label is required.`);
