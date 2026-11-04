@@ -8,7 +8,7 @@
 - Branch: `codex/embedding-ecosystem-research`.
 - Prompt: [prompt.md](prompt.md).
 - Input packet: ignored `tmp/pro/embedding-ecosystem/source-packet.zip`.
-- Phase: Pro research running. Sent message, both attachments, and Stop control verified.
+- Phase: Pro complete; all results collected and reviewed; preparing the PR.
 - Pro conversation: https://chatgpt.com/c/6aeaa852-3e08-83ea-997e-ca7c5ac0206d
 - Model: Pro, power 5 of 5, verified in Chrome model selector.
 - Chrome profile: `byroni.us`; signed-in ChatGPT history visible.
@@ -19,9 +19,26 @@
 - Packet inventory: 355 tracked files plus the prompt and inventory; 1,091,300 bytes compressed.
 - Follow-up count: 0.
 - Heartbeat: none. App instructions require checking this job in the current task instead of creating a monitoring automation.
-- Collected files: none yet.
+- Collected files: all four original Markdown deliverables; see the [asset index](../../intent/embedding-ecosystem/asset-index.md).
 - Blockers: none.
 - PR: pending.
+
+## Collection and integration
+
+- Pro reported 50 minutes 2 seconds of work. Completion and all download controls were visible.
+- Collected on November 4 at approximately 04:31 UTC (November 3, 23:31 EST).
+- Downloaded `draftably-embedding-design.zip` from the recorded conversation under the skill's standing approval.
+- The browser download event timed out, but the archive existed in Downloads. It was checked before any retry; no duplicate request was made.
+- Extraction checked unsafe paths, symlinks, entry sizes, and total size. The four extracted files match the archive byte for byte.
+- Original files are preserved under `docs/intent/embedding-ecosystem/assets/pro-results/2026-11-03/`.
+- The ZIP and input packet remain in ignored working storage.
+- Read every report and its source register. No additional Pro follow-up was needed.
+- Wrote the [summary](summary.md), [reviewed plan](../../intent/embedding-ecosystem/implementation-plan.md), and [all recommendation decisions](../../intent/embedding-ecosystem/recommendations.md).
+- Verified decisive source seams and current primary documentation for Mermaid, GitHub, markdown-it, and Astro.
+- Reconciled Pro's wheel guidance with FEEL.md and checked the release files omitted from the packet.
+- No product implementation, package publication, deployment, or upstream message occurred.
+- Final documentation verification passed: repository formatting, 40 local links across eight authored documents, all 29 dispositions, and 68 unique external source entries.
+- Rechecked all four original assets against the downloaded archive after formatting. Original bytes remain unchanged.
 
 ## Repository checks
 
