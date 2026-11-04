@@ -10,7 +10,7 @@ It distinguishes custom build integrations from native support on hosted platfor
 [All original Pro assets](../intent/embedding-ecosystem/asset-index.md) ·
 [Run record](embedding-ecosystem-2026-11-03/run.md)
 
-Status: research complete; implementation proposed.
+Status: research complete in [PR #422](https://github.com/byronwall/draftably/pull/422); implementation proposed.
 
 ## Diagram library coverage
 

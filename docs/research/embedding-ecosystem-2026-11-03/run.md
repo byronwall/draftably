@@ -8,7 +8,7 @@
 - Branch: `codex/embedding-ecosystem-research`.
 - Prompt: [prompt.md](prompt.md).
 - Input packet: ignored `tmp/pro/embedding-ecosystem/source-packet.zip`.
-- Phase: Pro complete; all results collected and reviewed; preparing the PR.
+- Phase: complete. Pro results collected, reviewed, integrated, and preserved in the verified open PR.
 - Pro conversation: https://chatgpt.com/c/6aeaa852-3e08-83ea-997e-ca7c5ac0206d
 - Model: Pro, power 5 of 5, verified in Chrome model selector.
 - Chrome profile: `byroni.us`; signed-in ChatGPT history visible.
@@ -21,7 +21,9 @@
 - Heartbeat: none. App instructions require checking this job in the current task instead of creating a monitoring automation.
 - Collected files: all four original Markdown deliverables; see the [asset index](../../intent/embedding-ecosystem/asset-index.md).
 - Blockers: none.
-- PR: pending.
+- PR: [#422 — Plan Draftably embedding and Markdown distribution](https://github.com/byronwall/draftably/pull/422).
+- PR verification: open, mergeable, correct base/head, saved body reviewed, all four originals present in the 12-file diff.
+- Monitoring: none remains active. Stop for review; do not merge or begin product implementation from this run.
 
 ## Collection and integration
 
