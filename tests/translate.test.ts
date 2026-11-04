@@ -16,6 +16,40 @@ import type { Diagram } from '../src/model/types';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
+/** The repro from issues #424 and #437. */
+const SCORING = `diagram "Score a change so reviewers know their posture" version=1
+subtitle "Objective scores on the change replace guessing from diff size"
+
+group bug "Defect: impact" color=red
+node disrupt "Disruption: crash, feature\\nunusable, or retry works" in=bug
+node scope "Scope: one user\\nor every user" in=bug
+group dev "Dev work: impact on developers" color=blue
+node touches "Who it touches" in=dev
+node odds "Odds it hurts\\nor helps others" in=dev
+node process "Process, skills, docs\\nvs architecture, refactor, API" in=dev
+node today "Today: description\\nand diff size" color=stone
+node scores "Scores in the description or labels" color=amber shade=300
+group posture "Reviewer posture" color=slate
+node accept "Default accept" in=posture
+node caution "Default caution" in=posture
+node reject "Default reject" in=posture
+
+edge s1 bug -> scores
+edge s2 dev -> scores
+edge s3 today -> scores "replaces" kind=async
+edge s4 scores -> posture "sets"
+
+layout root engine=layered direction=down
+layout bug row
+layout dev row
+layout posture row
+
+legend red "Defect scoring"
+legend blue "Dev-work scoring"
+legend amber shade=300 "What we add"
+legend line dashed "Today's signal"
+`;
+
 /** Apply an editor edit to the projected file and return the new source and its scene. */
 function edit(source: string, label: string, selection: string[], fn: (d: Diagram) => void) {
   const scene = checkSource(source),
@@ -137,6 +171,16 @@ describe('translating editor edits', () => {
     );
     expect(group.scene.byId.get('services')!.w).toBe(before.w + 100);
     expect(group.text).not.toMatch(/^near services/m);
+  });
+
+  it('leaves no layout notes after a plain resize', () => {
+    // Issue #437: a resize anchored its neighbours where they were, and the relayout broke them.
+    const source = SCORING;
+    const { text, scene } = edit(source, 'Resize shape', ['disrupt'], d => {
+      d.layout.nodes.disrupt.w += 120;
+    });
+    expect(text).toMatch(/^size disrupt /m);
+    expect(scene.diagnostics.filter(d => d.level !== 'info')).toEqual([]);
   });
 
   it('adds, renames, connects, styles and deletes with readable ids', () => {
