@@ -1332,8 +1332,9 @@ Edits made in the Editor are written back to the file as readable statements:
 | Tidy, a timeline step, the brush       | `stay` for each object that moved, plus anchors around them.        |
 | Connections in **Arrange**, or Compare | The `routing` line.                                                 |
 
-An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
-top-level object, and the siblings of the edited object and of its containers. When an agent later
+An accepted move or pin also writes soft `stay` anchors for the objects around it: every
+top-level object, and the siblings of the edited object and of its containers. A resize writes only
+its `size` line, so the layout moves the objects around it to make room. When an agent later
 adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to
 give way, the status bar's **layout notes** name it with its line, and the change notice lists the
 objects outside the edit that moved. **Reflow group** (Edit menu or Inspector) removes the soft
