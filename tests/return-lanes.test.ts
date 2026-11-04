@@ -77,4 +77,15 @@ describe('return and skip lanes', () => {
     const scene = await compile(flow.replace('edge ab a -> b', 'edge ab a -> b "push to main"'));
     expect(scene.edges.find(e => e.id === 'back')!.lane!.face).toBeUndefined();
   });
+
+  it("enters a diamond's face when its vertex facing back holds another edge", async () => {
+    // b → c takes c's left vertex, so the skip a → c comes down onto c's top vertex.
+    const scene = await compile(flow.replace('node c "C"', 'node c "C?" shape=diamond'));
+    const lane = scene.edges.find(e => e.id === 'skip')!.lane!,
+      c = scene.byId.get('c')!;
+    expect(lane).toMatchObject({ out: true, face: true, enter: c.x + c.w / 2 });
+    expect(laneBends({ lane }, scene.byId.get('a')!, c).toSide).toBe('top');
+    // A box's side holds both ports, so its skip still turns into the gap.
+    expect((await compile(flow)).edges.find(e => e.id === 'skip')!.lane!.face).toBeUndefined();
+  });
 });
