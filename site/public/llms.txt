@@ -1,0 +1,18 @@
+# draftably
+
+> draftably is a text format for diagrams. A `.draft` file lists boxes, groups and connections, one statement per line, and automatic layout draws them. The `draftably` CLI checks, lays out and renders files, and ships an agent skill that teaches coding agents the syntax.
+
+To write a `.draft` file, read the agent skill first. It has the syntax, the layout engines and the check loop.
+
+## Docs
+
+- [Agent skill (SKILL.md)](https://raw.githubusercontent.com/byronwall/draftably/main/skills/draftably/SKILL.md): syntax, layout and the check-and-render workflow for agents
+- [Agent skill install](https://draftably.dev/docs/agent-skill/): `npx draftably skill install` puts the skill where Claude Code, Codex or Cursor reads it
+- [Get started](https://draftably.dev/docs/get-started/): a first diagram
+- [CLI](https://draftably.dev/docs/cli/): `check`, `vary`, `inspect` and the other commands
+- [Language reference](https://raw.githubusercontent.com/byronwall/draftably/main/docs/DSL.md): every statement and setting
+
+## Optional
+
+- [Examples](https://draftably.dev/docs/examples/): diagrams with their source
+- [Agent diagram comparison](https://draftably.dev/docs/agent-diagram-evaluation/): how agents do with draftably, Mermaid, D2, Graphviz DOT and raw SVG

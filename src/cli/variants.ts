@@ -761,8 +761,18 @@ const DETOUR_RATIO = 2.5,
   DETOUR_EXTRA = 300;
 /** A node this far from every node it connects to is stranded. */
 const STRANDED_GAP = 480;
-/** Without `--fit`, an image wider or taller than this many times the other way is extreme. */
+/** Without `--fit`, an image taller than this many times its width is extreme. */
 const EXTREME_ASPECT = 3;
+/**
+ * Most diagrams are read in a page or chat column about this wide. A drawing wider than this and
+ * wider than WIDE_ASPECT:1 shrinks to fit it, and its text shrinks with it.
+ */
+const COLUMN_WIDTH = 960,
+  WIDE_ASPECT = 2;
+
+/** Whether a drawing shrinks, text and all, to fit a page or chat column. */
+export const tooWide = (m: Pick<Metrics, 'width' | 'height'>) =>
+  m.width / m.height > WIDE_ASPECT && m.width > COLUMN_WIDTH;
 
 /**
  * Warnings about how a drawing reads, beyond what `check` reports by default: lines that cross,
@@ -822,10 +832,16 @@ export function qualityNotes(d: Drawn, fit?: Fit): Diagnostic[] {
         `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}); --fit ${fit} wants about ${target}. Try draftably vary --fit ${fit}.`,
         [],
       );
-  } else if (aspect > EXTREME_ASPECT || aspect < 1 / EXTREME_ASPECT)
+  } else if (tooWide(d.metrics))
     warn(
       'aspect',
-      `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}). Try draftably vary --fit slide (or page).`,
+      `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}). In a ${COLUMN_WIDTH}px page or chat column it draws at ${Math.round((COLUMN_WIDTH / d.metrics.width) * 100)}% of its size, so its text shrinks. Add fit=slide to the layout root line, or run draftably vary, unless the user wants a wide drawing.`,
+      [],
+    );
+  else if (aspect < 1 / EXTREME_ASPECT)
+    warn(
+      'aspect',
+      `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}). Try draftably vary --fit page (or square).`,
       [],
     );
   return notes;

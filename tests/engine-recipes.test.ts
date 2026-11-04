@@ -34,7 +34,9 @@ describe('engine recipes', () => {
     });
     expect(errorLine('layout root engine=sideways')).toBe(1);
     expect(errorLine('node a "A"\nlayout root engine=layered rank-gap=5')).toBe(2);
-    expect(errorLine('layout root engine=layered gap=40')).toBe(1);
+    expect(parseModel('layout root engine=layered gap=40').warnings[0].message).toContain(
+      'node-gap=',
+    );
     expect(errorLine('layout root flow engine=layered')).toBe(1);
     expect(errorLine('layout root engine=separate')).toBe(1);
     expect(errorLine('node a "A"\nlayout root engine=tree root=b')).toBe(2);

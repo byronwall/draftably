@@ -459,6 +459,15 @@ export const ROUTING_PARAMS: Record<string, Param<keyof RoutingSettings>> = {
   standoff: { key: 'standoff', min: 0, max: 40 },
 };
 
+/** What to write instead of a layout attribute that a line does not take. */
+function layoutHint(key: string, engine: boolean) {
+  if (engine && key === 'gap') return 'Engine lines space boxes with node-gap= and rank-gap=.';
+  if (!engine && key in ENGINE_PARAMS)
+    return `${key}= needs an engine: add engine=layered or another engine.`;
+  if (key === 'fit') return 'fit= goes on the layout root line.';
+  return 'draftably skill print lists the layout settings.';
+}
+
 /** Source attribute for an engine or router setting. */
 export const paramAttr = (table: Record<string, Param<string>>, key: string) =>
   Object.keys(table).find(attr => table[attr].key === key);
@@ -781,8 +790,29 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'layout': {
         const scope = id(args[0]);
-        once('layout:' + scope);
+        // A layout line only moves things, so a mistake in one is a warning, not a failure:
+        // a repeated scope keeps the later line, and an attribute it does not take is ignored.
         const named = attrs.get('engine')?.value as LayoutAlgorithmId | undefined;
+        const earlier = m.layouts.findIndex(l => l.scope === scope);
+        if (earlier >= 0) {
+          m.warnings.push({
+            code: 'layout-repeated',
+            message: `layout ${scope} is also set on line ${m.layouts[earlier].line}; this line wins.`,
+            line,
+          });
+          m.layouts.splice(earlier, 1);
+        }
+        const allow = (allowed: string[]) => {
+          for (const key of [...attrs.keys()])
+            if (!allowed.includes(key)) {
+              m.warnings.push({
+                code: 'layout-attribute',
+                message: `This layout line does not take ${key}=, so it is ignored. ${layoutHint(key, named !== undefined)}`,
+                line,
+              });
+              attrs.delete(key);
+            }
+        };
         const common = [
           'direction',
           'min-width',

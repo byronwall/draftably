@@ -63,6 +63,13 @@ describe('check --metrics notes', () => {
     expect(notes.find(n => n.code === 'stranded')?.ids).toEqual(['far']);
   });
 
+  it('flags a drawing that shrinks in a page column, but not a narrow wide one', () => {
+    expect(qualityNotes(drawn([], { width: 1258, height: 372 })).map(n => n.code)).toEqual([
+      'aspect',
+    ]);
+    expect(qualityNotes(drawn([], { width: 900, height: 300 }))).toEqual([]);
+  });
+
   it('holds the aspect to --fit', () => {
     expect(qualityNotes(drawn([]), 'tall').map(n => n.code)).toEqual(['aspect']);
     expect(qualityNotes(drawn([]), 'slide')).toEqual([]);

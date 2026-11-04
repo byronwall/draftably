@@ -5,7 +5,6 @@ IDs match [A-Za-z_][A-Za-z0-9_.-]* and are unique across nodes and groups; edges
 References may point to later lines. Comments start with # or //.
 
 diagram "Checkout architecture" version=1
-subtitle "Orders persist before payment is authorized"
 
 group clients "Customer channels" color=blue
 node web "Web app" in=clients
@@ -26,13 +25,14 @@ layout platform column gap=28
 
 Statements:
 - diagram "title" version=1: optional; the title is drawn above the drawing.
-- node id "label": in=group, color=, shape=box|pill|circle|diamond|text.
+- node id "label": in=group, color= (blue, mint, violet, amber, red...), shape=box|pill|circle|diamond|text.
 - group id "label": in=group (groups nest), color=, frame=box|soft|none.
 - edge id source -> target "label": label optional; kind=async draws dashed;
   ends are nodes or a boxed group.
 - layout scope flow|row|column: gap=8..300, direction=auto|right|down. scope is root or a group ID.
 - layout scope engine=name: engines include layered, compound-flow, tree, grid, flow.
-Colors: slate, stone, blue, sky, teal, mint, green, amber, orange, red, rose, violet.
+  Engine spacing is node-gap= and rank-gap=, not gap=. One layout line per scope.
 
 Good defaults: pipelines and flows use `layout root engine=layered direction=right`.
 Nested architecture uses `layout root engine=compound-flow`.
+Most diagrams are read in a column 700-1000px wide: add fit=slide to the layout root line.
