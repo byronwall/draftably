@@ -97,9 +97,12 @@ export function PositionBadge(props: {
   };
   return (
     <Show when={props.pinned || props.manual}>
-      <g class="position-badge" classList={{ pinned: props.pinned }} color={props.color}>
-        <title>{tip()}</title>
-        <rect class="position-hit" x={props.x} y={props.y} width={PIN_SIZE} height={PIN_SIZE} />
+      <g
+        class="position-badge"
+        classList={{ pinned: props.pinned }}
+        color={props.color}
+        aria-label={tip()}
+      >
         <SceneGlyph name="pin" x={props.x} y={props.y} size={PIN_SIZE} color="currentColor" />
       </g>
     </Show>
@@ -143,9 +146,8 @@ export function ResizeHandles(props: { rect: Rect; zoom: number; corners?: boole
           height={size()}
           rx={1 / props.zoom}
           style={{ cursor: `${CURSORS[side]}-resize` }}
-        >
-          <title>{props.corners ? 'Resize shape' : 'Resize container only'}</title>
-        </rect>
+          aria-label={props.corners ? 'Resize shape' : 'Resize container only'}
+        />
       )}
     </For>
   );

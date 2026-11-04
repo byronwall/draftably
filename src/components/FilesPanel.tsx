@@ -14,7 +14,6 @@ import {
 } from '../state/launch';
 import { creatingFile, setCreatingFile } from '../state/ui';
 import { Highlight, tip } from './controls';
-import { closeFileCard, fileCard, FileHoverCard } from './FileHoverCard';
 import { Icon } from './Icon';
 import {
   ago,
@@ -111,7 +110,7 @@ export function FilesPanel() {
         />
         <FileOrderSwitch class="files-order" compact />
       </div>
-      <div class="panel-scroll files-list" ref={list} onScroll={closeFileCard}>
+      <div class="panel-scroll files-list" ref={list}>
         <For
           each={entries()}
           fallback={
@@ -130,7 +129,6 @@ export function FilesPanel() {
                 }}
                 href={fileUrl(entry.file.path)}
                 aria-current={entry.file.path === current() ? 'page' : undefined}
-                {...fileCard(entry.file)}
                 style={
                   byFolder()
                     ? { '--depth': folderOf(entry.file.path).split('/').length }
@@ -161,7 +159,6 @@ export function FilesPanel() {
           </button>
         </Show>
       </div>
-      <FileHoverCard />
     </div>
   );
 }

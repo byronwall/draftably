@@ -1104,41 +1104,6 @@ button.folder-heading:hover {
   font-weight: 600;
 }
 
-/* A file row's card sits right of the sidebar, over the canvas, so it never covers the list. */
-.file-card {
-  position: fixed;
-  z-index: 110;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  width: max-content;
-  max-width: 320px;
-  padding: 7px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text);
-  font-size: var(--text-xs);
-  line-height: 1.35;
-  pointer-events: none;
-  box-shadow: var(--shadow);
-}
-
-.file-card strong {
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-
-.file-card p,
-.file-card-time {
-  color: var(--muted);
-}
-
-.file-card code {
-  overflow-wrap: anywhere;
-  font-size: var(--text-xs);
-}
-
 /* Objects tree */
 
 .object-tree {

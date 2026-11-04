@@ -42,7 +42,7 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
-import { haloPieces, labelCards, panelDrawn, phaseOpacity, type Surface } from '../model/surface';
+import { haloPieces, panelDrawn, surfaces, phaseOpacity, type Surface } from '../model/surface';
 import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
 
 import { fontFaceCss } from '../lib/font-data';
@@ -57,13 +57,12 @@ export interface SvgOptions {
   states?: boolean;
 }
 
-/** Wrap marks in a link, with a tooltip naming the target, when the object has one. */
-function linked(href: string | undefined, title: string, marks: string[], opts: SvgOptions) {
+/** Wrap marks in a link when the object has one. */
+function linked(href: string | undefined, marks: string[], opts: SvgOptions) {
   if (!href) return marks;
   const url = linkTarget(href).kind === 'url';
   return [
     `<a class="link" href="${esc(opts.href?.(href) ?? href)}"${url ? ' target="_blank" rel="noopener"' : ''}>`,
-    `<title>${esc(title)}\n${esc(href)}</title>`,
     ...marks,
     '</a>',
   ];
@@ -200,7 +199,6 @@ function sceneMarkup(
       out.push(
         ...linked(
           g.href,
-          g.title,
           [
             `<g data-id="${esc(g.id)}"${fade(p)}>`,
             ...hull.map(
@@ -218,7 +216,6 @@ function sceneMarkup(
     out.push(
       ...linked(
         g.href,
-        g.title,
         [
           `<g data-id="${esc(g.id)}"${fade(p)}>`,
           p.halo ? haloMarkup('box', r, { ...look, radius: Math.min(10, look.radius + 4) }) : '',
@@ -261,6 +258,7 @@ function sceneMarkup(
       `<line x1="${x}" y1="${r.y + r.h}" x2="${x}" y2="${r.y + r.h + n.lifeline}" stroke="${look.muted}" stroke-width="${LIFELINE.width}" stroke-dasharray="${LIFELINE.dash}"/>`,
     );
   }
+  const under = surfaces(doc, look);
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!,
       p = statusPaint(look, edge.status, edge.spot),
@@ -270,7 +268,7 @@ function sceneMarkup(
       tail = tailOf(edge);
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
-      ...haloPieces(doc, look, route.halo).flatMap(({ surface, d }) =>
+      ...haloPieces(under, route.halo).flatMap(({ surface, d }) =>
         paintSurface(
           surface,
           s => `<path d="${d}" fill="none" stroke-width="${HALO_WIDTH}" ${s}/>`,
@@ -285,12 +283,10 @@ function sceneMarkup(
       lines = edgeLabelLines(edge.label, look, message);
     if (l)
       out.push(
-        ...labelCards(doc, look, l).flatMap((c, _, all) =>
-          paintSurface(
-            c.surface,
-            s =>
-              `<rect x="${c.x}" y="${l.y - l.h / 2}" width="${c.w}" height="${l.h}" rx="${all.length > 1 ? 0 : 4}" ${s}/>`,
-          ),
+        ...paintSurface(
+          under(l),
+          s =>
+            `<rect x="${l.x - l.w / 2}" y="${l.y - l.h / 2}" width="${l.w}" height="${l.h}" rx="4" ${s}/>`,
         ),
         `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${strikeAttr(p)}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
       );
@@ -314,7 +310,6 @@ function sceneMarkup(
     out.push(
       ...linked(
         n.href,
-        n.title,
         [
           `<g data-id="${esc(n.id)}"${fade(p)}>`,
           ...(n.count && style.shape !== 'text'
@@ -615,7 +610,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
         const from = px + 40 + measureText(name, look.groupTitle) + 12,
           room = (stacked ? bw : spans[0].size) - (from - px) - 40;
         out.push(
-          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}"><title>${esc(compare.undrawn)}</title>${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
+          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}">${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
         );
       }
       if (i)
