@@ -1,24 +1,24 @@
 diagram "Order approval workflow" version=1
 
-node start "Order received" shape=pill color=slate
-node validate "Validate order" color=blue
+node start "Order received" shape=pill color=blue
+node validate "Validate order"
 node payment "Payment authorized?" shape=diamond color=amber
-node reserve "Reserve stock" color=blue
+node reserve "Reserve stock"
 node stock "Stock available?" shape=diamond color=amber
-node pack "Pack order" color=mint
+node pack "Pack order"
 node ship "Ship order" color=mint
 node cancel "Cancel order" color=red
-node finish "End" shape=pill color=slate
+node finish "End" shape=pill color=blue
 
 edge e1 start -> validate
 edge e2 validate -> payment
-edge e3 payment -> cancel "No"
-edge e4 payment -> reserve "Yes"
+edge e3 payment -> reserve "yes"
+edge e4 payment -> cancel "no"
 edge e5 reserve -> stock
-edge e6 stock -> cancel "No"
-edge e7 stock -> pack "Yes"
+edge e6 stock -> pack "yes"
+edge e7 stock -> cancel "no"
 edge e8 pack -> ship
 edge e9 ship -> finish
 edge e10 cancel -> finish
 
-layout root engine=layered direction=right gap=48
+layout root engine=layered direction=right fit=slide

@@ -3,13 +3,13 @@ digraph G {
   node  [shape=box, style=rounded, fontname="Helvetica"];
   edge  [fontname="Helvetica"];
 
-  customer [label="Customer", shape=ellipse];
+  customer [label="Customer", shape=oval];
 
   subgraph cluster_clients {
     label="Clients";
     style=rounded;
-    webapp    [label="Web app"];
-    mobileapp [label="Mobile app"];
+    web    [label="Web app"];
+    mobile [label="Mobile app"];
   }
 
   subgraph cluster_services {
@@ -24,22 +24,22 @@ digraph G {
   subgraph cluster_data {
     label="Data";
     style=rounded;
-    ordersdb [label="Orders database", shape=cylinder];
-    queue    [label="Queue", shape=box, style=""];
+    db    [label="Orders database", shape=cylinder];
+    queue [label="Queue"];
   }
 
-  customer -> webapp;
-  customer -> mobileapp;
+  customer -> web    [label="uses"];
+  customer -> mobile [label="uses"];
 
-  webapp    -> gateway [label="HTTPS"];
-  mobileapp -> gateway [label="HTTPS"];
+  web    -> gateway [label="HTTPS"];
+  mobile -> gateway [label="HTTPS"];
 
-  gateway -> auth  [label="validate token"];
+  gateway -> auth  [label="validates tokens"];
   gateway -> order [label="requests"];
 
-  order -> ordersdb [label="read/write", dir=both];
-  order -> queue    [label="publish"];
+  order -> db    [label="reads/writes"];
+  order -> queue [label="publishes"];
 
-  queue  -> worker   [label="consume"];
-  worker -> ordersdb [label="update"];
+  queue  -> worker [label="consumes", dir=back];
+  worker -> db     [label="updates"];
 }

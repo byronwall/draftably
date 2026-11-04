@@ -1,11 +1,11 @@
 diagram "Publishing state machine" version=1
 
-node draft "Draft" shape=pill color=slate
-node review "In review" shape=pill color=blue
-node changes "Changes requested" shape=pill color=amber
+node draft "Draft" shape=pill color=blue
+node review "In review" shape=pill color=amber
+node changes "Changes requested" shape=pill color=red
 node approved "Approved" shape=pill color=mint
-node published "Published" shape=pill color=green
-node archived "Archived" shape=pill color=stone
+node published "Published" shape=pill color=violet
+node archived "Archived" shape=pill
 
 edge submit draft -> review "submit"
 edge request_edits review -> changes "request edits"
@@ -16,4 +16,4 @@ edge withdraw approved -> draft "withdraw"
 edge archive published -> archived "archive"
 edge restore archived -> draft "restore"
 
-layout root engine=layered direction=right
+layout root engine=layered direction=right fit=slide

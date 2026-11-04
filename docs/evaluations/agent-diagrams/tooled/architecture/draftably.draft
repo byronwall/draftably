@@ -1,5 +1,5 @@
 diagram "Checkout service architecture" version=1
-subtitle "Orders persist synchronously; a worker finishes them from the queue"
+subtitle "Orders are written synchronously, then updated by a worker"
 
 group clients "Clients" color=blue
 node web "Web app" in=clients
@@ -12,23 +12,22 @@ node orders "Order service" in=services
 node worker "Worker" in=services
 
 group data "Data" color=violet
-node orders_db "Orders DB" in=data
+node orders_db "Orders database" in=data
 node queue "Queue" in=data shape=pill
 
 legend blue "Clients"
 legend mint "Services"
 legend violet "Data layer"
 legend line solid "Request path"
-legend line dashed "Async messaging"
+legend line dashed "Asynchronous messaging"
 
 edge web_api web -> gateway "HTTPS"
 edge mobile_api mobile -> gateway "HTTPS"
 edge validate gateway -> auth "validate token"
-edge route gateway -> orders "order request"
-edge rw orders -> orders_db "read/write"
+edge route gateway -> orders "send request"
+edge rw orders -> orders_db "read / write"
 edge publish orders -> queue "publish" kind=async
 edge consume queue -> worker "consume" kind=async
 edge update worker -> orders_db "update"
 
-layout root engine=compound-flow
-routing crossing-penalty=900
+layout root flow gap=48 fit=slide

@@ -16,7 +16,8 @@ export const formats = {
   dot: { name: 'Graphviz DOT', ext: 'dot' },
   svg: { name: 'raw SVG', ext: 'svg' },
 };
-const arms = ['bare', 'reference'];
+// Optional arm names after the model run only those arms.
+const arms = process.argv.length > 3 ? process.argv.slice(3) : ['bare', 'reference'];
 
 const tasks = JSON.parse(await fs.readFile(`${base}/tasks.json`, 'utf8'));
 const template = await fs.readFile(`${base}/prompt.txt`, 'utf8');
@@ -93,10 +94,19 @@ const old = JSON.parse(
   await fs.readFile(`${base}/results.json`, 'utf8').catch(() => '{"cells":[]}'),
 );
 const kept = old.cells.filter(c => !arms.includes(c.arm));
+const order = c =>
+  ['bare', 'reference', 'tooled'].indexOf(c.arm) * 100 +
+  tasks.findIndex(t => t.id === c.task) * 10 +
+  Object.keys(formats).indexOf(c.tool);
 await fs.writeFile(
   `${base}/results.json`,
   JSON.stringify(
-    { model, generated: new Date().toISOString().slice(0, 10), cells: [...cells, ...kept] },
+    {
+      ...old,
+      model,
+      generated: new Date().toISOString().slice(0, 10),
+      cells: [...kept, ...cells].sort((a, b) => order(a) - order(b)),
+    },
     null,
     2,
   ) + '\n',

@@ -1,68 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480" font-family="Helvetica, Arial, sans-serif">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
     </marker>
   </defs>
 
-  <rect width="1100" height="470" fill="#ffffff"/>
-  <text x="550" y="50" text-anchor="middle" font-size="26" font-weight="bold" fill="#222">Publishing state machine</text>
+  <rect width="1100" height="480" fill="#ffffff"/>
+  <text x="550" y="48" text-anchor="middle" font-size="26" font-weight="bold" fill="#222">Publishing state machine</text>
 
   <!-- Transitions -->
   <g fill="none" stroke="#444" stroke-width="2" marker-end="url(#arrow)">
-    <!-- initial -->
-    <line x1="48" y1="200" x2="78" y2="200"/>
+    <!-- start -->
+    <line x1="58" y1="260" x2="84" y2="260"/>
     <!-- submit -->
-    <line x1="210" y1="200" x2="288" y2="200"/>
+    <line x1="235" y1="260" x2="294" y2="260"/>
     <!-- approve -->
-    <line x1="420" y1="200" x2="498" y2="200"/>
+    <line x1="445" y1="260" x2="504" y2="260"/>
     <!-- publish -->
-    <line x1="630" y1="200" x2="708" y2="200"/>
+    <line x1="655" y1="260" x2="714" y2="260"/>
     <!-- archive -->
-    <line x1="840" y1="200" x2="918" y2="200"/>
-    <!-- request changes -->
-    <path d="M375,225 Q375,335 337,335"/>
+    <line x1="865" y1="260" x2="924" y2="260"/>
+    <!-- request edits -->
+    <path d="M 390 232 C 390 170, 390 130, 356 130"/>
     <!-- revise -->
-    <path d="M165,335 Q135,335 135,227"/>
+    <path d="M 175 130 C 145 130, 140 170, 140 231"/>
     <!-- withdraw -->
-    <path d="M565,175 C565,100 170,100 170,173"/>
+    <path d="M 580 288 C 580 375, 185 375, 185 289"/>
     <!-- restore -->
-    <path d="M985,225 V390 Q985,410 965,410 H120 Q100,410 100,390 V227"/>
+    <path d="M 1000 288 C 1000 465, 135 465, 135 289"/>
   </g>
+
+  <!-- Start marker -->
+  <circle cx="48" cy="260" r="10" fill="#222"/>
 
   <!-- Transition labels -->
-  <g font-size="14" fill="#333" font-style="italic">
-    <text x="249" y="190" text-anchor="middle">submit</text>
-    <text x="459" y="190" text-anchor="middle">approve</text>
-    <text x="669" y="190" text-anchor="middle">publish</text>
-    <text x="879" y="190" text-anchor="middle">archive</text>
-    <text x="378" y="300">request changes</text>
-    <text x="146" y="275">revise</text>
-    <text x="367" y="115" text-anchor="middle">withdraw</text>
-    <text x="542" y="432" text-anchor="middle">restore</text>
+  <g font-size="15" fill="#333" text-anchor="middle">
+    <text x="265" y="250">submit</text>
+    <text x="475" y="250">approve</text>
+    <text x="685" y="250">publish</text>
+    <text x="895" y="250">archive</text>
+    <text x="400" y="180" text-anchor="start">request edits</text>
+    <text x="132" y="180" text-anchor="end">revise</text>
+    <text x="382" y="372">withdraw</text>
+    <text x="567" y="440">restore</text>
   </g>
 
-  <!-- Initial state -->
-  <circle cx="40" cy="200" r="8" fill="#222"/>
-
   <!-- States -->
-  <g stroke-width="2" font-size="16" text-anchor="middle">
-    <rect x="80" y="175" width="130" height="50" rx="12" fill="#e8f0fe" stroke="#3b6fd8"/>
-    <text x="145" y="205" fill="#1a3d82" stroke="none">Draft</text>
+  <g stroke-width="2" font-size="17" text-anchor="middle">
+    <rect x="85" y="232" width="150" height="56" rx="14" fill="#e8f0fe" stroke="#3367d6"/>
+    <text x="160" y="266" fill="#1a3d8f">Draft</text>
 
-    <rect x="290" y="175" width="130" height="50" rx="12" fill="#fff4e0" stroke="#d99a1e"/>
-    <text x="355" y="205" fill="#7a5200" stroke="none">In Review</text>
+    <rect x="295" y="232" width="150" height="56" rx="14" fill="#fff4e0" stroke="#e08a00"/>
+    <text x="370" y="266" fill="#7a4a00">In Review</text>
 
-    <rect x="165" y="310" width="170" height="50" rx="12" fill="#fde8e8" stroke="#d24b4b"/>
-    <text x="250" y="340" fill="#8a1f1f" stroke="none">Changes Requested</text>
+    <rect x="175" y="102" width="180" height="56" rx="14" fill="#fde8e8" stroke="#d33c3c"/>
+    <text x="265" y="136" fill="#8a1f1f">Changes Requested</text>
 
-    <rect x="500" y="175" width="130" height="50" rx="12" fill="#e6f6ea" stroke="#3a9d5a"/>
-    <text x="565" y="205" fill="#1d5c32" stroke="none">Approved</text>
+    <rect x="505" y="232" width="150" height="56" rx="14" fill="#e6f6ea" stroke="#2e9e4f"/>
+    <text x="580" y="266" fill="#1b5e30">Approved</text>
 
-    <rect x="710" y="175" width="130" height="50" rx="12" fill="#e4f4f8" stroke="#2a8ca8"/>
-    <text x="775" y="205" fill="#145566" stroke="none">Published</text>
+    <rect x="715" y="232" width="150" height="56" rx="14" fill="#e3f4f7" stroke="#1a8fa3"/>
+    <text x="790" y="266" fill="#0f5562">Published</text>
 
-    <rect x="920" y="175" width="130" height="50" rx="12" fill="#efefef" stroke="#777"/>
-    <text x="985" y="205" fill="#333" stroke="none">Archived</text>
+    <rect x="925" y="232" width="150" height="56" rx="14" fill="#eeeeee" stroke="#777777"/>
+    <text x="1000" y="266" fill="#333333">Archived</text>
   </g>
 </svg>
