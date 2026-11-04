@@ -1,0 +1,29 @@
+digraph OrderApprovalWorkflow {
+    label="Order approval workflow";
+    labelloc="t";
+    fontsize=20;
+    rankdir=TB;
+    node [fontname="Helvetica"];
+    edge [fontname="Helvetica"];
+
+    start [label="Start", shape=ellipse, style=filled, fillcolor="#c8e6c9"];
+    validate [label="Validate order", shape=box, style=rounded];
+    payment [label="Payment authorized?", shape=diamond, style=filled, fillcolor="#fff9c4"];
+    reserve [label="Reserve stock", shape=box, style=rounded];
+    stock [label="Stock available?", shape=diamond, style=filled, fillcolor="#fff9c4"];
+    pack [label="Pack order", shape=box, style=rounded];
+    ship [label="Ship order", shape=box, style=rounded];
+    cancel [label="Cancel order", shape=box, style="rounded,filled", fillcolor="#ffcdd2"];
+    end [label="End", shape=ellipse, style=filled, fillcolor="#c8e6c9"];
+
+    start -> validate;
+    validate -> payment;
+    payment -> reserve [label="Yes"];
+    payment -> cancel [label="No"];
+    reserve -> stock;
+    stock -> pack [label="Yes"];
+    stock -> cancel [label="No"];
+    pack -> ship;
+    ship -> end;
+    cancel -> end;
+}

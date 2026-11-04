@@ -1,29 +1,41 @@
 #!/usr/bin/env node
-/** Re-render committed native sources into a new directory; never overwrite evidence. */
+/**
+ * Render every committed source into a new directory with the native renderers.
+ * `--publish` also copies each SVG to the site and records render status in results.json.
+ */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { renderCell } from './render.mjs';
+
+const base = 'docs/evaluations/agent-diagrams';
+const site = 'site/public/evaluations/agent-diagrams';
 const target = process.argv[2];
-const phase = process.argv[3] || 'initial';
-if (!['initial', 'repaired'].includes(phase)) throw Error('Phase must be initial or repaired');
-if (!target)
-  throw Error(
-    'Usage: node scripts/diagram-compare/replay.mjs <new-output-directory> [initial|repaired]',
-  );
-const results = JSON.parse(
-  await fs.readFile('docs/evaluations/agent-diagrams/results.json', 'utf8'),
-);
+const publish = process.argv.includes('--publish');
+if (!target) throw Error('Usage: node scripts/diagram-compare/replay.mjs <new-dir> [--publish]');
+
+const results = JSON.parse(await fs.readFile(`${base}/results.json`, 'utf8'));
+if (publish) await fs.mkdir(site, { recursive: true });
 let failed = 0;
 for (const cell of results.cells) {
+  const outputDir = path.join(target, cell.arm, cell.task, cell.tool);
   const result = await renderCell({
     tool: cell.tool,
-    sourcePath: path.join(
-      'docs/evaluations/agent-diagrams',
-      phase === 'initial' ? cell.source : cell.repair.source,
-    ),
-    outputDir: path.join(target, cell.task, cell.tool),
+    sourcePath: `${base}/${cell.source}`,
+    outputDir,
   });
-  console.log(`${cell.task}/${cell.tool}: ${result.status}`);
+  console.log(`${cell.arm}/${cell.task}/${cell.tool}: ${result.status}`);
   if (result.status !== 'success') failed++;
+  if (!publish) continue;
+  cell.render = result.status;
+  cell.renderer = `${result.renderer} ${result.rendererVersion ?? ''}`.trim();
+  delete cell.image;
+  delete cell.error;
+  if (result.status === 'success') {
+    cell.image = `${cell.arm}-${cell.task}-${cell.tool}.svg`;
+    await fs.copyFile(path.join(outputDir, 'output.svg'), path.join(site, cell.image));
+  } else {
+    cell.error = (result.error || result.stderr).split('\n').slice(0, 3).join('\n');
+  }
 }
-if (failed) process.exitCode = 1;
+if (publish) await fs.writeFile(`${base}/results.json`, JSON.stringify(results, null, 2) + '\n');
+console.log(`${results.cells.length - failed}/${results.cells.length} rendered`);

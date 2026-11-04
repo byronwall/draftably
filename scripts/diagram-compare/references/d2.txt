@@ -1,9 +1,36 @@
-# Syntax reference (bounded adapter, not an optimized task solution)
-direction: right
-g: Group {
-  a: First
-}
-b: Second {shape: diamond}
-g.a -> b: label
+Condensed from the D2 tour (https://d2lang.com/tour/intro).
 
-Use direction: down for top-down. Node/group labels follow colon. IDs can be simple lowercase words; scoped node references use parent.child. Native output extension .d2.
+A shape is declared by its key. A label follows a colon.
+
+direction: right
+title: My diagram {near: top-center; shape: text; style.font-size: 24}
+
+server: Web server
+db: Database {shape: cylinder}
+check: Valid? {shape: diamond}
+
+Connections:
+a -> b: label
+a <- b
+a <-> b
+a -- b
+Repeat a connection to draw a second edge. Chain them: a -> b -> c.
+
+Containers group shapes. Use a dot path or nest with braces:
+
+cloud: AWS {
+  api: API
+  queue: Queue {shape: queue}
+  api -> queue: publish
+}
+clients.web -> cloud.api: HTTPS
+
+A key inside a container is scoped; reach it from outside with parent.child.
+Use _ to refer to the parent from inside a container.
+
+Shapes: rectangle (default), square, page, parallelogram, document, cylinder, queue, package,
+step, callout, stored_data, person, diamond, oval, circle, hexagon, cloud, text.
+
+Style: x.style.fill: "#f0f0f0"; x.style.stroke; x.style.font-size; x.style.stroke-dash for dashes.
+direction: up | down | left | right sets the layout direction.
+Comments start with #.

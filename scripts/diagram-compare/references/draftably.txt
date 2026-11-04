@@ -1,9 +1,38 @@
-# Syntax reference (bounded adapter, not an optimized task solution)
-diagram "Example" version=1
-group g "Group"
-node a "First" in=g
-node b "Second" shape=diamond
-edge ab a -> b "label"
-layout root engine=layered direction=right
+Condensed from the Draftably agent skill (skills/draftably/SKILL.md).
 
-Nodes may omit group and shape; labels are JSON strings. Groups use in=parent for nesting. Edges have unique IDs. Directions right/down. One statement per line. Native output extension .draft.
+One statement per line. Indentation means nothing. Strings use JSON double quotes.
+IDs match [A-Za-z_][A-Za-z0-9_.-]* and are unique across nodes and groups; edges have their own IDs.
+References may point to later lines. Comments start with # or //.
+
+diagram "Checkout architecture" version=1
+subtitle "Orders persist before payment is authorized"
+
+group clients "Customer channels" color=blue
+node web "Web app" in=clients
+node mobile "Mobile app" in=clients
+
+group platform "Commerce platform" color=mint
+node api "API gateway" in=platform
+node orders "Orders" in=platform
+node db "Postgres" shape=pill
+
+edge checkout web -> api "HTTPS"
+edge native mobile -> api "HTTPS"
+edge dispatch api -> orders "create order"
+edge persist orders -> db "persist" kind=async
+
+layout root flow gap=48
+layout platform column gap=28
+
+Statements:
+- diagram "title" version=1: optional; the title is drawn above the drawing.
+- node id "label": in=group, color=, shape=box|pill|circle|diamond|text.
+- group id "label": in=group (groups nest), color=, frame=box|soft|none.
+- edge id source -> target "label": label optional; kind=async draws dashed;
+  ends are nodes or a boxed group.
+- layout scope flow|row|column: gap=8..300, direction=auto|right|down. scope is root or a group ID.
+- layout scope engine=name: engines include layered, compound-flow, tree, grid, flow.
+Colors: slate, stone, blue, sky, teal, mint, green, amber, orange, red, rose, violet.
+
+Good defaults: pipelines and flows use `layout root engine=layered direction=right`.
+Nested architecture uses `layout root engine=compound-flow`.

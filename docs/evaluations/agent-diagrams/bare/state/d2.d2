@@ -1,0 +1,29 @@
+title: |md
+  # Publishing state machine
+| {near: top-center}
+
+direction: right
+
+start: "" {
+  shape: circle
+  width: 20
+  height: 20
+  style.fill: black
+}
+
+draft: Draft
+in_review: In Review
+changes_requested: Changes Requested
+approved: Approved
+published: Published
+archived: Archived
+
+start -> draft
+draft -> in_review: submit
+in_review -> changes_requested: request edits
+changes_requested -> draft: revise
+in_review -> approved: approve
+approved -> published: publish
+approved -> draft: withdraw
+published -> archived: archive
+archived -> draft: restore

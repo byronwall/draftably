@@ -1,1 +1,0 @@
-Native DOT uses three enclosing clusters and a restrained left-to-right architecture layout. All eight nodes and eight labeled directed edges are preserved exactly. The consume edge is excluded from rank constraints to accommodate the queue-to-service return path without changing its direction. Rendering and overlap verification were not performed, per first-pass constraints.

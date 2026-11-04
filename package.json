@@ -40,9 +40,7 @@
     "audit:compare": "node scripts/audit-compare.mjs",
     "shoot": "node scripts/shoot.mjs",
     "bench": "node scripts/bench/run.mjs",
-    "eval:diagrams:prepare": "node scripts/diagram-compare/prepare.mjs",
-    "eval:diagrams:collect": "node scripts/diagram-compare/collect.mjs",
-    "eval:diagrams:verify": "node scripts/diagram-compare/verify.mjs",
+    "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",
     "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs"
   },

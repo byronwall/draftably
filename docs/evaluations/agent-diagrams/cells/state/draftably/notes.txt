@@ -1,1 +1,0 @@
-Uses native layered left-to-right layout, with six exact state labels and all eight labeled directed transitions. No extra semantic nodes, edges, or enclosing groups. The bounded syntax reference exposes no styling or explicit routing controls; readability and return-edge routing rely on native layout defaults. First pass only; not rendered or feedback-optimized.

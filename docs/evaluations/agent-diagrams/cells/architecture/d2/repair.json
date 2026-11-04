@@ -1,6 +1,0 @@
-{
-  "decision": "changed",
-  "rationale": "Use a labeled enclosing canvas so the title is visible; switch to vertical flow to reduce extreme width and enlarge node/group type for documentation readability. Preserve every required node, group membership and directed labeled edge.",
-  "responseCount": 1,
-  "limitations": "No post-repair render permitted. Automatic edge routing and label placement, including consume at the group boundary, remain unverified. Title canvas is a presentation-only enclosure."
-}

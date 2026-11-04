@@ -1,0 +1,4 @@
+{{TASK}}
+
+Write the diagram in {{FORMAT}}. Reply with only the {{FORMAT}} source. Do not add an explanation or Markdown code fences.
+{{REFERENCE}}

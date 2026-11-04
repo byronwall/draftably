@@ -8,7 +8,6 @@ import { A, useLocation, useNavigate } from '@solidjs/router';
 import { demoEditorUrl, LiveEditor } from '../live/LiveEditor';
 import { deliver, ImportCancelled, readDiagramFile, unreadableFile } from '../reopen';
 import { Points } from './Points';
-import { DiagramComparison } from './DiagramComparison';
 import { drawSvg, enqueue, whenSeen } from './render';
 
 const GITHUB = 'https://github.com/byronwall/draftably';
@@ -100,7 +99,6 @@ export function Landing() {
         </section>
         <Install />
         <Points />
-        <DiagramComparison />
         <Examples />
       </main>
       <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>

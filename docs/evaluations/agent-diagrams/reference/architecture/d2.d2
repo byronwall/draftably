@@ -1,0 +1,35 @@
+direction: right
+title: Checkout service architecture {near: top-center; shape: text; style.font-size: 24}
+
+customers: Customers {shape: person}
+
+clients: Clients {
+  web: Web app
+  mobile: Mobile app
+}
+
+services: Services {
+  gateway: API gateway
+  auth: Auth service
+  order: Order service
+  worker: Worker
+}
+
+data: Data {
+  db: Orders database {shape: cylinder}
+  queue: Queue {shape: queue}
+}
+
+customers -> clients.web: uses
+customers -> clients.mobile: uses
+
+clients.web -> services.gateway: HTTPS
+clients.mobile -> services.gateway: HTTPS
+
+services.gateway -> services.auth: validate token
+services.gateway -> services.order: requests
+
+services.order <-> data.db: read/write
+services.order -> data.queue: publish
+data.queue -> services.worker: consume
+services.worker -> data.db: update

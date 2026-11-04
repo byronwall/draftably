@@ -1,9 +1,38 @@
-# Syntax reference (bounded adapter, not an optimized task solution)
-flowchart LR
-  subgraph g["Group"]
-    a["First"]
-  end
-  b{"Second"}
-  a -->|label| b
+Condensed from the Mermaid flowchart and state diagram docs (https://mermaid.js.org/syntax/flowchart.html).
 
-Use flowchart TD for top-down. Nodes support rectangles ["Label"], rounded (["Label"]), decisions {"Label"}. Native stateDiagram-v2 is also allowed. Mermaid source only, no Markdown fences. Native output extension .mmd.
+A flowchart starts with `flowchart` and a direction: TB or TD (top to bottom), BT, LR, RL.
+
+flowchart LR
+    id1[Rectangle] --> id2(Rounded)
+    id2 --> id3{Decision}
+    id3 -->|yes| id4([Stadium])
+    id3 -- no --> id5[(Database)]
+    id4 -.-> id6((Circle))
+
+Node shapes: id[text] rectangle, id(text) rounded, id([text]) stadium, id[[text]] subroutine,
+id[(text)] cylinder, id((text)) circle, id{text} rhombus, id{{text}} hexagon.
+Put text with special characters in quotes: id["Text (with) symbols"].
+
+Links: A --> B arrow, A --- B open line, A -.-> B dotted, A ==> B thick.
+Text on a link: A -->|text| B or A -- text --> B.
+
+Subgraphs group nodes:
+
+subgraph one [Group title]
+    a1 --> a2
+end
+subgraph two [Other group]
+    direction TB
+    b1 --> b2
+end
+a2 --> b1
+
+A link can start or end at a subgraph id. `title` front matter sets a title:
+
+---
+title: My diagram
+---
+flowchart TD
+
+State diagrams: `stateDiagram-v2`, then `[*] --> Still`, `Still --> Moving : push`, `Moving --> [*]`.
+Comments start with %%.

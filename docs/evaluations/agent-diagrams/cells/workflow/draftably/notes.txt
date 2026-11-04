@@ -1,2 +1,0 @@
-Uses native layered top-to-bottom layout with diamond decision nodes. All nine node labels and ten directed edges are preserved exactly, including four branch labels. No enclosing groups or additional semantic elements.
-The bounded syntax reference exposes no explicit color, spacing, or routing controls; readability and restrained styling rely on native defaults. This first pass was not rendered or adjusted using feedback.
