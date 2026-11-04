@@ -1,5 +1,25 @@
 # draftably
 
+## 0.10.0
+
+### Minor Changes
+
+- 7a7ad49: check warns when a drawing is too wide to read in a page column and suggests fit=slide; vary ranks such a file for --fit slide. A layout line now ignores a setting it does not take, and a repeated layout line replaces the earlier one; both are warnings instead of errors. The agent skill says where diagrams are read.
+- 127d456: The Editor's layout buttons say what they do. Improve is now **Tidy**, and **Lay out again** (Shift L) sits at the top of the Arrange panel and in the Layout menu. It replaces "Reset to the recipe" and "Rearrange from scratch".
+
+### Patch Changes
+
+- 2279452: A skip line that arrives at a diamond whose facing point already holds another line now comes down onto the diamond's top point, so the two lines no longer cross or loop over the diamond.
+- 3fd351d: check warns when direction= on the layout root line keeps fit= from turning a drawing that stays too wide, and says to remove direction=.
+- 6adc664: Under compound-flow and layered, a tall group that only receives lines no longer stacks on the group that calls it and leaves half the drawing empty. Two lines from one group to different targets are now routed instead of drawn straight through other boxes.
+- 3e723ee: A node title with explicit line breaks now widens its box so each line fits on one row, instead of wrapping again into ragged lines. Wrapped node and group titles break into near-equal lines, and a short token such as the unit in `< 5 s` no longer sits alone on a line.
+- 3849923: Edge label backgrounds match the surface under them. A label is one card in the fill under its center, and it no longer keeps the group fills of an earlier layout or file, so it never shows as a gray or split box.
+- c498d06: Lay out again on a file with a `legend line` entry. Improve, Reset to the recipe and resize relayouts no longer fail with "Legend entries need a color family."
+- ec02aa6: draftably is now released under the MIT License. The package includes the LICENSE file and sets `"license": "MIT"`.
+- 8621133: Remove hover tooltips from the editor and exported SVG. Shapes, connections, ports, handles, link marks and the file list no longer show a tooltip or card on hover. Accessible names stay on `aria-label`.
+- c45aa8c: Layout notes wrap inside their panel instead of scrolling sideways, and a toast shows centered so it no longer covers the right panel.
+- d7dc128: A shape resize in the Editor no longer writes `stay` lines for the objects around it. The layout moves them to make room, and no "gave way" layout notes appear right after the resize.
+
 ## 0.9.0
 
 ### Minor Changes
