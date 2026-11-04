@@ -735,7 +735,9 @@ function placeSelection(
     throw new UnsupportedEdit(
       'A participant stays in its lane. Drag it past a neighbor to reorder.',
     );
-  const anchored = lanes ? [] : anchorSurroundings(source, scene, placed);
+  // A resize lets the layout move the neighbours: anchors at their old places would only give way.
+  const anchored =
+    lanes || label.startsWith('Resize') ? [] : anchorSurroundings(source, scene, placed);
   if (anchored.length) notes.push(`anchored ${anchored.length} nearby`);
 }
 
