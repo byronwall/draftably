@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { resolveAppearance, type ThemeId } from '../src/model/appearance';
 import { measureText, wordPieces, wrapLines } from '../src/model/fonts';
-import { titleArea } from '../src/model/labels';
+import { titleArea, wrapTitle } from '../src/model/labels';
 
 const look = (theme: ThemeId = 'drafting') =>
   resolveAppearance({ theme, overrides: {}, colors: [] });
@@ -32,6 +32,22 @@ describe('title wrapping', () => {
     expect(parts.length).toBe(2);
     expect(parts.every(p => measureText(p, title) <= 128)).toBe(true);
   });
+
+  it('balances a wrapped title and leaves no short token alone', () => {
+    const title = look().title;
+    expect(wrapLines('Open a project in < 5 s', 132, title)).toEqual([
+      'Open a project in < 5',
+      's',
+    ]);
+    expect(wrapLines('Open a project in < 5 s', 132, title, true)).toEqual([
+      'Open a project',
+      'in < 5 s',
+    ]);
+    expect(wrapLines('Broken: regression to fix', 132, title, true)).toEqual([
+      'Broken:',
+      'regression to fix',
+    ]);
+  });
 });
 
 describe('default node width', () => {
@@ -42,6 +58,7 @@ describe('default node width', () => {
       'node long "Maintenanceverificationreport"',
       'node fixed "Maintenanceverificationreport"',
       'node plain "Load env file"',
+      'node split "Disruption: crash, feature\\nunusable, or retry works"',
       'size fixed width=164 height=56',
       'edge e1 ask -> long',
       'layout root flow direction=right',
@@ -56,6 +73,18 @@ describe('default node width', () => {
     expect(fits('ask', 'installed?')).toBe(true);
     expect(fits('long', 'Maintenanceverificationreport')).toBe(true);
     expect(scene.byId.get('long')!.w).toBeGreaterThan(164);
+  });
+
+  it('widens a title with explicit breaks so each line fits on one row', () => {
+    const o = scene.byId.get('split')!;
+    expect(o.w).toBeGreaterThan(164);
+    expect(
+      wrapTitle(
+        'Disruption: crash, feature\nunusable, or retry works',
+        titleArea(o.shape, o.w, o.h, scene.look).width,
+        scene.look,
+      ),
+    ).toEqual(['Disruption: crash, feature', 'unusable, or retry works']);
   });
 
   it('keeps the default width when every word fits, and a requested size exactly', () => {

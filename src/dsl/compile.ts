@@ -938,7 +938,7 @@ function titleFit(title: string, inner: number, look: ResolvedAppearance) {
   const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME;
   let w = Math.max(inner, GROUP_TITLE_WIDTH);
   if (full <= w) return { w: full, lines: 1 };
-  const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle).length;
+  const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle, true).length;
   while (lines() > GROUP_TITLE_LINES && w < full) w += 8;
   return { w: Math.min(w, full), lines: Math.min(lines(), GROUP_TITLE_LINES) };
 }
@@ -998,10 +998,13 @@ const MAX_GROW = 2;
 /**
  * Width of a node with no requested size: the shape's default, or wider (in 4px steps, up to
  * `MAX_GROW` times) when a word piece of its title would otherwise break by character, as
- * `Maintenanceverificationreport` or `installed?` in a diamond would.
+ * `Maintenanceverificationreport` or `installed?` in a diamond would. A title with explicit
+ * breaks also grows the box until each of its lines fits on one row; a line too long for that
+ * rewraps in balanced lines.
  */
 function fitWidth(o: ModelObject, base: { w: number; h: number }, look: ResolvedAppearance) {
-  const need = widestPiece(o.label, look.title);
+  const rows = o.label.includes('\n') && o.shape !== 'circle' ? o.label.split('\n') : [],
+    need = Math.max(widestPiece(o.label, look.title), ...rows.map(l => measureText(l, look.title)));
   let w = base.w;
   while (titleArea(o.shape, w, base.h, look).width < need && w < base.w * MAX_GROW) w += 4;
   return Math.min(w, base.w * MAX_GROW);

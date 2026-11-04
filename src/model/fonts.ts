@@ -121,47 +121,138 @@ export function widestPiece(text: string, profile: Pick<TypeProfile, 'face' | 's
 }
 
 /**
- * Break text into lines no wider than `width`. A word longer than a line breaks between its
- * pieces (`wordPieces`), and only a piece that is itself too long breaks by character.
+ * A paragraph's words, with a short token kept beside its neighbour so no line starts or ends on
+ * it alone: a lone symbol (`<`, `~`, `≈`) joins the word after it, and a short unit (`s`, `ms`,
+ * `%`) joins the number before it. `in < 5 s` breaks as `in` / `< 5 s`, never `in < 5` / `s`. A
+ * joined token that would not fit in `width` stays as separate words.
  */
-export function wrapLines(text: string, width: number, profile: TypeProfile): string[] {
+function tokens(paragraph: string, width: number, profile: TypeProfile) {
+  const out: string[] = [];
+  let lead = '';
+  for (const word of paragraph.split(/\s+/)) {
+    if (!word) continue;
+    const prev = out[out.length - 1];
+    const unit =
+      !lead &&
+      prev !== undefined &&
+      /\d$/.test(prev) &&
+      /^(%|[\p{L}µ]{1,3}[.,;:)]?)$/u.test(word) &&
+      measureText(prev + ' ' + word, profile) <= width;
+    if (unit) out[out.length - 1] = prev + ' ' + word;
+    else if (lead && measureText(lead + ' ' + word, profile) <= width) {
+      out.push(lead + ' ' + word);
+      lead = '';
+    } else {
+      if (lead) out.push(lead);
+      lead = '';
+      if (!/[\p{L}\p{N}]/u.test(word) && word.length <= 2) lead = word;
+      else out.push(word);
+    }
+  }
+  if (lead) {
+    const prev = out[out.length - 1];
+    if (prev !== undefined && measureText(prev + ' ' + lead, profile) <= width)
+      out[out.length - 1] = prev + ' ' + lead;
+    else out.push(lead);
+  }
+  return out;
+}
+
+/** Greedy line breaks of `words` at `width`. */
+function greedy(words: string[], width: number, profile: TypeProfile): string[] {
   const fits = (s: string) => measureText(s, profile) <= width;
   const lines: string[] = [];
-  for (const paragraph of String(text).split('\n')) {
-    let line = '';
-    for (const word of paragraph.split(/\s+/)) {
-      if (!word) continue;
-      if (!fits(word)) {
-        if (line) lines.push(line);
-        let part = '';
-        for (const piece of wordPieces(word)) {
-          if (part && fits(part + piece)) {
-            part += piece;
-            continue;
-          }
-          if (part) lines.push(part);
-          part = '';
-          if (fits(piece)) {
-            part = piece;
-            continue;
-          }
-          for (const char of piece) {
-            if (part && !fits(part + char)) {
-              lines.push(part);
-              part = '';
-            }
-            part += char;
-          }
+  let line = '';
+  for (const word of words) {
+    if (!fits(word)) {
+      if (line) lines.push(line);
+      let part = '';
+      for (const piece of wordPieces(word)) {
+        if (part && fits(part + piece)) {
+          part += piece;
+          continue;
         }
-        line = part;
-        continue;
+        if (part) lines.push(part);
+        part = '';
+        if (fits(piece)) {
+          part = piece;
+          continue;
+        }
+        for (const char of piece) {
+          if (part && !fits(part + char)) {
+            lines.push(part);
+            part = '';
+          }
+          part += char;
+        }
       }
-      if (line && !fits(line + ' ' + word)) {
-        lines.push(line);
-        line = word;
-      } else line += (line ? ' ' : '') + word;
+      line = part;
+      continue;
     }
-    lines.push(line);
+    if (line && !fits(line + ' ' + word)) {
+      lines.push(line);
+      line = word;
+    } else line += (line ? ' ' : '') + word;
+  }
+  lines.push(line);
+  return lines;
+}
+
+/**
+ * `words` broken into `n` lines no wider than `width` whose widths run as near equal as they can:
+ * the least sum of squared distances from the mean width. Undefined when a word alone is too
+ * wide, which leaves the greedy breaks.
+ */
+function even(words: string[], n: number, width: number, profile: TypeProfile) {
+  const w = words.map(word => measureText(word, profile)),
+    space = measureText(' ', profile);
+  if (w.some(x => x > width)) return;
+  const at = [0];
+  for (const x of w) at.push(at[at.length - 1] + x);
+  const span = (i: number, j: number) => at[j] - at[i] + (j - i - 1) * space,
+    mean = span(0, w.length) / n,
+    tie = (mean / 10) ** 2;
+  // cost[k][j]: best cost of the first j words in k lines; from[k][j] where the last line starts.
+  const cost = [[0, ...w.map(() => Infinity)]],
+    from: number[][] = [[]];
+  for (let k = 1; k <= n; k++) {
+    cost.push(w.map(() => Infinity).concat(Infinity));
+    from.push([]);
+    for (let j = k; j <= w.length; j++)
+      for (let i = j - 1; i >= k - 1 && span(i, j) <= width; i--) {
+        const c = cost[k - 1][i] + (span(i, j) - mean) ** 2;
+        // A near tie keeps the earlier lines longer, the shape a reader expects.
+        if (c < cost[k][j] - tie) [cost[k][j], from[k][j]] = [c, i];
+      }
+  }
+  if (!Number.isFinite(cost[n][w.length])) return;
+  const out: string[] = [];
+  for (let k = n, j = w.length; k > 0; j = from[k][j], k--)
+    out.unshift(words.slice(from[k][j], j).join(' '));
+  return out;
+}
+
+/**
+ * Break text into lines no wider than `width`, starting a new line at each `\n`. A word longer
+ * than a line breaks between its pieces (`wordPieces`), and only a piece that is itself too long
+ * breaks by character. With `balance`, a paragraph that wraps keeps its line count but its lines
+ * run near equal (`even`), so no word sits alone on the last line when a better break exists.
+ */
+export function wrapLines(
+  text: string,
+  width: number,
+  profile: TypeProfile,
+  balance = false,
+): string[] {
+  const lines: string[] = [];
+  for (const paragraph of String(text).split('\n')) {
+    const words = balance
+      ? tokens(paragraph, width, profile)
+      : paragraph.split(/\s+/).filter(Boolean);
+    const best = greedy(words, width, profile);
+    lines.push(
+      ...(balance && best.length > 1 ? (even(words, best.length, width, profile) ?? best) : best),
+    );
   }
   return lines.length ? lines : [''];
 }
