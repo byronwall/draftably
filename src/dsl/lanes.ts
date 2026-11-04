@@ -20,6 +20,7 @@ import type { ModelEdge } from './syntax';
 interface Box {
   id: string;
   type: string;
+  shape?: string;
   parent: string;
   x: number;
   y: number;
@@ -143,10 +144,16 @@ export function returnLanes(
             // toward the lane instead.
             gap = gapBeside(target, band, !p.back, u0, u1),
             port = Math.min(LANE_PORT, (v1(target) - v0(target)) / 2 - LANE_INSET),
-            face = labelledGap(target, band, !p.back, e.id, edges, u0, u1, v0, v1).some(label => {
-              const { w, h } = labelSize(label);
-              return (level ? h : w) / 2 + 2 > port;
-            }),
+            // A diamond's side is one vertex: an edge already through that gap holds it, so the
+            // lane arrives on the face too, not on the vertex the other edge needs.
+            near = linkedGap(target, band, !p.back, e.id, edges, byId, u0, u1, v0, v1),
+            face =
+              (target.shape === 'diamond' && near.length > 0) ||
+              near.some(x => {
+                if (!x.label) return false;
+                const { w, h } = labelSize(x.label);
+                return (level ? h : w) / 2 + 2 > port;
+              }),
             enter = face ? um(target) : p.back ? u1(target) + gap / 2 : u0(target) - gap / 2;
           out.set(p.id, {
             ...(level ? { y: Math.round(at) } : { x: Math.round(at) }),
@@ -176,15 +183,16 @@ function gapBeside(
 }
 
 /**
- * The labels in the gap beside `n`, before (or after) it along the axis: those of other edges
- * joining `n` to a band neighbour on that side, level with it across the axis.
+ * The edges through the gap beside `n`, before (or after) it along the axis: other edges joining
+ * `n` to a band neighbour on that side, level with it across the axis, or to a box inside one.
  */
-function labelledGap(
+function linkedGap(
   n: Box,
   band: Box[],
   before: boolean,
   self: string,
   edges: ModelEdge[],
+  byId: Map<string, Box>,
   u0: (o: Box) => number,
   u1: (o: Box) => number,
   v0: (o: Box) => number,
@@ -198,12 +206,13 @@ function labelledGap(
       )
       .map(o => o.id),
   );
-  return edges
-    .filter(
-      e =>
-        e.id !== self &&
-        !!e.label &&
-        ((e.source === n.id && side.has(e.target)) || (e.target === n.id && side.has(e.source))),
-    )
-    .map(e => e.label!);
+  const inside = (id: string): boolean => {
+    for (let o = byId.get(id); o; o = byId.get(o.parent)) if (side.has(o.id)) return true;
+    return false;
+  };
+  return edges.filter(
+    e =>
+      e.id !== self &&
+      ((e.source === n.id && inside(e.target)) || (e.target === n.id && inside(e.source))),
+  );
 }
