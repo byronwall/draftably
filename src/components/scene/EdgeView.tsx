@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { createMemo, createRoot, For, Show, type Accessor } from 'solid-js';
 import { findEdge, findObject } from '../../model/graph';
 import { HALO_WIDTH, type DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
@@ -13,8 +13,23 @@ import {
   type EndMarker,
 } from '../../model/markers';
 import { edgeInk, isDiff, statusPaint } from '../../model/status';
-import { haloPieces, labelCards } from '../../model/surface';
+import { haloPieces, surfaces } from '../../model/surface';
 import type { Diagram } from '../../model/types';
+
+const surfaceMemos = new WeakMap<Diagram, Accessor<ReturnType<typeof surfaces>>>();
+/**
+ * One surface lookup per document, shared by every edge. The memo reruns when the layout it reads
+ * changes, so it follows the editor store's in-place updates without a rebuild per edge.
+ */
+function sharedSurfaces(doc: Diagram) {
+  let memo = surfaceMemos.get(doc);
+  if (!memo)
+    surfaceMemos.set(
+      doc,
+      (memo = createRoot(() => createMemo(() => surfaces(doc, resolveAppearance(doc.appearance))))),
+    );
+  return memo;
+}
 
 export interface EdgeViewProps {
   doc: Diagram;
@@ -78,7 +93,9 @@ export function EdgeView(props: EdgeViewProps) {
   const message = () => props.doc.layout.edges[props.route.id]?.row !== undefined;
   const labelType = () => edgeLabelType(look(), message());
   const labelLines = () => edgeLabelLines(edge().label, look(), message());
-  const halos = () => (props.route.halo ? haloPieces(props.doc, look(), props.route.halo) : []);
+  const under = () => sharedSurfaces(props.doc)();
+  const labelBg = () => (props.route.label ? under()(props.route.label) : { fill: look().canvas });
+  const halos = () => (props.route.halo ? haloPieces(under(), props.route.halo) : []);
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const tailId = () => `${props.idPrefix ?? ''}tail-${props.route.id}`;
   const markerInk = () => (props.selected ? 'var(--accent)' : stroke());
@@ -162,35 +179,29 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.route.label}>
         {label => (
           <g data-edge-label>
-            <For each={labelCards(props.doc, look(), label())}>
-              {(card, i) => (
-                <>
-                  <rect
-                    class="edge-label-bg"
-                    x={card.x}
-                    y={label().y - label().h / 2}
-                    width={card.w}
-                    height={label().h}
-                    rx={i() || card.w < label().w ? 0 : 4}
-                    fill={card.surface.fill}
-                  />
-                  <Show when={card.surface.tint}>
-                    {t => (
-                      <rect
-                        class="edge-label-bg"
-                        x={card.x}
-                        y={label().y - label().h / 2}
-                        width={card.w}
-                        height={label().h}
-                        rx={i() || card.w < label().w ? 0 : 4}
-                        fill={t().fill}
-                        fill-opacity={t().opacity}
-                      />
-                    )}
-                  </Show>
-                </>
+            <rect
+              class="edge-label-bg"
+              x={label().x - label().w / 2}
+              y={label().y - label().h / 2}
+              width={label().w}
+              height={label().h}
+              rx={4}
+              fill={labelBg().fill}
+            />
+            <Show when={labelBg().tint}>
+              {t => (
+                <rect
+                  class="edge-label-bg"
+                  x={label().x - label().w / 2}
+                  y={label().y - label().h / 2}
+                  width={label().w}
+                  height={label().h}
+                  rx={4}
+                  fill={t().fill}
+                  fill-opacity={t().opacity}
+                />
               )}
-            </For>
+            </Show>
             <text
               class="edge-label"
               x={label().x}
