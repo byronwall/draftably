@@ -1551,9 +1551,13 @@ button.folder-heading:hover {
 }
 
 .toast {
+  /* Centered, so it does not cover the right panel's controls. */
   position: fixed;
-  right: var(--space-4);
+  right: 0;
   bottom: 88px;
+  left: 0;
+  width: fit-content;
+  margin-inline: auto;
   z-index: 100;
   max-width: min(560px, 90vw);
   padding: 9px 16px;
@@ -1699,8 +1703,11 @@ button.folder-heading:hover {
   z-index: 40;
   width: min(420px, calc(100vw - 32px));
   max-height: 260px;
-  overflow: auto;
+  overflow: hidden auto;
   padding: var(--space-2) var(--space-3);
+  /* The status bar keeps to one line; a note wraps inside the panel. */
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .file-note {
