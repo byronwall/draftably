@@ -1,0 +1,29 @@
+diagram "Order approval workflow" version=1
+subtitle "Orders ship only after payment and stock checks pass"
+
+node start "Start" shape=pill
+node validate "Validate order"
+node payment "Payment authorized?" shape=diamond color=amber shade=200
+node reserve "Reserve stock"
+node stock "Stock available?" shape=diamond color=amber shade=200
+node pack "Pack order"
+node ship "Ship order" color=green shade=200
+node cancel "Cancel order" color=red shade=200
+node end "End" shape=pill
+
+legend amber shade=200 "Decision"
+legend green shade=200 "Success outcome"
+legend red shade=200 "Failure outcome"
+
+edge e_validate start -> validate
+edge e_payment validate -> payment
+edge pay_no payment -> cancel "no"
+edge pay_yes payment -> reserve "yes"
+edge e_stock reserve -> stock
+edge stock_no stock -> cancel "no"
+edge stock_yes stock -> pack "yes"
+edge e_ship pack -> ship
+edge ship_end ship -> end
+edge cancel_end cancel -> end
+
+layout root engine=layered direction=down

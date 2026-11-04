@@ -1,0 +1,31 @@
+digraph publishing {
+    label="Publishing state machine";
+    labelloc=t;
+    fontsize=20;
+    fontname="Helvetica-Bold";
+    rankdir=LR;
+    nodesep=0.6;
+    ranksep=0.9;
+
+    node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#4a6fa5", fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=11, color="#555555"];
+
+    start [shape=point, width=0.15, fillcolor=black, label=""];
+
+    draft             [label="Draft"];
+    in_review         [label="In review"];
+    changes_requested [label="Changes requested"];
+    approved          [label="Approved"];
+    published         [label="Published", fillcolor="#e6f4ea", color="#3c8d50"];
+    archived          [label="Archived", fillcolor="#f0f0f0", color="#888888"];
+
+    start -> draft;
+    draft -> in_review [label="submit"];
+    in_review -> changes_requested [label="request edits"];
+    changes_requested -> draft [label="revise"];
+    in_review -> approved [label="approve"];
+    approved -> published [label="publish"];
+    approved -> draft [label="withdraw"];
+    published -> archived [label="archive"];
+    archived -> draft [label="restore"];
+}

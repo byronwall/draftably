@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="830" viewBox="0 0 640 830" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect width="640" height="830" fill="#ffffff"/>
+  <text x="320" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">Order approval workflow</text>
+
+  <!-- Connectors -->
+  <g stroke="#444" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <line x1="240" y1="120" x2="240" y2="145"/>
+    <line x1="240" y1="195" x2="240" y2="225"/>
+    <line x1="240" y1="325" x2="240" y2="360"/>
+    <line x1="240" y1="410" x2="240" y2="440"/>
+    <line x1="240" y1="540" x2="240" y2="575"/>
+    <line x1="240" y1="625" x2="240" y2="655"/>
+    <line x1="240" y1="705" x2="240" y2="745"/>
+    <polyline points="330,275 520,275 520,465"/>
+    <line x1="330" y1="490" x2="440" y2="490"/>
+    <polyline points="520,515 520,770 300,770"/>
+  </g>
+
+  <!-- Branch labels -->
+  <g font-size="14" font-weight="bold">
+    <text x="345" y="267" fill="#b03030">No</text>
+    <text x="345" y="482" fill="#b03030">No</text>
+    <text x="250" y="347" fill="#2a7a2a">Yes</text>
+    <text x="250" y="562" fill="#2a7a2a">Yes</text>
+  </g>
+
+  <!-- Start / End -->
+  <g fill="#e3f2e3" stroke="#2a7a2a" stroke-width="2">
+    <ellipse cx="240" cy="95" rx="60" ry="25"/>
+    <ellipse cx="240" cy="770" rx="60" ry="25"/>
+  </g>
+
+  <!-- Process steps -->
+  <g fill="#e6effa" stroke="#3a6ea5" stroke-width="2">
+    <rect x="160" y="145" width="160" height="50" rx="8"/>
+    <rect x="160" y="360" width="160" height="50" rx="8"/>
+    <rect x="160" y="575" width="160" height="50" rx="8"/>
+    <rect x="160" y="655" width="160" height="50" rx="8"/>
+  </g>
+  <rect x="440" y="465" width="160" height="50" rx="8" fill="#fbe5e5" stroke="#b03030" stroke-width="2"/>
+
+  <!-- Decisions -->
+  <g fill="#fff5d6" stroke="#b8860b" stroke-width="2">
+    <polygon points="240,225 330,275 240,325 150,275"/>
+    <polygon points="240,440 330,490 240,540 150,490"/>
+  </g>
+
+  <!-- Labels -->
+  <g font-size="15" fill="#222" text-anchor="middle" dominant-baseline="central">
+    <text x="240" y="95">Start</text>
+    <text x="240" y="170">Validate order</text>
+    <text x="240" y="267">Payment</text>
+    <text x="240" y="285">authorized?</text>
+    <text x="240" y="385">Reserve stock</text>
+    <text x="240" y="482">Stock</text>
+    <text x="240" y="500">available?</text>
+    <text x="240" y="600">Pack order</text>
+    <text x="240" y="680">Ship order</text>
+    <text x="520" y="490">Cancel order</text>
+    <text x="240" y="770">End</text>
+  </g>
+</svg>
