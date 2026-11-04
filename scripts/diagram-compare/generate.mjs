@@ -88,8 +88,16 @@ await Promise.all(
     }
   }),
 );
+// Keep the rows of other arms, such as the tooled arm from tooled.mjs.
+const old = JSON.parse(
+  await fs.readFile(`${base}/results.json`, 'utf8').catch(() => '{"cells":[]}'),
+);
+const kept = old.cells.filter(c => !arms.includes(c.arm));
 await fs.writeFile(
   `${base}/results.json`,
-  JSON.stringify({ model, generated: new Date().toISOString().slice(0, 10), cells }, null, 2) +
-    '\n',
+  JSON.stringify(
+    { model, generated: new Date().toISOString().slice(0, 10), cells: [...cells, ...kept] },
+    null,
+    2,
+  ) + '\n',
 );

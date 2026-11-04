@@ -1,0 +1,61 @@
+digraph checkout {
+    label = "Checkout service architecture";
+    labelloc = t;
+    fontsize = 20;
+    fontname = "Helvetica";
+    rankdir = LR;
+    compound = true;
+    nodesep = 0.6;
+    ranksep = 0.9;
+
+    node [fontname = "Helvetica", shape = box, style = "rounded,filled", fillcolor = white];
+    edge [fontname = "Helvetica", fontsize = 10];
+
+    customer [label = "Customer", shape = ellipse, fillcolor = "#f2f2f2"];
+
+    subgraph cluster_clients {
+        label = "Clients";
+        style = "rounded,filled";
+        fillcolor = "#e8f1fb";
+        color = "#4a7ab5";
+        web    [label = "Web app"];
+        mobile [label = "Mobile app"];
+    }
+
+    subgraph cluster_services {
+        label = "Services";
+        style = "rounded,filled";
+        fillcolor = "#eaf6ea";
+        color = "#4a9a4a";
+        gateway [label = "API gateway"];
+        auth    [label = "Auth service"];
+        order   [label = "Order service"];
+        worker  [label = "Worker"];
+        { rank = same; order; worker; }
+    }
+
+    subgraph cluster_data {
+        label = "Data";
+        style = "rounded,filled";
+        fillcolor = "#fdf3e3";
+        color = "#c08a2e";
+        db    [label = "Orders database", shape = cylinder];
+        queue [label = "Queue", shape = box3d];
+    }
+
+    customer -> web    [label = "uses"];
+    customer -> mobile [label = "uses"];
+
+    web    -> gateway [label = "HTTPS"];
+    mobile -> gateway [label = "HTTPS"];
+
+    gateway -> auth  [label = "validate token"];
+    gateway -> order [label = "route request"];
+
+    order -> queue [label = "publish"];
+    order -> db    [label = "read / write", dir = both];
+    // Drawn as worker -> queue with dir = back so the arrow still points
+    // queue -> worker, but the layout keeps the queue in the data column.
+    worker -> queue [label = "consume", dir = back];
+    worker -> db    [label = "update"];
+}

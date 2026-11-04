@@ -1,0 +1,5 @@
+{{TASK}}
+
+Write the diagram in {{FORMAT}} and save it as diagram.{{EXT}} in this folder.
+
+This folder has {{TOOLS}}. You can use them to check and render your file and to look at the result.
