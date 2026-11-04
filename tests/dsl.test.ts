@@ -313,7 +313,9 @@ layout root flow direction=right`;
   it('keeps a long chain on one line with fold=never', () => {
     const scene = checkSource(chain(12, 'layout root flow direction=right fold=never'));
     expect(new Set(scene.objects.map(o => o.y)).size).toBe(1);
-    expect(() => checkSource(chain(3, 'layout root row fold=never'))).toThrow(/fold/);
+    expect(parseModel(chain(3, 'layout root row fold=never')).warnings.map(w => w.code)).toEqual([
+      'layout-attribute',
+    ]);
   });
 });
 

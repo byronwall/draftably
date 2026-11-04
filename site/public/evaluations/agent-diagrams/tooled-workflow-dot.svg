@@ -13,7 +13,7 @@
 <!-- start -->
 <g id="node1" class="node">
 <title>start</title>
-<ellipse fill="#c8e6c9" stroke="#2e7d32" cx="79" cy="-613" rx="27" ry="18"/>
+<ellipse fill="#d5f5d5" stroke="#2e8b57" cx="79" cy="-613" rx="27" ry="18"/>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-607.98" font-family="Helvetica,sans-Serif" font-size="12.00">Start</text>
 </g>
 <!-- validate -->
@@ -31,7 +31,7 @@
 <!-- payment -->
 <g id="node3" class="node">
 <title>payment</title>
-<polygon fill="#fff3c4" stroke="#b08900" points="79,-485 0,-451.5 79,-418 158,-451.5 79,-485"/>
+<polygon fill="#fff4cc" stroke="#c9a227" points="79,-485 0,-451.5 79,-418 158,-451.5 79,-485"/>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-452.85" font-family="Helvetica,sans-Serif" font-size="12.00">Payment</text>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-440.1" font-family="Helvetica,sans-Serif" font-size="12.00">authorized?</text>
 </g>
@@ -52,12 +52,12 @@
 <title>payment&#45;&gt;reserve</title>
 <path fill="none" stroke="#555555" d="M79,-417.49C79,-405.89 79,-392.95 79,-381.73"/>
 <polygon fill="#555555" stroke="#555555" points="82.5,-381.88 79,-371.88 75.5,-381.88 82.5,-381.88"/>
-<text xml:space="preserve" text-anchor="middle" x="87.62" y="-389.55" font-family="Helvetica,sans-Serif" font-size="11.00">Yes</text>
+<text xml:space="preserve" text-anchor="middle" x="89.12" y="-389.55" font-family="Helvetica,sans-Serif" font-size="11.00"> Yes</text>
 </g>
 <!-- cancel -->
 <g id="node8" class="node">
 <title>cancel</title>
-<path fill="#fde0dc" stroke="#c62828" d="M309.5,-281.5C309.5,-281.5 248.5,-281.5 248.5,-281.5 242.5,-281.5 236.5,-275.5 236.5,-269.5 236.5,-269.5 236.5,-257.5 236.5,-257.5 236.5,-251.5 242.5,-245.5 248.5,-245.5 248.5,-245.5 309.5,-245.5 309.5,-245.5 315.5,-245.5 321.5,-251.5 321.5,-257.5 321.5,-257.5 321.5,-269.5 321.5,-269.5 321.5,-275.5 315.5,-281.5 309.5,-281.5"/>
+<path fill="#fde2e2" stroke="#c0392b" d="M309.5,-281.5C309.5,-281.5 248.5,-281.5 248.5,-281.5 242.5,-281.5 236.5,-275.5 236.5,-269.5 236.5,-269.5 236.5,-257.5 236.5,-257.5 236.5,-251.5 242.5,-245.5 248.5,-245.5 248.5,-245.5 309.5,-245.5 309.5,-245.5 315.5,-245.5 321.5,-251.5 321.5,-257.5 321.5,-257.5 321.5,-269.5 321.5,-269.5 321.5,-275.5 315.5,-281.5 309.5,-281.5"/>
 <text xml:space="preserve" text-anchor="middle" x="279" y="-258.48" font-family="Helvetica,sans-Serif" font-size="12.00">Cancel order</text>
 </g>
 <!-- payment&#45;&gt;cancel -->
@@ -65,12 +65,12 @@
 <title>payment&#45;&gt;cancel</title>
 <path fill="none" stroke="#555555" d="M103.12,-428.06C140.7,-393.12 212.94,-325.94 252.13,-289.49"/>
 <polygon fill="#555555" stroke="#555555" points="254.38,-292.18 259.32,-282.81 249.61,-287.05 254.38,-292.18"/>
-<text xml:space="preserve" text-anchor="middle" x="209.27" y="-347.55" font-family="Helvetica,sans-Serif" font-size="11.00">No</text>
+<text xml:space="preserve" text-anchor="middle" x="210.77" y="-347.55" font-family="Helvetica,sans-Serif" font-size="11.00"> No</text>
 </g>
 <!-- stock -->
 <g id="node5" class="node">
 <title>stock</title>
-<polygon fill="#fff3c4" stroke="#b08900" points="79,-297 7.5,-263.5 79,-230 150.5,-263.5 79,-297"/>
+<polygon fill="#fff4cc" stroke="#c9a227" points="79,-297 7.5,-263.5 79,-230 150.5,-263.5 79,-297"/>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-264.85" font-family="Helvetica,sans-Serif" font-size="12.00">Stock</text>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-252.1" font-family="Helvetica,sans-Serif" font-size="12.00">available?</text>
 </g>
@@ -91,14 +91,14 @@
 <title>stock&#45;&gt;pack</title>
 <path fill="none" stroke="#555555" d="M79,-229.49C79,-217.89 79,-204.95 79,-193.73"/>
 <polygon fill="#555555" stroke="#555555" points="82.5,-193.88 79,-183.88 75.5,-193.88 82.5,-193.88"/>
-<text xml:space="preserve" text-anchor="middle" x="87.62" y="-201.55" font-family="Helvetica,sans-Serif" font-size="11.00">Yes</text>
+<text xml:space="preserve" text-anchor="middle" x="89.12" y="-201.55" font-family="Helvetica,sans-Serif" font-size="11.00"> Yes</text>
 </g>
 <!-- stock&#45;&gt;cancel -->
 <g id="edge7" class="edge">
 <title>stock&#45;&gt;cancel</title>
 <path fill="none" stroke="#555555" d="M151.49,-263.5C175.67,-263.5 202.17,-263.5 224.73,-263.5"/>
 <polygon fill="#555555" stroke="#555555" points="224.61,-267 234.61,-263.5 224.61,-260 224.61,-267"/>
-<text xml:space="preserve" text-anchor="middle" x="193.5" y="-268.05" font-family="Helvetica,sans-Serif" font-size="11.00">No</text>
+<text xml:space="preserve" text-anchor="middle" x="193.5" y="-268.05" font-family="Helvetica,sans-Serif" font-size="11.00"> No</text>
 </g>
 <!-- ship -->
 <g id="node7" class="node">
@@ -115,7 +115,7 @@
 <!-- end -->
 <g id="node9" class="node">
 <title>end</title>
-<ellipse fill="#c8e6c9" stroke="#2e7d32" cx="79" cy="-18" rx="27" ry="18"/>
+<ellipse fill="#d5f5d5" stroke="#2e8b57" cx="79" cy="-18" rx="27" ry="18"/>
 <text xml:space="preserve" text-anchor="middle" x="79" y="-12.97" font-family="Helvetica,sans-Serif" font-size="12.00">End</text>
 </g>
 <!-- ship&#45;&gt;end -->

@@ -1,5 +1,5 @@
-digraph OrderApprovalWorkflow {
-  graph [rankdir=TB, label="Order approval workflow", labelloc=t, fontsize=20, fontname="Helvetica"];
+digraph OrderApproval {
+  graph [label="Order approval workflow", labelloc=t, fontsize=20, fontname="Helvetica"];
   node  [shape=box, style=rounded, fontname="Helvetica"];
   edge  [fontname="Helvetica"];
 

@@ -1,58 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480">
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="400" viewBox="0 0 820 400">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M0,0 L10,5 L0,10 Z" fill="#333"/>
     </marker>
   </defs>
-  <rect x="0" y="0" width="960" height="480" fill="#fff"/>
-  <text x="480" y="40" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold" fill="#222">Publishing state machine</text>
+  <rect width="820" height="400" fill="#fff"/>
+  <text x="410" y="36" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold" fill="#222">Publishing state machine</text>
 
-  <g font-family="sans-serif" font-size="13" fill="#444">
-    <circle cx="50" cy="200" r="10" fill="#333"/>
-    <line x1="60" y1="200" x2="90" y2="200" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <g fill="none" stroke="#333" stroke-width="1.5">
+    <line x1="68" y1="185" x2="108" y2="185" marker-end="url(#arrow)"/>
+    <line x1="250" y1="185" x2="358" y2="185" marker-end="url(#arrow)"/>
+    <path d="M430,160 Q430,105 397,105" marker-end="url(#arrow)"/>
+    <path d="M215,105 Q180,105 180,158" marker-end="url(#arrow)"/>
+    <line x1="500" y1="185" x2="608" y2="185" marker-end="url(#arrow)"/>
+    <line x1="680" y1="210" x2="680" y2="318" marker-end="url(#arrow)"/>
+    <path d="M640,210 V265 H210 V212" marker-end="url(#arrow)"/>
+    <line x1="610" y1="345" x2="502" y2="345" marker-end="url(#arrow)"/>
+    <path d="M360,345 H150 V212" marker-end="url(#arrow)"/>
+  </g>
 
-    <line x1="230" y1="200" x2="320" y2="200" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="275" y="192" text-anchor="middle">submit</text>
+  <circle cx="60" cy="185" r="8" fill="#333"/>
 
-    <line x1="460" y1="200" x2="550" y2="200" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="505" y="192" text-anchor="middle">approve</text>
+  <g font-family="sans-serif" font-size="13" fill="#555">
+    <text x="305" y="177" text-anchor="middle">submit</text>
+    <text x="440" y="130" text-anchor="start">request edits</text>
+    <text x="172" y="130" text-anchor="end">revise</text>
+    <text x="555" y="177" text-anchor="middle">approve</text>
+    <text x="690" y="270" text-anchor="start">publish</text>
+    <text x="430" y="258" text-anchor="middle">withdraw</text>
+    <text x="555" y="337" text-anchor="middle">archive</text>
+    <text x="270" y="337" text-anchor="middle">restore</text>
+  </g>
 
-    <line x1="690" y1="200" x2="780" y2="200" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="735" y="192" text-anchor="middle">publish</text>
-
-    <path d="M390,225 Q390,365 355,365" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="398" y="300" text-anchor="start">request edits</text>
-
-    <path d="M195,365 Q180,365 180,225" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="192" y="300" text-anchor="start">revise</text>
-
-    <path d="M620,175 C620,90 160,90 160,175" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="390" y="102" text-anchor="middle">withdraw</text>
-
-    <line x1="850" y1="225" x2="850" y2="340" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="860" y="287" text-anchor="start">archive</text>
-
-    <path d="M850,390 V440 H120 V225" fill="none" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
-    <text x="480" y="432" text-anchor="middle">restore</text>
+  <g stroke="#333" stroke-width="1.5" fill="#fff">
+    <rect x="110" y="160" width="140" height="50" rx="10" fill="#eef4ff"/>
+    <rect x="360" y="160" width="140" height="50" rx="10" fill="#fff7e6"/>
+    <rect x="215" y="80" width="180" height="50" rx="10" fill="#ffecec"/>
+    <rect x="610" y="160" width="140" height="50" rx="10" fill="#eafaea"/>
+    <rect x="610" y="320" width="140" height="50" rx="10" fill="#e6f7f7"/>
+    <rect x="360" y="320" width="140" height="50" rx="10" fill="#f0f0f0"/>
   </g>
 
   <g font-family="sans-serif" font-size="15" text-anchor="middle" fill="#222">
-    <rect x="90" y="175" width="140" height="50" rx="8" fill="#eef3fb" stroke="#333" stroke-width="1.5"/>
-    <text x="160" y="205">Draft</text>
-
-    <rect x="320" y="175" width="140" height="50" rx="8" fill="#fdf6e3" stroke="#333" stroke-width="1.5"/>
-    <text x="390" y="205">In review</text>
-
-    <rect x="550" y="175" width="140" height="50" rx="8" fill="#eaf7ec" stroke="#333" stroke-width="1.5"/>
-    <text x="620" y="205">Approved</text>
-
-    <rect x="780" y="175" width="140" height="50" rx="8" fill="#e6f4f7" stroke="#333" stroke-width="1.5"/>
-    <text x="850" y="205">Published</text>
-
-    <rect x="195" y="340" width="160" height="50" rx="8" fill="#fbecec" stroke="#333" stroke-width="1.5"/>
-    <text x="275" y="370">Changes requested</text>
-
-    <rect x="780" y="340" width="140" height="50" rx="8" fill="#f0f0f0" stroke="#333" stroke-width="1.5"/>
-    <text x="850" y="370">Archived</text>
+    <text x="180" y="190">Draft</text>
+    <text x="430" y="190">In review</text>
+    <text x="305" y="110">Changes requested</text>
+    <text x="680" y="190">Approved</text>
+    <text x="680" y="350">Published</text>
+    <text x="430" y="350">Archived</text>
   </g>
 </svg>

@@ -5,17 +5,17 @@ digraph PublishingStateMachine {
 
   start [shape=point, width=0.15, label=""];
 
-  draft             [label="Draft"];
-  in_review         [label="In review"];
-  changes_requested [label="Changes requested"];
-  approved          [label="Approved"];
-  published         [label="Published"];
-  archived          [label="Archived"];
+  draft     [label="Draft"];
+  in_review [label="In review"];
+  changes   [label="Changes requested"];
+  approved  [label="Approved"];
+  published [label="Published"];
+  archived  [label="Archived"];
 
   start -> draft;
   draft -> in_review [label="submit"];
-  in_review -> changes_requested [label="request edits"];
-  changes_requested -> draft [label="revise"];
+  in_review -> changes [label="request edits"];
+  changes -> draft [label="revise"];
   in_review -> approved [label="approve"];
   approved -> published [label="publish"];
   approved -> draft [label="withdraw"];

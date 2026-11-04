@@ -29,7 +29,7 @@ flowchart LR
     web -->|HTTPS| gateway
     mobile -->|HTTPS| gateway
     gateway -->|validate token| auth
-    gateway -->|requests| order
+    gateway -->|request| order
     order -->|read/write| db
     order -->|publish| queue
     queue -->|consume| worker

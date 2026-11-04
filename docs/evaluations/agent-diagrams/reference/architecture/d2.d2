@@ -1,4 +1,5 @@
 direction: right
+
 title: Checkout service architecture {near: top-center; shape: text; style.font-size: 24}
 
 customers: Customers {shape: person}
@@ -13,6 +14,9 @@ services: Services {
   auth: Auth service
   order: Order service
   worker: Worker
+
+  gateway -> auth: validate token
+  gateway -> order: requests
 }
 
 data: Data {
@@ -20,14 +24,11 @@ data: Data {
   queue: Queue {shape: queue}
 }
 
-customers -> clients.web: uses
-customers -> clients.mobile: uses
+customers -> clients.web: use
+customers -> clients.mobile: use
 
 clients.web -> services.gateway: HTTPS
 clients.mobile -> services.gateway: HTTPS
-
-services.gateway -> services.auth: validate token
-services.gateway -> services.order: requests
 
 services.order <-> data.db: read/write
 services.order -> data.queue: publish

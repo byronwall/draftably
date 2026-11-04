@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkSource, compile, type Scene } from '../src/dsl/compile';
+import { compile, type Scene } from '../src/dsl/compile';
 
 // A long chain: reading right it is very wide, reading down very tall.
 const chain = (fit: string) =>
@@ -39,9 +39,30 @@ describe('fit= on the root layout', () => {
     expect(tall.diagnostics.find(d => d.code === 'fit')?.message).toContain('as written');
   });
 
-  it('is only allowed on the root', () => {
-    expect(() =>
-      checkSource('diagram "F" version=1\ngroup g "G"\nnode a "A" in=g\nlayout g column fit=wide'),
-    ).toThrow('Unknown layout attribute: fit');
+  it('is only read on the root; elsewhere it is ignored with a warning', async () => {
+    const scene = await compile(
+      'diagram "F" version=1\ngroup g "G"\nnode a "A" in=g\nlayout g column fit=wide',
+    );
+    expect(scene.diagnostics.find(d => d.code === 'layout-attribute')?.message).toContain(
+      'fit= goes on the layout root line',
+    );
+  });
+});
+
+describe('a layout line that goes wrong', () => {
+  it('ignores a setting it does not take and names the right one', async () => {
+    const scene = await compile(chain(' gap=48'));
+    expect(scene.diagnostics.some(d => d.level === 'error')).toBe(false);
+    expect(scene.diagnostics.find(d => d.code === 'layout-attribute')?.message).toContain(
+      'node-gap=',
+    );
+  });
+
+  it('keeps the later of two lines for one scope', async () => {
+    const scene = await compile(chain('') + '\nlayout root engine=layered direction=right');
+    expect(scene.diagnostics.find(d => d.code === 'layout-repeated')?.message).toContain(
+      'this line wins',
+    );
+    expect(aspect(scene)).toBeGreaterThan(1);
   });
 });

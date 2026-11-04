@@ -8,7 +8,9 @@ import path from 'node:path';
 import { formatSource } from '../dsl/syntax';
 import {
   applyEdits,
+  draw,
   FITS,
+  tooWide,
   vary,
   type Edit,
   type LineChange,
@@ -157,6 +159,13 @@ export interface RunOptions extends VaryOptions {
 
 /** Generate, measure and write variants of `file`. */
 export async function runVary(file: string, source: string, opts: RunOptions) {
+  // A drawing too wide for a page column is ranked for a slide shape unless --fit says otherwise.
+  if (!opts.fit && !opts.axes?.length && !opts.grid && tooWide((await draw(source)).metrics)) {
+    opts = { ...opts, fit: 'slide' };
+    console.error(
+      'The drawing is too wide for a page column, so variants are ranked for --fit slide.',
+    );
+  }
   // One line per variant on stderr as it finishes, so a long run shows it is working and stdout
   // stays the table (or JSON).
   const result = await vary(source, {

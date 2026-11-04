@@ -5,7 +5,13 @@ title: Checkout service architecture {
   style.bold: true
 }
 
-direction: right
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+direction: down
 
 customer: Customer {
   shape: person
@@ -39,9 +45,9 @@ clients.web -> services.gateway: HTTPS
 clients.mobile -> services.gateway: HTTPS
 
 services.gateway -> services.auth: validate token
-services.gateway -> services.order: requests
+services.gateway -> services.order: request
 
-services.order <-> data.db: read / write
+services.order <-> data.db: read/write
 services.order -> data.queue: publish
 data.queue -> services.worker: consume
 services.worker -> data.db: update
