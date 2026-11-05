@@ -23,12 +23,15 @@ await build({
       entry: {
         index: path.join(pkg, 'src/index.ts'),
         remark: path.join(pkg, 'src/remark.ts'),
+        'markdown-it': path.join(pkg, 'src/markdown-it.ts'),
+        client: path.join(pkg, 'src/client.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: id => id === '@draftably/runtime' || id.startsWith('node:'),
+      external: id =>
+        id === '@draftably/runtime' || id === '@draftably/runtime/viewer' || id.startsWith('node:'),
       output: { chunkFileNames: 'chunks/[name]-[hash].js' },
     },
   },

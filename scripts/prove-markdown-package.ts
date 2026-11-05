@@ -29,6 +29,18 @@ const pack = (directory: string) =>
   ).filename as string;
 const runtimeArchive = pack('packages/runtime');
 const markdownArchive = pack('packages/markdown');
+for (const entry of ['index.js', 'remark.js', 'markdown-it.js']) {
+  const contents = readFileSync(path.join(root, 'packages/markdown/dist', entry), 'utf8');
+  assert.doesNotMatch(contents, /@draftably\/runtime\/viewer|mountViewer/);
+}
+assert.match(
+  readFileSync(path.join(root, 'packages/markdown/dist/client.js'), 'utf8'),
+  /@draftably\/runtime\/viewer/,
+);
+assert.doesNotMatch(
+  readFileSync(path.join(root, 'packages/markdown/dist/client.js'), 'utf8'),
+  /node:(?:crypto|fs|path|url|worker_threads)/,
+);
 const consumer = mkdtempSync(path.join(os.tmpdir(), 'draftably-markdown-'));
 const store = path.join(out, 'store');
 writeFileSync(
@@ -42,10 +54,15 @@ writeFileSync(
         '@draftably/markdown': `file:${markdownArchive}`,
         '@draftably/runtime': `file:${runtimeArchive}`,
         '@mdx-js/mdx': '3.1.1',
+        '@types/markdown-it': '14.1.2',
+        'markdown-it': '14.1.0',
+        'playwright-core': '1.64.0',
         'rehype-stringify': '10.0.1',
         'remark-parse': '11.0.0',
         'remark-rehype': '11.1.2',
         unified: '11.0.5',
+        typescript: '5.8.3',
+        vite: '6.4.3',
       },
     },
     null,
@@ -63,28 +80,28 @@ execFileSync('pnpm', ['install', '--ignore-scripts', '--store-dir', store], {
 });
 const fixture = path.join(root, 'integration-examples/unified');
 cpSync(path.join(fixture, 'content'), path.join(consumer, 'content'), { recursive: true });
-cpSync(path.join(fixture, 'prove.mjs'), path.join(consumer, 'prove.mjs'));
+for (const file of [
+  'prove.mjs',
+  'interactive.mjs',
+  'interactive-browser.mjs',
+  'attach-client.ts',
+  'browser-entry.ts',
+  'consumer.ts',
+  'favicon.svg',
+]) {
+  cpSync(path.join(fixture, file), path.join(consumer, file));
+}
 const proof = execFileSync(process.execPath, ['prove.mjs'], { cwd: consumer, encoding: 'utf8' });
-writeFileSync(path.join(out, 'proof.log'), proof);
+const interactiveProof = execFileSync(process.execPath, ['interactive.mjs'], {
+  cwd: consumer,
+  encoding: 'utf8',
+});
+writeFileSync(path.join(out, 'proof.log'), proof + interactiveProof);
 console.log(proof);
+console.log(interactiveProof);
 
-writeFileSync(
-  path.join(consumer, 'consumer.ts'),
-  `import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkDraft from '@draftably/markdown/remark';
-import { parseFenceOptions, type DraftDocumentResult, type DraftMarkdownOptions } from '@draftably/markdown';
-import { renderSvg, type RenderResult } from '@draftably/runtime';
-const options: DraftMarkdownOptions = { emitAsset: async asset => ({ url: '/diagrams/' + asset.fileName }) };
-const processor = unified().use(remarkParse).use(remarkDraft, options);
-const document: DraftDocumentResult = { version: 1, assets: [], clientModules: [], dependencies: [], diagnostics: [] };
-const result: RenderResult = await renderSvg('node api "API"');
-const metadata = parseFenceOptions('draft {alt="API"}');
-void [processor, document, result, metadata];
-`,
-);
 execFileSync(
-  path.join(root, 'node_modules/.bin/tsc'),
+  path.join(consumer, 'node_modules/.bin/tsc'),
   [
     '--noEmit',
     '--strict',

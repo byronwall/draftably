@@ -6,7 +6,8 @@
   "type": "module",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "exports": {
     ".": {
@@ -16,6 +17,14 @@
     "./remark": {
       "types": "./dist/types/remark.d.ts",
       "import": "./dist/remark.js"
+    },
+    "./markdown-it": {
+      "types": "./dist/types/markdown-it.d.ts",
+      "import": "./dist/markdown-it.js"
+    },
+    "./client": {
+      "types": "./dist/types/client.d.ts",
+      "import": "./dist/client.js"
     },
     "./package.json": "./package.json"
   },

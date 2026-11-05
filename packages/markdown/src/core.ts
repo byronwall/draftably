@@ -40,6 +40,7 @@ export type EmitAsset = (
 export interface DraftMarkdownOptions {
   emitAsset: EmitAsset;
   errors?: 'fail' | 'placeholder';
+  interactive?: MarkdownInteractiveBridge;
   render?: {
     includeSource?: boolean;
     links?:
@@ -66,6 +67,21 @@ export interface DraftMarkdownOptions {
     onDependency?: (dependency: SourceDependency) => void;
   };
   onDiagnostic?: (diagnostic: Diagnostic) => void;
+}
+
+export interface DraftViewerInitV1 {
+  version: 1;
+  key: string;
+  source: string;
+  state: string | null;
+  label: string;
+  policyId: string;
+}
+
+export interface MarkdownInteractiveBridge {
+  clientModuleUrl: string;
+  policyId: string;
+  emitInit(data: DraftViewerInitV1): Promise<{ fileName: string; url: string }>;
 }
 
 export function makeDiagnostic(
@@ -153,6 +169,8 @@ export async function prepare(
   asset?: AssetReference;
   diagnostics: Diagnostic[];
   dependency?: string;
+  extraAssets?: AssetReference[];
+  clientModule?: string;
 }> {
   const diagnostics: Diagnostic[] = [];
   throwIfAborted(options.render?.signal);
@@ -217,7 +235,7 @@ export async function prepare(
       throw hostFailure(error, 'Markdown dependency callback failed.');
     }
   }
-  if (metadata.mode === 'interactive') {
+  if (metadata.mode === 'interactive' && !options.interactive) {
     const error = expectedError(
       'DRAFT_CAPABILITY',
       'Interactive diagrams require a configured enhancement bridge.',
@@ -334,23 +352,93 @@ export async function prepare(
     alt,
     data: { hProperties: { width: Math.ceil(rendered.width), height: Math.ceil(rendered.height) } },
   };
-  const figure = metadata.caption
-    ? {
-        type: 'figure',
-        data: { hName: 'figure', ...(metadata.id ? { hProperties: { id: metadata.id } } : {}) },
-        children: [
-          image,
-          {
-            type: 'figcaption',
-            data: { hName: 'figcaption' },
-            children: [{ type: 'text', value: metadata.caption }],
-          },
-        ],
-      }
-    : {
-        type: 'paragraph',
-        ...(metadata.id ? { data: { hProperties: { id: metadata.id } } } : {}),
-        children: [image],
-      };
-  return { node: figure, asset: { fileName, url: emitted.url }, diagnostics, dependency };
+  const asset: AssetReference = { fileName, url: emitted.url };
+  const extraAssets: AssetReference[] = [];
+  let clientModule: string | undefined;
+  const figureChildren: Record<string, unknown>[] = [image];
+  if (metadata.mode === 'interactive') {
+    const bridge = options.interactive!;
+    if (!/^[A-Za-z0-9._-]{1,64}$/.test(bridge.policyId))
+      throw hostFailure(new TypeError('Interactive policyId must be a short ASCII token.'));
+    const viewerKey = `draft-${contentHash(JSON.stringify([actualSource, metadata.state ?? null, metadata.id ?? null, fenceIndex])).slice(0, 24)}`;
+    const init: DraftViewerInitV1 = {
+      version: 1,
+      key: viewerKey,
+      source: actualSource,
+      state: metadata.state ?? null,
+      label: alt,
+      policyId: bridge.policyId,
+    };
+    const initBytes = new TextEncoder().encode(JSON.stringify(init));
+    if (initBytes.byteLength > 1_000_000)
+      throw expectedError('DRAFT_LIMIT', 'Interactive initialization data exceeds 1 MB.', location);
+    let initAsset: { fileName: string; url: string };
+    try {
+      initAsset = await bridge.emitInit(init);
+    } catch (error) {
+      throw hostFailure(error, 'Interactive initialization emitter failed.');
+    }
+    if (!initAsset || typeof initAsset.fileName !== 'string' || typeof initAsset.url !== 'string')
+      throw hostFailure(new TypeError('Initialization emitter must return a filename and URL.'));
+    let initUrl: URL;
+    let clientUrl: URL;
+    try {
+      initUrl = new URL(initAsset.url, 'https://draftably.invalid');
+      clientUrl = new URL(bridge.clientModuleUrl, 'https://draftably.invalid');
+    } catch {
+      throw hostFailure(new Error('Interactive bridge returned an invalid URL.'));
+    }
+    if (
+      initAsset.fileName !== `draft-${contentHash(initBytes)}.json` ||
+      !initAsset.url ||
+      initAsset.url.charCodeAt(0) <= 0x20 ||
+      hasControls(initAsset.url) ||
+      !['https:', 'http:'].includes(initUrl.protocol)
+    )
+      throw hostFailure(new Error('Initialization emitter returned an invalid asset.'));
+    if (
+      !bridge.clientModuleUrl ||
+      bridge.clientModuleUrl.charCodeAt(0) <= 0x20 ||
+      hasControls(bridge.clientModuleUrl) ||
+      !['https:', 'http:'].includes(clientUrl.protocol)
+    )
+      throw hostFailure(new Error('clientModuleUrl is unsafe.'));
+    extraAssets.push({ fileName: initAsset.fileName, url: initAsset.url });
+    clientModule = bridge.clientModuleUrl;
+    figureChildren.push({
+      type: 'div',
+      data: {
+        hName: 'div',
+        hProperties: {
+          className: ['draftably-viewer-region'],
+          'data-draftably-region': '',
+          'data-draftably-init': initAsset.url,
+          'data-draftably-policy': bridge.policyId,
+          'data-draftably-key': viewerKey,
+          role: 'region',
+          'aria-label': alt,
+        },
+      },
+      children: [],
+    });
+  }
+  if (metadata.caption)
+    figureChildren.push({
+      type: 'figcaption',
+      data: { hName: 'figcaption' },
+      children: [{ type: 'text', value: metadata.caption }],
+    });
+  const figure =
+    metadata.mode === 'interactive' || metadata.caption
+      ? {
+          type: 'figure',
+          data: { hName: 'figure', ...(metadata.id ? { hProperties: { id: metadata.id } } : {}) },
+          children: figureChildren,
+        }
+      : {
+          type: 'paragraph',
+          ...(metadata.id ? { data: { hProperties: { id: metadata.id } } } : {}),
+          children: figureChildren,
+        };
+  return { node: figure, asset, extraAssets, clientModule, diagnostics, dependency };
 }

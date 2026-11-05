@@ -7,6 +7,8 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import remarkDraft from '@draftably/markdown/remark';
+import MarkdownIt from 'markdown-it';
+import { createMarkdownItDraft } from '@draftably/markdown/markdown-it';
 
 const root = resolve('content');
 const out = resolve('out');
@@ -51,6 +53,7 @@ const mdx = await compile(
 );
 assert.match(String(mdx), /\/docs\/diagrams\/draft-/);
 await writeFile(resolve(out, 'page.mdx.js'), String(mdx));
+assert.doesNotMatch(String(html), /mountViewer|runtime\/viewer/);
 
 const warmNames = manifest.assets.map(asset => asset.fileName);
 await rm(diagrams, { recursive: true, force: true });
@@ -166,6 +169,94 @@ await assert.rejects(
   /host emitter failed/,
 );
 
+const markdownItDraft = createMarkdownItDraft({
+  emitAsset,
+  sources: { rootDir: root },
+});
+const md = new MarkdownIt().use(markdownItDraft.plugin);
+const otherPath = resolve(root, 'other.md');
+const otherMarkdown = (await readFile(otherPath, 'utf8')).replaceAll('Checkout', 'Second checkout');
+const docs = [
+  { path: pagePath, value: markdown },
+  { path: otherPath, value: otherMarkdown },
+].map(({ path, value }) => {
+  const env = { draftably: { documentPath: path } };
+  return { env, tokens: md.parse(value, env) };
+});
+assert.throws(() => md.renderer.render(docs[0].tokens, md.options, docs[0].env), /before prepare/);
+const preparedDocs = await Promise.all(
+  docs.map(({ tokens, env }) => markdownItDraft.prepare(tokens, env)),
+);
+assert.ok(
+  preparedDocs.every(result => result.assets.length === 4 && result.dependencies.length === 1),
+);
+const renderedDocs = docs.map(({ tokens, env }) => md.renderer.render(tokens, md.options, env));
+assert.ok(renderedDocs.every(value => (value.match(/<img\b/g) ?? []).length === 4));
+assert.notEqual(preparedDocs[0].assets[0].fileName, preparedDocs[1].assets[0].fileName);
+const hostileCaption = [
+  '```draft {caption="Checkout <script>alert(1)</script>"}',
+  'diagram "Safe caption" version=1',
+  'node api "API"',
+  '```',
+  '',
+].join('\n');
+const hostileEnv = { draftably: { documentPath: pagePath } };
+const hostileTokens = md.parse(hostileCaption, hostileEnv);
+await markdownItDraft.prepare(hostileTokens, hostileEnv);
+const hostileHtml = md.renderer.render(hostileTokens, md.options, hostileEnv);
+assert.match(hostileHtml, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+assert.doesNotMatch(hostileHtml, /<script>/);
+const anchoredSource = [
+  '```draft {id="plain-anchor"}',
+  'diagram "Anchored" version=1',
+  'node api "API"',
+  '```',
+  '',
+].join('\n');
+const anchoredEnv = { draftably: { documentPath: pagePath } };
+const anchoredTokens = md.parse(anchoredSource, anchoredEnv);
+await markdownItDraft.prepare(anchoredTokens, anchoredEnv);
+assert.match(md.renderer.render(anchoredTokens, md.options, anchoredEnv), /<p id="plain-anchor">/);
+
+const mdDependencies = [];
+const mdMissingSource = ['```draft {src="./markdown-it-created-later.draft"}', '```', ''].join(
+  '\n',
+);
+const mdMissingPage = resolve(root, 'markdown-it-missing.md');
+const mdMissingEnv = { draftably: { documentPath: mdMissingPage } };
+const mdMissingTokens = md.parse(mdMissingSource, mdMissingEnv);
+const missingAdapter = createMarkdownItDraft({
+  emitAsset,
+  sources: { rootDir: root, onDependency: item => mdDependencies.push(item) },
+});
+await assert.rejects(missingAdapter.prepare(mdMissingTokens, mdMissingEnv), /preparation failed/);
+assert.equal(mdDependencies[0].dependencyPath, resolve(root, 'markdown-it-created-later.draft'));
+assert.equal(mdDependencies[0].missing, true);
+await writeFile(
+  resolve(root, 'markdown-it-created-later.draft'),
+  'diagram "Created later" version=1\nnode api "API"\n',
+);
+const mdCreatedEnv = { draftably: { documentPath: mdMissingPage } };
+const mdCreated = await missingAdapter.prepare(
+  md.parse(mdMissingSource, mdCreatedEnv),
+  mdCreatedEnv,
+);
+assert.equal(mdCreated.dependencies[0], resolve(root, 'markdown-it-created-later.draft'));
+await rm(resolve(root, 'markdown-it-created-later.draft'));
+
+const hostCallbackFailure = new Error('markdown-it emitter failed');
+const markdownItFailure = createMarkdownItDraft({
+  errors: 'placeholder',
+  emitAsset: async () => {
+    throw hostCallbackFailure;
+  },
+});
+const failedEnv = { draftably: { documentPath: pagePath } };
+await assert.rejects(
+  markdownItFailure.prepare(md.parse(markdown, failedEnv), failedEnv),
+  error => error === hostCallbackFailure,
+);
+
 const outside = resolve('outside.draft');
 await writeFile(outside, 'diagram "Outside" version=1\n');
 const escapePath = resolve(root, 'escape.draft');
@@ -185,7 +276,7 @@ await rm(missingPath);
 await rm(outside);
 
 console.log(
-  `PASS packed Unified and MDX consumer: ${manifest.assets.length} assets, ${emissions} emissions.`,
+  `PASS packed Unified, MDX, and markdown-it consumer: ${manifest.assets.length} assets, ${emissions} emissions.`,
 );
 console.log(`HTML: ${resolve(out, 'page.html')}`);
 console.log(`SVG: ${resolve(diagrams, warmNames[0])}`);

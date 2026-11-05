@@ -20,7 +20,7 @@
     "test": "vitest run && pnpm test:engines",
     "test:unit": "vitest run",
     "lint": "eslint .",
-    "check:fast": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit",
+    "check:fast": "pnpm runtime:build && pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit",
     "check": "pnpm check:fast && pnpm test:engines && pnpm build",
     "changeset:add": "node scripts/add-changeset.ts",
     "changeset:status": "changeset status",
@@ -51,6 +51,8 @@
     "prove:viewer": "node scripts/prove-viewer-browser.ts",
     "markdown:build": "node scripts/build-markdown.ts",
     "markdown:pack-check": "node scripts/prove-markdown-package.ts",
+    "markdown:browser-check": "node scripts/prove-markdown-browser.ts",
+    "markdown:serve-proof": "node scripts/serve-markdown-proof.ts",
     "prove:runtime": "node scripts/prove-runtime-browser.ts"
   },
   "dependencies": {

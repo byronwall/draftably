@@ -6,8 +6,9 @@ outside this repository. They do not publish them.
 
 Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
 
-Use `pnpm markdown:build && pnpm markdown:pack-check` for the async remark adapter and its packed
-Unified/MDX consumer. The proof installs the Markdown and runtime archives together.
+Use `pnpm markdown:build && pnpm markdown:pack-check` for the remark and markdown-it adapters and
+their packed Unified/MDX/markdown-it consumers. The proof installs the Markdown and runtime
+archives together. CI also runs `pnpm markdown:browser-check` against the real viewer package.
 
 The changeset helper defaults to the CLI. Select other packages explicitly:
 

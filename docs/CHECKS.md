@@ -26,8 +26,9 @@ Engine reports are written to the ignored `tmp/verification-current/` folder.
 
 `pnpm runtime:build && pnpm runtime:pack-check` proves the portable runtime from its package archive.
 `pnpm markdown:build && pnpm markdown:pack-check` builds and installs the Markdown adapter beside
-the packed runtime and checks the Unified/MDX consumer, include handling, diagnostics, and asset
-replay after an output directory is cleared.
+the packed runtime. It checks Unified, MDX, markdown-it, includes, diagnostics, strict consumer types,
+and asset replay after an output directory is cleared. `pnpm markdown:browser-check` checks the real
+viewer client after the packed browser is installed.
 
 ## Performance
 

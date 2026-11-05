@@ -29,6 +29,7 @@ export default function remarkDraft(options: DraftMarkdownOptions) {
   return async (tree: Node, file: FileLike) => {
     const document = { path: file.path };
     const assets: { fileName: string; url: string }[] = [];
+    const clientModules = new Set<string>();
     const dependencies = new Set<string>();
     const sourceOptions = options.sources && {
       ...options.sources,
@@ -86,6 +87,8 @@ export default function remarkDraft(options: DraftMarkdownOptions) {
             });
             children.splice(i, 1, result.node as unknown as Node);
             if (result.asset) assets.push(result.asset);
+            assets.push(...(result.extraAssets ?? []));
+            if (result.clientModule) clientModules.add(result.clientModule);
             if (result.dependency) dependencies.add(result.dependency);
             diagnostics.push(...result.diagnostics);
           } catch (error) {
@@ -126,7 +129,7 @@ export default function remarkDraft(options: DraftMarkdownOptions) {
     file.data.draftably = {
       version: 1,
       assets,
-      clientModules: [],
+      clientModules: [...clientModules],
       dependencies: [...dependencies],
       diagnostics,
     };

@@ -7,6 +7,8 @@ export type {
   DraftDocument,
   DraftDocumentResult,
   DraftMarkdownOptions,
+  DraftViewerInitV1,
   EmitAsset,
+  MarkdownInteractiveBridge,
   SourceDependency,
 } from './core.js';
