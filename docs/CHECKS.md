@@ -24,6 +24,11 @@ is `check:fast`, the engine suites and the packaged-CLI proof.
 
 Engine reports are written to the ignored `tmp/verification-current/` folder.
 
+`pnpm runtime:build && pnpm runtime:pack-check` proves the portable runtime from its package archive.
+`pnpm markdown:build && pnpm markdown:pack-check` builds and installs the Markdown adapter beside
+the packed runtime and checks the Unified/MDX consumer, include handling, diagnostics, and asset
+replay after an output directory is cleared.
+
 ## Performance
 
 `pnpm bench` times CLI commands and viewer interactions on the five diagrams in

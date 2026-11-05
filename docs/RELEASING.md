@@ -1,8 +1,13 @@
 # Draftably package releases
 
-The public packages are `draftably` (CLI) and `@draftably/runtime` (native rendering). Runtime proofs install a packed archive outside this repository. They do not publish it.
+The public packages are `draftably` (CLI), `@draftably/runtime` (native rendering), and
+`@draftably/markdown` (build-time remark integration). Package proofs install packed archives
+outside this repository. They do not publish them.
 
 Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
+
+Use `pnpm markdown:build && pnpm markdown:pack-check` for the async remark adapter and its packed
+Unified/MDX consumer. The proof installs the Markdown and runtime archives together.
 
 The changeset helper defaults to the CLI. Select other packages explicitly:
 

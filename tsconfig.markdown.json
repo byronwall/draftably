@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "packages/markdown/dist/types",
+    "rootDir": "packages/markdown/src"
+  },
+  "include": ["packages/markdown/src"]
+}

@@ -29,7 +29,7 @@
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:build": "pnpm --dir packages/cli build",
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
-    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check",
+    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm markdown:build && pnpm markdown:pack-check",
     "release": "pnpm release:check && changeset publish",
     "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
@@ -47,6 +47,8 @@
     "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs",
     "runtime:build": "node scripts/build-runtime.ts",
     "runtime:pack-check": "node scripts/prove-runtime-package.ts",
+    "markdown:build": "node scripts/build-markdown.ts",
+    "markdown:pack-check": "node scripts/prove-markdown-package.ts",
     "prove:runtime": "node scripts/prove-runtime-browser.ts"
   },
   "dependencies": {

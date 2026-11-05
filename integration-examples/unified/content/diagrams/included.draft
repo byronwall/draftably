@@ -1,0 +1,4 @@
+diagram "Included checkout" version=1
+node api "API"
+node db "Orders"
+edge save api -> db "store order"
