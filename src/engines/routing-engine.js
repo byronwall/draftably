@@ -591,7 +591,12 @@ function slot(id, side, r, used, s, other, tight = false, spread = true) {
 }
 const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
-  LEADING = { right: 'left', down: 'top' };
+  LEADING = { right: 'left', down: 'top' },
+  // Sides that read backwards along a direction: out of a box's left or top, into its right or
+  // bottom (going right). They cost `BACK_PENALTY`, a last resort when no forward route exists.
+  BACK_PENALTY = 300,
+  BACK_OUT = { right: ['left', 'top'], down: ['top', 'left'] },
+  BACK_IN = { right: ['right', 'bottom'], down: ['bottom', 'right'] };
 const HOOK_PENALTY = 80;
 // Side conventions without a declared direction, and the price of a far side's loop per unit.
 const ARRIVE_BELOW = 40,
@@ -619,7 +624,11 @@ function insideLength(ps, r) {
 // Fan siblings this far apart or more read as separate lines (the audit's `edges-too-close` is < 10).
 const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
-const DETOUR_RATIO = 1.75;
+const DETOUR_RATIO = 1.75,
+  // A gated route this many times the gap between its boxes weighs crossing the band instead.
+  DETOUR_SOFT = 1.2,
+  // What crossing a title band away from a top member's terminal line costs a route.
+  BAND_COST = 120;
 const pathLength = ps => segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0);
 const PORT_SLACK = 4;
 const FAR_PENALTY = 100,
@@ -646,7 +655,8 @@ function compute(input, rawOptions = {}) {
   const all = new Map([...groups, ...rects]);
   const near = s.standoff
     ? [
-        ...[...rects.values()].map(r => ({ ...r, band: s.standoff })),
+        // A group's frame stub stands for the group, whose border is already in the list.
+        ...[...rects.values()].filter(r => !r.frame).map(r => ({ ...r, band: s.standoff })),
         ...[...groups.values()]
           .filter(g => !g.collapsed)
           .map(g => ({ ...g, band: s.standoff, border: true, weight: BORDER_WEIGHT })),
@@ -719,9 +729,16 @@ function compute(input, rawOptions = {}) {
       slots(Math.min(TIGHT_PITCH, gap)) > full
     );
   };
+  const flowOf = e => [e.cfg.flow, rawOptions.direction].find(d => d === 'right' || d === 'down');
+  // Each route's score when `findIn` chose it, to weigh a gated route against an open one.
+  const scores = new WeakMap();
   const obsFor = (e, open = openBands.has(e.id)) => {
     const allowed = new Set([...ancestors(e.from), ...ancestors(e.to)]),
-      obstacles = [...rects.values()].map(r => inflate(r, s.clearance));
+      // A frame stub (a line's end on an open group's frame) covers the group's members: it
+      // blocks only its own lines, which must not run inside the group. Others see the group.
+      obstacles = [...rects.values()]
+        .filter(r => !r.frame || r.id === e.from || r.id === e.to)
+        .map(r => inflate(r, s.clearance));
     for (const [id, g] of groups) {
       if (g.collapsed) continue;
       if (!allowed.has(id)) obstacles.push(inflate(g, s.clearance));
@@ -835,7 +852,10 @@ function compute(input, rawOptions = {}) {
     return result;
   }
   // A line may cross a title band straight into any member, not only a top one, when the
-  // way round the group is over `DETOUR_RATIO` times the length of the crossing route.
+  // way round the group is over `DETOUR_RATIO` times the length of the crossing route. A band is
+  // also a cost to weigh, not a wall (FEEL.md): a gated route that reads against the flow or
+  // takes the long way round tries the crossing too, and takes it when it scores better by more
+  // than `BAND_COST`.
   function find(e, used, old, wall = []) {
     const gated = findIn(e, used, old, false, wall);
     if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
@@ -847,12 +867,33 @@ function compute(input, rawOptions = {}) {
       floor =
         Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
         Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2),
-      gatedLength = gated.blocked ? Infinity : pathLength(gated.points);
-    if (gatedLength <= DETOUR_RATIO * floor) return gated;
+      gatedLength = gated.blocked ? Infinity : pathLength(gated.points),
+      long = gatedLength > DETOUR_RATIO * floor,
+      weigh = !gated.blocked && (against(e, gated) || gatedLength > DETOUR_SOFT * floor + 40);
+    if (!long && !weigh) return gated;
     const open = findIn(e, used, old, true, wall);
-    if (open.blocked || gatedLength <= DETOUR_RATIO * pathLength(open.points)) return gated;
+    if (open.blocked) return gated;
+    const shorter = long && gatedLength > DETOUR_RATIO * pathLength(open.points),
+      better = weigh && scores.get(open) + BAND_COST < scores.get(gated);
+    if (!shorter && !better) return gated;
     opened.add(open);
     return open;
+  }
+  // Whether route `r` of edge `e` reads against the flow: off the reading direction's sides for
+  // a forward edge, or out of or into a side that points away from its other end.
+  function against(e, r) {
+    if (e.from === e.to) return false;
+    const ca = center(rects.get(e.from)),
+      cb = center(rects.get(e.to)),
+      flow = flowOf(e);
+    if (flow && (flow === 'down' ? cb.y - ca.y : cb.x - ca.x) > 20)
+      return r.fromSide !== TRAILING[flow] || r.toSide !== LEADING[flow];
+    const v = vector[r.fromSide],
+      w = vector[r.toSide];
+    return (
+      v.x * (cb.x - ca.x) + v.y * (cb.y - ca.y) < -0.01 ||
+      w.x * (ca.x - cb.x) + w.y * (ca.y - cb.y) < -0.01
+    );
   }
   function findIn(e, used, old, open, wall = []) {
     const a = rects.get(e.from),
@@ -875,15 +916,24 @@ function compute(input, rawOptions = {}) {
             : SIDES;
     // A forward edge in a layout with a declared reading direction leaves its source's
     // trailing side and enters its target's leading side (bottom → top going down), so
-    // it reads as parent → child. Other sides cost `AXIS_PENALTY` each, more than the
-    // standoff or fan-out a clean Z pays, so they win only when the axis sides are blocked.
-    const flow = [cfg.flow, rawOptions.direction].find(d => d === 'right' || d === 'down');
+    // it reads as parent → child. A side across the flow costs `AXIS_PENALTY`, more than the
+    // standoff or fan-out a clean Z pays, so it wins only when the axis sides are blocked; a
+    // backward side costs `BACK_PENALTY`.
+    const flow = flowOf(e);
     const along = flow === 'down' ? cb.y - ca.y : cb.x - ca.x,
       forward = flow && e.from !== e.to && along > 20,
       axis = c =>
         forward
-          ? (c.fs !== TRAILING[flow] ? AXIS_PENALTY : 0) +
-            (c.ts !== LEADING[flow] ? AXIS_PENALTY : 0)
+          ? (c.fs === TRAILING[flow]
+              ? 0
+              : BACK_OUT[flow].includes(c.fs)
+                ? BACK_PENALTY
+                : AXIS_PENALTY) +
+            (c.ts === LEADING[flow]
+              ? 0
+              : BACK_IN[flow].includes(c.ts)
+                ? BACK_PENALTY
+                : AXIS_PENALTY)
           : 0,
       onAxis = (side, end) => forward && side === (end === 'from' ? TRAILING : LEADING)[flow];
     const candidates = [];
@@ -1061,7 +1111,10 @@ function compute(input, rawOptions = {}) {
           const vertical = fs === 'left' || fs === 'right',
             axis = vertical ? 'y' : 'x',
             limit = (vertical ? b.h : b.w) / 2 - 12;
-          const desired = port(a, fs, fo)[axis] - center(b)[axis];
+          // A group's frame is a long side: a line meets it as near its own line as the side
+          // allows, not at the middle.
+          const want = port(a, fs, fo)[axis] - center(b)[axis],
+            desired = b.frame ? clamp(want, -limit, limit) : want;
           const taken = used.flatMap(q => [
             ...(q.from === e.to && q.fromSide === ts ? [q.fromOffset] : []),
             ...(q.to === e.to && q.toSide === ts ? [q.toOffset] : []),
@@ -1215,7 +1268,7 @@ function compute(input, rawOptions = {}) {
       };
     }
     best.points = simplify(best.points, e, best.fs, best.ts, edgeObs, used);
-    return {
+    const found = {
       id: e.id,
       from: e.from,
       to: e.to,
@@ -1226,6 +1279,8 @@ function compute(input, rawOptions = {}) {
       points: best.points,
       blocked: false,
     };
+    scores.set(found, best.score);
+    return found;
   }
   let routes = [];
   for (const e of edges) routes.push(find(e, routes, previous.get(e.id)));
