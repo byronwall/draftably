@@ -49,6 +49,7 @@
     "runtime:pack-check": "node scripts/prove-runtime-package.ts",
     "viewer:pack-check": "node scripts/prove-viewer-package.ts",
     "prove:viewer": "node scripts/prove-viewer-browser.ts",
+    "prove:element": "node scripts/prove-element-browser.ts",
     "markdown:build": "node scripts/build-markdown.ts",
     "markdown:pack-check": "node scripts/prove-markdown-package.ts",
     "markdown:browser-check": "node scripts/prove-markdown-browser.ts",

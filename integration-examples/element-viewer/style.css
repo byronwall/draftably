@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: #1e293b;
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+}
+main {
+  max-width: 68rem;
+  margin: 2rem auto;
+  padding: 0 1rem 2rem;
+}
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+h2 {
+  font-size: 1.1rem;
+  margin: 2rem 0 0.75rem;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+nav button {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.3rem;
+  background: white;
+  color: inherit;
+  font: inherit;
+}
+nav button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+#status {
+  min-height: 1.5rem;
+}

@@ -29,6 +29,7 @@ await build({
       entry: {
         index: path.join(root, 'src/runtime/index.ts'),
         viewer: path.join(root, 'src/runtime/viewer.ts'),
+        element: path.join(root, 'src/runtime/element.ts'),
       },
       formats: ['es'],
       fileName: (_format, name) => `${name}.js`,

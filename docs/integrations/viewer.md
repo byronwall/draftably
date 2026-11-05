@@ -1,5 +1,8 @@
 # Embed a draftably viewer
 
+Use the [diagram element](element.md) for automatic styles, sizing, and cleanup.
+Use the imperative API below when your application needs to own that lifecycle.
+
 The viewer owns the children of its host. Give it an empty element, mount after the DOM exists, then call `update` with source text. Each handle owns its camera and cleanup.
 
 ```ts

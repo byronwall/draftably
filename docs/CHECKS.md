@@ -101,6 +101,10 @@ To serve a folder from the dev server instead, run `DIAGRAM_ROOT=folder pnpm dev
 
 `pnpm viewer:pack-check` installs the packed runtime in fresh Node, vanilla, React, and Solid consumers. It checks declarations, SSR-safe imports, the emitted worker asset, and framework builds. `pnpm prove:viewer` serves the packed browser fixture below a nested path and checks worker updates, lifecycle races, camera behavior, links, and blocked worker/font policies. It also runs React Strict Mode and Solid lifecycle fixtures in Chromium. Run `pnpm runtime:build && pnpm viewer:pack-check` first; output goes to `tmp/viewer-proof/`.
 
+The viewer pack check also builds the diagram element example. `pnpm prove:element`
+checks its real worker, source updates, fallback, removal and reconnection,
+keyboard controls, narrow layout, and isolation from host styles.
+
 ## The public site
 
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in

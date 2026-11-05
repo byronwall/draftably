@@ -36,10 +36,12 @@ assert.equal(
 );
 assert.ok(manifest.exports['./viewer']);
 assert.ok(manifest.exports['./viewer.css']);
+assert.ok(manifest.exports['./element']);
 for (const file of [
   'dist/index.js',
   'dist/viewer.js',
   'dist/viewer.css',
+  'dist/element.js',
   'dist/fonts.css',
   'dist/types/src/runtime/viewer.d.ts',
 ])
@@ -52,7 +54,10 @@ function filesBelow(dir: string, prefix = ''): string[] {
 }
 const workerAssets = filesBelow('dist').filter(name => /render\.worker.*\.js$/.test(name));
 assert.ok(workerAssets.length, 'Vite did not emit the native worker JavaScript asset');
-const viewerCode = readFileSync(path.join(pkg, 'dist/viewer.js'), 'utf8');
+const viewerCode = filesBelow('dist')
+  .filter(name => name.endsWith('.js') && !name.includes('render.worker'))
+  .map(name => readFileSync(path.join(pkg, 'dist', name), 'utf8'))
+  .join('\n');
 assert.match(viewerCode, /new Worker\(new URL\(/);
 assert.ok(
   workerAssets.some(name => viewerCode.includes(name)),
@@ -80,6 +85,13 @@ writeFileSync(
 import { renderSvg } from '@draftably/runtime';
 import { mountViewer, runtimeVersion, fontMetricsVersion, type ViewerHandle, type UpdateResult } from '@draftably/runtime/viewer';
 import '@draftably/runtime/viewer.css';
+import '@draftably/runtime/element';
+import type { DraftDiagramElement } from '@draftably/runtime/element';
+const diagram: DraftDiagramElement = document.createElement('draft-diagram');
+diagram.source = 'node a "A"';
+diagram.options = { label: 'Typed element' };
+void diagram.updateComplete;
+void diagram.viewer;
 const host = document.createElement('div');
 const viewer: ViewerHandle = mountViewer(host, { render: { fonts: 'embed' } });
 const result: Promise<UpdateResult> = viewer.update('node a "A"');
@@ -112,13 +124,20 @@ const imported = execFileSync(
   const viewer = await import('@draftably/runtime/viewer');
   assert.equal(typeof viewer.mountViewer, 'function');
   assert.equal(typeof viewer.runtimeVersion, 'string');
+  await import('@draftably/runtime/element');
   console.log('PASS SSR-safe viewer module import');`,
   ],
   { cwd: basic, encoding: 'utf8' },
 );
 console.log(imported.trim());
 
-const consumers = ['vanilla-viewer', 'viewer-proof', 'react-viewer', 'solid-viewer'];
+const consumers = [
+  'vanilla-viewer',
+  'viewer-proof',
+  'react-viewer',
+  'solid-viewer',
+  'element-viewer',
+];
 const dirs: Record<string, string> = {};
 for (const name of consumers) {
   const dir = mkdtempSync(path.join(os.tmpdir(), `draftably-${name}-`));

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Draftably diagram element</title>
+  </head>
+  <body>
+    <main>
+      <h1>A diagram in one element</h1>
+      <p>Change its source or remove it. The element handles rendering, styles, and cleanup.</p>
+      <nav aria-label="Example controls">
+        <button id="update" type="button">Update source</button>
+        <button id="invalid" type="button">Try invalid source</button>
+        <button id="toggle" type="button">Remove diagram</button>
+      </nav>
+      <p id="status" role="status">Loading diagram…</p>
+      <div id="container">
+        <draft-diagram id="diagram" label="Checkout flow">
+          <img
+            src="./checkout.svg"
+            alt="The web app calls the API, which queries orders."
+            style="max-width: 100%; height: auto"
+          />
+        </draft-diagram>
+      </div>
+      <h2>Another diagram, independent state</h2>
+      <draft-diagram id="second" label="Archive flow">
+        <img
+          src="./checkout.svg"
+          alt="A second view of the checkout flow."
+          style="max-width: 100%; height: auto"
+        />
+      </draft-diagram>
+    </main>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>

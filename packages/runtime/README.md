@@ -26,6 +26,12 @@ To use exact host fonts, import `@draftably/runtime/fonts.css` and set `fonts: '
 
 ## Interactive viewer
 
+For automatic setup, import `@draftably/runtime/element` once and use
+`<draft-diagram source='node api "API"'></draft-diagram>`. It supplies styles,
+default sizing, updates, and cleanup. Put an image inside it for a static
+fallback. See the [element guide](https://github.com/byronwall/draftably/blob/main/docs/integrations/element.md)
+for the complete Vite configuration and source update example.
+
 The optional `/viewer` entry mounts an independent, read-only viewer. Its default module worker and embedded fonts keep compilation off the main thread and visuals self-contained:
 
 ```ts

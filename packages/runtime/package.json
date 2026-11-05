@@ -6,7 +6,8 @@
   "type": "module",
   "license": "MIT",
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./dist/element.js"
   ],
   "files": [
     "dist",
@@ -20,6 +21,10 @@
     "./viewer": {
       "types": "./dist/types/src/runtime/viewer.d.ts",
       "import": "./dist/viewer.js"
+    },
+    "./element": {
+      "types": "./dist/types/src/runtime/element.d.ts",
+      "import": "./dist/element.js"
     },
     "./viewer.css": "./dist/viewer.css",
     "./fonts.css": "./dist/fonts.css",
