@@ -104,7 +104,8 @@
 }
 
 .menu-item[aria-current='true'] {
-  font-weight: 600;
+  background: var(--pressed);
+  box-shadow: inset 2px 0 var(--ink);
 }
 
 .menu-heading {
