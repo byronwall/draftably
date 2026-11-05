@@ -1,0 +1,39 @@
+{
+  "name": "@draftably/runtime",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Portable native Draftably SVG rendering and validation.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/runtime/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./fonts.css": "./dist/fonts.css",
+    "./browser": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-runtime.ts"
+  },
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwall/draftably.git",
+    "directory": "packages/runtime"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

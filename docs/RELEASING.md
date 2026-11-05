@@ -1,4 +1,19 @@
-# draftably releases
+# Draftably package releases
+
+The public packages are `draftably` (CLI) and `@draftably/runtime` (native rendering). Runtime proofs install a packed archive outside this repository. They do not publish it.
+
+Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
+
+The changeset helper defaults to the CLI. Select other packages explicitly:
+
+```sh
+pnpm changeset:add minor "Add native rendering" --package @draftably/runtime
+pnpm changeset:add patch "Fix shared geometry" --package draftably --package @draftably/runtime
+```
+
+The PR check maps shared compiler, model, font, and renderer changes to their affected packages. An empty changeset is an explicit no-release choice. A change to package source must name each affected public package.
+
+Before the first registry release, confirm `@draftably` scope ownership and configure a trusted publisher for each package. The repository artifact proofs do not establish registry ownership. Release commands remain separate from development and verification.
 
 The release flow follows explorEDA and Product Grid:
 

@@ -78,6 +78,12 @@ The file proof also switches between more than six diagrams with Chrome’s back
 To serve a folder from the dev server instead, run `DIAGRAM_ROOT=folder pnpm dev`.
 `DIAGRAM_FILE=path/to/file.draft pnpm dev` serves the current folder and prints the file's address.
 
+## Portable runtime
+
+`pnpm runtime:build && pnpm runtime:pack-check` builds and installs the runtime tarball in a temporary consumer outside the repository. It checks native diagrams, repeatable SVG, embedded fonts, dependency isolation, and NodeNext TypeScript imports. The report records actual archive, static module, font sizes, and first/repeat render times.
+
+`pnpm prove:runtime` loads the copied installed distribution below a nested URL in Chromium. It verifies module chunks, the finished SVG image, and console errors. Run the pack check first to prepare its consumer. CI runs both proofs; neither publishes a package.
+
 ## The public site
 
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in

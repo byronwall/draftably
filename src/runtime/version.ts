@@ -1,3 +1,3 @@
-// The package layer supplies its release version before this API is distributed.
-export const runtimeVersion = '0.0.0';
+import { version } from '../../packages/runtime/package.json';
+export const runtimeVersion: string = version;
 export { fontMetricsVersion } from '../model/font-faces';

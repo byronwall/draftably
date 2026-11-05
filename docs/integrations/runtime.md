@@ -5,7 +5,7 @@ The runtime compiles `.draft` text asynchronously and returns an SVG string. It 
 ## Render
 
 ```ts
-import { renderSvg } from '../../src/runtime';
+import { renderSvg } from '@draftably/runtime';
 
 const result = await renderSvg('node web "Web"\n');
 if (result.ok) {
@@ -21,7 +21,7 @@ Links and raw source metadata are disabled by default. `state` selects a declare
 ## Validate
 
 ```ts
-import { validate } from '../../src/runtime';
+import { validate } from '@draftably/runtime';
 
 const result = await validate('node web "Web"\n', { sourceId: 'architecture.draft' });
 ```
@@ -50,4 +50,4 @@ Safe links open in `_self` by default. `target: '_blank'` adds `noopener norefer
 
 `includeSource: true` adds recoverable `.draft` source metadata. It can expose comments and paths authored in the source. The default omits this metadata; diagnostic `sourceId` is never included. The source reader accepts legacy metadata and the new namespaced form.
 
-Successful results include runtime, DSL, font, and render-context identities in `provenance`. They describe this result; they are not a public compiled-scene format. Package installation is added in the next stack layer.
+Successful results include runtime, DSL, font, and render-context identities in `provenance`. They describe this result; they are not a public compiled-scene format. The package ships ESM, TypeScript declarations, exact font assets, and a no-bundler browser entry.
