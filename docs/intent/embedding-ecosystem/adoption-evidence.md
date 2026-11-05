@@ -79,3 +79,6 @@ plugins. Registry publication remains a separate release step.
 
 The [original implementation evidence](implementation-evidence.md) records the
 first eight implementation PRs above the research plan.
+
+The [craft pass](craft-evidence.md) records the later input, lifecycle, and setup
+checks. Its fixes remain in the PRs that own those behaviors.

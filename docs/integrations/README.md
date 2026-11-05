@@ -90,7 +90,7 @@ pnpm add markdown-it
 Save this as `render-markdown.ts` and run `node render-markdown.ts`:
 
 ````ts
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import MarkdownIt from 'markdown-it';
 import { createMarkdownItDraft } from '@draftably/markdown/markdown-it';
 import { createFileAssets } from '@draftably/markdown/files';
@@ -100,8 +100,9 @@ const adapter = createMarkdownItDraft({ emitAsset: assets.emitAsset });
 const md = new MarkdownIt().use(adapter.plugin);
 const source = '```draft\nnode api "API"\n```';
 const { html } = await adapter.render(md, source);
+await mkdir('dist', { recursive: true });
 await writeFile('dist/index.html', html);
-console.log('Wrote dist/index.html and its diagram image.');
+console.log('Wrote dist/index.html');
 ````
 
 Serve `dist/` as the site root. The output is an ordinary image with alt text
