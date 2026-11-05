@@ -881,20 +881,17 @@ function compute(input, rawOptions = {}) {
     opened.add(open);
     return open;
   }
-  // Whether route `r` of edge `e` reads against the flow: off the reading direction's sides for
-  // a forward edge, or out of or into a side that points away from its other end.
+  // Whether route `r` of forward edge `e` reads against its layout's direction: out of or into
+  // a backward side (`BACK_OUT`, `BACK_IN`).
   function against(e, r) {
-    if (e.from === e.to) return false;
     const ca = center(rects.get(e.from)),
       cb = center(rects.get(e.to)),
       flow = flowOf(e);
-    if (flow && (flow === 'down' ? cb.y - ca.y : cb.x - ca.x) > 20)
-      return r.fromSide !== TRAILING[flow] || r.toSide !== LEADING[flow];
-    const v = vector[r.fromSide],
-      w = vector[r.toSide];
     return (
-      v.x * (cb.x - ca.x) + v.y * (cb.y - ca.y) < -0.01 ||
-      w.x * (ca.x - cb.x) + w.y * (ca.y - cb.y) < -0.01
+      !!flow &&
+      e.from !== e.to &&
+      (flow === 'down' ? cb.y - ca.y : cb.x - ca.x) > 20 &&
+      (BACK_OUT[flow].includes(r.fromSide) || BACK_IN[flow].includes(r.toSide))
     );
   }
   function findIn(e, used, old, open, wall = []) {
