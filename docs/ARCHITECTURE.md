@@ -31,19 +31,20 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 
 Each module owns one concern and exposes signals plus the actions that change them.
 
-| File                        | Responsibility                                                              |
-| --------------------------- | --------------------------------------------------------------------------- |
-| `document.ts`               | The committed diagram store, selection, undo/redo and browser persistence.  |
-| `editor.ts`                 | Tool, drag feedback, inline editing and camera helpers. Never saved.        |
-| `scene.ts`                  | Derived drawing data: visible graph, rectangles and memoized routes.        |
-| `actions.ts`                | Editor operations used by the UI; each wraps a model edit in one undo step. |
-| `commands.ts`               | Named commands shared by toolbar, menus and shortcuts.                      |
-| `keyboard.ts`, `pointer.ts` | Global shortcuts, clipboard and canvas gestures.                            |
-| `layout.ts`                 | Layout passes, previews, the layout lab's settings and checkpoints.         |
-| `sculpt.ts`                 | The layout timeline and the layout brush.                                   |
-| `comparison.ts`             | Compare: candidates, cameras, overlay layers and Apply.                     |
-| `files.ts`                  | Import, image embedding and JSON / SVG / PNG export.                        |
-| `ui.ts`, `toast.ts`         | Panels, menus, dialogs and status messages.                                 |
+| File                        | Responsibility                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `document.ts`               | The committed diagram store, selection, undo/redo and browser persistence.                        |
+| `editor.ts`                 | Tool, drag feedback, inline editing and camera helpers. Never saved.                              |
+| `scene.ts`                  | Derived drawing data: visible graph, rectangles and memoized routes.                              |
+| `actions.ts`                | Editor operations used by the UI; each wraps a model edit in one undo step.                       |
+| `commands.ts`               | Named commands shared by toolbar, menus and shortcuts.                                            |
+| `keyboard.ts`, `pointer.ts` | Global shortcuts, clipboard and canvas gestures.                                                  |
+| `canvas-text.ts`            | Text ids (`@note:0`, `@legend:1`, `@phase:id`) for text that is not an object, and its selection. |
+| `layout.ts`                 | Layout passes, previews, the layout lab's settings and checkpoints.                               |
+| `sculpt.ts`                 | The layout timeline and the layout brush.                                                         |
+| `comparison.ts`             | Compare: candidates, cameras, overlay layers and Apply.                                           |
+| `files.ts`                  | Import, image embedding and JSON / SVG / PNG export.                                              |
+| `ui.ts`, `toast.ts`         | Panels, menus, dialogs and status messages.                                                       |
 
 ### Rules
 

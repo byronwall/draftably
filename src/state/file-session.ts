@@ -14,6 +14,7 @@
  * An example works the same way, except that nothing is sent to disk: its edits live in browser
  * storage until the user saves the example as a new file.
  */
+import { selectedText } from './canvas-text';
 import { batch, createRoot, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 import { checkSource, compile, type Diagnostic, type Scene } from '../dsl/compile';
@@ -270,7 +271,8 @@ export async function showSource(
     routeSink.awaiting(!!pending);
     // A drag in a file keeps quick routes until its saved version is drawn.
     routeSink.quick(false);
-    setSelection(typeof selection === 'function' ? selection() : selection);
+    // Selected text (a note, a legend row) stays selected across its own save.
+    if (!selectedText()) setSelection(typeof selection === 'function' ? selection() : selection);
     state.setScene(scene);
     state.setSourceError(null);
     state.setCompiling(false);

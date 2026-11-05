@@ -528,7 +528,7 @@ function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 
 }
 
 /** Inset of a phase label from its band's top left corner. */
-const PHASE_TAB = 8;
+export const PHASE_TAB = 8;
 
 /** A thin stripe across the top of a box, inside its rounded corners. */
 export function accentPath(r: Rect, radius: number) {

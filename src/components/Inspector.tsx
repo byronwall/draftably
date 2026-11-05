@@ -26,7 +26,16 @@ import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
 import { setColor, setLayoutIntent, setShade } from '../state/actions';
 import { runCommand, type CommandId } from '../state/commands';
-import { doc, mutate, selectedIds, selectItems, transact } from '../state/document';
+import { clearSelection, doc, mutate, selectedIds, selectItems, transact } from '../state/document';
+import {
+  parseTextId,
+  removeText,
+  selectedText,
+  setTextValue,
+  TEXT_NAMES,
+  textValue,
+} from '../state/canvas-text';
+import { NOTE_SIDES, noteSide, type Note } from '../model/note';
 import { fileMode } from '../state/file-session';
 import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
@@ -48,6 +57,7 @@ export function Inspector() {
   return (
     <fieldset class="panel-scroll inspector" disabled={timelineOpen()}>
       <Switch fallback={<NothingSelected />}>
+        <Match when={selectedText()}>{id => <TextInspector id={id()} />}</Match>
         <Match when={ids().length > 1}>
           <MultipleSelected count={ids().length} />
         </Match>
@@ -174,6 +184,63 @@ function TextField(props: { label: string; value: string; onCommit: (value: stri
     <Field label={props.label}>
       <input value={props.value} onChange={e => props.onCommit(e.currentTarget.value)} />
     </Field>
+  );
+}
+
+const NOTE_SIDE_OPTIONS = NOTE_SIDES.map(s => [s, capitalize(s)] as const);
+
+/** A title, note, legend row or phase label: its words, and for a note where it sits. */
+function TextInspector(props: { id: string }) {
+  const kind = () => parseTextId(props.id)!.kind;
+  const value = () => textValue(doc, props.id);
+  const note = () =>
+    kind() === 'note' ? doc.appearance.notes?.[Number(parseTextId(props.id)!.key)] : undefined;
+  const setNote = (label: string, fn: (n: Note) => void) =>
+    edit(label, d => fn(d.appearance.notes![Number(parseTextId(props.id)!.key)]));
+  return (
+    <Show when={value() !== undefined} fallback={<NothingSelected />}>
+      <Heading title={capitalize(TEXT_NAMES[kind()])} />
+      <Section>
+        <TextField
+          label="Text"
+          value={value()!}
+          onCommit={v => {
+            edit(`Edit ${TEXT_NAMES[kind()]}`, d => setTextValue(d, props.id, v.trim()));
+            if (!v.trim()) clearSelection();
+          }}
+        />
+        <Show when={note()?.near}>
+          {near => (
+            <SelectField
+              label={`Beside ${findObject(doc, near())?.title ?? findEdge(doc, near())?.label ?? near()}`}
+              value={noteSide(doc, note()!)}
+              options={NOTE_SIDE_OPTIONS}
+              onChange={v => setNote('Move note', n => void (n.side = v))}
+            />
+          )}
+        </Show>
+        <p class="hint">
+          Double-click it on the canvas to edit in place.
+          {kind() === 'note'
+            ? ' Drag it beside another shape, container or message to move it.'
+            : ''}
+        </p>
+      </Section>
+      <Show when={kind() === 'note' || kind() === 'legend'}>
+        <Section>
+          <button
+            type="button"
+            class="button"
+            onClick={() => {
+              edit(`Delete ${TEXT_NAMES[kind()]}`, d => removeText(d, props.id));
+              clearSelection();
+            }}
+          >
+            Delete {TEXT_NAMES[kind()]}
+          </button>
+        </Section>
+      </Show>
+    </Show>
   );
 }
 

@@ -32,6 +32,8 @@ export interface DragFeedback {
   guides?: Guide[];
   dropTargetId?: string | null;
   resizingContainer?: boolean;
+  /** A note being dragged: its box, and the object it would sit beside if dropped. */
+  text?: { rect: Rect; near?: string };
 }
 
 const state = createRoot(() => {

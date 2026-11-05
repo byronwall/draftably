@@ -34,6 +34,7 @@ import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Frame } from './Frame';
 import { Notes } from './Notes';
+import { TextHits } from './TextHits';
 import { StateBar } from './StateBar';
 import { drawnDoc } from '../../state/emphasis';
 import { ZoomControls } from './ZoomControls';
@@ -219,6 +220,9 @@ export function Canvas() {
           </g>
           <Show when={doc.appearance.notes?.length}>
             <Notes />
+          </Show>
+          <Show when={!empty()}>
+            <TextHits />
           </Show>
           <Overlay />
         </g>

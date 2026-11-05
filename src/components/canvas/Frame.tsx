@@ -117,7 +117,7 @@ export function Frame() {
             font-size={String(line.type.size)}
             font-weight={String(line.type.weight)}
             fill={line.fill}
-            data-heading={HEADING_EDIT[line.key]}
+            data-text={HEADING_EDIT[line.key]}
           >
             {line.text}
           </text>
@@ -135,7 +135,7 @@ export function Frame() {
                 font-family={look().annotation.family}
                 font-size={String(look().annotation.size)}
                 fill={look().muted}
-                data-heading={HEADING_EDIT[key]}
+                data-text={HEADING_EDIT[key]}
               >
                 {key === 'title' ? 'Double-click to add a title' : 'Double-click to add a subtitle'}
               </text>

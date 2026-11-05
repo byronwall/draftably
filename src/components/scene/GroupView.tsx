@@ -101,7 +101,6 @@ export function GroupView(props: GroupViewProps) {
         fill={color().ink}
         fill-opacity={paint().inkFade}
         text-decoration={paint().strike ? 'line-through' : undefined}
-        pointer-events="none"
       >
         {truncateText(group().title, Math.max(40, hull()[0].w - 2 * SOFT_PAD), look().annotation)}
       </text>
@@ -203,7 +202,10 @@ export function GroupView(props: GroupViewProps) {
       </Show>
       <Show when={chrome()?.ruler}>
         {ruler => (
-          <g class="cells-ruler" pointer-events="none">
+          <g
+            class="cells-ruler"
+            data-text-hint="Bit numbers come from the cells' sizes. Edit a cell's size to change them."
+          >
             <For each={ruler().ticks}>
               {t => (
                 <text
@@ -293,6 +295,7 @@ export function GroupView(props: GroupViewProps) {
           font-family={look().annotation.family}
           font-size="10"
           fill={color().ink}
+          data-text-hint="Expand the container to see and edit its shapes."
         >
           {shapeCount()} shapes
         </text>

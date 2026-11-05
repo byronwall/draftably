@@ -40,11 +40,13 @@ import {
   persist,
   restoreDocument,
   selectItems,
+  selectText,
   selection,
   setCamera,
   setDoc,
   setSelection,
   snapshot,
+  transact,
 } from './document';
 import {
   connectFrom,
@@ -66,7 +68,9 @@ import {
   type Guide,
 } from './editor';
 import { layoutPreview, acceptPreview } from './layout';
-import { geometry, setQuickRouting, visibleScene } from './scene';
+import { noteAnchor, noteSide } from '../model/note';
+import { parseTextId } from './canvas-text';
+import { geometry, routes, sceneRects, setQuickRouting, viewerFrame, visibleScene } from './scene';
 import {
   brushPointerDown,
   brushPointerMove,
@@ -88,6 +92,7 @@ type DragKind =
   | 'connect'
   | 'objects'
   | 'edge-click'
+  | 'text'
   | 'marquee';
 
 interface Gesture {
@@ -104,6 +109,8 @@ interface Gesture {
   clickId?: string;
   handle?: edits.ResizeHandle;
   rect?: NodeLayout;
+  /** A dragged note's box when the drag began. */
+  noteRect?: Rect;
   shape?: DrawTool;
   index?: number;
   point?: Point;
@@ -116,6 +123,8 @@ interface Gesture {
   keepParent?: boolean;
   dropId?: string | null;
   doubleCandidate?: boolean;
+  /** An edge click that started on the connection's label. */
+  onLabel?: boolean;
   previousSelection?: ReadonlySet<string>;
   guides?: Guide[];
 }
@@ -295,6 +304,7 @@ export function onPointerDown(e: PointerEvent) {
     resize = targetData(t, '[data-resize]'),
     waypoint = targetData(t, '[data-waypoint]'),
     edgeLabel = t.closest('[data-edge-label]'),
+    text = targetData(t, '[data-text]')?.text,
     special = collapse || resize || waypoint;
   // Leaving the title field commits it before the canvas handles the click.
   if (
@@ -326,6 +336,20 @@ export function onPointerDown(e: PointerEvent) {
     return;
   }
   if (layoutPreview()) acceptPreview();
+  if (text && !isDrawTool(tool()) && tool() !== 'connect') {
+    e.preventDefault();
+    selectText(text);
+    const note = parseTextId(text)?.kind === 'note';
+    begin('text', e, canvas, {
+      id: text,
+      noteRect: note ? viewerFrame().notes[Number(parseTextId(text)!.key)]?.rect : undefined,
+      doubleCandidate:
+        lastClick?.id === text &&
+        performance.now() - lastClick.time < 380 &&
+        Math.hypot(e.clientX - lastClick.x, e.clientY - lastClick.y) < 7,
+    });
+    return;
+  }
   if (collapse) {
     e.preventDefault();
     actions.toggleCollapse(objectId);
@@ -407,6 +431,7 @@ export function onPointerDown(e: PointerEvent) {
     begin('edge-click', e, canvas, {
       id: objectId,
       doubleCandidate: lastClick?.id === objectId && performance.now() - lastClick.time < 350,
+      onLabel: !!edgeLabel,
     });
     selectItems([objectId], { add: e.shiftKey, toggle: e.shiftKey });
     return;
@@ -523,6 +548,8 @@ export function onPointerMove(e: PointerEvent) {
       x: rounded(g.point!.x + dx),
       y: rounded(g.point!.y + dy),
     });
+  } else if (g.kind === 'text') {
+    if (g.noteRect) moveNote(g, dx, dy);
   } else if (g.kind === 'edge-label') {
     setDoc('layout', 'edges', g.id!, cfg => ({
       ...cfg,
@@ -585,6 +612,36 @@ function moveObjects(g: Gesture, dx: number, dy: number, e: PointerEvent) {
   setDrag({ kind: 'objects', guides, dropTargetId: g.keepParent ? null : g.dropId });
 }
 
+/** Where a dragged note would go: its box under the pointer and the object it would sit by. */
+function noteTarget(g: Gesture) {
+  return noteAnchor(
+    g.current,
+    sceneRects(),
+    doc.layout.sequence ? routes().filter(r => doc.layout.edges[r.id]?.row !== undefined) : [],
+  );
+}
+
+function moveNote(g: Gesture, dx: number, dy: number) {
+  const r = g.noteRect!;
+  setDrag({
+    kind: 'text',
+    text: { rect: { ...r, x: r.x + dx, y: r.y + dy }, near: noteTarget(g)?.near },
+  });
+}
+
+/** A dropped note sits beside the object it was dropped by, on that side: `near=` and `side=`. */
+function finishNoteMove(g: Gesture) {
+  const i = Number(parseTextId(g.id)!.key),
+    note = doc.appearance.notes?.[i],
+    target = noteTarget(g);
+  if (!note) return;
+  if (!target) return toast('Drop a note beside a shape, container or message.');
+  if (note.near === target.near && noteSide(doc, note) === target.side) return;
+  transact('Move note', d => {
+    Object.assign(d.appearance.notes![i], target);
+  });
+}
+
 // --- Pointer up ------------------------------------------------------------------------------
 
 export function onPointerUp(e: PointerEvent | null) {
@@ -608,7 +665,7 @@ export function onPointerUp(e: PointerEvent | null) {
       suppressDoubleClickUntil = performance.now() + 450;
       lastClick = null;
       if (g.kind === 'waypoint') actions.removeWaypoint(g.id!, g.index!);
-      else if (g.kind === 'edge-click') actions.addWaypointAt(g.id!, g.start);
+      else if (g.kind === 'edge-click' && !g.onLabel) actions.addWaypointAt(g.id!, g.start);
       else actions.startInlineEdit(g.id!);
       return;
     }
@@ -617,6 +674,7 @@ export function onPointerUp(e: PointerEvent | null) {
     return;
   }
   lastClick = null;
+  if (g.kind === 'text') return finishNoteMove(g);
   if (g.kind === 'objects') {
     // Moving a container does not mark its children as manually placed.
     setDoc(
@@ -702,17 +760,19 @@ export function onDoubleClick(e: MouseEvent) {
   const t = e.target as Element,
     // The canvas holds the pointer during a background gesture, so the heading is found by position.
     under = document.elementFromPoint(e.clientX, e.clientY) ?? t,
-    heading = targetData(under, '[data-heading]'),
+    text = targetData(under, '[data-text]')?.text,
+    hint = targetData(under, '[data-text-hint]')?.textHint,
     waypoint = targetData(t, '[data-waypoint]'),
-    object = targetData(t, '[data-kind]');
-  if (heading) return actions.startInlineEdit(heading.heading!);
+    object = targetData(t, '[data-kind]') ?? targetData(under, '[data-kind]');
+  if (text) return actions.startInlineEdit(text);
+  if (hint) return toast(hint);
   if (under.closest('[data-frame-edge]')) return;
   if (waypoint && object?.id) return actions.removeWaypoint(object.id, Number(waypoint.waypoint));
   if (object?.kind === 'node') return actions.startInlineEdit(object.id!);
-  if (object?.kind === 'group' && t.closest('[data-group-header]'))
+  if (object?.kind === 'group' && under.closest('[data-group-header],.group-title'))
     return actions.startInlineEdit(object.id!);
   if (object?.kind === 'edge') {
-    if (t.closest('[data-edge-label]')) actions.startInlineEdit(object.id!);
+    if (under.closest('[data-edge-label]')) actions.startInlineEdit(object.id!);
     else actions.addWaypointAt(object.id!, screenToWorld(e.clientX, e.clientY));
     return;
   }

@@ -60,6 +60,7 @@ import {
 } from './editor';
 import { discardPreview, setDocumentOpener } from './layout';
 import { geometry, resetRoutes, routesById, routingReport, setAdoptedRoutes } from './scene';
+import { parseTextId, setTextValue, TEXT_NAMES, textId, textValue } from './canvas-text';
 import { toast } from './toast';
 import { confirmAction } from './ui';
 
@@ -93,17 +94,15 @@ onSourceIdMap(mapId => {
 });
 
 /** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
-export const HEADING_EDIT = { title: '@title', subtitle: '@subtitle' } as const;
-const headingKey = (id: string) =>
-  id === HEADING_EDIT.title ? 'title' : id === HEADING_EDIT.subtitle ? 'subtitle' : undefined;
+export const HEADING_EDIT = { title: textId('title'), subtitle: textId('subtitle') } as const;
 
 export function startInlineEdit(id: string) {
-  const key = headingKey(id);
-  if (key) {
+  const text = parseTextId(id) && textValue(doc, id);
+  if (text !== undefined) {
     finishInlineEdit(true);
     batch(() => {
       setConnectFrom(null);
-      setInlineDraft(doc.appearance.heading?.[key] ?? '');
+      setInlineDraft(text);
       setInlineEditId(id);
     });
     return;
@@ -124,15 +123,12 @@ export function finishInlineEdit(save = true) {
   setInlineEditId(null);
   if (!save) return;
   const value = inlineDraft().trim(),
-    key = headingKey(id);
-  if (key) {
-    if ((doc.appearance.heading?.[key] ?? '') !== value)
-      transact(key === 'title' ? 'Edit title' : 'Edit subtitle', d => {
-        const heading = (d.appearance.heading ??= {});
-        if (value) heading[key] = value;
-        else delete heading[key];
-        if (key === 'title') d.title = value;
-      });
+    text = parseTextId(id);
+  if (text) {
+    if (textValue(doc, id) !== value)
+      transact(`Edit ${TEXT_NAMES[text.kind]}`, d => setTextValue(d, id, value));
+    // An emptied note or legend row is gone, and later ones move up an index.
+    if (!value) clearSelection();
     return;
   }
   const edge = findEdge(doc, id);
