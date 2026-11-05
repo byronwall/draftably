@@ -1,0 +1,46 @@
+diagram "How code reaches each Web app K8s stack" version=1
+subtitle "Releases promote by branch; Sync applies main to any edited shard"
+config link-base="https://github.com/example/webapp/blob/main/"
+
+group branches "Git branches" color=slate
+node main "main" in=branches
+node staging_br "deploy/STAGING" in=branches
+node prod_br "deploy/production" in=branches
+
+group workflows "GitHub workflows" color=blue
+node cd_latest "CD - latest" in=workflows href=".github/workflows/webapp-cd-latest.yml"
+node cd_staging "CD - staging" in=workflows href=".github/workflows/webapp-cd-staging.yml"
+node cd_prod "CD - prod" in=workflows href=".github/workflows/webapp-cd-prod.yml"
+node sync "Infrastructure Sync" in=workflows color=amber shade=400 href=".github/workflows/webapp-v2-sync.yml"
+
+group stacks "K8s shards" color=mint
+node latest "latest/*" in=stacks
+node staging "staging/*" in=stacks
+node prod "prod/*" in=stacks color=red shade=200
+
+legend blue "Release path"
+legend amber "Sync (outside a release)" shade=400
+legend red "Customer-facing" shade=200
+legend mint "K8s shards"
+legend line solid "Release: new image + that branch's .tf"
+legend line dashed "Sync: main's .tf, current image"
+
+edge promote1 main -> staging_br "release PR"
+edge promote2 staging_br -> prod_br "release PR"
+edge t_latest main -> cd_latest "every merge"
+edge t_staging staging_br -> cd_staging "merge"
+edge t_prod prod_br -> cd_prod "merge"
+edge t_sync main -> sync "config changed"
+edge a_latest cd_latest -> latest to=left
+edge a_staging cd_staging -> staging to=left
+edge a_prod cd_prod -> prod to=left
+edge s_any sync -> stacks "any shard whose config changed" kind=async
+
+layout root engine=layered direction=right
+
+stay branches x=47 y=119
+stay main x=0 y=0
+stay staging_br x=230 y=0
+stay prod_br x=481 y=3
+stay workflows x=879 y=0
+stay stacks x=1198 y=19
