@@ -165,9 +165,38 @@ export function translateEdit(input: EditInput): EditResult {
     }
   };
 
-  // The heading has its own lines; the rest of the appearance is the `theme` line.
-  const look = (d: Diagram) => ({ ...d.appearance, heading: undefined });
+  // The heading, notes and key have their own lines; the rest of the appearance is the `theme` line.
+  const look = (d: Diagram) => ({
+    ...d.appearance,
+    heading: undefined,
+    notes: undefined,
+    footnotes: undefined,
+    legend: undefined,
+  });
   if (!same(look(before), look(after))) writeAppearance(source, after.appearance);
+  writeRows(source, 'note', before.appearance.notes, after.appearance.notes, (st, n) => {
+    st.args[0] = quoted(n.text);
+    setAttr(st, 'near', n.near ? bare(n.near) : undefined);
+    setAttr(st, 'side', n.near && n.side ? bare(n.side) : undefined);
+  });
+  writeRows(
+    source,
+    'footnote',
+    before.appearance.footnotes,
+    after.appearance.footnotes,
+    (st, n) => {
+      st.args = [...(n.mark ? [bare(n.mark)] : []), quoted(n.text)];
+    },
+  );
+  writeRows(source, 'legend', before.appearance.legend, after.appearance.legend, (st, e) => {
+    st.args[st.args.length - 1] = quoted(e.label);
+  });
+  // A phase's label is in its `phase` line; its messages never change on the canvas.
+  const phases = new Map(before.layout.sequence?.phases.map(p => [p.id, p.label]));
+  for (const p of after.layout.sequence?.phases ?? []) {
+    const st = statements(source).find(x => x.command === 'phase' && x.args[0]?.value === p.id);
+    if (st && phases.get(p.id) !== p.label) st.args[1] = quoted(p.label);
+  }
 
   // Title, frame width and subtitle.
   const head = before.appearance.heading ?? {},
@@ -300,6 +329,31 @@ export function translateEdit(input: EditInput): EditResult {
 
 function writeShade(s: Statement, shade: number | undefined) {
   setAttr(s, 'shade', shade === undefined ? undefined : bare(shade));
+}
+
+/**
+ * Rewrite the `command` statements (`note`, `legend`) whose rows changed, matched by order. Rows
+ * an edit removes are taken from where the lists first differ; this never adds rows.
+ */
+function writeRows<T>(
+  source: SourceDoc,
+  command: string,
+  before: readonly T[] = [],
+  after: readonly T[] = [],
+  write: (s: Statement, row: T) => void,
+) {
+  const rows = statements(source).filter(s => s.command === command);
+  let old = [...before];
+  if (after.length < old.length) {
+    let i = 0;
+    while (i < after.length && same(old[i], after[i])) i++;
+    const gone = rows.splice(i, old.length - after.length);
+    removeWhere(source, x => gone.includes(x));
+    old = [...old.slice(0, i), ...old.slice(i + gone.length)];
+  }
+  after.forEach((row, i) => {
+    if (rows[i] && !same(old[i], row)) write(rows[i], row);
+  });
 }
 
 const colorKey = (s: Statement) => `${s.args[0]?.value}:${getAttr(s, 'shade')?.value ?? 500}`;

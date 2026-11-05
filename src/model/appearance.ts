@@ -5,6 +5,7 @@
  *
  * Diagram appearance is separate from the editor's light or dark mode.
  */
+import type { Footnote } from './footnote';
 import type { Note } from './note';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
@@ -81,6 +82,8 @@ export interface DiagramAppearance {
   heading?: Heading;
   /** Sentences drawn on the diagram without moving it, from `note` statements. */
   notes?: Note[];
+  /** Entries of the block between the drawing and the key, from `footnote` statements. */
+  footnotes?: Footnote[];
   /** Panel labels from a `compare` statement: draw the old and new versions side by side. */
   compare?: {
     /** Set by `draftably compare`: the changes the older panel draws in their new version. */

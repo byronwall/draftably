@@ -373,6 +373,8 @@ export interface Model {
   legendLines: number[];
   /** Source line of each `note`, in order. */
   noteLines: number[];
+  /** Source line of each `footnote`, in order. */
+  footnoteLines: number[];
   /** Source line of each ID an emphasis state lists, by `state:id`. */
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
@@ -500,6 +502,7 @@ export function parseModel(source: string | SourceDoc): Model {
     colorLines: new Map(),
     legendLines: [],
     noteLines: [],
+    footnoteLines: [],
     stateLines: new Map(),
     phases: [],
     warnings: [],
@@ -959,6 +962,25 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(attrs.has('width') ? { width: num('width', NOTE_WIDTH, 80, 1200) } : {}),
         });
         m.noteLines.push(line);
+        break;
+      }
+      case 'footnote': {
+        // `footnote "text"`, or `footnote 1 "text"` with a marker that labels point at as [1].
+        count(1, 2);
+        allow([]);
+        const body = args[args.length - 1],
+          mark = args.length === 2 ? args[0] : undefined;
+        assert(body.quoted && body.value.trim(), 'A footnote needs its text in quotes.');
+        assert(
+          !mark || (!mark.quoted && /^[A-Za-z0-9*]{1,3}$/.test(mark.value)),
+          'A footnote marker is a short word: footnote 1 "text".',
+        );
+        if (mark) once(`footnote:${mark.value}`);
+        (m.appearance.footnotes ??= []).push({
+          text: body.value,
+          ...(mark ? { mark: mark.value } : {}),
+        });
+        m.footnoteLines.push(line);
         break;
       }
       case 'routing':

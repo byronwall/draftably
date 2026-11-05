@@ -25,6 +25,7 @@ import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { formatSource } from '../dsl/syntax';
 import { withState } from '../model/status';
+import { svgHref } from './links';
 import { findChrome } from './png';
 import { renderSvg } from './svg';
 
@@ -105,7 +106,10 @@ async function sheets(inputs: PdfInput[], opts: PdfOptions) {
       title = doc.appearance.heading?.title || doc.title || path.basename(input.name, '.draft');
     const states = opts.states ? (doc.appearance.states ?? []) : [];
     const pages: Sheet[] = (states.length ? states : [undefined]).map(state => {
-      const svg = renderSvg(state ? withState(doc, state.id) : doc);
+      // Links are written as `inspect --svg` writes them: joined to a URL `link-base`.
+      const svg = renderSvg(state ? withState(doc, state.id) : doc, {
+        href: svgHref(scene, input.name),
+      });
       const [, w, h] = /width="([\d.]+)" height="([\d.]+)"/.exec(svg)!.map(Number);
       return { title: state ? `${title}: ${state.label}` : title, svg, w, h };
     });

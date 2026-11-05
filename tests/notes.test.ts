@@ -7,6 +7,11 @@ import { removeEdge, removeReferences, removeWhere } from '../src/dsl/source-edi
 import { printSource, readSource } from '../src/dsl/syntax';
 import { contains, overlaps } from '../src/model/geometry';
 import { placeNotes } from '../src/model/note';
+import { translateEdit } from '../src/dsl/translate';
+import { clone } from '../src/model/geometry';
+import { normalize } from '../src/model/document';
+import type { Diagram } from '../src/model/types';
+import { setTextValue, textId } from '../src/state/canvas-text';
 import { computeRoutes } from '../src/model/routes';
 
 const SOURCE = `diagram "Plans" version=1
@@ -124,5 +129,54 @@ describe('notes on messages', () => {
       removeReferences(d, 'user');
       removeWhere(d, s => s.command === 'node' && s.args[0]?.value === 'user');
     });
+  });
+
+  it('saves canvas edits to notes, legend rows and phase labels on their own lines', () => {
+    const source = `diagram "Sign in" version=1
+node app "App"
+node auth "Auth"
+edge m1 app -> auth "verify"
+edge m2 auth -> app "token"
+# Why the token is short.
+note "Lasts 15 minutes." near=m2
+note "Second note." near=app
+phase check "Check" m1
+legend violet "Owns credentials"
+layout root sequence
+`;
+    const edit = (fn: (d: Diagram) => void) => {
+      const scene = checkSource(source),
+        before = projectScene(scene),
+        after = clone(before);
+      fn(after);
+      return printSource(
+        translateEdit({
+          source: readSource(source),
+          scene,
+          before: normalize(JSON.parse(JSON.stringify(before))),
+          after: normalize(JSON.parse(JSON.stringify(after))),
+          label: 'Edit',
+          selection: [],
+        }).source,
+      );
+    };
+    expect(
+      edit(d => {
+        setTextValue(d, textId('note', 0), 'Lasts 5 minutes.');
+        Object.assign(d.appearance.notes![1], { near: 'auth', side: 'left' });
+        setTextValue(d, textId('legend', 0), 'Holds credentials');
+        setTextValue(d, textId('phase', 'check'), 'Checks');
+      }),
+    ).toBe(
+      source
+        .replace('"Lasts 15 minutes."', '"Lasts 5 minutes."')
+        .replace('near=app', 'near=auth side=left')
+        .replace('"Owns credentials"', '"Holds credentials"')
+        .replace('"Check"', '"Checks"'),
+    );
+    // An emptied note is removed; the comment above the next line stays where it was.
+    expect(edit(d => setTextValue(d, textId('note', 0), ''))).toBe(
+      source.replace('note "Lasts 15 minutes." near=m2\n', ''),
+    );
   });
 });

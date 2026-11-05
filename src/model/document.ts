@@ -18,6 +18,7 @@ import {
 import { FONT_ROLES } from './fonts';
 import { EDITORS, type FileConfig } from './link';
 import { MARKERS } from './markers';
+import type { Footnote } from './footnote';
 import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
@@ -505,6 +506,11 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
         ...(typeof n.width === 'number' && n.width > 0 ? { width: n.width } : {}),
       });
   if (notes.length) out.notes = notes;
+  const footnotes: Footnote[] = [];
+  for (const n of Array.isArray(input.footnotes) ? input.footnotes : [])
+    if (n && typeof n.text === 'string')
+      footnotes.push({ text: n.text, ...(typeof n.mark === 'string' ? { mark: n.mark } : {}) });
+  if (footnotes.length) out.footnotes = footnotes;
   const cfg = input.config;
   if (cfg && typeof cfg === 'object') {
     const config: FileConfig = {};

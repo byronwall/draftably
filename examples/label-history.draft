@@ -1,0 +1,23 @@
+diagram "How a label reaches the page" version=1
+subtitle "Three recent fixes, one per step"
+
+config link-base="https://github.com/byronwall/draftably/"
+
+# The labels point at footnotes ([1]); the footnotes carry the detail and link each PR.
+node file "Source file" shape=pill color=sky
+node compiler "Compiler"
+node router "Router" color=violet
+node renderer "Renderer" color=amber
+
+edge m1 file -> compiler "label text"
+edge m2 compiler -> compiler "wrap title lines evenly [1]"
+edge m3 compiler -> router "boxes and label spots"
+edge m4 router -> router "bring skip lines onto a diamond's top [2]"
+edge m5 router -> renderer "routes"
+edge m6 renderer -> renderer "paint label backgrounds [3]"
+
+footnote 1 "[#436](pull/436) fits explicit title lines and wraps titles evenly."
+footnote 2 "[#438](pull/438) brings a skip line onto a diamond's top, so lines do not cross."
+footnote 3 "[#442](pull/442) draws each label's background in the surface under it, so a label in a tinted band keeps the band's tint."
+
+layout root sequence

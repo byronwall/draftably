@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Match, Switch } from 'solid-js';
 import {
   inspectorWidth,
   resetInspectorWidth,
@@ -11,6 +11,7 @@ import { ArrangePanel } from './ArrangePanel';
 import { IconButton, tip } from './controls';
 import { Inspector } from './Inspector';
 import { ResizeHandle } from './ResizeHandle';
+import { SourcePanel } from './SourcePanel';
 
 /** The right side: the selection's properties and the diagram's arrangement, one at a time. */
 export function RightPanel() {
@@ -36,6 +37,15 @@ export function RightPanel() {
           >
             Arrange
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={rightTab() === 'source'}
+            {...tip('Source', undefined, 'The .draft text, as your edits rewrite it.')}
+            onClick={() => setRightTab('source')}
+          >
+            Source
+          </button>
         </div>
         <IconButton
           icon="close"
@@ -44,9 +54,14 @@ export function RightPanel() {
           onClick={() => setInspectorOpen(false)}
         />
       </header>
-      <Show when={rightTab() === 'arrange'} fallback={<Inspector />}>
-        <ArrangePanel />
-      </Show>
+      <Switch fallback={<Inspector />}>
+        <Match when={rightTab() === 'arrange'}>
+          <ArrangePanel />
+        </Match>
+        <Match when={rightTab() === 'source'}>
+          <SourcePanel />
+        </Match>
+      </Switch>
       <ResizeHandle
         edge="left"
         label="Resize panel"

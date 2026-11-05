@@ -9,6 +9,7 @@ import { normalize } from '../model/document';
 import { findEntity } from '../model/graph';
 import { DEFAULT_SAMPLE, loadSample } from '../model/samples';
 import type { Camera, Diagram } from '../model/types';
+import { setSelectedText } from './canvas-text';
 import { toast } from './toast';
 
 const LEGACY_KEYS = ['diagram-studio-v4', 'diagram-studio-v3', 'diagram-studio-v2'];
@@ -72,10 +73,12 @@ export const singleSelection = () => {
 };
 
 export function setSelection(ids: Iterable<string>) {
+  setSelectedText(null);
   state.setSelectionSignal(new Set([...ids].filter(id => findEntity(state.doc, id))));
 }
 
 export function selectItems(ids: string[], { add = false, toggle = false } = {}) {
+  setSelectedText(null);
   const next = new Set<string>(add ? state.selection() : []);
   for (const id of ids) {
     if (!findEntity(state.doc, id)) continue;
@@ -85,7 +88,18 @@ export function selectItems(ids: string[], { add = false, toggle = false } = {})
   state.setSelectionSignal(next);
 }
 
-export const clearSelection = () => state.setSelectionSignal(new Set<string>());
+export const clearSelection = () =>
+  batch(() => {
+    setSelectedText(null);
+    state.setSelectionSignal(new Set<string>());
+  });
+
+/** Select a title, note, legend row or phase label (a text id) in place of any objects. */
+export const selectText = (id: string) =>
+  batch(() => {
+    state.setSelectionSignal(new Set<string>());
+    setSelectedText(id);
+  });
 
 // --- Edits and history -----------------------------------------------------------------------
 

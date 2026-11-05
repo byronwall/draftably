@@ -9,6 +9,7 @@ import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
 import { headingMarkup } from '../model/heading';
 import { legendMarkup, markerMarkup } from '../model/legend';
+import { footnoteMarkup } from '../model/footnote';
 import { noteMarkup, placeNotes } from '../model/note';
 import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
@@ -73,6 +74,9 @@ const markMarkup = (m: LinkMark, x: number, y: number, ink: string) =>
   `<path class="link-mark" transform="translate(${x + m.x},${y + m.y}) scale(${m.size / 10})" d="${LINK_MARK_PATH}" fill="none" stroke="${ink}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`;
 
 /** Hover for links, which a browser applies to an SVG opened on its own. */
+/** How a link in a note or footnote is written: as `href` on objects writes it. */
+const writeHref = (opts: SvgOptions) => (href: string) => opts.href?.(href) ?? href;
+
 const LINK_CSS =
   'a.link{cursor:pointer}a.link:hover .shape{stroke-width:2.4px}a.link:hover .link-mark{stroke-width:2px}';
 
@@ -457,6 +461,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
           statuses,
           { x: x0, y: y0, w: cols * cw, h: rows * ch },
           notes,
+          doc.appearance.footnotes,
         );
       return { cols, frame, w: frame.w, h: frame.h };
     },
@@ -488,8 +493,9 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
       '</g>',
     );
   });
+  out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));
   out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
-  out.push(noteMarkup(look, frame.notes));
+  out.push(noteMarkup(look, frame.notes, writeHref(opts)));
   out.push('</svg>\n');
   return out.join('\n');
 }
@@ -528,7 +534,7 @@ function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 
 }
 
 /** Inset of a phase label from its band's top left corner. */
-const PHASE_TAB = 8;
+export const PHASE_TAB = 8;
 
 /** A thin stripe across the top of a box, inside its rounded corners. */
 export function accentPath(r: Rect, radius: number) {
@@ -583,6 +589,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
         statuses,
         { x: x0, y: y0, w: areaW, h: areaH },
         notes,
+        doc.appearance.footnotes,
       );
     return { stacked, spans, starts, areaH, frame, w: frame.w, h: frame.h };
   };
@@ -623,8 +630,9 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
   });
   // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
+  out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));
   out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
-  out.push(noteMarkup(look, frame.notes));
+  out.push(noteMarkup(look, frame.notes, writeHref(opts)));
   out.push('</svg>\n');
   return out.join('\n');
 }

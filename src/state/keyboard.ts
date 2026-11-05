@@ -14,6 +14,7 @@ import {
   selection,
   setSelection,
   singleSelection,
+  transact,
 } from './document';
 import {
   connectFrom,
@@ -28,6 +29,7 @@ import {
 import { importForeignText, importText, insertImage } from './files';
 import { detectSource } from '../import/detect';
 import { acceptPreview, cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
+import { parseTextId, removeText, selectedText, TEXT_NAMES } from './canvas-text';
 import { cancelGesture } from './pointer';
 import { visibleScene } from './scene';
 import { sculptKey } from './sculpt';
@@ -172,7 +174,7 @@ export function handleKeyDown(e: KeyboardEvent) {
       return;
     }
     if (e.shiftKey) return runCommand('add-connected');
-    const id = focusedId || selectedIds()[0];
+    const id = focusedId || selectedIds()[0] || selectedText();
     if (id) actions.startInlineEdit(id);
     return;
   }
@@ -214,6 +216,13 @@ export function handleKeyDown(e: KeyboardEvent) {
   if (key === 'b' && !e.altKey) return (e.preventDefault(), runCommand('quick-build'));
   if ((key === '[' || key === ']') && !e.altKey && stepState(key === ']' ? 1 : -1))
     return e.preventDefault();
+  if ((e.key === 'Delete' || e.key === 'Backspace') && selectedText()) {
+    const id = selectedText()!;
+    e.preventDefault();
+    if (parseTextId(id)?.kind === 'phase') return toast('A phase needs its label.');
+    transact(`Delete ${TEXT_NAMES[parseTextId(id)!.kind]}`, d => removeText(d, id));
+    return clearSelection();
+  }
   if (e.key === 'Delete' || e.key === 'Backspace')
     return (e.preventDefault(), runCommand(e.shiftKey ? 'delete-deep' : 'delete'));
 

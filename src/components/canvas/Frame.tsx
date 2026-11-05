@@ -2,7 +2,9 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import { resolveAppearance } from '../../model/appearance';
 import { MIN_FRAME_WIDTH, type DiagramFrame } from '../../model/frame';
 import { headingLines, headingTypes } from '../../model/heading';
+import { footnoteMarkup } from '../../model/footnote';
 import { legendMarkup } from '../../model/legend';
+import { exportHref } from '../../state/links';
 import { HEADING_EDIT } from '../../state/actions';
 import { doc, transact } from '../../state/document';
 import { inlineEditId, screenToWorld } from '../../state/editor';
@@ -59,7 +61,10 @@ export function Frame() {
       frame().heading.y,
       frame().heading.wrap,
     );
-  const legend = () => legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
+  // Footnotes, then the key; link clicks land on the click targets `TextHits` draws over them.
+  const legend = () =>
+    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, exportHref) +
+    legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
   const ghost = (key: Key) => {
     if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
     // Frame notes sit where a missing subtitle would go, as exports draw them.
@@ -117,7 +122,7 @@ export function Frame() {
             font-size={String(line.type.size)}
             font-weight={String(line.type.weight)}
             fill={line.fill}
-            data-heading={HEADING_EDIT[line.key]}
+            data-text={HEADING_EDIT[line.key]}
           >
             {line.text}
           </text>
@@ -135,7 +140,7 @@ export function Frame() {
                 font-family={look().annotation.family}
                 font-size={String(look().annotation.size)}
                 fill={look().muted}
-                data-heading={HEADING_EDIT[key]}
+                data-text={HEADING_EDIT[key]}
               >
                 {key === 'title' ? 'Double-click to add a title' : 'Double-click to add a subtitle'}
               </text>

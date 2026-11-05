@@ -12,7 +12,15 @@ import {
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, layoutTarget, cancelLayout, movesBlocked } from '../state/layout';
 import { timelineOpen } from '../state/sculpt';
-import { arrangeOpen, filesShown, menu, objectsOpen, openMenu, propertiesOpen } from '../state/ui';
+import {
+  arrangeOpen,
+  filesShown,
+  menu,
+  objectsOpen,
+  openMenu,
+  propertiesOpen,
+  sourceOpen,
+} from '../state/ui';
 import { AppNav, Brand } from './Brand';
 import { startUrl, workspace } from '../state/launch';
 import { CommandButton, IconButton, tip } from './controls';
@@ -117,6 +125,7 @@ export function Toolbar() {
         />
         <CommandButton command="toggle-sidebar" pressed={filesShown() || objectsOpen()} />
         <CommandButton command="toggle-inspector" pressed={propertiesOpen()} />
+        <CommandButton command="toggle-source" pressed={sourceOpen()} />
         <button
           type="button"
           class="button ghost"

@@ -798,3 +798,44 @@
     display: none;
   }
 }
+
+/* Notes, legend rows and phase labels: a click selects, a double-click edits, a note drags. */
+.text-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.text-hit.note {
+  cursor: grab;
+}
+
+.text-hit.read-only {
+  cursor: help;
+}
+
+.text-hit.link {
+  cursor: pointer;
+}
+
+.text-hit:not(.read-only):hover {
+  fill: var(--accent);
+  fill-opacity: 0.06;
+}
+
+.text-selection,
+.text-ghost,
+.text-anchor {
+  fill: none;
+  stroke: var(--accent);
+  pointer-events: none;
+}
+
+.text-ghost {
+  fill: var(--accent);
+  fill-opacity: 0.08;
+  stroke-dasharray: 4 3;
+}
+
+.text-anchor {
+  stroke-dasharray: 2 3;
+}

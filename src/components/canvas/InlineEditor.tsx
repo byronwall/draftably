@@ -1,11 +1,11 @@
 import { createEffect, createMemo, on, onMount, Show } from 'solid-js';
+import { SOFT_PAD, SOFT_TITLE } from '../../dsl/frame';
 import { clamp } from '../../model/geometry';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
 import {
   finishInlineEdit,
-  HEADING_EDIT,
   inlineDraft,
   quickExtend,
   setInlineDraft,
@@ -14,7 +14,8 @@ import {
 import { doc, setSelection } from '../../state/document';
 import { focusCanvas, inlineEditId, stageSize } from '../../state/editor';
 import { geometry, routesById, viewerFrame } from '../../state/scene';
-import { headingSlot } from './Frame';
+import { parseTextId, TEXT_NAMES } from '../../state/canvas-text';
+import { textBox } from './text-boxes';
 
 /** A text box over the canvas for editing a shape, container or connection label in place. */
 export function InlineEditor() {
@@ -39,24 +40,34 @@ function Editor(props: { id: string }) {
       ink = look().text,
       align: 'center' | 'left' = 'center',
       radius = 4;
-    const key =
-        props.id === HEADING_EDIT.title
-          ? 'title'
-          : props.id === HEADING_EDIT.subtitle
-            ? 'subtitle'
-            : undefined,
-      slot = key && headingSlot(viewerFrame(), key);
-    if (slot) {
-      type = slot.type;
-      ink = key === 'title' ? look().text : look().muted;
+    const text = textBox(viewerFrame(), props.id);
+    if (text) {
+      ({ type, fill, ink } = text);
       align = 'left';
-      world = slot;
+      // A short label edits in a box wide enough to type a longer one; prose shows its links'
+      // targets while it is edited, so it gets more room.
+      const prose = /^@(note|footnote):/.test(props.id);
+      world = { ...text.rect, w: Math.max(text.rect.w, prose ? 360 : 160) };
     } else if (findEdge(doc, props.id)) {
       const route = routesById().get(props.id),
         at = route?.label ?? route?.points[Math.floor(route.points.length / 2)] ?? { x: 0, y: 0 };
       const w = Math.max(route?.label?.w ?? 0, 120),
         h = route?.label?.h ?? type.lineHeight + 6;
       world = { x: at.x - w / 2, y: at.y - h / 2, w, h };
+    } else if (findGroup(doc, props.id)?.frame === 'soft') {
+      // A soft group's small label sits inside the first piece of its tint.
+      const r = objectRect(doc, geometry, props.id),
+        h0 = findGroup(doc, props.id)!.hull?.[0] ?? { x: 0, y: 0, w: r.w, h: r.h },
+        swatch = drawnSwatch(doc, look(), props.id, 'group');
+      fill = swatch.fill;
+      ink = swatch.ink;
+      align = 'left';
+      world = {
+        x: r.x + h0.x + SOFT_TITLE.x - 4,
+        y: r.y + h0.y + SOFT_TITLE.y - type.lineHeight / 2 - 2,
+        w: Math.max(120, h0.w - 2 * SOFT_PAD),
+        h: type.lineHeight + 4,
+      };
     } else if (findGroup(doc, props.id)) {
       const r = objectRect(doc, geometry, props.id),
         swatch = drawnSwatch(doc, look(), props.id, 'group'),
@@ -103,16 +114,16 @@ function Editor(props: { id: string }) {
     input.style.height = `${input.scrollHeight}px`;
   };
 
-  const label = () =>
-    props.id === HEADING_EDIT.title
-      ? 'Edit diagram title'
-      : props.id === HEADING_EDIT.subtitle
-        ? 'Edit diagram subtitle'
-        : findEdge(doc, props.id)
-          ? 'Edit connection label'
-          : findGroup(doc, props.id)
-            ? 'Edit container title'
-            : 'Edit node title';
+  const label = () => {
+    const text = parseTextId(props.id);
+    return text
+      ? `Edit diagram ${TEXT_NAMES[text.kind]}`
+      : findEdge(doc, props.id)
+        ? 'Edit connection label'
+        : findGroup(doc, props.id)
+          ? 'Edit container title'
+          : 'Edit node title';
+  };
 
   onMount(() => {
     input.focus();

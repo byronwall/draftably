@@ -98,10 +98,34 @@ function proseNotes(m: Model): Diagnostic[] {
       level: 'warning',
       code: 'heading-prose',
       message:
-        'This note has no near=, so it sits under the heading as prose. Cut it, or anchor it with near=<id> to the object it explains.',
+        'This note has no near=, so it sits under the heading as prose. Anchor it with near=<id> to the object it explains, or make it a footnote under the drawing.',
       line: m.noteLines[i],
       ids: [],
     });
   });
-  return out;
+  return [...out, ...footnoteNotes(m)];
+}
+
+/**
+ * A label that points at a footnote (`[2]`) needs a `footnote 2 "…"` line. Only checked once the
+ * file has a marked footnote, since brackets in a label may mean something else.
+ */
+function footnoteNotes(m: Model): Diagnostic[] {
+  const marks = new Set((m.appearance.footnotes ?? []).flatMap(f => (f.mark ? [f.mark] : [])));
+  if (!marks.size) return [];
+  const labelled = [
+    ...m.objects.map(o => ({ id: o.id, text: o.label, line: o.line })),
+    ...m.edges.map(e => ({ id: e.id, text: e.label, line: e.line })),
+  ];
+  return labelled.flatMap(l =>
+    [...l.text.matchAll(/\[([A-Za-z0-9*]{1,3})\]/g)]
+      .filter(r => !marks.has(r[1]))
+      .map(r => ({
+        level: 'warning' as const,
+        code: 'footnote-missing',
+        message: `${l.id} points at [${r[1]}], but no footnote has that marker. Add footnote ${r[1]} "…" or fix the label.`,
+        line: l.line,
+        ids: [l.id],
+      })),
+  );
 }

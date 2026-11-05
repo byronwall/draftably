@@ -6,9 +6,9 @@
  */
 import { swatchFor, type ResolvedAppearance } from './appearance';
 import type { BoundedRoute } from './bounds';
-import { measureText, wrapLines } from './fonts';
+import { richLines, runsMarkup, type Run } from './rich-text';
 import { contains, overlaps, rectUnion } from './geometry';
-import type { Diagram, Rect } from './types';
+import type { Diagram, Point, Rect } from './types';
 
 export const NOTE_SIDES = ['below', 'above', 'left', 'right'] as const;
 export type NoteSide = (typeof NOTE_SIDES)[number];
@@ -30,16 +30,23 @@ export interface Note {
 export interface PlacedNote {
   note: Note;
   rect: Rect;
-  lines: string[];
+  /** Wrapped lines, each as runs of plain text and links. */
+  lines: Run[][];
   inFrame?: boolean;
   overlaps?: boolean;
 }
 
+/** The side a note sits on: its `side`, or by default right of a message and below anything else. */
+export const noteSide = (doc: Diagram, note: Note): NoteSide =>
+  note.side ?? (doc.graph.edges.some(e => e.id === note.near) ? 'right' : 'below');
+
 /** Default wrap width, and the room between a note and its object. */
 export const NOTE_WIDTH = 280;
+/** Room between a note's panel and its text. */
+export const NOTE_PAD = { x: 12, y: 8 };
 const GAP = 16,
-  PAD_X = 12,
-  PAD_Y = 8,
+  PAD_X = NOTE_PAD.x,
+  PAD_Y = NOTE_PAD.y,
   /** Room between a note and a message's row, and between notes stacked in a margin. */
   ROW_GAP = 8,
   /** How far each try moves a note along its row, away from the message. */
@@ -51,8 +58,8 @@ const esc = (s: string) =>
 /** The note's wrapped lines and box size, at 0,0. */
 export function noteBox(look: ResolvedAppearance, note: Note): PlacedNote {
   const type = look.annotation,
-    lines = wrapLines(note.text, (note.width ?? NOTE_WIDTH) - PAD_X * 2, type),
-    w = Math.ceil(Math.max(...lines.map(l => measureText(l, type)))) + PAD_X * 2;
+    lines = richLines(note.text, (note.width ?? NOTE_WIDTH) - PAD_X * 2, type),
+    w = Math.ceil(Math.max(...lines.map(l => l.reduce((x, r) => x + r.w, 0)))) + PAD_X * 2;
   return { note, lines, rect: { x: 0, y: 0, w, h: lines.length * type.lineHeight + PAD_Y * 2 } };
 }
 
@@ -180,16 +187,24 @@ export function placeNotes(
   });
 }
 
-/** SVG markup for placed notes: a quiet panel with a bar on its left edge, then the text. */
-export function noteMarkup(look: ResolvedAppearance, notes: readonly PlacedNote[]): string {
+/**
+ * SVG markup for placed notes: a quiet panel with a bar on its left edge, then the text. Links
+ * are `<a>` elements with `href` as `write` gives it.
+ */
+export function noteMarkup(
+  look: ResolvedAppearance,
+  notes: readonly PlacedNote[],
+  write: (href: string) => string = h => h,
+): string {
   const { family, size, weight, lineHeight } = look.annotation,
-    panel = swatchFor(look, 'slate', 50, 'group');
+    panel = swatchFor(look, 'slate', 50, 'group'),
+    link = swatchFor(look, 'primary', 700).fill;
   return notes
     .map(({ rect: r, lines }) => {
       const text = lines
         .map(
           (line, i) =>
-            `<text x="${r.x + PAD_X}" y="${r.y + PAD_Y + (i + 0.5) * lineHeight}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${esc(line)}</text>`,
+            `<text x="${r.x + PAD_X}" y="${r.y + PAD_Y + (i + 0.5) * lineHeight}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${runsMarkup(line, link, write)}</text>`,
         )
         .join('');
       return (
@@ -201,4 +216,43 @@ export function noteMarkup(look: ResolvedAppearance, notes: readonly PlacedNote[
       );
     })
     .join('');
+}
+
+/** How far from an object a dropped note still anchors to it. */
+const ANCHOR_REACH = 160;
+
+/**
+ * Where a note dropped at `p` belongs: beside the closest object or (in a sequence) message, on
+ * the side of it `p` is on. Inside several objects the smallest wins, so a note dropped on a
+ * shape in a group goes to the shape. Undefined when nothing is within reach.
+ */
+export function noteAnchor(
+  p: Point,
+  rects: ReadonlyMap<string, Rect>,
+  messages: readonly BoundedRoute[] = [],
+): { near: string; side: NoteSide } | undefined {
+  const boxes = [
+    ...rects,
+    ...messages.flatMap(m =>
+      m.id ? [[m.id, rectUnion(m.points.map(q => ({ ...q, w: 0, h: 0 })))] as const] : [],
+    ),
+  ];
+  let best: { id: string; r: Rect; d: number; area: number } | undefined;
+  for (const [id, r] of boxes) {
+    const d = Math.hypot(
+        Math.max(r.x - p.x, 0, p.x - r.x - r.w),
+        Math.max(r.y - p.y, 0, p.y - r.y - r.h),
+      ),
+      area = r.w * r.h;
+    if (d > ANCHOR_REACH) continue;
+    if (!best || d < best.d || (d === best.d && area < best.area)) best = { id, r, d, area };
+  }
+  if (!best) return;
+  const { r } = best,
+    // A message is a thin row, so its height counts as a short shape's.
+    dx = (p.x - r.x - r.w / 2) / Math.max(r.w / 2, 20),
+    dy = (p.y - r.y - r.h / 2) / Math.max(r.h / 2, 20);
+  const side: NoteSide =
+    Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'below' : 'above';
+  return { near: best.id, side };
 }
