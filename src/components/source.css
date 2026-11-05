@@ -143,12 +143,16 @@
   pointer-events: none;
 }
 
+/* Ends at the field's edge, so it never widens the scroll; the bar's tooltip has it in full. */
 .source-error span {
   position: absolute;
+  right: var(--pad);
   left: calc(var(--space-2) + var(--at) + 3ch);
+  overflow: hidden;
   color: var(--danger);
   font-family: var(--font);
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .source-error-jump {
