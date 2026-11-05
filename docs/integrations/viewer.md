@@ -9,8 +9,9 @@ import '@draftably/runtime/viewer.css';
 const host = document.querySelector<HTMLElement>('#diagram');
 if (!host) throw new Error('Missing #diagram host');
 const viewer = mountViewer(host, { label: 'Checkout diagram' });
-const result = await viewer.update(source);
-if (result.status === 'error') console.error(result.error.diagnostics);
+void viewer.update(source).then(result => {
+  if (result.status === 'error') console.error(result.error.diagnostics);
+});
 // Call viewer.update(nextSource) when source changes.
 // Call viewer.destroy() when the host is removed.
 ```

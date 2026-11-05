@@ -33,8 +33,9 @@ import { mountViewer } from '@draftably/runtime/viewer';
 import '@draftably/runtime/viewer.css';
 
 const viewer = mountViewer(document.querySelector('#diagram')!, { label: 'Checkout flow' });
-const result = await viewer.update(source);
-if (result.status === 'error') console.error(result.error.diagnostics);
+void viewer.update(source).then(result => {
+  if (result.status === 'error') console.error(result.error.diagnostics);
+});
 // Call viewer.destroy() when the host is removed.
 ```
 
