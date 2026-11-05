@@ -1069,8 +1069,11 @@ button.folder-heading:hover {
   font-weight: 400;
 }
 
+/* State marks change color and paint only. A weight change widens glyphs, so titles re-wrap and
+   every row below moves. */
 .file-row.current {
   background: var(--pressed);
+  box-shadow: inset 2px 0 var(--ink);
 }
 
 .file-row-title {
@@ -1078,10 +1081,6 @@ button.folder-heading:hover {
   min-width: 0;
   font-size: var(--text-sm);
   font-weight: 500;
-}
-
-.file-row.current .file-row-title {
-  font-weight: 650;
 }
 
 .file-row-folder {
@@ -1101,7 +1100,6 @@ button.folder-heading:hover {
 
 .file-time.changed {
   color: var(--success);
-  font-weight: 600;
 }
 
 /* Objects tree */
@@ -1126,7 +1124,7 @@ button.folder-heading:hover {
 
 .tree-row.active {
   background: var(--pressed);
-  font-weight: 600;
+  box-shadow: inset 2px 0 var(--ink);
 }
 
 .tree-toggle,

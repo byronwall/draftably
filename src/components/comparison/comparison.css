@@ -407,8 +407,8 @@ details.sidebar-section[open] > summary,
 }
 
 .layer-name[aria-pressed='true'] {
+  background: var(--pressed);
   color: var(--text);
-  font-weight: 650;
 }
 
 .color-dot {

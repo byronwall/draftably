@@ -17,6 +17,10 @@ inside the draftably repo). It needs Node 22.21 or later.
 1. **Plan the model.** List the boxes, the containers they belong to, and the connections. Pick
    short stable IDs (`api`, `orders_db`) and human labels (`"Orders DB"`).
 2. **Write the file** with declarations first, then edges, then `layout` lines.
+   **Diagram text is prose.** The title, subtitle, labels and notes are what a reader sees first.
+   Before you render a diagram for other readers, apply the user's writing-style or voice
+   guidance to that text, if they have it. Keep the text concrete: name the actual process or
+   change ("Orders move to the new queue"), not the document section ("Key flow overview").
 3. **Check it:** `npx draftably check diagram.draft`. Fix every `error`; read every `warning`.
    Exit code 1 means errors. Warnings ending in `[edge-through-node]`, `[edge-through-title]`,
    `[node-overlap]`, `[label-collision]` or `[outside-group]` are drawing conflicts. Each names
