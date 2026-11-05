@@ -7,5 +7,5 @@
     "declarationDir": "packages/runtime/dist/types",
     "rootDir": "."
   },
-  "include": ["src/runtime/index.ts"]
+  "include": ["src/runtime/index.ts", "src/runtime/viewer.ts"]
 }

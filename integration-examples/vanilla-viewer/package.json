@@ -1,0 +1,14 @@
+{
+  "name": "draftably-vanilla-viewer-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node fallback.mjs && vite build"
+  },
+  "dependencies": {
+    "@draftably/runtime": "0.1.0"
+  },
+  "devDependencies": {
+    "vite": "6.3.5"
+  }
+}

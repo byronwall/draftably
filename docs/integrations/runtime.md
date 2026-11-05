@@ -51,3 +51,5 @@ Safe links open in `_self` by default. `target: '_blank'` adds `noopener norefer
 `includeSource: true` adds recoverable `.draft` source metadata. It can expose comments and paths authored in the source. The default omits this metadata; diagnostic `sourceId` is never included. The source reader accepts legacy metadata and the new namespaced form.
 
 Successful results include runtime, DSL, font, and render-context identities in `provenance`. They describe this result; they are not a public compiled-scene format. The package ships ESM, TypeScript declarations, exact font assets, and a no-bundler browser entry.
+
+The optional viewer is a separate import. See [viewer integration](viewer.md) for mount, update, cleanup, and framework recipes.

@@ -89,6 +89,8 @@ To serve a folder from the dev server instead, run `DIAGRAM_ROOT=folder pnpm dev
 
 `pnpm prove:runtime` loads the copied installed distribution below a nested URL in Chromium. It verifies module chunks, the finished SVG image, and console errors. Run the pack check first to prepare its consumer. CI runs both proofs; neither publishes a package.
 
+`pnpm viewer:pack-check` installs the packed runtime in fresh Node, vanilla, React, and Solid consumers. It checks declarations, SSR-safe imports, the emitted worker asset, and framework builds. `pnpm prove:viewer` serves the packed browser fixture below a nested path and checks worker updates, lifecycle races, camera behavior, links, and blocked worker/font policies. It also runs React Strict Mode and Solid lifecycle fixtures in Chromium. Run `pnpm runtime:build && pnpm viewer:pack-check` first; output goes to `tmp/viewer-proof/`.
+
 ## The public site
 
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in

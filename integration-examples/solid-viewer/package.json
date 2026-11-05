@@ -1,0 +1,16 @@
+{
+  "name": "draftably-solid-viewer-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node fallback.mjs && vite build"
+  },
+  "dependencies": {
+    "@draftably/runtime": "0.1.0",
+    "solid-js": "1.9.9"
+  },
+  "devDependencies": {
+    "vite": "6.3.5",
+    "vite-plugin-solid": "2.11.6"
+  }
+}

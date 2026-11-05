@@ -10,6 +10,8 @@ const out = path.join(root, 'packages/runtime/dist');
 await build({
   root,
   configFile: false,
+  base: './',
+  worker: { format: 'es', rollupOptions: { output: { inlineDynamicImports: true } } },
   plugins: [
     {
       name: 'native-runtime-boundary',
@@ -23,8 +25,17 @@ await build({
   build: {
     target: 'es2022',
     outDir: out,
-    lib: { entry: path.join(root, 'src/runtime/index.ts'), formats: ['es'], fileName: 'index' },
-    rollupOptions: { output: { chunkFileNames: '[name]-[hash].js' } },
+    lib: {
+      entry: {
+        index: path.join(root, 'src/runtime/index.ts'),
+        viewer: path.join(root, 'src/runtime/viewer.ts'),
+      },
+      formats: ['es'],
+      fileName: (_format, name) => `${name}.js`,
+    },
+    rollupOptions: {
+      output: { chunkFileNames: '[name]-[hash].js', assetFileNames: '[name]-[hash][extname]' },
+    },
   },
 });
 execFileSync('pnpm', ['exec', 'tsc', '-p', 'tsconfig.runtime.json'], {
@@ -66,6 +77,7 @@ const css = Object.values(FACES)
   })
   .join('\n');
 writeFileSync(path.join(out, 'fonts.css'), css);
+cpSync(path.join(root, 'src/runtime/viewer.css'), path.join(out, 'viewer.css'));
 cpSync(path.join(root, 'LICENSE'), path.join(out, 'LICENSE'));
 writeFileSync(
   path.join(out, 'THIRD_PARTY_NOTICES'),

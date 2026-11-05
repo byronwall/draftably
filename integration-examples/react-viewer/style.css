@@ -1,0 +1,8 @@
+main {
+  max-width: 60rem;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+.diagram-host {
+  block-size: 28rem;
+}

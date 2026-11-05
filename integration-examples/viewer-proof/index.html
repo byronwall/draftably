@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <title>draftably viewer browser proof</title>
+  </head>
+  <body>
+    <main>
+      <img id="static-fallback" src="./checkout.svg" alt="Browser proof diagram fallback." />
+      <div id="first" class="host"></div>
+      <div id="second" class="host"></div>
+      <div id="hidden" class="host" hidden></div>
+      <p id="proof-status" role="status">Loading viewer.</p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
