@@ -89,6 +89,7 @@ To connect from the keyboard, select a source, press `C`, press `Tab` to reach t
 | Show the list           | `?`         |
 | Objects panel           | `[`         |
 | Inspector               | `]`         |
+| Source                  | `` ` ``     |
 | Hide or restore panels  | `\`         |
 | Diagrams in this folder | `F`         |
 | Go to a diagram         | `Ctrl/⌘ P`  |

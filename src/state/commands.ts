@@ -481,8 +481,9 @@ export const commands = {
     duringTimeline: true,
   },
   'toggle-source': {
-    hint: 'Show the .draft text beside the canvas. It follows your edits.',
+    hint: 'Show and edit the .draft text beside the canvas.',
     label: 'Source',
+    keys: '`',
     icon: 'code',
     run: () => toggleRight('source'),
     duringTimeline: true,

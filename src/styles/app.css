@@ -1618,6 +1618,14 @@ button.folder-heading:hover {
 
 /* File-backed sessions ----------------------------------------------------------------------- */
 
+.canvas-area {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
 .file-banner {
   position: absolute;
   top: var(--space-3);
@@ -1626,7 +1634,7 @@ button.folder-heading:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 2px var(--space-2);
-  max-width: min(720px, calc(100vw - 32px));
+  max-width: min(720px, calc(100% - 32px));
   padding: var(--space-2) var(--space-3);
   border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
   border-radius: var(--radius);

@@ -134,3 +134,37 @@ it('keeps framing through a theme change, in a document and in a file', async ()
     await new Promise(resolve => setTimeout(resolve, 0));
   expect(fileSession.currentSource().trim()).toBe(source);
 });
+
+it('draws typed source, keeps the last valid drawing for a broken line, and undoes one step', async () => {
+  const [documentState, fileSession] = await Promise.all([
+    import('../src/state/document'),
+    import('../src/state/file-session'),
+  ]);
+  const source = 'diagram "Typed" version=1\nnode a "Start"\nnode b "End"\nedge ab a -> b\n';
+  await fileSession.openExampleSession('typed', 'Typed', source);
+  const title = (id: string) => documentState.doc.graph.nodes.find(n => n.id === id)?.title;
+
+  await fileSession.typeSource(source.replace('"Start"', '"Sta"'), 1);
+  const typed = source.replace('"Start"', '"Started"');
+  await fileSession.typeSource(typed, 1);
+  expect(title('a')).toBe('Started');
+  expect(fileSession.currentSource()).toBe(typed);
+
+  const broken = `${typed}edge bad a -> nowhere\n`;
+  await fileSession.typeSource(broken, 1);
+  expect(fileSession.sourceError()?.line).toBe(5);
+  expect(fileSession.sourceDraft()).toBe(broken);
+  expect(fileSession.currentSource()).toBe(typed);
+  expect(title('a')).toBe('Started');
+
+  await fileSession.typeSource(typed, 1);
+  expect(fileSession.sourceError()).toBeNull();
+  expect(fileSession.sourceDraft()).toBeNull();
+
+  // Both valid texts typed in one focus of the panel undo together.
+  documentState.undo();
+  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+    await new Promise(resolve => setTimeout(resolve, 0));
+  expect(fileSession.currentSource()).toBe(source);
+  expect(title('a')).toBe('Start');
+});

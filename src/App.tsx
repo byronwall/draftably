@@ -178,8 +178,11 @@ export default function App() {
         <Show when={filesShown() || objectsOpen()}>
           <Sidebar />
         </Show>
-        <Canvas />
-        <FileBanner />
+        {/* The banner centers over the canvas and never covers a panel. */}
+        <div class="canvas-area">
+          <Canvas />
+          <FileBanner />
+        </div>
         <Show when={inspectorOpen()}>
           <RightPanel />
         </Show>
