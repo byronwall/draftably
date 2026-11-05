@@ -69,7 +69,7 @@ to PR #455. Both screenshots were inspected.
 
 ## Checks
 
-- `pnpm check`: 641 tests, the engine suites, and the production build passed.
+- `pnpm check`: 646 tests, the engine suites, and the production build passed.
 - `pnpm runtime:pack-check`: public root and browser imports pass strict TypeScript.
 - `pnpm viewer:pack-check`: all five installed consumers build, including the element.
 - `pnpm prove:element`: nine browser checks pass, including blank source and cancellation.
