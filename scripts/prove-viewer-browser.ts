@@ -6,6 +6,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { once } from 'node:events';
 import { chromium } from 'playwright-core';
+import { stripVTControlCharacters } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -315,7 +316,7 @@ try {
       );
       const onData = (chunk: Buffer) => {
         output += chunk.toString();
-        const match = /http:\/\/127\.0\.0\.1:(\d+)\//.exec(output);
+        const match = /http:\/\/127\.0\.0\.1:(\d+)\//.exec(stripVTControlCharacters(output));
         if (match) {
           clearTimeout(timer);
           resolve(`http://127.0.0.1:${match[1]}/`);

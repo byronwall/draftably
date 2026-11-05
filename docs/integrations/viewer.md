@@ -19,6 +19,16 @@ The viewer embeds its used fonts by default. It waits for those font faces to lo
 
 The default worker uses a module-relative asset and must be served from the same origin. A restrictive CSP must allow that worker. Worker setup or timeout failures appear as update errors; the viewer does not silently switch to main-thread compilation. Set `execution: { mode: 'main' }` only for known small inputs.
 
+For Vite development servers, keep the runtime out of dependency prebundling:
+
+```ts
+optimizeDeps: {
+  exclude: ['@draftably/runtime'];
+}
+```
+
+This keeps the worker URL relative to its package assets. The pinned React and Solid consumers include this setting. Their production builds emit the worker with the application assets.
+
 The viewer uses wheel zoom, background drag to pan, named zoom and fit buttons, and `+`, `-`, and `f` keys while its viewport is focused. **Fit diagram** shows the full overview with a margin, capped at actual size. Use **Actual size** or select an item in the outline to inspect small labels. Outline selection centers the item and raises zoom to at least actual size. User camera changes persist through source updates and resizes; call `fit()` or request `{ camera: 'fit' }` for a new overview.
 
 ## React
