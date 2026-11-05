@@ -4,6 +4,9 @@ This package converts canonical `draft` code fences to static SVG image nodes.
 It supports async remark and markdown-it adapters. Static pages do not load or
 compile diagrams in the reader.
 
+Start with the [complete Markdown example](https://github.com/byronwall/draftably/blob/main/docs/integrations/README.md#render-markdown)
+for installation, file storage, and a working first diagram.
+
 The host must provide `emitAsset`. It receives final SVG bytes and returns the
 public URL. Use a durable content-addressed store with your page cache. Re-emit
 the asset on a warm Markdown transform, and retain asset references with cached

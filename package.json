@@ -46,6 +46,7 @@
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",
     "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs",
     "runtime:build": "node scripts/build-runtime.ts",
+    "integration:pack": "node scripts/pack-integrations.ts",
     "runtime:pack-check": "node scripts/prove-runtime-package.ts",
     "viewer:pack-check": "node scripts/prove-viewer-package.ts",
     "prove:viewer": "node scripts/prove-viewer-browser.ts",

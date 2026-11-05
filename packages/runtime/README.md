@@ -2,6 +2,9 @@
 
 Render `.draft` source to SVG in Node or a browser. The package has no runtime dependencies, DOM shim, or install scripts.
 
+Start with [Use Draftably in your project](https://github.com/byronwall/draftably/blob/main/docs/integrations/README.md)
+for package installation and complete element, SVG, and Markdown examples.
+
 ```ts
 import { renderSvg, validate } from '@draftably/runtime';
 

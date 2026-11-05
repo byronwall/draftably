@@ -1,5 +1,8 @@
 # Markdown integration
 
+For a complete first build, start with [Render Markdown](README.md#render-markdown).
+It uses the packaged file store and one async rendering call.
+
 `@draftably/markdown/remark` transforms only parser-recognized code nodes with
 the complete language name `draft`. A fence without attributes is valid:
 

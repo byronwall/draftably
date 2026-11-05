@@ -126,7 +126,12 @@ Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [I
 
 ## Integrate
 
-For source consumers, see the [native runtime guide](docs/integrations/runtime.md), [static Markdown guide](docs/integrations/markdown.md), and [viewer guide](docs/integrations/viewer.md). Check the [integration support matrix](docs/integrations/support.md) for current package and host proof status. See the [contributor guide](docs/integrations/contributing.md) to build another adapter.
+Start with [Use Draftably in your project](docs/integrations/README.md). Choose a
+diagram element, an SVG script, a Markdown build, or a documentation-site recipe.
+`pnpm integration:pack` builds local package previews and writes exact install commands.
+
+Check the [integration support matrix](docs/integrations/support.md) for verified
+hosts. See the [contributor guide](docs/integrations/contributing.md) to build another adapter.
 
 These guides document repository artifacts and tested recipes. They do not mean a new runtime or Markdown package is published on npm, that a plugin is installed, or that a host recognizes `draft` natively.
 

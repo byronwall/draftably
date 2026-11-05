@@ -1,5 +1,8 @@
 # Embedding implementation evidence
 
+The later [adoption pass](adoption-evidence.md) adds simpler file storage,
+one-call Markdown rendering, a diagram element, and complete starting examples.
+
 Status on 2026-11-05. The selected Build recommendations are implemented in the stack below. No package publication, PR merge, extension release, or external contact is included. Explore recommendations remain separate proposals.
 
 ## Runtime and distribution
