@@ -1,4 +1,7 @@
-import { renderSvg as writeSvg } from '../cli/svg';
+import { renderSvg as writeSvg, SvgLimitError } from './svg-renderer';
+import { applyLinks, assertOptions, textLink } from './policy';
+import { runtimeVersion, fontMetricsVersion } from './version';
+import { resolveAppearance } from '../model/appearance';
 import { compile, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, parseModel, type Model } from '../dsl/syntax';
@@ -217,6 +220,7 @@ export async function renderWithScene(
   source: string,
   options: RenderOptions = {},
 ): Promise<InternalRender> {
+  assertOptions(options);
   if (typeof source !== 'string') throw new TypeError('source must be a string.');
   const limits = limitsOf(options.limits),
     sourceId = options.sourceId;
@@ -234,7 +238,12 @@ export async function renderWithScene(
         diagnostic('DRAFT_LIMIT', 'The source exceeds the configured size limit.', sourceId),
       ),
     };
-  if (!checkText(source))
+  if (
+    !checkText(source) ||
+    [options.title, options.description, options.styleNonce].some(
+      v => v !== undefined && !checkText(v),
+    )
+  )
     return {
       result: fail(
         'input',
@@ -287,7 +296,10 @@ export async function renderWithScene(
       ),
       scene,
     };
-  if (options.state && !(scene.model.appearance.states ?? []).some(s => s.id === options.state))
+  if (
+    options.state != null &&
+    !(scene.model.appearance.states ?? []).some(s => s.id === options.state)
+  )
     return {
       result: fail(
         'input',
@@ -301,18 +313,54 @@ export async function renderWithScene(
     };
   let doc = projectScene(scene);
   if (options.state) doc = withState(doc, options.state);
-  // The first runtime contract is image output with no navigable links.
-  doc.graph.nodes = doc.graph.nodes.map(({ href: _href, ...node }) => node);
-  doc.graph.groups = doc.graph.groups.map(({ href: _href, ...group }) => group);
-  const svg = writeSvg(doc);
-  if (encoder.encode(svg).byteLength > limits.maxOutputBytes)
+  const linkDiagnostics = applyLinks(doc, options);
+  const prefix = options.target === 'inline' ? options.idPrefix : 'draft';
+  const esc = (value: string) =>
+    value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const metadata = options.includeSource
+    ? `<metadata id="${prefix}-source" data-draftably-source="1" data-draftably-version="${runtimeVersion}">${esc(source)}</metadata>`
+    : undefined;
+  let fontCss = '';
+  try {
+    if (options.fonts !== 'host')
+      fontCss = (await import('../lib/font-data')).fontFaceCss(resolveAppearance(doc.appearance));
+  } catch {
     return {
       result: fail(
-        'limit',
-        diagnostic('DRAFT_LIMIT', 'The SVG exceeds the configured output limit.', sourceId),
+        'environment',
+        diagnostic('DRAFT_ENVIRONMENT', 'Bundled fonts could not be loaded.', sourceId),
       ),
+    };
+  }
+  if (options.signal?.aborted)
+    return {
+      result: fail('aborted', diagnostic('DRAFT_ABORTED', 'Rendering was aborted.', sourceId)),
+    };
+  let svg: string;
+  try {
+    svg = writeSvg(doc, {
+      idPrefix: prefix,
+      fontCss,
+      title: options.title,
+      description: options.description,
+      styleNonce: options.styleNonce,
+      linkTarget: options.links?.mode === 'safe' ? (options.links.target ?? '_self') : '_self',
+      textHref: textLink(options),
+      metadata,
+      maxOutputBytes: limits.maxOutputBytes,
+    });
+  } catch (error) {
+    return {
+      result:
+        error instanceof SvgLimitError
+          ? fail('limit', diagnostic('DRAFT_LIMIT', error.message, sourceId))
+          : fail(
+              'internal',
+              diagnostic('DRAFT_INTERNAL', 'The diagram could not be drawn.', sourceId),
+            ),
       scene,
     };
+  }
   if (!checkText(svg))
     return {
       result: fail(
@@ -350,13 +398,20 @@ export async function renderWithScene(
   ];
   const value = {
     svg,
-    title: scene.title,
+    title: options.title ?? scene.title,
+    ...(options.description !== undefined ? { description: options.description } : {}),
     width: Number(match[5]),
     height: Number(match[6]),
     viewBox: [Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4])] as const,
     items,
     states: (scene.model.appearance.states ?? []).map(s => ({ id: s.id, label: s.label })),
     activeState: options.state ?? null,
+    provenance: {
+      runtimeVersion,
+      fontMetricsVersion,
+      dslVersion: 1 as const,
+      renderContextVersion: '1',
+    },
   };
   const diagnostics = scene.diagnostics.map(d => ({
     code: d.code === 'fit' ? 'DRAFT_LAYOUT_NOTE' : 'DRAFT_COMPILE',
@@ -371,7 +426,7 @@ export async function renderWithScene(
       result: fail('aborted', diagnostic('DRAFT_ABORTED', 'Rendering was aborted.', sourceId)),
       scene,
     };
-  return { result: { ok: true, value, diagnostics }, scene };
+  return { result: { ok: true, value, diagnostics: [...diagnostics, ...linkDiagnostics] }, scene };
 }
 
 export async function renderSvg(source: string, options?: RenderOptions): Promise<RenderResult> {

@@ -17,7 +17,7 @@ import {
   THEME_IDS,
 } from '../src/model/appearance';
 import { normalize } from '../src/model/document';
-import { measureText, wrapLines } from '../src/model/fonts';
+import { FACES, measureText, wrapLines } from '../src/model/fonts';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
 
@@ -286,10 +286,10 @@ describe('CLI SVG', () => {
   it('draws with the theme and embeds the fonts it uses', () => {
     const svg = renderSvg(projectScene(checkSource(proof)));
     expect(svg).toContain(`fill="${PRESETS.fieldnotes.canvas}"`);
-    expect(svg).toContain("@font-face{font-family:'Draft Source Serif'");
+    expect(svg).toContain(`@font-face{font-family:'${FACES['serif-600'].family}'`);
     expect(svg).toContain('<path d="M'); // the diamond
     expect(svg).toContain('<tspan');
     expect(svg).toContain('>portal</text>');
-    expect(svg).not.toContain("font-family:'Draft JetBrains Mono'");
+    expect(svg).not.toContain(`font-family:'${FACES['mono-500'].family}'`);
   });
 });

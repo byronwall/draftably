@@ -194,7 +194,7 @@ export function placeNotes(
 export function noteMarkup(
   look: ResolvedAppearance,
   notes: readonly PlacedNote[],
-  write: (href: string) => string = h => h,
+  write: (href: string) => string | null = h => h,
 ): string {
   const { family, size, weight, lineHeight } = look.annotation,
     panel = swatchFor(look, 'slate', 50, 'group'),

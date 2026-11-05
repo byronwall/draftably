@@ -18,20 +18,8 @@ export interface FontFace {
   file: string;
 }
 
-export const FACES = {
-  'sans-500': { family: 'Draft Inter', weight: 500, file: 'inter-latin-500-normal.woff2' },
-  'sans-600': { family: 'Draft Inter', weight: 600, file: 'inter-latin-600-normal.woff2' },
-  'serif-600': {
-    family: 'Draft Source Serif',
-    weight: 600,
-    file: 'source-serif-4-latin-600-normal.woff2',
-  },
-  'mono-500': {
-    family: 'Draft JetBrains Mono',
-    weight: 500,
-    file: 'jetbrains-mono-latin-500-normal.woff2',
-  },
-} satisfies Record<string, FontFace>;
+export { FACES } from './font-faces';
+import { FACES } from './font-faces';
 
 export type FaceId = keyof typeof FACES;
 

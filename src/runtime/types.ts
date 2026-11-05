@@ -12,6 +12,7 @@ export interface Diagnostic {
   message: string;
   location?: SourceLocation;
   itemIds: readonly string[];
+  related?: readonly { message: string; location: SourceLocation }[];
   nativeCode?: string;
 }
 
@@ -27,12 +28,33 @@ export interface RenderLimits extends CompileLimits {
   maxOutputBytes: number;
 }
 
-export interface RenderOptions {
+export type LinkPolicy =
+  | { mode: 'none' }
+  | {
+      mode: 'safe';
+      baseUrl?: string;
+      target?: '_self' | '_blank';
+      resolve?: (request: { itemId: string; href: string }) => string | null;
+      cacheKey?: string;
+    };
+
+export interface CommonRenderOptions {
+  title?: string;
+  description?: string;
+  includeSource?: boolean;
+  links?: LinkPolicy;
+  styleNonce?: string;
   state?: string | null;
   sourceId?: string;
   signal?: AbortSignal;
   limits?: Partial<RenderLimits>;
 }
+
+export type RenderOptions = CommonRenderOptions &
+  (
+    | { target?: 'image'; idPrefix?: never; fonts?: 'embed' }
+    | { target: 'inline'; idPrefix: string; fonts?: 'embed' | 'host' }
+  );
 
 export interface ValidateOptions {
   sourceId?: string;
@@ -51,6 +73,7 @@ export interface ItemSummary {
 
 export interface DiagramSummary {
   title: string;
+  description?: string;
   width: number;
   height: number;
   viewBox: readonly [number, number, number, number];
@@ -61,11 +84,17 @@ export interface DiagramSummary {
 
 export interface RenderedDiagram extends DiagramSummary {
   svg: string;
+  provenance: {
+    runtimeVersion: string;
+    dslVersion: 1;
+    fontMetricsVersion: string;
+    renderContextVersion: string;
+  };
 }
 
 export type RenderFailure = {
   ok: false;
-  reason: 'input' | 'limit' | 'aborted' | 'internal';
+  reason: 'input' | 'limit' | 'aborted' | 'environment' | 'internal';
   diagnostics: readonly Diagnostic[];
 };
 

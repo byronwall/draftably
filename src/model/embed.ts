@@ -137,8 +137,11 @@ export const embedSvgSource = (svg: string, source: string) =>
 
 /** The source in an SVG's `draftably-source` metadata, or null when it has none. */
 export function readSvgSource(svg: string): string | null {
-  const match = /<metadata\b[^>]*\bid="draftably-source"[^>]*>([\s\S]*?)<\/metadata>/.exec(svg);
-  return match ? unescape(match[1]) : null;
+  for (const match of svg.matchAll(/<metadata\b([^>]*)>([\s\S]*?)<\/metadata>/g)) {
+    if (/(?:^|\s)(?:id="draftably-source"|data-draftably-source="1")(?:\s|$)/.test(match[1]))
+      return unescape(match[2]);
+  }
+  return null;
 }
 
 /** The source embedded in PNG or SVG bytes, or null when there is none. */
