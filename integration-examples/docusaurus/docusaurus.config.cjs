@@ -1,13 +1,16 @@
 module.exports = async function createConfig() {
-  const [{ default: remarkDraft }, { createDraftAssets }, path] = await Promise.all([
+  const [{ default: remarkDraft }, { createFileAssets }, path] = await Promise.all([
     import('@draftably/markdown/remark'),
-    import('./draft-assets.mjs'),
+    import('@draftably/markdown/files'),
     import('node:path'),
   ]);
   const root = __dirname;
   const contentRoot = path.resolve(root, 'docs');
   const dependencies = new Set();
-  const assets = createDraftAssets({ root, base: '/manual/', urlPath: '_draftably' });
+  const assets = createFileAssets({
+    directory: path.resolve(root, '.cache/draftably/public/_draftably'),
+    publicPath: '/manual/_draftably',
+  });
   const draftOptions = {
     emitAsset: assets.emitAsset,
     sources: {
@@ -45,7 +48,7 @@ module.exports = async function createConfig() {
             return [path.resolve(contentRoot, '**/*.draft'), ...dependencies];
           },
           async postBuild({ outDir }) {
-            await assets.publish(outDir);
+            await assets.copyTo(path.join(outDir, '_draftably'));
           },
         };
       },

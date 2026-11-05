@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { compile } from '@mdx-js/mdx';
@@ -9,11 +10,43 @@ import rehypeStringify from 'rehype-stringify';
 import remarkDraft from '@draftably/markdown/remark';
 import MarkdownIt from 'markdown-it';
 import { createMarkdownItDraft } from '@draftably/markdown/markdown-it';
+import { createFileAssets } from '@draftably/markdown/files';
 
 const root = resolve('content');
 const out = resolve('out');
 const diagrams = resolve(out, 'diagrams');
 await mkdir(diagrams, { recursive: true });
+const fileAssets = createFileAssets({
+  directory: resolve(out, 'shared-store'),
+  publicPath: '/docs/shared/',
+});
+const storedSvg = new TextEncoder().encode('<svg/>');
+const storedSvgName = `draft-${createHash('sha256').update(storedSvg).digest('hex')}.svg`;
+const storedReference = await fileAssets.emitAsset(
+  { fileName: storedSvgName, mediaType: 'image/svg+xml', bytes: storedSvg },
+  { document: {}, fenceIndex: 0 },
+);
+assert.equal(storedReference.url, `/docs/shared/${storedSvgName}`);
+const storedInit = await fileAssets.emitInit({
+  version: 1,
+  key: 'draft-0123456789abcdef01234567',
+  source: 'diagram "API" version=1',
+  state: null,
+  label: 'API',
+  policyId: 'docs',
+});
+await fileAssets.copyTo(resolve(out, 'shared-published'));
+assert.equal(
+  (await readFile(resolve(out, 'shared-published', storedSvgName))).toString(),
+  '<svg/>',
+);
+await rm(resolve(fileAssets.directory, storedSvgName));
+await fileAssets.emitAsset(
+  { fileName: storedSvgName, mediaType: 'image/svg+xml', bytes: storedSvg },
+  { document: {}, fenceIndex: 0 },
+);
+assert.ok(await readFile(resolve(fileAssets.directory, storedSvgName)));
+assert.ok(await readFile(resolve(out, 'shared-published', storedInit.fileName)));
 let emissions = 0;
 const emitAsset = async ({ fileName, bytes }) => {
   emissions++;
@@ -193,6 +226,25 @@ assert.ok(
 const renderedDocs = docs.map(({ tokens, env }) => md.renderer.render(tokens, md.options, env));
 assert.ok(renderedDocs.every(value => (value.match(/<img\b/g) ?? []).length === 4));
 assert.notEqual(preparedDocs[0].assets[0].fileName, preparedDocs[1].assets[0].fileName);
+const renderAdapter = createMarkdownItDraft({
+  emitAsset: async ({ fileName }, { document }) => {
+    await new Promise(resolve => setTimeout(resolve, document.path.endsWith('alpha.md') ? 20 : 5));
+    return { url: `/diagrams/${fileName}` };
+  },
+});
+const renderMarkdownIt = new MarkdownIt().use(renderAdapter.plugin);
+const [alpha, beta] = await Promise.all([
+  renderAdapter.render(renderMarkdownIt, '```draft\ndiagram "Alpha" version=1\nnode a "A"\n```', {
+    draftably: { documentPath: resolve(root, 'alpha.md') },
+  }),
+  renderAdapter.render(renderMarkdownIt, '```draft\ndiagram "Beta" version=1\nnode b "B"\n```', {
+    draftably: { documentPath: resolve(root, 'beta.md') },
+  }),
+]);
+assert.match(alpha.html, /alt="Alpha"/);
+assert.match(beta.html, /alt="Beta"/);
+assert.equal(alpha.manifest.assets.length, 1);
+assert.equal(beta.manifest.assets.length, 1);
 const hostileCaption = [
   '```draft {caption="Checkout <script>alert(1)</script>"}',
   'diagram "Safe caption" version=1',

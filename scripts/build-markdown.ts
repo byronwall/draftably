@@ -24,6 +24,7 @@ await build({
         index: path.join(pkg, 'src/index.ts'),
         remark: path.join(pkg, 'src/remark.ts'),
         'markdown-it': path.join(pkg, 'src/markdown-it.ts'),
+        files: path.join(pkg, 'src/files.ts'),
         client: path.join(pkg, 'src/client.ts'),
       },
       formats: ['es'],

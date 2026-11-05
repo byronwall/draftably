@@ -11,6 +11,8 @@ through Unified and `remarkDraft`. It writes ordinary image Markdown to
 `generated-docs/public/_draftably/`. The generated image path is `/_draftably/<hash>.svg`;
 VitePress prepends the configured `/manual/` base when it builds the page.
 The preprocessor also copies the shared favicon to VitePress's `public` folder.
+It uses `createFileAssets` from `@draftably/markdown/files` with the generated
+asset folder and `publicPath: '/_draftably/'`. It needs no custom file writer.
 
 Run `pnpm dev`, open `/manual/`, and edit `docs/request.draft`. The runner
 regenerates the page on Markdown or included `.draft` changes. If a nested

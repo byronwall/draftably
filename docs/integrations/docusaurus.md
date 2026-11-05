@@ -9,9 +9,12 @@ The docs plugin runs as an async Remark transformer after Docusaurus's default
 plugins. Keep the config and sidebar in CommonJS files. The config uses dynamic
 imports for Draftably's ESM entry points. Draftably replaces its own code fence
 with an image node, so Docusaurus does not need another diagram plugin. The
-host helper writes each SVG to a persistent content-addressed directory.
+`createFileAssets` from `@draftably/markdown/files` writes each SVG to a persistent
+content-addressed directory. The recipe sets `directory` to the asset folder
+and `publicPath` to `/manual/_draftably/`.
 `staticDirectories` exposes that store during development, while
-`postBuild({ outDir })` copies the store into each clean build output.
+`postBuild({ outDir })` calls `assets.copyTo()` with the output's `_draftably`
+folder. The recipe needs no custom file writer.
 
 The sample sets `baseUrl` to `/manual/` and emits that base in the image URL.
 The fixture uses one locale. A localized installation must use its current

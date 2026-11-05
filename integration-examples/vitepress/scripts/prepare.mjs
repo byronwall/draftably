@@ -5,12 +5,15 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import remarkDraft from '@draftably/markdown/remark';
-import { createDraftAssets } from '../draft-assets.mjs';
+import { createFileAssets } from '@draftably/markdown/files';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const docs = resolve(root, 'docs');
 const generated = resolve(root, 'generated-docs');
-const assets = createDraftAssets({ root });
+const assets = createFileAssets({
+  directory: resolve(generated, 'public/_draftably'),
+  publicPath: '/_draftably',
+});
 export const dependencies = new Map();
 
 export async function prepare() {

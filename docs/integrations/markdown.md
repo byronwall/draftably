@@ -53,21 +53,19 @@ supported.
 
 ## markdown-it
 
-markdown-it fence rendering is synchronous. Create the adapter, attach its
-plugin, then parse and prepare each document before rendering it:
+markdown-it fence rendering is synchronous. The adapter's `render` method
+bridges async preparation for each document:
 
 ```js
 const adapter = createMarkdownItDraft(options);
 const md = new MarkdownIt().use(adapter.plugin);
 const env = { draftably: { documentPath: pagePath } };
-const tokens = md.parse(markdown, env);
-const manifest = await adapter.prepare(tokens, env);
-const html = md.renderer.render(tokens, md.options, env);
+const { html, manifest } = await adapter.render(md, markdown, env);
 ```
 
-Pass the same tokens and environment to prepare and render. Rendering an
-unprepared Draft fence throws. The adapter stores prepared results per token
-tree. Separate documents can prepare at the same time.
+The low-level API remains available when the host needs it: parse tokens, await
+`adapter.prepare(tokens, env)`, then render those same tokens and environment.
+Separate documents can render at the same time.
 
 ## Interactive enhancement
 

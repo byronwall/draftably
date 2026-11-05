@@ -1,13 +1,29 @@
 # `@draftably/markdown`
 
 This package converts canonical `draft` code fences to static SVG image nodes.
-It supports async remark and an explicit two-step markdown-it adapter. Static
-pages do not load or compile diagrams in the reader.
+It supports async remark and markdown-it adapters. Static pages do not load or
+compile diagrams in the reader.
 
 The host must provide `emitAsset`. It receives final SVG bytes and returns the
 public URL. Use a durable content-addressed store with your page cache. Re-emit
 the asset on a warm Markdown transform, and retain asset references with cached
 pages. The host owns base paths, publication, cleanup, and watcher integration.
+
+For Node builds, `@draftably/markdown/files` provides a filesystem store for
+content-addressed SVG and interactive JSON assets:
+
+```js
+import { createFileAssets } from '@draftably/markdown/files';
+
+const assets = createFileAssets({ directory: '.cache/diagrams', publicPath: '/docs/diagrams/' });
+const options = { emitAsset: assets.emitAsset };
+// Add `assets.emitInit` to the optional interactive bridge.
+await assets.copyTo('dist/diagrams');
+```
+
+The store checks each filename against the asset bytes and recreates deleted
+files on warm transforms. The host still chooses paths and retains cached page
+references.
 
 Use `src="./diagram.draft"` only with `sources.rootDir` and a Markdown file path.
 The resolver rejects remote and absolute paths, non-`.draft` files, and symlink
@@ -21,11 +37,11 @@ or JSX. Inline SVG is not available.
 
 ## markdown-it
 
-Call `createMarkdownItDraft(options)`, add its `plugin` to markdown-it, parse a
-document, await `prepare(tokens, env)`, then render the same token array. The
-adapter throws if a Draft fence reaches render before preparation. Its prepared
-token state is local to that adapter and token tree, so separate documents can
-prepare at the same time.
+Call `createMarkdownItDraft(options)` and add its `plugin` to markdown-it. Use
+`adapter.render(md, source, env)` to parse, prepare, and render one document. The
+adapter also exposes `prepare(tokens, env)` for hosts that need custom rendering.
+Prepared state stays local to each token tree, so separate documents can prepare
+at the same time.
 
 ## Optional interactive mode
 

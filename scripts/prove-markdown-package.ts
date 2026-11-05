@@ -29,7 +29,7 @@ const pack = (directory: string) =>
   ).filename as string;
 const runtimeArchive = pack('packages/runtime');
 const markdownArchive = pack('packages/markdown');
-for (const entry of ['index.js', 'remark.js', 'markdown-it.js']) {
+for (const entry of ['index.js', 'remark.js', 'markdown-it.js', 'files.js']) {
   const contents = readFileSync(path.join(root, 'packages/markdown/dist', entry), 'utf8');
   assert.doesNotMatch(contents, /@draftably\/runtime\/viewer|mountViewer/);
 }

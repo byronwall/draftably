@@ -39,6 +39,11 @@ interface MarkdownItLike {
   };
   utils: { escapeHtml(value: string): string };
 }
+interface MarkdownItRenderHost<Tokens> {
+  parse(source: string, env?: unknown): Tokens[];
+  options: unknown;
+  renderer: { render(tokens: Tokens[], options: unknown, env?: unknown): string };
+}
 interface Prepared {
   node: Record<string, unknown>;
   diagnostics: readonly Diagnostic[];
@@ -116,6 +121,17 @@ export function createMarkdownItDraft(options: DraftMarkdownOptions) {
         );
       return renderPrepared(result.node, value => md.utils.escapeHtml(value));
     };
+  }
+
+  async function render(
+    md: MarkdownItRenderHost<unknown>,
+    source: string,
+    env: DraftMarkdownItEnvironment = {},
+  ): Promise<{ html: string; manifest: DraftDocumentResult }> {
+    const tokens = md.parse(source, env);
+    const manifest = await prepareTokens(tokens as Token[], env);
+    const html = md.renderer.render(tokens, md.options, env);
+    return { html, manifest };
   }
 
   async function prepareTokens(
@@ -223,5 +239,5 @@ export function createMarkdownItDraft(options: DraftMarkdownOptions) {
     };
   }
 
-  return { plugin, prepare: prepareTokens };
+  return { plugin, prepare: prepareTokens, render };
 }

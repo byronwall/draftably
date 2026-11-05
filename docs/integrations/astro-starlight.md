@@ -15,10 +15,12 @@ The consumer files are in [`integration-examples/astro-starlight`](../../integra
 The included `.draft` file is inside the configured `sources.rootDir`, so the
 fence resolves `./request.draft` relative to its Markdown file.
 
-The asset helper writes content-addressed SVGs to a persistent ignored store.
+`createFileAssets` from `@draftably/markdown/files` writes content-addressed SVGs
+to a persistent ignored store. The recipe sets `directory` to the asset folder
+and `publicPath` to `/manual/_draftably/`. It needs no custom file writer.
 Astro's dev hook serves that store under `/manual/_draftably/`, adds included
 files to Vite's watcher, and restarts the dev server when an included file
-changes. The build hook copies the complete store to `dist/_draftably/`, which
+changes. The build hook calls `assets.copyTo()` with `dist/_draftably/`, which
 also restores SVGs when a cached page transform does not run. If a nested
 include is missing, creating its parent directories and file restarts the dev
 server and refreshes the page.
