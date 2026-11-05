@@ -625,7 +625,7 @@ function insideLength(ps, r) {
 const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
 const DETOUR_RATIO = 1.75,
-  // A gated route this many times the gap between its boxes weighs crossing the band instead.
+  // A gated route from a set side this many times the gap between its boxes weighs crossing.
   DETOUR_SOFT = 1.2,
   // What crossing a title band away from a top member's terminal line costs a route.
   BAND_COST = 120;
@@ -853,9 +853,9 @@ function compute(input, rawOptions = {}) {
   }
   // A line may cross a title band straight into any member, not only a top one, when the
   // way round the group is over `DETOUR_RATIO` times the length of the crossing route. A band is
-  // also a cost to weigh, not a wall (FEEL.md): a gated route that reads against the flow or
-  // takes the long way round tries the crossing too, and takes it when it scores better by more
-  // than `BAND_COST`.
+  // also a cost to weigh, not a wall (FEEL.md): a gated route that reads against the flow, or
+  // takes the long way round from a side the file set, tries the crossing too, and takes it when
+  // it scores better by more than `BAND_COST`.
   function find(e, used, old, wall = []) {
     const gated = findIn(e, used, old, false, wall);
     if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
@@ -869,7 +869,9 @@ function compute(input, rawOptions = {}) {
         Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2),
       gatedLength = gated.blocked ? Infinity : pathLength(gated.points),
       long = gatedLength > DETOUR_RATIO * floor,
-      weigh = !gated.blocked && (against(e, gated) || gatedLength > DETOUR_SOFT * floor + 40);
+      pinned = [e.cfg.fromSide, e.cfg.toSide].some(x => x && x !== 'auto'),
+      weigh =
+        !gated.blocked && (against(e, gated) || (pinned && gatedLength > DETOUR_SOFT * floor + 40));
     if (!long && !weigh) return gated;
     const open = findIn(e, used, old, true, wall);
     if (open.blocked) return gated;
