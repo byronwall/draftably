@@ -67,7 +67,8 @@ export function SourcePanel() {
           on:keydown={onKey}
           on:copy={e => e.stopPropagation()}
         >
-          <Index each={lines()}>{line => <span class="source-line">{line()}</span>}</Index>
+          {/* Each line ends in its newline, so a selection copies blank lines too. */}
+          <Index each={lines()}>{line => <span class="source-line">{`${line()}\n`}</span>}</Index>
         </pre>
       </div>
     </Show>

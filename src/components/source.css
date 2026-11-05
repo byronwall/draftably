@@ -55,7 +55,7 @@
   flex: 1;
   min-height: 0;
   margin: 0;
-  padding: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
   overflow: auto;
   background: var(--surface-2);
   color: var(--text);
@@ -71,9 +71,6 @@
 }
 
 .source-line {
-  display: block;
-  min-width: max-content;
-  padding-right: var(--space-3);
   counter-increment: source-line;
 }
 
