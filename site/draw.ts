@@ -1,6 +1,5 @@
-import { renderSvg } from '../src/cli/svg';
-import { compile, type Diagnostic, type Scene } from '../src/dsl/compile';
-import { projectScene } from '../src/dsl/project';
+import type { Diagnostic, Scene } from '../src/dsl/compile';
+import { renderWithScene } from '../src/runtime/render';
 
 /** A node, group or edge and the source line that declares it. */
 export interface DrawnItem {
@@ -24,9 +23,9 @@ export interface Drawing {
 
 /** Compile `.draft` source and draw it the way `draftably inspect --svg` does. */
 export async function draw(source: string): Promise<Drawing> {
-  try {
-    const scene = await compile(source);
-    const failed = scene.diagnostics.some(d => d.level === 'error');
+  const { result, scene } = await renderWithScene(source);
+  if (scene) {
+    const failed = !result.ok || scene.diagnostics.some(d => d.level === 'error');
     const { objects, edges } = scene.model;
     const items: DrawnItem[] = [
       ...objects.map(o => ({ id: o.id, type: o.type, label: o.label, line: o.line })),
@@ -40,28 +39,34 @@ export async function draw(source: string): Promise<Drawing> {
       })),
     ];
     return {
-      svg: failed ? null : renderSvg(projectScene(scene)),
-      diagnostics: scene.diagnostics,
+      svg: failed ? null : result.value.svg,
+      diagnostics: result.ok
+        ? scene.diagnostics
+        : result.diagnostics.map(d => ({
+            level: d.severity === 'info' ? 'warning' : d.severity,
+            code: d.nativeCode ?? d.code,
+            message: d.message,
+            line: d.location?.line,
+            ids: [...d.itemIds],
+          })),
       items,
       scene,
     };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    const line = Number(/^Line (\d+):/.exec(message)?.[1]) || undefined;
-    return {
-      svg: null,
-      diagnostics: [
-        {
-          level: 'error',
-          code: 'compile',
-          message: message.replace(/^Line \d+: /, ''),
-          line,
-          ids: [],
-        },
-      ],
-      items: [],
-    };
   }
+  const issue = result.ok ? undefined : result.diagnostics[0];
+  return {
+    svg: null,
+    diagnostics: [
+      {
+        level: 'error',
+        code: 'compile',
+        message: issue?.message ?? 'The diagram could not be drawn.',
+        line: issue?.location?.line,
+        ids: [...(issue?.itemIds ?? [])],
+      },
+    ],
+    items: [],
+  };
 }
 
 /** The drawing's paper color, so whatever frames it can match. */

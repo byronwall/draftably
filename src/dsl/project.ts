@@ -24,6 +24,13 @@ function resolveColor(scene: Scene, o: SceneObject): ColorKey {
 
 export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
+  const set = (record: Record<string, unknown>, id: string, value: unknown) =>
+    Object.defineProperty(record, id, {
+      value,
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
   doc.id = 'draft-file';
   doc.appearance = clone(scene.model.appearance);
   const cells = new Set(scene.model.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope)),
@@ -48,34 +55,34 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);
-      doc.layout.containers[o.id] = {
+      set(doc.layout.containers, o.id, {
         direction: 'inherit',
         padding: GROUP_INSET,
         manualSize: true,
         ...(cells.has(o.id) ? { cellsBand: band } : {}),
         ...(scene.cells.has(o.id) ? { cellsChrome: clone(scene.cells.get(o.id)!) } : {}),
-      };
+      });
     } else {
       doc.graph.nodes.push(entry);
       // A marker's label sits above the object it cuts, clear of lines that reach it from below.
-      if (o.shape === 'marker') doc.layout.labels[o.id] = { mode: 'top' };
+      if (o.shape === 'marker') set(doc.layout.labels, o.id, { mode: 'top' });
     }
-    doc.layout.nodes[o.id] = {
+    set(doc.layout.nodes, o.id, {
       x: o.x,
       y: o.y,
       w: o.w,
       h: o.h,
       manual: hinted('near', o.id) || hinted('nudge', o.id),
       pinned: hinted('pin', o.id),
-    };
-    doc.styles[o.id] = {
+    });
+    set(doc.styles, o.id, {
       shape: o.shape,
       // A cell is drawn on the neutral surface under its group's band unless it names a color.
       color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
-    };
+    });
   }
   const flow = readingDirections(scene);
   for (const e of scene.edges) {
@@ -92,13 +99,13 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       dashed: e.dashed,
       ...(e.status ? { status: e.status } : {}),
     });
-    doc.layout.edges[e.id] = {
+    set(doc.layout.edges, e.id, {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
       ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
       ...(e.row !== undefined ? { row: e.row } : {}),
-    };
+    });
   }
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
   const groups = new Set(doc.graph.groups.map(g => g.id));
