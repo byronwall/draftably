@@ -6,7 +6,7 @@ const UI_STORAGE = 'diagram-studio-v5-ui';
 
 export type MenuId =
   'file' | 'edit' | 'view' | 'layout' | 'help' | 'export' | 'context' | 'appearance' | 'tools';
-export type RightTab = 'properties' | 'arrange';
+export type RightTab = 'properties' | 'arrange' | 'source';
 export type DialogId = 'help' | 'palette' | 'quick-build' | 'confirm' | 'error' | 'export';
 
 export interface MenuState {
@@ -179,6 +179,7 @@ export function setInspectorOpen(open: boolean) {
 const tabOpen = (tab: RightTab) => state.inspectorOpen() && state.rightTab() === tab;
 export const propertiesOpen = () => tabOpen('properties');
 export const arrangeOpen = () => tabOpen('arrange');
+export const sourceOpen = () => tabOpen('source');
 
 /** Open the right panel on a tab, or close it if that tab is already showing. */
 export function toggleRightTab(tab: RightTab) {

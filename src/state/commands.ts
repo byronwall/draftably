@@ -480,6 +480,13 @@ export const commands = {
     run: () => toggleRight('properties'),
     duringTimeline: true,
   },
+  'toggle-source': {
+    hint: 'Show the .draft text beside the canvas. It follows your edits.',
+    label: 'Source',
+    icon: 'code',
+    run: () => toggleRight('source'),
+    duringTimeline: true,
+  },
   'toggle-panels': {
     hint: 'Give the canvas the whole window, or bring the panels back.',
     label: 'Hide or restore panels',

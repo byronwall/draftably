@@ -20,6 +20,7 @@ import { fileMode, fileSession } from '../state/file-session';
 import { setRouting } from '../state/routing';
 import {
   arrangeOpen,
+  sourceOpen,
   closeMenu,
   filesShown,
   inspectorOpen,
@@ -485,6 +486,7 @@ function ViewMenu() {
       </Show>
       <MenuItem command="toggle-objects" checked={objectsOpen()} />
       <MenuItem command="toggle-inspector" checked={inspectorOpen()} />
+      <MenuItem command="toggle-source" checked={sourceOpen()} />
       <MenuItem command="toggle-panels" />
       <hr />
       <MenuItem command="fit" />

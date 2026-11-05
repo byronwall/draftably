@@ -154,6 +154,13 @@ const keptLabel = () => (exampleMode() ? `${scratchName()} only` : 'Saved');
 /** The source the viewer shows; it differs from `diskSource` while a save is pending. */
 let localSource = '';
 export const currentSource = () => localSource;
+/** `currentSource` as a signal, for views that follow the text as edits rewrite it. */
+const [liveSource, setLiveSource] = createRoot(() => createSignal(''));
+export { liveSource };
+function setLocal(source: string) {
+  localSource = source;
+  setLiveSource(source);
+}
 
 /** Editor state that is not in the file and survives each reprojection. */
 const viewState = () => {
@@ -289,7 +296,8 @@ function resetHistory() {
 async function acceptDisk(source: string, revision: string, { announce = false } = {}) {
   const previous = state.scene(),
     previousSource = localSource;
-  diskSource = localSource = source;
+  diskSource = source;
+  setLocal(source);
   diskRevision = revision;
   resetHistory();
   const scene = await showSource(source);
@@ -379,7 +387,8 @@ function enterConflict(source: string, revision: string) {
   const unsaved = localSource;
   savedMessage = null;
   savedAction = undefined;
-  diskSource = localSource = source;
+  diskSource = source;
+  setLocal(source);
   diskRevision = revision;
   resetHistory();
   batch(() => {
@@ -402,7 +411,7 @@ export function saveProposalOverDisk() {
   const proposal = state.proposal();
   if (!proposal) return;
   state.setProposal(null);
-  localSource = proposal;
+  setLocal(proposal);
   void showSource(proposal);
   void save();
 }
@@ -472,7 +481,7 @@ function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boo
     state.setUndoStack(stack => [...stack, { before: localSource, after: next, label }].slice(-80));
     state.setRedoStack([]);
   });
-  localSource = next;
+  setLocal(next);
   const mapId = (id: string) => result.ids.get(id) ?? id,
     { drops } = result;
   void showSource(next, () => selectedIds().map(mapId), mapId).then(
@@ -512,7 +521,7 @@ function checkDrops(scene: Scene, source: string, drops: Drop[]) {
   if (!off.length) return;
   const next = exactSource(off);
   state.setUndoStack(stack => [...stack.slice(0, -1), { ...stack.at(-1)!, after: next }]);
-  localSource = next;
+  setLocal(next);
   savedMessage = `${keptLabel()} · kept ${off.map(d => d.id).join(', ')} where dropped`;
   savedAction = undefined;
   void showSource(next);
@@ -542,7 +551,7 @@ export async function commitSource(next: string, label: string, message: string)
     state.setUndoStack(stack => [...stack, { before: localSource, after: next, label }].slice(-80));
     state.setRedoStack([]);
   });
-  localSource = next;
+  setLocal(next);
   savedMessage = `${keptLabel()} · ${message}`;
   savedAction = undefined;
   void save();
@@ -638,7 +647,7 @@ function historyStep(direction: 'undo' | 'redo') {
       state.setUndoStack(s => [...s, entry]);
     }
   });
-  localSource = direction === 'undo' ? entry.before : entry.after;
+  setLocal(direction === 'undo' ? entry.before : entry.after);
   void showSource(localSource);
   clearSelection();
   toast((direction === 'undo' ? 'Undid ' : 'Redid ') + entry.label.toLowerCase());
@@ -759,7 +768,7 @@ function keepScratch() {
 /** Throw away the example's edits and show it as it was opened. */
 export function resetExample() {
   if (!exampleMode()) return;
-  localSource = exampleOriginal;
+  setLocal(exampleOriginal);
   resetHistory();
   keepScratch();
   state.setRestored(false);
