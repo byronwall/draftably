@@ -813,6 +813,10 @@
   cursor: help;
 }
 
+.text-hit.link {
+  cursor: pointer;
+}
+
 .text-hit:not(.read-only):hover {
   fill: var(--accent);
   fill-opacity: 0.06;

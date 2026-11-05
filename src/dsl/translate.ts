@@ -170,6 +170,7 @@ export function translateEdit(input: EditInput): EditResult {
     ...d.appearance,
     heading: undefined,
     notes: undefined,
+    footnotes: undefined,
     legend: undefined,
   });
   if (!same(look(before), look(after))) writeAppearance(source, after.appearance);
@@ -178,6 +179,15 @@ export function translateEdit(input: EditInput): EditResult {
     setAttr(st, 'near', n.near ? bare(n.near) : undefined);
     setAttr(st, 'side', n.near && n.side ? bare(n.side) : undefined);
   });
+  writeRows(
+    source,
+    'footnote',
+    before.appearance.footnotes,
+    after.appearance.footnotes,
+    (st, n) => {
+      st.args = [...(n.mark ? [bare(n.mark)] : []), quoted(n.text)];
+    },
+  );
   writeRows(source, 'legend', before.appearance.legend, after.appearance.legend, (st, e) => {
     st.args[st.args.length - 1] = quoted(e.label);
   });

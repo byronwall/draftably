@@ -2,7 +2,9 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import { resolveAppearance } from '../../model/appearance';
 import { MIN_FRAME_WIDTH, type DiagramFrame } from '../../model/frame';
 import { headingLines, headingTypes } from '../../model/heading';
+import { footnoteMarkup } from '../../model/footnote';
 import { legendMarkup } from '../../model/legend';
+import { exportHref } from '../../state/links';
 import { HEADING_EDIT } from '../../state/actions';
 import { doc, transact } from '../../state/document';
 import { inlineEditId, screenToWorld } from '../../state/editor';
@@ -59,7 +61,10 @@ export function Frame() {
       frame().heading.y,
       frame().heading.wrap,
     );
-  const legend = () => legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
+  // Footnotes, then the key; link clicks land on the click targets `TextHits` draws over them.
+  const legend = () =>
+    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, exportHref) +
+    legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
   const ghost = (key: Key) => {
     if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
     // Frame notes sit where a missing subtitle would go, as exports draw them.

@@ -44,8 +44,10 @@ function Editor(props: { id: string }) {
     if (text) {
       ({ type, fill, ink } = text);
       align = 'left';
-      // A short label edits in a box wide enough to type a longer one.
-      world = { ...text.rect, w: Math.max(text.rect.w, 160) };
+      // A short label edits in a box wide enough to type a longer one; prose shows its links'
+      // targets while it is edited, so it gets more room.
+      const prose = /^@(note|footnote):/.test(props.id);
+      world = { ...text.rect, w: Math.max(text.rect.w, prose ? 360 : 160) };
     } else if (findEdge(doc, props.id)) {
       const route = routesById().get(props.id),
         at = route?.label ?? route?.points[Math.floor(route.points.length / 2)] ?? { x: 0, y: 0 };

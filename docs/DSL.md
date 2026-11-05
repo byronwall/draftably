@@ -48,6 +48,7 @@ and groups. References may point to later lines.
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                             |
 | `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                 |
 | `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                   |
+| `footnote 1 "text"`                | An entry in the block under the drawing, above the legend. The marker (`1`, `a`, `*`) is optional; a label points at it as `[1]`. Text takes `[label](href)` links. See [Footnotes](#footnotes).                                                                                                                                                                                                                                      |
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                                                                                |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                                                                            |
@@ -97,7 +98,8 @@ it wraps at 70 characters. A diagram stands on its own; the drawing says the res
 `note "A plan is one pricing tier: Free, Team or Enterprise." near=plan` adds a sentence beside
 the object it explains. Write one only when the drawing cannot say it. Like the legend, a note
 never moves anything. Without `near=` it sits in the frame under the subtitle, several notes stack
-in file order, and `check` warns `heading-prose`: cut it, or anchor it to its object. With
+in file order, and `check` warns `heading-prose`: anchor it to its object, or make it a
+[footnote](#footnotes). With
 `near=id` it is placed after layout beside that node or group: `side=below` (the default),
 `above`, `left` or `right`, at the first spot along that side that is clear of shapes, lines,
 group borders and other notes. In a sequence, `near=` also takes a message ID (see
@@ -109,6 +111,33 @@ subtitle.
 ```text
 note "Seats are billed monthly." near=seat side=below width=220
 ```
+
+A note's text may hold links written `[label](href)`: `note "See [the billing doc](docs/billing.md)." near=seat`
+draws `the billing doc` underlined. The href works like an object's `href=` and joins
+`config link-base=` (see [Links and counts](#links-and-counts)). In the Editor a click on the link
+opens it; in `inspect --svg`, SVG exports and PDF it is an `<a>`. PNG keeps the text without the link.
+
+### Footnotes
+
+`footnote` lines make a block under the drawing, above the legend: one entry per line, in file
+order, at the subtitle's text size, wrapped to the frame's width. Use it for references and
+detail that would crowd the drawing, such as the PRs behind each step. An entry may start with a
+short marker (`1`, `a`, `*`, up to three letters or digits) drawn in a column before its text; a
+node or message label points at it by writing `[1]`. `check` warns (`footnote-missing`) when a
+label points at a marker that no footnote has, once the file has a marked footnote. Text takes
+`[label](href)` links, as notes do. Footnotes never move the drawing and never warn
+`heading-prose`.
+
+```text
+config link-base="https://github.com/org/repo/"
+edge m2 api -> queue "retry later [1]"
+footnote 1 "[#1997](pull/1997) moved retries to the queue."
+footnote "Times are from the staging run."
+```
+
+In the Editor, a footnote, like a note, legend row or phase label, selects on a click and edits on
+a double-click; the edit saves to its own line. Dragging a note to another shape, container or
+message saves its new `near=` and `side=`.
 
 ### Links and counts
 
@@ -1262,6 +1291,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Support ticket lanes](https://draftably.dev/app/?example=support-lanes): Swim lanes: each top-level group is a role. Steps take their place in order across all lanes.
 - [Incident response](https://draftably.dev/app/?example=incident-response): One container per role, with hand-offs crossing between lanes.
 - [Sign-in sequence](https://draftably.dev/app/?example=login-sequence): A sequence diagram: participants across the top, one message per edge line, read top to bottom.
+- [How a label reaches the page](https://draftably.dev/app/?example=label-history): A sequence whose labels point at footnotes; each footnote links its PR.
 - [How a request is built](https://draftably.dev/app/?example=prompt-request): The request is one group of touching cells, and a marker shows the cache point.
 
 ### Tables and byte layouts

@@ -6,6 +6,7 @@ import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
 import { headingMarkup } from '../model/heading';
+import { footnoteMarkup } from '../model/footnote';
 import { legendMarkup } from '../model/legend';
 import { renderSvg } from '../cli/svg';
 import { findNode } from '../model/graph';
@@ -348,7 +349,9 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
             frame.heading.x,
             frame.heading.y,
             frame.heading.wrap,
-          ) + legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y);
+          ) +
+          footnoteMarkup(theme, frame.foot, frame.foot.x, frame.foot.y, exportHref) +
+          legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,

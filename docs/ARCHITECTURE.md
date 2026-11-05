@@ -21,6 +21,8 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 | `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given. |
 | `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                        |
 | `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                  |
+| `rich-text.ts`    | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                        |
+| `footnote.ts`     | The footnote block between the drawing and the key.                                                               |
 | `appearance.ts`   | Five preset themes, color families with numeric shades, and `resolveAppearance` (preset, then file overrides).    |
 | `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).          |
 | `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                 |

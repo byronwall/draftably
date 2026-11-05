@@ -64,6 +64,22 @@ export function TextHits() {
           />
         )}
       </For>
+      {/* Links sit over their text's click box: a click opens the link, as a node's link mark does. */}
+      <For each={boxes().flatMap(b => b.links ?? [])}>
+        {link => (
+          <rect
+            class="text-hit link"
+            data-open-link={link.href}
+            aria-label={`Open ${link.href}`}
+            x={link.x}
+            y={link.y}
+            width={link.w}
+            height={link.h}
+          >
+            <title>{link.href}</title>
+          </rect>
+        )}
+      </For>
       <For each={statusRows()}>
         {r => (
           <rect

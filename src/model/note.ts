@@ -6,7 +6,7 @@
  */
 import { swatchFor, type ResolvedAppearance } from './appearance';
 import type { BoundedRoute } from './bounds';
-import { measureText, wrapLines } from './fonts';
+import { richLines, runsMarkup, type Run } from './rich-text';
 import { contains, overlaps, rectUnion } from './geometry';
 import type { Diagram, Point, Rect } from './types';
 
@@ -30,7 +30,8 @@ export interface Note {
 export interface PlacedNote {
   note: Note;
   rect: Rect;
-  lines: string[];
+  /** Wrapped lines, each as runs of plain text and links. */
+  lines: Run[][];
   inFrame?: boolean;
   overlaps?: boolean;
 }
@@ -41,9 +42,11 @@ export const noteSide = (doc: Diagram, note: Note): NoteSide =>
 
 /** Default wrap width, and the room between a note and its object. */
 export const NOTE_WIDTH = 280;
+/** Room between a note's panel and its text. */
+export const NOTE_PAD = { x: 12, y: 8 };
 const GAP = 16,
-  PAD_X = 12,
-  PAD_Y = 8,
+  PAD_X = NOTE_PAD.x,
+  PAD_Y = NOTE_PAD.y,
   /** Room between a note and a message's row, and between notes stacked in a margin. */
   ROW_GAP = 8,
   /** How far each try moves a note along its row, away from the message. */
@@ -55,8 +58,8 @@ const esc = (s: string) =>
 /** The note's wrapped lines and box size, at 0,0. */
 export function noteBox(look: ResolvedAppearance, note: Note): PlacedNote {
   const type = look.annotation,
-    lines = wrapLines(note.text, (note.width ?? NOTE_WIDTH) - PAD_X * 2, type),
-    w = Math.ceil(Math.max(...lines.map(l => measureText(l, type)))) + PAD_X * 2;
+    lines = richLines(note.text, (note.width ?? NOTE_WIDTH) - PAD_X * 2, type),
+    w = Math.ceil(Math.max(...lines.map(l => l.reduce((x, r) => x + r.w, 0)))) + PAD_X * 2;
   return { note, lines, rect: { x: 0, y: 0, w, h: lines.length * type.lineHeight + PAD_Y * 2 } };
 }
 
@@ -184,16 +187,24 @@ export function placeNotes(
   });
 }
 
-/** SVG markup for placed notes: a quiet panel with a bar on its left edge, then the text. */
-export function noteMarkup(look: ResolvedAppearance, notes: readonly PlacedNote[]): string {
+/**
+ * SVG markup for placed notes: a quiet panel with a bar on its left edge, then the text. Links
+ * are `<a>` elements with `href` as `write` gives it.
+ */
+export function noteMarkup(
+  look: ResolvedAppearance,
+  notes: readonly PlacedNote[],
+  write: (href: string) => string = h => h,
+): string {
   const { family, size, weight, lineHeight } = look.annotation,
-    panel = swatchFor(look, 'slate', 50, 'group');
+    panel = swatchFor(look, 'slate', 50, 'group'),
+    link = swatchFor(look, 'primary', 700).fill;
   return notes
     .map(({ rect: r, lines }) => {
       const text = lines
         .map(
           (line, i) =>
-            `<text x="${r.x + PAD_X}" y="${r.y + PAD_Y + (i + 0.5) * lineHeight}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${esc(line)}</text>`,
+            `<text x="${r.x + PAD_X}" y="${r.y + PAD_Y + (i + 0.5) * lineHeight}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${runsMarkup(line, link, write)}</text>`,
         )
         .join('');
       return (

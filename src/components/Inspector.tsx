@@ -226,7 +226,7 @@ function TextInspector(props: { id: string }) {
             : ''}
         </p>
       </Section>
-      <Show when={kind() === 'note' || kind() === 'legend'}>
+      <Show when={kind() === 'note' || kind() === 'footnote' || kind() === 'legend'}>
         <Section>
           <button
             type="button"

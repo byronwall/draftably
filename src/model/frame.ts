@@ -5,6 +5,7 @@
  */
 import type { Heading, LegendEntry, ResolvedAppearance } from './appearance';
 import { headingSize, subtitleMeasure } from './heading';
+import { footnoteSize, type Footnote } from './footnote';
 import { legendSize } from './legend';
 import type { PlacedNote } from './note';
 import { rectUnion } from './geometry';
@@ -21,7 +22,8 @@ const NOTE_GAP = 8;
 
 /**
  * Lay out the frame round `area`, the drawing with `FRAME_PAD` already round it. The heading sits
- * above the area and the key at its bottom, both left-aligned with the drawing. Frame notes stack
+ * above the area and the key at its bottom, both left-aligned with the drawing; footnotes sit
+ * between the drawing and the key, wrapped to the frame. Frame notes stack
  * under the heading, and the area grows to hold anchored notes (`placeNotes`). The frame is at
  * least as wide as the heading, the notes, the key and the heading's `width`; extra width goes to
  * the right.
@@ -33,6 +35,7 @@ export function diagramFrame(
   statuses: StatusCount[],
   drawing: Rect,
   notes: readonly PlacedNote[] = [],
+  footnotes: readonly Footnote[] = [],
 ) {
   const anchored = notes.filter(n => !n.inFrame).map(n => n.rect),
     area = anchored.length ? rectUnion([drawing, rectUnion(anchored, FRAME_PAD)]) : drawing,
@@ -47,6 +50,9 @@ export function diagramFrame(
     // The key flows left to right and wraps to the frame the drawing and heading set.
     inner = Math.max(area.w, head.w + FRAME_PAD * 2, heading?.width ?? 0) - FRAME_PAD * 2,
     key = legendSize(look, legend, statuses, inner),
+    foot = footnoteSize(look, footnotes, inner),
+    // With no key under them, footnotes need the frame's bottom margin themselves.
+    footH = foot.h && !key.h ? foot.h + FRAME_PAD / 2 : foot.h,
     natural = Math.max(area.w, head.w + FRAME_PAD * 2, key.w + FRAME_PAD * 2),
     y = area.y - head.h,
     left = area.x + FRAME_PAD;
@@ -62,13 +68,15 @@ export function diagramFrame(
     x: area.x,
     y,
     w: Math.max(natural, heading?.width ?? 0),
-    h: area.h + head.h + key.h,
+    h: area.h + head.h + footH + key.h,
     /** Width without the heading's `width`, which a drag never narrows past. */
     natural,
     head,
     key,
     heading: { x: left, y: y + 28, wrap },
-    legend: { x: left, y: area.y + area.h - 12 },
+    legend: { x: left, y: area.y + area.h - 12 + foot.h },
+    /** The footnote block's top-left corner and layout. */
+    foot: { ...foot, x: left, y: area.y + area.h - 12 },
     /** Every note, placed. */
     notes: placed,
   };

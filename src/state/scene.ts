@@ -240,5 +240,6 @@ export function viewerFrame() {
     usedStatuses(doc),
     drawingBounds(doc, visibleScene(), sceneRects(), routes(), FRAME_PAD),
     placeNotes(doc, look, sceneRects(), routes()),
+    doc.appearance.footnotes,
   );
 }

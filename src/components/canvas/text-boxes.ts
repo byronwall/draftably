@@ -2,6 +2,8 @@ import { PHASE_TAB } from '../../cli/svg';
 import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../../model/appearance';
 import type { DiagramFrame } from '../../model/frame';
 import { measureText } from '../../model/fonts';
+import { NOTE_PAD } from '../../model/note';
+import type { Run } from '../../model/rich-text';
 import type { Rect } from '../../model/types';
 import { parseTextId, textId } from '../../state/canvas-text';
 import { doc } from '../../state/document';
@@ -16,7 +18,17 @@ export interface TextBox {
   type: Type;
   fill: string;
   ink: string;
+  /** Links in the text, each with the box a click opens it from. */
+  links?: Array<Rect & { href: string }>;
 }
+
+/** Click boxes for the links in lines of runs whose first line starts at (x, y). */
+const linkBoxes = (lines: Run[][], x: number, y: number, lineHeight: number) =>
+  lines.flatMap((runs, i) =>
+    runs.flatMap(r =>
+      r.href ? [{ href: r.href, x: x + r.x, y: y + i * lineHeight, w: r.w, h: lineHeight }] : [],
+    ),
+  );
 
 /**
  * Every note, legend row and phase label the frame draws, with the box a click or an edit covers.
@@ -28,8 +40,33 @@ export function textBoxes(frame: DiagramFrame): TextBox[] {
     panel = swatchFor(look, 'slate', 50, 'group').fill,
     out: TextBox[] = [];
   frame.notes.forEach((n, i) =>
-    out.push({ id: textId('note', i), rect: n.rect, type, fill: panel, ink: look.text }),
+    out.push({
+      id: textId('note', i),
+      rect: n.rect,
+      type,
+      fill: panel,
+      ink: look.text,
+      links: linkBoxes(n.lines, n.rect.x + NOTE_PAD.x, n.rect.y + NOTE_PAD.y, type.lineHeight),
+    }),
   );
+  const foot = frame.foot;
+  foot.items.forEach((item, i) => {
+    const top = foot.y + item.y,
+      lh = foot.type.lineHeight;
+    out.push({
+      id: textId('footnote', i),
+      rect: {
+        x: foot.x,
+        y: top,
+        w: foot.gutter + Math.max(...item.lines.map(l => l.reduce((w, r) => w + r.w, 0))),
+        h: item.lines.length * lh,
+      },
+      type: foot.type,
+      fill: look.canvas,
+      ink: look.text,
+      links: linkBoxes(item.lines, foot.x + foot.gutter, top, lh),
+    });
+  });
   const legend = doc.appearance.legend?.length ?? 0;
   frame.key.items.forEach((item, i) => {
     if (!item.legend || i >= legend) return;
