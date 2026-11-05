@@ -574,7 +574,7 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
         title: '',
         ...r,
         shape: 'box' as ShapeKind,
-        ...(stubParent.has(id) ? { parentId: stubParent.get(id) } : {}),
+        ...(stubParent.has(id) ? { parentId: stubParent.get(id), frame: true } : {}),
       })),
     ],
     // A soft or frameless group has no border for a line to cross or run along.

@@ -15,6 +15,7 @@ import { groupTitleInk, labelBoxes } from '../model/label-hits';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Diagram, Point, Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from './compile';
+import { flowSideNotes } from './flow-sides';
 import { projectScene, visibleRects } from './project';
 import type { Hint } from './syntax';
 
@@ -236,7 +237,11 @@ export function sceneConflicts(scene: Scene): Diagnostic[] {
   const doc = projectScene(scene);
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
-  return [...findConflicts(scene, doc, rects, routes), ...noteConflicts(scene, doc, rects, routes)];
+  return [
+    ...findConflicts(scene, doc, rects, routes),
+    ...noteConflicts(scene, doc, rects, routes),
+    ...flowSideNotes(scene, doc, rects, routes),
+  ];
 }
 
 /** An anchored note with no clear spot beside its object, so it covers part of the drawing. */

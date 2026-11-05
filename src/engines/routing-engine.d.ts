@@ -4,6 +4,8 @@ export interface RouteNodeInput extends Rect {
   id: string;
   parentId?: string;
   shape: ShapeKind;
+  /** The stub for lines that end on an open group's frame: the group's rectangle. */
+  frame?: boolean;
 }
 
 export interface RouteGroupInput extends Rect {
