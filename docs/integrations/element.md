@@ -43,7 +43,13 @@ void diagram.updateComplete.then(result => {
 });
 ```
 
-`state` selects a declared emphasis state. `label` supplies an accessible name.
+The `state` attribute selects a declared emphasis state. The `label` attribute
+supplies an accessible name. Change them with `setAttribute`, for example:
+
+```ts
+diagram.setAttribute('label', 'Checkout flow');
+```
+
 Changing source or state preserves the camera. An invalid update keeps the last
 good drawing and shows its diagnostic. `updateComplete` settles for the current
 update, including cancellation or removal. The `draft-update` event carries
@@ -65,6 +71,10 @@ fallback when disconnected. Adding it again creates a new viewer. Frameworks
 can render the element and fallback normally; they do not own its shadow root.
 The element's source is public browser data, as with the imperative viewer.
 
+Missing, empty, or whitespace-only source keeps the fallback visible. Set
+`source` when your data arrives. Clearing it cancels rendering and restores the
+fallback; `updateComplete` resolves to `undefined` while no source is present.
+
 ## Use a custom policy
 
 Set `options` before adding an element when you need custom execution or link
@@ -77,12 +87,12 @@ diagram.source = source;
 document.querySelector('#diagrams')!.append(diagram);
 ```
 
-Replacing `options` or `label` remounts the viewer. Set `render.styleNonce` before
+Replacing `options` or the `label` attribute remounts the viewer. Set `render.styleNonce` before
 connection when your CSP requires a style nonce. Source and options properties
 assigned before custom-element registration survive its upgrade.
 
 The read-only `viewer` property gives access to `fit()`, camera control, and
-viewer events while connected. For full lifecycle control, use
+viewer events while connected with source. For full lifecycle control, use
 [`mountViewer`](viewer.md). Importing the element entry in Node is safe, but
 registration and rendering occur only in a browser.
 

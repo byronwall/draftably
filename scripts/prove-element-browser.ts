@@ -115,6 +115,49 @@ try {
     'PASS nested deployment, two instances, bundled styles, default height, and real worker',
   );
 
+  await page.evaluate(() => {
+    const waiting = document.createElement('draft-diagram');
+    waiting.id = 'waiting';
+    waiting.append(document.querySelector('#diagram img')!.cloneNode(true));
+    document.body.append(waiting);
+  });
+  for (const source of [null, '', ' \n\t']) {
+    assert.equal(
+      await page.evaluate(async source => {
+        const waiting = document.querySelector<DraftDiagramElement>('#waiting')!;
+        if (source === null) waiting.removeAttribute('source');
+        else waiting.source = source;
+        return (await waiting.updateComplete) === undefined && waiting.viewer === undefined;
+      }, source),
+      true,
+    );
+    assert.equal(await page.locator('#waiting img').isVisible(), true);
+    assert.equal(await page.locator('#waiting svg').count(), 0);
+  }
+  const cleared = await page.evaluate(async () => {
+    const waiting = document.querySelector<DraftDiagramElement>('#waiting')!;
+    waiting.source = 'node a "Arrived"';
+    const first = (await waiting.updateComplete)?.status;
+    waiting.source = 'node a "Pending"';
+    const pending = waiting.updateComplete;
+    waiting.removeAttribute('source');
+    return { first, pending: (await pending)?.status, empty: await waiting.updateComplete };
+  });
+  assert.deepEqual(cleared, { first: 'committed', pending: 'destroyed', empty: undefined });
+  assert.equal(await page.locator('#waiting img').isVisible(), true);
+  assert.equal(await page.locator('#waiting svg').count(), 0);
+  assert.equal(
+    await page.evaluate(async () => {
+      const waiting = document.querySelector<DraftDiagramElement>('#waiting')!;
+      waiting.source = 'node a "Returned"';
+      return (await waiting.updateComplete)?.status;
+    }),
+    'committed',
+  );
+  assert.equal(await page.locator('#waiting img').isVisible(), false);
+  await page.locator('#waiting').evaluate(element => element.remove());
+  console.log('PASS blank source keeps fallback; clearing cancels work; later source renders');
+
   await page.getByRole('button', { name: 'Update source', exact: true }).click();
   await page.waitForFunction(() =>
     document

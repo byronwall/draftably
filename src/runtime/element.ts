@@ -104,6 +104,11 @@ if (
       }
 
       disconnectedCallback() {
+        this._reset();
+        this._style.remove();
+      }
+
+      private _reset() {
         this._generation++;
         this._viewer?.destroy();
         this._viewer = undefined;
@@ -112,12 +117,14 @@ if (
         this._fallback.hidden = false;
         this._status.textContent = '';
         this._hasCommitted = false;
-        this._style.remove();
       }
 
       attributeChangedCallback(name: string) {
         if (name === 'source') {
-          if (this.isConnected) this._update();
+          if (this.isConnected) {
+            if (this._viewer && this.source.trim()) this._update();
+            else this._mount(true);
+          }
         } else if (this.isConnected && name === 'state') {
           this._update();
         } else if (this.isConnected && name === 'label') {
@@ -127,16 +134,7 @@ if (
 
       private _mount(remount: boolean) {
         if (!this.isConnected) return;
-        if (remount) {
-          this._generation++;
-          this._viewer?.destroy();
-          this._viewer = undefined;
-          this._host.replaceChildren();
-          this._host.hidden = true;
-          this._fallback.hidden = false;
-          this._status.textContent = '';
-          this._hasCommitted = false;
-        }
+        if (remount) this._reset();
         if (this._viewer) return;
         const options: ViewerOptions = {
           ...this._options,
@@ -147,6 +145,10 @@ if (
         if (nonce) this._style.setAttribute('nonce', nonce);
         else this._style.removeAttribute('nonce');
         this.shadowRoot!.prepend(this._style);
+        if (!this.source.trim()) {
+          this._updateComplete = Promise.resolve(undefined);
+          return;
+        }
         try {
           this._viewer = mountViewer(this._host, options);
         } catch (error) {
