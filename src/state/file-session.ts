@@ -76,6 +76,8 @@ interface SourceStep {
   before: string;
   after: string;
   label: string;
+  /** Set for text typed in the Source panel: one focus of the panel undoes as one step. */
+  burst?: number;
 }
 
 const state = createRoot(() => {
@@ -161,6 +163,9 @@ function setLocal(source: string) {
   localSource = source;
   setLiveSource(source);
 }
+/** Text typed in the Source panel that is not the shown source yet: pending, or invalid. */
+const [sourceDraft, setDraft] = createRoot(() => createSignal<string | null>(null));
+export { sourceDraft };
 
 /** Editor state that is not in the file and survives each reprojection. */
 const viewState = () => {
@@ -418,6 +423,46 @@ export function saveProposalOverDisk() {
 
 /** Try the last failed save again. */
 export const retrySave = () => void save();
+
+let typing = 0;
+
+/**
+ * Show and save text typed in the Source panel. A valid text is drawn, recorded and saved as is;
+ * an invalid one keeps the last valid drawing and reports its line. Texts typed in one `burst`
+ * (one focus of the panel) undo as one step.
+ */
+export async function typeSource(next: string, burst: number) {
+  const ticket = ++typing;
+  setDraft(next);
+  if (state.proposal()) return;
+  if (next === localSource) {
+    // Typed back to the shown source: drop the error the draft reported.
+    if (!state.sourceError()) return setDraft(null);
+    if ((await showSource(next)) && ticket === typing) {
+      setDraft(null);
+      if (state.status() === 'invalid') state.setStatus('saved');
+    }
+    return;
+  }
+  const scene = await showSource(next);
+  if (!scene || ticket !== typing) return;
+  const top = state.undoStack().at(-1);
+  batch(() => {
+    if (top?.burst !== burst)
+      state.setUndoStack(stack =>
+        [...stack, { before: localSource, after: next, label: 'Edit source', burst }].slice(-80),
+      );
+    else if (top.before === next) state.setUndoStack(stack => stack.slice(0, -1));
+    else state.setUndoStack(stack => [...stack.slice(0, -1), { ...top, after: next }]);
+    state.setRedoStack([]);
+    setLocal(next);
+    setDraft(null);
+    if (state.status() === 'invalid') state.setStatus('saved');
+  });
+  savedMessage = null;
+  savedAction = undefined;
+  void save();
+}
 
 // --- Edits and history ---------------------------------------------------------------------------
 
@@ -784,6 +829,7 @@ export function markExampleSaved() {
 
 function begin(info: FileSessionInfo): Promise<void> {
   stopListening();
+  setDraft(null);
   if (!info.example) scratchKey = '';
   state.setRestored(false);
   exampleOriginal = info.example ? info.source : '';

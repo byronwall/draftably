@@ -63,6 +63,7 @@ const KEY_COMMANDS: Record<string, CommandId> = {
   '[': 'toggle-objects',
   ']': 'toggle-inspector',
   '\\': 'toggle-panels',
+  '`': 'toggle-source',
   '+': 'zoom-in',
   '=': 'zoom-in',
   '-': 'zoom-out',
