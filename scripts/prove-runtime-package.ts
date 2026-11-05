@@ -35,7 +35,9 @@ assert.equal(Object.keys(manifest.dependencies ?? {}).length, 0);
 const probe = `import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { renderSvg, validate } from '@draftably/runtime';
+import { renderSvg as renderBrowserSvg } from '@draftably/runtime/browser';
 assert.equal(typeof document, 'undefined');
+assert.equal((await renderBrowserSvg('node a "Browser entry"')).ok, true);
 const sources = JSON.parse(readFileSync('sources.json', 'utf8'));
 const times = [];
 for (const [name, source] of Object.entries(sources)) {
@@ -75,10 +77,13 @@ writeFileSync(path.join(out, 'node.txt'), proof);
 writeFileSync(
   path.join(dir, 'consumer.ts'),
   `import {renderSvg, validate, type RenderOptions, type RenderResult} from '@draftably/runtime';
+import {renderSvg as renderBrowserSvg, type RenderResult as BrowserResult} from '@draftably/runtime/browser';
 const options: RenderOptions = { target: 'inline', idPrefix: 'example', fonts: 'host' };
 const result: RenderResult = await renderSvg('node a "A"', options);
+const browserResult: BrowserResult = await renderBrowserSvg('node a "A"', options);
 await validate('node a "A"');
 if (result.ok) console.log(result.value.svg);
+if (browserResult.ok) console.log(browserResult.value.svg);
 `,
 );
 execFileSync(
