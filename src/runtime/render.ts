@@ -382,6 +382,10 @@ export async function validate(
   source: string,
   options: ValidateOptions = {},
 ): Promise<ValidationResult> {
+  if (!options || typeof options !== 'object' || Array.isArray(options))
+    throw new TypeError('Validation options must be an object.');
+  if (options.sourceId !== undefined && typeof options.sourceId !== 'string')
+    throw new TypeError('sourceId must be a string.');
   if (typeof source !== 'string') throw new TypeError('source must be a string.');
   const limits = limitsOf(options.limits, true),
     sourceId = options.sourceId;
