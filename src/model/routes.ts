@@ -4,12 +4,13 @@ import {
   type Route,
   type RoutingResult,
 } from '../engines/routing-engine.js';
-import { clamp, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
+import { clamp, contains, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
 import { edgeLabelLines, edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
+  ancestors,
   findEdge,
   findNode,
   isCell,
@@ -74,6 +75,8 @@ export interface LabelAvoid {
   borders?: Rect[];
   /** The marks at line ends. A spot that hides one costs as much as a line through the text. */
   marks?: Rect[];
+  /** The open group that holds both ends. A spot not inside it costs a little less than a line. */
+  home?: Rect;
 }
 
 /** Whether an orthogonal segment passes through a rectangle. */
@@ -138,6 +141,7 @@ function labelSpots(
     }
     for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
     for (const m of avoid.marks ?? []) if (overlaps(r, m, 1)) c += 5;
+    if (avoid.home && !contains(grown(avoid.home, -2), r)) c += 4;
     // A label pressed against a box reads as part of it; a spot a little further along is clearer.
     if (obstacles.some(o => overlaps(r, o, BOX_CLEARANCE))) c += 1;
     return c;
@@ -252,6 +256,7 @@ export function placeEdgeLabels(
       others,
       p => obstacles.some(o => overlaps(box(p), o, 4)) || others.some(o => overlaps(box(p), o, 6)),
       cost,
+      jobs[i].avoid?.home,
     );
   };
   // Labels with a clean spot go first, so one that crosses lines wherever it goes never takes it.
@@ -290,6 +295,7 @@ function shiftedLabel(
   existing: Rect[],
   blocked: (p: Point) => boolean,
   cost: (p: Point) => number = () => 0,
+  home?: Rect,
 ): EdgeLabelBox {
   const shifted: EdgeLabelBox[] = [];
   for (let i = 1; i < points.length; i++) {
@@ -300,7 +306,14 @@ function shiftedLabel(
     const nx = a.y === b.y ? 0 : a.x === b.x ? 1 : -(b.y - a.y) / len,
       ny = a.y === b.y ? 1 : a.x === b.x ? 0 : (b.x - a.x) / len,
       radius = (w * Math.abs(nx) + h * Math.abs(ny)) / 2,
-      pScore = len + (a.y === b.y ? 50 : 0);
+      pScore = len + (a.y === b.y ? 50 : 0),
+      // Slides along the segment, up to the label's own length, so it can step past a line that
+      // crosses the spot beside a short gap.
+      reach = w * Math.abs(ny) + h * Math.abs(nx),
+      slides = Array.from(
+        { length: 2 * Math.ceil(reach / 6) + 1 },
+        (_, k) => (k - Math.ceil(reach / 6)) * 6,
+      );
     for (const t of [0.5, 0.35, 0.65]) {
       const p = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t },
         along = p.x * nx + p.y * ny,
@@ -318,20 +331,23 @@ function shiftedLabel(
           offsets.add(center + extent - along);
         }
       }
-      for (const offset of offsets) {
-        if (!offset || blocked({ x: p.x + nx * offset, y: p.y + ny * offset })) continue;
-        shifted.push({
-          x: p.x + nx * offset,
-          y: p.y + ny * offset,
-          w,
-          h,
-          score: pScore - Math.abs(offset) * 2,
-        });
+      // Just inside the label's own group, where a short gap leaves room only by its frame.
+      if (home) {
+        const center = (home.x + home.w / 2) * nx + (home.y + home.h / 2) * ny,
+          extent = (home.w * Math.abs(nx) + home.h * Math.abs(ny)) / 2 - radius - 2;
+        offsets.add(center - extent - along);
+        offsets.add(center + extent - along);
       }
+      for (const offset of offsets)
+        for (const slide of offset ? slides : []) {
+          const q = { x: p.x + nx * offset + ny * slide, y: p.y + ny * offset - nx * slide };
+          if (blocked(q)) continue;
+          shifted.push({ ...q, w, h, score: pScore - (Math.abs(offset) + Math.abs(slide)) * 2 });
+        }
     }
   }
   // The nearest spot, where a line through the text (cost 5) counts as 40px further: the label
-  // may step past a line or two, but never flees far from its edge to avoid one.
+  // may step past a line or two, or out of its group, but never flees far from its edge.
   const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 16]));
   shifted.sort((a, b) => rank.get(b)! - rank.get(a)!);
   const a = points[0] || { x: 0, y: 0 },
@@ -708,7 +724,8 @@ export function drawRoutes(
   result: RoutingResult,
 ): DrawnRoute[] {
   const obstacles: Rect[] = vg.nodes.map(n => rects.get(n.id)!),
-    borders: Rect[] = [];
+    borders: Rect[] = [],
+    open = new Map<string, Rect>();
   for (const g of vg.groups) {
     const r = rects.get(g.id)!;
     if (g.frame) continue;
@@ -716,6 +733,7 @@ export function drawRoutes(
       obstacles.push(r);
       continue;
     }
+    open.set(g.id, r);
     obstacles.push({ x: r.x, y: r.y, w: r.w, h: 32 });
     borders.push(
       { x: r.x - 1, y: r.y, w: 2, h: r.h },
@@ -784,6 +802,11 @@ export function drawRoutes(
     const edge = findEdge(doc, route.id);
     return edge && hasMarkers(edge) ? markerRects(route.points, edge) : [];
   });
+  // A label's home is the nearest open group that holds both ends of its edge.
+  const home = (e: VisibleEdge) => {
+    const up = new Set(ancestors(doc, e.b));
+    return open.get(ancestors(doc, e.a).find(g => up.has(g) && open.has(g)) ?? '');
+  };
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
     boxes = placeEdgeLabels(
@@ -796,6 +819,7 @@ export function drawRoutes(
             routes: result.routes.filter(r => r !== route).map(r => r.points),
             borders,
             marks,
+            home: home(byEdge.get(route.id)!),
           },
           dx: cfg.labelDx || 0,
           dy: cfg.labelDy || 0,

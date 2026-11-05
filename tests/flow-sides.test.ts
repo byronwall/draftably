@@ -8,6 +8,7 @@ import { sceneConflicts } from '../src/dsl/conflicts';
 import { writeArrangement } from '../src/dsl/layout-edits';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { printSource, readSource } from '../src/dsl/syntax';
+import { contains } from '../src/model/geometry';
 import { computeRoutes } from '../src/model/routes';
 
 // Issue #457: a `direction=right` release flow across three groups.
@@ -83,6 +84,27 @@ describe('flow edges keep to the reading direction (#457)', () => {
       text = await tidy(text);
       expectForward(await drawn(text));
     }
+  });
+
+  it('keeps a label too long for its gap inside its group and off every line (#471)', async () => {
+    const d = await drawn(repro),
+      label = d.routes.get('promote1')!.label!,
+      box = { x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h },
+      frame = d.rects.get('branches')!;
+    expect(contains(frame, box)).toBe(true);
+    const crossing = [...d.routes.values()].filter(r =>
+      r.points.some((b, i) => {
+        const a = r.points[i - 1];
+        return (
+          i &&
+          Math.max(a.x, b.x) > box.x &&
+          Math.min(a.x, b.x) < box.x + box.w &&
+          Math.max(a.y, b.y) > box.y &&
+          Math.min(a.y, b.y) < box.y + box.h
+        );
+      }),
+    );
+    expect(crossing.map(r => r.id)).toEqual([]);
   });
 
   it('honours a pinned side with a forward route', async () => {
