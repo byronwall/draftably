@@ -73,3 +73,16 @@ jobs:
       - run: pnpm exec playwright-core install --with-deps chromium
       - run: pnpm build
       - run: pnpm bench --runs 1
+
+  host-proofs:
+    # Builds the three pinned documentation hosts against fresh packed consumers.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm host:pack-check

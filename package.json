@@ -53,6 +53,7 @@
     "markdown:pack-check": "node scripts/prove-markdown-package.ts",
     "markdown:browser-check": "node scripts/prove-markdown-browser.ts",
     "markdown:serve-proof": "node scripts/serve-markdown-proof.ts",
+    "host:pack-check": "node scripts/prove-host-packages.ts",
     "prove:runtime": "node scripts/prove-runtime-browser.ts"
   },
   "dependencies": {
