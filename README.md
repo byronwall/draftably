@@ -124,6 +124,12 @@ and return the same file to the agent. Read the [skill](skills/draftably/SKILL.m
 
 Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](docs/IMPORTING.md).
 
+## Integrate
+
+For source consumers, see the [native runtime guide](docs/integrations/runtime.md), [static Markdown guide](docs/integrations/markdown.md), and [viewer guide](docs/integrations/viewer.md). Check the [integration support matrix](docs/integrations/support.md) for current package and host proof status. See the [contributor guide](docs/integrations/contributing.md) to build another adapter.
+
+These guides document repository artifacts and tested recipes. They do not mean a new runtime or Markdown package is published on npm, that a plugin is installed, or that a host recognizes `draft` natively.
+
 ## Develop
 
 Built with SolidJS, TypeScript and Vite. Use Node 22.21 or later and pnpm 11.

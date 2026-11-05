@@ -2,7 +2,7 @@
 
 Deliver a native SVG runtime, Markdown adapters, then an independent viewer and broader integration recipes.
 Each stage must remain useful if later work stops.
-Status: proposed; product implementation has not started.
+Status: the selected Build scope is implemented and verified in the PR stack. See [implementation evidence](implementation-evidence.md) for commands and review order. Explore recommendations remain proposed follow-ups. This work has not published packages.
 
 Read the [research summary](../../research/embedding-ecosystem-2026-11-03/summary.md) and [recommendation decisions](recommendations.md) first.
 The [asset index](asset-index.md) preserves the complete Pro research.
@@ -14,13 +14,13 @@ The checkout corrections below take precedence over conflicting details in those
 
 | Stage | Result a builder can use                                                                   | Prerequisite                        |
 | ----- | ------------------------------------------------------------------------------------------ | ----------------------------------- |
-| M1    | Install `@draftably/runtime`; await source-to-SVG rendering in Node or a browser.          | Existing compiler and SVG renderer. |
+| M1    | Install a packed `@draftably/runtime` artifact; render source to SVG in Node or a browser. | Existing compiler and SVG renderer. |
 | M2    | Write a `draft` fence in unified/MDX; build an accessible SVG image.                       | M1.                                 |
 | M3    | Mount, update, and destroy an independent viewer in vanilla JS, React, or Solid.           | M1.                                 |
 | M4    | Use markdown-it and tested documentation-host recipes; optionally enhance static Markdown. | M2; M3 for interaction.             |
 | M5    | Build outside adapters from shared fixtures and explicit support documentation.            | Stable runtime and one adapter.     |
 
-M2 and M3 can proceed independently after M1. Package names remain provisional.
+M2 and M3 can proceed independently after M1. The package names are `@draftably/runtime` and `@draftably/markdown`. Publication remains separate.
 Keep the CLI executable, editor, layout engines, and native source format as existing foundations.
 The runtime must not install Mermaid, D2, jsdom, CodeMirror, or a UI framework.
 Use subpath exports for the optional viewer, not another package per internal layer.
@@ -30,6 +30,8 @@ Reconcile changes since baseline `ed4eff3181ded0c501c35ae18ef6aed9c62de8c5` befo
 Do not create a new worktree solely because the original Pro plan suggests a checkout preflight.
 
 ## M1 — Portable native SVG runtime
+
+**Status:** Packed Node, strict TypeScript, and plain-browser consumer proofs pass. Package publication remains separate.
 
 Start with the composition in `site/draw.ts`: `compile` → `projectScene` → SVG output.
 Read `src/dsl/{syntax,compile,project}.ts`, `src/cli/svg.ts`, `src/lib/font-data.ts`, and `src/model/{embed,link,document}.ts`.
@@ -73,6 +75,8 @@ Export only files and capabilities that exist.
 
 ## M2 — Shared Markdown core and remark
 
+**Status:** The packed Unified and MDX consumer proof passes. This proves the static remark path; it does not prove other Markdown hosts.
+
 Add `packages/markdown/` with a shared preparation core and a thin `/remark` adapter.
 Use canonical `draft` fences; `.draft` remains the file extension.
 Keep theme and layout declarations in the source body.
@@ -97,6 +101,8 @@ Show the real asset emitter and dependency hooks, not an unexplained helper impo
 **Main risk:** correct transforms leave broken assets after caching, rebuilding, or path changes.
 
 ## M3 — Independent viewer and framework recipes
+
+**Status:** Packed worker, React Strict Mode, and Solid lifecycle proofs pass. Independent Chrome 156 checks pass keyboard use, camera controls, cleanup, and narrow-screen Actual size and outline inspection.
 
 Add an optional runtime `/viewer` entry with synchronous `mountViewer` ownership and asynchronous `update`.
 Each handle owns its camera, pending work, event subscriptions, worker, and disposal.
@@ -125,26 +131,29 @@ Add Vue/Svelte recipes over the same API; create no framework wrapper packages a
 
 ## M4 — markdown-it and qualified host recipes
 
+**Status:** Packed remark, MDX, markdown-it, and client proofs pass. The pinned hosts pass production and development include-edit builds. Independent Chrome 156 checks pass the client controls and all three host pages. See [implementation evidence](implementation-evidence.md).
+
 Add `/markdown-it` over the shared Markdown core.
 Expose parse → await preparation → render the same tokens.
 Prove concurrent documents and errors when preparation is missing.
 
-Turn Astro/Starlight and Docusaurus excerpts into complete, versioned recipes.
-Include asset publication, development serving, include changes, public base paths, and warm builds.
-Recheck the selected Astro processor and host versions before implementation.
-Try one bounded VitePress bridge. If it needs a fork or broad internal patches, keep the image recipe.
+Maintain versioned recipes for Astro/Starlight, Docusaurus, and VitePress generated-image preprocessing.
+Production and development include-edit builds pass at the pinned versions. Docusaurus default builds clear the MDX cache; its dev wrapper covers one page, direct includes, and one locale. Standard webpack passes; Faster caching did not. Favicon errors are fixed and freshly verified.
+Keep the tested host pins listed below. Re-run the relevant proof before changing a pin.
+VitePress uses generated-image preprocessing; it is not an async native markdown-it hook. Keep that boundary explicit. The pinned targets are Astro 7.4.5 with Starlight 0.42.9 and @astrojs/markdown-remark 7.3.5, Docusaurus 3.10.2 with React 19.2.0, and VitePress 1.6.4.
 
-After M3, add optional `/client` enhancement with explicit root ownership and static fallback.
-Declare that browser recompilation exposes source. Keep static-only output available.
-Failure or teardown must restore a useful fallback and prevent late commits.
+The `/client` enhancement uses explicit root ownership and a static fallback. Browser recompilation exposes source. Keep static-only output available.
+Failure or teardown restores the static image and prevents late commits. The packed browser proof covers late fetch and worker results.
 
-**Docs/example:** `docs/integrations/{markdown-it,astro-starlight,docusaurus,vitepress}.md` and complete consumer fixtures.
+**Docs/example:** `docs/integrations/{markdown,astro-starlight,docusaurus,vitepress}.md` and complete consumer fixtures.
 **Done:** advertised recipes pass real builds and navigation/rebuild checks against named versions.
 **Main risk:** host-specific glue grows into independent rendering implementations.
 
 ## M5 — Contributor and adoption support
 
-Publish a support matrix and adapter guide with reusable source, metadata, diagnostic, and output fixtures.
+**Status:** Contributor guidance, support levels, proposal drafts, and reusable fixtures are included. The fixture contract passes three tests. Proposal drafts remain unsent.
+
+Add a support matrix and adapter guide with reusable source, metadata, diagnostic, and output fixtures.
 Separate package availability, installed plugins, generated images, and native provider support.
 Give contributors a route for Obsidian, MkDocs, and Pandoc without another compiler implementation.
 Prepare upstream proposal materials after there is working runtime evidence.
@@ -159,12 +168,12 @@ No external provider contact or publication follows from merging this research.
 
 ## Checks and remaining decisions
 
-Run focused tests for the changed boundaries and `pnpm check:fast` while iterating.
+Run focused tests for the changed boundaries and `pnpm check:fast` while iterating. The evidence record lists the final check results.
 Run `pnpm check` before pushing, plus the installed-package proof for each implemented surface.
 Shared renderer changes also need the existing CLI package and relevant export proofs.
 Use `pnpm shoot` for visual evidence and add changesets for shipped changes.
 New script names in Pro's plan remain proposed until implemented.
 
 Verify package ownership, supported browser versions, resource policies, and measured performance before publication.
-The proposed 8 MiB output ceiling and five-second job deadline are starting policies, not established capacity.
-No unresolved choice blocks starting the M1 facade and packed-consumer proof.
+The runtime caps SVG output at 8,000,000 bytes. The viewer worker timeout defaults to five seconds. Calling-thread cancellation remains cooperative. These limits do not establish service capacity.
+Release work still includes package ownership and browser compatibility decisions. No external contact or package publication has happened.

@@ -1,0 +1,19 @@
+{
+  "sourceFile": "source/bad-line-2.draft",
+  "sourceLine": 2,
+  "markdown": {
+    "file": "docs/guide.md",
+    "fenceOpeningLine": 12,
+    "dslLine": 2,
+    "expectedLine": 14
+  },
+  "expect": {
+    "runtimeFailure": true,
+    "runtimeCode": "DRAFT_PARSE",
+    "runtimeLine": 2,
+    "adapterFile": "docs/guide.md",
+    "adapterLine": 14,
+    "sourceId": "docs/guide.md"
+  },
+  "note": "The adapter maps a one-based DSL line to opening Markdown line plus DSL line. External-src diagnostics name the source file and add the include site as a related location."
+}

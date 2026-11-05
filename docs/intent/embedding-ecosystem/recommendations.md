@@ -1,7 +1,7 @@
 # Recommendation decisions
 
 All 29 Pro recommendations have a disposition below.
-Build means inclusion in the plan. Product implementation and publication have not started.
+“Build” records the selected plan, not package publication or provider acceptance. Current delivery and proof status is in [implementation evidence](implementation-evidence.md). No new runtime or Markdown package, extension, or upstream proposal has been published or sent.
 The [original ledger](assets/pro-results/2026-11-03/embedding-recommendations.md) contains the evidence and detailed scope for each ID.
 The [reviewed plan](implementation-plan.md) and [research summary](../../research/embedding-ecosystem-2026-11-03/summary.md) qualify that scope.
 

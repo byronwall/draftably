@@ -1,0 +1,6 @@
+diagram "Checkout"
+node web "Web app" href="https://example.invalid/checkout"
+node api "Order API"
+node db "Orders" shape=pill
+edge request web -> api "POST /orders"
+edge persist api -> db "save"
