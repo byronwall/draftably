@@ -28,6 +28,7 @@ export const App = defineComponent({
             key: i,
             source,
             label: `Diagram ${i + 1}`,
+            outline: i === 0 ? 'visible' : undefined,
             svg: props.svgs[i],
             onUpdate: record,
           }),

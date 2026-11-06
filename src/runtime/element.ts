@@ -4,6 +4,8 @@ import type { UpdateResult, ViewerHandle, ViewerOptions } from './viewer';
 
 export interface DraftDiagramElement extends HTMLElement {
   source: string;
+  /** Reflects the `outline` attribute. */
+  outline: 'visible' | 'hidden' | undefined;
   options: ViewerOptions;
   readonly viewer?: ViewerHandle;
   readonly updateComplete: Promise<UpdateResult | undefined>;
@@ -24,7 +26,7 @@ if (
   if (!customElements.get(tag)) {
     class DraftDiagram extends HTMLElement implements DraftDiagramElement {
       static get observedAttributes() {
-        return ['source', 'state', 'label'];
+        return ['source', 'state', 'label', 'outline'];
       }
 
       private _options: ViewerOptions = {};
@@ -37,6 +39,7 @@ if (
       private _generation = 0;
       private _revision = 0;
       private _pendingSource?: string;
+      private _pendingOutline?: 'visible' | 'hidden';
       private _hasCommitted = false;
 
       constructor() {
@@ -47,7 +50,11 @@ if (
         const oldOptions = Object.hasOwn(this, 'options')
           ? (this as { options: ViewerOptions }).options
           : undefined;
+        const oldOutline = Object.hasOwn(this, 'outline')
+          ? (this as Partial<DraftDiagramElement>).outline
+          : undefined;
         delete (this as Partial<DraftDiagramElement>).source;
+        delete (this as Partial<DraftDiagramElement>).outline;
         delete (this as Partial<DraftDiagramElement>).options;
         this.attachShadow({ mode: 'open' });
         this._style = this.ownerDocument.createElement('style');
@@ -63,6 +70,7 @@ if (
         this._status.setAttribute('aria-live', 'polite');
         this.shadowRoot!.append(this._host, this._fallback, this._status);
         if (oldOptions) this._options = oldOptions;
+        if (oldOutline) this._pendingOutline = oldOutline;
         if (oldSource !== undefined) {
           this._pendingSource = String(oldSource ?? '');
         }
@@ -75,6 +83,16 @@ if (
       set source(value: string) {
         const source = String(value ?? '');
         if (this.getAttribute('source') !== source) this.setAttribute('source', source);
+      }
+
+      get outline() {
+        const value = this.getAttribute('outline');
+        return value === null ? undefined : value === 'visible' ? 'visible' : 'hidden';
+      }
+
+      set outline(value: 'visible' | 'hidden' | undefined) {
+        if (value == null) this.removeAttribute('outline');
+        else if (this.getAttribute('outline') !== value) this.setAttribute('outline', value);
       }
 
       get options() {
@@ -95,6 +113,10 @@ if (
       }
 
       connectedCallback() {
+        if (this._pendingOutline) {
+          this.outline = this._pendingOutline;
+          this._pendingOutline = undefined;
+        }
         if (this._pendingSource !== undefined) {
           const source = this._pendingSource;
           this._pendingSource = undefined;
@@ -127,7 +149,7 @@ if (
           }
         } else if (this.isConnected && name === 'state') {
           this._update();
-        } else if (this.isConnected && name === 'label') {
+        } else if (this.isConnected && (name === 'label' || name === 'outline')) {
           this._mount(true);
         }
       }
@@ -139,6 +161,7 @@ if (
         const options: ViewerOptions = {
           ...this._options,
           ...(this.hasAttribute('label') ? { label: this.getAttribute('label')! } : {}),
+          ...(this.outline ? { outline: this.outline } : {}),
         };
         const nonce = options.render?.styleNonce;
         this._style.remove();

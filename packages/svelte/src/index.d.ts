@@ -11,6 +11,8 @@ export interface DraftDiagramProps {
   state?: string | null;
   /** The accessible name. */
   label?: string;
+  /** `'visible'` shows the item list under the drawing; `'hidden'` (default) shows it on focus. */
+  outline?: 'visible' | 'hidden';
   /** Static SVG from `renderSvg(source, { target: 'inline', idPrefix })`, shown until the viewer draws. */
   svg?: string;
   options?: ViewerOptions;

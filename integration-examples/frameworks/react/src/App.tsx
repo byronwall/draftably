@@ -22,6 +22,7 @@ export function App({ svgs = [] }: { svgs?: string[] }) {
           key={i}
           source={source}
           label={`Diagram ${i + 1}`}
+          outline={i === 0 ? 'visible' : undefined}
           svg={svgs[i]}
           onUpdate={record}
         />

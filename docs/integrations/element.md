@@ -44,7 +44,10 @@ void diagram.updateComplete.then(result => {
 ```
 
 The `state` attribute selects a declared emphasis state. The `label` attribute
-supplies an accessible name. Change them with `setAttribute`, for example:
+supplies an accessible name. The `outline` attribute sets the item outline:
+`outline="visible"` keeps the list of item buttons under the drawing. Without it,
+the list is visually hidden and appears while it holds keyboard focus (see the
+[viewer](viewer.md)). Change them with `setAttribute`, for example:
 
 ```ts
 diagram.setAttribute('label', 'Checkout flow');
@@ -87,7 +90,7 @@ diagram.source = source;
 document.querySelector('#diagrams')!.append(diagram);
 ```
 
-Replacing `options` or the `label` attribute remounts the viewer. Set `render.styleNonce` before
+Replacing `options`, the `label` attribute or the `outline` attribute remounts the viewer. Set `render.styleNonce` before
 connection when your CSP requires a style nonce. Source and options properties
 assigned before custom-element registration survive its upgrade.
 

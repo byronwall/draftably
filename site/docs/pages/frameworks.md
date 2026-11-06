@@ -20,6 +20,7 @@ viewer's worker loads in development.
 | --------- | ----------------------------------------------------------------------------------------- |
 | `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                     |
 | `label`   | The accessible name.                                                                      |
+| `outline` | `'visible'` keeps the item list under the drawing. Default: hidden until it has focus.    |
 | `state`   | A declared [emphasis state](#emphasis-states) to show.                                    |
 | `svg`     | Static SVG shown until the viewer draws. See [Server rendering](#server-rendering).       |
 | `options` | Viewer options: `toolbar`, link policy and render settings.                               |

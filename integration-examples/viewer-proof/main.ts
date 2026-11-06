@@ -9,7 +9,7 @@ const first = mountViewer(firstHost, {
   label: 'First diagram',
   render: { links: { mode: 'safe' } },
 });
-const second = mountViewer(secondHost, { label: 'Second diagram' });
+const second = mountViewer(secondHost, { label: 'Second diagram', outline: 'visible' });
 const hidden = mountViewer(hiddenHost, { label: 'Hidden diagram' });
 const source = `diagram "Browser proof" version=1
 node api "API" href="https://example.com/api"
