@@ -7,10 +7,10 @@ same renderer as the CLI, so a diagram looks the same everywhere.
 
 | You want to                              | Use                                            | Install               |
 | ---------------------------------------- | ---------------------------------------------- | --------------------- |
+| Replace Mermaid on a site you run        | The `mermaid` drop-in                          | `@draftably/mermaid`  |
 | Put an image in a README, wiki or chat   | `draftably inspect --svg` or `--png`           | `draftably`           |
 | Add an interactive diagram to a web page | The `<draft-diagram>` element                  | `@draftably/runtime`  |
 | Generate SVG in a script or build step   | `renderSvg`                                    | `@draftably/runtime`  |
-| Replace Mermaid on a site you run        | `@draftably/mermaid` under the `mermaid` name  | `@draftably/mermaid`  |
 | Turn `draft` code fences into images     | The remark or markdown-it plugin               | `@draftably/markdown` |
 | Add diagrams to a documentation site     | A pinned Astro, Docusaurus or VitePress recipe | `@draftably/markdown` |
 
@@ -50,15 +50,8 @@ redraw it. An invalid update keeps the last good drawing. With Vite, add
 
 ## Replace Mermaid
 
-Keep your Mermaid page code and swap the package behind the name:
-
-```sh
-pnpm add mermaid@npm:@draftably/mermaid
-```
-
-Mermaid flowcharts and sequences, and Draftably source in a `.mermaid` block, now draw with
-Draftably. Mermaid's other chart types still go to Mermaid. For a CDN page, change the import URL
-to `https://cdn.jsdelivr.net/npm/@draftably/mermaid@0/dist/mermaid.esm.min.mjs`.
+Already use Mermaid? [Switch from Mermaid](#from-mermaid) swaps the package behind the `mermaid` name.
+Your page code stays the same.
 
 ## SVG from a script
 

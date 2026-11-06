@@ -1,17 +1,21 @@
 # Use Draftably in your project
 
-Every route below draws with the same native compiler and renderer. Pick the
-row that matches what you want to ship.
+**Using Mermaid today?** Start with [Switch from Mermaid](../../site/docs/pages/from-mermaid.md). One alias in
+`package.json`, or one changed CDN URL, and your flowcharts and sequences draw with Draftably.
+Your page code stays the same.
+
+Every route below draws with the same native compiler and renderer. Pick the row that matches
+what you want to ship.
 
 | You want to                                   | Use                                                                                           | Install                                   |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Replace Mermaid on a site you run             | [Switch from Mermaid](../../site/docs/pages/from-mermaid.md)                                  | `pnpm add mermaid@npm:@draftably/mermaid` |
 | Draw and share a diagram with no install      | [Playground](https://draftably.dev/play)                                                      | Nothing                                   |
 | Edit `.draft` files on disk, check them in CI | [CLI](https://draftably.dev/docs/cli)                                                         | `pnpm add -g draftably`                   |
 | Have a coding agent write and refine diagrams | [Agent skill](https://draftably.dev/docs/agent-skill)                                         | `pnpm dlx draftably skill install`        |
 | Put a static image in a README, wiki or chat  | [Export an image](#export-an-image)                                                           | `draftably` CLI                           |
 | Add an interactive diagram to a web page      | [Diagram element](element.md)                                                                 | `@draftably/runtime`                      |
 | Generate SVG from a script or a build step    | [Render an image](#render-an-image)                                                           | `@draftably/runtime`                      |
-| Replace Mermaid on a site you run             | [Mermaid drop-in](#replace-mermaid)                                                           | `pnpm add mermaid@npm:@draftably/mermaid` |
 | Turn `draft` code fences into images          | [Render Markdown](#render-markdown)                                                           | `@draftably/markdown`                     |
 | Add diagrams to a documentation site          | [Astro Starlight](astro-starlight.md), [Docusaurus](docusaurus.md), [VitePress](vitepress.md) | `@draftably/markdown`                     |
 | Control the viewer's lifecycle yourself       | [Imperative viewer](viewer.md)                                                                | `@draftably/runtime`                      |
@@ -68,25 +72,6 @@ export default defineConfig({
 The [complete example](../../integration-examples/element-viewer/README.md)
 includes source updates, error recovery, fallback and removal. Use the
 [imperative viewer](viewer.md) when you need custom lifecycle control.
-
-## Replace Mermaid
-
-Keep your Mermaid page code. Point the `mermaid` package name at the drop-in:
-
-```sh
-pnpm add mermaid@npm:@draftably/mermaid
-```
-
-`mermaid.initialize`, `mermaid.run`, `mermaid.render` and `mermaid.parse` keep working. Draftably
-draws Draftably source and Mermaid flowcharts and sequences. Mermaid's other chart types still go
-to Mermaid, so nothing on the page goes blank. Sites that load Mermaid from a CDN change one URL:
-
-```js
-import mermaid from 'https://cdn.jsdelivr.net/npm/@draftably/mermaid@0/dist/mermaid.esm.min.mjs';
-```
-
-See the [package guide](../../packages/mermaid/README.md) and the
-[runnable example](../../integration-examples/mermaid-dropin/README.md).
 
 ## Render an image
 
