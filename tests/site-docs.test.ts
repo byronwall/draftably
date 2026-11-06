@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { Marked } from 'marked';
-import { describe, expect, it } from 'vitest';
-import { anchorPath, findPage, PAGES } from '../site/docs/content';
+import { describe, expect, it, vi } from 'vitest';
+import { anchorPath, findPage, inlineHtml, PAGES } from '../site/docs/content';
 import { compile } from '../src/dsl/compile';
 import { THEME_IDS } from '../src/model/appearance';
 import { findExample } from '../src/model/examples';
@@ -86,6 +86,17 @@ describe('docs links', () => {
     expect(sources.length).toBeGreaterThan(40);
     for (const { href } of sources) {
       expect(fs.existsSync(path.join(root, 'site/public', href)), href).toBe(true);
+    }
+  });
+
+  it('opens static sources without routing them to the app', () => {
+    vi.stubGlobal('location', { origin: 'https://draftably.dev' });
+    try {
+      expect(inlineHtml('[Source](/evaluations/agent-diagrams/prompt.txt)')).toContain(
+        'rel="external"',
+      );
+    } finally {
+      vi.unstubAllGlobals();
     }
   });
 });

@@ -270,11 +270,11 @@ const md = new Marked({
     link(t) {
       const href = resolveHref(t.href);
       const external = /^https?:/.test(href) && !href.startsWith(location.origin);
-      // The Editor is a separate build, so the site's router must leave these links alone.
-      const editor = href.startsWith(`${BASE}app/`);
+      // The Editor and static downloads must bypass the site's client router.
+      const separate = href.startsWith(`${BASE}app/`) || href.startsWith(`${BASE}evaluations/`);
       const attrs = external
         ? ' target="_blank" rel="noreferrer"'
-        : editor
+        : separate
           ? ' rel="external"'
           : '';
       return `<a href="${esc(href)}"${attrs}>${this.parser.parseInline(t.tokens)}</a>`;
