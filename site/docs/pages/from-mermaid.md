@@ -99,7 +99,23 @@ draftably inspect architecture.draft --svg > architecture.svg
 
 ## Convert the source
 
-You don't have to rewrite anything for the drop-in. To move a diagram to Draftably source for good:
+You don't have to rewrite anything for the drop-in. To move the Mermaid fences in your docs to
+Draftably source for good, run `migrate` on the folder:
+
+```sh
+draftably migrate docs/
+```
+
+It changes nothing yet. It lists each `mermaid` fence and what would happen to it, with the
+importer's warnings. Flowcharts and sequence diagrams become `draft` fences. Pie, gantt and other
+charts stay Mermaid. When the list looks right, apply it:
+
+```sh
+draftably migrate docs/ --write
+```
+
+A fence with warnings stays Mermaid until you add `--accept-lossy`. Commit before you run
+`--write`, so `git diff` shows each change. For a standalone `.mmd` file, use `import`:
 
 ```sh
 draftably import checkout.mmd --output checkout.draft

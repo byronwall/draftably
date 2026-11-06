@@ -29,6 +29,12 @@ Commands:
   import <file> [--output <new.draft>] [--from dot|mermaid|d2] [--accept-lossy]
                             Convert a text diagram to a new .draft file, or print native source.
                             Warnings require --accept-lossy. The input stays unchanged.
+  migrate <file|folder|glob>…
+       [--write]            Rewrite \`\`\`mermaid fences that hold a flowchart or sequence diagram
+       [--accept-lossy]     in Markdown files as \`\`\`draft fences. Other Mermaid charts stay. Prints
+                            each file's fences and the importer's warnings without changing
+                            anything; --write rewrites the files. A fence with warnings stays
+                            Mermaid unless --accept-lossy. A folder searches its .md and .mdx files.
   check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
        [--quiet]            errors. Several files or a folder check each .draft in turn.
@@ -324,6 +330,21 @@ export async function main(argv: string[]): Promise<number> {
             output: option(rest, '--output'),
             acceptLossy: flag('--accept-lossy'),
           },
+          new URL('./main.js', import.meta.url),
+        );
+      }
+      case 'migrate': {
+        const args = [file, ...rest].filter((a): a is string => !!a);
+        const unknown = args.find(
+          a => a.startsWith('--') && !['--write', '--accept-lossy'].includes(a),
+        );
+        if (unknown) throw new UsageError(`Unknown migrate option: ${unknown}`);
+        const patterns = args.filter(a => !a.startsWith('--'));
+        if (!patterns.length) throw new UsageError('migrate needs Markdown files or a folder.');
+        const { migrateFiles } = await import('./migrate');
+        return await migrateFiles(
+          patterns,
+          { write: flag('--write'), acceptLossy: flag('--accept-lossy') },
           new URL('./main.js', import.meta.url),
         );
       }
