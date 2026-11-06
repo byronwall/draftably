@@ -26,13 +26,15 @@ await build({
         'markdown-it': path.join(pkg, 'src/markdown-it.ts'),
         files: path.join(pkg, 'src/files.ts'),
         client: path.join(pkg, 'src/client.ts'),
+        mermaid: path.join(pkg, 'src/mermaid.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
       external: id =>
-        id === '@draftably/runtime' || id === '@draftably/runtime/viewer' || id.startsWith('node:'),
+        ['@draftably/runtime', '@draftably/runtime/viewer', 'jsdom', 'mermaid'].includes(id) ||
+        id.startsWith('node:'),
       output: { chunkFileNames: 'chunks/[name]-[hash].js' },
     },
   },

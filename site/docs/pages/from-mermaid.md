@@ -75,8 +75,11 @@ The conversion keeps nodes, groups, labels and connections, and recomputes the l
 
 ## Markdown you build
 
-For a static site with no diagram JavaScript, write `draft` fences and add the
-[Markdown plugin](https://github.com/byronwall/draftably/blob/main/docs/integrations/markdown.md). Readers get an ordinary SVG image. Host recipes:
+For a static site with no diagram JavaScript, add the
+[Markdown plugin](https://github.com/byronwall/draftably/blob/main/docs/integrations/markdown.md) with `mermaid: 'convert'`.
+Your existing `mermaid` flowcharts and sequences become ordinary SVG images at build time, and
+`draft` fences work beside them. Other Mermaid families stay code blocks, so keep your Mermaid
+setup for those. Host recipes:
 [Astro Starlight](https://github.com/byronwall/draftably/blob/main/docs/integrations/astro-starlight.md), [Docusaurus](https://github.com/byronwall/draftably/blob/main/docs/integrations/docusaurus.md), [VitePress](https://github.com/byronwall/draftably/blob/main/docs/integrations/vitepress.md).
 
 ## GitHub and other hosted Markdown

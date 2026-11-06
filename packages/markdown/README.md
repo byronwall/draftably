@@ -38,6 +38,12 @@ Unknown, repeated, malformed, or control-containing values fail the build.
 Captions and alternatives are plain text. The adapter does not evaluate HTML
 or JSX. Inline SVG is not available.
 
+## Mermaid fences
+
+With `mermaid: 'convert'`, `mermaid` fences that hold a flowchart or sequence
+also become static SVG images. Other Mermaid families stay code blocks for the
+site's Mermaid setup. The parser runs with jsdom in a worker thread.
+
 ## markdown-it
 
 Call `createMarkdownItDraft(options)` and add its `plugin` to markdown-it. Use

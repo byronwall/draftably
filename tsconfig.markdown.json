@@ -5,7 +5,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "packages/markdown/dist/types",
-    "rootDir": "packages/markdown/src"
+    "rootDir": "."
   },
   "include": ["packages/markdown/src"]
 }

@@ -84,6 +84,7 @@ for (const file of [
   'prove.mjs',
   'interactive.mjs',
   'interactive-browser.mjs',
+  'mermaid.mjs',
   'attach-client.ts',
   'browser-entry.ts',
   'consumer.ts',
@@ -96,9 +97,14 @@ const interactiveProof = execFileSync(process.execPath, ['interactive.mjs'], {
   cwd: consumer,
   encoding: 'utf8',
 });
-writeFileSync(path.join(out, 'proof.log'), proof + interactiveProof);
+const mermaidProof = execFileSync(process.execPath, ['mermaid.mjs'], {
+  cwd: consumer,
+  encoding: 'utf8',
+});
+writeFileSync(path.join(out, 'proof.log'), proof + interactiveProof + mermaidProof);
 console.log(proof);
 console.log(interactiveProof);
+console.log(mermaidProof);
 
 execFileSync(
   path.join(consumer, 'node_modules/.bin/tsc'),

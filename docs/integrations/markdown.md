@@ -70,6 +70,27 @@ The low-level API remains available when the host needs it: parse tokens, await
 `adapter.prepare(tokens, env)`, then render those same tokens and environment.
 Separate documents can render at the same time.
 
+## Mermaid fences
+
+Set `mermaid: 'convert'` to draw existing `mermaid` fences without Mermaid in
+the browser. The option applies to both adapters:
+
+```js
+const options = { emitAsset: assets.emitAsset, mermaid: 'convert' };
+```
+
+A fence that holds a `flowchart`, `graph` or `sequenceDiagram` becomes the same
+static SVG image that a `draft` fence gets. Every other Mermaid family, such as
+`pie` or `gantt`, stays a code block, so the site's Mermaid setup still draws
+it. Draftably does not imitate those families.
+
+The adapter parses Mermaid with Mermaid 12.2.0 and jsdom in one worker thread
+per build process. It does not load remote resources. If a flowchart or
+sequence does not convert, the fence stays code and the adapter reports a
+`DRAFT_MERMAID` warning through `onDiagnostic` and the manifest. Fence metadata
+after `mermaid` is ignored. The default, `mermaid: 'off'`, leaves every
+`mermaid` fence alone.
+
 ## Interactive enhancement
 
 Interactive mode needs the host bridge:

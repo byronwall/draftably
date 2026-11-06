@@ -125,6 +125,12 @@ importers:
       '@draftably/runtime':
         specifier: workspace:*
         version: link:../runtime
+      jsdom:
+        specifier: 26.1.0
+        version: 26.1.0
+      mermaid:
+        specifier: 12.2.0
+        version: 12.2.0
 
   packages/mermaid:
     dependencies:

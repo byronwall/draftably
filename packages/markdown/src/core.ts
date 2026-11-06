@@ -40,6 +40,11 @@ export type EmitAsset = (
 export interface DraftMarkdownOptions {
   emitAsset: EmitAsset;
   errors?: 'fail' | 'placeholder';
+  /**
+   * `convert` draws ```mermaid fences that hold a flowchart or sequence as Draftably images and
+   * leaves every other Mermaid family as a code block. `off` (default) leaves all of them.
+   */
+  mermaid?: 'convert' | 'off';
   interactive?: MarkdownInteractiveBridge;
   render?: {
     includeSource?: boolean;
@@ -82,6 +87,17 @@ export interface MarkdownInteractiveBridge {
   clientModuleUrl: string;
   policyId: string;
   emitInit(data: DraftViewerInitV1): Promise<{ fileName: string; url: string }>;
+}
+
+/** Native source for a Mermaid fence, or null when the fence stays as code. */
+export async function mermaidSource(
+  text: string,
+  location: Diagnostic['location'],
+  options: DraftMarkdownOptions,
+): Promise<{ source: string | null; alt?: string; diagnostics: Diagnostic[] }> {
+  if (options.mermaid !== 'convert') return { source: null, diagnostics: [] };
+  const { convertMermaid } = await import('./mermaid.js');
+  return convertMermaid(text, location);
 }
 
 export function makeDiagnostic(

@@ -1,4 +1,5 @@
 import {
+  mermaidSource,
   prepare,
   makeDiagnostic,
   hostFailure,
@@ -22,7 +23,7 @@ interface FileLike {
   data?: Record<string, unknown>;
 }
 
-/** Convert only parser-recognized `draft` code nodes into static image nodes. */
+/** Convert parser-recognized `draft` code nodes, and opted-in Mermaid ones, into static image nodes. */
 export default function remarkDraft(options: DraftMarkdownOptions) {
   if (!options || typeof options.emitAsset !== 'function')
     throw new TypeError('remarkDraft requires an emitAsset function.');
@@ -56,17 +57,24 @@ export default function remarkDraft(options: DraftMarkdownOptions) {
       if (!children) return;
       for (let i = 0; i < children.length; i++) {
         const node = children[i];
-        if (node.type === 'code' && node.lang === 'draft') {
+        const location = {
+          sourceId: file.path,
+          line: node.position?.start?.line ?? 1,
+          column: node.position?.start?.column,
+        };
+        const mermaid =
+          node.type === 'code' && node.lang === 'mermaid'
+            ? await mermaidSource(node.value ?? '', location, options)
+            : undefined;
+        diagnostics.push(...(mermaid?.diagnostics ?? []));
+        if ((node.type === 'code' && node.lang === 'draft') || mermaid?.source) {
           const index = fenceIndex++;
-          const location = {
-            sourceId: file.path,
-            line: node.position?.start?.line ?? 1,
-            column: node.position?.start?.column,
-          };
           try {
             let metadata: FenceOptions;
             try {
-              metadata = parseFenceOptions(node.meta ? `draft ${node.meta}` : 'draft');
+              metadata = mermaid
+                ? { alt: mermaid.alt }
+                : parseFenceOptions(node.meta ? `draft ${node.meta}` : 'draft');
             } catch (error) {
               const message =
                 error instanceof Error ? error.message : 'Invalid draft fence metadata.';
@@ -81,7 +89,8 @@ export default function remarkDraft(options: DraftMarkdownOptions) {
               });
             }
             if (metadata.id) ids.add(metadata.id);
-            const result = await prepare(node.value ?? '', metadata, location, document, index, {
+            const source = mermaid?.source ?? node.value ?? '';
+            const result = await prepare(source, metadata, location, document, index, {
               ...options,
               sources: sourceOptions,
             });
