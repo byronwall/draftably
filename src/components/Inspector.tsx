@@ -435,10 +435,10 @@ function ObjectInspector(props: { id: string }) {
             <div class="field link-field">
               <span class="field-label">Link</span>
               <div class="link-row">
-                <span class="link-target" {...tip(href(), undefined, describeLink(href()))}>
+                <span class="link-target" {...tip(href(), undefined, describeLink(s, href()))}>
                   {href()}
                 </span>
-                <button type="button" class="button small" onClick={() => openLink(href())}>
+                <button type="button" class="button small" onClick={() => openLink(s, href())}>
                   Open
                 </button>
               </div>

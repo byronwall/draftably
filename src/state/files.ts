@@ -327,7 +327,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     svg.append(title, meta, defs);
     if (!look.transparent)
       svg.append(createSvgElement('rect', { x, y, width: w, height: h, fill: theme.canvas }));
-    svg.appendChild(materializeSvg(world, exportHref));
+    svg.appendChild(materializeSvg(world, href => exportHref(activeSession(), href)));
     // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
     const markup =
       picked.size || !look.heading
@@ -339,7 +339,9 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
             frame.heading.y,
             frame.heading.wrap,
           ) +
-          footnoteMarkup(theme, frame.foot, frame.foot.x, frame.foot.y, exportHref) +
+          footnoteMarkup(theme, frame.foot, frame.foot.x, frame.foot.y, href =>
+            exportHref(activeSession(), href),
+          ) +
           legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y);
     if (markup) {
       const parsed = new DOMParser().parseFromString(

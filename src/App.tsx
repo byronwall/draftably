@@ -29,8 +29,8 @@ import {
   showError,
   sidebarWidth,
 } from './state/ui';
+import { useDiagramSession } from './components/session-context';
 import './styles/app.css';
-import { activeSession } from './state/active-session';
 
 /** Add an event listener and return a function that removes it. */
 function listen<E extends Event>(
@@ -47,6 +47,7 @@ function listen<E extends Event>(
 onLeaveFile(closeComparison);
 
 export default function App() {
+  const s = useDiagramSession();
   let diagramInput!: HTMLInputElement;
   let imageInput!: HTMLInputElement;
   let replaceImageId: string | null = null;
@@ -81,53 +82,53 @@ export default function App() {
   };
 
   createEffect(() => {
-    document.documentElement.dataset.theme = activeSession().doc.theme;
+    document.documentElement.dataset.theme = s.doc.theme;
   });
   // The diagram's canvas follows its appearance; editor chrome follows the editor's mode.
   createEffect(() => {
     document.documentElement.style.setProperty(
       '--diagram-canvas',
-      resolveAppearance(activeSession().doc.appearance).canvas,
+      resolveAppearance(s.doc.appearance).canvas,
     );
   });
   registerFonts();
 
   onMount(() => {
     installDebugApi();
-    const { restored, notice } = activeSession().restoreSavedDocument();
-    activeSession().restoreArchive();
+    const { restored, notice } = s.restoreSavedDocument();
+    s.restoreArchive();
     // A first visit to the static site starts on the start screen instead of a blank canvas.
-    if (!restored && !activeSession().fileMode()) setStartOpen(true);
+    if (!restored && !s.fileMode()) setStartOpen(true);
     requestAnimationFrame(() => {
-      if (!restored) activeSession().fitView();
+      if (!restored) s.fitView();
       if (notice) toast(notice);
     });
     console.info('[diagram-studio] ready', {
       restored,
-      objects: activeSession().doc.graph.nodes.length + activeSession().doc.graph.groups.length,
+      objects: s.doc.graph.nodes.length + s.doc.graph.groups.length,
     });
 
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotion = (e: MediaQueryListEvent) => activeSession().setReducedMotion(e.matches);
+    const onMotion = (e: MediaQueryListEvent) => s.setReducedMotion(e.matches);
     const onBlur = () => {
-      activeSession().sculptBlur();
-      activeSession().resetModifiers();
-      activeSession().setSpaceHeld(false);
+      s.sculptBlur();
+      s.resetModifiers();
+      s.setSpaceHeld(false);
     };
     // Edits to an example are not in any file; the browser asks first. A label or field still
     // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      activeSession().finishInlineEdit(true);
+      s.finishInlineEdit(true);
       (document.activeElement as HTMLElement | null)?.blur?.();
-      if (!activeSession().exampleEdited() || activeSession().leaveAgreed()) return;
+      if (!s.exampleEdited() || s.leaveAgreed()) return;
       e.preventDefault();
       // Older Chrome and Safari show the prompt only when returnValue is set.
       e.returnValue = '';
     };
     const onUnload = () => {
-      activeSession().sculptBeforeUnload();
-      activeSession().finishInlineEdit(true);
-      activeSession().persistNow();
+      s.sculptBeforeUnload();
+      s.finishInlineEdit(true);
+      s.persistNow();
     };
     const cleanups = [
       listen(document, 'keydown', handleKeyDown),
@@ -139,11 +140,11 @@ export default function App() {
       listen(window, 'beforeunload', onUnload),
       listen(motion, 'change', onMotion),
     ];
-    const stopWatching = activeSession().watchOtherTabs();
+    const stopWatching = s.watchOtherTabs();
     onCleanup(() => {
       cleanups.forEach(stop => stop());
       stopWatching();
-      activeSession().cancelLayout();
+      s.cancelLayout();
       cancelGeneration();
       onUnload();
     });
@@ -159,12 +160,12 @@ export default function App() {
       classList={{
         'objects-open': objectsOpen(),
         'inspector-open': inspectorOpen(),
-        'example-mode': activeSession().exampleMode(),
+        'example-mode': s.exampleMode(),
       }}
     >
       <Toolbar />
       <div class="mode-bar-slot">
-        <Show when={activeSession().exampleMode()}>
+        <Show when={s.exampleMode()}>
           <ExampleBar />
         </Show>
       </div>

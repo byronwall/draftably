@@ -3,10 +3,14 @@
  * shortcuts, commands, files and Compare address it rather than any one session.
  */
 import { createSignal } from 'solid-js';
-import { defaultSession } from './default-session';
 import type { DiagramSession } from './session';
 
-const [active, setActive] = createSignal<DiagramSession>(defaultSession);
+const [active, setActive] = createSignal<DiagramSession | null>(null);
 
-export const activeSession = active;
+export function activeSession(): DiagramSession {
+  const session = active();
+  if (!session) throw Error('No diagram session is active.');
+  return session;
+}
+
 export const setActiveSession = (session: DiagramSession) => setActive(() => session);

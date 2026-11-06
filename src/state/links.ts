@@ -5,29 +5,30 @@
 import { baseUrl, editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
 import { fileUrl, go, workspace } from './launch';
 import { toast } from './toast';
-import { activeSession } from './active-session';
+import type { DiagramSession } from './session';
 
 /**
  * Where a relative link starts: `config link-base=` from the diagram's folder, else its git root.
  * Null when no file on disk is open.
  */
-export function linkBase(): string | null {
-  const session = activeSession().fileSession(),
-    base = activeSession().doc.appearance.config?.linkBase;
+export function linkBase(s: DiagramSession): string | null {
+  const session = s.fileSession(),
+    base = s.doc.appearance.config?.linkBase;
   if (!session?.root || baseUrl('x', base)) return null;
   return base === undefined ? session.root : joinPath(joinPath(session.path, '..'), base);
 }
 
-const editor = () => activeSession().doc.appearance.config?.editor ?? 'vscode';
+const editor = (s: DiagramSession) => s.doc.appearance.config?.editor ?? 'vscode';
 
 /** `href` joined to a URL `link-base`, or null. */
-const joined = (href: string) => baseUrl(href, activeSession().doc.appearance.config?.linkBase);
+const joined = (s: DiagramSession, href: string) =>
+  baseUrl(href, s.doc.appearance.config?.linkBase);
 
 /** What opening `href` does, for a tooltip or the Inspector. */
-export function describeLink(href: string): string {
-  if (joined(href)) return `Open ${joined(href)}`;
+export function describeLink(s: DiagramSession, href: string): string {
+  if (joined(s, href)) return `Open ${joined(s, href)}`;
   const t = linkTarget(href),
-    base = linkBase();
+    base = linkBase(s);
   if (t.kind === 'url') return `Open ${href}`;
   const file = base ? joinPath(base, t.path) : t.path;
   if (t.kind === 'draft' && servedPath(file) !== null) return `Open ${t.path} in the viewer`;
@@ -43,21 +44,21 @@ function servedPath(file: string): string | null {
 }
 
 /** A link as an exported SVG carries it: file paths from the diagram's folder, URLs as written. */
-export function exportHref(href: string): string {
-  if (joined(href)) return joined(href)!;
-  const base = linkBase(),
-    session = activeSession().fileSession();
+export function exportHref(s: DiagramSession, href: string): string {
+  if (joined(s, href)) return joined(s, href)!;
+  const base = linkBase(s),
+    session = s.fileSession();
   return base && session ? staticHref(href, base, joinPath(session.path, '..')) : href;
 }
 
-export function openLink(href: string) {
+export function openLink(s: DiagramSession, href: string) {
   const t = linkTarget(href),
-    url = t.kind === 'url' ? href : joined(href);
+    url = t.kind === 'url' ? href : joined(s, href);
   if (url) {
     window.open(url, '_blank', 'noopener');
     return;
   }
-  const base = linkBase();
+  const base = linkBase(s);
   if (!base) {
     toast(`File links open when the diagram is served with draftably open: ${t.path}`);
     return;
@@ -65,5 +66,5 @@ export function openLink(href: string) {
   const file = joinPath(base, t.path),
     served = t.kind === 'draft' ? servedPath(file) : null;
   if (served !== null) void go(fileUrl(served));
-  else window.location.assign(editorUrl(editor(), file, t.line, t.col));
+  else window.location.assign(editorUrl(editor(s), file, t.line, t.col));
 }

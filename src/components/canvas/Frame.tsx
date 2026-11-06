@@ -63,8 +63,9 @@ export function Frame() {
     );
   // Footnotes, then the key; link clicks land on the click targets `TextHits` draws over them.
   const legend = () =>
-    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, exportHref) +
-    legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
+    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, href =>
+      exportHref(s, href),
+    ) + legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
   const ghost = (key: Key) => {
     if (s.doc.appearance.heading?.[key] || s.inlineEditId() === HEADING_EDIT[key]) return;
     // Frame notes sit where a missing subtitle would go, as exports draw them.

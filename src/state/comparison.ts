@@ -311,7 +311,6 @@ export function closeComparison() {
   if (returnFocus instanceof HTMLElement && returnFocus.isConnected)
     returnFocus.focus({ preventScroll: true });
 }
-activeSession().setComparisonCloser(closeComparison);
 
 export function updateConfig(patch: Partial<ComparisonConfig>) {
   setCmp('config', c => ({ ...c!, ...patch }));

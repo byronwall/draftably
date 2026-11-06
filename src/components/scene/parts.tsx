@@ -3,7 +3,7 @@ import type { TypeProfile } from '../../model/fonts';
 import { markerMarkup } from '../../model/legend';
 import type { Rect } from '../../model/types';
 import { SceneGlyph } from '../Icon';
-import { useDiagramSession } from '../session-context';
+import { useSessionIfAny } from '../session-context';
 import type { DiagramSession } from '../../state/session';
 
 /** Multi-line, vertically centered text in one of the diagram's type profiles. */
@@ -93,9 +93,9 @@ export function PositionBadge(props: {
   /** The object's ink, so the pin reads on its fill. */
   color: string;
 }) {
-  const s = useDiagramSession();
+  const s = useSessionIfAny();
   const tip = () => {
-    const placed = placingLine(s, props.id);
+    const placed = s && placingLine(s, props.id);
     if (placed) return `Placed by line ${placed.line} (${placed.type})`;
     return props.pinned ? 'Pinned' : 'Moved by hand';
   };
