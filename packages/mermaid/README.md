@@ -21,10 +21,15 @@ Point the `mermaid` name at this package. No code changes:
 pnpm add mermaid@npm:@draftably/mermaid
 ```
 
-Your `package.json` now has `"mermaid": "npm:@draftably/mermaid@^0.1.0"`. Every
-`import mermaid from 'mermaid'` in your app, and in plugins such as Docusaurus or VitePress
-Mermaid themes, gets Draftably. With Vite, add
+Your `package.json` now has `"mermaid": "npm:@draftably/mermaid@^0.1.0"`, and every
+`import mermaid from 'mermaid'` in your app gets Draftably. A plugin with its own Mermaid
+dependency, such as `@docusaurus/theme-mermaid`, also needs an override:
+`overrides: { mermaid: npm:@draftably/mermaid@^0.1.0 }` in `pnpm-workspace.yaml`, or `"overrides"`
+(npm) or `"resolutions"` (Yarn) in `package.json`. With Vite, add
 `optimizeDeps: { exclude: ['@draftably/runtime'] }`.
+
+The real Mermaid installs under the name `mermaid-upstream`, so an override cannot point the
+drop-in at itself.
 
 ## Swap it in from a CDN
 

@@ -36,7 +36,7 @@ export interface ParseResult {
   config: MermaidConfig;
 }
 
-type Upstream = (typeof import('mermaid'))['default'];
+type Upstream = (typeof import('mermaid-upstream'))['default'];
 
 let config: MermaidConfig = { startOnLoad: true };
 let upstream: Promise<Upstream> | undefined;
@@ -44,8 +44,11 @@ let parseError: ((err: unknown, hash?: unknown) => void) | undefined;
 let count = 0;
 let flowParser: Promise<(text: string) => Promise<ParseFlowResult>> | undefined;
 
-/** The real Mermaid, loaded only when a page holds Mermaid source. */
-const real = () => (upstream ??= import('mermaid').then(m => m.default));
+/**
+ * The real Mermaid, loaded only when a page holds Mermaid source. It sits under its own name so a
+ * site can point `mermaid` at this package, even through overrides, without a loop.
+ */
+const real = () => (upstream ??= import('mermaid-upstream').then(m => m.default));
 
 /** Draft source starts with a `diagram` line or a declaration; Mermaid starts with its family keyword. */
 const isDraft = (text: string) =>
@@ -133,8 +136,9 @@ export async function run(options: RunOptions = {}): Promise<void> {
     node.setAttribute('data-processed', 'true');
     const id = `mermaid-${count++}`;
     try {
-      const { svg, bindFunctions } = await render(id, node.textContent ?? '', node);
+      const { svg, bindFunctions, renderer } = await render(id, node.textContent ?? '', node);
       node.innerHTML = svg;
+      node.setAttribute('data-renderer', renderer);
       bindFunctions?.(node);
       options.postRenderCallback?.(id);
     } catch (err) {
@@ -168,6 +172,11 @@ export async function registerExternalDiagrams(
   await (await real()).registerExternalDiagrams(...args);
 }
 
+/** Layout plugins such as `@mermaid-js/layout-elk` apply to the charts Mermaid still draws. */
+export async function registerLayoutLoaders(...args: Parameters<Upstream['registerLayoutLoaders']>) {
+  (await real()).registerLayoutLoaders(...args);
+}
+
 const mermaid = {
   initialize,
   run,
@@ -177,6 +186,7 @@ const mermaid = {
   getConfig,
   setParseErrorHandler,
   registerExternalDiagrams,
+  registerLayoutLoaders,
   mermaidAPI: { initialize, render, parse, getConfig },
 };
 

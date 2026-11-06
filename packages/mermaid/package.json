@@ -12,7 +12,8 @@
   "exports": {
     ".": {
       "types": "./dist/types/packages/mermaid/src/index.d.ts",
-      "import": "./dist/mermaid.js"
+      "import": "./dist/mermaid.js",
+      "default": "./dist/mermaid.js"
     },
     "./package.json": "./package.json"
   },
@@ -21,7 +22,7 @@
   },
   "dependencies": {
     "@draftably/runtime": "workspace:*",
-    "mermaid": "12.2.0"
+    "mermaid-upstream": "npm:mermaid@12.2.0"
   },
   "engines": {
     "node": ">=22.21.0"

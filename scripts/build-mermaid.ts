@@ -7,8 +7,9 @@ import { build } from 'vite';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const pkg = path.join(root, 'packages/mermaid');
 const out = path.join(pkg, 'dist');
-const MERMAID = JSON.parse(readFileSync(path.join(pkg, 'package.json'), 'utf8')).dependencies
-  .mermaid;
+const MERMAID = JSON.parse(readFileSync(path.join(pkg, 'package.json'), 'utf8')).dependencies[
+  'mermaid-upstream'
+].replace('npm:mermaid@', '');
 rmSync(out, { recursive: true, force: true });
 execFileSync('pnpm', ['exec', 'tsc', '-p', 'tsconfig.mermaid.json'], {
   cwd: root,
@@ -27,7 +28,7 @@ await build({
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: id => id === '@draftably/runtime' || id === 'mermaid' || id.startsWith('node:'),
+      external: id => id === '@draftably/runtime' || id === 'mermaid-upstream' || id.startsWith('node:'),
       output: { chunkFileNames: 'chunks/[name]-[hash].js' },
     },
   },
@@ -47,10 +48,10 @@ await build({
       fileName: (_format, entryName) => `${entryName}.mjs`,
     },
     rollupOptions: {
-      external: ['mermaid'],
+      external: ['mermaid-upstream'],
       output: {
         paths: {
-          mermaid: `https://cdn.jsdelivr.net/npm/mermaid@${MERMAID}/dist/mermaid.esm.min.mjs`,
+          'mermaid-upstream': `https://cdn.jsdelivr.net/npm/mermaid@${MERMAID}/dist/mermaid.esm.min.mjs`,
         },
         chunkFileNames: 'cdn/[name]-[hash].mjs',
       },
