@@ -1,6 +1,12 @@
 import { afterAll, expect, it, vi } from 'vitest';
+import type { DiagramSession } from '../src/state/session';
 
 afterAll(() => vi.unstubAllGlobals());
+
+// One session for the file: the tests run in order and later ones start from earlier state.
+let shared: DiagramSession | undefined;
+const session = async () =>
+  (shared ??= (await import('../src/state/session')).createDiagramSession());
 
 it('keeps the first title edit on a new file-mode shape and selects its source id', async () => {
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener() {} }));
@@ -28,30 +34,26 @@ it('keeps the first title edit on a new file-mode shape and selects its source i
     }),
   });
 
-  const [actions, documentState, fileSession] = await Promise.all([
-    import('../src/state/actions'),
-    import('../src/state/document'),
-    import('../src/state/file-session'),
-  ]);
-  await fileSession.openExampleSession(
+  const s = await session();
+  await s.openExampleSession(
     'title-race',
     'Title race',
     'diagram "Title race" version=1\nnode start "Start"\n',
   );
 
-  actions.quickExtend();
-  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+  s.quickExtend();
+  for (let i = 0; i < 20 && s.fileCompiling(); i++)
     await new Promise(resolve => setTimeout(resolve, 0));
-  expect(documentState.selectedIds()).toEqual(['next-step']);
-  expect((await import('../src/state/editor')).inlineEditId()).toBe('next-step');
+  expect(s.selectedIds()).toEqual(['next-step']);
+  expect(s.inlineEditId()).toBe('next-step');
 
-  actions.setInlineDraft('Approve request');
-  actions.finishInlineEdit(true);
-  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+  s.setInlineDraft('Approve request');
+  s.finishInlineEdit(true);
+  for (let i = 0; i < 20 && s.fileCompiling(); i++)
     await new Promise(resolve => setTimeout(resolve, 0));
 
-  expect(fileSession.currentSource()).toContain('node next-step "Approve request"');
-  expect(documentState.selectedIds()).toEqual(['next-step']);
+  expect(s.currentSource()).toContain('node next-step "Approve request"');
+  expect(s.selectedIds()).toEqual(['next-step']);
 });
 
 it('releases cached-page streams and catches up when the file page returns', async () => {
@@ -70,46 +72,42 @@ it('releases cached-page streams and catches up when the file page returns', asy
   vi.stubGlobal('fetch', async () =>
     Response.json({ name: 'file.draft', path: '/file.draft', source, revision: source }),
   );
-  const session = await import('../src/state/file-session');
-  await session.openFileSession('one.draft');
-  await session.openFileSession('two.draft');
+  const s = await session();
+  await s.openFileSession('one.draft');
+  await s.openFileSession('two.draft');
   expect(streams[0].close).toHaveBeenCalledOnce();
   expect(streams[1].url).toBe('./api/events?file=two.draft');
 
   page.dispatchEvent(new Event('pagehide'));
   expect(streams[1].close).toHaveBeenCalledOnce();
   streams[1].dispatchEvent(new Event('error'));
-  expect(session.fileStatus()).toBe('saved');
+  expect(s.fileStatus()).toBe('saved');
 
   source = 'diagram "File" version=1\nnode a "Changed while away"\n';
   const restored = Object.assign(new Event('pageshow'), { persisted: true });
   page.dispatchEvent(restored);
   expect(streams).toHaveLength(3);
   streams[2].dispatchEvent(new Event('open'));
-  await vi.waitFor(() => expect(session.currentSource()).toContain('Changed while away'));
+  await vi.waitFor(() => expect(s.currentSource()).toContain('Changed while away'));
 
-  await session.openExampleSession('scratch', 'Scratch', 'node a "Scratch"\n');
+  await s.openExampleSession('scratch', 'Scratch', 'node a "Scratch"\n');
   expect(streams[2].close).toHaveBeenCalledOnce();
   page.dispatchEvent(restored);
   expect(streams).toHaveLength(3);
 });
 
 it('keeps framing through a theme change, in a document and in a file', async () => {
-  const [actions, documentState, fileSession] = await Promise.all([
-    import('../src/state/actions'),
-    import('../src/state/document'),
-    import('../src/state/file-session'),
-  ]);
+  const s = await session();
   const framing = {
     heading: { title: 'T', subtitle: 'Why' },
     notes: [{ text: 'Scope' }],
     legend: [{ color: 'blue', label: 'Blue' }],
     states: [{ id: 's', label: 'S', ids: [] }],
   };
-  fileSession.closeFileSession();
-  documentState.setDoc('appearance', { ...documentState.doc.appearance, ...framing } as never);
-  actions.chooseTheme('ink');
-  expect(documentState.doc.appearance).toMatchObject({ theme: 'ink', ...framing });
+  s.closeFileSession();
+  s.setDoc('appearance', { ...s.doc.appearance, ...framing } as never);
+  s.chooseTheme('ink');
+  expect(s.doc.appearance).toMatchObject({ theme: 'ink', ...framing });
 
   const source = [
     'diagram "Framed" version=1',
@@ -122,49 +120,46 @@ it('keeps framing through a theme change, in a document and in a file', async ()
     'state s "S" m1',
     'layout root sequence',
   ].join('\n');
-  await fileSession.openExampleSession('framed', 'Framed', source);
-  actions.chooseTheme('ink');
-  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+  await s.openExampleSession('framed', 'Framed', source);
+  s.chooseTheme('ink');
+  for (let i = 0; i < 20 && s.fileCompiling(); i++)
     await new Promise(resolve => setTimeout(resolve, 0));
-  const saved = fileSession.currentSource();
+  const saved = s.currentSource();
   expect(saved).toContain('theme ink');
   for (const line of source.split('\n')) expect(saved).toContain(line);
-  documentState.undo();
-  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+  s.undo();
+  for (let i = 0; i < 20 && s.fileCompiling(); i++)
     await new Promise(resolve => setTimeout(resolve, 0));
-  expect(fileSession.currentSource().trim()).toBe(source);
+  expect(s.currentSource().trim()).toBe(source);
 });
 
 it('draws typed source, keeps the last valid drawing for a broken line, and undoes one step', async () => {
-  const [documentState, fileSession] = await Promise.all([
-    import('../src/state/document'),
-    import('../src/state/file-session'),
-  ]);
+  const s = await session();
   const source = 'diagram "Typed" version=1\nnode a "Start"\nnode b "End"\nedge ab a -> b\n';
-  await fileSession.openExampleSession('typed', 'Typed', source);
-  const title = (id: string) => documentState.doc.graph.nodes.find(n => n.id === id)?.title;
+  await s.openExampleSession('typed', 'Typed', source);
+  const title = (id: string) => s.doc.graph.nodes.find(n => n.id === id)?.title;
 
-  await fileSession.typeSource(source.replace('"Start"', '"Sta"'), 1);
+  await s.typeSource(source.replace('"Start"', '"Sta"'), 1);
   const typed = source.replace('"Start"', '"Started"');
-  await fileSession.typeSource(typed, 1);
+  await s.typeSource(typed, 1);
   expect(title('a')).toBe('Started');
-  expect(fileSession.currentSource()).toBe(typed);
+  expect(s.currentSource()).toBe(typed);
 
   const broken = `${typed}edge bad a -> nowhere\n`;
-  await fileSession.typeSource(broken, 1);
-  expect(fileSession.sourceError()?.line).toBe(5);
-  expect(fileSession.sourceDraft()).toBe(broken);
-  expect(fileSession.currentSource()).toBe(typed);
+  await s.typeSource(broken, 1);
+  expect(s.sourceError()?.line).toBe(5);
+  expect(s.sourceDraft()).toBe(broken);
+  expect(s.currentSource()).toBe(typed);
   expect(title('a')).toBe('Started');
 
-  await fileSession.typeSource(typed, 1);
-  expect(fileSession.sourceError()).toBeNull();
-  expect(fileSession.sourceDraft()).toBeNull();
+  await s.typeSource(typed, 1);
+  expect(s.sourceError()).toBeNull();
+  expect(s.sourceDraft()).toBeNull();
 
   // Both valid texts typed in one focus of the panel undo together.
-  documentState.undo();
-  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+  s.undo();
+  for (let i = 0; i < 20 && s.fileCompiling(); i++)
     await new Promise(resolve => setTimeout(resolve, 0));
-  expect(fileSession.currentSource()).toBe(source);
+  expect(s.currentSource()).toBe(source);
   expect(title('a')).toBe('Start');
 });

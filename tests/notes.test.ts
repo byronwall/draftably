@@ -11,7 +11,7 @@ import { translateEdit } from '../src/dsl/translate';
 import { clone } from '../src/model/geometry';
 import { normalize } from '../src/model/document';
 import type { Diagram } from '../src/model/types';
-import { setTextValue, textId } from '../src/state/canvas-text';
+import { setTextValue, textId } from '../src/state/session/canvas-text';
 import { computeRoutes } from '../src/model/routes';
 
 const SOURCE = `diagram "Plans" version=1

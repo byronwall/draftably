@@ -18,6 +18,7 @@ import {
   materializeSvg,
   serializeSvg,
   svgToPng,
+  fileName,
 } from '../lib/svg-export';
 import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
 import { exportHref } from './links';
@@ -46,6 +47,7 @@ import { runLayout } from './layout';
 import { routes, sceneRects, viewerFrame, visibleScene } from './scene';
 import { drawingBounds } from '../model/bounds';
 import { FRAME_PAD } from '../model/frame';
+import { importTimeline } from './sculpt';
 import { toast } from './toast';
 import { confirmAction, openDialog, showError } from './ui';
 import type { PdfOptions } from '../cli/pdf';
@@ -121,22 +123,12 @@ export async function openImageSource(file: File) {
   return true;
 }
 
-/** Set by the timeline module: opens a saved layout timeline file. */
-let timelineImporter: ((data: unknown) => void) | null = null;
-export const setTimelineImporter = (fn: (data: unknown) => void) => (timelineImporter = fn);
-
 /** Set by the canvas: the `<g>` that holds the drawn diagram. */
 let sceneElement: SVGGElement | undefined;
 export const registerSceneElement = (el: SVGGElement) => (sceneElement = el);
 export const sceneReady = () => !!sceneElement;
 
-export function filename(extension: string) {
-  const base = doc.title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-  return (base || 'diagram') + '.' + extension;
-}
+export const filename = (extension: string) => fileName(doc.title, extension);
 
 /** Open diagram JSON, an editable SVG export, or a saved layout timeline. */
 export async function importText(text: string, name = '') {
@@ -151,7 +143,7 @@ export async function importText(text: string, name = '') {
     data = JSON.parse(metadata.textContent || '');
   } else if (trimmed.startsWith('{')) data = JSON.parse(trimmed);
   else throw Error('Open a saved JSON diagram or an exported, editable SVG.');
-  if (data.kind === 'diagram-studio-journey' && timelineImporter) return timelineImporter(data);
+  if (data.kind === 'diagram-studio-journey') return importTimeline(data);
   const legacy = isLegacyDiagram(data),
     needsLayout =
       !data.layout?.nodes &&
