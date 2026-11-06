@@ -37,7 +37,7 @@ type CommitHandler = (before: string, label: string, kind: EditKind) => boolean;
 export type EditKind = 'edit' | 'arrangement';
 
 /** Replaces the browser history while a diagram file is open: undo steps through its source. */
-interface HistoryHandler {
+export interface HistoryHandler {
   undo(): void;
   redo(): void;
   canUndo(): boolean;

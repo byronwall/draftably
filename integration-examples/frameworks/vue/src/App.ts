@@ -1,6 +1,7 @@
 import { defineComponent, h, ref } from 'vue';
 import { DraftDiagram, type UpdateResult } from '@draftably/vue';
-import { sources, updated } from '../../sources.js';
+import { DraftEditor } from '@draftably/vue/editor';
+import { recordChange, sources, updated } from '../../sources.js';
 
 const record = (result: UpdateResult) =>
   ((window as { __updates?: string[] }).__updates ??= []).push(result.status);
@@ -9,6 +10,7 @@ export const App = defineComponent({
   props: { svgs: { type: Array as () => string[], default: () => [] } },
   setup(props) {
     const list = ref(sources);
+    const edits = ref(sources.slice(0, 2));
     return () =>
       h('main', [
         h(
@@ -28,6 +30,17 @@ export const App = defineComponent({
             label: `Diagram ${i + 1}`,
             svg: props.svgs[i],
             onUpdate: record,
+          }),
+        ),
+        ...edits.value.map((source, i) =>
+          h(DraftEditor, {
+            key: `editor-${i}`,
+            source,
+            style: { height: '20rem' },
+            onChange: (next: string) => {
+              recordChange(i, next);
+              edits.value = edits.value.map((s, j) => (j === i ? next : s));
+            },
           }),
         ),
       ]);

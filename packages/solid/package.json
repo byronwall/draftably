@@ -14,11 +14,17 @@
       "solid": "./dist/index.jsx",
       "default": "./dist/index.jsx"
     },
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "solid": "./dist/editor.jsx",
+      "default": "./dist/editor.jsx"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
   "dependencies": {
-    "@draftably/runtime": "workspace:*"
+    "@draftably/runtime": "workspace:*",
+    "@draftably/editor": "workspace:*"
   },
   "peerDependencies": {
     "solid-js": "^1.8"

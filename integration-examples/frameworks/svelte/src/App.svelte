@@ -1,9 +1,11 @@
 <script>
   import { DraftDiagram } from '@draftably/svelte';
-  import { sources, updated } from '../../sources.js';
+  import { DraftEditor } from '@draftably/svelte/editor';
+  import { recordChange, sources, updated } from '../../sources.js';
 
   let { svgs = [] } = $props();
   let list = $state(sources);
+  let edits = $state(sources.slice(0, 2));
   const record = result => (window.__updates ??= []).push(result.status);
 </script>
 
@@ -12,5 +14,15 @@
   <button id="remove" onclick={() => (list = list.slice(0, 2))}>Remove last</button>
   {#each list as source, i (i)}
     <DraftDiagram {source} label={`Diagram ${i + 1}`} svg={svgs[i]} onupdate={record} />
+  {/each}
+  {#each edits as source, i (i)}
+    <DraftEditor
+      {source}
+      style="height: 20rem"
+      onchange={next => {
+        recordChange(i, next);
+        edits = edits.map((s, j) => (j === i ? next : s));
+      }}
+    />
   {/each}
 </main>

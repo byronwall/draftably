@@ -14,11 +14,17 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "import": "./dist/editor.js",
+      "default": "./dist/editor.js"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
   "dependencies": {
-    "@draftably/runtime": "workspace:*"
+    "@draftably/runtime": "workspace:*",
+    "@draftably/editor": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=19"

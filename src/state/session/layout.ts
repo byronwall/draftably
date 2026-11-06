@@ -22,7 +22,7 @@ import type { ScenePart } from './scene';
 
 export type LabScope = 'auto' | LayoutScope;
 
-interface LayoutPreview {
+export interface LayoutPreview {
   before: string;
   mode: 'pass' | 'rebuild';
   /** Objects a bounded pass moved; a rebuild's preview is a new drawing, so it has no count. */

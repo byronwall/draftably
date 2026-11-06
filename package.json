@@ -29,7 +29,7 @@
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:build": "pnpm --dir packages/cli build",
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
-    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check && pnpm mermaid:build && pnpm frameworks:build",
+    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build",
     "release": "pnpm release:check && changeset publish",
     "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
@@ -60,7 +60,8 @@
     "prove:runtime": "node scripts/prove-runtime-browser.ts",
     "mermaid:build": "node scripts/build-mermaid.ts",
     "frameworks:build": "node scripts/build-frameworks.ts",
-    "prove:frameworks": "node scripts/prove-frameworks.ts"
+    "prove:frameworks": "node scripts/prove-frameworks.ts",
+    "editor:build": "node scripts/build-editor.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",
@@ -88,6 +89,7 @@
     "jsdom": "26.1.0",
     "pdf-lib": "^1.17.1",
     "playwright-core": "^1.64.0",
+    "postcss": "8.5.6",
     "prettier": "^3.9.9",
     "react": "19.2.0",
     "typescript": "~5.8.3",

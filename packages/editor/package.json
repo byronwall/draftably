@@ -1,0 +1,44 @@
+{
+  "name": "@draftably/editor",
+  "version": "0.1.0",
+  "description": "The Draftably diagram editor: drag boxes and lines, and get the .draft source back.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/editor/mount.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/types/src/editor/element.d.ts",
+      "import": "./dist/element.js",
+      "default": "./dist/element.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "./dist/element.js",
+    "./dist/index.js",
+    "./dist/chunks/*.js"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/build-editor.ts"
+  },
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwall/draftably.git",
+    "directory": "packages/editor"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

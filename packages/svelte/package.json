@@ -14,11 +14,17 @@
       "svelte": "./src/index.js",
       "default": "./src/index.js"
     },
+    "./editor": {
+      "types": "./src/editor.d.ts",
+      "svelte": "./src/editor.js",
+      "default": "./src/editor.js"
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
   "dependencies": {
-    "@draftably/runtime": "workspace:*"
+    "@draftably/runtime": "workspace:*",
+    "@draftably/editor": "workspace:*"
   },
   "peerDependencies": {
     "svelte": "^5"

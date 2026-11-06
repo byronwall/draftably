@@ -5,3 +5,9 @@ export const sources = [
   'diagram "Gamma" version=1\nnode user "Gamma user"\nnode app "Gamma app"\nedge e1 user -> app "opens"\n',
 ];
 export const updated = sources[0].replace('Alpha API', 'Updated API');
+
+/** Test hook: each editor's reported sources, by index. */
+export const recordChange = (i, source) => {
+  const all = (globalThis.__changes ??= [[], []]);
+  all[i].push(source);
+};
