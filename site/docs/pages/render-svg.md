@@ -1,6 +1,6 @@
 # Render SVG
 
-`@draftably/runtime` turns `.draft` text into an SVG string in Node or a browser. Use it in a
+`renderSvg` from `@draftably/runtime` turns `.draft` text into an SVG string in Node or a browser. Use it in a
 script, a build step or a server route. It uses the same compiler and renderer as the CLI.
 
 ```sh
@@ -10,7 +10,7 @@ pnpm add @draftably/runtime
 The package has no runtime dependencies, DOM shim or install scripts. It needs Node 22.21 or later
 and is ES modules only, so a script needs `"type": "module"` in its `package.json`.
 
-## Render
+## Render with renderSvg
 
 Save this as `render.ts` and run `node render.ts`:
 

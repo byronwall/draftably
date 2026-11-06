@@ -63,6 +63,10 @@ describe('docs search', () => {
     ['feedback', /Feedback lines and ties/],
     ['back edge', /Feedback lines and ties/],
     ['group layout', /Scopes and groups/],
+    ['docusaurus', /Documentation sites/],
+    ['mountViewer', /Element and viewer/],
+    ['renderSvg', /Render SVG/],
+    ['mermaid drop-in', /Switch from Mermaid/],
   ])('ranks the right page first: %s', (query, page) => {
     expect(top(query)).toMatch(page);
   });

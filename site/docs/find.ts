@@ -1,6 +1,6 @@
 /** Full-text search over the docs: one entry per page section, ranked by where the words match. */
 import type { Tokens } from 'marked';
-import { PAGES, plain, type Page } from './content';
+import { HOME, PAGES, plain, type Page } from './content';
 
 export interface Entry {
   page: Page;
@@ -17,7 +17,7 @@ export interface Entry {
 }
 
 // The docs home only links to other pages, so a match there would hide the page it points to.
-const ENTRIES: Entry[] = PAGES.filter(p => p.slug !== 'start').flatMap(page => {
+const ENTRIES: Entry[] = PAGES.filter(p => p.slug !== HOME).flatMap(page => {
   const lead = plain(page.lead);
   const out: Entry[] = [{ page, text: lead, prose: lead.toLowerCase(), code: '', keys: '' }];
   for (const t of page.tokens) {

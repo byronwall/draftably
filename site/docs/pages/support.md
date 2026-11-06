@@ -5,14 +5,14 @@ Node 22.21 or later and is ES modules only.
 
 ## Packages
 
-| Package                                         | Use it to                                                   | Guide                                                     |
-| ----------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------- |
-| `draftably`                                     | Check, draw and edit `.draft` files from the terminal       | [CLI](#cli)                                               |
-| `@draftably/runtime`                            | Render SVG; show the `<draft-diagram>` element or a viewer  | [Render SVG](#render-svg), [Element and viewer](#element) |
-| `@draftably/react`, `/solid`, `/vue`, `/svelte` | Show or edit a diagram in a component                       | [Frameworks](#frameworks)                                 |
-| `@draftably/editor`                             | Put the drag-and-drop editor in your page                   | [Editor component](#editor-component)                     |
-| `@draftably/markdown`                           | Turn `draft` and `mermaid` fences into images at build time | [Markdown](#markdown)                                     |
-| `@draftably/mermaid`                            | Draw your Mermaid flowcharts and sequences with Draftably   | [Switch from Mermaid](#from-mermaid)                      |
+| Package                       | Use it to                                                   | Guide                                                     |
+| ----------------------------- | ----------------------------------------------------------- | --------------------------------------------------------- |
+| `draftably`                   | Check, draw and edit `.draft` files from the terminal       | [CLI](#cli)                                               |
+| `@draftably/runtime`          | Render SVG; show the `<draft-diagram>` element or a viewer  | [Render SVG](#render-svg), [Element and viewer](#element) |
+| `@draftably/react` and others | Show or edit a diagram in a component                       | [Frameworks](#frameworks)                                 |
+| `@draftably/editor`           | Put the drag-and-drop editor in your page                   | [Editor component](#editor-component)                     |
+| `@draftably/markdown`         | Turn `draft` and `mermaid` fences into images at build time | [Markdown](#markdown)                                     |
+| `@draftably/mermaid`          | Draw your Mermaid flowcharts and sequences with Draftably   | [Switch from Mermaid](#from-mermaid)                      |
 
 Every package draws with the same compiler and renderer, so a diagram looks the same in each.
 

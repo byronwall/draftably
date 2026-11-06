@@ -6,6 +6,7 @@ import {
   anchorPath,
   docsPath,
   findPage,
+  HOME,
   html,
   inlineHtml,
   isDraft,
@@ -325,7 +326,7 @@ function Article(props: { page: Page; query: string }) {
   };
 
   return (
-    <article class="doc" ref={el} onClick={click}>
+    <article class="doc" data-page={props.page.slug} ref={el} onClick={click}>
       <div class="doc-crumbs">
         {/* The group links to its first page, unless that is this page. */}
         <Show
@@ -468,7 +469,8 @@ function Contents(props: { page: Page }) {
   });
   return (
     <aside class="docs-toc" aria-label="On this page">
-      <Show when={props.page.headings.length > 1}>
+      {/* The home's sections sit side by side, so a list of them would only repeat them. */}
+      <Show when={props.page.headings.length > 1 && props.page.slug !== HOME}>
         <h2>On this page</h2>
         <SectionLinks page={props.page} current={current()} />
       </Show>

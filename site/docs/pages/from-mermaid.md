@@ -33,7 +33,7 @@ its own copy. Add an override so it gets the drop-in too:
 | npm             | `"overrides": { "mermaid": "npm:@draftably/mermaid@^0.1.0" }` in `package.json`      |
 | Yarn            | `"resolutions": { "mermaid": "npm:@draftably/mermaid@^0.1.0" }` in `package.json`    |
 
-### Docusaurus
+### Mermaid theme in Docusaurus
 
 Keep `markdown: { mermaid: true }` and `themes: ['@docusaurus/theme-mermaid']`. Add the override
 above, then reinstall. Your `mermaid` code fences now draw with Draftably. With pnpm,

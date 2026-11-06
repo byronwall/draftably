@@ -7,11 +7,11 @@ image at build time, and readers load no Draftably JavaScript.
 pnpm add @draftably/markdown
 ```
 
-| Site                   | Tested version | How it plugs in                                 | Example                                                                                                  |
-| ---------------------- | -------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Astro 7 with Starlight | 7.4.5, 0.42.9  | Remark plugin through Astro's Unified processor | [astro-starlight](https://github.com/byronwall/draftably/tree/main/integration-examples/astro-starlight) |
-| Docusaurus 3           | 3.10.2         | Remark plugin in the docs preset                | [docusaurus](https://github.com/byronwall/draftably/tree/main/integration-examples/docusaurus)           |
-| VitePress 1            | 1.6.4          | A prebuild step writes image Markdown           | [vitepress](https://github.com/byronwall/draftably/tree/main/integration-examples/vitepress)             |
+| Site, tested version              | How it plugs in                                 | Example                                                                                                  |
+| --------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Astro 7.4.5 with Starlight 0.42.9 | Remark plugin through Astro's Unified processor | [astro-starlight](https://github.com/byronwall/draftably/tree/main/integration-examples/astro-starlight) |
+| Docusaurus 3.10.2                 | Remark plugin in the docs preset                | [docusaurus](https://github.com/byronwall/draftably/tree/main/integration-examples/docusaurus)           |
+| VitePress 1.6.4                   | A prebuild step writes image Markdown           | [vitepress](https://github.com/byronwall/draftably/tree/main/integration-examples/vitepress)             |
 
 Each example is a complete site you can copy. It serves under `/manual/`, so you can see how the
 base path flows into image URLs.

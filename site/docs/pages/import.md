@@ -13,7 +13,7 @@ draftably open systems.draft
 In the editor or the [Playground](/play), choose **Import text diagram** and pick a file. It opens
 as a new draft, with any warnings shown before you open it.
 
-| Format            | Imports                              | Stops on                                         |
+| Format            | Imports                              | Refuses                                          |
 | ----------------- | ------------------------------------ | ------------------------------------------------ |
 | Graphviz DOT      | Graphs, clusters, labels, arrowheads | Record fields, named ports, crow's feet          |
 | Mermaid flowchart | Nodes, subgraphs, labels, line ends  | Unsupported arrow types, a node in two subgraphs |

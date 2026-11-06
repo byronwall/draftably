@@ -56,12 +56,12 @@ void diagram.updateComplete.then(result => {
 });
 ```
 
-| Attribute | Effect                                                                                        |
-| --------- | --------------------------------------------------------------------------------------------- |
-| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                         |
-| `label`   | The accessible name.                                                                          |
-| `state`   | A declared [emphasis state](#emphasis-states) to show.                                        |
-| `outline` | `visible` keeps the item list under the drawing. By default it shows only while it has focus. |
+| Attribute | Effect                                                                    |
+| --------- | ------------------------------------------------------------------------- |
+| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.     |
+| `label`   | The accessible name.                                                      |
+| `state`   | A declared [emphasis state](#emphasis-states) to show.                    |
+| `outline` | `visible` keeps the item list under the drawing. Default: shown on focus. |
 
 Change them with `setAttribute`, such as `diagram.setAttribute('label', 'Checkout flow')`.
 

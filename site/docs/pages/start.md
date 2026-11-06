@@ -1,6 +1,6 @@
 # Choose a path
 
-Draftably turns short text into laid-out diagrams. Pick what you want to do.
+Draftably turns short text into laid-out diagrams: write the boxes and lines, and it places them.
 
 ## Make a diagram
 
@@ -18,7 +18,7 @@ Draftably turns short text into laid-out diagrams. Pick what you want to do.
 - **Have a coding agent draw for you.** Install the [agent skill](#agent-skill).
 - **Bring diagrams you already have.** [Import](#import) DOT, Mermaid and D2 files.
 
-## Put diagrams in your product
+## Embed in your app
 
 - **Already use Mermaid?** [Switch from Mermaid](#from-mermaid) with one alias. Your page code
   stays the same.

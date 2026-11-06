@@ -82,6 +82,13 @@ export function Example(props: { source: string; themes?: boolean }) {
     clearTimeout(timer);
     timer = setTimeout(() => void redraw(text), 160);
   };
+  // The picked state's own line in the source, tinted so the row and the text agree.
+  const stateLine = () =>
+    state()
+      ? source()
+          .split('\n')
+          .findIndex(l => l.trim().startsWith(`state ${state()} `))
+      : -1;
   const pick = (id: string) => {
     setState(id);
     void redraw(source());
@@ -142,6 +149,9 @@ export function Example(props: { source: string; themes?: boolean }) {
             {Array.from({ length: lines() }, (_, i) => i + 1).join('\n')}
           </pre>
           <div class="doc-example-code">
+            <Show when={stateLine() >= 0}>
+              <div class="doc-example-mark" style={{ top: `${stateLine() * 20}px` }} />
+            </Show>
             <pre
               class="doc-example-hl"
               aria-hidden="true"

@@ -59,14 +59,14 @@ Options go in one brace group after `draft`, with quoted values:
 ```
 ````
 
-| Key       | Effect                                                                                      |
-| --------- | ------------------------------------------------------------------------------------------- |
-| `alt`     | Alt text for the image. Without it, the diagram's title is used.                            |
-| `caption` | Wraps the image in a figure with this plain-text caption.                                   |
-| `src`     | Draws a `.draft` file instead of the fence body. Needs `sources.rootDir`.                   |
-| `id`      | A stable name for the image and its anchor.                                                 |
-| `state`   | Draws a declared [emphasis state](#emphasis-states).                                        |
-| `mode`    | `static` (the default) or `interactive`. See [Interactive diagrams](#interactive-diagrams). |
+| Key       | Effect                                                                       |
+| --------- | ---------------------------------------------------------------------------- |
+| `alt`     | Alt text for the image. Without it, the diagram's title is used.             |
+| `caption` | Wraps the image in a figure with this plain-text caption.                    |
+| `src`     | Draws a `.draft` file instead of the fence body. Needs `sources.rootDir`.    |
+| `id`      | A stable name for the image and its anchor.                                  |
+| `state`   | Draws a declared [emphasis state](#emphasis-states).                         |
+| `mode`    | `static` (the default) or `interactive`. See [below](#interactive-diagrams). |
 
 An unknown or repeated key fails the build. Theme and layout belong in the `.draft` source. A
 fence inside another code block stays code, because the plugin reads the parsed document and never

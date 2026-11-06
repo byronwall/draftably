@@ -13,7 +13,7 @@ matches what you ship.
 | Generate SVG in a script or build step           | [Render SVG](#render-svg)                       | `@draftably/runtime`                      |
 | Turn `draft` fences into images                  | [Markdown](#markdown)                           | `@draftably/markdown`                     |
 | Add diagrams to Starlight, Docusaurus, VitePress | [Documentation sites](#documentation-sites)     | `@draftably/markdown`                     |
-| Draw diagrams in a GitHub README                 | [GitHub Action](#github-action)                 | Nothing                                   |
+| Draw diagrams in a GitHub README                 | [GitHub Action](#github-action)                 | A workflow step                           |
 | Put an image in a wiki, chat or slide            | [An image for any host](#an-image-for-any-host) | `draftably`                               |
 
 The packages need Node 22.21 or later and are ES modules only. [Support](#support) lists each

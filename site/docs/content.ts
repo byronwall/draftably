@@ -196,6 +196,8 @@ function ordered(): Page[] {
 }
 
 export const PAGES = ordered();
+/** The docs home: it only routes to other pages. */
+export const HOME = 'start';
 export const findPage = (slug: string) => PAGES.find(p => p.slug === slug);
 export const docsPath = (slug: string, hash = '') => `/docs/${slug}${hash ? `#${hash}` : ''}`;
 
