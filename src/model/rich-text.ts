@@ -79,11 +79,11 @@ const SCHEME = /^[a-z][a-z0-9+.-]+:/i;
  * One line's content inside its `<text>`: plain runs as text, links as an underlined `<tspan>` in
  * `link`, wrapped in `<a>` with `href` as `write` gives it.
  */
-export function runsMarkup(runs: Run[], link: string, write: (href: string) => string) {
+export function runsMarkup(runs: Run[], link: string, write: (href: string) => string | null) {
   return runs
     .map(r => {
-      if (!r.href) return esc(r.text);
-      const href = write(r.href);
+      const href = r.href ? write(r.href) : null;
+      if (!href) return esc(r.text);
       return (
         `<a href="${esc(href)}"${SCHEME.test(href) ? ' target="_blank" rel="noopener"' : ''}>` +
         `<tspan fill="${link}" text-decoration="underline">${esc(r.text)}</tspan></a>`

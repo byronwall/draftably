@@ -1,0 +1,15 @@
+{
+  "name": "draftably-element-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node fallback.ts && vite",
+    "build": "node fallback.ts && vite build"
+  },
+  "dependencies": {
+    "@draftably/runtime": "0.1.0"
+  },
+  "devDependencies": {
+    "vite": "6.3.5"
+  }
+}

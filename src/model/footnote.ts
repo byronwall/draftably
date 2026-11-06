@@ -57,7 +57,7 @@ export function footnoteMarkup(
   layout: FootnoteLayout,
   x: number,
   y: number,
-  write: (href: string) => string = h => h,
+  write: (href: string) => string | null = h => h,
 ): string {
   if (!layout.items.length) return '';
   const { type } = layout,

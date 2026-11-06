@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { compile } from '../src/dsl/compile';
 import { sceneConflicts } from '../src/dsl/conflicts';
@@ -131,10 +131,23 @@ node b "Second part" in=req`,
 
   it('stops at --budget, keeps v0 and reports what it skipped', async () => {
     const seen: string[] = [];
-    const result = await vary(SOURCE, { grid: true, budget: 0, progress: d => seen.push(d.title) });
-    expect(result.variants.map(v => v.id)).toEqual(['v0', 'v1']);
-    expect(result.skipped).toBe(5);
-    expect(seen).toEqual([result.variants[1].title]);
+    let elapsed = 0;
+    const clock = vi.spyOn(Date, 'now').mockImplementation(() => elapsed);
+    try {
+      const result = await vary(SOURCE, {
+        grid: true,
+        budget: 0,
+        progress: d => {
+          seen.push(d.title);
+          elapsed = 1;
+        },
+      });
+      expect(result.variants.map(v => v.id)).toEqual(['v0', 'v1']);
+      expect(result.skipped).toBe(5);
+      expect(seen).toEqual([result.variants[1].title]);
+    } finally {
+      clock.mockRestore();
+    }
   });
 
   it('lets --fit trade area for the target shape, never crossings', () => {

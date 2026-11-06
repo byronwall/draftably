@@ -1,0 +1,6 @@
+node browser "Browser" color=blue
+node api "API" color=teal
+node db "Database" color=violet
+edge request browser -> api "HTTPS"
+edge query api -> db "read / write"
+layout root engine=layered direction=right

@@ -1,0 +1,17 @@
+{
+  "raw": {
+    "language": "draft",
+    "info": "{id=\"checkout\" alt=\"Web sends an order through the API to the database.\" caption=\"Checkout path\"}",
+    "body": "diagram \"Checkout\"\nnode web \"Web app\" href=\"https://example.invalid/checkout\"\nnode api \"Order API\"\nnode db \"Orders\" shape=pill\nedge request web -> api \"POST /orders\"\nedge persist api -> db \"save\"\n"
+  },
+  "normalized": {
+    "id": "checkout",
+    "alt": "Web sends an order through the API to the database.",
+    "caption": "Checkout path"
+  },
+  "defaults": {
+    "mode": "static",
+    "includeSource": false,
+    "links": "none"
+  }
+}

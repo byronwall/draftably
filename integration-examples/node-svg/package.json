@@ -1,0 +1,11 @@
+{
+  "name": "draftably-node-svg-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.ts"
+  },
+  "dependencies": {
+    "@draftably/runtime": "0.1.0"
+  }
+}

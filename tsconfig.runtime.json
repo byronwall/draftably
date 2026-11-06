@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "packages/runtime/dist/types",
+    "rootDir": "."
+  },
+  "include": ["src/runtime/index.ts", "src/runtime/viewer.ts", "src/runtime/element.ts"]
+}

@@ -10,7 +10,7 @@ export default tseslint.config(
       'dist',
       'dist-cli',
       'dist-site',
-      'packages/cli/dist',
+      'packages/*/dist',
       'reference',
       'docs/intent/diagram-imports/assets/pro-results/2026-10-31',
       'tmp',
@@ -40,12 +40,24 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tests/**', 'scripts/**', 'src/cli/**', 'src/server/**', '*.config.*'],
+    files: [
+      'tests/**',
+      'scripts/**',
+      'src/cli/**',
+      'src/server/**',
+      'integration-examples/**',
+      '*.config.*',
+    ],
     languageOptions: { globals: globals.node },
   },
   {
     // Proof and bench scripts pass callbacks to `page.evaluate`, which run in the browser.
-    files: ['scripts/prove-*.mjs', 'scripts/lib/proof.mjs', 'scripts/bench/*.mjs'],
+    files: [
+      'scripts/prove-*.mjs',
+      'scripts/prove-*.ts',
+      'scripts/lib/proof.mjs',
+      'scripts/bench/*.mjs',
+    ],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 );

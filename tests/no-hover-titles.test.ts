@@ -48,7 +48,7 @@ describe('no hover titles', () => {
     expect(scene.querySelectorAll('title, [title]')).toHaveLength(0);
     dispose();
     const svg = renderSvg(doc);
-    expect(svg.match(/<title>/g)).toHaveLength(1);
-    expect(svg).toContain('<title>Doc</title>');
+    expect(svg.match(/<title\b/g)).toHaveLength(1);
+    expect(svg).toMatch(/<title[^>]*>Doc<\/title>/);
   });
 });

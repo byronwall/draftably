@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>draftably viewer</title>
+  </head>
+  <body>
+    <main>
+      <h1>Checkout diagram</h1>
+      <img
+        id="fallback"
+        src="./checkout.svg"
+        alt="Checkout flow: web app requests the API, which reads the store."
+      />
+      <div id="diagram" class="diagram-host"></div>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

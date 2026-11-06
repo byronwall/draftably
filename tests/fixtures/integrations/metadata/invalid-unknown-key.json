@@ -1,0 +1,12 @@
+{
+  "raw": {
+    "language": "draft",
+    "info": "{alt=\"Example\" onclick=\"run()\"}",
+    "body": "node web \"Web app\"\n"
+  },
+  "expected": {
+    "accepted": false,
+    "reason": "unknown-metadata-key",
+    "key": "onclick"
+  }
+}

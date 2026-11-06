@@ -124,6 +124,25 @@ and return the same file to the agent. Read the [skill](skills/draftably/SKILL.m
 
 Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](docs/IMPORTING.md).
 
+## Integrate
+
+Show diagrams in your own pages, scripts and documentation sites:
+
+````sh
+pnpm add @draftably/runtime    # <draft-diagram> element, viewer, renderSvg()
+pnpm add @draftably/markdown   # remark and markdown-it plugins for ```draft fences
+````
+
+```ts
+import '@draftably/runtime/element';
+// <draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
+```
+
+[Use Draftably in your project](docs/integrations/README.md) compares every route, from a
+committed image to a documentation-site plugin, with a complete start for each. The
+[support matrix](docs/integrations/support.md) lists tested hosts. The
+[contributor guide](docs/integrations/contributing.md) shows how to build another adapter.
+
 ## Develop
 
 Built with SolidJS, TypeScript and Vite. Use Node 22.21 or later and pnpm 11.

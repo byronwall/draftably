@@ -106,6 +106,14 @@ importers:
         specifier: 12.2.0
         version: 12.2.0
 
+  packages/markdown:
+    dependencies:
+      '@draftably/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+
+  packages/runtime: {}
+
 packages:
 
   '@antfu/install-pkg@2.1.0':

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Draftably static browser example</title>
+  <body>
+    <h1>Checkout</h1>
+    <p id="status" role="status">Drawing diagram…</p>
+    <img id="diagram" alt="The web app calls the API, which stores an order." hidden />
+    <script type="module">
+      // Copy the complete runtime dist directory here, including its relative chunks.
+      import { renderSvg } from './runtime/index.js';
+      const result = await renderSvg(`diagram "Checkout" version=1
+node web "Web app" color=blue
+node api "API" color=teal
+node db "Postgres" shape=pill
+edge request web -> api "HTTPS"
+edge persist api -> db "Store order"
+layout root flow direction=right
+`);
+      if (result.ok) {
+        const img = document.querySelector('#diagram');
+        const url = URL.createObjectURL(new Blob([result.value.svg], { type: 'image/svg+xml' }));
+        img.onload = () => URL.revokeObjectURL(url);
+        img.src = url;
+        img.width = result.value.width;
+        img.height = result.value.height;
+        img.hidden = false;
+        document.querySelector('#status').textContent = 'Rendered with the installed runtime.';
+      } else
+        document.querySelector('#status').textContent = result.diagnostics
+          .map(d => d.message)
+          .join('\n');
+    </script>
+  </body>
+</html>

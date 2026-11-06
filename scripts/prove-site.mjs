@@ -422,10 +422,35 @@ const journeys = {
       /Whole diagram/.test(await panel.textContent()),
     );
     await page.locator('[data-id="web"]').first().click({ force: true });
-    check('#307 a selection narrows the scope', /1 shape/.test(await panel.textContent()));
+    // Selection and the two scope labels update through separate reactive components. Wait for
+    // both projections before checking them, and keep their final values in failure output.
+    await page
+      .waitForFunction(
+        () => {
+          const subject = document.querySelector('.arrange-subject strong')?.textContent ?? '';
+          const hint =
+            document
+              .querySelector('.toolbar button[data-tip="Tidy"]')
+              ?.getAttribute('data-tip-hint') ?? '';
+          return /1 shape/.test(subject) && /the selection|this group/.test(hint);
+        },
+        null,
+        { timeout: 2000 },
+      )
+      .catch(() => {});
+    const selectedScope = (await panel.textContent())?.trim() ?? '(missing)';
+    const selectedHint = (await button.getAttribute('data-tip-hint')) ?? '(missing)';
+    const selectionStatus =
+      (await page.locator('.statusbar > span').first().textContent())?.trim() ?? '(missing)';
+    check(
+      '#307 a selection narrows the scope',
+      /1 shape/.test(selectedScope),
+      `observed ${JSON.stringify(selectedScope)}; status ${JSON.stringify(selectionStatus)}`,
+    );
     check(
       '#307 the toolbar tooltip agrees',
-      /the selection|this group/.test(await button.getAttribute('data-tip-hint')),
+      /the selection|this group/.test(selectedHint),
+      `observed ${JSON.stringify(selectedHint)}; status ${JSON.stringify(selectionStatus)}`,
     );
     await page.screenshot({ path: path.join(proof.out, 'layout-panel.png') });
     await page.context().close();

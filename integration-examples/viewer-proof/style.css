@@ -1,0 +1,20 @@
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+.host {
+  block-size: 25rem;
+}
+#proof-status {
+  grid-column: 1 / -1;
+}
+@media (max-width: 600px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  #proof-status {
+    grid-column: auto;
+  }
+}

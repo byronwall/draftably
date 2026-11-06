@@ -1,0 +1,16 @@
+{
+  "name": "draftably-react-viewer-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node fallback.mjs && vite build"
+  },
+  "dependencies": {
+    "@draftably/runtime": "0.1.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "vite": "6.3.5"
+  }
+}

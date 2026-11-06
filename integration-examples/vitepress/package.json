@@ -1,0 +1,19 @@
+{
+  "name": "draftably-vitepress-image-consumer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/prepare.mjs",
+    "dev": "node scripts/dev.mjs",
+    "build": "pnpm generate && vitepress build .",
+    "preview": "vitepress preview . --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@draftably/markdown": "0.1.0",
+    "@draftably/runtime": "0.1.0",
+    "remark-parse": "11.0.0",
+    "remark-stringify": "11.0.0",
+    "unified": "11.0.5",
+    "vitepress": "1.6.4"
+  }
+}

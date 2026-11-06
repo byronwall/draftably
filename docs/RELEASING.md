@@ -1,12 +1,33 @@
-# draftably releases
+# Draftably package releases
+
+The public packages are `draftably` (CLI), `@draftably/runtime` (native rendering), and
+`@draftably/markdown` (build-time remark integration). Package proofs install packed archives
+outside this repository. They do not publish them.
+
+Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
+
+Use `pnpm markdown:build && pnpm markdown:pack-check` for the remark and markdown-it adapters and
+their packed Unified/MDX/markdown-it consumers. The proof installs the Markdown and runtime
+archives together. CI also runs `pnpm markdown:browser-check` against the real viewer package.
+
+The changeset helper defaults to the CLI. Select other packages explicitly:
+
+```sh
+pnpm changeset:add minor "Add native rendering" --package @draftably/runtime
+pnpm changeset:add patch "Fix shared geometry" --package draftably --package @draftably/runtime
+```
+
+The PR check maps shared compiler, model, font, and renderer changes to their affected packages. An empty changeset is an explicit no-release choice. A change to package source must name each affected public package.
+
+Before the first registry release, confirm `@draftably` scope ownership and configure a trusted publisher for each package. The repository artifact proofs do not establish registry ownership. Release commands remain separate from development and verification.
 
 The release flow follows explorEDA and Product Grid:
 
-1. Add a changeset with the CLI change.
+1. Add a changeset that names each changed package.
 2. Merge it into `main`.
 3. GitHub Actions opens or updates the **Version Packages** pull request.
 4. Review the version and changelog. Merge that pull request.
-5. Actions checks, builds, tests, and packs the CLI. Changesets publishes it and creates a GitHub release.
+5. Actions checks, builds, tests and packs each package. Changesets publishes them and creates GitHub releases.
 
 A pull request that changes shipped files (`src/`, `index.html`, `examples/`, `docs/DSL.md`,
 `packages/cli/`) must add a changeset; CI runs `pnpm changeset:check` to enforce it. Use
@@ -62,6 +83,32 @@ Trusted publishing requires npm 11.5.1 or later and Node 22.14 or later.
 See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
 The source repository is public. The release workflow requests npm provenance for automated publishes.
+
+### First publish of the scoped packages
+
+`@draftably/runtime` and `@draftably/markdown` follow the same rule: each package must exist on
+npm before it can have a trusted publisher. Do these steps once, before you merge a
+**Version Packages** pull request that includes them:
+
+1. On npmjs.com, create the free `draftably` organization. It owns the `@draftably` scope.
+2. Build and check both packages:
+
+   ```sh
+   pnpm runtime:build && pnpm runtime:pack-check
+   pnpm markdown:build && pnpm markdown:pack-check
+   ```
+
+3. Publish each package at its current version from your authenticated session. pnpm replaces
+   the `workspace:*` dependency with the exact runtime version:
+
+   ```sh
+   pnpm --dir packages/runtime publish --access public --no-git-checks
+   pnpm --dir packages/markdown publish --access public --no-git-checks
+   ```
+
+4. Add a trusted publisher to each package with the values in the table above.
+
+After that, Changesets publishes all three packages from Actions.
 
 ## Add each release note
 

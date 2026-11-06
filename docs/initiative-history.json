@@ -26,5 +26,30 @@
       "# still starts a comment inside a bare word, so an unquoted URL fragment is lost.",
       "A compare panel keeps the empty side margin of a message note."
     ]
+  },
+  {
+    "title": "Embedding ecosystem",
+    "slug": "embedding-ecosystem",
+    "outcome": "completed",
+    "retired_at": "2026-11-05",
+    "summary": "The native runtime, SVG policy, viewer, <draft-diagram> element, remark and markdown-it adapters, and Astro, Docusaurus and VitePress recipes shipped in the stack from PR #422 to PR #456. Planning and Pro assets are archived at 525e8807.",
+    "reason": "Byron asked for one clean consumer story and docs, then a merge of the whole stack.",
+    "documentation": [
+      "docs/integrations/README.md",
+      "docs/integrations/support.md",
+      "docs/RELEASING.md",
+      "docs/CHECKS.md",
+      "site/docs/pages/embed.md",
+      "packages/runtime/README.md",
+      "packages/markdown/README.md"
+    ],
+    "revision": "525e8807",
+    "follow_ups": [
+      "Create the @draftably npm organization, publish both packages once, and add trusted publishers before merging Version Packages.",
+      "Trim the runtime's public options (limits, cancellation, nonce, provenance) before 1.0.",
+      "Decide whether the viewer needs its worker and its own SVG sanitizer.",
+      "Merge the four package proof scripts and the duplicate viewer examples.",
+      "Explore items EMB-017 to EMB-020: VS Code preview, custom iframe, Kroki, native host proposals."
+    ]
   }
 ]

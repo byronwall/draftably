@@ -1,7 +1,7 @@
 # Architecture
 
-draftably is a SolidJS single-page app. All state lives in the browser; computation-heavy work
-runs in a Web Worker. The code is split into three layers, each depending only on the ones below it.
+draftably is a SolidJS single-page app. All editor state lives in the browser; computation-heavy work
+runs in a Web Worker. The editor code is split into three layers, each depending only on the ones below it. The portable runtime and adapters are described later.
 
 ```
 components/  →  state/  →  model/  →  engines/
@@ -98,6 +98,14 @@ poll the folder while visible (`watchWorkspace`); examples show only when the fo
 
 `cli/` is the `pnpm draftably` command. `scripts/draftably.mjs` rebuilds it with `vite build --ssr` when a
 source file is newer than `dist-cli/`.
+
+## runtime/ and packages/ — portable distribution
+
+`src/runtime/` exposes native source rendering, validation, diagnostics, and an independent read-only viewer. `packages/runtime/` builds the portable package and its viewer worker. The runtime uses the native compiler and deterministic font metrics; it does not expose the editor store or compiled scene.
+
+`packages/markdown/` owns shared fence metadata, local-source resolution, diagnostics, and static asset preparation. Its remark and markdown-it adapters map host syntax to that core. The optional browser client adds the independent viewer and owns its cleanup. Host adapters own file identity, asset publication, cache replay, and public URLs; they do not implement another compiler.
+
+See [integration support](integrations/support.md) for proof and publication status, plus the [runtime](integrations/runtime.md), [Markdown](integrations/markdown.md), [viewer](integrations/viewer.md), and [contributor](integrations/contributing.md) guides.
 
 ## components/ — the interface
 

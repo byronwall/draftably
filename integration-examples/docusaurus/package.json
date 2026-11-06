@@ -1,0 +1,17 @@
+{
+  "name": "draftably-docusaurus-consumer",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/dev.mjs",
+    "build": "docusaurus clear && docusaurus build",
+    "serve": "docusaurus serve --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@draftably/markdown": "0.1.0",
+    "@draftably/runtime": "0.1.0",
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  }
+}
