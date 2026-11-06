@@ -1,11 +1,11 @@
 # Integration support
 
-Status on 2026-11-05. These changes have packed-package and browser proofs. This stack has not published packages or installed provider plugins.
+Status on 2026-11-05. Each surface has packed-package and browser proofs in CI. `@draftably/runtime` and `@draftably/markdown` publish to npm with the CLI. No provider plugin is installed.
 
 | Surface                      | Verified behavior                                                                                              | Availability                                                                                    |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Native runtime               | Packed Node, strict TypeScript, and nested-path browser consumers render portable SVG.                         | Repository package artifact; publication is separate.                                           |
-| Static Markdown              | Packed Unified, MDX, and markdown-it consumers emit accessible SVG images and restore cached assets.           | Repository adapter package.                                                                     |
+| Native runtime               | Packed Node, strict TypeScript, and nested-path browser consumers render portable SVG.                         | `@draftably/runtime` on npm.                                                                    |
+| Static Markdown              | Packed Unified, MDX, and markdown-it consumers emit accessible SVG images and restore cached assets.           | `@draftably/markdown` on npm.                                                                   |
 | Independent viewer           | Packed workers, React Strict Mode, Solid cleanup, keyboard controls, and 390-pixel inspection pass.            | Optional runtime entry. Vue and Svelte have recipes, without wrapper packages.                  |
 | Diagram element              | Packed Vite and browser imports provide automatic styles, source updates, fallback, and cleanup.               | Optional `@draftably/runtime/element` entry.                                                    |
 | Markdown client              | Visible enhancement and restore controls, static fallback, cancellation, and late-result handling pass.        | Optional adapter entry; browser recompilation discloses source.                                 |
@@ -34,4 +34,4 @@ VitePress prepares image Markdown before its synchronous site pipeline. Astro an
 - **A new adapter:** follow the [contributor guide](contributing.md) and run the shared fixtures.
 - **Interactive display:** keep the static image until the viewer commits and restore it during cleanup.
 
-See [implementation evidence](../intent/embedding-ecosystem/implementation-evidence.md) for commands and review order.
+[Checks](../CHECKS.md#portable-runtime) lists the proof commands.

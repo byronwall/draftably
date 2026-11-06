@@ -19,7 +19,7 @@
 - Packet inventory: 355 tracked files plus the prompt and inventory; 1,091,300 bytes compressed.
 - Follow-up count: 0.
 - Heartbeat: none. App instructions require checking this job in the current task instead of creating a monitoring automation.
-- Collected files: all four original Markdown deliverables; see the [asset index](../../intent/embedding-ecosystem/asset-index.md).
+- Collected files: all four original Markdown deliverables; see the [asset index](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/asset-index.md).
 - Blockers: none.
 - PR: [#422 — Plan Draftably embedding and Markdown distribution](https://github.com/byronwall/draftably/pull/422).
 - PR verification: open, mergeable, correct base/head, saved body reviewed, all four originals present in the 12-file diff.
@@ -32,10 +32,10 @@
 - Downloaded `draftably-embedding-design.zip` from the recorded conversation under the skill's standing approval.
 - The browser download event timed out, but the archive existed in Downloads. It was checked before any retry; no duplicate request was made.
 - Extraction checked unsafe paths, symlinks, entry sizes, and total size. The four extracted files match the archive byte for byte.
-- Original files are preserved under `docs/intent/embedding-ecosystem/assets/pro-results/2026-11-03/`.
+- Original files are preserved under [the archived intent folder](https://github.com/byronwall/draftably/tree/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem).
 - The ZIP and input packet remain in ignored working storage.
 - Read every report and its source register. No additional Pro follow-up was needed.
-- Wrote the [summary](summary.md), [reviewed plan](../../intent/embedding-ecosystem/implementation-plan.md), and [all recommendation decisions](../../intent/embedding-ecosystem/recommendations.md).
+- Wrote the [summary](summary.md), [reviewed plan](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/implementation-plan.md), and [all recommendation decisions](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/recommendations.md).
 - Verified decisive source seams and current primary documentation for Mermaid, GitHub, markdown-it, and Astro.
 - Reconciled Pro's wheel guidance with FEEL.md and checked the release files omitted from the packet.
 - No product implementation, package publication, deployment, or upstream message occurred.

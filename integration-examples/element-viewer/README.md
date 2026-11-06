@@ -3,10 +3,10 @@
 This example needs no viewer lifecycle code or viewer CSS import. It uses
 `<draft-diagram>` for source updates, cleanup, and a static image fallback.
 
-Install the packed runtime from this branch, then run the example:
+Install the runtime, then run the example:
 
 ```sh
-pnpm add /absolute/path/to/draftably-runtime-0.1.0.tgz
+pnpm add @draftably/runtime
 pnpm install
 pnpm dev
 ```

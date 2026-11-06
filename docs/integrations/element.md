@@ -28,8 +28,8 @@ export default defineConfig({
 ```
 
 The [complete element example](../../integration-examples/element-viewer/README.md)
-builds with Vite's default target. The package remains unpublished; use the
-packed archive from this branch for a local trial.
+builds with Vite's default target. Install the runtime with
+`pnpm add @draftably/runtime`.
 
 ## Change the source
 

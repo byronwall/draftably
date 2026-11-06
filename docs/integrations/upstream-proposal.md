@@ -16,7 +16,7 @@ pnpm prove:viewer
 
 Also run `pnpm markdown:browser-check` and `pnpm host:pack-check`. For a host proposal, attach its named-version build and browser evidence. Include output policy, limits, measured package size, license and font notices, compatibility range, and an agreed maintenance contact.
 
-See the [implementation evidence](../intent/embedding-ecosystem/implementation-evidence.md) for the complete PR stack and proof commands.
+[Checks](../CHECKS.md#portable-runtime) lists the proof commands.
 
 ## Draft A: native fenced diagram support
 

@@ -5,8 +5,8 @@ Use generated images to reach hosts that cannot run a custom renderer.
 Keep the current CLI and editor as separate tools.
 
 This is a reviewed design, not an implemented SDK. Package names and code examples remain proposals.
-Start with the [implementation plan](../../intent/embedding-ecosystem/implementation-plan.md).
-The [asset index](../../intent/embedding-ecosystem/asset-index.md) preserves every original Pro result.
+Start with the [implementation plan](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/implementation-plan.md).
+The [asset index](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/asset-index.md) preserves every original Pro result.
 
 ## What to build
 
@@ -42,7 +42,7 @@ Host recipes must name tested versions and prove asset publication, rebuilds, an
 
 ## Review decisions and corrections
 
-All four original reports were read. The [29 recommendation decisions](../../intent/embedding-ecosystem/recommendations.md) retain the proposed direction with these qualifications:
+All four original reports were read. The [29 recommendation decisions](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/recommendations.md) retain the proposed direction with these qualifications:
 
 - Follow repository interaction intent. Pro's modified-wheel proposal conflicts with `docs/intent/diagram-quality/FEEL.md`. The plan requires unmodified wheel zoom and background drag to pan inside the viewer.
 - Keep the SVG refactor bounded. Share the existing drawing vocabulary between output writers; do not build a general scene framework.
@@ -69,4 +69,4 @@ No further product decision prevents starting milestone one.
 
 [Pro conversation](https://chatgpt.com/c/6aeaa852-3e08-83ea-997e-ca7c5ac0206d) ·
 [Prompt](prompt.md) · [Run record](run.md) ·
-[Original source register](../../intent/embedding-ecosystem/assets/pro-results/2026-11-03/embedding-sources.md)
+[Original source register](https://github.com/byronwall/draftably/blob/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem/assets/pro-results/2026-11-03/embedding-sources.md)

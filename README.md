@@ -126,14 +126,22 @@ Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [I
 
 ## Integrate
 
-Start with [Use Draftably in your project](docs/integrations/README.md). Choose a
-diagram element, an SVG script, a Markdown build, or a documentation-site recipe.
-`pnpm integration:pack` builds local package previews and writes exact install commands.
+Show diagrams in your own pages, scripts and documentation sites:
 
-Check the [integration support matrix](docs/integrations/support.md) for verified
-hosts. See the [contributor guide](docs/integrations/contributing.md) to build another adapter.
+````sh
+pnpm add @draftably/runtime    # <draft-diagram> element, viewer, renderSvg()
+pnpm add @draftably/markdown   # remark and markdown-it plugins for ```draft fences
+````
 
-These guides document repository artifacts and tested recipes. They do not mean a new runtime or Markdown package is published on npm, that a plugin is installed, or that a host recognizes `draft` natively.
+```ts
+import '@draftably/runtime/element';
+// <draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
+```
+
+[Use Draftably in your project](docs/integrations/README.md) compares every route, from a
+committed image to a documentation-site plugin, with a complete start for each. The
+[support matrix](docs/integrations/support.md) lists tested hosts. The
+[contributor guide](docs/integrations/contributing.md) shows how to build another adapter.
 
 ## Develop
 

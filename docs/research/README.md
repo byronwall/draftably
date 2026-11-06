@@ -6,11 +6,10 @@ The embedding study proposes a native runtime, Markdown adapters, and an optiona
 It distinguishes custom build integrations from native support on hosted platforms.
 
 [Summary](embedding-ecosystem-2026-11-03/summary.md) ·
-[Plan](../intent/embedding-ecosystem/implementation-plan.md) ·
-[All original Pro assets](../intent/embedding-ecosystem/asset-index.md) ·
+[Plan and original Pro assets (archived)](https://github.com/byronwall/draftably/tree/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem) ·
 [Run record](embedding-ecosystem-2026-11-03/run.md)
 
-Status: research complete in [PR #422](https://github.com/byronwall/draftably/pull/422); implementation proposed.
+Status: shipped as `@draftably/runtime` and `@draftably/markdown`; see [Use Draftably in your project](../integrations/README.md) and [the closure record](../initiative-history.json).
 
 ## Diagram library coverage
 
