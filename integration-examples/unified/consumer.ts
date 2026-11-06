@@ -29,7 +29,7 @@ const rendered = await adapter.render(markdownIt, '```draft\ndiagram "API" versi
 const html: string = rendered.html;
 const manifest: DraftDocumentResult = rendered.manifest;
 const files = createFileAssets({ directory: '/tmp/draftably-assets', publicPath: '/docs/' });
-const fileOptions: DraftMarkdownOptions = { emitAsset: files.emitAsset };
+const fileOptions: DraftMarkdownOptions = { emitAsset: files.emitAsset, mermaid: 'convert' };
 const emitInit: MarkdownInteractiveBridge['emitInit'] = files.emitInit;
 void Promise.all([files.copyTo('/tmp/draftably-assets-output')]);
 void fileOptions;

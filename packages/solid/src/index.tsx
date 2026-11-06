@@ -14,6 +14,7 @@ declare module 'solid-js' {
         source?: string;
         state?: string;
         label?: string;
+        outline?: 'visible' | 'hidden';
       };
     }
   }
@@ -26,6 +27,8 @@ export interface DraftDiagramProps {
   state?: string | null;
   /** The accessible name. */
   label?: string;
+  /** `'visible'` shows the item list under the drawing; `'hidden'` (default) shows it on focus. */
+  outline?: 'visible' | 'hidden';
   /**
    * Static SVG from `renderSvg(source, { target: 'inline', idPrefix })`, shown until the viewer
    * draws. Server rendering and readers without JavaScript see it.
@@ -60,6 +63,7 @@ export function DraftDiagram(props: DraftDiagramProps) {
       source={props.source}
       state={props.state ?? undefined}
       label={props.label}
+      outline={props.outline}
       class={props.class}
       style={props.style}
     >

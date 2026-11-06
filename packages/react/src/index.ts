@@ -21,6 +21,8 @@ export interface DraftDiagramProps {
   state?: string | null;
   /** The accessible name. */
   label?: string;
+  /** `'visible'` shows the item list under the drawing; `'hidden'` (default) shows it on focus. */
+  outline?: 'visible' | 'hidden';
   /**
    * Static SVG from `renderSvg(source, { target: 'inline', idPrefix })`, shown until the viewer
    * draws. Server rendering and readers without JavaScript see it.
@@ -33,7 +35,10 @@ export interface DraftDiagramProps {
 }
 
 export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramProps>(
-  function DraftDiagram({ source, state, label, svg, options, onUpdate, className, style }, ref) {
+  function DraftDiagram(
+    { source, state, label, outline, svg, options, onUpdate, className, style },
+    ref,
+  ) {
     const el = useRef<DraftDiagramElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useEffect(() => {
@@ -48,7 +53,7 @@ export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramP
     }, [onUpdate]);
     return createElement(
       'draft-diagram',
-      { ref: el, source, state: state ?? undefined, label, className, style },
+      { ref: el, source, state: state ?? undefined, label, outline, className, style },
       svg ? createElement('div', { dangerouslySetInnerHTML: { __html: svg } }) : null,
     );
   },

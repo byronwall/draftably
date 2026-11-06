@@ -22,6 +22,7 @@ export function App(props: { svgs?: string[] }) {
           <DraftDiagram
             source={source}
             label={`Diagram ${i() + 1}`}
+            outline={i() === 0 ? 'visible' : undefined}
             svg={props.svgs?.[i()]}
             onUpdate={record}
           />

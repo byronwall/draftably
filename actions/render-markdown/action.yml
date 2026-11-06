@@ -1,0 +1,39 @@
+name: Render Draftably diagrams in Markdown
+description: Render each ```draft fence in your Markdown files to an SVG and link it under the fence.
+branding:
+  icon: image
+  color: blue
+
+inputs:
+  files:
+    description: >-
+      Glob patterns for the Markdown files, separated by spaces or new lines. `**` matches any
+      folder depth. Paths under node_modules are skipped.
+    default: '**/*.md'
+  version:
+    description: The draftably CLI version from npm.
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Install draftably
+      shell: bash
+      run: npm install --silent --no-save --prefix "$RUNNER_TEMP/draftably" "draftably@$VERSION"
+      env:
+        VERSION: ${{ inputs.version }}
+    - name: Render draft fences
+      shell: bash
+      run: |
+        shopt -s globstar nullglob
+        read -r -d '' -a patterns <<< "$FILES" || true
+        files=()
+        for pattern in "${patterns[@]}"; do
+          for file in $pattern; do
+            [[ "$file" == *node_modules/* ]] || files+=("$file")
+          done
+        done
+        node "$ACTION_PATH/render.mjs" "$RUNNER_TEMP/draftably/node_modules/.bin/draftably" "${files[@]}"
+      env:
+        FILES: ${{ inputs.files }}
+        ACTION_PATH: ${{ github.action_path }}

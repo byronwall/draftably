@@ -175,6 +175,31 @@ ambiguous. `rm` removes nodes, groups or edges with their edges, refinements and
 a removed group's members move to its container. `mv` renames an ID everywhere. All three
 rewrite the file through the formatter, then check it.
 
+## migrate
+
+```sh
+draftably migrate docs/                 # print what would change
+draftably migrate 'docs/**/*.md' --write
+```
+
+Rewrites `mermaid` code fences in Markdown files as `draft` fences. Only flowcharts (`flowchart`,
+`graph`) and sequence diagrams (`sequenceDiagram`) convert. Pie, gantt, class and other Mermaid
+charts stay as they are. A folder adds its `.md`, `.mdx` and `.markdown` files, and skips
+`node_modules`. Quote a glob so the shell does not expand it.
+
+Without `--write`, nothing changes. It prints each file's fences, what happens to each one, and
+the importer's warnings. A fence with warnings, such as a Mermaid shape with no exact Draftably
+match, stays Mermaid until you pass `--accept-lossy`. Exits 1 when a fence fails to import; that
+fence stays Mermaid.
+
+| Option           | Effect                                     |
+| ---------------- | ------------------------------------------ |
+| `--write`        | Rewrite the files.                         |
+| `--accept-lossy` | Also convert the fences that had warnings. |
+
+To convert one Mermaid, DOT or D2 file to a new `.draft` file, use
+`draftably import chart.mmd --output chart.draft`.
+
 ## extract
 
 ```sh

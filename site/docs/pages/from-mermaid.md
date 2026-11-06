@@ -75,8 +75,11 @@ The conversion keeps nodes, groups, labels and connections, and recomputes the l
 
 ## Markdown you build
 
-For a static site with no diagram JavaScript, write `draft` fences and add the
-[Markdown plugin](https://github.com/byronwall/draftably/blob/main/docs/integrations/markdown.md). Readers get an ordinary SVG image. Host recipes:
+For a static site with no diagram JavaScript, add the
+[Markdown plugin](https://github.com/byronwall/draftably/blob/main/docs/integrations/markdown.md) with `mermaid: 'convert'`.
+Your existing `mermaid` flowcharts and sequences become ordinary SVG images at build time, and
+`draft` fences work beside them. Other Mermaid families stay code blocks, so keep your Mermaid
+setup for those. Host recipes:
 [Astro Starlight](https://github.com/byronwall/draftably/blob/main/docs/integrations/astro-starlight.md), [Docusaurus](https://github.com/byronwall/draftably/blob/main/docs/integrations/docusaurus.md), [VitePress](https://github.com/byronwall/draftably/blob/main/docs/integrations/vitepress.md).
 
 ## GitHub and other hosted Markdown
@@ -94,9 +97,41 @@ draftably inspect architecture.draft --svg > architecture.svg
 
 `draftably open architecture.svg` opens the image for editing. Use `--png` where a host blocks SVG.
 
+### Keep the images current with a GitHub Action
+
+To skip the manual export, write `draft` fences in your README and docs and let CI draw them. The
+[render-markdown action](https://github.com/byronwall/draftably/tree/main/actions/render-markdown)
+renders each fence to an SVG beside the Markdown file and adds an image link under the fence. A
+rerun updates the link in place. Add a commit step after it:
+
+```yaml
+- uses: byronwall/draftably/actions/render-markdown@main
+  with:
+    files: README.md docs/**/*.md
+- uses: stefanzweifel/git-auto-commit-action@v5
+```
+
+The action's README has the full workflow and the fence options.
+
 ## Convert the source
 
-You don't have to rewrite anything for the drop-in. To move a diagram to Draftably source for good:
+You don't have to rewrite anything for the drop-in. To move the Mermaid fences in your docs to
+Draftably source for good, run `migrate` on the folder:
+
+```sh
+draftably migrate docs/
+```
+
+It changes nothing yet. It lists each `mermaid` fence and what would happen to it, with the
+importer's warnings. Flowcharts and sequence diagrams become `draft` fences. Pie, gantt and other
+charts stay Mermaid. When the list looks right, apply it:
+
+```sh
+draftably migrate docs/ --write
+```
+
+A fence with warnings stays Mermaid until you add `--accept-lossy`. Commit before you run
+`--write`, so `git diff` shows each change. For a standalone `.mmd` file, use `import`:
 
 ```sh
 draftably import checkout.mmd --output checkout.draft

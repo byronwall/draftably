@@ -140,6 +140,32 @@ try {
       storeBefore.x + storeBefore.width < frameBeforeSelection.x,
     'Store should start outside the visible viewport.',
   );
+  const outlineHeight = (host: string) =>
+    narrowPage.locator(`${host} .draft-viewer__outline`).evaluate(list => list.clientHeight);
+  assert.ok((await outlineHeight('#first')) <= 1, 'the default outline must be visually hidden');
+  assert.ok((await outlineHeight('#second')) > 20, "outline: 'visible' must show the outline");
+  await narrowViewport.focus();
+  for (let tab = 0; tab < 5; tab++) {
+    const inOutline = await narrowPage.evaluate(
+      () => !!document.activeElement?.closest('#first .draft-viewer__outline'),
+    );
+    if (inOutline) break;
+    await narrowPage.keyboard.press('Tab');
+  }
+  assert.ok(
+    await narrowPage.evaluate(
+      () => !!document.activeElement?.closest('#first .draft-viewer__outline'),
+    ),
+    'Tab from the viewport must reach the hidden outline',
+  );
+  const shown = await narrowPage.locator('#first .draft-viewer__outline').boundingBox();
+  assert.ok(shown && shown.height > 20, 'a focused outline must show on screen');
+  assert.equal(
+    (await narrowViewport.boundingBox())?.height,
+    frameBeforeSelection.height,
+    'showing the outline must not resize the viewport',
+  );
+  console.log('PASS hidden outline: visually hidden, reached with Tab, shown while focused');
   await narrowPage.locator('#first').getByRole('button', { name: 'node: Store' }).click();
   const centered = await Promise.all([
     narrowViewport.boundingBox(),

@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prove": "node prove.mjs && node interactive.mjs && tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext consumer.ts",
+    "prove": "node prove.mjs && node interactive.mjs && node mermaid.mjs && tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext consumer.ts",
     "prove:browser": "node interactive-browser.mjs"
   },
   "dependencies": {

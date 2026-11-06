@@ -112,6 +112,13 @@ process.stdout.write(html);`,
       { timeout: 20000 },
     );
     const before = await drawn();
+    const outlines = await page.evaluate(() =>
+      [...document.querySelectorAll('draft-diagram')].map(
+        el => el.shadowRoot?.querySelector('.draft-viewer__outline')?.clientHeight ?? 0,
+      ),
+    );
+    assert.ok(outlines[0] > 20, `${fw}: outline="visible" shows the first outline`);
+    assert.ok(outlines[1] <= 1, `${fw}: the default outline is visually hidden`);
     assert.ok(before[1].includes('Beta worker'), `${fw}: second diagram shows its own source`);
     await page.click('#update');
     await page.waitForFunction(

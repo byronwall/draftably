@@ -3,7 +3,7 @@
   import '@draftably/runtime/element';
 
   /** @type {import('./index').DraftDiagramProps} */
-  let { source, state: emphasis = null, label, svg, options, onupdate, class: className, style } = $props();
+  let { source, state: emphasis = null, label, outline, svg, options, onupdate, class: className, style } = $props();
   /** @type {import('@draftably/runtime/element').DraftDiagramElement | undefined} */
   let el = $state();
 
@@ -20,6 +20,6 @@
   });
 </script>
 
-<draft-diagram bind:this={el} {source} state={emphasis ?? undefined} {label} class={className} {style}>
+<draft-diagram bind:this={el} {source} state={emphasis ?? undefined} {label} {outline} class={className} {style}>
   {#if svg}<div>{@html svg}</div>{/if}
 </draft-diagram>

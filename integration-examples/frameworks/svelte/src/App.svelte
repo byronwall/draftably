@@ -13,7 +13,7 @@
   <button id="update" onclick={() => (list = [updated, ...list.slice(1)])}>Update first</button>
   <button id="remove" onclick={() => (list = list.slice(0, 2))}>Remove last</button>
   {#each list as source, i (i)}
-    <DraftDiagram {source} label={`Diagram ${i + 1}`} svg={svgs[i]} onupdate={record} />
+    <DraftDiagram {source} label={`Diagram ${i + 1}`} outline={i === 0 ? 'visible' : undefined} svg={svgs[i]} onupdate={record} />
   {/each}
   {#each edits as source, i (i)}
     <DraftEditor

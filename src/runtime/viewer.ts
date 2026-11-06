@@ -28,6 +28,11 @@ export type ViewerRenderOptions = Omit<CommonRenderOptions, 'signal' | 'state'> 
 export interface ViewerOptions {
   label?: string;
   toolbar?: boolean;
+  /**
+   * The keyboard and screen-reader list of items. `'hidden'` (default) keeps it for assistive tech
+   * and shows it while it holds focus; `'visible'` always shows it under the drawing.
+   */
+  outline?: 'visible' | 'hidden';
   execution?: ViewerExecution;
   render?: ViewerRenderOptions;
 }
@@ -226,6 +231,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   const win = view;
   const root = doc.createElement('section');
   root.className = 'draft-viewer';
+  if (options.outline !== 'visible') root.classList.add('draft-viewer--outline-hidden');
   root.setAttribute('aria-label', options.label ?? 'Diagram viewer');
   const toolbar = doc.createElement('div');
   toolbar.className = 'draft-viewer__toolbar';

@@ -23,6 +23,8 @@ export const DraftDiagram = defineComponent({
     state: { type: String as PropType<string | null>, default: undefined },
     /** The accessible name. */
     label: { type: String, default: undefined },
+    /** `'visible'` shows the item list under the drawing; `'hidden'` (default) shows it on focus. */
+    outline: { type: String as PropType<'visible' | 'hidden'>, default: undefined },
     /** Static SVG from `renderSvg(source, { target: 'inline', idPrefix })`, shown until the viewer draws. */
     svg: { type: String, default: undefined },
     options: { type: Object as PropType<ViewerOptions>, default: undefined },
@@ -40,7 +42,13 @@ export const DraftDiagram = defineComponent({
     return () =>
       h(
         'draft-diagram',
-        { ref: el, source: props.source, state: props.state ?? undefined, label: props.label },
+        {
+          ref: el,
+          source: props.source,
+          state: props.state ?? undefined,
+          label: props.label,
+          outline: props.outline,
+        },
         props.svg ? [h('div', { innerHTML: props.svg })] : [],
       );
   },

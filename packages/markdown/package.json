@@ -11,23 +11,23 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
+      "types": "./dist/types/packages/markdown/src/index.d.ts",
       "import": "./dist/index.js"
     },
     "./remark": {
-      "types": "./dist/types/remark.d.ts",
+      "types": "./dist/types/packages/markdown/src/remark.d.ts",
       "import": "./dist/remark.js"
     },
     "./markdown-it": {
-      "types": "./dist/types/markdown-it.d.ts",
+      "types": "./dist/types/packages/markdown/src/markdown-it.d.ts",
       "import": "./dist/markdown-it.js"
     },
     "./files": {
-      "types": "./dist/types/files.d.ts",
+      "types": "./dist/types/packages/markdown/src/files.d.ts",
       "import": "./dist/files.js"
     },
     "./client": {
-      "types": "./dist/types/client.d.ts",
+      "types": "./dist/types/packages/markdown/src/client.d.ts",
       "import": "./dist/client.js"
     },
     "./package.json": "./package.json"
@@ -37,7 +37,9 @@
     "test": "node ../../scripts/prove-markdown-package.ts"
   },
   "dependencies": {
-    "@draftably/runtime": "workspace:*"
+    "@draftably/runtime": "workspace:*",
+    "jsdom": "26.1.0",
+    "mermaid": "12.2.0"
   },
   "engines": {
     "node": ">=22.21.0"

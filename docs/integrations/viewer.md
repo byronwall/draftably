@@ -35,6 +35,12 @@ This keeps the worker URL relative to its package assets. The pinned React and S
 
 The viewer uses wheel zoom, background drag to pan, named zoom and fit buttons, and `+`, `-`, and `f` keys while its viewport is focused. **Fit diagram** shows the full overview with a margin, capped at actual size. Use **Actual size** or select an item in the outline to inspect small labels. Outline selection centers the item and raises zoom to at least actual size. User camera changes persist through source updates and resizes; call `fit()` or request `{ camera: 'fit' }` for a new overview.
 
+The outline is a numbered list of item buttons, one for each node, group and edge. Screen readers and keyboard users always have it. By default (`outline: 'hidden'`) it is visually hidden: press Tab from the viewport and it appears over the bottom of the drawing while it holds focus. The viewport keeps its size. Set `outline: 'visible'` to keep the list on screen under the drawing, for example in a documentation page that teaches the keyboard path.
+
+```ts
+mountViewer(host, { label: 'Checkout diagram', outline: 'visible' });
+```
+
 ## React
 
 Mount and destroy in an effect. A separate effect updates source, so React Strict Mode can run setup, cleanup, and setup without sharing a handle.

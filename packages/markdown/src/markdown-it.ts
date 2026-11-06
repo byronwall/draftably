@@ -1,5 +1,6 @@
 import {
   makeDiagnostic,
+  mermaidSource,
   prepare,
   hostFailure,
   isHostFailure,
@@ -110,7 +111,7 @@ export function createMarkdownItDraft(options: DraftMarkdownOptions) {
     const previous = md.renderer.rules.fence;
     md.renderer.rules.fence = function (tokens, index, renderOptions, env, self) {
       const token = tokens[index];
-      if (!isDraftToken(token))
+      if (!isDraftToken(token) && !prepared.has(token))
         return previous
           ? previous(tokens, index, renderOptions, env, self)
           : self.renderToken(tokens, index, renderOptions);
@@ -163,14 +164,20 @@ export function createMarkdownItDraft(options: DraftMarkdownOptions) {
     let fenceIndex = 0;
     const visit = async (items: Token[]): Promise<void> => {
       for (const token of items) {
-        if (isDraftToken(token)) {
+        const location = { sourceId: document.path, line: (token.map?.[0] ?? 0) + 1 };
+        const mermaid =
+          token.type === 'fence' && /^mermaid(?:\s|$)/.test((token.info ?? '').trim())
+            ? await mermaidSource(token.content ?? '', location, options)
+            : undefined;
+        diagnostics.push(...(mermaid?.diagnostics ?? []));
+        if (mermaid) prepared.delete(token);
+        if (isDraftToken(token) || mermaid?.source) {
           const index = fenceIndex++;
-          const location = { sourceId: document.path, line: (token.map?.[0] ?? 0) + 1 };
           prepared.delete(token);
           try {
             let metadata: FenceOptions;
             try {
-              metadata = parseFenceOptions(token.info ?? '');
+              metadata = mermaid ? { alt: mermaid.alt } : parseFenceOptions(token.info ?? '');
             } catch (error) {
               const message =
                 error instanceof Error ? error.message : 'Invalid draft fence metadata.';
@@ -185,7 +192,8 @@ export function createMarkdownItDraft(options: DraftMarkdownOptions) {
               });
             }
             if (metadata.id) ids.add(metadata.id);
-            const result = await prepare(token.content ?? '', metadata, location, document, index, {
+            const source = mermaid?.source ?? token.content ?? '';
+            const result = await prepare(source, metadata, location, document, index, {
               ...options,
               sources: sourceOptions,
             });
