@@ -3,7 +3,7 @@ import { render } from 'solid-js/web';
 import { registerFonts } from '../lib/font-data';
 import { resolveAppearance } from '../model/appearance';
 import { activeSession, setActiveSession } from '../state/active-session';
-import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from '../state/keyboard';
+import { copyShapes, handleCanvasKey, handleKeyUp, pasteShapes } from '../state/canvas-keyboard';
 import { createDiagramSession, type DiagramSession, type SessionOptions } from '../state/session';
 import { Editor } from './Editor';
 import '../styles/app.css';
@@ -20,10 +20,10 @@ const forEditor =
     if (target === document.body || target.closest?.('.draft-editor')) void handle(e as E);
   };
 const KEYS: Array<[string, (e: Event) => void]> = [
-  ['keydown', forEditor(handleKeyDown)],
+  ['keydown', forEditor(handleCanvasKey)],
   ['keyup', forEditor(handleKeyUp)],
-  ['copy', forEditor(handleCopy)],
-  ['paste', forEditor(handlePaste)],
+  ['copy', forEditor(copyShapes)],
+  ['paste', forEditor(pasteShapes)],
 ];
 let mounted = 0;
 

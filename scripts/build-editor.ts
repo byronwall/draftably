@@ -56,6 +56,29 @@ if (typeof document !== 'undefined' && !document.querySelector('style[data-draft
   },
 };
 
+/** The editor is the canvas only: importers, file handling and the app's panel state stay out. */
+const SHELL =
+  /\/src\/(?:import\/|state\/(?:files|ui|commands|keyboard|launch|comparison|open-link)\.)|\/node_modules\/.*\/(?:mermaid|@d2lang)\//;
+const boundary: Plugin = {
+  name: 'draft-editor-boundary',
+  generateBundle() {
+    const bad: string[] = [];
+    for (const id of this.getModuleIds()) {
+      if (!SHELL.test(id)) continue;
+      // Name the import chain from the entry, so the fix is easy to find.
+      const chain = [id];
+      for (let at = id, seen = new Set([id]); ;) {
+        const next = this.getModuleInfo(at)?.importers.find(i => !seen.has(i));
+        if (!next) break;
+        chain.push(next);
+        seen.add((at = next));
+      }
+      bad.push(chain.map(i => path.relative(root, i)).join(' <- '));
+    }
+    if (bad.length) throw Error(`App-shell modules in @draftably/editor:\n${bad.join('\n')}`);
+  },
+};
+
 rmSync(out, { recursive: true, force: true });
 execFileSync('pnpm', ['exec', 'tsc', '-p', 'tsconfig.editor.json'], {
   cwd: root,
@@ -66,7 +89,7 @@ await build({
   configFile: false,
   base: './',
   publicDir: false,
-  plugins: [scopedCss, solid()],
+  plugins: [scopedCss, solid(), boundary],
   worker: {
     format: 'es',
     plugins: () => [solid()],

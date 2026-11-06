@@ -1,5 +1,5 @@
 import { Show } from 'solid-js';
-import { runCommand } from '../state/commands';
+import { runCanvasCommand } from '../state/canvas-commands';
 import { tip } from './controls';
 import { useDiagramSession } from './session-context';
 
@@ -55,10 +55,14 @@ export function LayoutPreviewBar() {
           >
             Hold to compare
           </button>
-          <button type="button" class="button" onClick={() => runCommand('layout-discard')}>
+          <button type="button" class="button" onClick={() => runCanvasCommand('layout-discard')}>
             Discard <kbd>Esc</kbd>
           </button>
-          <button type="button" class="button primary" onClick={() => runCommand('layout-accept')}>
+          <button
+            type="button"
+            class="button primary"
+            onClick={() => runCanvasCommand('layout-accept')}
+          >
             Keep <kbd>Enter</kbd>
           </button>
         </div>

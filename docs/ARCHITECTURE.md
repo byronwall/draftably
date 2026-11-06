@@ -62,14 +62,20 @@ Session options replace hooks into the app: `storageKey` (browser persistence), 
 The shell acts on `activeSession()` (`active-session.ts`): the session whose canvas the user last
 pointed at or focused. The app creates one session in `index.tsx` and marks it active.
 
-| File                    | Responsibility                                          |
-| ----------------------- | ------------------------------------------------------- |
-| `commands.ts`           | Named commands shared by toolbar, menus and shortcuts.  |
-| `keyboard.ts`           | Global shortcuts and the clipboard.                     |
-| `comparison.ts`         | Compare: candidates, cameras, overlay layers and Apply. |
-| `files.ts`              | Import, image embedding and JSON / SVG / PNG export.    |
-| `launch.ts`, `links.ts` | What the viewer opens, and where object links go.       |
-| `ui.ts`, `toast.ts`     | Panels, menus, dialogs and status messages.             |
+| File                        | Responsibility                                           |
+| --------------------------- | -------------------------------------------------------- |
+| `canvas-commands.ts`        | Commands that act only on the session: undo, add, zoom.  |
+| `canvas-keyboard.ts`        | Canvas shortcuts and shape copy and paste.               |
+| `commands.ts`               | All named commands for the toolbar, menus and shortcuts. |
+| `keyboard.ts`               | App shortcuts and paste, around the canvas ones.         |
+| `comparison.ts`             | Compare: candidates, cameras, overlay layers and Apply.  |
+| `files.ts`                  | Import, image embedding and JSON / SVG / PNG export.     |
+| `launch.ts`, `workspace.ts` | What the viewer opens, and the served folder.            |
+| `links.ts`, `open-link.ts`  | Where object links go, and opening them.                 |
+| `ui.ts`, `toast.ts`         | Panels, menus, dialogs and status messages.              |
+
+The canvas and the `canvas-*` modules never import the shell. The embeddable editor is built from
+them alone, and `scripts/build-editor.ts` fails when a shell module gets into its bundle.
 
 ### Rules
 
@@ -135,6 +141,8 @@ See [integration support](integrations/support.md) for proof and publication sta
 `editor/index.ts` is the surface a host builds on. `Editor` draws the canvas for one session.
 `mountEditor(host, { source, onChange })` creates a session, edits `source` in it, reports each kept
 edit as text, and takes `update(source)` from the host. The app renders `Editor` for its own canvas.
+A mounted editor listens for the canvas shortcuts only (`canvas-keyboard.ts`); the app adds its own
+keys, such as the palette and panel toggles, in `keyboard.ts`.
 
 ## components/ — the interface
 

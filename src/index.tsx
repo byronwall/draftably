@@ -7,7 +7,7 @@ import { STORAGE_KEY } from './lib/saved-diagram';
 import { setActiveSession } from './state/active-session';
 import { closeComparison } from './state/comparison';
 import { launch, launchView, navigateInPlace } from './state/launch';
-import { openLink } from './state/links';
+import { openLink } from './state/open-link';
 import { createDiagramSession } from './state/session';
 import { closeMenu, confirmAction } from './state/ui';
 import './styles/app.css';

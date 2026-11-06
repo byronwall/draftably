@@ -34,16 +34,10 @@ import {
 } from '../state/session/canvas-text';
 import { NOTE_SIDES, noteSide, type Note } from '../model/note';
 import { setRightTab } from '../state/ui';
-import {
-  CommandButton as IconCommand,
-  Checkbox,
-  Field,
-  IconButton,
-  NumberField,
-  SelectField,
-  tip,
-} from './controls';
-import { describeLink, openLink } from '../state/links';
+import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
+import { CommandButton as IconCommand } from './CommandButton';
+import { describeLink } from '../state/links';
+import { openLink } from '../state/open-link';
 import { useDiagramSession } from './session-context';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */

@@ -1,12 +1,6 @@
 /** Small form and button primitives shared by panels, menus and dialogs. */
 import { For, Show, splitProps, type JSX } from 'solid-js';
-import {
-  commandEnabled,
-  commands,
-  runCommand,
-  type Command,
-  type CommandId,
-} from '../state/commands';
+import type { Command } from '../state/canvas-commands';
 import { Icon } from './Icon';
 
 /** Attributes that give an element the shared tooltip. See `Tips`. */
@@ -52,21 +46,30 @@ export function IconButton(
   );
 }
 
-/** An icon button that runs a command and explains itself from the command's own words. */
-export function CommandButton(props: { command: CommandId; label?: string; pressed?: boolean }) {
-  const command = (): Command => commands[props.command];
-  return (
-    <IconButton
-      icon={command().icon ?? 'cube'}
-      label={props.label ?? command().label}
-      keys={command().keys}
-      hint={command().hint}
-      pressed={props.pressed}
-      disabled={!commandEnabled(props.command)}
-      onClick={() => runCommand(props.command)}
-    />
-  );
-}
+/**
+ * An icon button for one table of commands: it runs a command and explains itself from the
+ * command's own words.
+ */
+export const commandButton =
+  <Id extends string>(
+    table: Record<Id, Command>,
+    run: (id: Id) => void,
+    enabled: (id: Id) => boolean,
+  ) =>
+  (props: { command: Id; label?: string; pressed?: boolean }) => {
+    const command = () => table[props.command];
+    return (
+      <IconButton
+        icon={command().icon ?? 'cube'}
+        label={props.label ?? command().label}
+        keys={command().keys}
+        hint={command().hint}
+        pressed={props.pressed}
+        disabled={!enabled(props.command)}
+        onClick={() => run(props.command)}
+      />
+    );
+  };
 
 /** Text with each word of a query marked where it matches. */
 export function Highlight(props: { text: string; query: string }) {

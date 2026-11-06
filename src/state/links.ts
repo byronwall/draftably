@@ -1,10 +1,8 @@
 /**
- * Open an object's link from the viewer: a URL in a new tab as written, a `.draft` in the viewer,
- * and a file in the editor at its line.
+ * Where an object's link goes, for tooltips and exports. The app opens links in `open-link.ts`.
  */
-import { baseUrl, editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
-import { fileUrl, go, workspace } from './launch';
-import { toast } from './toast';
+import { baseUrl, joinPath, linkTarget, staticHref } from '../model/link';
+import { workspace } from './workspace';
 import type { DiagramSession } from './session';
 
 /**
@@ -18,10 +16,8 @@ export function linkBase(s: DiagramSession): string | null {
   return base === undefined ? session.root : joinPath(joinPath(session.path, '..'), base);
 }
 
-const editor = (s: DiagramSession) => s.doc.appearance.config?.editor ?? 'vscode';
-
 /** `href` joined to a URL `link-base`, or null. */
-const joined = (s: DiagramSession, href: string) =>
+export const joined = (s: DiagramSession, href: string) =>
   baseUrl(href, s.doc.appearance.config?.linkBase);
 
 /** What opening `href` does, for a tooltip or the Inspector. */
@@ -36,7 +32,7 @@ export function describeLink(s: DiagramSession, href: string): string {
 }
 
 /** A path inside the served folder, relative to it, or null. */
-function servedPath(file: string): string | null {
+export function servedPath(file: string): string | null {
   const root = workspace()?.root;
   if (!root) return null;
   const prefix = joinPath(root, '.') + '/';
@@ -49,22 +45,4 @@ export function exportHref(s: DiagramSession, href: string): string {
   const base = linkBase(s),
     session = s.fileSession();
   return base && session ? staticHref(href, base, joinPath(session.path, '..')) : href;
-}
-
-export function openLink(s: DiagramSession, href: string) {
-  const t = linkTarget(href),
-    url = t.kind === 'url' ? href : joined(s, href);
-  if (url) {
-    window.open(url, '_blank', 'noopener');
-    return;
-  }
-  const base = linkBase(s);
-  if (!base) {
-    toast(`File links open when the diagram is served with draftably open: ${t.path}`);
-    return;
-  }
-  const file = joinPath(base, t.path),
-    served = t.kind === 'draft' ? servedPath(file) : null;
-  if (served !== null) void go(fileUrl(served));
-  else window.location.assign(editorUrl(editor(s), file, t.line, t.col));
 }
