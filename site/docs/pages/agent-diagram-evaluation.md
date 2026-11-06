@@ -309,7 +309,10 @@ Read the [full report](/evaluations/agent-diagrams/report.txt),
 [study setup](/evaluations/agent-diagrams/study-setup.txt),
 [initial prompt](/evaluations/agent-diagrams/prompt.txt) and
 [CLI prompt](/evaluations/agent-diagrams/prompt-tooled.txt) on this site.
-The source links above contain all 45 initial responses.
+The source links above contain the 45 responses shown here. For the task requirements and render
+records, see [tasks.json](/evaluations/agent-diagrams/tasks.json) and
+[results.json](/evaluations/agent-diagrams/results.json). The source archive also includes the
+reference material used in the reference arm.
 
 The separate repair study reports 15/15 initial renders and 14/15 after one feedback response.
 Eight agents changed their source and seven retained it. These paired samples do not establish

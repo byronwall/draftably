@@ -107,6 +107,11 @@ keyboard controls, narrow layout, and isolation from host styles.
 
 ## The public site
 
+`pnpm docs:assets` refreshes the comparison study's published sources, supporting documents and
+download ZIP from the originals. Commit the generated files with any study change.
+`tests/site-downloads.test.ts` rejects stale copies or a stale ZIP during `check:fast` and opens
+the archive with `unzip` (included on macOS and the Ubuntu CI runner).
+
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in
 Chromium with real clicks and keys. It covers the links between surfaces, narrow Playground panes,
 docs overlays, export blocking, reopening an exported image, and a failed module load. Direct URLs

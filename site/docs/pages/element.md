@@ -38,14 +38,17 @@ export default defineConfig({
 });
 ```
 
-Import the element entry once in your client entry point. After the page has loaded, handle `draft-update` to report
-success or failure:
+Import the element entry once in your client entry point. Listen before changing `source` to handle
+the update result:
 
 ```ts
+import type { UpdateResult } from '@draftably/runtime/viewer';
+
 const diagram = document.querySelector('draft-diagram')!;
-diagram.addEventListener('draft-update', event => {
-  const result = (event as CustomEvent).detail;
-  console.log('Diagram update:', result.status);
+diagram.addEventListener('draft-update', (event: Event) => {
+  const result = (event as CustomEvent<UpdateResult>).detail;
+  if (result.status === 'error') console.error(result.error.diagnostics);
+  else if (result.status === 'committed') console.log('Diagram ready.');
 });
 diagram.source = 'node api "API"';
 ```
@@ -81,8 +84,8 @@ void diagram.updateComplete.then(result => {
 Change them with `setAttribute`, such as `diagram.setAttribute('label', 'Checkout flow')`.
 
 An invalid update keeps the last good drawing and shows its diagnostic. `updateComplete` settles
-for the current update, including cancellation or removal. The `draft-update` event carries
-committed or error results in `event.detail`.
+for the current update, including cancellation or removal. The bubbling `draft-update` event carries
+an `UpdateResult` in `event.detail`: `committed`, `error`, `superseded`, `destroyed` or `aborted`.
 
 ## Keep an image as a fallback
 

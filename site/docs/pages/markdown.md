@@ -146,11 +146,32 @@ interactive: {
 }
 ```
 
-`emitInit` writes the JSON and returns its URL. After the page hydrates, load
-`@draftably/markdown/client` and call `enhanceDrafts(root, { policies })`. The client accepts only
-same-origin JSON, mounts the [viewer](#element), and hides the image only after the first drawing.
-On a failure the image stays. `destroy()` stops the work and puts the image back. With Vite, add
-`optimizeDeps: { exclude: ['@draftably/runtime'] }`.
+`emitInit` writes the JSON and returns its filename and public URL. `clientModuleUrl` is metadata:
+the plugin does not add a script tag or bundle that module. Your host must bundle and publish the
+client entry, include it on the page, serve the JSON at the returned same-origin URL, and publish
+the SVG assets as usual. For example, save this as the entry your bundler publishes at
+`/assets/draftably-client.js`:
+
+```ts
+import { enhanceDrafts } from '@draftably/markdown/client';
+import '@draftably/runtime/viewer.css';
+import '@draftably/runtime/fonts.css';
+
+const root = document.querySelector<HTMLElement>('#docs');
+if (!root) throw new Error('Missing #docs content root');
+
+const enhancement = enhanceDrafts(root, {
+  policies: new Map([['docs', { render: { fonts: 'host', links: { mode: 'none' } } }]]),
+});
+// In a client-side router, call enhancement.destroy() before removing this content root.
+```
+
+Include it with `<script type="module" src="/assets/draftably-client.js"></script>` after the
+content root. Set `#docs` to an element that contains the generated figures. Adapt the output URL,
+asset copying and bundler setup to your host. The client accepts only same-origin JSON,
+mounts the [viewer](#element), and hides the image only after the first successful drawing. On a
+failure the image stays. `destroy()` stops the work and puts the image back.
+With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime'] }` so the viewer worker loads in development.
 
 ## Complete Unified build
 

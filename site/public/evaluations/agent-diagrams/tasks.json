@@ -1,0 +1,84 @@
+[
+  {
+    "id": "workflow",
+    "title": "Order approval workflow",
+    "prompt": "Draw a diagram titled \"Order approval workflow\". An order starts and is validated. Then the system checks if payment is authorized. If it is not, the order is cancelled. If it is, the system reserves stock and checks if stock is available. If it is not, the order is cancelled. If it is, the order is packed and then shipped. Both the shipped path and the cancelled path go to the end of the process.",
+    "score": {
+      "nodes": [
+        "Start",
+        "Validate order",
+        "Payment authorized?",
+        "Reserve stock",
+        "Stock available?",
+        "Pack order",
+        "Ship order",
+        "Cancel order",
+        "End"
+      ],
+      "edges": [
+        ["Start", "Validate order", ""],
+        ["Validate order", "Payment authorized?", ""],
+        ["Payment authorized?", "Reserve stock", "yes"],
+        ["Payment authorized?", "Cancel order", "no"],
+        ["Reserve stock", "Stock available?", ""],
+        ["Stock available?", "Pack order", "yes"],
+        ["Stock available?", "Cancel order", "no"],
+        ["Pack order", "Ship order", ""],
+        ["Ship order", "End", ""],
+        ["Cancel order", "End", ""]
+      ],
+      "groups": {}
+    }
+  },
+  {
+    "id": "architecture",
+    "title": "Checkout service architecture",
+    "prompt": "Draw a diagram titled \"Checkout service architecture\". Customers use a web app and a mobile app; these are the clients. Both call an API gateway over HTTPS. The gateway validates tokens with an auth service and sends requests to an order service. The order service reads and writes an orders database and publishes to a queue. A worker consumes from the queue and updates the orders database. The gateway, auth service, order service and worker are the services. The database and the queue are the data layer. Show the three groups: clients, services and data.",
+    "score": {
+      "nodes": [
+        "Web app",
+        "Mobile app",
+        "API gateway",
+        "Auth service",
+        "Order service",
+        "Worker",
+        "Orders database",
+        "Queue"
+      ],
+      "edges": [
+        ["Web app", "API gateway", "HTTPS"],
+        ["Mobile app", "API gateway", "HTTPS"],
+        ["API gateway", "Auth service", "validate token"],
+        ["API gateway", "Order service", "request"],
+        ["Order service", "Orders database", "read/write"],
+        ["Order service", "Queue", "publish"],
+        ["Queue", "Worker", "consume"],
+        ["Worker", "Orders database", "update"]
+      ],
+      "groups": {
+        "Client": ["Web app", "Mobile app"],
+        "Services": ["API gateway", "Auth service", "Order service", "Worker"],
+        "Data": ["Orders database", "Queue"]
+      }
+    }
+  },
+  {
+    "id": "state",
+    "title": "Publishing state machine",
+    "prompt": "Draw a diagram titled \"Publishing state machine\". A document starts as a draft. Submitting it moves it to in review. From review, an editor can request edits, which moves it to changes requested; revising it returns it to draft. Or the editor can approve it. An approved document can be published, or withdrawn back to draft. A published document can be archived, and an archived document can be restored to draft.",
+    "score": {
+      "nodes": ["Draft", "In review", "Changes requested", "Approved", "Published", "Archived"],
+      "edges": [
+        ["Draft", "In review", "submit"],
+        ["In review", "Changes requested", "request edits"],
+        ["Changes requested", "Draft", "revise"],
+        ["In review", "Approved", "approve"],
+        ["Approved", "Published", "publish"],
+        ["Published", "Archived", "archive"],
+        ["Archived", "Draft", "restore"],
+        ["Approved", "Draft", "withdraw"]
+      ],
+      "groups": {}
+    }
+  }
+]
