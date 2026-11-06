@@ -1,7 +1,6 @@
 import type { Diagram } from '../model/types';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 import { ancestors, childrenOf, isGroup, styleOf } from '../model/graph';
-
 import { Icon } from './Icon';
 import { tip } from './controls';
 import { useDiagramSession } from './session-context';

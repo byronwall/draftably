@@ -7,7 +7,6 @@ import { legendMarkup } from '../../model/legend';
 import type { Diagram } from '../../model/types';
 import { exportHref } from '../../state/links';
 import { HEADING_EDIT } from '../../state/session/actions';
-
 import { useDiagramSession } from '../session-context';
 
 type Key = 'title' | 'subtitle';

@@ -1,10 +1,7 @@
 import { Show } from 'solid-js';
 import { findNode } from '../model/graph';
-
 import { FileNotes } from './FileNotes';
-
 import { type Tool } from '../state/session/editor';
-
 import { ancestors } from '../model/graph';
 import { useDiagramSession } from './session-context';
 

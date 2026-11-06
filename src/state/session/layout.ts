@@ -13,7 +13,6 @@ import { findGroup, selectionRoots } from '../../model/graph';
 import { layoutShape, type LayoutShape, type ShapeChange } from '../../dsl/layout-edits';
 import type { Diagram, LayoutAlgorithmId, NodeGeometry, RoutingSettings } from '../../model/types';
 import { CancelledError, startEngineTask, type RunningTask } from '../../lib/engine-tasks';
-
 import { sourceScope, UnstorableLayout } from './file-session';
 import { toast } from '../toast';
 import type { DocumentPart } from './document';

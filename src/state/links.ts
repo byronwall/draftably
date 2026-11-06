@@ -3,26 +3,25 @@
  * and a file in the editor at its line.
  */
 import { baseUrl, editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
-import { doc } from './document';
-import { fileSession } from './file-session';
 import { fileUrl, go, workspace } from './launch';
 import { toast } from './toast';
+import { activeSession } from './active-session';
 
 /**
  * Where a relative link starts: `config link-base=` from the diagram's folder, else its git root.
  * Null when no file on disk is open.
  */
 export function linkBase(): string | null {
-  const session = fileSession(),
-    base = doc.appearance.config?.linkBase;
+  const session = activeSession().fileSession(),
+    base = activeSession().doc.appearance.config?.linkBase;
   if (!session?.root || baseUrl('x', base)) return null;
   return base === undefined ? session.root : joinPath(joinPath(session.path, '..'), base);
 }
 
-const editor = () => doc.appearance.config?.editor ?? 'vscode';
+const editor = () => activeSession().doc.appearance.config?.editor ?? 'vscode';
 
 /** `href` joined to a URL `link-base`, or null. */
-const joined = (href: string) => baseUrl(href, doc.appearance.config?.linkBase);
+const joined = (href: string) => baseUrl(href, activeSession().doc.appearance.config?.linkBase);
 
 /** What opening `href` does, for a tooltip or the Inspector. */
 export function describeLink(href: string): string {
@@ -47,7 +46,7 @@ function servedPath(file: string): string | null {
 export function exportHref(href: string): string {
   if (joined(href)) return joined(href)!;
   const base = linkBase(),
-    session = fileSession();
+    session = activeSession().fileSession();
   return base && session ? staticHref(href, base, joinPath(session.path, '..')) : href;
 }
 

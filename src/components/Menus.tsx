@@ -10,11 +10,8 @@ import {
   THEME_IDS,
   type ThemeId,
 } from '../model/appearance';
-
 import type { Tool } from '../state/session/editor';
-
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
-
 import {
   arrangeOpen,
   sourceOpen,

@@ -14,19 +14,12 @@ import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
 import { Tips } from './components/Tips';
 import { Toolbar } from './components/Toolbar';
-import { finishInlineEdit } from './state/actions';
 import { setFilePicker } from './state/commands';
 import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
-import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
-import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
-import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
 import { importForeignText, openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
-import { cancelLayout } from './state/layout';
-import { resetModifiers } from './state/pointer';
-import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
 import {
   filesShown,
@@ -37,6 +30,7 @@ import {
   sidebarWidth,
 } from './state/ui';
 import './styles/app.css';
+import { activeSession } from './state/active-session';
 
 /** Add an event listener and return a function that removes it. */
 function listen<E extends Event>(
@@ -87,53 +81,53 @@ export default function App() {
   };
 
   createEffect(() => {
-    document.documentElement.dataset.theme = doc.theme;
+    document.documentElement.dataset.theme = activeSession().doc.theme;
   });
   // The diagram's canvas follows its appearance; editor chrome follows the editor's mode.
   createEffect(() => {
     document.documentElement.style.setProperty(
       '--diagram-canvas',
-      resolveAppearance(doc.appearance).canvas,
+      resolveAppearance(activeSession().doc.appearance).canvas,
     );
   });
   registerFonts();
 
   onMount(() => {
     installDebugApi();
-    const { restored, notice } = restoreSavedDocument();
-    restoreArchive();
+    const { restored, notice } = activeSession().restoreSavedDocument();
+    activeSession().restoreArchive();
     // A first visit to the static site starts on the start screen instead of a blank canvas.
-    if (!restored && !fileMode()) setStartOpen(true);
+    if (!restored && !activeSession().fileMode()) setStartOpen(true);
     requestAnimationFrame(() => {
-      if (!restored) fitView();
+      if (!restored) activeSession().fitView();
       if (notice) toast(notice);
     });
     console.info('[diagram-studio] ready', {
       restored,
-      objects: doc.graph.nodes.length + doc.graph.groups.length,
+      objects: activeSession().doc.graph.nodes.length + activeSession().doc.graph.groups.length,
     });
 
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotion = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    const onMotion = (e: MediaQueryListEvent) => activeSession().setReducedMotion(e.matches);
     const onBlur = () => {
-      sculptBlur();
-      resetModifiers();
-      setSpaceHeld(false);
+      activeSession().sculptBlur();
+      activeSession().resetModifiers();
+      activeSession().setSpaceHeld(false);
     };
     // Edits to an example are not in any file; the browser asks first. A label or field still
     // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      finishInlineEdit(true);
+      activeSession().finishInlineEdit(true);
       (document.activeElement as HTMLElement | null)?.blur?.();
-      if (!exampleEdited() || leaveAgreed()) return;
+      if (!activeSession().exampleEdited() || activeSession().leaveAgreed()) return;
       e.preventDefault();
       // Older Chrome and Safari show the prompt only when returnValue is set.
       e.returnValue = '';
     };
     const onUnload = () => {
-      sculptBeforeUnload();
-      finishInlineEdit(true);
-      persistNow();
+      activeSession().sculptBeforeUnload();
+      activeSession().finishInlineEdit(true);
+      activeSession().persistNow();
     };
     const cleanups = [
       listen(document, 'keydown', handleKeyDown),
@@ -145,11 +139,11 @@ export default function App() {
       listen(window, 'beforeunload', onUnload),
       listen(motion, 'change', onMotion),
     ];
-    const stopWatching = watchOtherTabs();
+    const stopWatching = activeSession().watchOtherTabs();
     onCleanup(() => {
       cleanups.forEach(stop => stop());
       stopWatching();
-      cancelLayout();
+      activeSession().cancelLayout();
       cancelGeneration();
       onUnload();
     });
@@ -165,12 +159,12 @@ export default function App() {
       classList={{
         'objects-open': objectsOpen(),
         'inspector-open': inspectorOpen(),
-        'example-mode': exampleMode(),
+        'example-mode': activeSession().exampleMode(),
       }}
     >
       <Toolbar />
       <div class="mode-bar-slot">
-        <Show when={exampleMode()}>
+        <Show when={activeSession().exampleMode()}>
           <ExampleBar />
         </Show>
       </div>

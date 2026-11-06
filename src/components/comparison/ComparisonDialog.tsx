@@ -1,7 +1,7 @@
 import { createMemo, createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
 import { describeMeasure, readDifference } from '../../model/candidates';
 import { labelHits } from '../../model/label-hits';
-import { currentSource, fileMode, sourceScope } from '../../state/file-session';
+import { sourceScope } from '../../state/session/file-session';
 import {
   candidateChange,
   anchorFor,
@@ -24,12 +24,12 @@ import {
   toggleShowAll,
   type Candidate,
 } from '../../state/comparison';
-import { rebuildBlocked } from '../../state/layout';
 import { cutTip, IconButton, tip } from '../controls';
 import { StaticScene } from '../scene/StaticScene';
 import { ComparisonSidebar } from './ComparisonSidebar';
 import { ViewportCanvas } from './ViewportCanvas';
 import './comparison.css';
+import { activeSession } from '../../state/active-session';
 
 /** Full-screen comparison of layout or routing candidates. */
 export function ComparisonDialog() {
@@ -84,8 +84,8 @@ function Dialog() {
           <button
             type="button"
             aria-pressed={!routing()}
-            disabled={!!rebuildBlocked()}
-            {...tip('Layouts', undefined, rebuildBlocked() ?? undefined)}
+            disabled={!!activeSession().rebuildBlocked()}
+            {...tip('Layouts', undefined, activeSession().rebuildBlocked() ?? undefined)}
             onClick={() => setComparisonMode('layout')}
           >
             Layouts
@@ -234,7 +234,8 @@ function currentLine() {
   const routing = comparison.config?.mode === 'routing',
     command = routing ? 'routing' : 'layout',
     scope = routing ? '' : ` ${sourceScope(comparison.config!) ?? 'root'}`;
-  const line = currentSource()
+  const line = activeSession()
+    .currentSource()
     .split('\n')
     .find(l => l.startsWith(command + scope));
   return line?.split(' #')[0].trim() ?? (routing ? 'Default routing' : 'Built-in recipe');
@@ -355,7 +356,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
           </details>
         </Show>
       </div>
-      <Show when={props.cell.source ?? (props.cell.current && fileMode())}>
+      <Show when={props.cell.source ?? (props.cell.current && activeSession().fileMode())}>
         {source => (
           <footer>
             <code class="candidate-recipe" {...cutTip}>

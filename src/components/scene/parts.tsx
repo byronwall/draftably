@@ -2,7 +2,6 @@ import { For, Show } from 'solid-js';
 import type { TypeProfile } from '../../model/fonts';
 import { markerMarkup } from '../../model/legend';
 import type { Rect } from '../../model/types';
-
 import { SceneGlyph } from '../Icon';
 import { useDiagramSession } from '../session-context';
 import type { DiagramSession } from '../../state/session';

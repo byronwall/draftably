@@ -1,41 +1,19 @@
 /** Global keyboard shortcuts and clipboard handling for the editor. */
-import { stepState } from './emphasis';
+
 import { setStartOpen, startOpen } from './launch';
 import { findEdge, findNode } from '../model/graph';
 import { isClipboardFragment } from '../model/edits';
 import type { Side } from '../model/types';
-import * as actions from './actions';
 import { commandEnabled, runCommand, type CommandId } from './commands';
 import { comparison } from './comparison';
-import {
-  clearSelection,
-  doc,
-  selectedIds,
-  selection,
-  setSelection,
-  singleSelection,
-  transact,
-} from './document';
-import {
-  connectFrom,
-  focusCanvas,
-  inlineEditId,
-  panBy,
-  setConnectFrom,
-  setSpaceHeld,
-  tool,
-  type Tool,
-} from './editor';
+import { type Tool } from './session/editor';
 import { importForeignText, importText, insertImage } from './files';
 import { detectSource } from '../import/detect';
-import { acceptPreview, cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
-import { parseTextId, removeText, selectedText, TEXT_NAMES } from './canvas-text';
-import { cancelGesture } from './pointer';
-import { visibleScene } from './scene';
-import { sculptKey } from './sculpt';
+import { parseTextId, removeText, TEXT_NAMES } from './session/canvas-text';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
 import { closeMenu, dialog, menu, openQuickBuild } from './ui';
+import { activeSession } from './active-session';
 
 const isEditable = (el: EventTarget | null) =>
   el instanceof Element && el.matches('input,textarea,select,[contenteditable=true]');
@@ -92,22 +70,23 @@ export function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') setStartOpen(false);
     return;
   }
-  if (sculptKey(e)) return;
+  if (activeSession().sculptKey(e)) return;
   const mod = e.ctrlKey || e.metaKey,
     key = shortcutKey(e),
     target = e.target as Element;
 
   if (e.key === 'Escape') {
-    if (layoutBusy()) return (e.preventDefault(), cancelLayout());
-    if (layoutPreview()) return (e.preventDefault(), discardPreview());
-    if (inlineEditId()) return;
+    if (activeSession().layoutBusy()) return (e.preventDefault(), activeSession().cancelLayout());
+    if (activeSession().layoutPreview())
+      return (e.preventDefault(), activeSession().discardPreview());
+    if (activeSession().inlineEditId()) return;
     if (menu()) return (e.preventDefault(), closeMenu());
     e.preventDefault();
-    cancelGesture();
-    setConnectFrom(null);
-    if (tool() !== 'select') return actions.setTool('select');
-    clearSelection();
-    focusCanvas();
+    activeSession().cancelGesture();
+    activeSession().setConnectFrom(null);
+    if (activeSession().tool() !== 'select') return activeSession().setTool('select');
+    activeSession().clearSelection();
+    activeSession().focusCanvas();
     return;
   }
   // Finding a command works from anywhere, even while typing in a field.
@@ -117,7 +96,7 @@ export function handleKeyDown(e: KeyboardEvent) {
   if (e.code === 'Space' && keepsSpace(target)) return;
   if (e.code === 'Space' && !e.repeat) {
     e.preventDefault();
-    setSpaceHeld(true);
+    activeSession().setSpaceHeld(true);
     return;
   }
 
@@ -125,7 +104,12 @@ export function handleKeyDown(e: KeyboardEvent) {
     const shortcuts: Record<string, () => void> = {
       z: () => runCommand(e.shiftKey ? 'redo' : 'undo'),
       y: () => runCommand('redo'),
-      a: () => setSelection(visibleScene().nodes.map(n => n.id)),
+      a: () =>
+        activeSession().setSelection(
+          activeSession()
+            .visibleScene()
+            .nodes.map(n => n.id),
+        ),
       d: () => runCommand('duplicate'),
       g: () => runCommand(e.shiftKey ? 'ungroup' : 'group'),
       s: () => runCommand('export-json'),
@@ -147,94 +131,108 @@ export function handleKeyDown(e: KeyboardEvent) {
   const focusedId = focusedObject(target);
 
   // Keep from anywhere, including the Arrange button that started the preview.
-  if (e.key === 'Enter' && layoutPreview() && !target.closest?.('.layout-preview')) {
+  if (
+    e.key === 'Enter' &&
+    activeSession().layoutPreview() &&
+    !target.closest?.('.layout-preview')
+  ) {
     e.preventDefault();
-    acceptPreview();
+    activeSession().acceptPreview();
     return;
   }
 
   const quickAdd = target.closest?.('[data-quick-add]') as SVGElement | null;
   if (e.key === 'Enter' && quickAdd) {
     e.preventDefault();
-    setSelection([quickAdd.dataset.owner!]);
-    actions.quickExtend({ side: quickAdd.dataset.quickAdd as Side });
+    activeSession().setSelection([quickAdd.dataset.owner!]);
+    activeSession().quickExtend({ side: quickAdd.dataset.quickAdd as Side });
     return;
   }
 
   if (e.key === 'Enter') {
     if (target.tagName === 'BUTTON') return;
     e.preventDefault();
-    if (tool() === 'connect') {
+    if (activeSession().tool() === 'connect') {
       const id =
-        focusedId && findNode(doc, focusedId)
+        focusedId && findNode(activeSession().doc, focusedId)
           ? focusedId
-          : selectedIds().find(id => findNode(doc, id));
+          : activeSession()
+              .selectedIds()
+              .find(id => findNode(activeSession().doc, id));
       if (!id) return;
-      if (connectFrom()) actions.completeConnection(id);
-      else setConnectFrom({ id, side: 'auto' });
+      if (activeSession().connectFrom()) activeSession().completeConnection(id);
+      else activeSession().setConnectFrom({ id, side: 'auto' });
       return;
     }
     if (e.shiftKey) return runCommand('add-connected');
-    const id = focusedId || selectedIds()[0] || selectedText();
-    if (id) actions.startInlineEdit(id);
+    const id = focusedId || activeSession().selectedIds()[0] || activeSession().selectedText();
+    if (id) activeSession().startInlineEdit(id);
     return;
   }
 
   if (e.key === 'Tab' && onCanvas) {
-    if (tool() === 'connect') {
+    if (activeSession().tool() === 'connect') {
       // Tab moves between connection targets.
-      const targets = visibleScene().nodes.map(n => n.id),
-        anchor = focusedId || selectedIds().find(id => findNode(doc, id)),
+      const targets = activeSession()
+          .visibleScene()
+          .nodes.map(n => n.id),
+        anchor =
+          focusedId ||
+          activeSession()
+            .selectedIds()
+            .find(id => findNode(activeSession().doc, id)),
         i = targets.indexOf(anchor ?? ''),
         next = targets[(i + (e.shiftKey ? -1 : 1) + targets.length) % targets.length];
       if (next) {
         e.preventDefault();
-        setSelection([next]);
+        activeSession().setSelection([next]);
         (document.querySelector(`[data-id="${CSS.escape(next)}"]`) as SVGElement | null)?.focus({
           preventScroll: true,
         });
       }
       return;
     }
-    const only = singleSelection();
-    if (only && (findNode(doc, only) || findEdge(doc, only))) {
+    const only = activeSession().singleSelection();
+    if (only && (findNode(activeSession().doc, only) || findEdge(activeSession().doc, only))) {
       e.preventDefault();
-      actions.quickExtend({ sibling: e.shiftKey });
+      activeSession().quickExtend({ sibling: e.shiftKey });
     }
     return;
   }
 
   if (e.altKey && ARROW_SIDES[e.key] && onCanvas) {
     e.preventDefault();
-    actions.quickExtend({ side: ARROW_SIDES[e.key] });
+    activeSession().quickExtend({ side: ARROW_SIDES[e.key] });
     return;
   }
-  if (e.altKey && key === 's') return (e.preventDefault(), actions.markSelectedAs('start'));
-  if (e.altKey && e.key === 'End') return (e.preventDefault(), actions.markSelectedAs('end'));
+  if (e.altKey && key === 's') return (e.preventDefault(), activeSession().markSelectedAs('start'));
+  if (e.altKey && e.key === 'End')
+    return (e.preventDefault(), activeSession().markSelectedAs('end'));
   if (e.altKey && key === 'r')
     return (e.preventDefault(), runCommand(e.shiftKey ? 'auto-ports' : 'reroute'));
   if (e.altKey && key === 'e') return (e.preventDefault(), runCommand('compare-layouts'));
   if (key === 'b' && !e.altKey) return (e.preventDefault(), runCommand('quick-build'));
-  if ((key === '[' || key === ']') && !e.altKey && stepState(key === ']' ? 1 : -1))
+  if ((key === '[' || key === ']') && !e.altKey && activeSession().stepState(key === ']' ? 1 : -1))
     return e.preventDefault();
-  if ((e.key === 'Delete' || e.key === 'Backspace') && selectedText()) {
-    const id = selectedText()!;
+  if ((e.key === 'Delete' || e.key === 'Backspace') && activeSession().selectedText()) {
+    const id = activeSession().selectedText()!;
     e.preventDefault();
     if (parseTextId(id)?.kind === 'phase') return toast('A phase needs its label.');
-    transact(`Delete ${TEXT_NAMES[parseTextId(id)!.kind]}`, d => removeText(d, id));
-    return clearSelection();
+    activeSession().transact(`Delete ${TEXT_NAMES[parseTextId(id)!.kind]}`, d => removeText(d, id));
+    return activeSession().clearSelection();
   }
   if (e.key === 'Delete' || e.key === 'Backspace')
     return (e.preventDefault(), runCommand(e.shiftKey ? 'delete-deep' : 'delete'));
 
   if (ARROW_SIDES[e.key] && onCanvas) {
     e.preventDefault();
-    if (focusedId && !selection().has(focusedId)) setSelection([focusedId]);
+    if (focusedId && !activeSession().selection().has(focusedId))
+      activeSession().setSelection([focusedId]);
     const amount = e.shiftKey ? 10 : 1,
       dx = e.key === 'ArrowLeft' ? -amount : e.key === 'ArrowRight' ? amount : 0,
       dy = e.key === 'ArrowUp' ? -amount : e.key === 'ArrowDown' ? amount : 0;
     // With nothing selected, arrows pan the canvas.
-    if (!actions.nudgeSelection(dx, dy)) panBy(-dx * 30, -dy * 30);
+    if (!activeSession().nudgeSelection(dx, dy)) activeSession().panBy(-dx * 30, -dy * 30);
     return;
   }
 
@@ -250,17 +248,17 @@ export function handleKeyDown(e: KeyboardEvent) {
   }
   if (KEY_TOOLS[key]) {
     e.preventDefault();
-    actions.setTool(KEY_TOOLS[key]);
+    activeSession().setTool(KEY_TOOLS[key]);
   }
 }
 
 export function handleKeyUp(e: KeyboardEvent) {
-  if (e.code === 'Space') setSpaceHeld(false);
+  if (e.code === 'Space') activeSession().setSpaceHeld(false);
 }
 
 export function handleCopy(e: ClipboardEvent) {
-  if (isEditable(e.target) || modalOpen() || !selection().size) return;
-  const part = actions.copySelection();
+  if (isEditable(e.target) || modalOpen() || !activeSession().selection().size) return;
+  const part = activeSession().copySelection();
   e.clipboardData?.setData('text/plain', JSON.stringify(part));
   e.preventDefault();
 }
@@ -294,13 +292,13 @@ export async function handlePaste(e: ClipboardEvent) {
     if (text.startsWith('{')) {
       e.preventDefault();
       const data = JSON.parse(text);
-      if (isClipboardFragment(data)) actions.pasteFragment(data);
+      if (isClipboardFragment(data)) activeSession().pasteFragment(data);
       else await importText(text);
       return;
     }
-    if (!text && actions.hasClipboard()) {
+    if (!text && activeSession().hasClipboard()) {
       e.preventDefault();
-      actions.pasteFragment();
+      activeSession().pasteFragment();
     }
   } catch (error) {
     toast(error instanceof Error ? error.message : String(error));

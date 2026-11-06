@@ -1,6 +1,5 @@
 import { Show } from 'solid-js';
 import { runCommand } from '../state/commands';
-
 import { tip } from './controls';
 import { useDiagramSession } from './session-context';
 

@@ -28,10 +28,8 @@ import {
   selectionRoots,
 } from '../../model/graph';
 import type { NodeLayout, Point, Rect, Side } from '../../model/types';
-
 import { isDrawTool, MAX_ZOOM, MIN_ZOOM, type DrawTool, type Guide } from './editor';
 import { noteAnchor, noteSide } from '../../model/note';
-
 import { parseTextId } from './canvas-text';
 import { toast } from '../toast';
 import type { EditorPart } from './editor';

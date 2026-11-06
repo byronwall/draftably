@@ -1,7 +1,6 @@
 import { createEffect, createMemo, For, Show } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 import { renderSvg } from '../../cli/svg';
-
 import { tip } from '../controls';
 import { useDiagramSession } from '../session-context';
 

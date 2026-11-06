@@ -1,8 +1,6 @@
 import { resolveAppearance } from '../../model/appearance';
 import { noteMarkup } from '../../model/note';
-
 import { exportHref } from '../../state/links';
-
 import { useDiagramSession } from '../session-context';
 
 /**

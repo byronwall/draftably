@@ -1,6 +1,5 @@
 import { createEffect, createSignal, Show } from 'solid-js';
 import { downloadText } from '../lib/svg-export';
-
 import {
   cameFromPlayground,
   createDiagramFile,

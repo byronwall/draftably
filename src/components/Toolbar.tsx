@@ -1,9 +1,6 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
-
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
-
 import { type Tool } from '../state/session/editor';
-
 import {
   arrangeOpen,
   filesShown,

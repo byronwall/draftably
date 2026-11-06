@@ -1,5 +1,4 @@
 import { Show } from 'solid-js';
-
 import { runCommand } from '../state/commands';
 import { workspace } from '../state/launch';
 import {

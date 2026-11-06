@@ -4,7 +4,6 @@ import { clamp } from '../../model/geometry';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
-
 import { parseTextId, TEXT_NAMES } from '../../state/session/canvas-text';
 import { textBox } from './text-boxes';
 import { useDiagramSession } from '../session-context';

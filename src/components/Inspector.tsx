@@ -24,9 +24,7 @@ import { headOf, MARKERS, tailOf } from '../model/markers';
 import { DSL_SHAPES } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, Diagram, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
-
 import { runCommand, type CommandId } from '../state/commands';
-
 import {
   parseTextId,
   removeText,
@@ -35,7 +33,6 @@ import {
   textValue,
 } from '../state/session/canvas-text';
 import { NOTE_SIDES, noteSide, type Note } from '../model/note';
-
 import { setRightTab } from '../state/ui';
 import {
   CommandButton as IconCommand,

@@ -6,7 +6,6 @@ import { NOTE_PAD } from '../../model/note';
 import type { Run } from '../../model/rich-text';
 import type { Diagram, Rect } from '../../model/types';
 import { parseTextId, textId } from '../../state/session/canvas-text';
-
 import { headingSlot } from './Frame';
 
 type Type = ResolvedAppearance['annotation'];

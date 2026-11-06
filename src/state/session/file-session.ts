@@ -42,7 +42,6 @@ import { cacheScene, cachedScene } from '../../lib/scene-cache';
 import { normalize, routingFingerprint } from '../../model/document';
 import type { Diagram, LayoutSettings, RoutingSettings } from '../../model/types';
 import { clone } from '../../model/geometry';
-
 import { type EditKind } from './document';
 import { toast, type ToastAction } from '../toast';
 import type { DocumentPart } from './document';

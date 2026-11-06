@@ -1,5 +1,4 @@
 import { Match, Show, Switch } from 'solid-js';
-
 import { useDiagramSession } from './session-context';
 
 /** Explains why a file-backed drawing is not following its source, and what to do about it. */

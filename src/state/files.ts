@@ -22,35 +22,12 @@ import {
 } from '../lib/svg-export';
 import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
 import { exportHref } from './links';
-import { addNode, finishInlineEdit, openDocument } from './actions';
-import {
-  clearSelection,
-  doc,
-  prepareForEdit,
-  selection,
-  setDoc,
-  setSelection,
-  snapshot,
-  transact,
-} from './document';
-import { connectFrom, fitView, setConnectFrom } from './editor';
-import {
-  currentSource,
-  fileMode,
-  fileSession,
-  fileStatus,
-  exampleMode,
-  openExampleSession,
-  settleSave,
-} from './file-session';
-import { runLayout } from './layout';
-import { routes, sceneRects, viewerFrame, visibleScene } from './scene';
 import { drawingBounds } from '../model/bounds';
 import { FRAME_PAD } from '../model/frame';
-import { importTimeline } from './sculpt';
 import { toast } from './toast';
 import { confirmAction, openDialog, showError } from './ui';
 import type { PdfOptions } from '../cli/pdf';
+import { activeSession } from './active-session';
 
 const IMAGE_TYPES = /^image\/(png|jpeg|webp|gif)$/;
 
@@ -93,7 +70,7 @@ export function setExportLook(patch: Partial<ExportLook>) {
 
 /** The `.draft` source to put in an export, or undefined when there is none to carry. */
 const exportSource = (look = exportLook()) =>
-  fileMode() && look.source ? currentSource() : undefined;
+  activeSession().fileMode() && look.source ? activeSession().currentSource() : undefined;
 
 /** Space round the selected objects when only they are exported. */
 const SELECTION_MARGIN = 24;
@@ -106,7 +83,7 @@ export async function openImageSource(file: File) {
   if (!/\.(png|svg)$/i.test(file.name) && !/^image\/(png|svg\+xml)$/.test(file.type)) return false;
   const source = await readImageSource(new Uint8Array(await file.arrayBuffer()));
   if (source === null) return false;
-  await settleSave();
+  await activeSession().settleSave();
   // Named after the diagram's title, since a pasted image is just "image.png".
   const title = /^diagram\s+"([^"]*)"/m.exec(source)?.[1] ?? file.name.replace(/\.[^.]+$/, ''),
     name =
@@ -115,20 +92,20 @@ export async function openImageSource(file: File) {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '') || 'diagram';
   history.pushState(null, '', location.pathname);
-  clearSelection();
-  setDoc('collapsed', []);
-  await openExampleSession(name, title || name, source);
-  fitView();
+  activeSession().clearSelection();
+  activeSession().setDoc('collapsed', []);
+  await activeSession().openExampleSession(name, title || name, source);
+  activeSession().fitView();
   toast('Opened the diagram in ' + (file.name || 'the pasted image'));
   return true;
 }
 
-/** Set by the canvas: the `<g>` that holds the drawn diagram. */
-let sceneElement: SVGGElement | undefined;
-export const registerSceneElement = (el: SVGGElement) => (sceneElement = el);
-export const sceneReady = () => !!sceneElement;
+/** The `<g>` that holds the active session's drawn diagram. */
+const sceneElement = () =>
+  activeSession().canvasElement()?.querySelector<SVGGElement>('g.scene') ?? undefined;
+export const sceneReady = () => !!sceneElement();
 
-export const filename = (extension: string) => fileName(doc.title, extension);
+export const filename = (extension: string) => fileName(activeSession().doc.title, extension);
 
 /** Open diagram JSON, an editable SVG export, or a saved layout timeline. */
 export async function importText(text: string, name = '') {
@@ -143,15 +120,15 @@ export async function importText(text: string, name = '') {
     data = JSON.parse(metadata.textContent || '');
   } else if (trimmed.startsWith('{')) data = JSON.parse(trimmed);
   else throw Error('Open a saved JSON diagram or an exported, editable SVG.');
-  if (data.kind === 'diagram-studio-journey') return importTimeline(data);
+  if (data.kind === 'diagram-studio-journey') return activeSession().importTimeline(data);
   const legacy = isLegacyDiagram(data),
     needsLayout =
       !data.layout?.nodes &&
       !data.views?.some(
         (v: { layout?: { nodes?: object } }) => Object.keys(v.layout?.nodes || {}).length,
       );
-  openDocument(data, { label: 'Import diagram' });
-  if (needsLayout) await runLayout({ fit: true });
+  activeSession().openDocument(data, { label: 'Import diagram' });
+  if (needsLayout) await activeSession().runLayout({ fit: true });
   toast(
     legacy
       ? 'Imported the active v1 diagram. The original file is unchanged.'
@@ -186,15 +163,15 @@ export async function insertImage(file: File, replaceId: string | null = null) {
   const data = canvas.toDataURL(file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png', 0.92),
     w = Math.min(300, canvas.width),
     h = clamp((w * canvas.height) / canvas.width, 32, 400);
-  if (replaceId && findNode(doc, replaceId)) {
-    transact('Replace image', d => {
+  if (replaceId && findNode(activeSession().doc, replaceId)) {
+    activeSession().transact('Replace image', d => {
       findNode(d, replaceId)!.image = data;
       (d.styles[replaceId] ||= { shape: 'image', color: 'slate', icon: '' }).shape = 'image';
       d.layout.nodes[replaceId].w = w;
       d.layout.nodes[replaceId].h = h;
     });
   } else
-    addNode({
+    activeSession().addNode({
       title: file.name.replace(/\.[^.]+$/, '') || 'Image',
       image: data,
       style: { shape: 'image', icon: '', color: 'slate' },
@@ -225,12 +202,18 @@ let importRequest = 0;
 /** Convert before switching files; failed or cancelled imports leave the current work in place. */
 export async function importForeignText(text: string, name = '') {
   const request = ++importRequest;
-  prepareForEdit();
-  await settleSave();
-  if (fileMode() && !exampleMode() && fileStatus() !== 'saved')
+  activeSession().prepareForEdit();
+  await activeSession().settleSave();
+  if (
+    activeSession().fileMode() &&
+    !activeSession().exampleMode() &&
+    activeSession().fileStatus() !== 'saved'
+  )
     throw Error('Resolve the current file’s save status before importing another diagram.');
   const address = location.href;
-  const original = fileMode() ? currentSource() : snapshot();
+  const original = activeSession().fileMode()
+    ? activeSession().currentSource()
+    : activeSession().snapshot();
   const { importBrowser } = await import('../import/browser');
   const result = await importBrowser(text, name);
   if (request !== importRequest) return;
@@ -239,14 +222,20 @@ export async function importForeignText(text: string, name = '') {
     throw Error(errors.map(item => item.message).join('\n') || 'Could not import this diagram.');
   const source = result.nativeSource;
   const open = async () => {
-    await settleSave();
+    await activeSession().settleSave();
     if (
       request !== importRequest ||
       location.href !== address ||
-      (fileMode() ? currentSource() : snapshot()) !== original
+      (activeSession().fileMode()
+        ? activeSession().currentSource()
+        : activeSession().snapshot()) !== original
     )
       throw Error('The current diagram changed during import. Import again to continue.');
-    if (fileMode() && !exampleMode() && fileStatus() !== 'saved')
+    if (
+      activeSession().fileMode() &&
+      !activeSession().exampleMode() &&
+      activeSession().fileStatus() !== 'saved'
+    )
       throw Error('Resolve the current file’s save status before importing another diagram.');
     const id = keepImportedSource(source);
     location.assign(`${location.pathname}?import=${encodeURIComponent(id)}`);
@@ -270,47 +259,55 @@ export async function importForeignText(text: string, name = '') {
  * something selected, the image is cropped to the selected objects with a margin and no heading.
  */
 export function exportSvg(look = exportLook(), onlySelection = false): string {
-  finishInlineEdit(true);
+  activeSession().finishInlineEdit(true);
   // A comparison draws each version as its own panel, which the canvas does not show.
   const source = exportSource(look),
     carry = (svg: string) => (source === undefined ? svg : embedSvgSource(svg, source));
-  if (doc.appearance.compare) {
-    const svg = renderSvg(doc);
+  if (activeSession().doc.appearance.compare) {
+    const svg = renderSvg(activeSession().doc);
     return (
       '<?xml version="1.0" encoding="UTF-8"?>\n' +
       carry(look.transparent ? svg.replace(/(<\/defs>)\s*<rect[^>]*\/>/, '$1') : svg)
     );
   }
-  const picked = onlySelection ? selection() : new Set<string>();
-  const world = sceneElement;
+  const picked = onlySelection ? activeSession().selection() : new Set<string>();
+  const world = sceneElement();
   if (!world) throw Error('The canvas is not ready.');
-  const previousSelection = selection(),
-    previousConnect = connectFrom();
+  const previousSelection = activeSession().selection(),
+    previousConnect = activeSession().connectFrom();
   // Clearing the selection removes handles and rings before the DOM is copied.
   batch(() => {
-    setSelection([]);
-    setConnectFrom(null);
+    activeSession().setSelection([]);
+    activeSession().setConnectFrom(null);
   });
   try {
-    const theme = resolveAppearance(doc.appearance),
-      frame = viewerFrame(),
-      vg = visibleScene();
+    const theme = resolveAppearance(activeSession().doc.appearance),
+      frame = activeSession().viewerFrame(),
+      vg = activeSession().visibleScene();
     // The frame as the viewer draws it; the drawing alone without the heading; or the selection.
     const { x, y, w, h } = picked.size
       ? drawingBounds(
-          doc,
+          activeSession().doc,
           {
             ...vg,
             nodes: vg.nodes.filter(n => picked.has(n.id)),
             groups: vg.groups.filter(g => picked.has(g.id)),
           },
-          sceneRects(),
-          routes().filter(r => picked.has(r.id)),
+          activeSession().sceneRects(),
+          activeSession()
+            .routes()
+            .filter(r => picked.has(r.id)),
           SELECTION_MARGIN,
         )
       : look.heading
         ? frame
-        : drawingBounds(doc, vg, sceneRects(), routes(), FRAME_PAD);
+        : drawingBounds(
+            activeSession().doc,
+            vg,
+            activeSession().sceneRects(),
+            activeSession().routes(),
+            FRAME_PAD,
+          );
     const svg = createSvgElement('svg', {
       xmlns: 'http://www.w3.org/2000/svg',
       width: Math.ceil(w),
@@ -319,9 +316,9 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
       role: 'img',
     });
     const title = createSvgElement('title');
-    title.textContent = doc.title;
+    title.textContent = activeSession().doc.title;
     const meta = createSvgElement('metadata', { id: 'diagram-studio-data' });
-    meta.textContent = snapshot();
+    meta.textContent = activeSession().snapshot();
     // The drawing's own canvas and fonts, so the file renders the same without the app.
     const defs = createSvgElement('defs'),
       style = createSvgElement('style');
@@ -337,7 +334,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
         ? ''
         : headingMarkup(
             theme,
-            doc.appearance.heading,
+            activeSession().doc.appearance.heading,
             frame.heading.x,
             frame.heading.y,
             frame.heading.wrap,
@@ -356,8 +353,8 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + carry(serializeSvg(svg));
   } finally {
     batch(() => {
-      setSelection(previousSelection);
-      setConnectFrom(previousConnect);
+      activeSession().setSelection(previousSelection);
+      activeSession().setConnectFrom(previousConnect);
     });
   }
 }
@@ -378,7 +375,7 @@ export function openPdfExport(paths: string[]) {
  * Throws with the server's message, such as the file whose errors stopped the export.
  */
 export async function exportPdf(paths: string[], opts: PdfOptions) {
-  await settleSave();
+  await activeSession().settleSave();
   const res = await fetch('./api/workspace/pdf', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -413,10 +410,10 @@ export async function exportDocument(
   look = exportLook(),
   onlySelection = false,
 ) {
-  finishInlineEdit(true);
+  activeSession().finishInlineEdit(true);
   if (format === 'json')
     downloadText(
-      JSON.stringify(JSON.parse(snapshot()), null, 2),
+      JSON.stringify(JSON.parse(activeSession().snapshot()), null, 2),
       filename('json'),
       'application/json',
     );
@@ -456,10 +453,10 @@ const blobText = (blob: Blob) =>
  * The other kinds copy one thing as text.
  */
 export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onlySelection = true) {
-  finishInlineEdit(true);
+  activeSession().finishInlineEdit(true);
   const clip = navigator.clipboard;
   if (kind === 'source') {
-    const source = currentSource();
+    const source = activeSession().currentSource();
     if (source == null) throw Error('Only a diagram file has .draft source to copy.');
     await clip.writeText(source);
     return toast('Copied the .draft source');
@@ -468,7 +465,7 @@ export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onl
     await clip.writeText(location.href);
     return toast('Copied a link to this diagram');
   }
-  const part = onlySelection && selection().size > 0,
+  const part = onlySelection && activeSession().selection().size > 0,
     svg = exportSvg(look, part),
     what = part ? 'the selection' : '';
   if (kind === 'svg') {
@@ -485,7 +482,7 @@ export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onl
       async b =>
         new Blob(
           [
-            `<img src="${await blobText(b)}" width="${w}" height="${h}" alt="${doc.title.replace(/"/g, '&quot;')}">`,
+            `<img src="${await blobText(b)}" width="${w}" height="${h}" alt="${activeSession().doc.title.replace(/"/g, '&quot;')}">`,
           ],
           { type: 'text/html' },
         ),
@@ -525,7 +522,7 @@ export { exportKind, setExportKind };
 /** Open the export dialog on `kind`. */
 export function openExport(kind: ExportKind) {
   setExportKind(kind);
-  const file = fileSession()?.file;
+  const file = activeSession().fileSession()?.file;
   // The PDF tab starts with the open file checked, whichever tab the dialog opens on.
   setPdfFiles(file ? [file] : []);
   openDialog('export');

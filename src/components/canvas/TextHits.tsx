@@ -3,7 +3,6 @@ import { resolveAppearance } from '../../model/appearance';
 import { measureText } from '../../model/fonts';
 import { rectUnion } from '../../model/geometry';
 import { parseTextId, TEXT_NAMES } from '../../state/session/canvas-text';
-
 import { textBox, textBoxes } from './text-boxes';
 import { useDiagramSession } from '../session-context';
 

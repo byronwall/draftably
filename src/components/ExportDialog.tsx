@@ -1,6 +1,5 @@
 import { createMemo, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
 import type { PdfPage } from '../cli/pdf';
-
 import {
   copyImage,
   exportDocument,

@@ -20,34 +20,13 @@ import { fitCamera, type ViewCamera } from '../model/camera';
 import { anchorPoint, buildStaticScene, type StaticScene } from '../model/static-scene';
 import type { Diagram, IntentRole } from '../model/types';
 import { CancelledError, inPool, startEngineTask, type RunningTask } from '../lib/engine-tasks';
-import { finishInlineEdit, setTool } from './actions';
-import { doc, selection, setSelection, snapshot, transact, prepareForEdit } from './document';
-import { fitView, stageSize, setConnectFrom } from './editor';
-import {
-  cancelLayout,
-  currentScope,
-  fixedIds,
-  layoutBusy,
-  layoutPreview,
-  setLayoutReport,
-} from './layout';
-import { resetRoutes, routes, setAdoptedRoutes } from './scene';
-import { setComparisonCloser } from './sculpt';
 import { toast } from './toast';
 import { closeMenu } from './ui';
-import {
-  changedLine,
-  commitSource,
-  currentSource,
-  fileBlocked,
-  fileMode,
-  sourceScope,
-  sourceWithRecipe,
-  sourceWithRouting,
-} from './file-session';
+import { sourceScope } from './session/file-session';
 import { LayoutLab } from '../engines/layout-engine.js';
 import { RouteLab } from '../engines/routing-engine.js';
 import type { CandidateSpec } from '../engines/explorer-engine.js';
+import { activeSession } from './active-session';
 
 const CURRENT: CandidateSpec = {
   key: 'current',
@@ -220,13 +199,13 @@ export const toggleShowAll = () => {
 };
 
 function defaultConfig(mode: ComparisonMode): ComparisonConfig {
-  const scope = currentScope();
+  const scope = activeSession().currentScope();
   return {
-    fixedIds: fixedIds(),
-    intent: clone(doc.layout.intent || {}),
+    fixedIds: activeSession().fixedIds(),
+    intent: clone(activeSession().doc.layout.intent || {}),
     mode,
     kind: mode === 'routing' ? 'routes' : 'algorithms',
-    algorithm: doc.settings.algorithm,
+    algorithm: activeSession().doc.settings.algorithm,
     algorithms: [...COMPARE_ORDER],
     axisA: mode === 'routing' ? 'edgeGap' : 'nodeGap',
     valuesA: mode === 'routing' ? '10,18,28' : '12,24,44',
@@ -236,10 +215,12 @@ function defaultConfig(mode: ComparisonMode): ComparisonConfig {
     maxIterations: 640,
     scope: scope.scope === 'container' ? 'container' : 'all',
     autoPorts: false,
-    selected: [...selection()],
+    selected: [...activeSession().selection()],
     ...(scope.scope === 'container' ? { containerId: scope.containerId } : {}),
-    viewport: { w: stageSize().width, h: stageSize().height },
-    priorRoutes: routes().map(r => ({ id: r.id, fromSide: r.fromSide, toSide: r.toSide })),
+    viewport: { w: activeSession().stageSize().width, h: activeSession().stageSize().height },
+    priorRoutes: activeSession()
+      .routes()
+      .map(r => ({ id: r.id, fromSide: r.fromSide, toSide: r.toSide })),
   };
 }
 
@@ -251,9 +232,11 @@ const setProgress = (text: string, error = false) => setCmp('progress', { text, 
  * Returns null for runs that start from the current drawing (warm starts and passes).
  */
 function candidateSource(baseline: Diagram, spec: CandidateSpec, config: ComparisonConfig) {
-  if (!fileMode()) return null;
+  if (!activeSession().fileMode()) return null;
   if (config.mode === 'routing')
-    return sourceWithRouting(RouteLab.settings({ ...baseline.settings.routing, ...spec.patch }));
+    return activeSession().sourceWithRouting(
+      RouteLab.settings({ ...baseline.settings.routing, ...spec.patch }),
+    );
   if (config.run !== 'rebuild') return null;
   const scope = sourceScope(config);
   if (!scope)
@@ -261,28 +244,28 @@ function candidateSource(baseline: Diagram, spec: CandidateSpec, config: Compari
   const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
   const asked = spec.patch.direction;
   const direction = asked ? (asked === 'DOWN' ? 'down' : 'right') : undefined;
-  return sourceWithRecipe(scope, settings, direction).source;
+  return activeSession().sourceWithRecipe(scope, settings, direction).source;
 }
 
 export function openComparison(mode: ComparisonMode = 'layout') {
-  prepareForEdit();
-  const blocked = fileMode() && fileBlocked();
+  activeSession().prepareForEdit();
+  const blocked = activeSession().fileMode() && activeSession().fileBlocked();
   if (blocked) {
     toast(blocked);
     return;
   }
-  if (layoutPreview()) {
+  if (activeSession().layoutPreview()) {
     toast('Keep or discard the current layout preview before comparing.');
     return;
   }
-  finishInlineEdit(true);
-  if (layoutBusy()) cancelLayout();
+  activeSession().finishInlineEdit(true);
+  if (activeSession().layoutBusy()) activeSession().cancelLayout();
   closeMenu();
   if (cmp.open) {
     setCmp('config', { ...defaultConfig(mode), priorRoutes: cmp.config!.priorRoutes });
     return;
   }
-  const baseline = JSON.parse(snapshot()) as Diagram;
+  const baseline = JSON.parse(activeSession().snapshot()) as Diagram;
   setCmp(
     reconcile({
       ...initial(),
@@ -291,9 +274,11 @@ export function openComparison(mode: ComparisonMode = 'layout') {
       signature: documentIdentity(baseline),
       config: defaultConfig(mode),
       focusId:
-        [...selection()].find(id => findNode(doc, id) || findGroup(doc, id)) ||
-        doc.layout.intent?.start?.id ||
-        doc.graph.nodes[0]?.id ||
+        [...activeSession().selection()].find(
+          id => findNode(activeSession().doc, id) || findGroup(activeSession().doc, id),
+        ) ||
+        activeSession().doc.layout.intent?.start?.id ||
+        activeSession().doc.graph.nodes[0]?.id ||
         '',
     }),
   );
@@ -322,11 +307,11 @@ export function closeComparison() {
   if (!cmp.open) return;
   cancelGeneration();
   setCmp(reconcile(initial()));
-  setTool('select');
+  activeSession().setTool('select');
   if (returnFocus instanceof HTMLElement && returnFocus.isConnected)
     returnFocus.focus({ preventScroll: true });
 }
-setComparisonCloser(closeComparison);
+activeSession().setComparisonCloser(closeComparison);
 
 export function updateConfig(patch: Partial<ComparisonConfig>) {
   setCmp('config', c => ({ ...c!, ...patch }));
@@ -392,7 +377,7 @@ export async function generate(override?: Partial<ComparisonConfig>) {
     try {
       const current = specs[i] === CURRENT,
         source = current
-          ? fileMode() && currentSource()
+          ? activeSession().fileMode() && activeSession().currentSource()
           : candidateSource(baseline, specs[i], config);
       task = source
         ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
@@ -450,7 +435,7 @@ export async function generate(override?: Partial<ComparisonConfig>) {
 export function applyCandidate(i: number) {
   const cell = cmp.cells[i];
   if (!cmp.open || cell?.status !== 'ready' || !cell.result) return false;
-  if (documentIdentity(doc) !== cmp.signature) {
+  if (documentIdentity(activeSession().doc) !== cmp.signature) {
     setProgress(
       'The editor changed after this snapshot. Close and reopen Compare to avoid overwriting newer edits.',
       true,
@@ -459,12 +444,13 @@ export function applyCandidate(i: number) {
   }
   // Rebuild and routing candidates save a recipe line; warm-start and pass candidates depend on
   // the current drawing and are saved as positions, like any other arrangement.
-  if (fileMode() && cell.source) return applyToFile({ ...cell, source: cell.source });
-  if (fileMode() && fileBlocked()) {
-    setProgress(fileBlocked()!, true);
+  if (activeSession().fileMode() && cell.source)
+    return applyToFile({ ...cell, source: cell.source });
+  if (activeSession().fileMode() && activeSession().fileBlocked()) {
+    setProgress(activeSession().fileBlocked()!, true);
     return false;
   }
-  if (doc.layout.sequence) {
+  if (activeSession().doc.layout.sequence) {
     setProgress(LANES_HOLD, true);
     return false;
   }
@@ -472,9 +458,9 @@ export function applyCandidate(i: number) {
     routing = clone(cell.result.routing),
     report = cell.result.report && clone(cell.result.report),
     label = cell.title,
-    camera = { ...doc.camera };
+    camera = { ...activeSession().doc.camera };
   closeComparison();
-  transact(
+  activeSession().transact(
     'Apply comparison: ' + label,
     d => {
       Object.assign(d, winner);
@@ -483,36 +469,40 @@ export function applyCandidate(i: number) {
     'arrangement',
   );
   batch(() => {
-    setSelection([]);
-    setConnectFrom(null);
-    resetRoutes();
-    setAdoptedRoutes({ fingerprint: routingFingerprint(doc), result: routing });
-    setLayoutReport(report);
+    activeSession().setSelection([]);
+    activeSession().setConnectFrom(null);
+    activeSession().resetRoutes();
+    activeSession().setAdoptedRoutes({
+      fingerprint: routingFingerprint(activeSession().doc),
+      result: routing,
+    });
+    activeSession().setLayoutReport(report);
   });
-  requestAnimationFrame(() => fitView());
+  requestAnimationFrame(() => activeSession().fitView());
   toast('Applied ' + label + ' · one undo restores your starting diagram');
   return true;
 }
 
 /** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
-export const candidateChange = (source: string) => changedLine(source) ?? 'Same as the file';
+export const candidateChange = (source: string) =>
+  activeSession().changedLine(source) ?? 'Same as the file';
 
 /** Save a file candidate's source: its layout recipe or routing line. */
 function applyToFile(cell: Candidate & { source: string }) {
   const label =
     cell.title +
     (cell.subtitle && cell.subtitle !== 'One-parameter sweep' ? ` · ${cell.subtitle}` : '');
-  const blocked = fileBlocked();
+  const blocked = activeSession().fileBlocked();
   if (blocked) {
     setProgress(blocked, true);
     return false;
   }
   const source = cell.source;
   closeComparison();
-  setSelection([]);
-  void commitSource(source, 'Apply comparison: ' + label, label).then(
-    saved => saved && requestAnimationFrame(() => fitView()),
-  );
+  activeSession().setSelection([]);
+  void activeSession()
+    .commitSource(source, 'Apply comparison: ' + label, label)
+    .then(saved => saved && requestAnimationFrame(() => activeSession().fitView()));
   return true;
 }
 

@@ -1,8 +1,6 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import type { WorkspaceFile } from '../server/workspace';
-
 import { openPdfExport } from '../state/files';
-
 import {
   createDiagramFile,
   fileNameFor,

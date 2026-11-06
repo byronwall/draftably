@@ -28,9 +28,7 @@ import {
 } from '../../model/graph';
 import { loadSample } from '../../model/samples';
 import type { Diagram, IntentPlacement, IntentRole, Point, Rect, Side } from '../../model/types';
-
 import { type Tool } from './editor';
-
 import { parseTextId, setTextValue, TEXT_NAMES, textId, textValue } from './canvas-text';
 import { toast } from '../toast';
 import type { ConfirmRequest } from '.';

@@ -4,7 +4,6 @@ import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { EXAMPLES, type ExampleInfo } from '../model/examples';
 import { runCommand } from '../state/commands';
-
 import {
   createDiagramFile,
   exampleUrl,

@@ -14,20 +14,8 @@ import { decodeSource, encodeSource } from '../lib/source-hash';
 import { readImportedSource } from '../import/scratch';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
-import { clearSelection, prepareForEdit, setDoc } from './document';
-import { fitView } from './editor';
-import {
-  agreeToLeave,
-  closeFileSession,
-  DRAFT_ID,
-  currentSource,
-  exampleMode,
-  fileSession,
-  openExampleSession,
-  openFileSession,
-  prefetchFile,
-  settleSave,
-} from './file-session';
+import { DRAFT_ID } from './session/file-session';
+import { activeSession } from './active-session';
 
 export type LaunchMode = 'static' | 'start' | 'file' | 'example';
 
@@ -86,7 +74,7 @@ export const cameFromPlayground = () => {
 
 /** What happens to the source when it goes to the Playground, said before it goes. */
 export function playgroundNote(): string {
-  const file = fileSession();
+  const file = activeSession().fileSession();
   if (!file) return '';
   return file.example
     ? 'The Playground opens in this tab with this source. Your edits here stay in this browser, and Back returns to them.'
@@ -98,9 +86,9 @@ export function playgroundNote(): string {
  * a new tab; an example goes in this tab, since its source is all it has.
  */
 export async function openInPlayground() {
-  const url = `${siteUrl('play')}#${await encodeSource(currentSource())}`;
-  if (!exampleMode()) return void window.open(url, '_blank', 'noopener');
-  agreeToLeave();
+  const url = `${siteUrl('play')}#${await encodeSource(activeSession().currentSource())}`;
+  if (!activeSession().exampleMode()) return void window.open(url, '_blank', 'noopener');
+  activeSession().agreeToLeave();
   location.assign(url);
 }
 
@@ -163,13 +151,13 @@ async function chooseLaunch(): Promise<LaunchMode> {
   const file = params.get('file'),
     exampleId = params.get('example');
   if (file && info) {
-    if (await openFileSession(file)) return 'file';
+    if (await activeSession().openFileSession(file)) return 'file';
     state.setLaunchNotice(`There is no diagram at ${file}.`);
   } else if (file) state.setLaunchNotice('Files open only through `draftably open`.');
   if (exampleId) {
     const example = findExample(exampleId);
     if (example) {
-      await openExampleSession(example.id, example.title, example.source);
+      await activeSession().openExampleSession(example.id, example.title, example.source);
       return 'example';
     }
     state.setLaunchNotice(`There is no example named ${exampleId}.`);
@@ -179,7 +167,7 @@ async function chooseLaunch(): Promise<LaunchMode> {
     const source = readImportedSource(imported);
     if (source != null) {
       const title = /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Imported diagram';
-      await openExampleSession(DRAFT_ID, title, source, `import:${imported}`);
+      await activeSession().openExampleSession(DRAFT_ID, title, source, `import:${imported}`);
       return 'example';
     }
     state.setLaunchNotice('This imported diagram is no longer available in this browser.');
@@ -188,7 +176,7 @@ async function chooseLaunch(): Promise<LaunchMode> {
   if (shared != null) {
     const title = /^diagram\s+"([^"]*)"/m.exec(shared)?.[1] || 'Shared diagram';
     const id = params.has('new') ? DRAFT_ID : 'shared';
-    await openExampleSession(id, title, shared, location.hash.slice(1));
+    await activeSession().openExampleSession(id, title, shared, location.hash.slice(1));
     return 'example';
   }
   return info ? 'start' : 'static';
@@ -232,25 +220,30 @@ export async function go(url: string, { push = true } = {}) {
   const next = new URL(url, location.href);
   const file = next.searchParams.get('file');
   const toStart = next.pathname === location.pathname && !next.search;
-  if (next.origin !== location.origin || !state.workspace() || exampleMode() || (!file && !toStart))
+  if (
+    next.origin !== location.origin ||
+    !state.workspace() ||
+    activeSession().exampleMode() ||
+    (!file && !toStart)
+  )
     return location.assign(url);
-  prepareForEdit();
+  activeSession().prepareForEdit();
   for (const handler of leaveHandlers) handler();
-  await settleSave();
+  await activeSession().settleSave();
   if (file) {
-    const switching = fileSession()?.file !== file;
-    if (switching && !(await openFileSession(file))) return location.assign(url);
+    const switching = activeSession().fileSession()?.file !== file;
+    if (switching && !(await activeSession().openFileSession(file))) return location.assign(url);
     if (push) history.pushState(null, '', next.href);
     state.setStartOpen(false);
     if (switching) {
-      clearSelection();
-      setDoc('collapsed', []);
+      activeSession().clearSelection();
+      activeSession().setDoc('collapsed', []);
       // The new drawing is projected in this same task, so it never paints at the old camera.
-      fitView();
+      activeSession().fitView();
     }
     state.setView('file');
   } else {
-    closeFileSession();
+    activeSession().closeFileSession();
     if (push) history.pushState(null, '', next.href);
     document.title = 'draftably';
     state.setView('start');
@@ -283,10 +276,10 @@ export function navigateInPlace() {
     const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
     const file = link && state.workspace() && new URL(link.href).searchParams.get('file');
     clearTimeout(hover);
-    if (!file || prefetched.has(file) || file === fileSession()?.file) return;
+    if (!file || prefetched.has(file) || file === activeSession().fileSession()?.file) return;
     hover = setTimeout(() => {
       prefetched.add(file);
-      void prefetchFile(file);
+      void activeSession().prefetchFile(file);
     }, 80);
   };
   document.addEventListener('click', onClick);

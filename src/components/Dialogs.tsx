@@ -1,9 +1,7 @@
 import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
-
 import { commandEnabled, runCommand } from '../state/commands';
-
 import { siteUrl } from '../state/launch';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';

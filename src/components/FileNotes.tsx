@@ -1,6 +1,5 @@
 import { createMemo, createSignal, For, Show } from 'solid-js';
 import { findConflicts } from '../dsl/conflicts';
-
 import { useDiagramSession } from './session-context';
 
 /**

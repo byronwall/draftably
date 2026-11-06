@@ -12,9 +12,7 @@ import {
   type Command,
   type CommandId,
 } from '../state/commands';
-
 import { ROUTE_PRESETS, type RoutePreset } from '../state/session/routing';
-
 import { Checkbox, RangeField, SelectField, tip } from './controls';
 import { IntentSummary } from './Inspector';
 import { useDiagramSession } from './session-context';

@@ -1,8 +1,7 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-
-import { registerSceneElement, openFile } from '../../state/files';
-
+import { openFile } from '../../state/files';
 import { runCommand } from '../../state/commands';
+import { setActiveSession } from '../../state/active-session';
 import { toast } from '../../state/toast';
 import { openMenu } from '../../state/ui';
 import { BrushDock } from '../sculpt/BrushDock';
@@ -17,7 +16,6 @@ import { Frame } from './Frame';
 import { Notes } from './Notes';
 import { TextHits } from './TextHits';
 import { StateBar } from './StateBar';
-
 import { ZoomControls } from './ZoomControls';
 import { LayoutPreviewBar } from '../LayoutPreviewBar';
 import { Icon } from '../Icon';
@@ -38,7 +36,6 @@ export function Canvas() {
 
   onMount(() => {
     s.registerCanvas(svg);
-    registerSceneElement(world);
     const observer = new ResizeObserver(([entry]) =>
       s.setStageSize({ width: entry.contentRect.width, height: entry.contentRect.height }),
     );
@@ -103,11 +100,15 @@ export function Canvas() {
     >
       <svg
         ref={svg}
+        onFocusIn={() => setActiveSession(s)}
         class="canvas"
         role="application"
         tabindex="0"
         aria-label={CANVAS_LABEL}
-        onPointerDown={s.onPointerDown}
+        onPointerDown={e => {
+          setActiveSession(s);
+          s.onPointerDown(e);
+        }}
         onPointerMove={s.onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={() => s.resetModifiers()}

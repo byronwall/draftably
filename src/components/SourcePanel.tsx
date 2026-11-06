@@ -1,5 +1,4 @@
 import { createEffect, createSignal, Index, onCleanup, Show } from 'solid-js';
-
 import { toast } from '../state/toast';
 import { Icon } from './Icon';
 import { tip } from './controls';

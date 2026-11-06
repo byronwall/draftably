@@ -28,11 +28,11 @@ import {
   type CameraMode,
 } from '../../state/comparison';
 import { exportComparisonSvg, exportExperiment } from '../../state/comparison-export';
-import { fileMode } from '../../state/file-session';
 import { Checkbox, Field, IconButton, Select, SelectField, tip } from '../controls';
+import { activeSession } from '../../state/active-session';
 
 /** Rebuild candidates in a file are source variants: they read only what a `layout` line says. */
-const sourceRun = () => fileMode() && comparison.config!.run === 'rebuild';
+const sourceRun = () => activeSession().fileMode() && comparison.config!.run === 'rebuild';
 
 /** The parameters a comparison can vary: in a source run, those a `layout` line can store. */
 function savedAxes<T>(params: Record<string, T>) {
@@ -157,7 +157,7 @@ function Settings() {
               ]}
               onChange={kind => ensureAxes({ kind })}
             />
-            <Show when={!fileMode()}>
+            <Show when={!activeSession().fileMode()}>
               <Checkbox
                 label="Release fixed port sides"
                 checked={config().autoPorts}

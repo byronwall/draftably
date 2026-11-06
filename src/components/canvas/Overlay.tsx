@@ -4,9 +4,7 @@ import { center } from '../../model/geometry';
 import { findNode, isGroup, styleOf } from '../../model/graph';
 import { portPoint, sideToward, SIDE_VECTORS } from '../../model/routes';
 import type { NodeLayout, Side } from '../../model/types';
-
 import { roundedPath } from '../../model/geometry';
-
 import { useDiagramSession } from '../session-context';
 
 /** Temporary drawing on top of the diagram: gestures, connection previews and brush feedback. */
