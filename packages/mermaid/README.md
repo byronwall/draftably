@@ -60,6 +60,9 @@ returns `renderer: 'draftably' | 'mermaid'` beside Mermaid's `svg` and `diagramT
 
 - The conversion keeps nodes, groups, labels, connections and sequences. It recomputes the layout,
   and it drops Mermaid `classDef` styling, click callbacks and activation bars. See
-  [Import diagrams](https://github.com/byronwall/draftably/blob/main/docs/IMPORTING.md).
+  [Import diagrams](https://draftably.dev/docs/import).
 - Server-side Mermaid renderers such as GitHub's do not load page scripts, so this package cannot
   change them.
+
+[Switch from Mermaid](https://draftably.dev/docs/from-mermaid) covers every route, including
+Markdown builds and `draftably migrate`.

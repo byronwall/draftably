@@ -9,7 +9,7 @@ It distinguishes custom build integrations from native support on hosted platfor
 [Plan and original Pro assets (archived)](https://github.com/byronwall/draftably/tree/525e8807e1f05a528a973757714bf0584d94594a/docs/intent/embedding-ecosystem) ·
 [Run record](embedding-ecosystem-2026-11-03/run.md)
 
-Status: shipped as `@draftably/runtime` and `@draftably/markdown`; see [Use Draftably in your project](../integrations/README.md) and [the closure record](../initiative-history.json).
+Status: shipped as `@draftably/runtime` and `@draftably/markdown`; see [Embed diagrams](https://draftably.dev/docs/embed) and [the closure record](../initiative-history.json).
 
 ## Upstream proposals
 

@@ -1,7 +1,7 @@
-# Render Draftably diagrams in Markdown
+# GitHub Action
 
-GitHub, GitLab and npm do not draw `draft` fences. This action draws them for you. For each
-` ```draft ` fence in your Markdown files, it:
+GitHub, GitLab and npm do not draw `draft` fences. The `render-markdown` action draws them in
+CI. For each ` ```draft ` fence in your Markdown files, it:
 
 1. Renders the fence with the published [`draftably`](https://www.npmjs.com/package/draftably)
    CLI (`draftably inspect --svg`).
@@ -67,7 +67,7 @@ edge e1 web -> api "HTTPS"
 ````
 
 The image is named `<markdown file>-<fence number>.svg`, and its alt text is the diagram title.
-The fence options of the [Markdown plugin](../../docs/integrations/markdown.md) change this:
+The [fence options](#fence-options) change this:
 
 - `id="checkout-flow"` names the image `checkout-flow.svg`. Use it so that adding a fence above
   does not rename the images below.

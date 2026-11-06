@@ -1,21 +1,57 @@
-# Markdown integration
+# Markdown
 
-For a complete first build, start with [Render Markdown](README.md#render-markdown).
-It uses the packaged file store and one async rendering call.
-
-`@draftably/markdown/remark` transforms only parser-recognized code nodes with
-the complete language name `draft`. A fence without attributes is valid:
+`@draftably/markdown` turns `draft` code fences into ordinary SVG images when your site builds.
+Readers load no Draftably JavaScript.
 
 ````markdown
 ```draft
-diagram "Checkout" version=1
 node web "Web app"
 node api "API"
 edge request web -> api "HTTPS"
 ```
 ````
 
-The canonical metadata form uses one brace group and quoted values:
+It has a remark plugin for Unified, MDX, Astro and Docusaurus, and a markdown-it plugin for
+VitePress and others. For a ready setup on a documentation site, follow
+[Documentation sites](#documentation-sites).
+
+## Render your first page
+
+```sh
+pnpm add @draftably/markdown markdown-it
+```
+
+Save this as `render-markdown.ts` and run `node render-markdown.ts`:
+
+````ts
+import { mkdir, writeFile } from 'node:fs/promises';
+import MarkdownIt from 'markdown-it';
+import { createMarkdownItDraft } from '@draftably/markdown/markdown-it';
+import { createFileAssets } from '@draftably/markdown/files';
+
+const assets = createFileAssets({ directory: 'dist/diagrams', publicPath: '/diagrams/' });
+const adapter = createMarkdownItDraft({ emitAsset: assets.emitAsset });
+const md = new MarkdownIt().use(adapter.plugin);
+const source = '```draft\nnode api "API"\n```';
+const { html } = await adapter.render(md, source);
+await mkdir('dist', { recursive: true });
+await writeFile('dist/index.html', html);
+````
+
+Serve `dist/` as the site root. Each fence becomes an `<img>` with alt text and dimensions. For a
+site served under a path, put that path in `publicPath`, such as `/manual/diagrams/`.
+
+With Unified or MDX, keep your processor and add the remark plugin with the same file store:
+
+```ts
+import remarkDraft from '@draftably/markdown/remark';
+
+processor.use(remarkDraft, { emitAsset: assets.emitAsset });
+```
+
+## Fence options
+
+Options go in one brace group after `draft`, with quoted values:
 
 ````markdown
 ```draft {src="./diagrams/checkout.draft" alt="The web app sends requests to the API." caption="Checkout path"}
@@ -23,77 +59,81 @@ The canonical metadata form uses one brace group and quoted values:
 ```
 ````
 
-Only `id`, `alt`, `caption`, `src`, `mode="static"` or
-`mode="interactive"`, and `state` are accepted. Theme and layout belong in the
-`.draft` body. Unknown keys fail. Literal code examples remain code because the
-plugin walks the parsed AST and never scans code contents.
+| Key       | Effect                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------- |
+| `alt`     | Alt text for the image. Without it, the diagram's title is used.                            |
+| `caption` | Wraps the image in a figure with this plain-text caption.                                   |
+| `src`     | Draws a `.draft` file instead of the fence body. Needs `sources.rootDir`.                   |
+| `id`      | A stable name for the image and its anchor.                                                 |
+| `state`   | Draws a declared [emphasis state](#emphasis-states).                                        |
+| `mode`    | `static` (the default) or `interactive`. See [Interactive diagrams](#interactive-diagrams). |
 
-## Unified and MDX
+An unknown or repeated key fails the build. Theme and layout belong in the `.draft` source. A
+fence inside another code block stays code, because the plugin reads the parsed document and never
+looks inside code.
 
-Use the async transformer before code highlighting. The adapter emits ordinary
-image nodes, or a generated figure with a text-only caption. It does not create
-HTML strings, JSX, or executable data. Keep the same durable asset store across
-page-cache hits and builds. The emitter runs on each transform, including warm
-render-cache hits.
+## Assets and includes
 
-Set `sources.rootDir` to the content root to enable `src`. Include resolution
-starts from the containing Markdown file and checks both the lexical path and
-the canonical real path. Missing include paths are reported through
-`onDependency` and the document manifest. A missing dependency also reports
-the nearest existing in-root directory as `watchPath`. Hosts must connect these
-paths to their watcher and keep dependencies with their page cache.
-
-Use a content-addressed emitter and include the site's base path in returned
-URLs. The adapter rejects URL schemes such as `javascript:` and control
-characters. Build output must not expose absolute filesystem paths. Inspect
-`file.data.draftably` for emitted assets, dependencies, and diagnostics.
-
-The default error policy is `fail`. `errors: 'placeholder'` replaces expected
-content, metadata, or include errors with the plain text “Diagram unavailable.”
-Host emitter, dependency callback, and renderer failures still fail the build.
-The placeholder never includes source or an exception stack. Inline SVG is not
-supported.
-
-## markdown-it
-
-markdown-it fence rendering is synchronous. The adapter's `render` method
-bridges async preparation for each document:
+`emitAsset` receives each SVG and returns its public URL. `createFileAssets` from
+`@draftably/markdown/files` is a ready store: it names each file by its content hash and writes it
+once.
 
 ```js
-const adapter = createMarkdownItDraft(options);
-const md = new MarkdownIt().use(adapter.plugin);
+import { createFileAssets } from '@draftably/markdown/files';
+
+const assets = createFileAssets({ directory: '.cache/diagrams', publicPath: '/docs/diagrams/' });
+const options = { emitAsset: assets.emitAsset };
+// After the build:
+await assets.copyTo('dist/diagrams');
+```
+
+Keep the store between builds. A page cache can skip a transform, and `copyTo` puts back every SVG
+that a cached page still links to.
+
+To use `src`, set `sources.rootDir` to your content root. A path resolves from the Markdown file
+that holds the fence and must stay inside the root. Remote paths, absolute paths, other file types
+and symlinks that leave the root are refused. Each included file, even a missing one, is reported
+through `onDependency`, so your watcher can rebuild the page when it changes or appears.
+
+## Errors
+
+A diagram error fails the build and names the Markdown file and line. To keep building, set
+`errors: 'placeholder'`: a broken fence becomes the text "Diagram unavailable." Errors from your
+own `emitAsset` or callbacks still fail the build. Read `file.data.draftably` (remark) or the
+returned `manifest` (markdown-it) for the assets, dependencies and diagnostics of each page.
+
+## markdown-it details
+
+markdown-it renders fences synchronously, so `adapter.render(md, source, env)` does the async work
+first. Pass the page path so `src` includes resolve:
+
+```js
 const env = { draftably: { documentPath: pagePath } };
 const { html, manifest } = await adapter.render(md, markdown, env);
 ```
 
-The low-level API remains available when the host needs it: parse tokens, await
-`adapter.prepare(tokens, env)`, then render those same tokens and environment.
-Separate documents can render at the same time.
+To render tokens yourself, parse, `await adapter.prepare(tokens, env)`, then render those same
+tokens. Separate documents can render at the same time.
 
 ## Mermaid fences
 
-Set `mermaid: 'convert'` to draw existing `mermaid` fences without Mermaid in
-the browser. The option applies to both adapters:
+Set `mermaid: 'convert'` to draw your existing `mermaid` fences too, with no Mermaid in the
+browser. Both plugins take it:
 
 ```js
 const options = { emitAsset: assets.emitAsset, mermaid: 'convert' };
 ```
 
-A fence that holds a `flowchart`, `graph` or `sequenceDiagram` becomes the same
-static SVG image that a `draft` fence gets. Every other Mermaid family, such as
-`pie` or `gantt`, stays a code block, so the site's Mermaid setup still draws
-it. Draftably does not imitate those families.
+A `flowchart`, `graph` or `sequenceDiagram` fence becomes an SVG image like a `draft` fence. Pie,
+gantt and other Mermaid charts stay code blocks, so your Mermaid setup still draws them. A fence
+that does not convert also stays code, with a `DRAFT_MERMAID` warning. The default, `'off'`,
+leaves every `mermaid` fence alone. [Switch from Mermaid](#from-mermaid) has the other routes.
 
-The adapter parses Mermaid with Mermaid 12.2.0 and jsdom in one worker thread
-per build process. It does not load remote resources. If a flowchart or
-sequence does not convert, the fence stays code and the adapter reports a
-`DRAFT_MERMAID` warning through `onDiagnostic` and the manifest. Fence metadata
-after `mermaid` is ignored. The default, `mermaid: 'off'`, leaves every
-`mermaid` fence alone.
+## Interactive diagrams
 
-## Interactive enhancement
-
-Interactive mode needs the host bridge:
+`mode="interactive"` adds zoom, pan and the keyboard outline over the static image. It publishes
+the diagram source in a JSON file, so use it only when the source can be public. Give the plugin
+an `interactive` bridge:
 
 ```js
 interactive: {
@@ -103,39 +143,11 @@ interactive: {
 }
 ```
 
-The host emits the JSON bytes and returns their content-addressed filename and
-public URL. The generated page includes a static SVG image and an empty viewer
-region. Source appears only in the explicit versioned JSON asset. The manifest
-lists that asset and the client module URL.
+`emitInit` writes the JSON and returns its URL. After the page hydrates, load
+`@draftably/markdown/client` and call `enhanceDrafts(root, { policies })`. The client accepts only
+same-origin JSON, mounts the [viewer](#element), and hides the image only after the first drawing.
+On a failure the image stays. `destroy()` stops the work and puts the image back. With Vite, add
+`optimizeDeps: { exclude: ['@draftably/runtime'] }`.
 
-After hydration, load `@draftably/markdown/client` and call
-`enhanceDrafts(root, { policies, onDiagnostic })`. The client accepts only
-same-origin HTTP(S) initialization URLs without redirects and bounded JSON with
-the expected version, key, and policy. It mounts the actual runtime viewer. It hides the
-fallback image only after an update commits. Failed requests and viewer errors
-keep the fallback visible. `destroy()` aborts work, destroys mounted viewers,
-and restores the fallback.
-
-The host controls client loading and viewer policies. The Markdown package
-build keeps the reader entry separate and externalizes
-`@draftably/runtime/viewer`. Static pages do not load client code or runtime
-compiler code.
-
-With Vite, exclude the runtime from dependency optimization so its worker URL
-stays beside the packed viewer entry:
-
-```js
-export default defineConfig({
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
-});
-```
-
-The client rejects initialization redirects. Serve the init JSON from the
-same origin as the page.
-
-## Consumer proof
-
-See [the runnable Unified, MDX, markdown-it, and browser examples](../../integration-examples/unified/README.md).
-The fixture pins `unified@11.0.5`, `remark-parse@11.0.0`,
-`remark-rehype@11.1.2`, `rehype-stringify@10.0.1`, and `@mdx-js/mdx@3.1.1`.
-Run it after packing both `@draftably/runtime` and `@draftably/markdown`.
+The [Unified example](https://github.com/byronwall/draftably/tree/main/integration-examples/unified)
+runs Unified, MDX, markdown-it and the interactive client end to end.

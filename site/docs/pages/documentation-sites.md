@@ -1,43 +1,125 @@
-# Astro and Starlight
+# Documentation sites
 
-This fixture targets Astro 7.4.5, Starlight 0.42.9, and
-`@astrojs/markdown-remark` 7.3.5. It uses the packed `@draftably/runtime` and
-`@draftably/markdown/remark` packages. The package manifest pins proposed
-Draftably version 0.1.0; replace those two dependencies with the packed tarballs
-for a local proof.
+Add `draft` fences to an Astro Starlight, Docusaurus or VitePress site. Each fence becomes an SVG
+image at build time, and readers load no Draftably JavaScript.
 
-Astro 7 uses Sätteri by default. This fixture selects Unified explicitly and
-passes `remarkDraft` through `markdown.processor`; the older top-level
-`markdown.remarkPlugins` setting is deprecated. Starlight uses Astro's Markdown
-processor for its Markdown and MDX pages.
+```sh
+pnpm add @draftably/markdown
+```
 
-The consumer files are in [`integration-examples/astro-starlight`](../../integration-examples/astro-starlight/README.md).
-The included `.draft` file is inside the configured `sources.rootDir`, so the
-fence resolves `./request.draft` relative to its Markdown file.
+| Site                   | Tested version | How it plugs in                                 | Example                                                                                                  |
+| ---------------------- | -------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Astro 7 with Starlight | 7.4.5, 0.42.9  | Remark plugin through Astro's Unified processor | [astro-starlight](https://github.com/byronwall/draftably/tree/main/integration-examples/astro-starlight) |
+| Docusaurus 3           | 3.10.2         | Remark plugin in the docs preset                | [docusaurus](https://github.com/byronwall/draftably/tree/main/integration-examples/docusaurus)           |
+| VitePress 1            | 1.6.4          | A prebuild step writes image Markdown           | [vitepress](https://github.com/byronwall/draftably/tree/main/integration-examples/vitepress)             |
 
-`createFileAssets` from `@draftably/markdown/files` writes content-addressed SVGs
-to a persistent ignored store. The recipe sets `directory` to the asset folder
-and `publicPath` to `/manual/_draftably/`. It needs no custom file writer.
-Astro's dev hook serves that store under `/manual/_draftably/`, adds included
-files to Vite's watcher, and restarts the dev server when an included file
-changes. The build hook calls `assets.copyTo()` with `dist/_draftably/`, which
-also restores SVGs when a cached page transform does not run. If a nested
-include is missing, creating its parent directories and file restarts the dev
-server and refreshes the page.
+Each example is a complete site you can copy. It serves under `/manual/`, so you can see how the
+base path flows into image URLs.
 
-Run `pnpm dev`, open `/manual/`, and edit `src/content/docs/request.draft`.
-Then run `pnpm build` and confirm the image resolves under the nested base path.
+## The shared setup
 
-## Official references
+Every recipe does the same three things:
 
-- [Astro Unified processor](https://docs.astro.build/en/reference/markdown-processors/unified/)
-- [Astro build and server hooks](https://docs.astro.build/en/reference/integrations-reference/)
-- [Starlight Markdown configuration](https://starlight.astro.build/guides/authoring-content/)
-- [Astro 7.4 release](https://astro.build/blog/astro-740/)
-- [Starlight releases](https://github.com/withastro/starlight/releases)
+1. **Store the images.** `createFileAssets` writes each SVG to a folder that persists between
+   builds, named by its content hash. Keep that folder out of git.
+2. **Add the remark plugin** with the store and your content root, so `src="./file.draft"` works.
+3. **Publish the store.** Serve the folder in development and copy it into the build output.
 
-The packed consumer built under Node 24.21.0. Editing the included source
-changed the asset hash, and deleting `dist/` then rebuilding restored the SVG
-from the persistent store. The dev server served the SVG at the `/manual/` base.
-Editing the included source restarted the server, changed the rendered hash,
-and returned the new SVG with HTTP 200.
+```js
+import remarkDraft from '@draftably/markdown/remark';
+import { createFileAssets } from '@draftably/markdown/files';
+
+const assets = createFileAssets({
+  directory: '.cache/draftably/public/_draftably',
+  publicPath: '/manual/_draftably', // your site's base, then the folder
+});
+const draftOptions = {
+  emitAsset: assets.emitAsset,
+  sources: { rootDir: 'docs' },
+};
+// After the build: await assets.copyTo('<build output>/_draftably');
+```
+
+Copying after every build matters: when a site caches a page, the plugin does not run for it, and
+`copyTo` still puts its image back. [Markdown](#markdown) explains each option.
+
+## Astro and Starlight
+
+Astro 7 uses its own Markdown processor by default. Select Unified and pass the plugin there;
+Starlight uses the same processor for its Markdown and MDX pages:
+
+```js
+import { unified } from '@astrojs/markdown-remark';
+
+export default defineConfig({
+  base: '/manual/',
+  integrations: [starlight({ title: 'Docs' }), draftablyAssets],
+  markdown: {
+    processor: unified({ remarkPlugins: [[remarkDraft, draftOptions]] }),
+  },
+});
+```
+
+The example's `draftablyAssets` integration does the publishing. Its `astro:server:setup` hook
+serves the store under `/manual/_draftably/` and restarts the dev server when an included `.draft`
+file changes. Its `astro:build:done` hook calls `assets.copyTo()`. Use Astro's `markdown.processor`
+setting; the older top-level `markdown.remarkPlugins` is deprecated.
+
+## Docusaurus
+
+Add the plugin to the docs preset. Docusaurus reads a CommonJS config, so import Draftably's ES
+modules dynamically:
+
+```js
+module.exports = async function createConfig() {
+  const { default: remarkDraft } = await import('@draftably/markdown/remark');
+  // …createFileAssets and draftOptions as above
+  return {
+    baseUrl: '/manual/',
+    staticDirectories: ['static', '.cache/draftably/public'],
+    presets: [['classic', { docs: { remarkPlugins: [[remarkDraft, draftOptions]] } }]],
+    plugins: [
+      () => ({
+        name: 'draftably-assets',
+        getPathsToWatch: () => ['docs/**/*.draft'],
+        postBuild: ({ outDir }) => assets.copyTo(`${outDir}/_draftably`),
+      }),
+    ],
+  };
+};
+```
+
+`staticDirectories` serves the store in development. Two Docusaurus caches need care:
+
+- Its MDX cache does not know about included `.draft` files. Clear it before a production build,
+  as the example's `build` script does.
+- In development, an edit to an included `.draft` file does not rerun the page. The example's dev
+  script touches the Markdown file when a `.draft` file next to it changes.
+
+Use the standard webpack build. The faster Rspack build kept a stale image after an include
+changed. On a site with several locales, use each locale's base URL in `publicPath`.
+
+## VitePress
+
+VitePress renders Markdown synchronously, so it cannot wait for a diagram. Run the remark plugin
+before VitePress starts and let VitePress read the result:
+
+```js
+const result = await unified()
+  .use(remarkParse)
+  .use(remarkDraft, { ...draftOptions, emitAsset: assets.emitAsset })
+  .use(remarkStringify)
+  .process({ path, value: await readFile(path, 'utf8') });
+await writeFile('generated-docs/index.md', String(result));
+```
+
+Point VitePress at `generated-docs/`, and write the store to `generated-docs/public/_draftably/`
+with `publicPath: '/_draftably'`. VitePress adds its own base when it builds the page. Run the step
+in your `build` script (`node scripts/prepare.mjs && vitepress build .`). The example's dev script
+reruns it when a Markdown or `.draft` file changes. Keep `generated-docs/` out of git.
+
+## Other sites
+
+A site with a Unified or markdown-it pipeline can use the plugins directly: see
+[Markdown](#markdown). For MkDocs, Pandoc or a host you do not control, commit SVG images with
+`draftably inspect --svg`, or let the [GitHub Action](#github-action) draw them.

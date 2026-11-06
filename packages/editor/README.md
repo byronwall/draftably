@@ -19,9 +19,8 @@ import '@draftably/editor/element';
 Listen for `draft-change`; its `detail` is the new source. Set `source` to load other text. Give
 the element a height; it is 28rem by default. Its styles apply only inside the editor.
 
-In React, Solid, Vue or Svelte, use `DraftEditor` from `@draftably/react/editor`,
-`@draftably/solid/editor`, `@draftably/vue/editor` or `@draftably/svelte/editor`. See
-[Use with your framework](https://draftably.dev/docs/frameworks).
+In React, Solid, Vue or Svelte, use `DraftEditor` from `@draftably/react/editor` and the
+others. For your own lifecycle, call `mountEditor(host, { source, onChange })`.
 
-For your own lifecycle, call `mountEditor(host, { source, onChange })`. It returns `source()`,
-`update(source)` and `destroy()`.
+[Editor component](https://draftably.dev/docs/editor-component) has the options and the framework
+props.

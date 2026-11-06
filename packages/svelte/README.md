@@ -8,5 +8,5 @@ cleanup when it unmounts. Any number of diagrams can share a page.
 pnpm add @draftably/svelte
 ```
 
-See [Use with your framework](https://draftably.dev/docs/frameworks) for the component, server
+See [Frameworks](https://draftably.dev/docs/frameworks) for the component, server
 rendering with the `svg` prop, and a complete example.

@@ -134,7 +134,7 @@ source file is newer than `dist-cli/`.
 
 `packages/markdown/` owns shared fence metadata, local-source resolution, diagnostics, and static asset preparation. Its remark and markdown-it adapters map host syntax to that core. The optional browser client adds the independent viewer and owns its cleanup. Host adapters own file identity, asset publication, cache replay, and public URLs; they do not implement another compiler.
 
-See [integration support](integrations/support.md) for proof and publication status, plus the [runtime](integrations/runtime.md), [Markdown](integrations/markdown.md), [viewer](integrations/viewer.md), and [contributor](integrations/contributing.md) guides.
+The user guides live on the site: [Support](https://draftably.dev/docs/support), [Render SVG](https://draftably.dev/docs/render-svg), [Markdown](https://draftably.dev/docs/markdown), [Element and viewer](https://draftably.dev/docs/element) and [Build an adapter](https://draftably.dev/docs/build-an-adapter). Their source is in `site/docs/pages/`.
 
 ## editor/ — the embeddable editor
 

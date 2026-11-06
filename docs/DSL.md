@@ -1114,7 +1114,7 @@ Editor. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ### skill
 
-`skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
+`skill install` copies the agent skill in [`skills/draftably`](https://github.com/byronwall/draftably/tree/main/skills/draftably), which
 teaches coding agents to write and check `.draft` files. `--global` installs it under
 `~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
 `npx skills add byronwall/draftably` installs the same skill from the repository.
@@ -1138,7 +1138,7 @@ scratch diagram. The format is stable, so other tools can read it:
   diagram's title as its description. `check`, `extract` and `open` read every attachment whose
   name ends in `.draft`; `diagrams.pdf#checkout.draft` names one.
 
-Hosts that recompress images drop the PNG chunk. The [README](../README.md#review-refine-and-share)
+Hosts that recompress images drop the PNG chunk. [Save, share and reopen](https://draftably.dev/docs/saving)
 has more on this.
 
 ### Layout variants

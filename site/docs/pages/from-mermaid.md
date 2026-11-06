@@ -76,11 +76,11 @@ The conversion keeps nodes, groups, labels and connections, and recomputes the l
 ## Markdown you build
 
 For a static site with no diagram JavaScript, add the
-[Markdown plugin](https://github.com/byronwall/draftably/blob/main/docs/integrations/markdown.md) with `mermaid: 'convert'`.
+[Markdown plugin](#mermaid-fences) with `mermaid: 'convert'`.
 Your existing `mermaid` flowcharts and sequences become ordinary SVG images at build time, and
 `draft` fences work beside them. Other Mermaid families stay code blocks, so keep your Mermaid
-setup for those. Host recipes:
-[Astro Starlight](https://github.com/byronwall/draftably/blob/main/docs/integrations/astro-starlight.md), [Docusaurus](https://github.com/byronwall/draftably/blob/main/docs/integrations/docusaurus.md), [VitePress](https://github.com/byronwall/draftably/blob/main/docs/integrations/vitepress.md).
+setup for those. [Documentation sites](#documentation-sites) has recipes for Astro Starlight,
+Docusaurus and VitePress.
 
 ## GitHub and other hosted Markdown
 
@@ -100,7 +100,7 @@ draftably inspect architecture.draft --svg > architecture.svg
 ### Keep the images current with a GitHub Action
 
 To skip the manual export, write `draft` fences in your README and docs and let CI draw them. The
-[render-markdown action](https://github.com/byronwall/draftably/tree/main/actions/render-markdown)
+[render-markdown action](#github-action)
 renders each fence to an SVG beside the Markdown file and adds an image link under the fence. A
 rerun updates the link in place. Add a commit step after it:
 
@@ -111,7 +111,7 @@ rerun updates the link in place. Add a commit step after it:
 - uses: stefanzweifel/git-auto-commit-action@v5
 ```
 
-The action's README has the full workflow and the fence options.
+[GitHub Action](#github-action) has the full workflow and the fence options.
 
 ## Convert the source
 
@@ -152,4 +152,4 @@ draftably import checkout.mmd --output checkout.draft
 
 Every edge has an ID, so a label can change without breaking a reference. The
 [language reference](#overview) covers layout rules, emphasis states and themes, which Mermaid
-does not have. [Import diagrams](https://github.com/byronwall/draftably/blob/main/docs/IMPORTING.md) lists every conversion warning.
+does not have. [Import diagrams](#import) lists every conversion warning.

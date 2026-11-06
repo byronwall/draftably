@@ -16,7 +16,8 @@ export interface Entry {
   keys: string;
 }
 
-const ENTRIES: Entry[] = PAGES.flatMap(page => {
+// The docs home only links to other pages, so a match there would hide the page it points to.
+const ENTRIES: Entry[] = PAGES.filter(p => p.slug !== 'start').flatMap(page => {
   const lead = plain(page.lead);
   const out: Entry[] = [{ page, text: lead, prose: lead.toLowerCase(), code: '', keys: '' }];
   for (const t of page.tokens) {

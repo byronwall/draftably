@@ -1,22 +1,45 @@
-# Native SVG runtime
+# Render SVG
 
-The runtime compiles `.draft` text asynchronously and returns an SVG string. It shares the native compiler and drawing code with the CLI. Image output embeds the bundled fonts used by its theme.
+`@draftably/runtime` turns `.draft` text into an SVG string in Node or a browser. Use it in a
+script, a build step or a server route. It uses the same compiler and renderer as the CLI.
+
+```sh
+pnpm add @draftably/runtime
+```
+
+The package has no runtime dependencies, DOM shim or install scripts. It needs Node 22.21 or later
+and is ES modules only, so a script needs `"type": "module"` in its `package.json`.
 
 ## Render
 
+Save this as `render.ts` and run `node render.ts`:
+
 ```ts
+import { writeFile } from 'node:fs/promises';
 import { renderSvg } from '@draftably/runtime';
 
-const result = await renderSvg('node web "Web"\n');
-if (result.ok) {
-  console.log(result.value.svg);
-  console.log(result.value.width, result.value.height);
-}
+const result = await renderSvg('node api "API"');
+if (!result.ok) throw new Error(JSON.stringify(result.diagnostics));
+await writeFile('api.svg', result.value.svg);
+console.log(`Wrote api.svg (${result.value.width} × ${result.value.height})`);
 ```
 
-The result contains a detached summary with the title, size, viewBox, source item IDs, labels, lines, edge endpoints, emphasis states, and active state. It does not expose the compiled scene or editor document.
+The SVG embeds the fonts it uses. Serve it as an ordinary image. Links and source metadata are off
+until you turn them on.
 
-Links and raw source metadata are disabled by default. `state` selects a declared emphasis state. `sourceId` labels diagnostic locations. `signal` requests cooperative cancellation; compilation can finish before cancellation is observed because it runs on the current thread.
+The result also holds a summary: the title, size, viewBox, item IDs, labels, lines, edge endpoints
+and emphasis states. It does not expose the compiled scene.
+
+| Option        | Effect                                                                            |
+| ------------- | --------------------------------------------------------------------------------- |
+| `state`       | Draws a declared [emphasis state](#emphasis-states).                              |
+| `sourceId`    | Names the source in diagnostics, such as `architecture.draft`.                    |
+| `signal`      | Asks to cancel. Compilation runs on the calling thread, so it can finish first.   |
+| `title`       | Accessible title text in the SVG.                                                 |
+| `description` | Accessible description text in the SVG.                                           |
+| `styleNonce`  | A nonce for the generated style element, for your CSP.                            |
+| `links`       | The link policy. See [Links](#links-and-source).                                  |
+| `target`      | `'inline'` for SVG pasted into an HTML page. See [Inline output](#inline-output). |
 
 ## Validate
 
@@ -26,30 +49,65 @@ import { validate } from '@draftably/runtime';
 const result = await validate('node web "Web"\n', { sourceId: 'architecture.draft' });
 ```
 
-Validation runs the asynchronous compiler, including native layout engines. It returns structured diagnostics with stable `DRAFT_*` categories, messages, source lines, optional source IDs, and item IDs. It does not produce SVG.
+Validation runs the full compiler, including the layout engines, and returns structured
+diagnostics without SVG. Each diagnostic has a stable `DRAFT_*` category, a message, the source
+line, the optional source ID and the item IDs.
 
-## Limits and text
+## Inline output
 
-Pass positive integer limits to reduce work and output size. Overrides cannot exceed the native ceilings: 300,000 source characters, 1,000,000 UTF-8 source bytes, 500 nodes and groups, 1,200 edges, containment depth 12, and 8,000,000 UTF-8 SVG bytes. The SVG writer checks output bytes as chunks arrive. This does not bound all compiler memory. Validation accepts compile limits only. Invalid limit values throw `RangeError`; a non-string source throws `TypeError`.
+An image file can repeat IDs. SVG pasted into a page cannot, so give each inline diagram its own
+prefix:
 
-XML-invalid source characters and invalid characters decoded from quoted labels return `DRAFT_TEXT_INVALID`. Expected syntax, compilation, limit, and cancellation failures are structured results. Unexpected implementation failures return `DRAFT_INTERNAL` without a stack trace.
+```ts
+const result = await renderSvg(source, {
+  target: 'inline',
+  idPrefix: 'checkout-one',
+  description: 'The web app calls the API and saves an order.',
+});
+```
 
-## Inline output and fonts
+A prefix matches `[A-Za-z][A-Za-z0-9_-]{0,63}`. Every SVG ID, reference and link style uses it.
+This is the form for [server rendering](#server-rendering) in a framework.
 
-Use `{ target: 'inline', idPrefix: 'checkout-one' }` for each inline instance. Prefixes must match `[A-Za-z][A-Za-z0-9_-]{0,63}`. The host must assign a unique prefix per instance. All SVG IDs, references, and link styles use that prefix.
+Image output always embeds its fonts. Inline output can use `fonts: 'host'` with the package's
+`@draftably/runtime/fonts.css`. Font family names include a hash of the font files, so they never
+collide with an older copy.
 
-Image output requires embedded fonts. Inline output can use `fonts: 'host'` with the exact distributed `fonts.css`. Font family names include the identity of the bundled font files and metric table. Embedded font data loads only when rendering needs it.
+## Links and source
 
-## Links, accessibility, and source
+Links default to `{ mode: 'none' }`. To allow HTTP(S) destinations, set
+`links: { mode: 'safe', baseUrl: 'https://example.com/docs/' }`. Relative destinations need that
+base. A `link-base` written in the file cannot change this policy. A host
+`resolve({ itemId, href })` callback can return a replacement or `null`; the HTTP(S) check always
+applies to the result. A callback that throws rejects the render.
 
-Links default to `{ mode: 'none' }`. To permit HTTP(S) destinations, use `links: { mode: 'safe', baseUrl: 'https://example.com/docs/' }`. Relative destinations need that host base. Authored `link-base` cannot change this policy. A host `resolve({ itemId, href })` callback can return a replacement or `null`; final HTTP(S) validation always applies. A throwing callback rejects the render promise.
+Safe links open in `_self`. `target: '_blank'` adds `noopener noreferrer`. A denied link loses its
+anchor and mark, and its destination does not show in tooltips.
 
-Safe links open in `_self` by default. `target: '_blank'` adds `noopener noreferrer`. Denied links lose their anchor and mark. Their destinations do not appear in tooltips.
+`includeSource: true` adds `.draft` source metadata, so `draftably open` can edit the SVG later.
+It can expose comments and paths written in the source, so it is off by default.
 
-`title` and `description` add accessible text to the SVG. They accept plain text and reject XML-invalid characters. `styleNonce` applies a host nonce to the generated style element. The surrounding page must also permit embedded font data, or use host fonts under its CSP.
+## Limits and errors
 
-`includeSource: true` adds recoverable `.draft` source metadata. It can expose comments and paths authored in the source. The default omits this metadata; diagnostic `sourceId` is never included. The source reader accepts legacy metadata and the new namespaced form.
+Pass positive integer limits to reduce work and output size. They cannot go above the built-in
+ceilings:
 
-Successful results include runtime, DSL, font, and render-context identities in `provenance`. They describe this result; they are not a public compiled-scene format. The package ships ESM, TypeScript declarations, exact font assets, and a no-bundler browser entry.
+| Limit                | Ceiling   |
+| -------------------- | --------- |
+| Source characters    | 300,000   |
+| Source bytes (UTF-8) | 1,000,000 |
+| Nodes and groups     | 500       |
+| Edges                | 1,200     |
+| Containment depth    | 12        |
+| SVG output bytes     | 8,000,000 |
 
-The optional viewer is a separate import. See [viewer integration](viewer.md) for mount, update, cleanup, and framework recipes.
+The SVG writer checks output bytes as it writes. The limits do not cap all compiler memory.
+Validation takes compile limits only. An invalid limit throws `RangeError`, and source that is not
+a string throws `TypeError`.
+
+Syntax, compile, limit and cancel failures return structured results, not exceptions. Characters
+that are not valid XML return `DRAFT_TEXT_INVALID`. An unexpected failure returns `DRAFT_INTERNAL`
+without a stack trace.
+
+For an interactive diagram on a page, use the [element and viewer](#element) from the same
+package.

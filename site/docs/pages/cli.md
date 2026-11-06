@@ -1,4 +1,4 @@
-# CLI
+# CLI guide
 
 `draftably` checks, formats, draws and edits `.draft` files, and serves the editor. Run any
 command with `--help` for its own options, and `draftably --version` for the version.

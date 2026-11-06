@@ -1,38 +1,58 @@
-# Integration support
+# Support
 
-Status on 2026-11-05. Each surface has packed-package and browser proofs in CI. `@draftably/runtime` and `@draftably/markdown` publish to npm with the CLI. No provider plugin is installed.
+What each package does, where it is tested, and what is not supported yet. Every package needs
+Node 22.21 or later and is ES modules only.
 
-| Surface                      | Verified behavior                                                                                                                                                                           | Availability                                                                                    |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Native runtime               | Packed Node, strict TypeScript, and nested-path browser consumers render portable SVG.                                                                                                      | `@draftably/runtime` on npm.                                                                    |
-| Static Markdown              | Packed Unified, MDX, and markdown-it consumers emit accessible SVG images and restore cached assets.                                                                                        | `@draftably/markdown` on npm.                                                                   |
-| Independent viewer           | Packed workers, React Strict Mode, Solid cleanup, keyboard controls, and 390-pixel inspection pass.                                                                                         | Optional runtime entry. Vue and Svelte have recipes, without wrapper packages.                  |
-| Mermaid drop-in              | A Vite app and a stock Docusaurus 3.10.2 site with `@docusaurus/theme-mermaid` draw Mermaid flowcharts and sequences with Draftably. Mermaid's CDN snippet works with only the URL changed. | `@draftably/mermaid` on npm.                                                                    |
-| Diagram element              | Packed Vite and browser imports provide automatic styles, source updates, fallback, and cleanup.                                                                                            | Optional `@draftably/runtime/element` entry.                                                    |
-| Markdown client              | Visible enhancement and restore controls, static fallback, cancellation, and late-result handling pass.                                                                                     | Optional adapter entry; browser recompilation discloses source.                                 |
-| Host recipes                 | Production and development include-edit builds pass. Chrome 156 checks confirm SVG load, alt text, and reload.                                                                              | Exact pins are listed below.                                                                    |
-| Generated-image bridge       | Existing SVG and PNG exports can accompany source links.                                                                                                                                    | Useful for readers without a Draftably adapter, including MkDocs and Pandoc workflows.          |
-| Installed plugins            | No plugin release is part of this stack.                                                                                                                                                    | VS Code and Obsidian integrations need separate implementation and release.                     |
-| Native provider support      | This work adds no external provider integration.                                                                                                                                            | Use images and source links for GitHub, GitLab, npm pages, Slack, and generic Markdown readers. |
-| Preview and embed prototypes | No implementation is included.                                                                                                                                                              | VS Code preview, self-hosted iframe, and Kroki remain proposed experiments.                     |
+## Packages
 
-## Qualified hosts
+| Package                                         | Use it to                                                   | Guide                                                     |
+| ----------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------- |
+| `draftably`                                     | Check, draw and edit `.draft` files from the terminal       | [CLI](#cli)                                               |
+| `@draftably/runtime`                            | Render SVG; show the `<draft-diagram>` element or a viewer  | [Render SVG](#render-svg), [Element and viewer](#element) |
+| `@draftably/react`, `/solid`, `/vue`, `/svelte` | Show or edit a diagram in a component                       | [Frameworks](#frameworks)                                 |
+| `@draftably/editor`                             | Put the drag-and-drop editor in your page                   | [Editor component](#editor-component)                     |
+| `@draftably/markdown`                           | Turn `draft` and `mermaid` fences into images at build time | [Markdown](#markdown)                                     |
+| `@draftably/mermaid`                            | Draw your Mermaid flowcharts and sequences with Draftably   | [Switch from Mermaid](#from-mermaid)                      |
 
-Proofs use Node 24.21.0 and Chromium. The independent browser review uses Chrome 156.
+Every package draws with the same compiler and renderer, so a diagram looks the same in each.
 
-- Astro 7.4.5, Starlight 0.42.9, and `@astrojs/markdown-remark` 7.3.5.
-- Docusaurus 3.10.2 and React 19.2.0.
-- VitePress 1.6.4 with generated-image preprocessing.
+## Tested hosts
 
-Docusaurus uses standard webpack and clears the MDX cache before production builds. Its development wrapper covers one page, direct includes, and one locale. Faster caching did not pass the include-edit check.
+CI installs the packed packages into real projects and drives them in Chromium:
 
-VitePress prepares image Markdown before its synchronous site pipeline. Astro and VitePress also recover when a missing nested include is created during development. These results apply to the pinned fixtures, not every host configuration.
+| Host                              | What passes                                                                               |
+| --------------------------------- | ----------------------------------------------------------------------------------------- |
+| Node and strict TypeScript        | `renderSvg` and `validate`, under a nested base path                                      |
+| Vite                              | Element, viewer, worker loading, source updates, fallback and cleanup                     |
+| React 19, Solid, Vue 3, Svelte 5  | Production build, server render, three diagrams and two editors per page                  |
+| Unified, MDX, markdown-it         | Static images with alt text; cached assets restored                                       |
+| Astro 7.4.5 with Starlight 0.42.9 | Production build and include edits in development                                         |
+| Docusaurus 3.10.2                 | Production build, include edits, and `@docusaurus/theme-mermaid` with the Mermaid drop-in |
+| VitePress 1.6.4                   | Production build and include edits through the prebuild step                              |
+| Mermaid's CDN snippet             | Flowcharts and sequences, with only the import URL changed                                |
 
-## Choose a route
+The viewer passes keyboard checks and a 390 px wide check. The [Documentation sites](#documentation-sites)
+recipes list the caveats for each site.
 
-- **A site build you control:** follow a pinned recipe and provide its asset emitter.
-- **A reader you do not control:** publish an image with a link to the `.draft` source. Use PNG where SVG is blocked.
-- **A new adapter:** follow the [contributor guide](contributing.md) and run the shared fixtures.
-- **Interactive display:** keep the static image until the viewer commits and restore it during cleanup.
+## Not supported yet
 
-[Checks](../CHECKS.md#portable-runtime) lists the proof commands.
+- **Hosted Markdown.** GitHub, GitLab and npm draw diagrams on their own servers. Commit an SVG
+  with `draftably inspect --svg`, or let the [GitHub Action](#github-action) do it.
+- **Editor plugins.** There is no VS Code or Obsidian extension.
+- **MkDocs and Pandoc.** There is no plugin. Use committed SVG or PNG images.
+
+To build an integration for another host, read [Build an adapter](#build-an-adapter).
+
+## Upgrade from draftably 0.10
+
+The CLI, the editor, the `.draft` language and saved files do not change, and diagrams lay out the
+same way. SVG exports change in two small ways:
+
+- Bundled font family names carry a short hash, such as `'Draft Inter 269b2d3580f4'`. CSS that
+  targets `'Draft Inter'` no longer matches. The fallback list (`Inter, Arial, sans-serif`) is the
+  same.
+- The root `<svg>` has `id="draft-svg"`, `role="img"` and `aria-labelledby`. To paste several
+  exports into one HTML page, render them with [`target: 'inline'`](#inline-output) and a unique
+  `idPrefix` each.
+
+Exports from 0.10 open in the new version, and new exports open in 0.10.

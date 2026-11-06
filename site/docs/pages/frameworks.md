@@ -1,4 +1,4 @@
-# Use with your framework
+# Frameworks
 
 Every framework gets the same diagram viewer: zoom, pan, fit, a keyboard outline, and cleanup when
 the component unmounts. Put as many diagrams on one page as you like. Each one owns its viewer.
@@ -107,27 +107,16 @@ Listen for the `draft-update` event for results.
 
 ## Edit diagrams
 
-`DraftEditor` is the editor: drag boxes and lines, add shapes with **N**, edit labels, undo. It
-reports the `.draft` source after every edit. Pass that text back as `source`; the editor does not
-redraw its own echo. Any number of editors can share a page.
+`DraftEditor` from `@draftably/react/editor` (or `/solid/editor`, `/vue/editor`,
+`/svelte/editor`) lets users drag boxes and lines and reports the new source after each edit:
 
 ```tsx
 import { DraftEditor } from '@draftably/react/editor';
 
-const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
 <DraftEditor source={source} onChange={setSource} style={{ height: '28rem' }} />;
 ```
 
-| Framework       | Import                                                      | Change callback      |
-| --------------- | ----------------------------------------------------------- | -------------------- |
-| React           | `DraftEditor` from `@draftably/react/editor`                | `onChange`           |
-| Solid           | `DraftEditor` from `@draftably/solid/editor`                | `onChange`           |
-| Vue             | `DraftEditor` from `@draftably/vue/editor`                  | `@change`            |
-| Svelte          | `DraftEditor` from `@draftably/svelte/editor`               | `onchange`           |
-| Angular, others | `import '@draftably/editor/element'`, then `<draft-editor>` | `draft-change` event |
-
-The editor loads in the browser after the component mounts, so server rendering and pages that
-only show diagrams never download it. Its styles apply only inside the editor.
+[Editor component](#editor-component) has the props for each framework.
 
 ## Server rendering
 
