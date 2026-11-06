@@ -1,0 +1,16 @@
+{
+  "name": "draftably-mermaid-dropin-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "mermaid": "npm:@draftably/mermaid@^0.1.0"
+  },
+  "devDependencies": {
+    "vite": "6.4.1"
+  }
+}

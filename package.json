@@ -29,7 +29,7 @@
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:build": "pnpm --dir packages/cli build",
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
-    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check",
+    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check && pnpm mermaid:build",
     "release": "pnpm release:check && changeset publish",
     "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
@@ -56,7 +56,8 @@
     "markdown:browser-check": "node scripts/prove-markdown-browser.ts",
     "markdown:serve-proof": "node scripts/serve-markdown-proof.ts",
     "host:pack-check": "node scripts/prove-host-packages.ts",
-    "prove:runtime": "node scripts/prove-runtime-browser.ts"
+    "prove:runtime": "node scripts/prove-runtime-browser.ts",
+    "mermaid:build": "node scripts/build-mermaid.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",

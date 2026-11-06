@@ -1,0 +1,38 @@
+{
+  "name": "@draftably/mermaid",
+  "version": "0.1.0",
+  "description": "A drop-in for the mermaid package that draws diagrams with Draftably.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/packages/mermaid/src/index.d.ts",
+      "import": "./dist/mermaid.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-mermaid.ts"
+  },
+  "dependencies": {
+    "@draftably/runtime": "workspace:*",
+    "mermaid": "12.2.0"
+  },
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwall/draftably.git",
+    "directory": "packages/mermaid"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

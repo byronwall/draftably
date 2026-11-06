@@ -37,6 +37,15 @@ const PACKAGES: Record<string, { manifest: string; paths: RegExp[] }> = {
     manifest: 'packages/markdown/package.json',
     paths: [/^packages\/markdown\//, /^scripts\/build-markdown\.ts$/],
   },
+  '@draftably/mermaid': {
+    manifest: 'packages/mermaid/package.json',
+    paths: [
+      /^packages\/mermaid\//,
+      /^src\/import\/(?:mermaid-|import-core)/,
+      /^scripts\/build-mermaid\.ts$/,
+      /^tsconfig\.mermaid\.json$/,
+    ],
+  },
 };
 /** Release bookkeeping, written by the Version Packages pull request. */
 const BOOKKEEPING = [/^packages\/[^/]+\/CHANGELOG\.md$/];

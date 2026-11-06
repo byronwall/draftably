@@ -10,6 +10,7 @@ same renderer as the CLI, so a diagram looks the same everywhere.
 | Put an image in a README, wiki or chat   | `draftably inspect --svg` or `--png`           | `draftably`           |
 | Add an interactive diagram to a web page | The `<draft-diagram>` element                  | `@draftably/runtime`  |
 | Generate SVG in a script or build step   | `renderSvg`                                    | `@draftably/runtime`  |
+| Replace Mermaid on a site you run        | `@draftably/mermaid` under the `mermaid` name  | `@draftably/mermaid`  |
 | Turn `draft` code fences into images     | The remark or markdown-it plugin               | `@draftably/markdown` |
 | Add diagrams to a documentation site     | A pinned Astro, Docusaurus or VitePress recipe | `@draftably/markdown` |
 
@@ -46,6 +47,18 @@ import '@draftably/runtime/element';
 The element brings its own styles, worker, zoom controls and cleanup. Set its `source` property to
 redraw it. An invalid update keeps the last good drawing. With Vite, add
 `optimizeDeps: { exclude: ['@draftably/runtime'] }` to `vite.config.ts`.
+
+## Replace Mermaid
+
+Keep your Mermaid page code and swap the package behind the name:
+
+```sh
+pnpm add mermaid@npm:@draftably/mermaid
+```
+
+Mermaid flowcharts and sequences, and Draftably source in a `.mermaid` block, now draw with
+Draftably. Mermaid's other chart types still go to Mermaid. For a CDN page, change the import URL
+to `https://cdn.jsdelivr.net/npm/@draftably/mermaid@0/dist/mermaid.esm.min.mjs`.
 
 ## SVG from a script
 
