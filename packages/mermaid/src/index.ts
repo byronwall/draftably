@@ -173,7 +173,9 @@ export async function registerExternalDiagrams(
 }
 
 /** Layout plugins such as `@mermaid-js/layout-elk` apply to the charts Mermaid still draws. */
-export async function registerLayoutLoaders(...args: Parameters<Upstream['registerLayoutLoaders']>) {
+export async function registerLayoutLoaders(
+  ...args: Parameters<Upstream['registerLayoutLoaders']>
+) {
   (await real()).registerLayoutLoaders(...args);
 }
 

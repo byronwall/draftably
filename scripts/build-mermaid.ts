@@ -28,7 +28,8 @@ await build({
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: id => id === '@draftably/runtime' || id === 'mermaid-upstream' || id.startsWith('node:'),
+      external: id =>
+        id === '@draftably/runtime' || id === 'mermaid-upstream' || id.startsWith('node:'),
       output: { chunkFileNames: 'chunks/[name]-[hash].js' },
     },
   },
