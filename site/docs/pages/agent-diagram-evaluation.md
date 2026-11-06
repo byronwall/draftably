@@ -13,6 +13,10 @@ The first two arms show what a model writes cold. The third is how people use th
 agent. Every cell is one sample, and each source was drawn by that format's own renderer. A failure
 is shown as the error it produced.
 
+[Download all comparison sources](/evaluations/agent-diagrams/sources.zip) to inspect the 45 responses together.
+The ZIP preserves each format's file extension and includes the prompts, study setup and report.
+Individual source links remain beside each drawing below.
+
 ## Results
 
 |                   | Mermaid | Draftably  | D2     | Graphviz DOT | Raw SVG |
