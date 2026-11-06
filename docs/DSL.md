@@ -638,9 +638,8 @@ state read "Read path" web api catalog cache
 state events "Events" queue publish rest=plain
 ```
 
-**Try it:** this drawing shows no state, because a live example does not draw them. Select **Edit
-in playground**, then **Open in the editor**. Then select **Read path** in the row of chips over
-the canvas.
+**Try it:** pick **Write path**, then **Read path**, in the State row over the drawing. The boxes
+stay in place; only the focus changes. The Editor has the same row over its canvas.
 
 The first word is the state's ID, then an optional label in quotes, then the IDs in focus:
 nodes, groups (a group brings all its members) and connections. A connection between two
@@ -1114,7 +1113,7 @@ Editor. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ### skill
 
-`skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
+`skill install` copies the agent skill in [`skills/draftably`](https://github.com/byronwall/draftably/tree/main/skills/draftably), which
 teaches coding agents to write and check `.draft` files. `--global` installs it under
 `~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
 `npx skills add byronwall/draftably` installs the same skill from the repository.
@@ -1138,7 +1137,7 @@ scratch diagram. The format is stable, so other tools can read it:
   diagram's title as its description. `check`, `extract` and `open` read every attachment whose
   name ends in `.draft`; `diagrams.pdf#checkout.draft` names one.
 
-Hosts that recompress images drop the PNG chunk. The [README](../README.md#review-refine-and-share)
+Hosts that recompress images drop the PNG chunk. [Save, share and reopen](https://draftably.dev/docs/saving)
 has more on this.
 
 ### Layout variants

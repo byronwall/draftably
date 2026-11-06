@@ -2604,6 +2604,49 @@ kbd {
   color: var(--accent-hover);
 }
 
+/* A link that leaves for GitHub carries its mark. */
+.doc-md a[href^='https://github.com/']::after {
+  content: '';
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.25em;
+  vertical-align: -0.05em;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  opacity: 0.7;
+}
+
+/* The docs home: its three sections side by side where there is room. */
+@media (min-width: 1280px) {
+  .doc[data-page='start'] .doc-md {
+    columns: 3;
+    column-gap: 32px;
+  }
+
+  .doc[data-page='start'] .doc-md > * {
+    max-width: none;
+  }
+
+  .doc[data-page='start'] .doc-md h2 {
+    margin-top: 0;
+  }
+
+  .doc[data-page='start'] .doc-md h2:not(:first-child) {
+    break-before: column;
+  }
+
+  .doc[data-page='start'] .doc-md li {
+    break-inside: avoid;
+  }
+
+  .doc[data-page='start'] .doc-md > p:last-child {
+    column-span: all;
+    margin-top: 28px;
+  }
+}
+
 .doc :not(pre) > code {
   padding: 1px 3px;
   border-radius: 4px;
@@ -2791,6 +2834,48 @@ kbd {
   background: var(--bg);
 }
 
+/* The emphasis states of an example, one button each, like the Editor's chips. */
+.doc-example-states {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  min-height: 34px;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font: 600 12px var(--font);
+}
+
+.doc-example-states span {
+  margin-right: 4px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.doc-example-states button {
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.doc-example-states button:hover {
+  color: var(--accent);
+}
+
+.doc-example-states button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .doc-example-label {
   min-width: 0;
   margin-right: auto;
@@ -2854,6 +2939,17 @@ kbd {
   position: relative;
   flex: 1;
   min-width: max-content;
+  isolation: isolate;
+}
+
+/* The line of the state picked in the State row. One line is 20px, as in .doc-example-source. */
+.doc-example-mark {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  height: 20px;
+  background: var(--accent-soft);
 }
 
 .doc-example-hl,

@@ -69,5 +69,6 @@ Draw the checkout flow in src/checkout as a .draft file next to it, and open it 
 
 The agent writes the file, runs `check` until no error is left, and prints the editor's URL.
 
-The skill's full text is [skills/draftably/SKILL.md](../skills/draftably/SKILL.md). It covers the
-syntax, layout engines, cells and refinements.
+Run `npx draftably skill print` to read the skill's full text, or browse
+[skills/draftably](https://github.com/byronwall/draftably/tree/main/skills/draftably) on GitHub. It
+covers the syntax, layout engines, cells and refinements.
