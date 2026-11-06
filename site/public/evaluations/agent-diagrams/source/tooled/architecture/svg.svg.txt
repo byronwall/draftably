@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="600" fill="#ffffff"/>
+  <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">Checkout service architecture</text>
+
+  <!-- Groups -->
+  <g stroke-width="1.5" stroke-dasharray="6 4">
+    <rect x="30" y="70" width="180" height="505" rx="12" fill="#eef5ff" stroke="#6b8fc7"/>
+    <rect x="260" y="70" width="420" height="505" rx="12" fill="#eefaf0" stroke="#5fa86e"/>
+    <rect x="730" y="70" width="240" height="505" rx="12" fill="#fff6e8" stroke="#d29a3c"/>
+  </g>
+  <g font-size="16" font-weight="bold" text-anchor="middle">
+    <text x="120" y="96" fill="#3d5f99">Clients</text>
+    <text x="470" y="96" fill="#3a7d48">Services</text>
+    <text x="850" y="96" fill="#a8701a">Data</text>
+  </g>
+
+  <!-- Edges -->
+  <g fill="none" stroke="#444" stroke-width="1.6">
+    <!-- clients -> gateway -->
+    <path d="M190,210 L290,298" marker-end="url(#arrow)"/>
+    <path d="M190,410 L290,322" marker-end="url(#arrow)"/>
+    <!-- gateway -> auth -->
+    <path d="M360,280 L360,140 L510,140" marker-end="url(#arrow)"/>
+    <!-- gateway -> order -->
+    <path d="M430,310 L510,310" marker-end="url(#arrow)"/>
+    <!-- order <-> db -->
+    <path d="M650,310 L770,310" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <!-- order -> queue (publish) -->
+    <path d="M650,330 L700,330 L700,465 L770,465" marker-end="url(#arrow)"/>
+    <!-- queue -> worker (consume) -->
+    <path d="M770,495 L650,495" marker-end="url(#arrow)"/>
+    <!-- worker -> db (update) -->
+    <path d="M580,510 L580,548 L955,548 L955,310 L930,310" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Edge labels -->
+  <g font-size="12" fill="#333" text-anchor="middle" stroke="#fff" stroke-width="4" stroke-linejoin="round" paint-order="stroke">
+    <text x="270" y="250">HTTPS</text>
+    <text x="272" y="382">HTTPS</text>
+    <text x="435" y="132">validate token</text>
+    <text x="470" y="302">requests</text>
+    <text x="710" y="302">read / write</text>
+    <text x="736" y="457">publish</text>
+    <text x="710" y="512">consume</text>
+    <text x="770" y="541">update orders</text>
+  </g>
+
+  <!-- Nodes -->
+  <g font-size="15" text-anchor="middle" fill="#222">
+    <!-- Clients -->
+    <rect x="50" y="180" width="140" height="60" rx="8" fill="#fff" stroke="#6b8fc7" stroke-width="2"/>
+    <text x="120" y="215">Web app</text>
+    <rect x="50" y="380" width="140" height="60" rx="8" fill="#fff" stroke="#6b8fc7" stroke-width="2"/>
+    <text x="120" y="415">Mobile app</text>
+
+    <!-- Services -->
+    <rect x="290" y="280" width="140" height="60" rx="8" fill="#fff" stroke="#5fa86e" stroke-width="2"/>
+    <text x="360" y="315">API gateway</text>
+    <rect x="510" y="110" width="140" height="60" rx="8" fill="#fff" stroke="#5fa86e" stroke-width="2"/>
+    <text x="580" y="145">Auth service</text>
+    <rect x="510" y="280" width="140" height="60" rx="8" fill="#fff" stroke="#5fa86e" stroke-width="2"/>
+    <text x="580" y="315">Order service</text>
+    <rect x="510" y="450" width="140" height="60" rx="8" fill="#fff" stroke="#5fa86e" stroke-width="2"/>
+    <text x="580" y="485">Worker</text>
+
+    <!-- Data: orders database (cylinder) -->
+    <path d="M770,282 L770,338 A80,10 0 0 0 930,338 L930,282" fill="#fff" stroke="#d29a3c" stroke-width="2"/>
+    <ellipse cx="850" cy="282" rx="80" ry="10" fill="#fff" stroke="#d29a3c" stroke-width="2"/>
+    <text x="850" y="320">Orders database</text>
+
+    <!-- Data: queue -->
+    <rect x="770" y="450" width="160" height="60" rx="8" fill="#fff" stroke="#d29a3c" stroke-width="2"/>
+    <g stroke="#d29a3c" stroke-width="1.5">
+      <line x1="890" y1="458" x2="890" y2="502"/>
+      <line x1="902" y1="458" x2="902" y2="502"/>
+      <line x1="914" y1="458" x2="914" y2="502"/>
+    </g>
+    <text x="828" y="485">Queue</text>
+  </g>
+</svg>

@@ -36,8 +36,7 @@ describe('docs examples', () => {
   }
 });
 
-// Every useful doc lives on the site, so a link must stay there or leave for a non-Markdown file.
-// A relative `.md` path resolves to GitHub, so it counts as a GitHub link.
+// Guidance and supporting sources stay on the site. Relative repository paths resolve to GitHub.
 describe('docs links', () => {
   const links = PAGES.flatMap(page => {
     const out: { page: string; href: string }[] = [];
@@ -52,11 +51,11 @@ describe('docs links', () => {
     expect(links.length).toBeGreaterThan(100);
   });
 
-  it('never sends a reader to a Markdown file on GitHub', () => {
+  it('never sends a reader to the repository for guidance or source examples', () => {
     const bad = links.filter(
       ({ href }) =>
-        /github\.com\/[^)]*\.md(#|$)/.test(href) ||
-        (!/^([a-z]+:|#|\/)/.test(href) && /\.md(#|$)/.test(href)),
+        /(?:github\.com|raw\.githubusercontent\.com)\/byronwall\/draftably(?:\/|$)/.test(href) ||
+        !/^([a-z]+:|#|\/)/.test(href),
     );
     expect(bad).toEqual([]);
   });
@@ -80,5 +79,13 @@ describe('docs links', () => {
       return url.pathname === '/play' && id !== null && !findExample(id);
     });
     expect(bad).toEqual([]);
+  });
+
+  it('serves every linked evaluation source from the public site', () => {
+    const sources = links.filter(({ href }) => href.startsWith('/evaluations/'));
+    expect(sources.length).toBeGreaterThan(40);
+    for (const { href } of sources) {
+      expect(fs.existsSync(path.join(root, 'site/public', href)), href).toBe(true);
+    }
   });
 });

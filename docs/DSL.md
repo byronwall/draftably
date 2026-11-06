@@ -1113,7 +1113,7 @@ Editor. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ### skill
 
-`skill install` copies the agent skill in [`skills/draftably`](https://github.com/byronwall/draftably/tree/main/skills/draftably), which
+`skill install` copies the [agent skill](https://draftably.dev/docs/agent-skill), which
 teaches coding agents to write and check `.draft` files. `--global` installs it under
 `~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
 `npx skills add byronwall/draftably` installs the same skill from the repository.

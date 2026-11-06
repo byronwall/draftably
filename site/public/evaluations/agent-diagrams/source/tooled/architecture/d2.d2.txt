@@ -1,0 +1,53 @@
+title: Checkout service architecture {
+  near: top-center
+  shape: text
+  style.font-size: 28
+  style.bold: true
+}
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+  }
+}
+
+direction: down
+
+customer: Customer {
+  shape: person
+}
+
+clients: Clients {
+  web: Web app
+  mobile: Mobile app
+}
+
+services: Services {
+  gateway: API gateway
+  auth: Auth service
+  order: Order service
+  worker: Worker
+}
+
+data: Data {
+  db: Orders database {
+    shape: cylinder
+  }
+  queue: Queue {
+    shape: queue
+  }
+}
+
+customer -> clients.web: uses
+customer -> clients.mobile: uses
+
+clients.web -> services.gateway: HTTPS
+clients.mobile -> services.gateway: HTTPS
+
+services.gateway -> services.auth: validate token
+services.gateway -> services.order: request
+
+services.order <-> data.db: read/write
+services.order -> data.queue: publish
+data.queue -> services.worker: consume
+services.worker -> data.db: update

@@ -1,0 +1,14 @@
+---
+title: Order approval workflow
+---
+flowchart TD
+    start([Start]) --> validate[Validate order]
+    validate --> payment{Payment authorized?}
+    payment -- No --> cancel[Cancel order]
+    payment -- Yes --> reserve[Reserve stock]
+    reserve --> stock{Stock available?}
+    stock -- No --> cancel
+    stock -- Yes --> pack[Pack order]
+    pack --> ship[Ship order]
+    ship --> finish([End])
+    cancel --> finish

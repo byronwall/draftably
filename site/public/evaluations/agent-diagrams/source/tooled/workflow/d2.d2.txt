@@ -1,0 +1,29 @@
+title: Order approval workflow {
+  near: top-center
+  shape: text
+  style.font-size: 28
+  style.bold: true
+}
+
+direction: down
+
+start: Start {shape: oval}
+validate: Validate order
+payment: Payment authorized? {shape: diamond}
+reserve: Reserve stock
+stock: Stock available? {shape: diamond}
+pack: Pack order
+ship: Ship order
+cancel: Cancel order
+end: End {shape: oval}
+
+start -> validate
+validate -> payment
+payment -> reserve: Yes
+payment -> cancel: No
+reserve -> stock
+stock -> pack: Yes
+stock -> cancel: No
+pack -> ship
+ship -> end
+cancel -> end

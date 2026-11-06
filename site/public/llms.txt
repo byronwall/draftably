@@ -6,12 +6,14 @@ To write a `.draft` file, read the agent skill first. It has the syntax, the lay
 
 ## Docs
 
-- [Agent skill (SKILL.md)](https://raw.githubusercontent.com/byronwall/draftably/main/skills/draftably/SKILL.md): syntax, layout and the check-and-render workflow for agents
+- [Agent workflow](https://draftably.dev/docs/agent-skill/): installation, prompts and the check-and-render workflow for agents
 - [Agent skill install](https://draftably.dev/docs/agent-skill/): `npx draftably skill install` puts the skill where Claude Code, Codex or Cursor reads it
 - [Get started](https://draftably.dev/docs/get-started/): a first diagram
 - [Diagram recipes](https://draftably.dev/docs/recipes/): complete architecture, handoff, sequence and change-review examples
 - [CLI](https://draftably.dev/docs/cli/): `check`, `vary`, `inspect` and the other commands
-- [Language reference](https://raw.githubusercontent.com/byronwall/draftably/main/docs/DSL.md): every statement and setting
+- [Language reference](https://draftably.dev/docs/rules/): every statement and attribute
+- [Layout engines](https://draftably.dev/docs/layout-engines/): placement algorithms and settings
+- [Refinements](https://draftably.dev/docs/refinements/): ordering, pins and placement adjustments
 
 ## Integrations
 

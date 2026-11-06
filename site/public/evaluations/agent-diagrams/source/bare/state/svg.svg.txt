@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="470" viewBox="0 0 1020 470" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="1020" height="470" fill="#ffffff"/>
+  <text x="510" y="40" text-anchor="middle" font-size="22" font-weight="bold" fill="#222">Publishing state machine</text>
+  <g fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)">
+    <line x1="43" y1="250" x2="78" y2="250"/>
+    <line x1="230" y1="250" x2="328" y2="250"/>
+    <path d="M420 225 Q420 100 367 100"/>
+    <path d="M195 100 Q155 100 155 223"/>
+    <line x1="480" y1="250" x2="578" y2="250"/>
+    <line x1="730" y1="250" x2="818" y2="250"/>
+    <path d="M655 275 C655 350 175 350 175 277"/>
+    <line x1="895" y1="275" x2="895" y2="383"/>
+    <path d="M820 410 H155 Q135 410 135 390 V277"/>
+  </g>
+  <circle cx="35" cy="250" r="8" fill="#333"/>
+  <g font-size="13" fill="#444">
+    <text x="279" y="241" text-anchor="middle">submit</text>
+    <text x="428" y="150">request edits</text>
+    <text x="146" y="150" text-anchor="end">revise</text>
+    <text x="529" y="241" text-anchor="middle">approve</text>
+    <text x="775" y="241" text-anchor="middle">publish</text>
+    <text x="415" y="322" text-anchor="middle">withdraw</text>
+    <text x="905" y="335">archive</text>
+    <text x="480" y="402" text-anchor="middle">restore</text>
+  </g>
+  <g stroke="#2b5b84" stroke-width="1.8" fill="#e8f1fa">
+    <rect x="80" y="225" width="150" height="50" rx="12"/>
+    <rect x="330" y="225" width="150" height="50" rx="12"/>
+    <rect x="195" y="75" width="170" height="50" rx="12"/>
+    <rect x="580" y="225" width="150" height="50" rx="12"/>
+    <rect x="820" y="225" width="150" height="50" rx="12"/>
+    <rect x="820" y="385" width="150" height="50" rx="12"/>
+  </g>
+  <g font-size="15" fill="#1d3b55" text-anchor="middle">
+    <text x="155" y="255">Draft</text>
+    <text x="405" y="255">In review</text>
+    <text x="280" y="105">Changes requested</text>
+    <text x="655" y="255">Approved</text>
+    <text x="895" y="255">Published</text>
+    <text x="895" y="415">Archived</text>
+  </g>
+</svg>

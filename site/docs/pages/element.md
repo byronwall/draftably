@@ -38,8 +38,23 @@ export default defineConfig({
 });
 ```
 
-The [element example](https://github.com/byronwall/draftably/tree/main/integration-examples/element-viewer)
-builds with Vite's default target and shows source updates, error recovery, fallback and removal.
+Import the element entry once in your client entry point. After the page has loaded, handle `draft-update` to report
+success or failure:
+
+```ts
+const diagram = document.querySelector('draft-diagram')!;
+diagram.addEventListener('draft-update', event => {
+  const result = (event as CustomEvent).detail;
+  console.log('Diagram update:', result.status);
+});
+diagram.source = 'node api "API"';
+```
+
+To let users retry, assign corrected source after an error. The element keeps its last good drawing
+when new source is invalid. To remove and restore it, call `diagram.remove()` and append the same
+element again; its viewer and worker are cleaned up on removal and created on reconnection. Generate
+a fallback SVG during the build with `renderSvg`, then place an `<img>` inside the element as shown
+in [Keep an image as a fallback](#keep-an-image-as-a-fallback).
 
 For a page without a bundler, serve the package's full `dist` directory from your origin. Import
 `element.js` with a module script. Keep its neighboring worker and module files in place.

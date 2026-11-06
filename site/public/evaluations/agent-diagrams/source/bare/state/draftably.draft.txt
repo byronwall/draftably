@@ -1,0 +1,22 @@
+I'm not familiar with a diagram language called Draftably, so I can't write valid source for it without guessing at the syntax. If you share its documentation or an example file, I'll write the diagram in it.
+
+Here is the same state machine in Mermaid in case that's useful:
+
+```mermaid
+---
+title: Publishing state machine
+---
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> InReview: submit
+    InReview --> ChangesRequested: request edits
+    ChangesRequested --> Draft: revise
+    InReview --> Approved: approve
+    Approved --> Published: publish
+    Approved --> Draft: withdraw
+    Published --> Archived: archive
+    Archived --> Draft: restore
+
+    InReview: In review
+    ChangesRequested: Changes requested
+```

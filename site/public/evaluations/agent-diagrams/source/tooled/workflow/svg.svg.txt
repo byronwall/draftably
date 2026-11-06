@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="940" viewBox="0 0 660 940" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect width="660" height="940" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="330" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#222">Order approval workflow</text>
+
+  <!-- Connectors -->
+  <g stroke="#444" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <line x1="240" y1="105" x2="240" y2="150"/>
+    <line x1="240" y1="200" x2="240" y2="235"/>
+    <line x1="240" y1="345" x2="240" y2="390"/>
+    <line x1="240" y1="440" x2="240" y2="475"/>
+    <line x1="240" y1="585" x2="240" y2="630"/>
+    <line x1="240" y1="680" x2="240" y2="725"/>
+    <line x1="240" y1="775" x2="240" y2="840"/>
+    <!-- Payment not authorized -> Cancel -->
+    <polyline points="350,290 520,290 520,505"/>
+    <!-- Stock not available -> Cancel -->
+    <line x1="350" y1="530" x2="440" y2="530"/>
+    <!-- Cancel -> End -->
+    <polyline points="520,555 520,870 300,870"/>
+  </g>
+
+  <!-- Branch labels -->
+  <g font-size="15" font-weight="bold">
+    <text x="252" y="373" fill="#2e7d32">Yes</text>
+    <text x="252" y="613" fill="#2e7d32">Yes</text>
+    <text x="365" y="281" fill="#c62828">No</text>
+    <text x="365" y="521" fill="#c62828">No</text>
+  </g>
+
+  <!-- Start -->
+  <ellipse cx="240" cy="80" rx="60" ry="25" fill="#c8e6c9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="240" y="85" text-anchor="middle" font-size="16" fill="#1b1b1b">Start</text>
+
+  <!-- Validate order -->
+  <rect x="150" y="150" width="180" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="240" y="180" text-anchor="middle" font-size="16" fill="#1b1b1b">Validate order</text>
+
+  <!-- Payment decision -->
+  <polygon points="240,235 350,290 240,345 130,290" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="240" y="286" text-anchor="middle" font-size="15" fill="#1b1b1b">Payment</text>
+  <text x="240" y="305" text-anchor="middle" font-size="15" fill="#1b1b1b">authorized?</text>
+
+  <!-- Reserve stock -->
+  <rect x="150" y="390" width="180" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="240" y="420" text-anchor="middle" font-size="16" fill="#1b1b1b">Reserve stock</text>
+
+  <!-- Stock decision -->
+  <polygon points="240,475 350,530 240,585 130,530" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="240" y="526" text-anchor="middle" font-size="15" fill="#1b1b1b">Stock</text>
+  <text x="240" y="545" text-anchor="middle" font-size="15" fill="#1b1b1b">available?</text>
+
+  <!-- Pack order -->
+  <rect x="150" y="630" width="180" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="240" y="660" text-anchor="middle" font-size="16" fill="#1b1b1b">Pack order</text>
+
+  <!-- Ship order -->
+  <rect x="150" y="725" width="180" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="240" y="755" text-anchor="middle" font-size="16" fill="#1b1b1b">Ship order</text>
+
+  <!-- Cancel order -->
+  <rect x="440" y="505" width="160" height="50" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="520" y="535" text-anchor="middle" font-size="16" fill="#1b1b1b">Cancel order</text>
+
+  <!-- End -->
+  <ellipse cx="240" cy="870" rx="60" ry="25" fill="#cfd8dc" stroke="#37474f" stroke-width="2"/>
+  <text x="240" y="875" text-anchor="middle" font-size="16" fill="#1b1b1b">End</text>
+</svg>

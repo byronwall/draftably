@@ -1,127 +1,207 @@
 # Documentation sites
 
-Add `draft` fences to an Astro Starlight, Docusaurus or VitePress site. Each fence becomes an SVG
-image at build time, and readers load no Draftably JavaScript.
+Add `draft` fences to Astro Starlight, Docusaurus or VitePress. Each fence becomes an SVG at
+build time. Readers load no Draftably JavaScript.
 
 ```sh
 pnpm add @draftably/markdown
 ```
 
-| Site, tested version              | How it plugs in                                 | Example                                                                                                  |
-| --------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Astro 7.4.5 with Starlight 0.42.9 | Remark plugin through Astro's Unified processor | [astro-starlight](https://github.com/byronwall/draftably/tree/main/integration-examples/astro-starlight) |
-| Docusaurus 3.10.2                 | Remark plugin in the docs preset                | [docusaurus](https://github.com/byronwall/draftably/tree/main/integration-examples/docusaurus)           |
-| VitePress 1.6.4                   | A prebuild step writes image Markdown           | [vitepress](https://github.com/byronwall/draftably/tree/main/integration-examples/vitepress)             |
+| Host                   | Integration                                          |
+| ---------------------- | ---------------------------------------------------- |
+| Astro 7 with Starlight | Remark plugin in Astro's Unified processor           |
+| Docusaurus 3           | Remark plugin in the docs preset                     |
+| VitePress 1            | Prebuild script writes Markdown with SVG image links |
 
-Each link opens a complete example project. The examples use the package versions listed in the
-table and serve under `/manual/`, so you can compare the configured base path with the generated
-image URLs. Copy the project that matches your host, then change its content root and base path.
-
-## The shared setup
-
-Every recipe does the same three things:
-
-1. **Store the images.** `createFileAssets` writes each SVG to a folder that persists between
-   builds, named by its content hash. Keep that folder out of git.
-2. **Add the remark plugin** with the store and your content root, so `src="./file.draft"` works.
-3. **Publish the store.** Serve the folder in development and copy it into the build output.
-
-```js
-import remarkDraft from '@draftably/markdown/remark';
-import { createFileAssets } from '@draftably/markdown/files';
-
-const assets = createFileAssets({
-  directory: '.cache/draftably/public/_draftably',
-  publicPath: '/manual/_draftably', // your site's base, then the folder
-});
-const draftOptions = {
-  emitAsset: assets.emitAsset,
-  sources: { rootDir: 'docs' },
-};
-// After the build: await assets.copyTo('<build output>/_draftably');
-```
-
-Resolve `directory` and `rootDir` from the config file when it may run from another working
-directory. Serve `directory` during development, and copy it to the build output after each build.
-Copying after every build matters: a page cache can skip the transform, while `copyTo` restores all
-SVGs referenced by cached pages. The result is HTML with `<img>` links under
-`/manual/_draftably/` and SVGs in the published `_draftably/` folder. See [Markdown](#markdown) for
-fence options, source includes and error handling.
+All recipes below use `/manual/` as the site base. Change `base` or `baseUrl` and the matching
+`publicPath` for your site. Keep generated assets outside source control.
 
 ## Astro and Starlight
 
-Astro 7 uses its own Markdown processor by default. Select Unified and pass the plugin there;
-Starlight uses the same processor for its Markdown and MDX pages:
+In an existing Astro 7/Starlight site, install the Unified processor used by this recipe:
+
+```sh
+pnpm add -D @astrojs/markdown-remark@7.3.5
+```
+
+Put this in `astro.config.mjs`. Set `contentRoot` to the directory that contains your Markdown.
+The hooks serve generated images during development and copy them into the build output.
 
 ```js
+import { resolve } from 'node:path';
+import { createReadStream } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
 import { unified } from '@astrojs/markdown-remark';
+import remarkDraft from '@draftably/markdown/remark';
+import { createFileAssets } from '@draftably/markdown/files';
+
+const root = fileURLToPath(new URL('.', import.meta.url));
+const contentRoot = resolve(root, 'src/content/docs');
+const assets = createFileAssets({
+  directory: resolve(root, '.cache/draftably/public/_draftably'),
+  publicPath: '/manual/_draftably',
+});
+const options = { emitAsset: assets.emitAsset, sources: { rootDir: contentRoot } };
 
 export default defineConfig({
   base: '/manual/',
-  integrations: [starlight({ title: 'Docs' }), draftablyAssets],
-  markdown: {
-    processor: unified({ remarkPlugins: [[remarkDraft, draftOptions]] }),
-  },
+  integrations: [
+    starlight({ title: 'Docs' }),
+    {
+      name: 'draftably-assets',
+      hooks: {
+        'astro:server:setup': ({ server }) =>
+          server.middlewares.use((req, res, next) => {
+            const path = new URL(req.url, 'http://localhost').pathname;
+            const name = path.startsWith('/_draftably/') ? path.slice('/_draftably/'.length) : '';
+            if (!/^draft-[0-9a-f]{64}\.svg$/.test(name)) return next();
+            res.setHeader('Content-Type', 'image/svg+xml; charset=utf-8');
+            createReadStream(resolve(assets.directory, name)).on('error', next).pipe(res);
+          }),
+        'astro:build:done': ({ dir }) => assets.copyTo(resolve(fileURLToPath(dir), '_draftably')),
+      },
+    },
+  ],
+  markdown: { processor: unified({ remarkPlugins: [[remarkDraft, options]] }) },
 });
 ```
 
-The example's `draftablyAssets` integration does the publishing. Its `astro:server:setup` hook
-serves the store under `/manual/_draftably/` and restarts the dev server when an included `.draft`
-file changes. Its `astro:build:done` hook calls `assets.copyTo()`. Use Astro's `markdown.processor`
-setting; the older top-level `markdown.remarkPlugins` is deprecated.
+Astro watches Markdown pages. If a fence includes another `.draft` file, restart the dev server
+after that file changes so Astro reruns the page transform. For include syntax, see
+[Markdown](#markdown).
 
 ## Docusaurus
 
-Add the plugin to the docs preset. Docusaurus reads a CommonJS config, so import Draftably's ES
-modules dynamically:
+Use an async CommonJS config to load Draftably's ES modules. `staticDirectories` serves images in
+development; `postBuild` restores the full asset set after the build.
 
 ```js
-module.exports = async function createConfig() {
-  const { default: remarkDraft } = await import('@draftably/markdown/remark');
-  // …createFileAssets and draftOptions as above
+// docusaurus.config.cjs
+const path = require('node:path');
+module.exports = async () => {
+  const [{ default: remarkDraft }, { createFileAssets }] = await Promise.all([
+    import('@draftably/markdown/remark'),
+    import('@draftably/markdown/files'),
+  ]);
+  const root = __dirname;
+  const assets = createFileAssets({
+    directory: path.resolve(root, '.cache/draftably/public/_draftably'),
+    publicPath: '/manual/_draftably',
+  });
+  const options = { emitAsset: assets.emitAsset, sources: { rootDir: path.resolve(root, 'docs') } };
   return {
+    title: 'Docs',
+    url: 'https://example.com',
     baseUrl: '/manual/',
     staticDirectories: ['static', '.cache/draftably/public'],
-    presets: [['classic', { docs: { remarkPlugins: [[remarkDraft, draftOptions]] } }]],
+    presets: [['classic', { docs: { remarkPlugins: [[remarkDraft, options]] } }]],
     plugins: [
       () => ({
         name: 'draftably-assets',
-        getPathsToWatch: () => ['docs/**/*.draft'],
-        postBuild: ({ outDir }) => assets.copyTo(`${outDir}/_draftably`),
+        async postBuild({ outDir }) {
+          await assets.copyTo(path.join(outDir, '_draftably'));
+        },
       }),
     ],
   };
 };
 ```
 
-`staticDirectories` serves the store in development. The fixture's `pnpm build` clears Docusaurus'
-MDX cache before the standard webpack build because the cache does not track included `.draft`
-files. The faster Rspack build kept a stale image after an include changed, so use the standard
-webpack build. In development, the fixture touches the Markdown page when an included `.draft`
-file changes. On a site with several locales, set each locale's base URL in `publicPath`.
+Included files do not invalidate Docusaurus' MDX cache. Clear it before builds, and touch the page
+when an included `.draft` changes in development:
+
+```json
+{ "scripts": { "start": "node scripts/dev.mjs", "build": "docusaurus clear && docusaurus build" } }
+```
+
+```js
+// scripts/dev.mjs
+import { watch } from 'node:fs';
+import { utimes } from 'node:fs/promises';
+import { spawn } from 'node:child_process';
+const page = 'docs/index.md';
+const host = spawn('pnpm', ['exec', 'docusaurus', 'start', '--host', '127.0.0.1'], {
+  stdio: 'inherit',
+});
+let timer;
+watch('docs', (_event, file) => {
+  if (!file?.toString().endsWith('.draft')) return;
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    const now = new Date();
+    void utimes(page, now, now);
+  }, 120);
+});
+host.on('exit', code => process.exit(code ?? 1));
+```
+
+For multiple pages, watch each page's content directory and touch the page that includes the changed
+file. For several locales, set `publicPath` to each locale's base plus `/_draftably`.
 
 ## VitePress
 
-VitePress renders Markdown synchronously, so it cannot wait for a diagram. Run the remark plugin
-before VitePress starts and let VitePress read the result:
+VitePress renders Markdown synchronously. Prepare Markdown first, then point `srcDir` at the
+generated folder. This example prepares `docs/index.md`; repeat the transform for each source page.
+Install the Unified processor packages used by the preparation script:
 
-```js
-const result = await unified()
-  .use(remarkParse)
-  .use(remarkDraft, { ...draftOptions, emitAsset: assets.emitAsset })
-  .use(remarkStringify)
-  .process({ path, value: await readFile(path, 'utf8') });
-await writeFile('generated-docs/index.md', String(result));
+```sh
+pnpm add -D unified remark-parse remark-stringify
 ```
 
-Point VitePress at `generated-docs/`, and write the store to `generated-docs/public/_draftably/`
-with `publicPath: '/_draftably'`. VitePress adds its configured base when it builds the page. Run
-the prebuild step before `vitepress build` and serve the generated folder. The example's dev script
-reruns preparation when a Markdown or included `.draft` file changes. Keep `generated-docs/` out of
-git.
+```js
+// scripts/prepare.mjs
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkStringify from 'remark-stringify';
+import remarkDraft from '@draftably/markdown/remark';
+import { createFileAssets } from '@draftably/markdown/files';
+
+const docs = resolve('docs');
+const generated = resolve('generated-docs');
+const assets = createFileAssets({
+  directory: resolve(generated, 'public/_draftably'),
+  publicPath: '/_draftably',
+});
+const input = resolve(docs, 'index.md');
+const result = await unified()
+  .use(remarkParse)
+  .use(remarkDraft, {
+    emitAsset: assets.emitAsset,
+    sources: { rootDir: docs },
+  })
+  .use(remarkStringify)
+  .process({ path: input, value: await readFile(input, 'utf8') });
+await mkdir(generated, { recursive: true });
+await writeFile(resolve(generated, 'index.md'), String(result));
+```
+
+```js
+// .vitepress/config.mjs
+import { defineConfig } from 'vitepress';
+export default defineConfig({ base: '/manual/', srcDir: 'generated-docs' });
+```
+
+Run preparation before both commands. The generated `public/_draftably` folder is copied into
+VitePress output, and the configured base is added to image URLs.
+
+```json
+{
+  "scripts": {
+    "docs:prepare": "node scripts/prepare.mjs",
+    "docs:dev": "pnpm docs:prepare && vitepress dev",
+    "docs:build": "pnpm docs:prepare && vitepress build"
+  }
+}
+```
+
+Re-run `docs:prepare` when a source page or included `.draft` file changes during development.
+Keep `generated-docs/` out of git. See [Markdown](#markdown) for fence options and include paths.
 
 ## Other sites
 
-A site with a Unified or markdown-it pipeline can use the plugins directly: see
-[Markdown](#markdown). For MkDocs, Pandoc or a host you do not control, commit SVG images with
-`draftably inspect --svg`, or let the [GitHub Action](#github-action) draw them.
+A site with a Unified or markdown-it pipeline can use the plugins directly. For other hosts, commit
+SVG images with `draftably inspect --svg`, or generate them with the [GitHub Action](#github-action).

@@ -1,0 +1,43 @@
+digraph checkout {
+  graph [label="Checkout service architecture", labelloc=t, fontsize=20, fontname="Helvetica",
+         rankdir=LR, nodesep=0.5, ranksep=0.9, compound=true];
+  node  [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12];
+  edge  [fontname="Helvetica", fontsize=10];
+
+  customer [label="Customer", shape=oval, fillcolor="#f2f2f2"];
+
+  subgraph cluster_clients {
+    label="Clients"; style="rounded,filled"; fillcolor="#eaf2fb"; color="#4a7ab8";
+    web    [label="Web app",    fillcolor="#ffffff"];
+    mobile [label="Mobile app", fillcolor="#ffffff"];
+  }
+
+  subgraph cluster_services {
+    label="Services"; style="rounded,filled"; fillcolor="#edf7ea"; color="#4f9a45";
+    gateway [label="API gateway",   fillcolor="#ffffff"];
+    auth    [label="Auth service",  fillcolor="#ffffff"];
+    order   [label="Order service", fillcolor="#ffffff"];
+    worker  [label="Worker",        fillcolor="#ffffff"];
+  }
+
+  subgraph cluster_data {
+    label="Data"; style="rounded,filled"; fillcolor="#fdf3e6"; color="#c98a2e";
+    ordersdb [label="Orders database", shape=cylinder, fillcolor="#ffffff"];
+    queue    [label="Queue", shape=box, style="filled", fillcolor="#ffffff"];
+  }
+
+  customer -> web    [label="uses"];
+  customer -> mobile [label="uses"];
+
+  web    -> gateway [label="HTTPS"];
+  mobile -> gateway [label="HTTPS"];
+
+  gateway -> auth  [label="validate token"];
+  gateway -> order [label="requests"];
+
+  order -> ordersdb [label="read / write", dir=both];
+  order -> queue    [label="publish"];
+
+  queue  -> worker   [label="consume"];
+  worker -> ordersdb [label="update"];
+}

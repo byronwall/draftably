@@ -73,13 +73,7 @@ broken build.
 
 ## Test it
 
-`tests/fixtures/integrations/` is a host-neutral corpus. Run its shared contract:
-
-```sh
-pnpm exec vitest run tests/fixtures/integrations/contract.test.ts
-```
-
-Then prove these at your adapter's boundary:
+Use host-neutral fixtures for your adapter, then exercise the public boundary with these cases:
 
 1. Valid source draws the same geometry every time.
 2. Valid and invalid options normalize or fail as above.

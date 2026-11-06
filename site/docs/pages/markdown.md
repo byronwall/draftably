@@ -142,7 +142,7 @@ an `interactive` bridge:
 interactive: {
   clientModuleUrl: '/assets/draftably-client.js',
   policyId: 'docs',
-  emitInit: async data => writeVersionedInitAsset(data),
+  emitInit: assets.emitInit,
 }
 ```
 
@@ -152,5 +152,44 @@ same-origin JSON, mounts the [viewer](#element), and hides the image only after 
 On a failure the image stays. `destroy()` stops the work and puts the image back. With Vite, add
 `optimizeDeps: { exclude: ['@draftably/runtime'] }`.
 
-The [Unified example](https://github.com/byronwall/draftably/tree/main/integration-examples/unified)
-runs Unified, MDX, markdown-it and the interactive client end to end.
+## Complete Unified build
+
+For a complete static Unified build, install the processor plugins and write emitted SVGs beside the
+HTML. This example reads a Markdown file, creates the output directory, and publishes image URLs
+under `/docs/diagrams/`:
+
+```sh
+pnpm add @draftably/markdown unified remark-parse remark-rehype rehype-stringify
+```
+
+Save this as `build.mjs`:
+
+```js
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
+import remarkDraft from '@draftably/markdown/remark';
+import { createFileAssets } from '@draftably/markdown/files';
+
+const output = resolve('dist');
+const assets = createFileAssets({ directory: '.cache/diagrams', publicPath: '/docs/diagrams/' });
+const source = await readFile('content/page.md', 'utf8');
+const file = await unified()
+  .use(remarkParse)
+  .use(remarkDraft, { emitAsset: assets.emitAsset, sources: { rootDir: resolve('content') } })
+  .use(remarkRehype)
+  .use(rehypeStringify)
+  .process({ path: resolve('content/page.md'), value: source });
+await mkdir(output, { recursive: true });
+await writeFile(resolve(output, 'index.html'), String(file));
+await assets.copyTo(resolve(output, 'docs/diagrams'));
+```
+
+Run `node build.mjs`. The `path` value is the Markdown file path; it lets `src` includes resolve
+relative to that file. The asset store writes content-hashed SVG files and restores assets that a
+cached page may still reference. Copy its files to the matching public directory after each build.
+To enable MDX, use `@mdx-js/mdx` and add the remark plugin to its Unified processor with the same
+`emitAsset` callback.

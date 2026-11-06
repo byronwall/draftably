@@ -117,6 +117,6 @@ Run check and inspect the drawing. Tell me which existing objects moved and why.
 The file holds your layout refinements as well as the model. Replacing it from memory can discard those refinements.
 Use a focused update when adding one path; ask for a fresh diagram when the question itself changes.
 
-Run `npx draftably skill print` to read the skill's full text, or browse
-[skills/draftably](https://github.com/byronwall/draftably/tree/main/skills/draftably) on GitHub. It
-covers the syntax, layout engines, cells and refinements.
+Read [Rules](#rules) for syntax, [Layout engines](#layout-engines) for placement,
+[Cells](#cells) for grids, and [Refinements](#refinements) for precise adjustments.
+Run `npx draftably skill print` to inspect the installed CLI's complete agent instructions.
