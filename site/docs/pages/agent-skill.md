@@ -67,7 +67,55 @@ Once the skill is installed, ask in plain words:
 Draw the checkout flow in src/checkout as a .draft file next to it, and open it for me.
 ```
 
-The agent writes the file, runs `check` until no error is left, and prints the editor's URL.
+Ask the agent to write the file, resolve check errors, inspect the drawing and print the editor's URL.
+Successful compilation proves the syntax works. It does not prove that the diagram describes your code correctly.
+
+## Give the agent a useful brief
+
+Name the audience, the question and the source of truth. A bounded request produces a more useful diagram than “draw this repository”.
+
+```text
+Use the Draftably skill to explain how an order reaches the background worker.
+Read src/checkout and src/jobs. Trace the actual calls before drawing.
+The reader is a developer joining this project.
+Include the entry point, queue, worker and result store. Leave out helper functions.
+Label each connection with the request, event or data it carries.
+Write docs/order-flow.draft. Keep names from the code and report any uncertain connection.
+Run check, inspect the rendered diagram, and open the file for me.
+```
+
+Replace the paths with folders that exist in your project. Review the agent's evidence for each connection.
+Use a [flow recipe](#recipes) for dependencies, lanes for ownership, or a sequence for message order.
+
+## Review a proposed change
+
+Give the agent both versions and the question the review should answer:
+
+```text
+Use the Draftably skill to show how this branch changes order processing.
+Compare the relevant code with main. Write before.draft and after.draft.
+Keep the same IDs for services that exist in both versions.
+Use draftably compare to create change.draft, then check and render it.
+Explain which connections changed and which details the Before panel cannot reconstruct.
+Open change.draft for review.
+```
+
+The CLI comparison matches diagram IDs, not code symbols. The agent must first identify the same objects in both versions.
+[Change marks](#change-marks) explains the comparison output and its limits.
+
+## Revise without losing your edits
+
+After you adjust the diagram in the editor, point the agent at that same file:
+
+```text
+Read the current docs/order-flow.draft before editing it.
+Add the failed-job queue and the worker's failure path.
+Keep existing IDs, groups and placement refinements unless the new path requires a change.
+Run check and inspect the drawing. Tell me which existing objects moved and why.
+```
+
+The file holds your layout refinements as well as the model. Replacing it from memory can discard those refinements.
+Use a focused update when adding one path; ask for a fresh diagram when the question itself changes.
 
 Run `npx draftably skill print` to read the skill's full text, or browse
 [skills/draftably](https://github.com/byronwall/draftably/tree/main/skills/draftably) on GitHub. It

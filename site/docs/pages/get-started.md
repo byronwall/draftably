@@ -71,7 +71,7 @@ Every command below works as `npx draftably …` or, once installed, `draftably 
 
 ## Write your first file
 
-Save this source as `architecture.draft`. The live example above shows a small architecture
+Save this source as `architecture.draft`. The live example below shows a small architecture
 diagram with a group, three boxes and two connections:
 
 ```draft
