@@ -3,17 +3,17 @@
 Every route below draws with the same native compiler and renderer. Pick the
 row that matches what you want to ship.
 
-| You want to                                      | Use                                                                                           | Install                            |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Draw and share a diagram with no install         | [Playground](https://draftably.dev/play)                                                      | Nothing                            |
-| Edit `.draft` files on disk, check them in CI    | [CLI](https://draftably.dev/docs/cli)                                                         | `pnpm add -g draftably`            |
-| Have a coding agent write and refine diagrams    | [Agent skill](https://draftably.dev/docs/agent-skill)                                         | `pnpm dlx draftably skill install` |
-| Put a static image in a README, wiki or chat     | [Export an image](#export-an-image)                                                           | `draftably` CLI                    |
-| Add an interactive diagram to a web page         | [Diagram element](element.md)                                                                 | `@draftably/runtime`               |
-| Generate SVG from a script or a build step       | [Render an image](#render-an-image)                                                           | `@draftably/runtime`               |
-| Turn ` ```draft ` fences in Markdown into images | [Render Markdown](#render-markdown)                                                           | `@draftably/markdown`              |
-| Add diagrams to a documentation site             | [Astro Starlight](astro-starlight.md), [Docusaurus](docusaurus.md), [VitePress](vitepress.md) | `@draftably/markdown`              |
-| Control the viewer's lifecycle yourself          | [Imperative viewer](viewer.md)                                                                | `@draftably/runtime`               |
+| You want to                                   | Use                                                                                           | Install                            |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Draw and share a diagram with no install      | [Playground](https://draftably.dev/play)                                                      | Nothing                            |
+| Edit `.draft` files on disk, check them in CI | [CLI](https://draftably.dev/docs/cli)                                                         | `pnpm add -g draftably`            |
+| Have a coding agent write and refine diagrams | [Agent skill](https://draftably.dev/docs/agent-skill)                                         | `pnpm dlx draftably skill install` |
+| Put a static image in a README, wiki or chat  | [Export an image](#export-an-image)                                                           | `draftably` CLI                    |
+| Add an interactive diagram to a web page      | [Diagram element](element.md)                                                                 | `@draftably/runtime`               |
+| Generate SVG from a script or a build step    | [Render an image](#render-an-image)                                                           | `@draftably/runtime`               |
+| Turn `draft` code fences into images          | [Render Markdown](#render-markdown)                                                           | `@draftably/markdown`              |
+| Add diagrams to a documentation site          | [Astro Starlight](astro-starlight.md), [Docusaurus](docusaurus.md), [VitePress](vitepress.md) | `@draftably/markdown`              |
+| Control the viewer's lifecycle yourself       | [Imperative viewer](viewer.md)                                                                | `@draftably/runtime`               |
 
 Use Node 22.21 or later. The packages are ES modules only. Script examples
 need `"type": "module"` in your `package.json`.
