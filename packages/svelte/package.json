@@ -1,0 +1,38 @@
+{
+  "name": "@draftably/svelte",
+  "version": "0.1.0",
+  "description": "Svelte components for Draftably diagrams.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "svelte": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@draftably/runtime": "workspace:*"
+  },
+  "peerDependencies": {
+    "svelte": "^5"
+  },
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwall/draftably.git",
+    "directory": "packages/svelte"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

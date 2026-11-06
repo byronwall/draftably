@@ -1,0 +1,41 @@
+{
+  "name": "@draftably/solid",
+  "version": "0.1.0",
+  "description": "Solid components for Draftably diagrams.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "solid": "./dist/index.jsx",
+      "default": "./dist/index.jsx"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@draftably/runtime": "workspace:*"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8"
+  },
+  "engines": {
+    "node": ">=22.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byronwall/draftably.git",
+    "directory": "packages/solid"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-frameworks.ts"
+  }
+}

@@ -1,8 +1,9 @@
 # Draftably package releases
 
 The public packages are `draftably` (CLI), `@draftably/runtime` (native rendering),
-`@draftably/markdown` (build-time remark integration), and `@draftably/mermaid` (the Mermaid
-drop-in). Package proofs install packed archives
+`@draftably/markdown` (build-time remark integration), `@draftably/mermaid` (the Mermaid
+drop-in), and the framework components `@draftably/react`, `@draftably/solid`, `@draftably/vue` and
+`@draftably/svelte`. Package proofs install packed archives
 outside this repository. They do not publish them.
 
 Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
@@ -85,33 +86,36 @@ See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
 
 The source repository is public. The release workflow requests npm provenance for automated publishes.
 
-### First publish of the scoped packages
+### First publish of a new scoped package
 
-`@draftably/runtime`, `@draftably/markdown` and `@draftably/mermaid` follow the same rule: each package must exist on
-npm before it can have a trusted publisher. Do these steps once, before you merge a
-**Version Packages** pull request that includes them:
+A package must exist on npm before it can have a trusted publisher, so publish each new
+`@draftably/*` package once by hand. The `draftably` npm organization owns the scope. Use npm 11.10
+or later, which has `npm trust`.
 
-1. On npmjs.com, create the free `draftably` organization. It owns the `@draftably` scope.
-2. Build and check the packages:
-
-   ```sh
-   pnpm runtime:build && pnpm runtime:pack-check
-   pnpm markdown:build && pnpm markdown:pack-check
-   pnpm mermaid:build
-   ```
-
-3. Publish each package at its current version from your authenticated session. pnpm replaces
-   the `workspace:*` dependency with the exact runtime version:
+1. Build the package and pack it. `pnpm pack` replaces `workspace:*` with the exact runtime version:
 
    ```sh
-   pnpm --dir packages/runtime publish --access public --no-git-checks
-   pnpm --dir packages/markdown publish --access public --no-git-checks
-   pnpm --dir packages/mermaid publish --access public --no-git-checks
+   pnpm runtime:build && pnpm frameworks:build
+   pnpm --dir packages/react pack --pack-destination tmp/publish
    ```
 
-4. Add a trusted publisher to each package with the values in the table above.
+2. Publish the archive with npm. pnpm 11 does not send the `npm login` token, so `pnpm publish`
+   returns 404:
 
-After that, Changesets publishes all four packages from Actions.
+   ```sh
+   npm publish tmp/publish/draftably-react-0.1.0.tgz --access public
+   ```
+
+   Tick "Do not challenge npm publish, npm trust operations" on the 2FA page to publish several
+   packages and add their trust in one five-minute window.
+
+3. Let the release workflow publish later versions:
+
+   ```sh
+   npm trust github @draftably/react --file release.yml --repo byronwall/draftably --allow-publish -y
+   ```
+
+Then Changesets publishes the package from Actions with the others.
 
 ## Add each release note
 

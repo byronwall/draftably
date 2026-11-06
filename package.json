@@ -29,7 +29,7 @@
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:build": "pnpm --dir packages/cli build",
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
-    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check && pnpm mermaid:build",
+    "release:check": "pnpm check:fast && pnpm test:engines && pnpm cli:build && pnpm cli:pack-check && pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm markdown:build && pnpm markdown:pack-check && pnpm mermaid:build && pnpm frameworks:build",
     "release": "pnpm release:check && changeset publish",
     "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
@@ -57,7 +57,9 @@
     "markdown:serve-proof": "node scripts/serve-markdown-proof.ts",
     "host:pack-check": "node scripts/prove-host-packages.ts",
     "prove:runtime": "node scripts/prove-runtime-browser.ts",
-    "mermaid:build": "node scripts/build-mermaid.ts"
+    "mermaid:build": "node scripts/build-mermaid.ts",
+    "frameworks:build": "node scripts/build-frameworks.ts",
+    "prove:frameworks": "node scripts/prove-frameworks.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",
@@ -78,6 +80,7 @@
     "@eslint/js": "^10.0.1",
     "@types/jsdom": "21.1.7",
     "@types/node": "^22.15.30",
+    "@types/react": "19.2.2",
     "eslint": "^10.12.0",
     "eslint-plugin-solid": "^0.18.1",
     "globals": "^17.13.0",
@@ -85,11 +88,13 @@
     "pdf-lib": "^1.17.1",
     "playwright-core": "^1.64.0",
     "prettier": "^3.9.9",
+    "react": "19.2.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^6.3.5",
     "vite-plugin-solid": "^2.11.6",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.3",
+    "vue": "3.5.22"
   },
   "engines": {
     "node": ">=22.21.0"

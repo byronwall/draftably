@@ -5,14 +5,15 @@ same renderer as the CLI, so a diagram looks the same everywhere.
 
 ## Pick a route
 
-| You want to                              | Use                                            | Install               |
-| ---------------------------------------- | ---------------------------------------------- | --------------------- |
-| Replace Mermaid on a site you run        | The `mermaid` drop-in                          | `@draftably/mermaid`  |
-| Put an image in a README, wiki or chat   | `draftably inspect --svg` or `--png`           | `draftably`           |
-| Add an interactive diagram to a web page | The `<draft-diagram>` element                  | `@draftably/runtime`  |
-| Generate SVG in a script or build step   | `renderSvg`                                    | `@draftably/runtime`  |
-| Turn `draft` code fences into images     | The remark or markdown-it plugin               | `@draftably/markdown` |
-| Add diagrams to a documentation site     | A pinned Astro, Docusaurus or VitePress recipe | `@draftably/markdown` |
+| You want to                                 | Use                                            | Install                       |
+| ------------------------------------------- | ---------------------------------------------- | ----------------------------- |
+| Replace Mermaid on a site you run           | The `mermaid` drop-in                          | `@draftably/mermaid`          |
+| Put an image in a README, wiki or chat      | `draftably inspect --svg` or `--png`           | `draftably`                   |
+| Add an interactive diagram to a web page    | The `<draft-diagram>` element                  | `@draftably/runtime`          |
+| Use a React, Solid, Vue or Svelte component | [`DraftDiagram`](#frameworks)                  | `@draftably/react` and others |
+| Generate SVG in a script or build step      | `renderSvg`                                    | `@draftably/runtime`          |
+| Turn `draft` code fences into images        | The remark or markdown-it plugin               | `@draftably/markdown`         |
+| Add diagrams to a documentation site        | A pinned Astro, Docusaurus or VitePress recipe | `@draftably/markdown`         |
 
 The packages need Node 22.21 or later and are ES modules only.
 
