@@ -104,7 +104,7 @@ jobs:
         with:
           files: integration-examples/markdown-action/**/*.md
       - name: Check the rerun changed nothing
-        run: git diff --exit-code && test -z "$(git status --porcelain --untracked-files=all | grep -v '^A ')"
+        run: git diff --exit-code && test -z "$(git ls-files --others --exclude-standard)"
 
   host-proofs:
     # Builds the three pinned documentation hosts against fresh packed consumers.
