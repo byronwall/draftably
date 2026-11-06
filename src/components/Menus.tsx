@@ -10,14 +10,11 @@ import {
   THEME_IDS,
   type ThemeId,
 } from '../model/appearance';
-import { chooseTheme, openSample, setAppearanceOverrides, setTool } from '../state/actions';
-import type { Tool } from '../state/editor';
-import { layoutTarget } from '../state/layout';
-import { timelineOpen } from '../state/sculpt';
+
+import type { Tool } from '../state/session/editor';
+
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
-import { doc } from '../state/document';
-import { fileMode, fileSession } from '../state/file-session';
-import { setRouting } from '../state/routing';
+
 import {
   arrangeOpen,
   sourceOpen,
@@ -35,6 +32,7 @@ import { Icon } from './Icon';
 import './menus.css';
 import { exampleUrl, fileUrl, go, workspace } from '../state/launch';
 import { baseName } from './workspace-files';
+import { useDiagramSession } from './session-context';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -164,6 +162,7 @@ const MORE_TOOLS: [Tool, string, string][] = [
 ];
 
 function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
+  const s = useDiagramSession();
   const submenu = (id: MenuState['id']) => () => openMenu(id, props.anchor);
   return (
     <>
@@ -183,10 +182,10 @@ function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
               type="button"
               class="menu-item"
               role="menuitem"
-              disabled={timelineOpen()}
+              disabled={s.timelineOpen()}
               onClick={() => {
                 closeMenu();
-                setTool(tool);
+                s.setTool(tool);
               }}
             >
               <span class="menu-icon">
@@ -330,6 +329,7 @@ function Submenu(props: { label: string; icon: string; children: JSX.Element }) 
 }
 
 function ExamplesSubmenu() {
+  const s = useDiagramSession();
   return (
     <Submenu label="Examples" icon="spark">
       <p class="menu-note">Opens a scratch copy. Nothing in a folder changes.</p>
@@ -339,7 +339,7 @@ function ExamplesSubmenu() {
             type="button"
             class="menu-item"
             role="menuitem"
-            aria-current={fileSession()?.example === example.id || undefined}
+            aria-current={s.fileSession()?.example === example.id || undefined}
             {...tip(example.title, undefined, example.summary)}
             onClick={() => {
               closeMenu();
@@ -356,9 +356,10 @@ function ExamplesSubmenu() {
 
 /** The newest diagrams in the folder, leaving out the one already open. */
 function RecentFiles() {
+  const s = useDiagramSession();
   const files = () =>
     [...(workspace()?.files ?? [])]
-      .filter(f => f.path !== fileSession()?.file)
+      .filter(f => f.path !== s.fileSession()?.file)
       .sort((a, b) => b.modified - a.modified)
       .slice(0, 5);
   return (
@@ -395,6 +396,7 @@ function RecentFiles() {
  * through files you pick.
  */
 function FileMenu() {
+  const s = useDiagramSession();
   return (
     <>
       <MenuItem command="new-diagram" />
@@ -405,7 +407,7 @@ function FileMenu() {
         when={workspace()}
         fallback={
           <>
-            <Show when={!fileMode()}>
+            <Show when={!s.fileMode()}>
               <MenuItem command="open" />
               <MenuItem command="insert-image" />
               <MenuItem command="export-json" />
@@ -511,11 +513,12 @@ function ViewMenu() {
 }
 
 function LayoutMenu() {
+  const s = useDiagramSession();
   return (
     <>
       <MenuItem command="layout-menu" checked={arrangeOpen()} />
       <MenuItem command="layout-rebuild" />
-      <MenuItem command="layout" note={`Small moves in ${layoutTarget()}.`} />
+      <MenuItem command="layout" note={`Small moves in ${s.layoutTarget()}.`} />
       <MenuItem command="compare-layouts" />
       <hr />
       <MenuItem command="reroute" />
@@ -532,6 +535,7 @@ function LayoutMenu() {
 }
 
 function HelpMenu() {
+  const s = useDiagramSession();
   return (
     <>
       <MenuItem command="palette" />
@@ -548,7 +552,7 @@ function HelpMenu() {
               role="menuitem"
               onClick={() => {
                 closeMenu();
-                openSample(sample.id);
+                s.openSample(sample.id);
               }}
             >
               <span class="menu-icon">
@@ -564,6 +568,7 @@ function HelpMenu() {
 }
 
 function ExportMenu() {
+  const s = useDiagramSession();
   return (
     <>
       <MenuItem command="export-json" />
@@ -571,18 +576,18 @@ function ExportMenu() {
       <MenuItem command="copy-image" />
       <Heading>Copy as</Heading>
       <MenuItem command="copy-svg" />
-      <Show when={fileMode()}>
+      <Show when={s.fileMode()}>
         <MenuItem command="copy-source" />
         <MenuItem command="copy-link" />
       </Show>
       <hr />
       <MenuItem command="export-png" />
       <MenuItem command="export-svg" />
-      <Show when={fileMode() && workspace()}>
+      <Show when={s.fileMode() && workspace()}>
         <MenuItem command="export-pdf" />
       </Show>
       <p class="menu-note">
-        {fileMode()
+        {s.fileMode()
           ? 'Copy takes the selection when something is selected. An image with its source opens again as an editable diagram.'
           : 'Copy takes the selection when something is selected. Saved diagrams and exported SVGs remain editable.'}
       </p>
@@ -595,7 +600,8 @@ function ExportMenu() {
  * line); the editor's own light or dark mode is separate.
  */
 function AppearanceMenu() {
-  const look = () => resolveAppearance(doc.appearance);
+  const s = useDiagramSession();
+  const look = () => resolveAppearance(s.doc.appearance);
   const padding = (key: 'paddingX' | 'paddingY', label: string) => (
     <label class="field appearance-padding">
       <span class="field-label">{label}</span>
@@ -610,8 +616,8 @@ function AppearanceMenu() {
             { min, max } = OVERRIDE_LIMITS[key];
           if (!Number.isFinite(value)) return;
           const next = clamp(Math.round(value), min, max);
-          setAppearanceOverrides({
-            [key]: next === PRESETS[doc.appearance.theme][key] ? undefined : next,
+          s.setAppearanceOverrides({
+            [key]: next === PRESETS[s.doc.appearance.theme][key] ? undefined : next,
           });
         }}
       />
@@ -635,25 +641,25 @@ function AppearanceMenu() {
           {([label, radius]) => (
             <button
               type="button"
-              aria-pressed={!doc.settings.routing.cornerRadius === !radius}
-              onClick={() => setRouting({ cornerRadius: radius }, 'Change line corners')}
+              aria-pressed={!s.doc.settings.routing.cornerRadius === !radius}
+              onClick={() => s.setRouting({ cornerRadius: radius }, 'Change line corners')}
             >
               {label}
             </button>
           )}
         </For>
       </div>
-      <Show when={Object.keys(doc.appearance.overrides).length}>
+      <Show when={Object.keys(s.doc.appearance.overrides).length}>
         <button
           type="button"
           class="button ghost full"
-          onClick={() => chooseTheme(doc.appearance.theme)}
+          onClick={() => s.chooseTheme(s.doc.appearance.theme)}
         >
-          Reset to {PRESETS[doc.appearance.theme].label} defaults
+          Reset to {PRESETS[s.doc.appearance.theme].label} defaults
         </button>
       </Show>
       <p class="menu-note">
-        {fileMode()
+        {s.fileMode()
           ? 'Saved to the file’s theme line. Choosing a theme clears its overrides and keeps your own theme colors.'
           : 'Saved with the diagram. Choosing a theme clears its overrides and keeps your own colors.'}{' '}
         Light and dark editor mode is separate.
@@ -664,9 +670,10 @@ function AppearanceMenu() {
 
 /** One preset with a small drawing in its own colors and title type. */
 function ThemeOption(props: { id: ThemeId }) {
+  const s = useDiagramSession();
   const preset = () => PRESETS[props.id];
   const look = () => resolveAppearance({ theme: props.id, overrides: {}, colors: [] });
-  const selected = () => doc.appearance.theme === props.id;
+  const selected = () => s.doc.appearance.theme === props.id;
   return (
     <button
       type="button"
@@ -675,7 +682,7 @@ function ThemeOption(props: { id: ThemeId }) {
       aria-checked={selected()}
       classList={{ selected: selected() }}
       onClick={() => {
-        if (!selected() || Object.keys(doc.appearance.overrides).length) chooseTheme(props.id);
+        if (!selected() || Object.keys(s.doc.appearance.overrides).length) s.chooseTheme(props.id);
       }}
     >
       <svg class="theme-preview" viewBox="0 0 72 36" width="72" height="36" aria-hidden="true">

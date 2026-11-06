@@ -1,18 +1,20 @@
 import { createEffect, createSignal, Index, onCleanup, Show } from 'solid-js';
-import { fileMode, liveSource, sourceDraft, sourceError, typeSource } from '../state/file-session';
+
 import { toast } from '../state/toast';
 import { Icon } from './Icon';
 import { tip } from './controls';
 import './source.css';
+import { useDiagramSession } from './session-context';
 
 /** How long typing pauses before the text is drawn. */
 const TYPE_DELAY = 300;
 
 /** The open file's .draft text. Typing redraws the canvas; canvas edits rewrite the text. */
 export function SourcePanel() {
+  const s = useDiagramSession();
   let area!: HTMLTextAreaElement;
   const [copied, setCopied] = createSignal(false);
-  const text = () => sourceDraft() ?? liveSource();
+  const text = () => s.sourceDraft() ?? s.liveSource();
   const [value, setValue] = createSignal(text());
   let copyTimer = 0,
     typeTimer = 0,
@@ -25,7 +27,7 @@ export function SourcePanel() {
   const width = () => Math.max(...lines().map(l => l.length));
   // The message without its "Line N:" prefix; the line is marked in the gutter.
   const error = () => {
-    const e = sourceError();
+    const e = s.sourceError();
     if (!e) return null;
     return { line: e.line, message: e.message.replace(/^Line \d+(, column \d+)?: /, '') };
   };
@@ -46,7 +48,7 @@ export function SourcePanel() {
     if (!typeTimer) return;
     clearTimeout(typeTimer);
     typeTimer = 0;
-    void typeSource(area.value, burst);
+    void s.typeSource(area.value, burst);
   }
 
   const onInput = () => {
@@ -92,7 +94,7 @@ export function SourcePanel() {
 
   return (
     <Show
-      when={fileMode()}
+      when={s.fileMode()}
       fallback={
         <p class="source-empty">
           Only a .draft file has source. Open one with <code>draftably open</code> to see it here.

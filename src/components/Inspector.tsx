@@ -23,22 +23,19 @@ import {
 import { headOf, MARKERS, tailOf } from '../model/markers';
 import { DSL_SHAPES } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
-import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
-import { setColor, setLayoutIntent, setShade } from '../state/actions';
+import type { ColorKey, Diagram, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
+
 import { runCommand, type CommandId } from '../state/commands';
-import { clearSelection, doc, mutate, selectedIds, selectItems, transact } from '../state/document';
+
 import {
   parseTextId,
   removeText,
-  selectedText,
   setTextValue,
   TEXT_NAMES,
   textValue,
-} from '../state/canvas-text';
+} from '../state/session/canvas-text';
 import { NOTE_SIDES, noteSide, type Note } from '../model/note';
-import { fileMode } from '../state/file-session';
-import { geometry, routesById } from '../state/scene';
-import { timelineOpen } from '../state/sculpt';
+
 import { setRightTab } from '../state/ui';
 import {
   CommandButton as IconCommand,
@@ -50,29 +47,29 @@ import {
   tip,
 } from './controls';
 import { describeLink, openLink } from '../state/links';
+import { useDiagramSession } from './session-context';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */
 export function Inspector() {
-  const ids = () => selectedIds();
+  const s = useDiagramSession();
+  const ids = () => s.selectedIds();
   return (
-    <fieldset class="panel-scroll inspector" disabled={timelineOpen()}>
+    <fieldset class="panel-scroll inspector" disabled={s.timelineOpen()}>
       <Switch fallback={<NothingSelected />}>
-        <Match when={selectedText()}>{id => <TextInspector id={id()} />}</Match>
+        <Match when={s.selectedText()}>{id => <TextInspector id={id()} />}</Match>
         <Match when={ids().length > 1}>
           <MultipleSelected count={ids().length} />
         </Match>
-        <Match when={ids().length === 1 && findEdge(doc, ids()[0]) && ids()[0]}>
+        <Match when={ids().length === 1 && findEdge(s.doc, ids()[0]) && ids()[0]}>
           {id => <EdgeInspector id={id()} />}
         </Match>
-        <Match when={ids().length === 1 && findObject(doc, ids()[0]) && ids()[0]}>
+        <Match when={ids().length === 1 && findObject(s.doc, ids()[0]) && ids()[0]}>
           {id => <ObjectInspector id={id()} />}
         </Match>
       </Switch>
     </fieldset>
   );
 }
-
-const edit = (label: string, fn: Parameters<typeof transact>[1]) => transact(label, fn);
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
@@ -109,7 +106,8 @@ function CommandButton(props: { command: CommandId; children: JSX.Element; class
 
 /** Color families in the diagram's theme, plus `auto` for the theme's default surface. */
 function Swatches(props: { selected?: ColorKey; shade?: Shade; group?: boolean }) {
-  const look = () => resolveAppearance(doc.appearance);
+  const s = useDiagramSession();
+  const look = () => resolveAppearance(s.doc.appearance);
   const families = () =>
     ['auto', ...look().families.keys()].filter(f => f === 'auto' || shadesOf(look(), f).length);
   const preview = (family: string) =>
@@ -134,7 +132,7 @@ function Swatches(props: { selected?: ColorKey; shade?: Shade; group?: boolean }
               aria-pressed={props.selected === key}
               {...tip(key === 'auto' ? 'Theme default' : capitalize(key))}
               style={{ background: preview(key).fill, 'border-color': preview(key).stroke }}
-              onClick={() => setColor(key)}
+              onClick={() => s.setColor(key)}
             />
           )}
         </For>
@@ -148,7 +146,8 @@ function Swatches(props: { selected?: ColorKey; shade?: Shade; group?: boolean }
 
 /** Numeric shades of a family, light to dark; the object's default shade is marked. */
 function ShadePicker(props: { family: string; shade?: Shade; group?: boolean }) {
-  const look = () => resolveAppearance(doc.appearance);
+  const s = useDiagramSession();
+  const look = () => resolveAppearance(s.doc.appearance);
   const fallback = () => (props.group ? groupShadeFor(look().theme) : NODE_SHADE);
   const current = () => props.shade ?? fallback();
   return (
@@ -168,7 +167,7 @@ function ShadePicker(props: { family: string; shade?: Shade; group?: boolean }) 
                 shade === fallback() ? 'Default shade' : undefined,
               )}
               style={{ background: swatch().fill, color: swatch().ink }}
-              onClick={() => setShade(shade === fallback() ? undefined : shade)}
+              onClick={() => s.setShade(shade === fallback() ? undefined : shade)}
             >
               {shade}
             </button>
@@ -191,12 +190,13 @@ const NOTE_SIDE_OPTIONS = NOTE_SIDES.map(s => [s, capitalize(s)] as const);
 
 /** A title, note, legend row or phase label: its words, and for a note where it sits. */
 function TextInspector(props: { id: string }) {
+  const s = useDiagramSession();
   const kind = () => parseTextId(props.id)!.kind;
-  const value = () => textValue(doc, props.id);
+  const value = () => textValue(s.doc, props.id);
   const note = () =>
-    kind() === 'note' ? doc.appearance.notes?.[Number(parseTextId(props.id)!.key)] : undefined;
+    kind() === 'note' ? s.doc.appearance.notes?.[Number(parseTextId(props.id)!.key)] : undefined;
   const setNote = (label: string, fn: (n: Note) => void) =>
-    edit(label, d => fn(d.appearance.notes![Number(parseTextId(props.id)!.key)]));
+    s.transact(label, d => fn(d.appearance.notes![Number(parseTextId(props.id)!.key)]));
   return (
     <Show when={value() !== undefined} fallback={<NothingSelected />}>
       <Heading title={capitalize(TEXT_NAMES[kind()])} />
@@ -205,15 +205,15 @@ function TextInspector(props: { id: string }) {
           label="Text"
           value={value()!}
           onCommit={v => {
-            edit(`Edit ${TEXT_NAMES[kind()]}`, d => setTextValue(d, props.id, v.trim()));
-            if (!v.trim()) clearSelection();
+            s.transact(`Edit ${TEXT_NAMES[kind()]}`, d => setTextValue(d, props.id, v.trim()));
+            if (!v.trim()) s.clearSelection();
           }}
         />
         <Show when={note()?.near}>
           {near => (
             <SelectField
-              label={`Beside ${findObject(doc, near())?.title ?? findEdge(doc, near())?.label ?? near()}`}
-              value={noteSide(doc, note()!)}
+              label={`Beside ${findObject(s.doc, near())?.title ?? findEdge(s.doc, near())?.label ?? near()}`}
+              value={noteSide(s.doc, note()!)}
               options={NOTE_SIDE_OPTIONS}
               onChange={v => setNote('Move note', n => void (n.side = v))}
             />
@@ -232,8 +232,8 @@ function TextInspector(props: { id: string }) {
             type="button"
             class="button"
             onClick={() => {
-              edit(`Delete ${TEXT_NAMES[kind()]}`, d => removeText(d, props.id));
-              clearSelection();
+              s.transact(`Delete ${TEXT_NAMES[kind()]}`, d => removeText(d, props.id));
+              s.clearSelection();
             }}
           >
             Delete {TEXT_NAMES[kind()]}
@@ -245,23 +245,24 @@ function TextInspector(props: { id: string }) {
 }
 
 function NothingSelected() {
+  const s = useDiagramSession();
   return (
     <>
       <p class="hint">Select a shape, connection or container to edit it.</p>
-      <Show when={doc.layout.intent.start || doc.layout.intent.end}>
+      <Show when={s.doc.layout.intent.start || s.doc.layout.intent.end}>
         <IntentSummary />
       </Show>
       <Section>
         {/* Editor preferences, which belong to the session and not to the drawing. */}
         <Checkbox
           label="Snap to nearby shapes"
-          checked={doc.settings.snap}
-          onChange={v => mutate(d => void (d.settings.snap = v))}
+          checked={s.doc.settings.snap}
+          onChange={v => s.mutate(d => void (d.settings.snap = v))}
         />
         <Checkbox
           label="Show manual position badges"
-          checked={doc.settings.showManual}
-          onChange={v => mutate(d => void (d.settings.showManual = v))}
+          checked={s.doc.settings.showManual}
+          onChange={v => s.mutate(d => void (d.settings.showManual = v))}
         />
       </Section>
     </>
@@ -278,11 +279,12 @@ const ALIGN_COMMANDS: CommandId[] = [
 ];
 
 function MultipleSelected(props: { count: number }) {
+  const s = useDiagramSession();
   return (
     <>
       <Heading title={`${props.count} selected`} />
       <Section>
-        <Show when={!doc.layout.sequence}>
+        <Show when={!s.doc.layout.sequence}>
           <div class="align-row" role="group" aria-label="Align and distribute">
             <For each={ALIGN_COMMANDS}>{command => <IconCommand command={command} />}</For>
           </div>
@@ -290,7 +292,7 @@ function MultipleSelected(props: { count: number }) {
         <div class="fields-2">
           <CommandButton command="group">Wrap container</CommandButton>
           <CommandButton command="duplicate">Duplicate</CommandButton>
-          <Show when={!doc.layout.sequence}>
+          <Show when={!s.doc.layout.sequence}>
             <CommandButton command="pin">Pin</CommandButton>
           </Show>
           <CommandButton command="layout">Tidy</CommandButton>
@@ -298,8 +300,8 @@ function MultipleSelected(props: { count: number }) {
       </Section>
       <Section title="Color">
         <Swatches
-          selected={styleOf(doc, selectedIds()[0]).color}
-          shade={styleOf(doc, selectedIds()[0]).shade}
+          selected={styleOf(s.doc, s.selectedIds()[0]).color}
+          shade={styleOf(s.doc, s.selectedIds()[0]).shade}
         />
       </Section>
       <CommandButton command="delete" class="danger ghost full">
@@ -316,9 +318,10 @@ const SIDE_OPTIONS = (['auto', 'left', 'right', 'top', 'bottom'] as PortSide[]).
 const MARKER_OPTIONS = MARKERS.map(m => [m, capitalize(m.replace('-', ' '))] as const);
 
 function EdgeInspector(props: { id: string }) {
-  const edge = () => findEdge(doc, props.id)!;
-  const cfg = () => doc.layout.edges[props.id] || {};
-  const route = () => routesById().get(props.id);
+  const s = useDiagramSession();
+  const edge = () => findEdge(s.doc, props.id)!;
+  const cfg = () => s.doc.layout.edges[props.id] || {};
+  const route = () => s.routesById().get(props.id);
   return (
     <>
       <Heading title="Connection" />
@@ -326,23 +329,27 @@ function EdgeInspector(props: { id: string }) {
         <TextField
           label="Label"
           value={edge().label}
-          onCommit={v => edit('Edit label', d => edits.setEdgeLabel(d, props.id, v))}
+          onCommit={v => s.transact('Edit label', d => edits.setEdgeLabel(d, props.id, v))}
         />
         <Checkbox
           label="Directed"
           checked={edge().directed}
-          onChange={v => edit('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))}
+          onChange={v =>
+            s.transact('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))
+          }
         />
         <Checkbox
           label="Dashed"
           checked={edge().dashed}
-          onChange={v => edit('Edit dashed', d => edits.setEdge(d, props.id, { dashed: v }))}
+          onChange={v => s.transact('Edit dashed', d => edits.setEdge(d, props.id, { dashed: v }))}
         />
-        <Show when={!fileMode()}>
+        <Show when={!s.fileMode()}>
           <Checkbox
             label="Emphasis"
             checked={edge().emphasis}
-            onChange={v => edit('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))}
+            onChange={v =>
+              s.transact('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))
+            }
           />
         </Show>
       </Section>
@@ -353,14 +360,14 @@ function EdgeInspector(props: { id: string }) {
             value={tailOf(edge())}
             options={MARKER_OPTIONS}
             disabled={!edge().directed}
-            onChange={v => edit('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
+            onChange={v => s.transact('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
           />
           <SelectField
             label="Head"
             value={headOf(edge())}
             options={MARKER_OPTIONS}
             disabled={!edge().directed}
-            onChange={v => edit('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
+            onChange={v => s.transact('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
           />
         </div>
       </Section>
@@ -371,7 +378,7 @@ function EdgeInspector(props: { id: string }) {
             value={cfg().fromSide || 'auto'}
             options={SIDE_OPTIONS}
             onChange={v =>
-              edit('Edit fromSide', d => edits.setEdgeLayout(d, props.id, { fromSide: v }))
+              s.transact('Edit fromSide', d => edits.setEdgeLayout(d, props.id, { fromSide: v }))
             }
           />
           <SelectField
@@ -379,7 +386,7 @@ function EdgeInspector(props: { id: string }) {
             value={cfg().toSide || 'auto'}
             options={SIDE_OPTIONS}
             onChange={v =>
-              edit('Edit toSide', d => edits.setEdgeLayout(d, props.id, { toSide: v }))
+              s.transact('Edit toSide', d => edits.setEdgeLayout(d, props.id, { toSide: v }))
             }
           />
         </div>
@@ -390,11 +397,11 @@ function EdgeInspector(props: { id: string }) {
           <CommandButton command="reverse-edge">Reverse</CommandButton>
           <CommandButton command="auto-ports">Use auto ports</CommandButton>
           <CommandButton command="insert-step">Insert step · Tab</CommandButton>
-          <Show when={!fileMode()}>
+          <Show when={!s.fileMode()}>
             <CommandButton command="reset-route">Reset bends</CommandButton>
           </Show>
         </div>
-        <Show when={!fileMode()}>
+        <Show when={!s.fileMode()}>
           <p class="hint">
             Double-click a line to add a bend. Double-click a bend to remove it. Alt-drag a label to
             move it.
@@ -409,12 +416,14 @@ function EdgeInspector(props: { id: string }) {
 }
 
 function ObjectInspector(props: { id: string }) {
-  const container = () => isGroup(doc, props.id);
-  const object = () => findNode(doc, props.id) ?? findGroup(doc, props.id)!;
-  const style = () => styleOf(doc, props.id);
-  const shapes = () => (fileMode() ? SHAPES.filter(s => DSL_SHAPES.includes(s as never)) : SHAPES);
+  const s = useDiagramSession();
+  const container = () => isGroup(s.doc, props.id);
+  const object = () => findNode(s.doc, props.id) ?? findGroup(s.doc, props.id)!;
+  const style = () => styleOf(s.doc, props.id);
+  const shapes = () =>
+    s.fileMode() ? SHAPES.filter(s => DSL_SHAPES.includes(s as never)) : SHAPES;
   // A sequence places everything in lanes, so only a participant's size is the file's to set.
-  const lanes = () => !!doc.layout.sequence;
+  const lanes = () => !!s.doc.layout.sequence;
   return (
     <>
       <Heading title={container() ? 'Container' : 'Shape'} />
@@ -422,7 +431,7 @@ function ObjectInspector(props: { id: string }) {
         <TextField
           label="Label"
           value={object().title}
-          onCommit={v => edit('Edit title', d => edits.setTitle(d, props.id, v))}
+          onCommit={v => s.transact('Edit title', d => edits.setTitle(d, props.id, v))}
         />
         <Show when={object().href}>
           {href => (
@@ -447,10 +456,14 @@ function ObjectInspector(props: { id: string }) {
             label="Shape"
             value={style().shape}
             options={shapes().map(s => [s, SHAPE_LABELS[s]] as const)}
-            onChange={shape => edit('Edit shape', d => edits.setStyle(d, props.id, { shape }))}
+            onChange={shape =>
+              s.transact('Edit shape', d => edits.setStyle(d, props.id, { shape }))
+            }
           />
         </Show>
-        <Show when={isCell(doc, props.id) && style().shape !== 'marker' && findNode(doc, props.id)}>
+        <Show
+          when={isCell(s.doc, props.id) && style().shape !== 'marker' && findNode(s.doc, props.id)}
+        >
           {node => (
             <Show
               when={node().span !== 'var'}
@@ -462,7 +475,7 @@ function ObjectInspector(props: { id: string }) {
                 min={1}
                 max={4096}
                 onChange={v =>
-                  edit('Edit span', d => {
+                  s.transact('Edit span', d => {
                     const n = findNode(d, props.id)!;
                     if (Math.round(v) > 1) n.span = Math.round(v);
                     else delete n.span;
@@ -510,25 +523,27 @@ function ObjectInspector(props: { id: string }) {
 }
 
 function GeometryField(props: { id: string; label: string; field: 'x' | 'y' | 'w' | 'h' }) {
+  const s = useDiagramSession();
   return (
     <NumberField
       label={props.label}
-      value={Math.round(geometry(props.id)[props.field])}
+      value={Math.round(s.geometry(props.id)[props.field])}
       onChange={v =>
-        edit('Edit ' + props.field, d => edits.setGeometry(d, props.id, props.field, v))
+        s.transact('Edit ' + props.field, d => edits.setGeometry(d, props.id, props.field, v))
       }
     />
   );
 }
 
 function PinControl(props: { id: string }) {
-  const r = () => geometry(props.id);
-  const inherited = () => ancestors(doc, props.id).find(a => geometry(a).pinned);
+  const s = useDiagramSession();
+  const r = () => s.geometry(props.id);
+  const inherited = () => ancestors(s.doc, props.id).find(a => s.geometry(a).pinned);
   const note = () => {
     const parent = inherited();
-    if (parent) return `Held by pinned container “${findGroup(doc, parent)?.title}”.`;
+    if (parent) return `Held by pinned container “${findGroup(s.doc, parent)?.title}”.`;
     if (r().manual && !r().pinned)
-      return doc.settings.respectManual ? 'Moved by hand and protected.' : 'Moved by hand.';
+      return s.doc.settings.respectManual ? 'Moved by hand and protected.' : 'Moved by hand.';
     return null;
   };
   return (
@@ -536,7 +551,7 @@ function PinControl(props: { id: string }) {
       <Checkbox
         label="Pin"
         checked={!!r().pinned}
-        onChange={v => edit('Edit pinned', d => void (d.layout.nodes[props.id].pinned = v))}
+        onChange={v => s.transact('Edit pinned', d => void (d.layout.nodes[props.id].pinned = v))}
       />
       <Show when={note()}>
         <p class="hint">{note()}</p>
@@ -546,23 +561,24 @@ function PinControl(props: { id: string }) {
 }
 
 function ParentSelect(props: { id: string }) {
+  const s = useDiagramSession();
   const options = () => {
     const excluded = new Set([
       props.id,
-      ...(isGroup(doc, props.id) ? descendants(doc, props.id) : []),
+      ...(isGroup(s.doc, props.id) ? descendants(s.doc, props.id) : []),
     ]);
     return [
       ['', 'No container'] as const,
-      ...doc.graph.groups.filter(g => !excluded.has(g.id)).map(g => [g.id, g.title] as const),
+      ...s.doc.graph.groups.filter(g => !excluded.has(g.id)).map(g => [g.id, g.title] as const),
     ];
   };
-  const object = () => findNode(doc, props.id) ?? findGroup(doc, props.id);
+  const object = () => findNode(s.doc, props.id) ?? findGroup(s.doc, props.id);
   return (
     <SelectField
       label="Container"
       value={object()?.parentId || ''}
       options={options()}
-      onChange={v => edit('Edit parentId', d => edits.setParent(d, props.id, v || null))}
+      onChange={v => s.transact('Edit parentId', d => edits.setParent(d, props.id, v || null))}
     />
   );
 }
@@ -570,14 +586,15 @@ function ParentSelect(props: { id: string }) {
 const LABEL_MODES: LabelMode[] = ['center', 'top', 'bottom', 'left', 'right', 'detached'];
 
 function ShapeSections(props: { id: string }) {
-  const style = () => styleOf(doc, props.id);
+  const s = useDiagramSession();
+  const style = () => styleOf(s.doc, props.id);
   const labelMode = () =>
-    nodeLabel(doc, props.id, findNode(doc, props.id)!.title, geometry(props.id)).mode;
+    nodeLabel(s.doc, props.id, findNode(s.doc, props.id)!.title, s.geometry(props.id)).mode;
   return (
     <>
       {/* A file cannot store these yet. */}
-      <Show when={!fileMode()}>
-        <Show when={!doc.layout.sequence}>
+      <Show when={!s.fileMode()}>
+        <Show when={!s.doc.layout.sequence}>
           <IntentSection id={props.id} />
         </Show>
         <details class="inspector-section">
@@ -586,13 +603,13 @@ function ShapeSections(props: { id: string }) {
             label="Label position"
             value={labelMode()}
             options={LABEL_MODES.map(mode => [mode, capitalize(mode)] as const)}
-            onChange={mode => edit('Edit mode', d => edits.setLabelMode(d, props.id, mode))}
+            onChange={mode => s.transact('Edit mode', d => edits.setLabelMode(d, props.id, mode))}
           />
           <SelectField
             label="Icon"
             value={style().icon || ''}
             options={[['', 'None'], ...NODE_ICONS.map(i => [i, capitalize(i)] as const)]}
-            onChange={icon => edit('Edit icon', d => edits.setStyle(d, props.id, { icon }))}
+            onChange={icon => s.transact('Edit icon', d => edits.setStyle(d, props.id, { icon }))}
           />
           <Show when={style().shape === 'image'}>
             <CommandButton command="replace-image" class="full">
@@ -614,12 +631,13 @@ function ShapeSections(props: { id: string }) {
 const openArrange = () => setRightTab('arrange');
 
 function ContainerSections(props: { id: string }) {
-  const cfg = () => doc.layout.containers[props.id];
+  const s = useDiagramSession();
+  const cfg = () => s.doc.layout.containers[props.id];
   return (
     <>
       <Section title="Contents">
         <Show
-          when={fileMode()}
+          when={s.fileMode()}
           fallback={
             <>
               <SelectField
@@ -631,7 +649,7 @@ function ContainerSections(props: { id: string }) {
                   ['DOWN', 'Top to bottom'],
                 ]}
                 onChange={direction =>
-                  edit('Edit direction', d => edits.setContainer(d, props.id, { direction }))
+                  s.transact('Edit direction', d => edits.setContainer(d, props.id, { direction }))
                 }
               />
               <NumberField
@@ -640,7 +658,7 @@ function ContainerSections(props: { id: string }) {
                 min={12}
                 max={80}
                 onChange={padding =>
-                  edit('Edit padding', d => edits.setContainer(d, props.id, { padding }))
+                  s.transact('Edit padding', d => edits.setContainer(d, props.id, { padding }))
                 }
               />
               <div class="fields-2">
@@ -660,7 +678,7 @@ function ContainerSections(props: { id: string }) {
         <ParentSelect id={props.id} />
         <div class="fields-2">
           <CommandButton command="collapse-selected">
-            {doc.collapsed.includes(props.id) ? 'Expand' : 'Collapse'}
+            {s.doc.collapsed.includes(props.id) ? 'Expand' : 'Collapse'}
           </CommandButton>
           <CommandButton command="ungroup">Ungroup</CommandButton>
         </div>
@@ -669,15 +687,16 @@ function ContainerSections(props: { id: string }) {
   );
 }
 
-const roleOf = (id: string): IntentRole | null =>
+const roleOf = (doc: Diagram, id: string): IntentRole | null =>
   doc.layout.intent.start?.id === id ? 'start' : doc.layout.intent.end?.id === id ? 'end' : null;
 
 function IntentSection(props: { id: string }) {
+  const s = useDiagramSession();
   return (
     <details class="inspector-section">
       <summary>Layout intent</summary>
       <Show
-        when={roleOf(props.id)}
+        when={roleOf(s.doc, props.id)}
         fallback={
           <div class="fields-2">
             <CommandButton command="mark-start">Start here</CommandButton>
@@ -692,18 +711,18 @@ function IntentSection(props: { id: string }) {
               <button
                 type="button"
                 class="button ghost small"
-                onClick={() => setLayoutIntent(role(), null)}
+                onClick={() => s.setLayoutIntent(role(), null)}
               >
                 Clear
               </button>
             </div>
             <SelectField
               label="Preferred area"
-              value={doc.layout.intent[role()]!.placement}
+              value={s.doc.layout.intent[role()]!.placement}
               options={edits
                 .intentPlacements(role())
                 .map(p => [p, edits.INTENT_LABELS[p]] as const)}
-              onChange={placement => setLayoutIntent(role(), props.id, placement)}
+              onChange={placement => s.setLayoutIntent(role(), props.id, placement)}
             />
           </>
         )}
@@ -714,9 +733,10 @@ function IntentSection(props: { id: string }) {
 
 /** Start and end preferences for the whole diagram. Also shown in the Arrange panel. */
 export function IntentSummary() {
+  const s = useDiagramSession();
   const entries = () =>
     (['start', 'end'] as const).flatMap(role =>
-      doc.layout.intent[role] ? [[role, doc.layout.intent[role]!] as const] : [],
+      s.doc.layout.intent[role] ? [[role, s.doc.layout.intent[role]!] as const] : [],
     );
   return (
     <Section title="Drawing intent">
@@ -736,14 +756,14 @@ export function IntentSummary() {
               <button
                 type="button"
                 class="button ghost grow truncate"
-                onClick={() => selectItems([hint.id])}
+                onClick={() => s.selectItems([hint.id])}
               >
-                {findNode(doc, hint.id)?.title || hint.id}
+                {findNode(s.doc, hint.id)?.title || hint.id}
               </button>
               <IconButton
                 icon="close"
                 label={`Clear ${role}`}
-                onClick={() => setLayoutIntent(role, null)}
+                onClick={() => s.setLayoutIntent(role, null)}
               />
             </div>
             <p class="hint">{edits.INTENT_LABELS[hint.placement]}</p>

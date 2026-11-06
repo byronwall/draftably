@@ -1,27 +1,16 @@
 import { createMemo, For, onMount, Show } from 'solid-js';
 import { LayoutLab } from '../../engines/layout-engine.js';
 import { clamp } from '../../model/geometry';
-import {
-  bookmarkStep,
-  closeTimeline,
-  endPeek,
-  fitTimelinePath,
-  keepStep,
-  playing,
-  scrub,
-  setGhost,
-  stopPlayback,
-  timeline,
-  togglePlayback,
-  type GhostMode,
-} from '../../state/sculpt';
+import { type GhostMode } from '../../state/session/sculpt';
 import { IconButton, Select, tip } from '../controls';
+import { useDiagramSession } from '../session-context';
 
 /** Scrub recorded layout steps, bookmark one as a restore source, and keep a step. */
 export function TimelineDeck() {
+  const s = useDiagramSession();
   let deck!: HTMLElement;
   return (
-    <Show when={timeline()}>
+    <Show when={s.timeline()}>
       {t => {
         const algorithm = () =>
           LayoutLab.algorithms.find(a => a.id === t().algorithm)?.name ?? 'Layout';
@@ -47,7 +36,7 @@ export function TimelineDeck() {
                   undefined,
                   'Fit every recorded arrangement in one steady camera.',
                 )}
-                onClick={() => fitTimelinePath(deck.offsetHeight)}
+                onClick={() => s.fitTimelinePath(deck.offsetHeight)}
               >
                 Fit path
               </button>
@@ -61,14 +50,14 @@ export function TimelineDeck() {
                     ['final', 'Computed finish'],
                     ['off', 'Off'],
                   ]}
-                  onChange={setGhost}
+                  onChange={s.setGhost}
                 />
               </label>
               <IconButton
                 icon="close"
                 label="Cancel layout timeline"
                 keys="Esc"
-                onClick={closeTimeline}
+                onClick={s.closeTimeline}
               />
             </header>
             <Show when={!t().busy && t().data} fallback={<TimelineLoading />}>
@@ -82,11 +71,12 @@ export function TimelineDeck() {
 }
 
 function TimelineLoading() {
+  const s = useDiagramSession();
   return (
     <div class="timeline-loading">
       <span class="spinner" />
       <p>Recording intermediate arrangements, not just the start and end.</p>
-      <button type="button" class="button" onClick={closeTimeline}>
+      <button type="button" class="button" onClick={s.closeTimeline}>
         Cancel
       </button>
     </div>
@@ -94,9 +84,10 @@ function TimelineLoading() {
 }
 
 function TimelineTrack() {
+  const s = useDiagramSession();
   let slider!: HTMLInputElement;
   onMount(() => slider.focus({ preventScroll: true }));
-  const t = () => timeline()!;
+  const t = () => s.timeline()!;
   const data = () => t().data!;
   const max = () => data().frames.length - 1;
   const shown = () => t().peek ?? t().index;
@@ -108,8 +99,8 @@ function TimelineTrack() {
     ).length;
   });
   const go = (i: number) => {
-    stopPlayback();
-    scrub(i);
+    s.stopPlayback();
+    s.scrub(i);
   };
 
   return (
@@ -118,11 +109,11 @@ function TimelineTrack() {
         <button
           type="button"
           class="button"
-          aria-pressed={playing()}
+          aria-pressed={s.playing()}
           disabled={!max()}
-          onClick={togglePlayback}
+          onClick={s.togglePlayback}
         >
-          {playing() ? 'Pause' : 'Play'}
+          {s.playing() ? 'Pause' : 'Play'}
         </button>
         <IconButton
           icon="chevron-left"
@@ -144,12 +135,12 @@ function TimelineTrack() {
             onInput={e => go(Number(e.currentTarget.value))}
             onPointerMove={e => {
               // Hovering the track previews a step without choosing it.
-              if (e.buttons || playing()) return;
+              if (e.buttons || s.playing()) return;
               const r = e.currentTarget.getBoundingClientRect(),
                 ratio = clamp((e.clientX - r.left - 7) / (r.width - 14), 0, 1);
-              scrub(Math.round(ratio * max()), { peek: true });
+              s.scrub(Math.round(ratio * max()), { peek: true });
             }}
-            onPointerOut={endPeek}
+            onPointerOut={s.endPeek}
           />
           <div class="timeline-marks">
             <For each={data().bookmarks}>
@@ -191,7 +182,7 @@ function TimelineTrack() {
           type="button"
           class="button"
           {...tip('Bookmark for restore', undefined, 'Use this step as a restore source later.')}
-          onClick={bookmarkStep}
+          onClick={s.bookmarkStep}
         >
           Bookmark for restore
         </button>
@@ -217,10 +208,10 @@ function TimelineTrack() {
             : 'Recorded steps—not % optimal. Bookmark a good area, then restore it with the brush.'}
         </span>
         <span class="grow" />
-        <button type="button" class="button" onClick={() => keepStep({ brush: true })}>
+        <button type="button" class="button" onClick={() => s.keepStep({ brush: true })}>
           Keep & brush
         </button>
-        <button type="button" class="button primary" onClick={() => keepStep()}>
+        <button type="button" class="button primary" onClick={() => s.keepStep()}>
           Keep & edit
         </button>
       </div>

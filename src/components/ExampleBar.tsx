@@ -1,14 +1,6 @@
 import { createEffect, createSignal, Show } from 'solid-js';
 import { downloadText } from '../lib/svg-export';
-import {
-  currentSource,
-  exampleEdited,
-  exampleRestored,
-  fileSession,
-  scratchName,
-  markExampleSaved,
-  resetExample,
-} from '../state/file-session';
+
 import {
   cameFromPlayground,
   createDiagramFile,
@@ -19,15 +11,17 @@ import {
 } from '../state/launch';
 import { savingExample, setSavingExample } from '../state/ui';
 import { Icon } from './Icon';
+import { useDiagramSession } from './session-context';
 
 /**
  * Shown for as long as an example is open, so it is never mistaken for a file on disk. It offers
  * the ways out: save the example as a new file, reset it, or go back to the start screen.
  */
 export function ExampleBar() {
+  const s = useDiagramSession();
   const [path, setPath] = createSignal('');
   const [error, setError] = createSignal('');
-  const id = () => fileSession()?.example ?? 'example';
+  const id = () => s.fileSession()?.example ?? 'example';
   const fromPlay = cameFromPlayground();
 
   createEffect(() => {
@@ -39,9 +33,9 @@ export function ExampleBar() {
     e.preventDefault();
     setError('');
     try {
-      const created = await createDiagramFile(path().trim(), currentSource());
+      const created = await createDiagramFile(path().trim(), s.currentSource());
       // Leave without the unsaved-edits prompt: the edits are in the new file.
-      markExampleSaved();
+      s.markExampleSaved();
       location.assign(fileUrl(created));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -52,7 +46,7 @@ export function ExampleBar() {
     <div class="example-bar" role="status">
       <span class="example-badge">
         <Icon name="spark" />
-        {scratchName()}
+        {s.scratchName()}
       </span>
       <Show
         when={savingExample()}
@@ -60,9 +54,9 @@ export function ExampleBar() {
           <>
             <span class="example-text">
               <span class="example-note">
-                {exampleRestored() && exampleEdited()
+                {s.exampleRestored() && s.exampleEdited()
                   ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
-                  : exampleEdited()
+                  : s.exampleEdited()
                     ? 'Your edits are kept in this browser only. Save as a file to keep them.'
                     : 'A scratch copy. Edits stay in this browser and are not written to disk.'}
               </span>
@@ -77,7 +71,7 @@ export function ExampleBar() {
                   <button
                     type="button"
                     class="button small"
-                    onClick={() => downloadText(currentSource(), `${id()}.draft`, 'text/plain')}
+                    onClick={() => downloadText(s.currentSource(), `${id()}.draft`, 'text/plain')}
                   >
                     <Icon name="download" />
                     Download .draft
@@ -96,8 +90,8 @@ export function ExampleBar() {
               <button
                 type="button"
                 class="button small ghost"
-                disabled={!exampleEdited()}
-                onClick={resetExample}
+                disabled={!s.exampleEdited()}
+                onClick={s.resetExample}
               >
                 Reset
               </button>
@@ -105,7 +99,7 @@ export function ExampleBar() {
                 when={fromPlay}
                 fallback={
                   <a class="button small ghost" href={startUrl()}>
-                    Close {scratchName().toLowerCase()}
+                    Close {s.scratchName().toLowerCase()}
                   </a>
                 }
               >

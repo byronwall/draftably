@@ -1,7 +1,6 @@
 import { createMemo, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
 import type { PdfPage } from '../cli/pdf';
-import { selection } from '../state/document';
-import { fileMode } from '../state/file-session';
+
 import {
   copyImage,
   exportDocument,
@@ -20,6 +19,7 @@ import { IconButton, tip } from './controls';
 import { Modal } from './Dialogs';
 import { baseName, folderOf } from './workspace-files';
 import './export.css';
+import { useDiagramSession } from './session-context';
 
 const KINDS: [ExportKind, string][] = [
   ['png', 'PNG'],
@@ -66,9 +66,10 @@ function Choice<T extends string | number>(props: {
  * diagrams as `draftably pdf` does.
  */
 export function ExportDialog() {
+  const s = useDiagramSession();
   const [busy, setBusy] = createSignal(false);
   const [error, setError] = createSignal('');
-  const picked = selection().size;
+  const picked = s.selection().size;
   const [onlySelection, setOnlySelection] = createSignal(picked > 0);
   const pdf = pdfState();
 
@@ -204,7 +205,7 @@ export function ExportDialog() {
                   ? `Only the selection (${picked} ${picked === 1 ? 'object' : 'objects'})`
                   : 'Only the selection (nothing selected)'}
               </label>
-              <Show when={fileMode()}>
+              <Show when={s.fileMode()}>
                 <label>
                   <input
                     type="checkbox"

@@ -1,5 +1,5 @@
 import { Show } from 'solid-js';
-import { doc } from '../state/document';
+
 import { runCommand } from '../state/commands';
 import { workspace } from '../state/launch';
 import {
@@ -15,10 +15,12 @@ import { IconButton, tip } from './controls';
 import { FilesPanel } from './FilesPanel';
 import { ObjectsPanel } from './ObjectsPanel';
 import { ResizeHandle } from './ResizeHandle';
+import { useDiagramSession } from './session-context';
 
 /** The left side: this folder's diagrams and the open diagram's objects, one at a time. */
 export function Sidebar() {
-  const objects = () => doc.graph.nodes.length + doc.graph.groups.length;
+  const s = useDiagramSession();
+  const objects = () => s.doc.graph.nodes.length + s.doc.graph.groups.length;
   return (
     <aside class="panel sidebar" aria-label="Sidebar">
       <header class="sidebar-head">

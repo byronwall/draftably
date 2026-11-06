@@ -4,9 +4,9 @@ import type { DiagramFrame } from '../../model/frame';
 import { measureText } from '../../model/fonts';
 import { NOTE_PAD } from '../../model/note';
 import type { Run } from '../../model/rich-text';
-import type { Rect } from '../../model/types';
-import { parseTextId, textId } from '../../state/canvas-text';
-import { doc } from '../../state/document';
+import type { Diagram, Rect } from '../../model/types';
+import { parseTextId, textId } from '../../state/session/canvas-text';
+
 import { headingSlot } from './Frame';
 
 type Type = ResolvedAppearance['annotation'];
@@ -34,7 +34,7 @@ const linkBoxes = (lines: Run[][], x: number, y: number, lineHeight: number) =>
  * Every note, legend row and phase label the frame draws, with the box a click or an edit covers.
  * Status rows in the key are counted from the drawing, so they are not here.
  */
-export function textBoxes(frame: DiagramFrame): TextBox[] {
+export function textBoxes(doc: Diagram, frame: DiagramFrame): TextBox[] {
   const look = resolveAppearance(doc.appearance),
     type = look.annotation,
     panel = swatchFor(look, 'slate', 50, 'group').fill,
@@ -101,11 +101,11 @@ export function textBoxes(frame: DiagramFrame): TextBox[] {
 }
 
 /** The box of one text id, including the title and subtitle; undefined when it is not drawn. */
-export function textBox(frame: DiagramFrame, id: string): TextBox | undefined {
+export function textBox(doc: Diagram, frame: DiagramFrame, id: string): TextBox | undefined {
   const t = parseTextId(id);
   if (!t) return;
   if (t.kind === 'title' || t.kind === 'subtitle') {
-    const slot = headingSlot(frame, t.kind),
+    const slot = headingSlot(doc, frame, t.kind),
       look = resolveAppearance(doc.appearance);
     return (
       slot && {
@@ -117,5 +117,5 @@ export function textBox(frame: DiagramFrame, id: string): TextBox | undefined {
       }
     );
   }
-  return textBoxes(frame).find(b => b.id === id);
+  return textBoxes(doc, frame).find(b => b.id === id);
 }

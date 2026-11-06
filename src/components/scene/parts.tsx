@@ -2,8 +2,10 @@ import { For, Show } from 'solid-js';
 import type { TypeProfile } from '../../model/fonts';
 import { markerMarkup } from '../../model/legend';
 import type { Rect } from '../../model/types';
-import { fileScene } from '../../state/file-session';
+
 import { SceneGlyph } from '../Icon';
+import { useDiagramSession } from '../session-context';
+import type { DiagramSession } from '../../state/session';
 
 /** Multi-line, vertically centered text in one of the diagram's type profiles. */
 export function SceneText(props: {
@@ -69,10 +71,12 @@ export function pinSpot(shape: string, w: number, h: number) {
 }
 
 /** The line that places `id` in the open file (`pin`, `near`, `stay` or `nudge`), if any. */
-function placingLine(id: string) {
-  const h = fileScene()?.model.hints.find(
-    h => 'id' in h && h.id === id && ['pin', 'near', 'stay', 'nudge'].includes(h.type),
-  );
+function placingLine(s: DiagramSession, id: string) {
+  const h = s
+    .fileScene()
+    ?.model.hints.find(
+      h => 'id' in h && h.id === id && ['pin', 'near', 'stay', 'nudge'].includes(h.type),
+    );
   return h && { type: h.type, line: h.line };
 }
 
@@ -90,8 +94,9 @@ export function PositionBadge(props: {
   /** The object's ink, so the pin reads on its fill. */
   color: string;
 }) {
+  const s = useDiagramSession();
   const tip = () => {
-    const placed = placingLine(props.id);
+    const placed = placingLine(s, props.id);
     if (placed) return `Placed by line ${placed.line} (${placed.type})`;
     return props.pinned ? 'Pinned' : 'Moved by hand';
   };

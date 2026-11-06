@@ -1,9 +1,9 @@
 import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
-import { buildFromList, setTool } from '../state/actions';
+
 import { commandEnabled, runCommand } from '../state/commands';
-import { doc, selectedIds } from '../state/document';
+
 import { siteUrl } from '../state/launch';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';
@@ -11,6 +11,7 @@ import { ExportDialog } from './ExportDialog';
 import { Icon } from './Icon';
 import { Palette } from './Palette';
 import './dialogs.css';
+import { useDiagramSession } from './session-context';
 
 /** The single modal dialog that is open, if any. */
 export function Dialogs() {
@@ -72,6 +73,7 @@ export function Modal(props: {
   footer?: JSX.Element;
   class?: string;
 }) {
+  const s = useDiagramSession();
   let el!: HTMLDialogElement;
   const previousFocus = document.activeElement as HTMLElement | null;
   onMount(() => {
@@ -92,7 +94,7 @@ export function Modal(props: {
       onCancel={e => {
         e.preventDefault();
         closeDialog();
-        queueMicrotask(() => setTool('select'));
+        queueMicrotask(() => s.setTool('select'));
       }}
     >
       <header class="modal-head">
@@ -203,8 +205,9 @@ function HelpDialog() {
 }
 
 function QuickBuildDialog() {
-  const source = selectedIds().find(id => findNode(doc, id));
-  const container = selectedIds().find(id => findGroup(doc, id));
+  const s = useDiagramSession();
+  const source = s.selectedIds().find(id => findNode(s.doc, id));
+  const container = s.selectedIds().find(id => findGroup(s.doc, id));
   const [text, setText] = createSignal(quickBuildText());
   const [mode, setMode] = createSignal<BuildMode>('chain');
   const [title, setTitle] = createSignal('');
@@ -221,7 +224,7 @@ function QuickBuildDialog() {
       return;
     }
     closeDialog();
-    buildFromList(lines, {
+    s.buildFromList(lines, {
       mode: mode(),
       title: title().trim(),
       source: continueFrom() ? source : null,
@@ -292,12 +295,12 @@ function QuickBuildDialog() {
                 checked={continueFrom()}
                 onChange={e => setContinueFrom(e.currentTarget.checked)}
               />
-              <span>Continue from {findNode(doc, id())?.title}</span>
+              <span>Continue from {findNode(s.doc, id())?.title}</span>
             </label>
           )}
         </Show>
         <Show when={!source && container}>
-          {id => <p class="hint">New shapes go inside {findGroup(doc, id())?.title}.</p>}
+          {id => <p class="hint">New shapes go inside {findGroup(s.doc, id())?.title}.</p>}
         </Show>
         <p class="hint" classList={{ 'error-text': !!error() }}>
           {error() ||

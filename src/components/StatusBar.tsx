@@ -1,12 +1,12 @@
 import { Show } from 'solid-js';
 import { findNode } from '../model/graph';
-import { fileMode } from '../state/file-session';
+
 import { FileNotes } from './FileNotes';
-import { doc, selection } from '../state/document';
-import { connectFrom, drag, tool, type Tool } from '../state/editor';
-import { layoutBusy, layoutReport } from '../state/layout';
-import { blockedRouteIds, visibleScene } from '../state/scene';
+
+import { type Tool } from '../state/session/editor';
+
 import { ancestors } from '../model/graph';
+import { useDiagramSession } from './session-context';
 
 const HINTS: Record<Tool, string> = {
   brush: 'Hover previews · drag paints · [ / ] radius · Alt restores · Space pans',
@@ -26,29 +26,30 @@ const version = `v${BUILD.version}${BUILD.commit ? ` · ${BUILD.commit.slice(0, 
 const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
 
 export function StatusBar() {
+  const s = useDiagramSession();
   const counts = () => {
-    const vg = visibleScene();
-    return `${count(vg.nodes.length, 'shape')} · ${count(vg.edges.length, 'connection')}${selection().size ? ` · ${selection().size} selected` : ''}`;
+    const vg = s.visibleScene();
+    return `${count(vg.nodes.length, 'shape')} · ${count(vg.edges.length, 'connection')}${s.selection().size ? ` · ${s.selection().size} selected` : ''}`;
   };
   const hint = () => {
-    if (drag()?.resizingContainer) return 'Resizing container only · contents stay in place';
-    const from = connectFrom();
-    if (tool() === 'connect' && from)
-      return `Connect from ${findNode(doc, from.id)?.title || 'shape'} → choose target or empty space · Esc to stop`;
-    return HINTS[tool()];
+    if (s.drag()?.resizingContainer) return 'Resizing container only · contents stay in place';
+    const from = s.connectFrom();
+    if (s.tool() === 'connect' && from)
+      return `Connect from ${findNode(s.doc, from.id)?.title || 'shape'} → choose target or empty space · Esc to stop`;
+    return HINTS[s.tool()];
   };
   const pinnedCount = () =>
-    doc.graph.nodes.filter(
+    s.doc.graph.nodes.filter(
       n =>
-        doc.layout.nodes[n.id]?.pinned ||
-        ancestors(doc, n.id).some(a => doc.layout.nodes[a]?.pinned),
-    ).length + doc.graph.groups.filter(g => doc.layout.nodes[g.id]?.pinned).length;
+        s.doc.layout.nodes[n.id]?.pinned ||
+        ancestors(s.doc, n.id).some(a => s.doc.layout.nodes[a]?.pinned),
+    ).length + s.doc.graph.groups.filter(g => s.doc.layout.nodes[g.id]?.pinned).length;
   const engine = () => {
-    if (layoutBusy()) return 'Arranging…';
-    const blocked = blockedRouteIds().length;
+    if (s.layoutBusy()) return 'Arranging…';
+    const blocked = s.blockedRouteIds().length;
     if (blocked) return count(blocked, 'obstructed route');
     if (pinnedCount()) return `${pinnedCount()} pinned · P to toggle`;
-    const r = layoutReport();
+    const r = s.layoutReport();
     if (r)
       return `${r.mode === 'journey' ? 'Timeline step ' + r.selectedStep : r.mode === 'rebuild' ? 'Rebuild' : 'Pass'} · ${r.name} · ${r.maxDisplacement}px max move`;
     return 'Tab extends · L improves · Alt R reroutes';
@@ -58,9 +59,9 @@ export function StatusBar() {
       <span>{counts()}</span>
       <span class="status-hint">{hint()}</span>
       <Show
-        when={fileMode()}
+        when={s.fileMode()}
         fallback={
-          <span class="status-engine" classList={{ warning: blockedRouteIds().length > 0 }}>
+          <span class="status-engine" classList={{ warning: s.blockedRouteIds().length > 0 }}>
             {engine()}
           </span>
         }

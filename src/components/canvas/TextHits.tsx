@@ -2,11 +2,10 @@ import { createMemo, For, Show } from 'solid-js';
 import { resolveAppearance } from '../../model/appearance';
 import { measureText } from '../../model/fonts';
 import { rectUnion } from '../../model/geometry';
-import { parseTextId, selectedText, TEXT_NAMES } from '../../state/canvas-text';
-import { doc } from '../../state/document';
-import { drag, inlineEditId } from '../../state/editor';
-import { routesById, sceneRects, viewerFrame } from '../../state/scene';
+import { parseTextId, TEXT_NAMES } from '../../state/session/canvas-text';
+
 import { textBox, textBoxes } from './text-boxes';
+import { useDiagramSession } from '../session-context';
 
 /** Room between a text's words and its selection outline. */
 const PAD = 3;
@@ -17,11 +16,12 @@ const PAD = 3;
  * are counted from the drawing, so a click there shows a hint instead. Not part of exports.
  */
 export function TextHits() {
-  const frame = createMemo(viewerFrame);
-  const boxes = createMemo(() => textBoxes(frame()));
+  const s = useDiagramSession();
+  const frame = createMemo(s.viewerFrame);
+  const boxes = createMemo(() => textBoxes(s.doc, frame()));
   const selected = () => {
-    const id = selectedText();
-    return id && id !== inlineEditId() ? textBox(frame(), id)?.rect : undefined;
+    const id = s.selectedText();
+    return id && id !== s.inlineEditId() ? textBox(s.doc, frame(), id)?.rect : undefined;
   };
   const statusRows = () =>
     frame()
@@ -29,16 +29,16 @@ export function TextHits() {
       .map(item => ({
         x: frame().legend.x + item.x,
         y: frame().legend.y + 12 + item.y,
-        w: 24 + measureText(item.label, resolveAppearance(doc.appearance).annotation),
+        w: 24 + measureText(item.label, resolveAppearance(s.doc.appearance).annotation),
         h: frame().key.row,
       }));
-  const moving = () => drag()?.text;
+  const moving = () => s.drag()?.text;
   const anchor = () => {
     const near = moving()?.near;
     if (!near) return;
-    const route = routesById().get(near);
+    const route = s.routesById().get(near);
     return (
-      sceneRects().get(near) ??
+      s.sceneRects().get(near) ??
       (route &&
         rectUnion(
           route.points.map(p => ({ ...p, w: 0, h: 0 })),
@@ -46,7 +46,7 @@ export function TextHits() {
         ))
     );
   };
-  const k = () => doc.camera.k;
+  const k = () => s.doc.camera.k;
   return (
     <g class="text-hits">
       <For each={boxes()}>

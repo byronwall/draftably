@@ -1,17 +1,9 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
-import { setTool } from '../state/actions';
+
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
-import { doc, saveStatus, transact } from '../state/document';
-import {
-  exampleMode,
-  fileMode,
-  fileSession,
-  fileStatus,
-  fileStatusText,
-} from '../state/file-session';
-import { tool, type Tool } from '../state/editor';
-import { layoutBusy, layoutTarget, cancelLayout, movesBlocked } from '../state/layout';
-import { timelineOpen } from '../state/sculpt';
+
+import { type Tool } from '../state/session/editor';
+
 import {
   arrangeOpen,
   filesShown,
@@ -27,6 +19,7 @@ import { CommandButton, IconButton, tip } from './controls';
 import { Icon } from './Icon';
 import { MenuBar } from './MenuBar';
 import './toolbar.css';
+import { useDiagramSession } from './session-context';
 
 type ToolInfo = [Tool, string, string, string, string];
 
@@ -44,7 +37,8 @@ const DRAW_TOOLS: ToolInfo[] = [
 ];
 
 export function Toolbar() {
-  const locked = () => timelineOpen();
+  const s = useDiagramSession();
+  const locked = () => s.timelineOpen();
   const run = (id: CommandId) => () => runCommand(id);
   const menuButton = (id: Parameters<typeof openMenu>[0]) => (e: MouseEvent) =>
     openMenu(id, e.currentTarget as HTMLElement);
@@ -74,9 +68,9 @@ export function Toolbar() {
         <span class="grow" />
 
         <Show
-          when={!layoutBusy()}
+          when={!s.layoutBusy()}
           fallback={
-            <button type="button" class="button danger" onClick={cancelLayout}>
+            <button type="button" class="button danger" onClick={s.cancelLayout}>
               Cancel
             </button>
           }
@@ -87,8 +81,8 @@ export function Toolbar() {
             {...tip(
               'Tidy',
               'L',
-              movesBlocked() ??
-                `Small moves in ${layoutTarget()} that shorten long lines. Undo restores them.`,
+              s.movesBlocked() ??
+                `Small moves in ${s.layoutTarget()} that shorten long lines. Undo restores them.`,
             )}
             disabled={locked() || !commandEnabled('layout')}
             onClick={run('layout')}
@@ -151,9 +145,9 @@ export function Toolbar() {
         <button
           type="button"
           class="button ghost"
-          aria-pressed={tool() === 'connect'}
+          aria-pressed={s.tool() === 'connect'}
           disabled={locked()}
-          onClick={() => setTool(tool() === 'connect' ? 'select' : 'connect')}
+          onClick={() => s.setTool(s.tool() === 'connect' ? 'select' : 'connect')}
         >
           <Icon name="connect" />
           Connect
@@ -187,6 +181,7 @@ export function Toolbar() {
 }
 
 function ToolButtons(props: { tools: ToolInfo[]; disabled: boolean }) {
+  const s = useDiagramSession();
   return (
     <For each={props.tools}>
       {([id, icon, label, key, hint]) => (
@@ -195,9 +190,9 @@ function ToolButtons(props: { tools: ToolInfo[]; disabled: boolean }) {
           label={label}
           keys={key}
           hint={hint}
-          pressed={tool() === id}
+          pressed={s.tool() === id}
           disabled={props.disabled}
-          onClick={() => setTool(id)}
+          onClick={() => s.setTool(id)}
         />
       )}
     </For>
@@ -206,30 +201,31 @@ function ToolButtons(props: { tools: ToolInfo[]; disabled: boolean }) {
 
 /** Editable diagram title. Commits on Enter or when focus leaves. */
 function DocumentTitle() {
-  const [draft, setDraft] = createSignal(doc.title);
+  const s = useDiagramSession();
+  const [draft, setDraft] = createSignal(s.doc.title);
   let editing = false;
   createEffect(() => {
-    const title = doc.title;
+    const title = s.doc.title;
     if (!editing) setDraft(title);
   });
   const commit = () => {
     editing = false;
     const title = draft().trim() || 'Untitled diagram';
     setDraft(title);
-    if (title !== doc.title)
-      transact('Rename diagram', d => {
+    if (title !== s.doc.title)
+      s.transact('Rename diagram', d => {
         d.title = title;
       });
   };
   const status = () =>
-    fileMode()
-      ? fileStatusText()
+    s.fileMode()
+      ? s.fileStatusText()
       : {
           saved: 'Saved',
           saving: 'Saving…',
           preview: 'Preview · not saved',
           failed: 'Not saved · export a backup',
-        }[saveStatus()];
+        }[s.saveStatus()];
   return (
     <div class="title-block">
       <input
@@ -237,7 +233,7 @@ function DocumentTitle() {
         aria-label="Diagram title"
         spellcheck={false}
         value={draft()}
-        disabled={timelineOpen()}
+        disabled={s.timelineOpen()}
         onFocus={() => (editing = true)}
         onInput={e => setDraft(e.currentTarget.value)}
         onBlur={commit}
@@ -251,20 +247,20 @@ function DocumentTitle() {
       />
       <span
         class="save-status"
-        {...(fileSession()?.path ? tip(fileSession()!.path!, undefined, status()) : {})}
+        {...(s.fileSession()?.path ? tip(s.fileSession()!.path!, undefined, status()) : {})}
         classList={{
-          'on-disk': fileMode() && !exampleMode(),
-          'in-example': exampleMode(),
-          warning: fileMode()
-            ? fileStatus() !== 'saved' && fileStatus() !== 'saving'
-            : saveStatus() === 'failed',
+          'on-disk': s.fileMode() && !s.exampleMode(),
+          'in-example': s.exampleMode(),
+          warning: s.fileMode()
+            ? s.fileStatus() !== 'saved' && s.fileStatus() !== 'saving'
+            : s.saveStatus() === 'failed',
         }}
         aria-live="polite"
       >
-        <Show when={fileMode()}>
-          <Icon name={exampleMode() ? 'spark' : 'file'} size={11} />
+        <Show when={s.fileMode()}>
+          <Icon name={s.exampleMode() ? 'spark' : 'file'} size={11} />
         </Show>
-        <Show when={fileMode() && !exampleMode() && workspace()}>
+        <Show when={s.fileMode() && !s.exampleMode() && workspace()}>
           {info => (
             <>
               <a
