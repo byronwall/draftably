@@ -344,6 +344,15 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   let externalDuringSave: { source: string; revision: string } | null = null;
 
   async function save() {
+    if (hostSave) {
+      // A host owns the text: it receives every kept edit and stores it however it likes.
+      diskSource = localSource;
+      savedMessage = null;
+      savedAction = undefined;
+      state.setStatus('saved');
+      hostSave(localSource);
+      return;
+    }
     if (exampleMode()) {
       // Examples keep their edits in browser storage; there is no file to write.
       keepScratch();
@@ -745,6 +754,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
 
   /** Leave the open file for the start page: stop following it on disk. */
   function closeFileSession() {
+    hostSave = null;
     stopListening();
     s.setCommitHandler(null);
     s.setHistoryHandler(null);
@@ -776,6 +786,24 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     if (!restored) return;
     state.setUndoStack([{ before: source, after: kept, label: 'Restore unsaved edits' }]);
     state.setRestored(true);
+  }
+
+  /** Set while a host owns the source (`openSource`): it receives each kept edit. */
+  let hostSave: ((source: string) => void) | null = null;
+
+  /**
+   * Edit `source` for a host such as an embedded editor. Nothing is read from or written to disk;
+   * `onChange` receives the new text after every kept edit, undo and redo.
+   */
+  function openSource(source: string, onChange: (source: string) => void = () => {}) {
+    hostSave = onChange;
+    return begin({ name: '', path: '', source, revision: 'host' });
+  }
+
+  /** Show text the host changed. Local undo history cannot step past it. */
+  function receiveSource(source: string) {
+    if (source === localSource) return Promise.resolve();
+    return acceptDisk(source, `host:${source.length}:${Date.now()}`);
   }
 
   /** The source of the example as it was opened, for Reset. */
@@ -817,6 +845,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   }
 
   function begin(info: FileSessionInfo): Promise<void> {
+    if (info.revision !== 'host') hostSave = null;
     stopListening();
     setDraft(null);
     if (!info.example) scratchKey = '';
@@ -908,6 +937,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     }
   }
   return {
+    openSource,
+    receiveSource,
     liveSource,
     sourceDraft,
     fileSession,

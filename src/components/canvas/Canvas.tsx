@@ -1,9 +1,5 @@
-import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import { openFile } from '../../state/files';
-import { runCommand } from '../../state/commands';
+import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
 import { setActiveSession } from '../../state/active-session';
-import { toast } from '../../state/toast';
-import { openMenu } from '../../state/ui';
 import { BrushDock } from '../sculpt/BrushDock';
 import { TimelineDeck } from '../sculpt/TimelineDeck';
 import { CrossingView, EdgeView } from '../scene/EdgeView';
@@ -26,7 +22,20 @@ const CANVAS_LABEL =
   'Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. ' +
   'Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.';
 
-export function Canvas() {
+export interface CanvasProps {
+  /** Open the host's context menu; the canvas has already selected what was clicked. */
+  onContextMenu?: (e: MouseEvent) => void;
+  /** Files dropped on the canvas. Without it the canvas takes no drops. */
+  onDropFiles?: (files: File[]) => Promise<void> | void;
+  /** Shown under the hint on an empty canvas, such as a button that builds from a list. */
+  emptyAction?: JSX.Element;
+}
+
+/**
+ * The canvas for the session in context: drawing, selection, dragging, inline editing, layout
+ * previews, the timeline and the brush. Pointing at it or focusing it makes its session active.
+ */
+export function Canvas(props: CanvasProps) {
   const s = useDiagramSession();
   let stage!: HTMLElement;
   let svg!: SVGSVGElement;
@@ -41,9 +50,15 @@ export function Canvas() {
     );
     observer.observe(stage);
     svg.addEventListener('wheel', s.onWheel, { passive: false });
+    // Before any handler inside it runs, so menus, shortcuts and commands act on this session.
+    const activate = () => setActiveSession(s);
+    stage.addEventListener('pointerdown', activate, true);
+    stage.addEventListener('focusin', activate, true);
     onCleanup(() => {
       observer.disconnect();
       svg.removeEventListener('wheel', s.onWheel);
+      stage.removeEventListener('pointerdown', activate, true);
+      stage.removeEventListener('focusin', activate, true);
     });
   });
 
@@ -62,17 +77,14 @@ export function Canvas() {
     }
   };
 
-  const onDrop = async (e: DragEvent) => {
+  const onDrop = (e: DragEvent) => {
     e.preventDefault();
     dragDepth = 0;
     setDropping(false);
-    try {
-      for (const file of e.dataTransfer?.files ?? []) await openFile(file);
-    } catch (error) {
-      toast(error instanceof Error ? error.message : String(error));
-    }
+    void props.onDropFiles?.([...(e.dataTransfer?.files ?? [])]);
   };
-  const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
+  const hasFiles = (e: DragEvent) =>
+    !!props.onDropFiles && !!e.dataTransfer?.types.includes('Files');
 
   return (
     <main
@@ -100,15 +112,11 @@ export function Canvas() {
     >
       <svg
         ref={svg}
-        onFocusIn={() => setActiveSession(s)}
         class="canvas"
         role="application"
         tabindex="0"
         aria-label={CANVAS_LABEL}
-        onPointerDown={e => {
-          setActiveSession(s);
-          s.onPointerDown(e);
-        }}
+        onPointerDown={s.onPointerDown}
         onPointerMove={s.onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={() => s.resetModifiers()}
@@ -118,7 +126,7 @@ export function Canvas() {
         onContextMenu={e => {
           e.preventDefault();
           s.selectForContextMenu(e);
-          openMenu('context', { x: e.clientX, y: e.clientY });
+          props.onContextMenu?.(e);
         }}
       >
         <defs>
@@ -218,9 +226,7 @@ export function Canvas() {
           <p>
             <kbd>N</kbd> adds a box. Type a title, then <kbd>Tab</kbd> to keep going.
           </p>
-          <button class="button primary" onClick={() => runCommand('quick-build')}>
-            Build from a list <kbd>B</kbd>
-          </button>
+          {props.emptyAction}
         </div>
       </Show>
       <InlineEditor />

@@ -5,7 +5,7 @@
 import { batch, createSignal } from 'solid-js';
 import { createStore, produce, reconcile, unwrap } from 'solid-js/store';
 import { STORAGE_KEY } from '../../lib/saved-diagram';
-import { normalize } from '../../model/document';
+import { emptyDiagram, normalize } from '../../model/document';
 import { findEntity } from '../../model/graph';
 import { DEFAULT_SAMPLE, loadSample } from '../../model/samples';
 import type { Camera, Diagram } from '../../model/types';
@@ -48,7 +48,10 @@ export function createDocument(s: CanvasTextPart, options: SessionOptions) {
   const key = options.storageKey ?? '';
 
   const state = (() => {
-    const [doc, setDoc] = createStore<Diagram>(loadSample(DEFAULT_SAMPLE));
+    // The app shows the sample until storage, a file or an example replaces it.
+    const [doc, setDoc] = createStore<Diagram>(
+      options.storageKey ? loadSample(DEFAULT_SAMPLE) : emptyDiagram(),
+    );
     const [undoStack, setUndoStack] = createSignal<HistoryEntry[]>([]);
     const [redoStack, setRedoStack] = createSignal<HistoryEntry[]>([]);
     const [selection, setSelectionSignal] = createSignal<ReadonlySet<string>>(new Set(), {

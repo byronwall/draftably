@@ -1,7 +1,6 @@
 import { resolveAppearance } from './model/appearance';
 import { registerFonts } from './lib/font-data';
 import { createEffect, onCleanup, onMount, Show } from 'solid-js';
-import { Canvas } from './components/canvas/Canvas';
 import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
@@ -14,7 +13,8 @@ import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
 import { Tips } from './components/Tips';
 import { Toolbar } from './components/Toolbar';
-import { setFilePicker } from './state/commands';
+import { Editor } from './editor/Editor';
+import { runCommand, setFilePicker } from './state/commands';
 import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { importForeignText, openFile } from './state/files';
@@ -26,6 +26,7 @@ import {
   inspectorOpen,
   inspectorWidth,
   objectsOpen,
+  openMenu,
   showError,
   sidebarWidth,
 } from './state/ui';
@@ -78,6 +79,14 @@ export default function App() {
     } finally {
       replaceImageId = null;
       foreignOnly = false;
+    }
+  };
+
+  const dropFiles = async (files: File[]) => {
+    try {
+      for (const file of files) await openFile(file);
+    } catch (error) {
+      toast(error instanceof Error ? error.message : String(error));
     }
   };
 
@@ -175,7 +184,16 @@ export default function App() {
         </Show>
         {/* The banner centers over the canvas and never covers a panel. */}
         <div class="canvas-area">
-          <Canvas />
+          <Editor
+            session={s}
+            onContextMenu={e => openMenu('context', { x: e.clientX, y: e.clientY })}
+            onDropFiles={dropFiles}
+            emptyAction={
+              <button class="button primary" onClick={() => runCommand('quick-build')}>
+                Build from a list <kbd>B</kbd>
+              </button>
+            }
+          />
           <FileBanner />
         </div>
         <Show when={inspectorOpen()}>

@@ -114,6 +114,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
       s.transact('Edit label', d => edits.setTitle(d, id, value));
   }
 
+  // A registered handler, not a reactive read.
+  // eslint-disable-next-line solid/reactivity
   s.onBeforeEdit(() => {
     // Commit a pending label before any other edit so it lands in its own undo step.
     if (s.inlineEditId()) finishInlineEdit(true);
