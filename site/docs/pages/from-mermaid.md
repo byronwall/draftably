@@ -97,6 +97,22 @@ draftably inspect architecture.draft --svg > architecture.svg
 
 `draftably open architecture.svg` opens the image for editing. Use `--png` where a host blocks SVG.
 
+### Keep the images current with a GitHub Action
+
+To skip the manual export, write `draft` fences in your README and docs and let CI draw them. The
+[render-markdown action](https://github.com/byronwall/draftably/tree/main/actions/render-markdown)
+renders each fence to an SVG beside the Markdown file and adds an image link under the fence. A
+rerun updates the link in place. Add a commit step after it:
+
+```yaml
+- uses: byronwall/draftably/actions/render-markdown@main
+  with:
+    files: README.md docs/**/*.md
+- uses: stefanzweifel/git-auto-commit-action@v5
+```
+
+The action's README has the full workflow and the fence options.
+
 ## Convert the source
 
 You don't have to rewrite anything for the drop-in. To move the Mermaid fences in your docs to

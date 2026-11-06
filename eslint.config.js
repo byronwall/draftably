@@ -46,6 +46,7 @@ export default tseslint.config(
       'src/cli/**',
       'src/server/**',
       'integration-examples/**',
+      'actions/**',
       '*.config.*',
     ],
     languageOptions: { globals: globals.node },

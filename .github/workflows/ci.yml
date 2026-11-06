@@ -74,6 +74,38 @@ jobs:
       - run: pnpm build
       - run: pnpm bench --runs 1
 
+  markdown-action:
+    # Runs actions/render-markdown twice on a fixture: the first run adds the SVGs and links, and
+    # the second must change nothing.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: ./actions/render-markdown
+        with:
+          files: integration-examples/markdown-action/**/*.md
+      - name: Check the images and links
+        working-directory: integration-examples/markdown-action
+        run: |
+          for svg in readme-1.svg checkout-flow.svg docs/guide-1.svg; do
+            grep -q 'id="draftably-source"' "$svg" || { echo "::error::$svg has no embedded source"; exit 1; }
+          done
+          grep -qx '![Request path](readme-1.svg)' README.md
+          grep -qx '![Cart, payment, then receipt.](checkout-flow.svg)' README.md
+          grep -qx '![Diagram](guide-1.svg)' docs/guide.md
+          test "$(grep -c '^<!-- draftably: ' README.md)" = 2
+          git diff --stat
+          git add -A
+      - name: Rerun
+        uses: ./actions/render-markdown
+        with:
+          files: integration-examples/markdown-action/**/*.md
+      - name: Check the rerun changed nothing
+        run: git diff --exit-code && test -z "$(git status --porcelain --untracked-files=all | grep -v '^A ')"
+
   host-proofs:
     # Builds the three pinned documentation hosts against fresh packed consumers.
     runs-on: ubuntu-latest
