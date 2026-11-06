@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { anchorPath, findPage, PAGES } from '../site/docs/content';
 import { compile } from '../src/dsl/compile';
 import { THEME_IDS } from '../src/model/appearance';
+import { findExample } from '../src/model/examples';
 
 const root = path.join(__dirname, '..');
 const pages = path.join(root, 'site/docs/pages');
@@ -40,7 +41,8 @@ describe('docs examples', () => {
 describe('docs links', () => {
   const links = PAGES.flatMap(page => {
     const out: { page: string; href: string }[] = [];
-    new Marked().walkTokens(page.tokens, t => {
+    const markdown = new Marked();
+    markdown.walkTokens([...markdown.lexer(page.lead), ...page.tokens], t => {
       if (t.type === 'link') out.push({ page: page.slug, href: t.href });
     });
     return out;
@@ -67,6 +69,15 @@ describe('docs links', () => {
         return !page || (docs[2] != null && !page.headings.some(h => h.id === docs[2]));
       }
       return href.startsWith('#') && !anchorPath(href.slice(1));
+    });
+    expect(bad).toEqual([]);
+  });
+
+  it('opens an existing example for every Playground example link', () => {
+    const bad = links.filter(({ href }) => {
+      const url = new URL(href, 'https://draftably.dev');
+      const id = url.searchParams.get('example');
+      return url.pathname === '/play' && id !== null && !findExample(id);
     });
     expect(bad).toEqual([]);
   });

@@ -33,7 +33,7 @@ export interface Page {
 
 /** Sidebar groups, in order. A DSL section missing here goes at the end of Language. */
 const GROUPS: [string, string[]][] = [
-  ['Start', ['start', 'get-started', 'saving']],
+  ['Start', ['start', 'get-started', 'recipes', 'saving']],
   [
     'Use Draftably',
     [

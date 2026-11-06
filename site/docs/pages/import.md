@@ -1,14 +1,23 @@
 # Import diagrams
 
-Turn a Graphviz DOT, Mermaid or D2 file into an editable `.draft` file. The import keeps the
-boxes, groups, labels and connections, and lays the diagram out again. The input file stays as it
-is.
+Turn a Graphviz DOT, Mermaid or D2 file into an editable `.draft` file. The importer keeps the
+supported boxes, groups, labels and connections, then lays the diagram out again. It leaves the
+input file unchanged.
 
 ```sh
-draftably import systems.dot --output systems.draft
-draftably check systems.draft
-draftably open systems.draft
+cat <<'MERMAID' > checkout.mmd
+flowchart LR
+  A[Cart] -->|submit| B[API]
+  B --> C[Database]
+MERMAID
+draftably import checkout.mmd --output checkout.draft
+draftably check checkout.draft
+draftably open checkout.draft
 ```
+
+The import writes a new file, then `check` reports source errors and drawing conflicts. `open`
+lets you inspect and refine the result. If the output file already exists, choose another name;
+import never overwrites it.
 
 In the editor or the [Playground](/play), choose **Import text diagram** and pick a file. It opens
 as a new draft, with any warnings shown before you open it.
@@ -31,8 +40,13 @@ fences in Markdown at once, use [`draftably migrate`](#convert-the-source).
 | `--from FORMAT`  | Names the format (`dot`, `mermaid`, `d2`) when the file name does not.         |
 | `--accept-lossy` | Writes the result although it has warnings. Errors always stop the import.     |
 
-Diagnostics print to standard error. A warning means some appearance or layout detail changes; read
-it before you pass `--accept-lossy`.
+Diagnostics print to standard error. A warning means some appearance or layout detail changes. By
+default, an import with warnings does not write the output file. Read the warnings, then pass
+`--accept-lossy` only if the converted result is useful to you:
+
+```sh
+draftably import systems.dot --output systems.draft --accept-lossy
+```
 
 Line ends map to `head=` and `tail=`, including two-ended arrows and Mermaid circle and cross ends.
 D2 variables and rules become plain values in the native file.
