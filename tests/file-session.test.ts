@@ -56,6 +56,19 @@ it('keeps the first title edit on a new file-mode shape and selects its source i
   expect(s.selectedIds()).toEqual(['next-step']);
 });
 
+it('keeps a title finished while the new shape is still compiling', async () => {
+  const s = await session();
+  s.quickExtend();
+  // Finish before the add's compile ends: the edit waits for it instead of being refused.
+  expect(s.fileCompiling()).toBe(true);
+  s.setInlineDraft('Ship order');
+  s.finishInlineEdit(true);
+  for (let i = 0; i < 40 && s.fileCompiling(); i++)
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+  expect(s.currentSource()).toMatch(/node \S+ "Ship order"/);
+});
+
 it('releases cached-page streams and catches up when the file page returns', async () => {
   const page = Object.assign(new EventTarget(), { setTimeout, clearTimeout });
   vi.stubGlobal('window', page);

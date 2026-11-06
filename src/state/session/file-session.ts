@@ -174,6 +174,28 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   const keptLabel = () => (exampleMode() ? `${scratchName()} only` : 'Saved');
   /** The source the viewer shows; it differs from `diskSource` while a save is pending. */
   let localSource = '';
+  /**
+   * Source ids given to new objects whose saved version is not drawn yet. An edit made in that
+   * window still names the editor's temporary id, so it is translated through these first.
+   */
+  const pendingIds = new Map<string, string>();
+  /** An edit made while the file was compiling, saved once the compile finishes. */
+  let queued: { before: string; after: string; label: string } | null = null;
+  const flushQueued = () => {
+    const edit = queued;
+    queued = null;
+    if (edit) handleEdit(edit.before, edit.label, 'edit', edit.after);
+  };
+  const renamePending = <T>(value: T): T =>
+    pendingIds.size
+      ? JSON.parse(JSON.stringify(value), function (key, v) {
+          if (pendingIds.has(key) && this && typeof this === 'object' && !Array.isArray(this)) {
+            this[pendingIds.get(key)!] = v;
+            return undefined;
+          }
+          return typeof v === 'string' ? (pendingIds.get(v) ?? v) : v;
+        })
+      : value;
   const currentSource = () => localSource;
   /** `currentSource` as a signal, for views that follow the text as edits rewrite it. */
   const [liveSource, setLiveSource] = createSignal('');
@@ -270,6 +292,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
         state.setSourceError({ message: error.message, line: error.line });
         state.setStatus('invalid');
       });
+      flushQueued();
       return null;
     }
     if (ticket !== showing) return null;
@@ -300,6 +323,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       state.setSourceError(null);
       state.setCompiling(false);
     });
+    flushQueued();
     return scene;
   }
 
@@ -510,10 +534,22 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     };
   }
 
-  function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boolean {
+  function handleEdit(
+    before: string,
+    label: string,
+    kind: EditKind = 'edit',
+    after = JSON.stringify(unwrap(s.doc)),
+  ): boolean {
     if (state.sourceError()) return snapBack('Fix the error in the file before editing here.');
     if (state.proposal()) return snapBack('Keep the file or save your edit before editing again.');
-    if (state.compiling()) return snapBack('Still laying out the file. Try again in a moment.');
+    if (state.compiling()) {
+      // A label typed right after adding a shape lands here; keep it rather than refuse it.
+      if (kind === 'edit') {
+        queued = { before: queued?.before ?? before, after, label };
+        return true;
+      }
+      return snapBack('Still laying out the file. Try again in a moment.');
+    }
     const scene = state.scene();
     if (!scene) return snapBack('The file has no valid drawing yet.');
     let result;
@@ -524,10 +560,10 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
           : translateEdit({
               source: readSource(localSource),
               scene,
-              before: normalize(JSON.parse(before)),
-              after: normalize(JSON.parse(JSON.stringify(unwrap(s.doc)))),
+              before: renamePending(normalize(JSON.parse(before))),
+              after: renamePending(normalize(JSON.parse(after))),
               label,
-              selection: s.selectedIds(),
+              selection: renamePending(s.selectedIds()),
             });
     } catch (error) {
       if (error instanceof UnsupportedEdit) return snapBack(error.message);
@@ -549,6 +585,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       state.setRedoStack([]);
     });
     setLocal(next);
+    for (const [id, sourceId] of result.ids) pendingIds.set(id, sourceId);
     const mapId = (id: string) => result.ids.get(id) ?? id,
       { drops } = result;
     void showSource(next, () => s.selectedIds().map(mapId), mapId).then(

@@ -95,10 +95,21 @@ try {
   // Add a node in Right with N, then end the label with Escape.
   await page.keyboard.press('Escape');
   await page.keyboard.press('n');
+  // Type once the new node's label editor has focus.
+  await waitFor(
+    page,
+    () => {
+      const el = document.activeElement;
+      return !!el && (el.isContentEditable || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA');
+    },
+    'label editor focus',
+  );
   await page.keyboard.type('Right extra');
   await page.keyboard.press('Enter');
   await idle(1);
   await waitFor(page, () => window.editors[1].session.doc.graph.nodes.length === 3, 'right node');
+  // The source catches up with the document after the edit settles.
+  await waitFor(page, () => /Right extra/.test(window.editors[1].source()), 'right source');
   const left3 = await state(0),
     right3 = await state(1);
   check('N in Right adds to Right only', right3.ids.length === 3 && same(left3.ids, left1.ids));
