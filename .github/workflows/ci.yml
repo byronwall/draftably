@@ -44,7 +44,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright-core install --with-deps chromium
       - run: pnpm site:build
-      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check
+      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build
       - run: pnpm prove:file
       - run: pnpm prove:layout
       - run: pnpm prove:site

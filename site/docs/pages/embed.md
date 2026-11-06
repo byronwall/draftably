@@ -7,6 +7,7 @@ same renderer as the CLI, so a diagram looks the same everywhere.
 
 | You want to                              | Use                                            | Install               |
 | ---------------------------------------- | ---------------------------------------------- | --------------------- |
+| Replace Mermaid on a site you run        | The `mermaid` drop-in                          | `@draftably/mermaid`  |
 | Put an image in a README, wiki or chat   | `draftably inspect --svg` or `--png`           | `draftably`           |
 | Add an interactive diagram to a web page | The `<draft-diagram>` element                  | `@draftably/runtime`  |
 | Generate SVG in a script or build step   | `renderSvg`                                    | `@draftably/runtime`  |
@@ -46,6 +47,11 @@ import '@draftably/runtime/element';
 The element brings its own styles, worker, zoom controls and cleanup. Set its `source` property to
 redraw it. An invalid update keeps the last good drawing. With Vite, add
 `optimizeDeps: { exclude: ['@draftably/runtime'] }` to `vite.config.ts`.
+
+## Replace Mermaid
+
+Already use Mermaid? [Switch from Mermaid](#from-mermaid) swaps the package behind the `mermaid` name.
+Your page code stays the same.
 
 ## SVG from a script
 

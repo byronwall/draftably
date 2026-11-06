@@ -1,7 +1,8 @@
 # Draftably package releases
 
-The public packages are `draftably` (CLI), `@draftably/runtime` (native rendering), and
-`@draftably/markdown` (build-time remark integration). Package proofs install packed archives
+The public packages are `draftably` (CLI), `@draftably/runtime` (native rendering),
+`@draftably/markdown` (build-time remark integration), and `@draftably/mermaid` (the Mermaid
+drop-in). Package proofs install packed archives
 outside this repository. They do not publish them.
 
 Use `pnpm runtime:build && pnpm runtime:pack-check` for Node and public TypeScript imports. Add `pnpm prove:runtime` for the nested-path browser consumer. `release:check` includes each package's build and installed-artifact checks.
@@ -86,16 +87,17 @@ The source repository is public. The release workflow requests npm provenance fo
 
 ### First publish of the scoped packages
 
-`@draftably/runtime` and `@draftably/markdown` follow the same rule: each package must exist on
+`@draftably/runtime`, `@draftably/markdown` and `@draftably/mermaid` follow the same rule: each package must exist on
 npm before it can have a trusted publisher. Do these steps once, before you merge a
 **Version Packages** pull request that includes them:
 
 1. On npmjs.com, create the free `draftably` organization. It owns the `@draftably` scope.
-2. Build and check both packages:
+2. Build and check the packages:
 
    ```sh
    pnpm runtime:build && pnpm runtime:pack-check
    pnpm markdown:build && pnpm markdown:pack-check
+   pnpm mermaid:build
    ```
 
 3. Publish each package at its current version from your authenticated session. pnpm replaces
@@ -104,11 +106,12 @@ npm before it can have a trusted publisher. Do these steps once, before you merg
    ```sh
    pnpm --dir packages/runtime publish --access public --no-git-checks
    pnpm --dir packages/markdown publish --access public --no-git-checks
+   pnpm --dir packages/mermaid publish --access public --no-git-checks
    ```
 
 4. Add a trusted publisher to each package with the values in the table above.
 
-After that, Changesets publishes all three packages from Actions.
+After that, Changesets publishes all four packages from Actions.
 
 ## Add each release note
 

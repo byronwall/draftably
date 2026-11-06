@@ -112,6 +112,15 @@ importers:
         specifier: workspace:*
         version: link:../runtime
 
+  packages/mermaid:
+    dependencies:
+      '@draftably/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      mermaid-upstream:
+        specifier: npm:mermaid@12.2.0
+        version: mermaid@12.2.0
+
   packages/runtime: {}
 
 packages:

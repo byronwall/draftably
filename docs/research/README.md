@@ -11,6 +11,10 @@ It distinguishes custom build integrations from native support on hosted platfor
 
 Status: shipped as `@draftably/runtime` and `@draftably/markdown`; see [Use Draftably in your project](../integrations/README.md) and [the closure record](../initiative-history.json).
 
+## Upstream proposals
+
+[Saved drafts](upstream-proposals.md) for asking a Markdown host or Kroki to render `draft` fences. None has been sent.
+
 ## Diagram library coverage
 
 | Topic                                             | Status                                                                                                                     | Files                                                                                                                                                                                                                              |
