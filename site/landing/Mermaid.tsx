@@ -1,6 +1,7 @@
 import { A } from '@solidjs/router';
-import { createSignal, For, onCleanup, onMount } from 'solid-js';
+import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { paperOf } from '../draw';
+import { Expand } from '../live/Expand';
 import { CopyCommand } from './CopyCommand';
 import { drawSvg, enqueue, whenSeen } from './render';
 
@@ -40,7 +41,7 @@ const ROWS: [string, string, string][] = [
     'Start lines with +, - or ~',
   ],
   ['Focus on one path', 'Draw a second diagram', 'Add a state line'],
-  ['Edit', 'Text', 'Text or canvas, in one file'],
+  ['Edit by hand', 'In text', 'In text or on the canvas'],
   ['Diagram kinds', 'Many, including pie and Gantt', 'Flows, sequences, lanes, grids'],
 ];
 
@@ -74,8 +75,7 @@ export function Mermaid() {
             <div>
               <h3>Swap the package</h3>
               <p>
-                Your <code>import mermaid from 'mermaid'</code> code stays the same. A CDN page
-                changes one URL.
+                Your <code>import mermaid</code> now loads Draftably. A CDN page changes one URL.
               </p>
               <CopyCommand text="pnpm add mermaid@npm:@draftably/mermaid" />
             </div>
@@ -112,19 +112,25 @@ export function Mermaid() {
           </table>
         </div>
         <figure class="switch-figure">
-          <figcaption>Your Mermaid</figcaption>
-          <pre class="switch-source">{MERMAID}</pre>
-          <figcaption>Drawn by Draftably</figcaption>
-          <div
-            class="switch-drawing"
-            classList={{ 'is-drawn': !!svg() }}
-            style={{ background: paperOf(svg()) }}
-            role="img"
-            aria-label="The same flowchart drawn by Draftably: Web app calls the API in a Backend group, which calls Auth and a Cached? check that falls through to the Orders DB."
-            // The SVG comes from our own renderer, which escapes every label.
-            // eslint-disable-next-line solid/no-innerhtml
-            innerHTML={svg()}
-          />
+          <div class="switch-pane">
+            <p class="switch-caption">Your Mermaid</p>
+            <pre class="switch-source">{MERMAID}</pre>
+          </div>
+          <div class="switch-pane switch-pane-drawing" style={{ background: paperOf(svg()) }}>
+            <p class="switch-caption">Drawn by Draftably</p>
+            <Show when={svg()}>
+              <Expand svg={svg()} />
+            </Show>
+            <div
+              class="switch-drawing"
+              classList={{ 'is-drawn': !!svg() }}
+              role="img"
+              aria-label="The same flowchart drawn by Draftably: Web app calls the API in a Backend group, which calls Auth and a Cached? check that falls through to the Orders DB."
+              // The SVG comes from our own renderer, which escapes every label.
+              // eslint-disable-next-line solid/no-innerhtml
+              innerHTML={svg()}
+            />
+          </div>
         </figure>
       </div>
     </section>

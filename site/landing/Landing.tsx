@@ -80,13 +80,13 @@ export function Landing() {
       <Nav />
       <main id="main" tabIndex={-1} style={{ outline: 'none' }}>
         <section class="hero">
-          <h1>Manual diagrams are a drag.</h1>
+          <h1>Diagrams used to be a drag.</h1>
           <div class="hero-head">
             <div>
-              <p class="hero-kicker">Write yours. Drag only if you want to.</p>
+              <p class="hero-kicker">Now you write them. Drag only if you want to.</p>
               <p class="hero-sub">
-                Architecture, flows, sequences, state machines and schemas, laid out from plain
-                text. Move a box and the file gets plain, readable lines. Use it in the browser, the
+                Architecture, flows, sequences, state machines and schemas, laid out from text. A
+                box you move becomes a readable line in the file. Use it in the browser, the
                 terminal, your app or your coding agent.
               </p>
             </div>
@@ -252,7 +252,7 @@ function Install() {
           <CopyCommand text="npx draftably open plan.draft" />
         </div>
         <div>
-          <h3>Teach your coding agent</h3>
+          <h3>Agent: let it draw for you</h3>
           <p>
             A bundled skill teaches an agent the language, so it writes, checks and renders{' '}
             <code>.draft</code> files on its own. Add <code>--global</code> for every project.{' '}
