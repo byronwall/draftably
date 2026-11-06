@@ -126,7 +126,7 @@ layout root flow direction=right
 **Try it:** add `compare "Before" "After"` on its own line. The drawing becomes two aligned panels.
 Change marks supply their own colors and legend, so readers can distinguish additions from removals.
 
-If you already have both files, generate the marks:
+If you already have both files, generate the marks. First install the CLI in your project with `pnpm add -D draftably`:
 
 ```sh
 pnpm exec draftably compare before.draft after.draft > change.draft
@@ -134,11 +134,13 @@ pnpm exec draftably check change.draft
 pnpm exec draftably open change.draft
 ```
 
-These commands assume `draftably` is installed in your project. See [Install](#install) for other ways to run it.
+See [Install](#install) for other ways to run the CLI.
 Use the same IDs in both files so the comparison can match objects.
 Read [Change marks](#change-marks) for attributes that a Before panel cannot reconstruct.
 
 ## Refine and share a recipe
+
+Save your chosen recipe as `architecture.draft`. The commands below use the CLI installed in your project.
 
 1. Choose the question the diagram must answer. Put its answer in a short subtitle.
 2. Replace the labels and connections. Keep one level of detail within each diagram.

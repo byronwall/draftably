@@ -16,17 +16,17 @@ viewer's worker loads in development.
 
 ## Props
 
-| Prop      | Meaning                                                                                   |
-| --------- | ----------------------------------------------------------------------------------------- |
-| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                     |
-| `label`   | The accessible name.                                                                      |
-| `outline` | `'visible'` keeps the item list under the drawing. Default: hidden until it has focus.    |
-| `state`   | A declared [emphasis state](#emphasis-states) to show.                                    |
-| `svg`     | Static SVG shown until the viewer draws. See [Server rendering](#server-rendering).       |
-| `options` | Viewer options: `toolbar`, link policy and render settings.                               |
-| result    | Called with each result: `onUpdate` (React, Solid), `@update` (Vue), `onupdate` (Svelte). |
+| Prop      | Meaning                                                                                |
+| --------- | -------------------------------------------------------------------------------------- |
+| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                  |
+| `label`   | The accessible name.                                                                   |
+| `outline` | `'visible'` keeps the item list under the drawing. Default: hidden until it has focus. |
+| `state`   | A declared [emphasis state](#emphasis-states) to show.                                 |
+| `svg`     | Static SVG shown until the viewer draws. See [Server rendering](#server-rendering).    |
+| `options` | Viewer options: `toolbar`, link policy and render settings.                            |
 
-The callback receives `committed`, `error` or a cancellation status. On an initial error, the
+Use `onUpdate` in React or Solid, `@update` in Vue, or `onupdate` in Svelte to receive render results.
+The callback receives an object whose `status` is `committed`, `error` or a cancellation status. On an initial error, the
 component keeps its `svg` fallback visible. A later error keeps the last committed drawing.
 
 ## React
