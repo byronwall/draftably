@@ -24,10 +24,14 @@ In an existing Astro 7/Starlight site, install the Unified processor used by thi
 pnpm add -D @astrojs/markdown-remark@7.3.5
 ```
 
+Astro 7.4 requires Node 22.22.0 or newer. This example pairs Astro 7.4 with
+`@astrojs/markdown-remark` 7.3.5.
+
 Put this in `astro.config.mjs`. Set `contentRoot` to the directory that contains your Markdown.
 The hooks serve generated images during development and copy them into the build output.
 
 ```js
+// astro.config.mjs
 import { resolve } from 'node:path';
 import { createReadStream } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -68,14 +72,16 @@ export default defineConfig({
 });
 ```
 
-Astro watches Markdown pages. If a fence includes another `.draft` file, restart the dev server
-after that file changes so Astro reruns the page transform. For include syntax, see
+Astro watches Markdown pages, but not files included by a fence. Restart the dev server after an
+included `.draft` file changes so Astro reruns the page transform. For include syntax, see
 [Markdown](#markdown).
 
 ## Docusaurus
 
 Use an async CommonJS config to load Draftably's ES modules. `staticDirectories` serves images in
-development; `postBuild` restores the full asset set after the build.
+development; `postBuild` restores the full asset set after the build. This docs-only example puts
+docs at `/manual/` and disables the default blog. In an existing site, keep its current docs route
+and blog settings.
 
 ```js
 // docusaurus.config.cjs
@@ -96,7 +102,15 @@ module.exports = async () => {
     url: 'https://example.com',
     baseUrl: '/manual/',
     staticDirectories: ['static', '.cache/draftably/public'],
-    presets: [['classic', { docs: { remarkPlugins: [[remarkDraft, options]] } }]],
+    presets: [
+      [
+        'classic',
+        {
+          docs: { routeBasePath: '/', remarkPlugins: [[remarkDraft, options]] },
+          blog: false,
+        },
+      ],
+    ],
     plugins: [
       () => ({
         name: 'draftably-assets',
@@ -109,36 +123,20 @@ module.exports = async () => {
 };
 ```
 
-Included files do not invalidate Docusaurus' MDX cache. Clear it before builds, and touch the page
-when an included `.draft` changes in development:
+Included files do not invalidate Docusaurus' MDX cache. Clear it before builds. After an included
+`.draft` changes in development, touch the Markdown page that includes it to rebuild that page.
+For example, use `touch docs/index.md`. The package scripts can clear the cache before each build:
 
 ```json
-{ "scripts": { "start": "node scripts/dev.mjs", "build": "docusaurus clear && docusaurus build" } }
+{
+  "scripts": {
+    "start": "docusaurus start --host 127.0.0.1",
+    "build": "docusaurus clear && docusaurus build"
+  }
+}
 ```
 
-```js
-// scripts/dev.mjs
-import { watch } from 'node:fs';
-import { utimes } from 'node:fs/promises';
-import { spawn } from 'node:child_process';
-const page = 'docs/index.md';
-const host = spawn('pnpm', ['exec', 'docusaurus', 'start', '--host', '127.0.0.1'], {
-  stdio: 'inherit',
-});
-let timer;
-watch('docs', (_event, file) => {
-  if (!file?.toString().endsWith('.draft')) return;
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    const now = new Date();
-    void utimes(page, now, now);
-  }, 120);
-});
-host.on('exit', code => process.exit(code ?? 1));
-```
-
-For multiple pages, watch each page's content directory and touch the page that includes the changed
-file. For several locales, set `publicPath` to each locale's base plus `/_draftably`.
+For several locales, set `publicPath` to each locale's base plus `/_draftably`.
 
 ## VitePress
 

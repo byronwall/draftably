@@ -35,8 +35,11 @@ the packed runtime. It checks Unified, MDX, markdown-it, includes, diagnostics, 
 and asset replay after an output directory is cleared. `pnpm markdown:browser-check` checks the real
 viewer client after the packed browser is installed.
 `pnpm host:pack-check` installs the packed packages in fresh Astro/Starlight, Docusaurus, and
-VitePress consumers. It runs two clean production builds per host, edits an included source between
-builds, and verifies that each nested-base image URL points to an SVG in the output directory.
+VitePress consumers. It copies the named config and setup snippets from the documentation into each
+consumer. It runs two clean production builds per host, edits an included source between builds,
+and verifies that each nested-base image URL points to an SVG in the output directory.
+Pass `astro-starlight`, `docusaurus`, or `vitepress` to check one host, such as
+`pnpm host:pack-check vitepress`.
 The host proof requires Node 22.22.0 or newer for Astro 7.4.5.
 
 ## Performance
