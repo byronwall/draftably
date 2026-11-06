@@ -4,20 +4,8 @@ import { center } from '../../model/geometry';
 import { findNode, isGroup, styleOf } from '../../model/graph';
 import { portPoint, sideToward, SIDE_VECTORS } from '../../model/routes';
 import type { NodeLayout, Side } from '../../model/types';
-import { doc, singleSelection } from '../../state/document';
-import { connectFrom, drag, inlineEditId, pointer, tool } from '../../state/editor';
-import { geometry, sculptGeometry } from '../../state/scene';
 import { roundedPath } from '../../model/geometry';
-import {
-  brushActive,
-  brushHover,
-  brushPoint,
-  brushSettings,
-  heldIds,
-  restoreKey,
-  stroking,
-  timeline,
-} from '../../state/sculpt';
+import { useDiagramSession } from '../session-context';
 
 /** Temporary drawing on top of the diagram: gestures, connection previews and brush feedback. */
 export function Overlay() {
@@ -34,17 +22,18 @@ export function Overlay() {
 }
 
 function GestureFeedback() {
+  const s = useDiagramSession();
   return (
     <>
-      <Show when={drag()?.marquee}>
+      <Show when={s.drag()?.marquee}>
         {r => <rect class="marquee" x={r().x} y={r().y} width={r().w} height={r().h} />}
       </Show>
-      <Show when={drag()?.draw}>
+      <Show when={s.drag()?.draw}>
         {r => (
           <rect class="drawing-preview" x={r().x} y={r().y} width={r().w} height={r().h} rx={8} />
         )}
       </Show>
-      <For each={drag()?.guides ?? []}>
+      <For each={s.drag()?.guides ?? []}>
         {g => (
           <path
             class="guide"
@@ -58,35 +47,37 @@ function GestureFeedback() {
 
 /** Dashed elbow from the connection source to the pointer. */
 function ConnectionPreview() {
+  const s = useDiagramSession();
   const path = createMemo(() => {
-    const from = connectFrom(),
-      b = pointer();
-    if (!from || !b || !findNode(doc, from.id)) return null;
-    const r = geometry(from.id),
+    const from = s.connectFrom(),
+      b = s.pointer();
+    if (!from || !b || !findNode(s.doc, from.id)) return null;
+    const r = s.geometry(from.id),
       side: Side = from.side === 'auto' ? sideToward(r, b) : from.side,
-      a = portPoint(styleOf(doc, from.id).shape, r, side),
+      a = portPoint(styleOf(s.doc, from.id).shape, r, side),
       points =
         side === 'left' || side === 'right'
           ? [a, { x: (a.x + b.x) / 2, y: a.y }, { x: (a.x + b.x) / 2, y: b.y }, b]
           : [a, { x: a.x, y: (a.y + b.y) / 2 }, { x: b.x, y: (a.y + b.y) / 2 }, b];
-    return roundedPath(points, doc.settings.routing.cornerRadius);
+    return roundedPath(points, s.doc.settings.routing.cornerRadius);
   });
   return <Show when={path()}>{d => <path class="connection-preview" d={d()} />}</Show>;
 }
 
 /** "+" buttons beside a single selected shape that add a connected shape. */
 function QuickAddButtons() {
+  const s = useDiagramSession();
   const owner = () => {
-    const id = singleSelection();
+    const id = s.singleSelection();
     const visible =
       id &&
-      findNode(doc, id) &&
-      !sculptGeometry() &&
-      tool() !== 'brush' &&
-      !drag() &&
-      !inlineEditId() &&
-      !connectFrom() &&
-      !timeline();
+      findNode(s.doc, id) &&
+      !s.sculptGeometry() &&
+      s.tool() !== 'brush' &&
+      !s.drag() &&
+      !s.inlineEditId() &&
+      !s.connectFrom() &&
+      !s.timeline();
     return visible ? id : null;
   };
   return (
@@ -94,9 +85,9 @@ function QuickAddButtons() {
       {id => (
         <For each={['right', 'bottom'] as Side[]}>
           {side => {
-            const k = () => doc.camera.k;
+            const k = () => s.doc.camera.k;
             const at = () => {
-              const p = portPoint(styleOf(doc, id()).shape, geometry(id()), side),
+              const p = portPoint(styleOf(s.doc, id()).shape, s.geometry(id()), side),
                 v = SIDE_VECTORS[side];
               return { x: p.x + (v.x * 26) / k(), y: p.y + (v.y * 26) / k() };
             };
@@ -125,10 +116,11 @@ function QuickAddButtons() {
 
 /** Dashed outlines showing where shapes go next while scrubbing a timeline. */
 function TimelineGhosts() {
+  const s = useDiagramSession();
   const ghosts = createMemo(() => {
-    const t = timeline();
+    const t = s.timeline();
     if (!t?.data || t.ghost === 'off') return [];
-    const k = doc.camera.k,
+    const k = s.doc.camera.k,
       index = t.peek ?? t.index,
       at = t.data.frames[index],
       next =
@@ -158,6 +150,7 @@ function TimelineGhosts() {
 }
 
 function Ghost(props: { id: string; rect: NodeLayout; color: string; opacity: number }) {
+  const s = useDiagramSession();
   return (
     <rect
       class="sculpt-ghost"
@@ -165,7 +158,7 @@ function Ghost(props: { id: string; rect: NodeLayout; color: string; opacity: nu
       y={props.rect.y}
       width={props.rect.w}
       height={props.rect.h}
-      rx={isGroup(doc, props.id) ? 8 : 10}
+      rx={isGroup(s.doc, props.id) ? 8 : 10}
       style={{ stroke: props.color, opacity: props.opacity }}
       stroke-dasharray="5 4"
     />
@@ -174,11 +167,12 @@ function Ghost(props: { id: string; rect: NodeLayout; color: string; opacity: nu
 
 /** Objects held in place by the brush. */
 function HeldObjects() {
-  const k = () => doc.camera.k;
+  const s = useDiagramSession();
+  const k = () => s.doc.camera.k;
   return (
-    <For each={heldIds()}>
+    <For each={s.heldIds()}>
       {id => {
-        const p = () => geometry(id);
+        const p = () => s.geometry(id);
         return (
           <>
             <rect
@@ -204,16 +198,17 @@ function HeldObjects() {
 
 /** The brush ring, plus a preview of what the next dab would move. */
 function BrushCursor() {
-  const visible = () => brushActive() && brushPoint() && !drag();
-  const k = () => doc.camera.k;
-  const restoring = () => restoreKey() || brushSettings().mode === 'restore';
+  const s = useDiagramSession();
+  const visible = () => s.brushActive() && s.brushPoint() && !s.drag();
+  const k = () => s.doc.camera.k;
+  const restoring = () => s.restoreKey() || s.brushSettings().mode === 'restore';
   const color = () => (restoring() ? 'var(--sculpt-restore)' : 'var(--accent)');
-  const weights = createMemo(() => Object.entries(brushHover()?.weights ?? {}));
+  const weights = createMemo(() => Object.entries(s.brushHover()?.weights ?? {}));
   return (
-    <Show when={visible() && brushPoint()}>
+    <Show when={visible() && s.brushPoint()}>
       {p => {
-        const r = () => brushSettings().radius / k();
-        const core = () => r() * (1 - brushSettings().softness / 100);
+        const r = () => s.brushSettings().radius / k();
+        const core = () => r() * (1 - s.brushSettings().softness / 100);
         return (
           <>
             <g class="sculpt-brush-ring" style={{ color: color() }} aria-hidden="true">
@@ -225,9 +220,9 @@ function BrushCursor() {
             </g>
             <For each={weights()}>
               {([id, w]) => {
-                const base = () => geometry(id);
+                const base = () => s.geometry(id);
                 const target = () =>
-                  !stroking() ? brushHover()?.document.layout.nodes[id] : undefined;
+                  !s.stroking() ? s.brushHover()?.document.layout.nodes[id] : undefined;
                 const moves = () => {
                   const q = target();
                   return q && Math.hypot(q.x - base().x, q.y - base().y) > 0.05;

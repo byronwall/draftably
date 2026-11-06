@@ -1,7 +1,6 @@
 import { resolveAppearance } from './model/appearance';
 import { registerFonts } from './lib/font-data';
 import { createEffect, onCleanup, onMount, Show } from 'solid-js';
-import { Canvas } from './components/canvas/Canvas';
 import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
@@ -14,28 +13,24 @@ import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
 import { Tips } from './components/Tips';
 import { Toolbar } from './components/Toolbar';
-import { finishInlineEdit } from './state/actions';
-import { setFilePicker } from './state/commands';
+import { Editor } from './editor/Editor';
+import { runCommand, setFilePicker } from './state/commands';
 import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
-import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
-import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
-import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
 import { importForeignText, openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
-import { cancelLayout } from './state/layout';
-import { resetModifiers } from './state/pointer';
-import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
 import {
   filesShown,
   inspectorOpen,
   inspectorWidth,
   objectsOpen,
+  openMenu,
   showError,
   sidebarWidth,
 } from './state/ui';
+import { useDiagramSession } from './components/session-context';
 import './styles/app.css';
 
 /** Add an event listener and return a function that removes it. */
@@ -53,6 +48,7 @@ function listen<E extends Event>(
 onLeaveFile(closeComparison);
 
 export default function App() {
+  const s = useDiagramSession();
   let diagramInput!: HTMLInputElement;
   let imageInput!: HTMLInputElement;
   let replaceImageId: string | null = null;
@@ -86,54 +82,62 @@ export default function App() {
     }
   };
 
+  const dropFiles = async (files: File[]) => {
+    try {
+      for (const file of files) await openFile(file);
+    } catch (error) {
+      toast(error instanceof Error ? error.message : String(error));
+    }
+  };
+
   createEffect(() => {
-    document.documentElement.dataset.theme = doc.theme;
+    document.documentElement.dataset.theme = s.doc.theme;
   });
   // The diagram's canvas follows its appearance; editor chrome follows the editor's mode.
   createEffect(() => {
     document.documentElement.style.setProperty(
       '--diagram-canvas',
-      resolveAppearance(doc.appearance).canvas,
+      resolveAppearance(s.doc.appearance).canvas,
     );
   });
   registerFonts();
 
   onMount(() => {
     installDebugApi();
-    const { restored, notice } = restoreSavedDocument();
-    restoreArchive();
+    const { restored, notice } = s.restoreSavedDocument();
+    s.restoreArchive();
     // A first visit to the static site starts on the start screen instead of a blank canvas.
-    if (!restored && !fileMode()) setStartOpen(true);
+    if (!restored && !s.fileMode()) setStartOpen(true);
     requestAnimationFrame(() => {
-      if (!restored) fitView();
+      if (!restored) s.fitView();
       if (notice) toast(notice);
     });
     console.info('[diagram-studio] ready', {
       restored,
-      objects: doc.graph.nodes.length + doc.graph.groups.length,
+      objects: s.doc.graph.nodes.length + s.doc.graph.groups.length,
     });
 
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotion = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    const onMotion = (e: MediaQueryListEvent) => s.setReducedMotion(e.matches);
     const onBlur = () => {
-      sculptBlur();
-      resetModifiers();
-      setSpaceHeld(false);
+      s.sculptBlur();
+      s.resetModifiers();
+      s.setSpaceHeld(false);
     };
     // Edits to an example are not in any file; the browser asks first. A label or field still
     // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      finishInlineEdit(true);
+      s.finishInlineEdit(true);
       (document.activeElement as HTMLElement | null)?.blur?.();
-      if (!exampleEdited() || leaveAgreed()) return;
+      if (!s.exampleEdited() || s.leaveAgreed()) return;
       e.preventDefault();
       // Older Chrome and Safari show the prompt only when returnValue is set.
       e.returnValue = '';
     };
     const onUnload = () => {
-      sculptBeforeUnload();
-      finishInlineEdit(true);
-      persistNow();
+      s.sculptBeforeUnload();
+      s.finishInlineEdit(true);
+      s.persistNow();
     };
     const cleanups = [
       listen(document, 'keydown', handleKeyDown),
@@ -145,11 +149,11 @@ export default function App() {
       listen(window, 'beforeunload', onUnload),
       listen(motion, 'change', onMotion),
     ];
-    const stopWatching = watchOtherTabs();
+    const stopWatching = s.watchOtherTabs();
     onCleanup(() => {
       cleanups.forEach(stop => stop());
       stopWatching();
-      cancelLayout();
+      s.cancelLayout();
       cancelGeneration();
       onUnload();
     });
@@ -165,12 +169,12 @@ export default function App() {
       classList={{
         'objects-open': objectsOpen(),
         'inspector-open': inspectorOpen(),
-        'example-mode': exampleMode(),
+        'example-mode': s.exampleMode(),
       }}
     >
       <Toolbar />
       <div class="mode-bar-slot">
-        <Show when={exampleMode()}>
+        <Show when={s.exampleMode()}>
           <ExampleBar />
         </Show>
       </div>
@@ -180,7 +184,16 @@ export default function App() {
         </Show>
         {/* The banner centers over the canvas and never covers a panel. */}
         <div class="canvas-area">
-          <Canvas />
+          <Editor
+            session={s}
+            onContextMenu={e => openMenu('context', { x: e.clientX, y: e.clientY })}
+            onDropFiles={dropFiles}
+            emptyAction={
+              <button class="button primary" onClick={() => runCommand('quick-build')}>
+                Build from a list <kbd>B</kbd>
+              </button>
+            }
+          />
           <FileBanner />
         </div>
         <Show when={inspectorOpen()}>

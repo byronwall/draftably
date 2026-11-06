@@ -4,11 +4,10 @@ import { MIN_FRAME_WIDTH, type DiagramFrame } from '../../model/frame';
 import { headingLines, headingTypes } from '../../model/heading';
 import { footnoteMarkup } from '../../model/footnote';
 import { legendMarkup } from '../../model/legend';
+import type { Diagram } from '../../model/types';
 import { exportHref } from '../../state/links';
-import { HEADING_EDIT } from '../../state/actions';
-import { doc, transact } from '../../state/document';
-import { inlineEditId, screenToWorld } from '../../state/editor';
-import { viewerFrame } from '../../state/scene';
+import { HEADING_EDIT } from '../../state/session/actions';
+import { useDiagramSession } from '../session-context';
 
 type Key = 'title' | 'subtitle';
 
@@ -17,7 +16,7 @@ type Key = 'title' | 'subtitle';
  * frame's top margin, or above the subtitle; a missing subtitle goes under the title. A subtitle
  * is offered only once there is a title.
  */
-export function headingSlot(frame: DiagramFrame, key: Key) {
+export function headingSlot(doc: Diagram, frame: DiagramFrame, key: Key) {
   const look = resolveAppearance(doc.appearance),
     types = headingTypes(look),
     lines = headingLines(
@@ -48,41 +47,43 @@ export function headingSlot(frame: DiagramFrame, key: Key) {
  * Double-click the title or subtitle to edit it; drag the right edge to widen the frame.
  */
 export function Frame() {
-  const look = () => resolveAppearance(doc.appearance);
-  const frame = createMemo(viewerFrame);
+  const s = useDiagramSession();
+  const look = () => resolveAppearance(s.doc.appearance);
+  const frame = createMemo(s.viewerFrame);
   // Width while the right edge is dragged, before it is saved.
   const [dragW, setDragW] = createSignal<number | null>(null);
   const w = () => dragW() ?? frame().w;
   const lines = () =>
     headingLines(
       look(),
-      doc.appearance.heading,
+      s.doc.appearance.heading,
       frame().heading.x,
       frame().heading.y,
       frame().heading.wrap,
     );
   // Footnotes, then the key; link clicks land on the click targets `TextHits` draws over them.
   const legend = () =>
-    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, exportHref) +
-    legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
+    footnoteMarkup(look(), frame().foot, frame().foot.x, frame().foot.y, href =>
+      exportHref(s, href),
+    ) + legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
   const ghost = (key: Key) => {
-    if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
+    if (s.doc.appearance.heading?.[key] || s.inlineEditId() === HEADING_EDIT[key]) return;
     // Frame notes sit where a missing subtitle would go, as exports draw them.
     if (key === 'subtitle' && frame().notes.some(n => n.inFrame)) return;
-    return headingSlot(frame(), key);
+    return headingSlot(s.doc, frame(), key);
   };
   let start = 0;
   const onEdgeDown = (e: PointerEvent) => {
     if (e.button) return;
     e.stopPropagation();
     (e.currentTarget as Element).setPointerCapture(e.pointerId);
-    start = screenToWorld(e.clientX, 0).x - (frame().x + frame().w);
+    start = s.screenToWorld(e.clientX, 0).x - (frame().x + frame().w);
     setDragW(frame().w);
   };
   const onEdgeMove = (e: PointerEvent) => {
     if (dragW() === null) return;
     e.stopPropagation();
-    const right = screenToWorld(e.clientX, 0).x - start;
+    const right = s.screenToWorld(e.clientX, 0).x - start;
     setDragW(Math.max(frame().natural, MIN_FRAME_WIDTH, right - frame().x));
   };
   const onEdgeUp = (e: PointerEvent) => {
@@ -92,8 +93,8 @@ export function Frame() {
     setDragW(null);
     // Back at the content's own width, the frame follows the content again.
     const width = next - frame().natural < 4 ? undefined : Math.round(next);
-    if (width === doc.appearance.heading?.width) return;
-    transact('Resize frame', d => {
+    if (width === s.doc.appearance.heading?.width) return;
+    s.transact('Resize frame', d => {
       const heading = (d.appearance.heading ??= {});
       if (width) heading.width = width;
       else delete heading.width;
@@ -114,7 +115,7 @@ export function Frame() {
         {line => (
           <text
             class="diagram-frame-heading"
-            classList={{ editing: inlineEditId() === HEADING_EDIT[line.key] }}
+            classList={{ editing: s.inlineEditId() === HEADING_EDIT[line.key] }}
             x={line.x}
             y={line.y + line.type.lineHeight / 2}
             dominant-baseline="central"
@@ -157,9 +158,9 @@ export function Frame() {
         role="separator"
         aria-orientation="vertical"
         aria-label="Frame width. Drag to widen the frame."
-        x={frame().x + w() - 6 / doc.camera.k}
+        x={frame().x + w() - 6 / s.doc.camera.k}
         y={frame().y}
-        width={12 / doc.camera.k}
+        width={12 / s.doc.camera.k}
         height={frame().h}
         onPointerDown={onEdgeDown}
         onPointerMove={onEdgeMove}

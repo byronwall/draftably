@@ -1,35 +1,35 @@
 import { createEffect, createMemo, For, Show } from 'solid-js';
 import { unwrap } from 'solid-js/store';
 import { renderSvg } from '../../cli/svg';
-import { doc } from '../../state/document';
-import { activeState, gridOpen, setGridOpen, showState, states } from '../../state/emphasis';
 import { tip } from '../controls';
+import { useDiagramSession } from '../session-context';
 
 /**
  * The file's emphasis states as chips over the canvas: none, each state, and a grid of all of
  * them. Hidden when the file has no `state` lines.
  */
 export function StateBar() {
+  const s = useDiagramSession();
   return (
-    <Show when={states().length}>
+    <Show when={s.states().length}>
       <nav class="state-bar" aria-label="Emphasis states">
         <button
           type="button"
           class="state-chip"
-          aria-pressed={!activeState() && !gridOpen()}
-          onClick={() => (setGridOpen(false), showState(null))}
+          aria-pressed={!s.activeState() && !s.gridOpen()}
+          onClick={() => (s.setGridOpen(false), s.showState(null))}
         >
           All
         </button>
-        <For each={states()}>
-          {s => (
+        <For each={s.states()}>
+          {state => (
             <button
               type="button"
               class="state-chip"
-              aria-pressed={activeState() === s.id && !gridOpen()}
-              onClick={() => (setGridOpen(false), showState(s.id))}
+              aria-pressed={s.activeState() === state.id && !s.gridOpen()}
+              onClick={() => (s.setGridOpen(false), s.showState(state.id))}
             >
-              {s.label}
+              {state.label}
             </button>
           )}
         </For>
@@ -37,13 +37,13 @@ export function StateBar() {
         <button
           type="button"
           class="state-chip"
-          aria-pressed={gridOpen()}
-          onClick={() => setGridOpen(!gridOpen())}
+          aria-pressed={s.gridOpen()}
+          onClick={() => s.setGridOpen(!s.gridOpen())}
         >
           Grid
         </button>
       </nav>
-      <Show when={gridOpen()}>
+      <Show when={s.gridOpen()}>
         <StateGrid />
       </Show>
     </Show>
@@ -58,7 +58,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  * without a drag opens that state, and Fit shows the whole panels again.
  */
 function StateGrid() {
-  const markup = createMemo(() => renderSvg(structuredClone(unwrap(doc)), { states: true }));
+  const s = useDiagramSession();
+  const markup = createMemo(() => renderSvg(structuredClone(unwrap(s.doc)), { states: true }));
   let host!: HTMLDivElement;
   let views: SVGGElement[] = [];
   // The same view in every panel: a scale and an offset, in panel units.
@@ -144,8 +145,8 @@ function StateGrid() {
           if (moved) return;
           const panel = (e.target as Element).closest('[data-state]');
           if (!panel) return;
-          setGridOpen(false);
-          showState(panel.getAttribute('data-state'));
+          s.setGridOpen(false);
+          s.showState(panel.getAttribute('data-state'));
         }}
         // The markup is drawn from the file by `renderSvg`, which escapes every label.
         // eslint-disable-next-line solid/no-innerhtml

@@ -1,9 +1,9 @@
+import type { Diagram } from '../model/types';
 import { createMemo, createSignal, For, Show } from 'solid-js';
 import { ancestors, childrenOf, isGroup, styleOf } from '../model/graph';
-import { doc, selectItems, selection } from '../state/document';
-import { centerSelection } from '../state/editor';
 import { Icon } from './Icon';
 import { tip } from './controls';
+import { useDiagramSession } from './session-context';
 
 interface Row {
   id: string;
@@ -13,7 +13,7 @@ interface Row {
 }
 
 /** Rows of the object tree, depth first. A search shows matches at any depth. */
-function treeRows(query: string, closed: ReadonlySet<string>): Row[] {
+function treeRows(doc: Diagram, query: string, closed: ReadonlySet<string>): Row[] {
   const rows: Row[] = [];
   const walk = (parent: string | null, depth: number) => {
     for (const n of childrenOf(doc, parent)) {
@@ -30,9 +30,10 @@ function treeRows(query: string, closed: ReadonlySet<string>): Row[] {
 
 /** Searchable tree of shapes and containers. */
 export function ObjectsPanel() {
+  const s = useDiagramSession();
   const [query, setQuery] = createSignal('');
   const [closed, setClosed] = createSignal<ReadonlySet<string>>(new Set());
-  const rows = createMemo(() => treeRows(query().trim().toLowerCase(), closed()));
+  const rows = createMemo(() => treeRows(s.doc, query().trim().toLowerCase(), closed()));
 
   const toggle = (id: string) =>
     setClosed(current => {
@@ -58,10 +59,10 @@ export function ObjectsPanel() {
           {row => (
             <div
               class="tree-row"
-              classList={{ active: selection().has(row.id) }}
+              classList={{ active: s.selection().has(row.id) }}
               style={{ 'padding-left': `${row.depth * 14}px` }}
               role="treeitem"
-              aria-selected={selection().has(row.id)}
+              aria-selected={s.selection().has(row.id)}
             >
               <Show when={row.container} fallback={<span class="tree-spacer" />}>
                 <button
@@ -77,12 +78,12 @@ export function ObjectsPanel() {
                 type="button"
                 class="tree-label"
                 {...tip(row.title)}
-                onClick={e => selectItems([row.id], { add: e.shiftKey, toggle: e.shiftKey })}
-                onDblClick={centerSelection}
+                onClick={e => s.selectItems([row.id], { add: e.shiftKey, toggle: e.shiftKey })}
+                onDblClick={s.centerSelection}
               >
-                <Icon name={row.container ? 'group' : styleOf(doc, row.id).shape} />
+                <Icon name={row.container ? 'group' : styleOf(s.doc, row.id).shape} />
                 <span>{row.title}</span>
-                <Show when={doc.layout.nodes[row.id]?.pinned}>
+                <Show when={s.doc.layout.nodes[row.id]?.pinned}>
                   <Icon name="pin" class="icon pin-mark" />
                 </Show>
               </button>

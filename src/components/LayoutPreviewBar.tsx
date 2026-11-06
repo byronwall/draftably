@@ -1,13 +1,14 @@
 import { Show } from 'solid-js';
 import { runCommand } from '../state/commands';
-import { holdPreviewBefore, layoutPreview } from '../state/layout';
 import { tip } from './controls';
+import { useDiagramSession } from './session-context';
 
 /** Shown while a layout preview waits to be kept or discarded. */
 export function LayoutPreviewBar() {
-  const hold = (held: boolean) => () => holdPreviewBefore(held);
+  const s = useDiagramSession();
+  const hold = (held: boolean) => () => s.holdPreviewBefore(held);
   return (
-    <Show when={layoutPreview()}>
+    <Show when={s.layoutPreview()}>
       {preview => (
         <div class="layout-preview floating-bar" role="region" aria-label="Layout preview">
           <div class="layout-preview-text">
@@ -39,7 +40,7 @@ export function LayoutPreviewBar() {
             onPointerDown={e => {
               e.preventDefault();
               e.currentTarget.setPointerCapture(e.pointerId);
-              holdPreviewBefore(true);
+              s.holdPreviewBefore(true);
             }}
             onPointerUp={hold(false)}
             onPointerCancel={hold(false)}
@@ -47,7 +48,7 @@ export function LayoutPreviewBar() {
             onKeyDown={e => {
               if (e.key === ' ' || e.key === 'Enter') {
                 e.preventDefault();
-                holdPreviewBefore(true);
+                s.holdPreviewBefore(true);
               }
             }}
             onKeyUp={hold(false)}

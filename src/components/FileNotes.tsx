@@ -1,8 +1,6 @@
 import { createMemo, createSignal, For, Show } from 'solid-js';
 import { findConflicts } from '../dsl/conflicts';
-import { doc } from '../state/document';
-import { fileDiagnostics, fileScene, movedByChange } from '../state/file-session';
-import { routes, sceneRects } from '../state/scene';
+import { useDiagramSession } from './session-context';
 
 /**
  * Status bar entry for a diagram file: preferences that gave way, unsatisfied pins, drawing
@@ -10,21 +8,22 @@ import { routes, sceneRects } from '../state/scene';
  * source line it came from.
  */
 export function FileNotes() {
+  const s = useDiagramSession();
   const [open, setOpen] = createSignal(false);
   const conflicts = createMemo(() => {
-    const scene = fileScene();
-    return scene ? findConflicts(scene, doc, sceneRects(), routes()) : [];
+    const scene = s.fileScene();
+    return scene ? findConflicts(scene, s.doc, s.sceneRects(), s.routes()) : [];
   });
   const notes = () => [
-    ...[...fileDiagnostics(), ...conflicts()].map(d => ({
+    ...[...s.fileDiagnostics(), ...conflicts()].map(d => ({
       level: d.level,
       text: (d.line ? `Line ${d.line} · ` : '') + d.message,
     })),
-    ...(movedByChange().length
+    ...(s.movedByChange().length
       ? [
           {
             level: 'info',
-            text: `The last change on disk also moved ${movedByChange().join(', ')}.`,
+            text: `The last change on disk also moved ${s.movedByChange().join(', ')}.`,
           },
         ]
       : []),

@@ -11,7 +11,7 @@ import { headingTypes } from '../src/model/heading';
 import { defaultAppearance, resolveAppearance } from '../src/model/appearance';
 import { plainText, richLines } from '../src/model/rich-text';
 import type { Diagram } from '../src/model/types';
-import { setTextValue, textId } from '../src/state/canvas-text';
+import { setTextValue, textId } from '../src/state/session/canvas-text';
 
 const SOURCE = `diagram "Retries" version=1
 config link-base="https://github.com/org/repo/"

@@ -1,29 +1,5 @@
-import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import { selection } from '../../state/document';
-import { doc } from '../../state/document';
-import {
-  drag,
-  inlineEditId,
-  registerCanvas,
-  setStageSize,
-  spaceHeld,
-  tool,
-} from '../../state/editor';
-import { registerSceneElement, openFile } from '../../state/files';
-import * as pointer from '../../state/pointer';
-import {
-  edgeIds,
-  geometry,
-  groupIds,
-  nodeIds,
-  routeIds,
-  routesById,
-  sceneRects,
-} from '../../state/scene';
-import { brushActive, brushPointerLeave, cancelStroke, timelineOpen } from '../../state/sculpt';
-import { runCommand } from '../../state/commands';
-import { toast } from '../../state/toast';
-import { openMenu } from '../../state/ui';
+import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
+import { setActiveSession } from '../../state/active-session';
 import { BrushDock } from '../sculpt/BrushDock';
 import { TimelineDeck } from '../sculpt/TimelineDeck';
 import { CrossingView, EdgeView } from '../scene/EdgeView';
@@ -36,17 +12,31 @@ import { Frame } from './Frame';
 import { Notes } from './Notes';
 import { TextHits } from './TextHits';
 import { StateBar } from './StateBar';
-import { drawnDoc } from '../../state/emphasis';
 import { ZoomControls } from './ZoomControls';
 import { LayoutPreviewBar } from '../LayoutPreviewBar';
 import { Icon } from '../Icon';
 import './canvas.css';
+import { useDiagramSession } from '../session-context';
 
 const CANVAS_LABEL =
   'Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. ' +
   'Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.';
 
-export function Canvas() {
+export interface CanvasProps {
+  /** Open the host's context menu; the canvas has already selected what was clicked. */
+  onContextMenu?: (e: MouseEvent) => void;
+  /** Files dropped on the canvas. Without it the canvas takes no drops. */
+  onDropFiles?: (files: File[]) => Promise<void> | void;
+  /** Shown under the hint on an empty canvas, such as a button that builds from a list. */
+  emptyAction?: JSX.Element;
+}
+
+/**
+ * The canvas for the session in context: drawing, selection, dragging, inline editing, layout
+ * previews, the timeline and the brush. Pointing at it or focusing it makes its session active.
+ */
+export function Canvas(props: CanvasProps) {
+  const s = useDiagramSession();
   let stage!: HTMLElement;
   let svg!: SVGSVGElement;
   let world!: SVGGElement;
@@ -54,27 +44,32 @@ export function Canvas() {
   let dragDepth = 0;
 
   onMount(() => {
-    registerCanvas(svg);
-    registerSceneElement(world);
+    s.registerCanvas(svg);
     const observer = new ResizeObserver(([entry]) =>
-      setStageSize({ width: entry.contentRect.width, height: entry.contentRect.height }),
+      s.setStageSize({ width: entry.contentRect.width, height: entry.contentRect.height }),
     );
     observer.observe(stage);
-    svg.addEventListener('wheel', pointer.onWheel, { passive: false });
+    svg.addEventListener('wheel', s.onWheel, { passive: false });
+    // Before any handler inside it runs, so menus, shortcuts and commands act on this session.
+    const activate = () => setActiveSession(s);
+    stage.addEventListener('pointerdown', activate, true);
+    stage.addEventListener('focusin', activate, true);
     onCleanup(() => {
       observer.disconnect();
-      svg.removeEventListener('wheel', pointer.onWheel);
+      svg.removeEventListener('wheel', s.onWheel);
+      stage.removeEventListener('pointerdown', activate, true);
+      stage.removeEventListener('focusin', activate, true);
     });
   });
 
-  const camera = () => doc.camera;
+  const camera = () => s.doc.camera;
   // The drawing in the chosen emphasis state; edits still go to `doc`.
-  const shown = createMemo(drawnDoc);
-  const isSelected = (id: string) => selection().has(id);
-  const empty = () => !nodeIds().length && !groupIds().length;
+  const shown = createMemo(s.drawnDoc);
+  const isSelected = (id: string) => s.selection().has(id);
+  const empty = () => !s.nodeIds().length && !s.groupIds().length;
 
   const onPointerUp = (e: PointerEvent) => {
-    pointer.onPointerUp(e);
+    s.onPointerUp(e);
     try {
       svg.releasePointerCapture(e.pointerId);
     } catch {
@@ -82,29 +77,26 @@ export function Canvas() {
     }
   };
 
-  const onDrop = async (e: DragEvent) => {
+  const onDrop = (e: DragEvent) => {
     e.preventDefault();
     dragDepth = 0;
     setDropping(false);
-    try {
-      for (const file of e.dataTransfer?.files ?? []) await openFile(file);
-    } catch (error) {
-      toast(error instanceof Error ? error.message : String(error));
-    }
+    void props.onDropFiles?.([...(e.dataTransfer?.files ?? [])]);
   };
-  const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
+  const hasFiles = (e: DragEvent) =>
+    !!props.onDropFiles && !!e.dataTransfer?.types.includes('Files');
 
   return (
     <main
       ref={stage}
       class="stage"
       classList={{
-        'is-dragging': !!drag() && drag()!.kind === 'pan',
-        'space-held': spaceHeld(),
-        'has-timeline': timelineOpen(),
-        'has-brush': brushActive(),
+        'is-dragging': !!s.drag() && s.drag()!.kind === 'pan',
+        'space-held': s.spaceHeld(),
+        'has-timeline': s.timelineOpen(),
+        'has-brush': s.brushActive(),
       }}
-      data-tool={tool()}
+      data-tool={s.tool()}
       aria-label="Diagram workspace"
       onDragEnter={e => {
         if (!hasFiles(e)) return;
@@ -124,17 +116,17 @@ export function Canvas() {
         role="application"
         tabindex="0"
         aria-label={CANVAS_LABEL}
-        onPointerDown={pointer.onPointerDown}
-        onPointerMove={pointer.onPointerMove}
+        onPointerDown={s.onPointerDown}
+        onPointerMove={s.onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerCancel={() => pointer.resetModifiers()}
-        onPointerLeave={brushPointerLeave}
-        onLostPointerCapture={() => brushActive() && cancelStroke()}
-        onDblClick={pointer.onDoubleClick}
+        onPointerCancel={() => s.resetModifiers()}
+        onPointerLeave={s.brushPointerLeave}
+        onLostPointerCapture={() => s.brushActive() && s.cancelStroke()}
+        onDblClick={s.onDoubleClick}
         onContextMenu={e => {
           e.preventDefault();
-          pointer.selectForContextMenu(e);
-          openMenu('context', { x: e.clientX, y: e.clientY });
+          s.selectForContextMenu(e);
+          props.onContextMenu?.(e);
         }}
       >
         <defs>
@@ -152,7 +144,7 @@ export function Canvas() {
         <g
           ref={world}
           class="scene"
-          classList={{ connecting: tool() === 'connect' }}
+          classList={{ connecting: s.tool() === 'connect' }}
           transform={`translate(${camera().x},${camera().y}) scale(${camera().k})`}
         >
           <Show when={!empty()}>
@@ -160,15 +152,15 @@ export function Canvas() {
           </Show>
           <SequenceBackdrop doc={shown()} part="panel" />
           <g>
-            <For each={groupIds()}>
+            <For each={s.groupIds()}>
               {id => (
                 <GroupView
                   doc={shown()}
                   id={id}
-                  rect={sceneRects().get(id)!}
+                  rect={s.sceneRects().get(id)!}
                   selected={isSelected(id)}
-                  dropTarget={drag()?.dropTargetId === id}
-                  editing={inlineEditId() === id}
+                  dropTarget={s.drag()?.dropTargetId === id}
+                  editing={s.inlineEditId() === id}
                   interactive
                   zoom={camera().k}
                 />
@@ -176,17 +168,17 @@ export function Canvas() {
             </For>
           </g>
           <SequenceBackdrop doc={shown()} part="phases" />
-          <Lifelines doc={doc} ids={nodeIds()} rect={id => sceneRects().get(id)} />
+          <Lifelines doc={s.doc} ids={s.nodeIds()} rect={id => s.sceneRects().get(id)} />
           <g>
-            <For each={routeIds()}>
+            <For each={s.routeIds()}>
               {id => (
-                <Show when={routesById().get(id)}>
+                <Show when={s.routesById().get(id)}>
                   {route => (
                     <EdgeView
                       doc={shown()}
                       route={route()}
                       selected={isSelected(id)}
-                      editing={inlineEditId() === id}
+                      editing={s.inlineEditId() === id}
                       interactive
                     />
                   )}
@@ -195,14 +187,14 @@ export function Canvas() {
             </For>
           </g>
           <g>
-            <For each={nodeIds()}>
+            <For each={s.nodeIds()}>
               {id => (
                 <NodeView
                   doc={shown()}
                   id={id}
-                  rect={geometry(id)}
+                  rect={s.geometry(id)}
                   selected={isSelected(id)}
-                  editing={inlineEditId() === id}
+                  editing={s.inlineEditId() === id}
                   interactive
                   zoom={camera().k}
                 />
@@ -210,15 +202,15 @@ export function Canvas() {
             </For>
           </g>
           <g>
-            <For each={edgeIds()}>
+            <For each={s.edgeIds()}>
               {id => (
-                <Show when={routesById().get(id)?.cross && routesById().get(id)}>
-                  {route => <CrossingView doc={doc} route={route()} selected={isSelected(id)} />}
+                <Show when={s.routesById().get(id)?.cross && s.routesById().get(id)}>
+                  {route => <CrossingView doc={s.doc} route={route()} selected={isSelected(id)} />}
                 </Show>
               )}
             </For>
           </g>
-          <Show when={doc.appearance.notes?.length}>
+          <Show when={s.doc.appearance.notes?.length}>
             <Notes />
           </Show>
           <Show when={!empty()}>
@@ -234,9 +226,7 @@ export function Canvas() {
           <p>
             <kbd>N</kbd> adds a box. Type a title, then <kbd>Tab</kbd> to keep going.
           </p>
-          <button class="button primary" onClick={() => runCommand('quick-build')}>
-            Build from a list <kbd>B</kbd>
-          </button>
+          {props.emptyAction}
         </div>
       </Show>
       <InlineEditor />

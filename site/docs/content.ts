@@ -35,7 +35,16 @@ export interface Page {
 const GROUPS: [string, string[]][] = [
   [
     'Start here',
-    ['get-started', 'saving', 'cli', 'themes', 'agent-skill', 'from-mermaid', 'embed'],
+    [
+      'get-started',
+      'saving',
+      'cli',
+      'themes',
+      'agent-skill',
+      'from-mermaid',
+      'embed',
+      'frameworks',
+    ],
   ],
   [
     'Language',

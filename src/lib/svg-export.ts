@@ -92,6 +92,15 @@ export function downloadBlob(blob: Blob, name: string) {
   window.setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
+/** A download name from the diagram's title: `My plan` → `my-plan.svg`. */
+export function fileName(title: string, extension: string) {
+  const base = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return (base || 'diagram') + '.' + extension;
+}
+
 export const downloadText = (text: string, name: string, type: string) =>
   downloadBlob(new Blob([text], { type }), name);
 

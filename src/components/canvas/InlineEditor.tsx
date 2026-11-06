@@ -4,27 +4,20 @@ import { clamp } from '../../model/geometry';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
-import {
-  finishInlineEdit,
-  inlineDraft,
-  quickExtend,
-  setInlineDraft,
-  setTool,
-} from '../../state/actions';
-import { doc, setSelection } from '../../state/document';
-import { focusCanvas, inlineEditId, stageSize } from '../../state/editor';
-import { geometry, routesById, viewerFrame } from '../../state/scene';
-import { parseTextId, TEXT_NAMES } from '../../state/canvas-text';
+import { parseTextId, TEXT_NAMES } from '../../state/session/canvas-text';
 import { textBox } from './text-boxes';
+import { useDiagramSession } from '../session-context';
 
 /** A text box over the canvas for editing a shape, container or connection label in place. */
 export function InlineEditor() {
-  return <Show when={inlineEditId()}>{id => <Editor id={id()} />}</Show>;
+  const s = useDiagramSession();
+  return <Show when={s.inlineEditId()}>{id => <Editor id={id()} />}</Show>;
 }
 
 function Editor(props: { id: string }) {
+  const s = useDiagramSession();
   let input!: HTMLTextAreaElement;
-  const look = () => resolveAppearance(doc.appearance);
+  const look = () => resolveAppearance(s.doc.appearance);
 
   /**
    * The editor sits on the object itself: a shape's whole face, a container's title band, or a
@@ -32,15 +25,15 @@ function Editor(props: { id: string }) {
    * it is drawn larger than the object, around the same center, so it stays legible.
    */
   const frame = createMemo(() => {
-    const k = doc.camera.k,
-      { width, height } = stageSize();
+    const k = s.doc.camera.k,
+      { width, height } = s.stageSize();
     let world: { x: number; y: number; w: number; h: number },
       type = look().annotation,
       fill = look().canvas,
       ink = look().text,
       align: 'center' | 'left' = 'center',
       radius = 4;
-    const text = textBox(viewerFrame(), props.id);
+    const text = textBox(s.doc, s.viewerFrame(), props.id);
     if (text) {
       ({ type, fill, ink } = text);
       align = 'left';
@@ -48,17 +41,17 @@ function Editor(props: { id: string }) {
       // targets while it is edited, so it gets more room.
       const prose = /^@(note|footnote):/.test(props.id);
       world = { ...text.rect, w: Math.max(text.rect.w, prose ? 360 : 160) };
-    } else if (findEdge(doc, props.id)) {
-      const route = routesById().get(props.id),
+    } else if (findEdge(s.doc, props.id)) {
+      const route = s.routesById().get(props.id),
         at = route?.label ?? route?.points[Math.floor(route.points.length / 2)] ?? { x: 0, y: 0 };
       const w = Math.max(route?.label?.w ?? 0, 120),
         h = route?.label?.h ?? type.lineHeight + 6;
       world = { x: at.x - w / 2, y: at.y - h / 2, w, h };
-    } else if (findGroup(doc, props.id)?.frame === 'soft') {
+    } else if (findGroup(s.doc, props.id)?.frame === 'soft') {
       // A soft group's small label sits inside the first piece of its tint.
-      const r = objectRect(doc, geometry, props.id),
-        h0 = findGroup(doc, props.id)!.hull?.[0] ?? { x: 0, y: 0, w: r.w, h: r.h },
-        swatch = drawnSwatch(doc, look(), props.id, 'group');
+      const r = objectRect(s.doc, s.geometry, props.id),
+        h0 = findGroup(s.doc, props.id)!.hull?.[0] ?? { x: 0, y: 0, w: r.w, h: r.h },
+        swatch = drawnSwatch(s.doc, look(), props.id, 'group');
       fill = swatch.fill;
       ink = swatch.ink;
       align = 'left';
@@ -68,9 +61,9 @@ function Editor(props: { id: string }) {
         w: Math.max(120, h0.w - 2 * SOFT_PAD),
         h: type.lineHeight + 4,
       };
-    } else if (findGroup(doc, props.id)) {
-      const r = objectRect(doc, geometry, props.id),
-        swatch = drawnSwatch(doc, look(), props.id, 'group'),
+    } else if (findGroup(s.doc, props.id)) {
+      const r = objectRect(s.doc, s.geometry, props.id),
+        swatch = drawnSwatch(s.doc, look(), props.id, 'group'),
         band = look().groupHeader / 2 - 7;
       type = look().groupTitle;
       fill = swatch.fill;
@@ -78,9 +71,9 @@ function Editor(props: { id: string }) {
       align = 'left';
       world = { x: r.x + 28, y: r.y + 3, w: Math.max(80, r.w - 28 - 34), h: band * 2 - 6 };
     } else {
-      const r = objectRect(doc, geometry, props.id),
-        style = styleOf(doc, props.id),
-        swatch = drawnSwatch(doc, look(), props.id, 'node');
+      const r = objectRect(s.doc, s.geometry, props.id),
+        style = styleOf(s.doc, props.id),
+        swatch = drawnSwatch(s.doc, look(), props.id, 'node');
       type = look().title;
       // Text shapes and images keep their title off the face; those edit on the canvas color.
       const onFace = style.shape !== 'text' && style.shape !== 'image';
@@ -92,8 +85,8 @@ function Editor(props: { id: string }) {
     const scale = Math.max(k, 12 / type.size),
       w = world.w * scale,
       h = world.h * scale,
-      cx = (world.x + world.w / 2) * k + doc.camera.x,
-      cy = (world.y + world.h / 2) * k + doc.camera.y;
+      cx = (world.x + world.w / 2) * k + s.doc.camera.x,
+      cy = (world.y + world.h / 2) * k + s.doc.camera.y;
     return {
       left: clamp(cx - w / 2, 5, Math.max(5, width - w - 5)),
       top: clamp(cy - h / 2, 5, Math.max(5, height - h - 5)),
@@ -118,9 +111,9 @@ function Editor(props: { id: string }) {
     const text = parseTextId(props.id);
     return text
       ? `Edit diagram ${TEXT_NAMES[text.kind]}`
-      : findEdge(doc, props.id)
+      : findEdge(s.doc, props.id)
         ? 'Edit connection label'
-        : findGroup(doc, props.id)
+        : findGroup(s.doc, props.id)
           ? 'Edit container title'
           : 'Edit node title';
   };
@@ -139,19 +132,19 @@ function Editor(props: { id: string }) {
       // Tab keeps going: commit and add the next connected shape (Shift: a sibling branch).
       e.preventDefault();
       const id = props.id;
-      finishInlineEdit(true);
-      if (id.startsWith('@')) return focusCanvas();
-      setSelection([id]);
-      if (findNode(doc, id) || findEdge(doc, id)) quickExtend({ sibling: e.shiftKey });
-      else focusCanvas();
+      s.finishInlineEdit(true);
+      if (id.startsWith('@')) return s.focusCanvas();
+      s.setSelection([id]);
+      if (findNode(s.doc, id) || findEdge(s.doc, id)) s.quickExtend({ sibling: e.shiftKey });
+      else s.focusCanvas();
     } else if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      finishInlineEdit(true);
-      focusCanvas();
+      s.finishInlineEdit(true);
+      s.focusCanvas();
     } else if (e.key === 'Escape') {
       e.preventDefault();
-      finishInlineEdit(false);
-      setTool('select');
+      s.finishInlineEdit(false);
+      s.setTool('select');
     }
   };
 
@@ -172,13 +165,13 @@ function Editor(props: { id: string }) {
         ref={input}
         rows={1}
         aria-label={label()}
-        value={inlineDraft()}
+        value={s.inlineDraft()}
         onInput={e => {
-          setInlineDraft(e.currentTarget.value);
+          s.setInlineDraft(e.currentTarget.value);
           fit();
         }}
         onKeyDown={onKeyDown}
-        onBlur={() => finishInlineEdit(true)}
+        onBlur={() => s.finishInlineEdit(true)}
         style={{
           color: frame().ink,
           'font-family': frame().type.family,

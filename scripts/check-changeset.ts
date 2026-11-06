@@ -37,6 +37,31 @@ const PACKAGES: Record<string, { manifest: string; paths: RegExp[] }> = {
     manifest: 'packages/markdown/package.json',
     paths: [/^packages\/markdown\//, /^scripts\/build-markdown\.ts$/],
   },
+  '@draftably/editor': {
+    manifest: 'packages/editor/package.json',
+    paths: [
+      /^src\/(?:editor|state|components|model|dsl|engines|lib|workers|styles)\//,
+      /^packages\/editor\//,
+      /^scripts\/build-editor\.ts$/,
+      /^tsconfig\.editor\.json$/,
+    ],
+  },
+  '@draftably/react': {
+    manifest: 'packages/react/package.json',
+    paths: [/^packages\/react\//],
+  },
+  '@draftably/solid': {
+    manifest: 'packages/solid/package.json',
+    paths: [/^packages\/solid\//],
+  },
+  '@draftably/vue': {
+    manifest: 'packages/vue/package.json',
+    paths: [/^packages\/vue\//],
+  },
+  '@draftably/svelte': {
+    manifest: 'packages/svelte/package.json',
+    paths: [/^packages\/svelte\//],
+  },
   '@draftably/mermaid': {
     manifest: 'packages/mermaid/package.json',
     paths: [

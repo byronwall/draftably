@@ -15,12 +15,9 @@ export interface MenuState {
   anchor: HTMLElement | { x: number; y: number };
 }
 
-export interface ConfirmRequest {
-  title: string;
-  message: string;
-  confirmLabel: string;
-  onConfirm: () => void;
-}
+import type { ConfirmRequest } from './session';
+
+export type { ConfirmRequest };
 
 const compactPanels = matchMedia('(max-width: 1100px)');
 

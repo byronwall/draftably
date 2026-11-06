@@ -2,9 +2,7 @@
  * Named commands shared by the toolbar, menus and keyboard shortcuts.
  * While a timeline preview is open, only navigation and view commands run.
  */
-import * as actions from './actions';
-import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
-import { diagramClipped, fitView, zoomAt } from './editor';
+
 import {
   copyImage,
   exportDocument,
@@ -13,31 +11,7 @@ import {
   type CopyAs,
   type ExportKind,
 } from './files';
-import {
-  acceptPreview,
-  captureCheckpoint,
-  discardPreview,
-  layoutPreview,
-  movesBlocked,
-  rebuildBlocked,
-  restoreCheckpoint,
-  routesBlocked,
-  runLabLayout,
-} from './layout';
 import { openComparison } from './comparison';
-import {
-  brushActive,
-  closeTimeline,
-  deactivateBrush,
-  openTimeline,
-  reopenTimeline,
-  saveTimelineFile,
-  sculptInteracting,
-  sculptUndo,
-  timelineOpen,
-  toggleBrush,
-} from './sculpt';
-import { exampleMode, fileMode, reflowSelectedGroup } from './file-session';
 import { encodeSource } from '../lib/source-hash';
 import {
   go,
@@ -66,6 +40,7 @@ import {
   togglePanels,
 } from './ui';
 import { findNode, isGroup } from '../model/graph';
+import { activeSession } from './active-session';
 
 export interface Command {
   label: string;
@@ -90,18 +65,18 @@ let fileInput:
 export const setFilePicker = (fn: typeof fileInput) => (fileInput = fn);
 
 function undoCommand() {
-  if (sculptUndo()) return;
-  if (layoutPreview()) return discardPreview();
-  undo();
+  if (activeSession().sculptUndo()) return;
+  if (activeSession().layoutPreview()) return activeSession().discardPreview();
+  activeSession().undo();
 }
 
 function redoCommand() {
-  if (timelineOpen()) closeTimeline();
-  redo();
+  if (activeSession().timelineOpen()) activeSession().closeTimeline();
+  activeSession().redo();
 }
 
 function exportCommand(format: 'json') {
-  if (sculptInteracting()) {
+  if (activeSession().sculptInteracting()) {
     toast('Keep or cancel the preview before exporting the diagram.');
     return;
   }
@@ -111,12 +86,13 @@ function exportCommand(format: 'json') {
 }
 
 function openExportCommand(kind: ExportKind) {
-  if (sculptInteracting()) toast('Keep or cancel the preview before exporting the diagram.');
+  if (activeSession().sculptInteracting())
+    toast('Keep or cancel the preview before exporting the diagram.');
   else openExport(kind);
 }
 
 function copyCommand(kind: CopyAs) {
-  if (sculptInteracting()) {
+  if (activeSession().sculptInteracting()) {
     toast('Keep or cancel the preview before copying the diagram.');
     return;
   }
@@ -138,7 +114,7 @@ function findFile() {
  * browser copy; from an example there, a blank scratch copy opens instead, like the Playground's.
  */
 async function newDiagram() {
-  if (!fileMode()) return actions.newDocument();
+  if (!activeSession().fileMode()) return activeSession().newDocument();
   if (workspace()) {
     setFilesOpen(true);
     setCreatingFile(true);
@@ -155,7 +131,7 @@ function openStart() {
   else setStartOpen(true);
 }
 
-const hasSelection = () => selectedIds().length > 0;
+const hasSelection = () => activeSession().selectedIds().length > 0;
 
 export const commands = {
   undo: {
@@ -165,7 +141,7 @@ export const commands = {
     icon: 'undo',
     run: undoCommand,
     duringTimeline: true,
-    enabled: canUndo,
+    enabled: () => activeSession().canUndo(),
   },
   redo: {
     hint: 'Put back the edit you just undid.',
@@ -173,7 +149,7 @@ export const commands = {
     keys: '⇧⌘Z',
     icon: 'redo',
     run: redoCommand,
-    enabled: canRedo,
+    enabled: () => activeSession().canRedo(),
   },
 
   'add-node': {
@@ -182,8 +158,8 @@ export const commands = {
     keys: 'N',
     icon: 'plus',
     run: () => {
-      actions.setTool('select');
-      actions.addNode({}, undefined, true);
+      activeSession().setTool('select');
+      activeSession().addNode({}, undefined, true);
     },
   },
   'add-connected': {
@@ -191,7 +167,7 @@ export const commands = {
     label: 'Add connected box',
     keys: '⇧ Enter',
     icon: 'connect',
-    run: () => actions.quickExtend(),
+    run: () => activeSession().quickExtend(),
   },
   'quick-build': {
     hint: 'Type or paste an indented list and get connected shapes.',
@@ -203,8 +179,10 @@ export const commands = {
   'insert-step': {
     label: 'Insert step',
     run: () => {
-      const id = selectedIds().find(id => doc.graph.edges.some(e => e.id === id));
-      if (id) actions.insertStep(id);
+      const id = activeSession()
+        .selectedIds()
+        .find(id => activeSession().doc.graph.edges.some(e => e.id === id));
+      if (id) activeSession().insertStep(id);
     },
   },
   duplicate: {
@@ -213,7 +191,7 @@ export const commands = {
     label: 'Duplicate',
     keys: '⌘D',
     icon: 'copy',
-    run: actions.duplicateSelection,
+    run: () => activeSession().duplicateSelection(),
   },
   group: {
     hint: 'Frame the selection in a new container.',
@@ -221,14 +199,14 @@ export const commands = {
     label: 'Wrap in container',
     keys: '⌘G',
     icon: 'group',
-    run: actions.wrapSelection,
+    run: () => activeSession().wrapSelection(),
   },
   ungroup: {
     hint: 'Remove the container and keep its contents.',
     enabled: hasSelection,
     label: 'Ungroup',
     keys: '⇧⌘G',
-    run: actions.ungroupSelection,
+    run: () => activeSession().ungroupSelection(),
   },
   pin: {
     hint: 'Stop layout tools from moving the selection.',
@@ -236,12 +214,12 @@ export const commands = {
     label: 'Toggle pin',
     keys: 'P',
     icon: 'pin',
-    run: actions.togglePin,
+    run: () => activeSession().togglePin(),
   },
   'release-manual': {
     hint: 'Forget that shapes were moved by hand.',
     label: 'Clear manual markers',
-    run: actions.clearManualMarkers,
+    run: () => activeSession().clearManualMarkers(),
   },
   delete: {
     hint: 'Remove the selection and keep the contents of containers.',
@@ -249,90 +227,96 @@ export const commands = {
     enabled: hasSelection,
     keys: '⌫',
     icon: 'trash',
-    run: () => actions.deleteSelection(),
+    run: () => activeSession().deleteSelection(),
   },
   'delete-deep': {
     label: 'Delete with contents',
     keys: '⇧⌫',
-    run: () => actions.deleteSelection(true),
+    run: () => activeSession().deleteSelection(true),
   },
   'align-left': {
     label: 'Align left',
     icon: 'align-left',
     enabled: hasSelection,
-    run: () => actions.alignSelection('left'),
+    run: () => activeSession().alignSelection('left'),
   },
   'align-top': {
     label: 'Align top',
     icon: 'align-top',
     enabled: hasSelection,
-    run: () => actions.alignSelection('top'),
+    run: () => activeSession().alignSelection('top'),
   },
   'align-center': {
     label: 'Align horizontal centers',
     icon: 'align-center',
     enabled: hasSelection,
-    run: () => actions.alignSelection('center'),
+    run: () => activeSession().alignSelection('center'),
   },
   'align-middle': {
     label: 'Align vertical centers',
     icon: 'align-middle',
     enabled: hasSelection,
-    run: () => actions.alignSelection('middle'),
+    run: () => activeSession().alignSelection('middle'),
   },
   'distribute-x': {
     label: 'Distribute horizontally',
     icon: 'distribute-x',
     enabled: hasSelection,
-    run: () => actions.alignSelection('distribute-x'),
+    run: () => activeSession().alignSelection('distribute-x'),
   },
   'distribute-y': {
     label: 'Distribute vertically',
     icon: 'distribute-y',
     enabled: hasSelection,
-    run: () => actions.alignSelection('distribute-y'),
+    run: () => activeSession().alignSelection('distribute-y'),
   },
-  'fit-container': { label: 'Fit contents', run: actions.fitSelectedContainer },
+  'fit-container': { label: 'Fit contents', run: () => activeSession().fitSelectedContainer() },
   'reflow-group': {
     hint: 'Rearrange the contents of the selected container.',
     label: 'Reflow group',
     run: () => {
-      const id = selectedIds().find(id => isGroup(doc, id));
-      if (id) reflowSelectedGroup(id);
+      const id = activeSession()
+        .selectedIds()
+        .find(id => isGroup(activeSession().doc, id));
+      if (id) activeSession().reflowSelectedGroup(id);
     },
-    enabled: () => fileMode() && selectedIds().some(id => isGroup(doc, id)),
+    enabled: () =>
+      activeSession().fileMode() &&
+      activeSession()
+        .selectedIds()
+        .some(id => isGroup(activeSession().doc, id)),
   },
-  'collapse-selected': { label: 'Collapse or expand', run: () => actions.toggleCollapse() },
-  'reverse-edge': { label: 'Reverse', run: actions.reverseSelectedEdge },
-  'reset-route': { label: 'Reset bends', run: actions.resetSelectedBends },
-  'mark-start': { label: 'Start here', run: () => actions.markSelectedAs('start') },
-  'mark-end': { label: 'End here', run: () => actions.markSelectedAs('end') },
+  'collapse-selected': { label: 'Collapse or expand', run: () => activeSession().toggleCollapse() },
+  'reverse-edge': { label: 'Reverse', run: () => activeSession().reverseSelectedEdge() },
+  'reset-route': { label: 'Reset bends', run: () => activeSession().resetSelectedBends() },
+  'mark-start': { label: 'Start here', run: () => activeSession().markSelectedAs('start') },
+  'mark-end': { label: 'End here', run: () => activeSession().markSelectedAs('end') },
 
   layout: {
     hint: 'Small moves that shorten long lines and line up neighbours. Your arrangement stays.',
     label: 'Tidy',
     keys: 'L',
     icon: 'layout',
-    run: () => runLabLayout(),
-    blocked: movesBlocked,
+    run: () => activeSession().runLabLayout(),
+    blocked: () => activeSession().movesBlocked(),
     endsBrush: true,
   },
   'layout-rebuild': {
     hint: "Run the automatic layout again from the file's recipe, without hand placements.",
     label: 'Lay out again',
     keys: '⇧L',
-    run: () => runLabLayout('rebuild', true),
-    blocked: rebuildBlocked,
+    run: () => activeSession().runLabLayout('rebuild', true),
+    blocked: () => activeSession().rebuildBlocked(),
     endsBrush: true,
   },
   'layout-preview': {
     label: 'Preview improvement',
-    run: () => runLabLayout('pass', true),
-    blocked: movesBlocked,
+    run: () => activeSession().runLabLayout('pass', true),
+    blocked: () => activeSession().movesBlocked(),
     endsBrush: true,
   },
-  'layout-accept': { label: 'Keep preview', run: acceptPreview },
-  'layout-discard': { label: 'Discard', run: discardPreview },
+  'layout-accept': { label: 'Keep preview', run: () => activeSession().acceptPreview() },
+  'layout-discard': { label: 'Discard', run: () => activeSession().discardPreview() },
   'layout-menu': {
     hint: 'Lay out again, or choose a direction, a format and how connections run.',
     label: 'Arrange',
@@ -342,21 +326,24 @@ export const commands = {
     endsBrush: true,
     duringTimeline: true,
   },
-  'layout-checkpoint': { label: 'Capture checkpoint', run: captureCheckpoint },
-  'layout-restore': { label: 'Restore checkpoint', run: restoreCheckpoint },
+  'layout-checkpoint': {
+    label: 'Capture checkpoint',
+    run: () => activeSession().captureCheckpoint(),
+  },
+  'layout-restore': { label: 'Restore checkpoint', run: () => activeSession().restoreCheckpoint() },
   'compare-layouts': {
     hint: 'See other arrangements beside this one, then apply one.',
     label: 'Compare alternatives',
     keys: '⌥E',
     run: () => openComparison('layout'),
-    blocked: rebuildBlocked,
+    blocked: () => activeSession().rebuildBlocked(),
     endsBrush: true,
   },
   'compare-routes': {
     hint: 'See other connection routes beside these, then apply one.',
     label: 'Compare connections',
     run: () => openComparison('routing'),
-    blocked: routesBlocked,
+    blocked: () => activeSession().routesBlocked(),
     endsBrush: true,
   },
   reroute: {
@@ -364,13 +351,13 @@ export const commands = {
     label: 'Reroute connections',
     keys: '⌥R',
     icon: 'branch',
-    run: () => actions.reroute(),
+    run: () => activeSession().reroute(),
   },
   'auto-ports': {
     hint: 'Let the router choose sides for the selected lines.',
     label: 'Use auto ports on selection',
     keys: '⌥⇧R',
-    run: () => actions.reroute({ auto: true }),
+    run: () => activeSession().reroute({ auto: true }),
   },
 
   'timeline-toggle': {
@@ -378,22 +365,25 @@ export const commands = {
     label: 'Layout timeline',
     keys: '⌥T',
     icon: 'journey',
-    run: () => (timelineOpen() ? closeTimeline() : openTimeline()),
-    blocked: movesBlocked,
+    run: () =>
+      activeSession().timelineOpen()
+        ? activeSession().closeTimeline()
+        : activeSession().openTimeline(),
+    blocked: () => activeSession().movesBlocked(),
     duringTimeline: true,
   },
   'timeline-reopen': {
     hint: 'Open the last layout timeline again.',
     label: 'Reopen last layout timeline',
     icon: 'journey',
-    run: reopenTimeline,
+    run: () => activeSession().reopenTimeline(),
     duringTimeline: true,
   },
   'timeline-save': {
     hint: 'Download the last layout timeline as a file.',
     label: 'Save layout timeline…',
     icon: 'download',
-    run: saveTimelineFile,
+    run: () => activeSession().saveTimelineFile(),
     duringTimeline: true,
   },
   'brush-toggle': {
@@ -401,8 +391,8 @@ export const commands = {
     label: 'Layout brush',
     keys: 'W',
     icon: 'brush',
-    run: toggleBrush,
-    blocked: movesBlocked,
+    run: () => activeSession().toggleBrush(),
+    blocked: () => activeSession().movesBlocked(),
     duringTimeline: true,
   },
 
@@ -411,27 +401,27 @@ export const commands = {
     label: 'Fit diagram',
     keys: '1',
     icon: 'fit',
-    run: fitView,
+    run: () => activeSession().fitView(),
     duringTimeline: true,
   },
   'zoom-in': {
     label: 'Zoom in',
     keys: '+',
     icon: 'plus',
-    run: () => zoomAt(1.18),
+    run: () => activeSession().zoomAt(1.18),
     duringTimeline: true,
   },
   'zoom-out': {
     label: 'Zoom out',
     keys: '−',
     icon: 'minus',
-    run: () => zoomAt(1 / 1.18),
+    run: () => activeSession().zoomAt(1 / 1.18),
     duringTimeline: true,
   },
   'reset-camera': {
     label: 'Zoom to 100%',
     keys: '0',
-    run: () => zoomAt(1 / doc.camera.k),
+    run: () => activeSession().zoomAt(1 / activeSession().doc.camera.k),
     duringTimeline: true,
   },
   'toggle-objects': {
@@ -537,7 +527,7 @@ export const commands = {
     hint: 'Write this scratch copy to a new file in the folder.',
     label: 'Save as file…',
     icon: 'file',
-    enabled: () => exampleMode() && !!workspace(),
+    enabled: () => activeSession().exampleMode() && !!workspace(),
     run: () => setSavingExample(true),
   },
   'import-diagram': {
@@ -554,7 +544,13 @@ export const commands = {
   },
   'replace-image': {
     label: 'Replace image',
-    run: () => fileInput?.(selectedIds().find(id => findNode(doc, id)) ?? null, 'image'),
+    run: () =>
+      fileInput?.(
+        activeSession()
+          .selectedIds()
+          .find(id => findNode(activeSession().doc, id)) ?? null,
+        'image',
+      ),
   },
   'export-json': {
     hint: 'Save the diagram to a file on this computer.',
@@ -602,7 +598,7 @@ export const commands = {
     hint: 'Switch the editor between light and dark. The diagram keeps its theme.',
     label: 'Light or dark editor',
     icon: 'sun',
-    run: actions.toggleTheme,
+    run: () => activeSession().toggleTheme(),
   },
   home: {
     hint: 'Go to the start of this folder or to the draftably site.',
@@ -624,7 +620,7 @@ export const commands = {
     label: 'Open in Playground',
     icon: 'code',
     // Only a file or an example has source to carry.
-    enabled: fileMode,
+    enabled: () => activeSession().fileMode(),
     run: () =>
       confirmAction({
         title: 'Open in the Playground?',
@@ -639,11 +635,13 @@ export type CommandId = keyof typeof commands;
 
 /** Open or close a right-panel tab, keeping a diagram that was shown whole in view. */
 function toggleRight(tab: RightTab) {
-  const whole = !diagramClipped();
+  const whole = !activeSession().diagramClipped();
   toggleRightTab(tab);
   // The canvas takes its new size on the next frame.
   if (whole)
-    requestAnimationFrame(() => requestAnimationFrame(() => diagramClipped() && fitView()));
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => activeSession().diagramClipped() && activeSession().fitView()),
+    );
 }
 
 /**
@@ -662,7 +660,7 @@ const FILE_UNSUPPORTED = new Set<string>([
   'replace-image',
   'open',
 ]);
-const unavailableInFile = (id: string) => fileMode() && FILE_UNSUPPORTED.has(id);
+const unavailableInFile = (id: string) => activeSession().fileMode() && FILE_UNSUPPORTED.has(id);
 
 export function runCommand(id: CommandId) {
   const command: Command = commands[id];
@@ -670,13 +668,13 @@ export function runCommand(id: CommandId) {
     toast('Not available while editing a diagram file. Its results cannot be saved to the file.');
     return;
   }
-  if (timelineOpen() && !command.duringTimeline) {
+  if (activeSession().timelineOpen() && !command.duringTimeline) {
     toast('Preview only. Keep this step or press Escape to cancel.');
     return;
   }
   const blocked = command.blocked?.();
   if (blocked) return void toast(blocked);
-  if (command.endsBrush && brushActive()) deactivateBrush();
+  if (command.endsBrush && activeSession().brushActive()) activeSession().deactivateBrush();
   try {
     const result = command.run();
     if (result instanceof Promise)

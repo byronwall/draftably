@@ -1,20 +1,7 @@
 import { Show } from 'solid-js';
 import type { BrushMode } from '../../engines/sculpt-engine.js';
-import { setTool } from '../../state/actions';
-import {
-  brushActive,
-  brushHover,
-  brushSettings,
-  clearHolds,
-  deactivateBrush,
-  heldIds,
-  openTimeline,
-  referenceLabel,
-  reopenTimeline,
-  updateBrushSettings,
-  useCurrentAsReference,
-} from '../../state/sculpt';
 import { Checkbox, IconButton, RangeField, Select } from '../controls';
+import { useDiagramSession } from '../session-context';
 
 const MODES: [BrushMode, string][] = [
   ['tidy', 'Tidy nearby'],
@@ -26,8 +13,9 @@ const MODES: [BrushMode, string][] = [
 
 /** Settings for the local layout brush. */
 export function BrushDock() {
+  const s = useDiagramSession();
   const hint = () => {
-    const h = brushHover();
+    const h = s.brushHover();
     if (!h) return 'Hover previews. Hold or drag to paint. [ / ] size · Alt restores · Space pans.';
     const n = Object.keys(h.weights).length;
     if (!n)
@@ -40,7 +28,7 @@ export function BrushDock() {
     return `${n} eligible · ${h.locked.length} protected · ${detail}`;
   };
   return (
-    <Show when={brushActive()}>
+    <Show when={s.brushActive()}>
       <section class="brush-dock floating-panel" aria-label="Layout brush controls">
         <header class="panel-header compact">
           <span class="eyebrow">Local layout</span>
@@ -49,17 +37,17 @@ export function BrushDock() {
             label="Exit layout brush"
             keys="Esc"
             onClick={() => {
-              deactivateBrush();
-              setTool('select');
+              s.deactivateBrush();
+              s.setTool('select');
             }}
           />
         </header>
         <label class="field">
           <span class="field-label">Brush</span>
           <Select
-            value={brushSettings().mode}
+            value={s.brushSettings().mode}
             options={MODES}
-            onChange={mode => updateBrushSettings({ mode })}
+            onChange={mode => s.updateBrushSettings({ mode })}
           />
         </label>
         <RangeField
@@ -68,44 +56,44 @@ export function BrushDock() {
           min={40}
           max={600}
           step={10}
-          value={brushSettings().radius}
-          onInput={radius => updateBrushSettings({ radius })}
-          onChange={radius => updateBrushSettings({ radius })}
+          value={s.brushSettings().radius}
+          onInput={radius => s.updateBrushSettings({ radius })}
+          onChange={radius => s.updateBrushSettings({ radius })}
         />
         <RangeField
           label="Strength"
           unit="%"
           min={1}
           max={100}
-          value={brushSettings().strength}
-          onInput={strength => updateBrushSettings({ strength })}
-          onChange={strength => updateBrushSettings({ strength })}
+          value={s.brushSettings().strength}
+          onInput={strength => s.updateBrushSettings({ strength })}
+          onChange={strength => s.updateBrushSettings({ strength })}
         />
         <RangeField
           label="Soft edge"
           unit="%"
           min={0}
           max={100}
-          value={brushSettings().softness}
-          onInput={softness => updateBrushSettings({ softness })}
-          onChange={softness => updateBrushSettings({ softness })}
+          value={s.brushSettings().softness}
+          onInput={softness => s.updateBrushSettings({ softness })}
+          onChange={softness => s.updateBrushSettings({ softness })}
         />
         <Checkbox
           label="Hold restored nodes for the next layout"
-          checked={brushSettings().holdRestored}
-          onChange={holdRestored => updateBrushSettings({ holdRestored })}
+          checked={s.brushSettings().holdRestored}
+          onChange={holdRestored => s.updateBrushSettings({ holdRestored })}
         />
         <div class="brush-row">
           <span>
-            Restore: <strong>{referenceLabel()}</strong>
+            Restore: <strong>{s.referenceLabel()}</strong>
           </span>
-          <button type="button" class="button ghost small" onClick={useCurrentAsReference}>
+          <button type="button" class="button ghost small" onClick={s.useCurrentAsReference}>
             Use current
           </button>
         </div>
         <div class="brush-row">
-          <span>{heldIds().length} local holds</span>
-          <button type="button" class="button ghost small" onClick={clearHolds}>
+          <span>{s.heldIds().length} local holds</span>
+          <button type="button" class="button ghost small" onClick={s.clearHolds}>
             Clear holds
           </button>
         </div>
@@ -114,13 +102,13 @@ export function BrushDock() {
             type="button"
             class="button"
             onClick={() => {
-              deactivateBrush();
-              void openTimeline();
+              s.deactivateBrush();
+              void s.openTimeline();
             }}
           >
             Preview from here
           </button>
-          <button type="button" class="button ghost" onClick={reopenTimeline}>
+          <button type="button" class="button ghost" onClick={s.reopenTimeline}>
             Last path
           </button>
         </div>

@@ -1,8 +1,6 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import type { WorkspaceFile } from '../server/workspace';
-import { focusCanvas } from '../state/editor';
 import { openPdfExport } from '../state/files';
-import { fileSession } from '../state/file-session';
 import {
   createDiagramFile,
   fileNameFor,
@@ -33,6 +31,7 @@ import {
   sortFiles,
   toggleFolder,
 } from './workspace-files';
+import { useDiagramSession } from './session-context';
 
 type Entry = { file: WorkspaceFile } | { folder: string; count: number };
 
@@ -41,9 +40,10 @@ type Entry = { file: WorkspaceFile } | { folder: string; count: number };
  * start page. Type to filter, arrow keys to move, Enter to open. The list follows the folder.
  */
 export function FilesPanel() {
+  const s = useDiagramSession();
   const [query, setQuery] = createSignal('');
   const [active, setActive] = createSignal(0);
-  const current = () => fileSession()?.file;
+  const current = () => s.fileSession()?.file;
   const all = () => workspace()?.files ?? [];
   const files = createMemo(() => sortFiles(matchFiles(all(), query()), shownOrder(all())));
   const byFolder = () => shownOrder(all()) === 'folder';
@@ -87,7 +87,7 @@ export function FilesPanel() {
     } else if (e.key === 'Escape') {
       e.stopPropagation();
       if (query()) setQuery('');
-      else focusCanvas();
+      else s.focusCanvas();
     }
   };
 

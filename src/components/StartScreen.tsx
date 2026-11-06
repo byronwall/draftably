@@ -4,7 +4,6 @@ import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { EXAMPLES, type ExampleInfo } from '../model/examples';
 import { runCommand } from '../state/commands';
-import { exampleMode } from '../state/file-session';
 import {
   createDiagramFile,
   exampleUrl,
@@ -34,6 +33,7 @@ import {
   shownOrder,
   sortFiles,
 } from './workspace-files';
+import { useDiagramSession } from './session-context';
 
 /**
  * Where a session starts. A served folder with diagrams shows those diagrams and little else; an
@@ -41,6 +41,7 @@ import {
  * screen of `draftably open` without a file; as a dialog it sits over the editor and can be closed.
  */
 export function StartScreen(props: { variant: 'page' | 'dialog' }) {
+  const s = useDiagramSession();
   onMount(() => {
     void refreshWorkspace();
     onCleanup(watchWorkspace());
@@ -62,7 +63,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             when={workspace()}
             fallback={
               <span class="start-where">
-                {exampleMode()
+                {s.exampleMode()
                   ? 'Scratch copy · not on disk'
                   : 'Browser copy · saved on this device'}
               </span>
@@ -108,6 +109,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
 }
 
 function NewDiagram() {
+  const s = useDiagramSession();
   const [title, setTitle] = createSignal('');
   const [path, setPath] = createSignal('');
   const [pathEdited, setPathEdited] = createSignal(false);
@@ -141,7 +143,7 @@ function NewDiagram() {
         fallback={
           <form class="start-new" onSubmit={create}>
             <p class="start-hint">
-              {exampleMode()
+              {s.exampleMode()
                 ? 'Opens a blank draft. The diagram kept in this browser stays as it is.'
                 : 'Replaces the diagram kept in this browser. Undo restores it.'}
             </p>
