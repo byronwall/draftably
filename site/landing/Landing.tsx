@@ -85,9 +85,9 @@ export function Landing() {
             <div>
               <p class="hero-kicker">Now you write them. Drag only if you want to.</p>
               <p class="hero-sub">
-                Architecture, flows, sequences, state machines and schemas, laid out from text. A
-                box you move becomes a readable line in the file. Use it in the browser, the
-                terminal, your app or your coding agent.
+                Architecture, flows, sequences, state machines and schemas, laid out from text. Move
+                a box and the file gets readable lines. Use it in the browser, the terminal, your
+                app or your coding agent.
               </p>
             </div>
             <div class="hero-actions">
