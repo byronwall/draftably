@@ -31,7 +31,14 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 
 ## state/ — reactive application state
 
-Each module owns one concern and exposes signals plus the actions that change them.
+State has two halves. A **diagram session** holds everything about one diagram being edited. The
+**app shell** holds what the page has once: panels, menus, commands, files and Compare.
+
+### state/session/ — one diagram
+
+`createDiagramSession(options)` (`session/index.ts`) builds one session. Each file below exports a
+`create…` part; the parts are built in dependency order on one object, so a part reads earlier
+parts through `s`. A page can hold any number of sessions.
 
 | File                        | Responsibility                                                                                    |
 | --------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -39,14 +46,30 @@ Each module owns one concern and exposes signals plus the actions that change th
 | `editor.ts`                 | Tool, drag feedback, inline editing and camera helpers. Never saved.                              |
 | `scene.ts`                  | Derived drawing data: visible graph, rectangles and memoized routes.                              |
 | `actions.ts`                | Editor operations used by the UI; each wraps a model edit in one undo step.                       |
-| `commands.ts`               | Named commands shared by toolbar, menus and shortcuts.                                            |
-| `keyboard.ts`, `pointer.ts` | Global shortcuts, clipboard and canvas gestures.                                                  |
+| `pointer.ts`                | Canvas gestures.                                                                                  |
 | `canvas-text.ts`            | Text ids (`@note:0`, `@legend:1`, `@phase:id`) for text that is not an object, and its selection. |
 | `layout.ts`                 | Layout passes, previews, the layout lab's settings and checkpoints.                               |
 | `sculpt.ts`                 | The layout timeline and the layout brush.                                                         |
-| `comparison.ts`             | Compare: candidates, cameras, overlay layers and Apply.                                           |
-| `files.ts`                  | Import, image embedding and JSON / SVG / PNG export.                                              |
-| `ui.ts`, `toast.ts`         | Panels, menus, dialogs and status messages.                                                       |
+| `emphasis.ts`, `routing.ts` | The shown emphasis state, and router settings.                                                    |
+| `file-session.ts`           | The diagram's `.draft` source: a served file, an example, or text a host owns.                    |
+
+Session options replace hooks into the app: `storageKey` (browser persistence), `urlState`
+(`?state=`), `confirm`, `openLink` and `onInteract`. Components read the session from context with
+`useDiagramSession()`.
+
+### The app shell
+
+The shell acts on `activeSession()` (`active-session.ts`): the session whose canvas the user last
+pointed at or focused. The app creates one session in `index.tsx` and marks it active.
+
+| File                    | Responsibility                                          |
+| ----------------------- | ------------------------------------------------------- |
+| `commands.ts`           | Named commands shared by toolbar, menus and shortcuts.  |
+| `keyboard.ts`           | Global shortcuts and the clipboard.                     |
+| `comparison.ts`         | Compare: candidates, cameras, overlay layers and Apply. |
+| `files.ts`              | Import, image embedding and JSON / SVG / PNG export.    |
+| `launch.ts`, `links.ts` | What the viewer opens, and where object links go.       |
+| `ui.ts`, `toast.ts`     | Panels, menus, dialogs and status messages.             |
 
 ### Rules
 
@@ -83,9 +106,9 @@ TypeScript shared by the browser and the command line.
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
 writes saves atomically. A save based on an older revision is refused with 409, and invalid
-source with 422. `state/file-session.ts` is the browser side: it detects a session at startup,
-switches browser storage off, and projects each valid revision into the document. While a file is
-open, `commit` in `state/document.ts` hands every edit to the session, which translates it, shows
+source with 422. `state/session/file-session.ts` is the browser side: it detects a session at
+startup, switches browser storage off, and projects each valid revision into the document. While a
+file is open, `commit` in `state/session/document.ts` hands every edit to the session, which translates it, shows
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
 
 `server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
@@ -106,6 +129,12 @@ source file is newer than `dist-cli/`.
 `packages/markdown/` owns shared fence metadata, local-source resolution, diagnostics, and static asset preparation. Its remark and markdown-it adapters map host syntax to that core. The optional browser client adds the independent viewer and owns its cleanup. Host adapters own file identity, asset publication, cache replay, and public URLs; they do not implement another compiler.
 
 See [integration support](integrations/support.md) for proof and publication status, plus the [runtime](integrations/runtime.md), [Markdown](integrations/markdown.md), [viewer](integrations/viewer.md), and [contributor](integrations/contributing.md) guides.
+
+## editor/ — the embeddable editor
+
+`editor/index.ts` is the surface a host builds on. `Editor` draws the canvas for one session.
+`mountEditor(host, { source, onChange })` creates a session, edits `source` in it, reports each kept
+edit as text, and takes `update(source)` from the host. The app renders `Editor` for its own canvas.
 
 ## components/ — the interface
 

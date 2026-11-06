@@ -133,6 +133,13 @@ restarts the server. After every step the browser's geometry must equal `draftab
 the saved file, and the arranged region away from the addition must not move. Screenshots go to
 `tmp/proof-layout/`.
 
+## Two editors on one page
+
+`pnpm prove:editors` serves `tests/browser/two-editors.html` through Vite. The page mounts two
+editors with `mountEditor`. The proof drags, selects, adds a node and undoes in one editor with real
+mouse and keys. The other editor's document, selection and source must not change. Screenshots go to
+`tmp/proof-editors/`.
+
 ## Browser
 
 The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at 1440 × 900 and
