@@ -93,9 +93,9 @@ jobs:
           for svg in readme-1.svg checkout-flow.svg docs/guide-1.svg; do
             grep -q 'id="draftably-source"' "$svg" || { echo "::error::$svg has no embedded source"; exit 1; }
           done
-          grep -qx '![Request path](readme-1.svg)' README.md
-          grep -qx '![Cart, payment, then receipt.](checkout-flow.svg)' README.md
-          grep -qx '![Diagram](guide-1.svg)' docs/guide.md
+          grep -Fqx '![Request path](readme-1.svg)' README.md
+          grep -Fqx '![Cart, payment, then receipt.](checkout-flow.svg)' README.md
+          grep -Fqx '![Diagram](guide-1.svg)' docs/guide.md
           test "$(grep -c '^<!-- draftably: ' README.md)" = 2
           git diff --stat
           git add -A
