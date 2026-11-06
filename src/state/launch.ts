@@ -16,17 +16,15 @@ import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { DRAFT_ID } from './session/file-session';
 import { activeSession } from './active-session';
+import { setWorkspace, workspace } from './workspace';
 
 export type LaunchMode = 'static' | 'start' | 'file' | 'example';
 
 const state = createRoot(() => {
-  const [workspace, setWorkspace] = createSignal<WorkspaceInfo | null>(null);
   const [startOpen, setStartOpen] = createSignal(false);
   const [launchNotice, setLaunchNotice] = createSignal('');
   const [view, setView] = createSignal<LaunchMode>('static');
   return {
-    workspace,
-    setWorkspace,
     startOpen,
     setStartOpen,
     launchNotice,
@@ -36,8 +34,7 @@ const state = createRoot(() => {
   };
 });
 
-/** The served folder, or null on the static site. */
-export const workspace = state.workspace;
+export { workspace };
 /** The start screen shown over the editor (the static site's first run, or File › Start). */
 export const startOpen = state.startOpen;
 export const setStartOpen = state.setStartOpen;
@@ -61,7 +58,7 @@ export const siteUrl = (path = '') =>
   new URL(path, onSite() ? new URL('..', location.href) : 'https://draftably.dev/').href;
 
 /** Home: the served folder's start page, or the public site's landing page. */
-export const homeUrl = () => (state.workspace() ? startUrl() : siteUrl());
+export const homeUrl = () => (workspace() ? startUrl() : siteUrl());
 
 /** The editor was opened from the Playground, as its "Open in the editor" does. */
 export const cameFromPlayground = () => {
@@ -106,7 +103,7 @@ async function fetchWorkspace(): Promise<WorkspaceInfo | null> {
 /** List the folder's diagrams again. */
 export async function refreshWorkspace() {
   const info = await fetchWorkspace();
-  const current = state.workspace();
+  const current = workspace();
   if (!info) return;
   if (current && JSON.stringify(info) === JSON.stringify(current)) return;
   // Unchanged files keep their objects, so their rows and thumbnails are not drawn again.
@@ -115,7 +112,7 @@ export async function refreshWorkspace() {
     const old = known.get(f.path);
     return old && old.title === f.title && old.modified === f.modified ? old : f;
   });
-  state.setWorkspace({ ...info, files });
+  setWorkspace({ ...info, files });
 }
 
 /**
@@ -147,7 +144,7 @@ export async function launch(): Promise<LaunchMode> {
 async function chooseLaunch(): Promise<LaunchMode> {
   const params = new URLSearchParams(location.search);
   const info = await fetchWorkspace();
-  state.setWorkspace(info);
+  setWorkspace(info);
   const file = params.get('file'),
     exampleId = params.get('example');
   if (file && info) {
@@ -222,7 +219,7 @@ export async function go(url: string, { push = true } = {}) {
   const toStart = next.pathname === location.pathname && !next.search;
   if (
     next.origin !== location.origin ||
-    !state.workspace() ||
+    !workspace() ||
     activeSession().exampleMode() ||
     (!file && !toStart)
   )
@@ -274,7 +271,7 @@ export function navigateInPlace() {
   let hover: ReturnType<typeof setTimeout> | undefined;
   const onPointerOver = (e: PointerEvent) => {
     const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
-    const file = link && state.workspace() && new URL(link.href).searchParams.get('file');
+    const file = link && workspace() && new URL(link.href).searchParams.get('file');
     clearTimeout(hover);
     if (!file || prefetched.has(file) || file === activeSession().fileSession()?.file) return;
     hover = setTimeout(() => {

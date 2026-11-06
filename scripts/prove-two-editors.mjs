@@ -128,6 +128,45 @@ try {
     left4.source === left0.source ? '' : left4.source,
   );
   await page.screenshot({ path: path.join(proof.out, 'after-undo.png') });
+
+  // The canvas shortcuts a bare editor keeps, in Right. Left stays as it was.
+  const right = () => page.evaluate(() => window.editors[1].session.doc);
+  await page.mouse.click(...center(await node('right', 'b')));
+  const bx = (await right()).layout.nodes.b.x;
+  // Arrows act on the canvas or a shape with focus; a click leaves focus on the page.
+  await page.locator('#right [data-kind="node"][data-id="b"]').first().focus();
+  await page.keyboard.press('ArrowRight');
+  await idle(1);
+  const moved = (await right()).layout.nodes.b.x;
+  check('arrow nudges the selection', moved === bx + 1, `${bx} -> ${moved}`);
+
+  const edges = (await right()).graph.edges.length;
+  await page.keyboard.press('c');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await idle(1);
+  check(
+    'C, Enter, Tab, Enter connects two shapes',
+    (await right()).graph.edges.length === edges + 1,
+  );
+  await page.keyboard.press('Escape');
+
+  // Clipboard shortcuts need the OS clipboard; send the events they fire instead.
+  await page.mouse.click(...center(await node('right', 'b')));
+  const count = (await right()).graph.nodes.length;
+  await page.evaluate(() => {
+    const target = document.querySelector('#right [data-kind="node"][data-id="b"]');
+    const data = new DataTransfer();
+    target.dispatchEvent(new ClipboardEvent('copy', { clipboardData: data, bubbles: true }));
+    target.dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true }));
+  });
+  await idle(1);
+  check('copy and paste duplicate the shape', (await right()).graph.nodes.length === count + 1);
+  await page.keyboard.press('Delete');
+  await idle(1);
+  check('Delete removes the pasted shape', (await right()).graph.nodes.length === count);
+  check('shortcuts in Right leave Left untouched', (await state(0)).source === left4.source);
 } catch (error) {
   check('proof ran to completion', false, error.message);
 } finally {

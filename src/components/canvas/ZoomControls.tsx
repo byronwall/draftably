@@ -1,6 +1,12 @@
-import { runCommand } from '../../state/commands';
-import { CommandButton, tip } from '../controls';
+import {
+  canvasCommandEnabled,
+  canvasCommands,
+  runCanvasCommand,
+} from '../../state/canvas-commands';
+import { commandButton, tip } from '../controls';
 import { useDiagramSession } from '../session-context';
+
+const CommandButton = commandButton(canvasCommands, runCanvasCommand, canvasCommandEnabled);
 
 export function ZoomControls() {
   const s = useDiagramSession();
@@ -12,7 +18,7 @@ export function ZoomControls() {
       <button
         class="button ghost zoom-level"
         {...tip('Zoom to 100%', '0')}
-        onClick={() => runCommand('reset-camera')}
+        onClick={() => runCanvasCommand('reset-camera')}
       >
         {Math.round(s.doc.camera.k * 100)}%
       </button>

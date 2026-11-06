@@ -12,7 +12,8 @@ import {
 } from '../state/ui';
 import { AppNav, Brand } from './Brand';
 import { startUrl, workspace } from '../state/launch';
-import { CommandButton, IconButton, tip } from './controls';
+import { CommandButton } from './CommandButton';
+import { IconButton, tip } from './controls';
 import { Icon } from './Icon';
 import { MenuBar } from './MenuBar';
 import './toolbar.css';
