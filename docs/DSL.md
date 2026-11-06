@@ -638,9 +638,8 @@ state read "Read path" web api catalog cache
 state events "Events" queue publish rest=plain
 ```
 
-**Try it:** this drawing shows no state, because a live example does not draw them. Select **Edit
-in playground**, then **Open in the editor**. Then select **Read path** in the row of chips over
-the canvas.
+**Try it:** pick **Write path**, then **Read path**, in the State row over the drawing. The boxes
+stay in place; only the focus changes. The Editor has the same row over its canvas.
 
 The first word is the state's ID, then an optional label in quotes, then the IDs in focus:
 nodes, groups (a group brings all its members) and connections. A connection between two

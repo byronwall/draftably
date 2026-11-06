@@ -2791,6 +2791,48 @@ kbd {
   background: var(--bg);
 }
 
+/* The emphasis states of an example, one button each, like the Editor's chips. */
+.doc-example-states {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  min-height: 34px;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font: 600 12px var(--font);
+}
+
+.doc-example-states span {
+  margin-right: 4px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.doc-example-states button {
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.doc-example-states button:hover {
+  color: var(--accent);
+}
+
+.doc-example-states button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .doc-example-label {
   min-width: 0;
   margin-right: auto;

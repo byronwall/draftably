@@ -21,9 +21,12 @@ export interface Drawing {
   scene?: Scene;
 }
 
-/** Compile `.draft` source and draw it the way `draftably inspect --svg` does. */
-export async function draw(source: string): Promise<Drawing> {
-  const { result, scene } = await renderWithScene(source);
+/**
+ * Compile `.draft` source and draw it the way `draftably inspect --svg` does, or
+ * `inspect --svg --state <id>` with a state.
+ */
+export async function draw(source: string, state?: string): Promise<Drawing> {
+  const { result, scene } = await renderWithScene(source, state ? { state } : {});
   if (scene) {
     const failed = !result.ok || scene.diagnostics.some(d => d.level === 'error');
     const { objects, edges } = scene.model;
