@@ -39,9 +39,9 @@ describe('ports centred on a side', () => {
     expect(straight.points[0].y).toBe(straight.points[1].y);
   });
 
-  it('turns the other line a standoff out rather than hugging the side', () => {
+  it('turns the other line midway between the columns rather than hugging the side', () => {
     const { routes } = RouteLab.compute(input);
     const turn = routes.find(r => r.id === 'cb')!.points.at(-2)!;
-    expect(200 - turn.x).toBeGreaterThanOrEqual(20);
+    expect(turn.x).toBe((164 + 200) / 2);
   });
 });
