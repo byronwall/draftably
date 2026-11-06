@@ -13,8 +13,9 @@ pnpm add @draftably/markdown
 | Docusaurus 3.10.2                 | Remark plugin in the docs preset                | [docusaurus](https://github.com/byronwall/draftably/tree/main/integration-examples/docusaurus)           |
 | VitePress 1.6.4                   | A prebuild step writes image Markdown           | [vitepress](https://github.com/byronwall/draftably/tree/main/integration-examples/vitepress)             |
 
-Each example is a complete site you can copy. It serves under `/manual/`, so you can see how the
-base path flows into image URLs.
+Each link opens a complete example project. The examples use the package versions listed in the
+table and serve under `/manual/`, so you can compare the configured base path with the generated
+image URLs. Copy the project that matches your host, then change its content root and base path.
 
 ## The shared setup
 
@@ -40,8 +41,12 @@ const draftOptions = {
 // After the build: await assets.copyTo('<build output>/_draftably');
 ```
 
-Copying after every build matters: when a site caches a page, the plugin does not run for it, and
-`copyTo` still puts its image back. [Markdown](#markdown) explains each option.
+Resolve `directory` and `rootDir` from the config file when it may run from another working
+directory. Serve `directory` during development, and copy it to the build output after each build.
+Copying after every build matters: a page cache can skip the transform, while `copyTo` restores all
+SVGs referenced by cached pages. The result is HTML with `<img>` links under
+`/manual/_draftably/` and SVGs in the published `_draftably/` folder. See [Markdown](#markdown) for
+fence options, source includes and error handling.
 
 ## Astro and Starlight
 
@@ -89,15 +94,11 @@ module.exports = async function createConfig() {
 };
 ```
 
-`staticDirectories` serves the store in development. Two Docusaurus caches need care:
-
-- Its MDX cache does not know about included `.draft` files. Clear it before a production build,
-  as the example's `build` script does.
-- In development, an edit to an included `.draft` file does not rerun the page. The example's dev
-  script touches the Markdown file when a `.draft` file next to it changes.
-
-Use the standard webpack build. The faster Rspack build kept a stale image after an include
-changed. On a site with several locales, use each locale's base URL in `publicPath`.
+`staticDirectories` serves the store in development. The fixture's `pnpm build` clears Docusaurus'
+MDX cache before the standard webpack build because the cache does not track included `.draft`
+files. The faster Rspack build kept a stale image after an include changed, so use the standard
+webpack build. In development, the fixture touches the Markdown page when an included `.draft`
+file changes. On a site with several locales, set each locale's base URL in `publicPath`.
 
 ## VitePress
 
@@ -114,9 +115,10 @@ await writeFile('generated-docs/index.md', String(result));
 ```
 
 Point VitePress at `generated-docs/`, and write the store to `generated-docs/public/_draftably/`
-with `publicPath: '/_draftably'`. VitePress adds its own base when it builds the page. Run the step
-in your `build` script (`node scripts/prepare.mjs && vitepress build .`). The example's dev script
-reruns it when a Markdown or `.draft` file changes. Keep `generated-docs/` out of git.
+with `publicPath: '/_draftably'`. VitePress adds its configured base when it builds the page. Run
+the prebuild step before `vitepress build` and serve the generated folder. The example's dev script
+reruns preparation when a Markdown or included `.draft` file changes. Keep `generated-docs/` out of
+git.
 
 ## Other sites
 

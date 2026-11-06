@@ -1,7 +1,7 @@
 # Markdown
 
-`@draftably/markdown` turns `draft` code fences into ordinary SVG images when your site builds.
-Readers load no Draftably JavaScript.
+`@draftably/markdown` turns `draft` code fences into SVG image references during a Markdown build.
+The SVG files are build assets. Readers need no Draftably JavaScript for static diagrams.
 
 ````markdown
 ```draft
@@ -15,15 +15,15 @@ It has a remark plugin for Unified, MDX, Astro and Docusaurus, and a markdown-it
 VitePress and others. For a ready setup on a documentation site, follow
 [Documentation sites](#documentation-sites).
 
-## Render your first page
+## Render a Markdown file
 
 ```sh
 pnpm add @draftably/markdown markdown-it
 ```
 
-Save this as `render-markdown.ts` and run `node render-markdown.ts`:
+Save this as `render-markdown.mjs` and run `node render-markdown.mjs`:
 
-````ts
+````js
 import { mkdir, writeFile } from 'node:fs/promises';
 import MarkdownIt from 'markdown-it';
 import { createMarkdownItDraft } from '@draftably/markdown/markdown-it';
@@ -38,10 +38,13 @@ await mkdir('dist', { recursive: true });
 await writeFile('dist/index.html', html);
 ````
 
-Serve `dist/` as the site root. Each fence becomes an `<img>` with alt text and dimensions. For a
-site served under a path, put that path in `publicPath`, such as `/manual/diagrams/`.
+The script writes `dist/index.html` and the SVG to `dist/diagrams/`. The HTML contains an `<img>`
+whose URL starts with `/diagrams/`, with alt text, width and height. Serve `dist/` as the site root.
+If the site is mounted at `/manual/`, set `publicPath: '/manual/diagrams/'` and publish the files
+at `dist/diagrams/`.
 
-With Unified or MDX, keep your processor and add the remark plugin with the same file store:
+For Unified or MDX, keep your existing processor and add the remark plugin with the same asset
+store. The site build must publish the store's output directory at the matching public URL:
 
 ```ts
 import remarkDraft from '@draftably/markdown/remark';

@@ -54,6 +54,21 @@ draftably open architecture.draft
 draftably open                              # start page for the current folder
 ```
 
+For GitHub, GitLab or another host that does not run your page JavaScript, export an SVG and
+reference it from Markdown:
+
+```sh
+draftably inspect architecture.draft --svg > architecture.svg
+```
+
+```markdown
+![Architecture](architecture.svg)
+```
+
+The SVG embeds its `.draft` source, so `draftably open architecture.svg` can open it for editing.
+Use `--png architecture.png` if the host blocks SVG. For a generated image on every push, use the
+[Markdown GitHub Action](https://draftably.dev/docs/github-action).
+
 ## Agent skill
 
 The package bundles a skill that teaches coding agents to write, check and render `.draft` files.

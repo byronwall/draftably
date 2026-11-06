@@ -32,7 +32,10 @@ edge consume queue -> worker "consume"
 edge persist worker -> db "save result"
 layout root flow direction=right
 layout service row
-legend line dashed "Queued work"
+legend blue "Caller"
+legend amber "Buffered work"
+legend teal "Stored results"
+legend line dashed "Queued delivery"
 ```
 
 **Try it:** add `count=3` to the worker's `node` line. The worker gains a count badge without adding three boxes.
@@ -90,6 +93,8 @@ edge deliver queue -> worker "deliver job"
 edge process worker -> worker "process job"
 edge done worker -> queue "acknowledge" kind=async
 layout root sequence
+legend blue "Caller"
+legend amber "Buffered work"
 legend line dashed "Response or acknowledgement"
 ```
 
