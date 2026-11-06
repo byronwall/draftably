@@ -308,6 +308,7 @@ main {
 
 .copy code {
   flex: 1;
+  min-width: 0;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -1159,7 +1160,13 @@ main {
   margin-bottom: 14px;
 }
 
-.copy-word,
+/* A command breaks between words, never after a hyphen; a word wider than the box still breaks. */
+.copy-word {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .install p code,
 .switch p code {
   white-space: nowrap;
@@ -1350,7 +1357,8 @@ main {
 
 .footer-links {
   display: flex;
-  gap: 22px;
+  flex-wrap: wrap;
+  gap: 4px 22px;
   margin-left: auto;
   font-size: 13px;
 }
