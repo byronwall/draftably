@@ -754,8 +754,9 @@ function compute(input, rawOptions = {}) {
           // straight into or out of a member's top: never run along or through.
           obstacles.push({
             id: id + ':header-band',
-            x: g.x - lip,
-            w: g.w + 2 * lip,
+            // Beside the group only a clearance out, so a line can pass midway along its side.
+            x: g.x - s.clearance,
+            w: g.w + 2 * s.clearance,
             y: g.y - lip,
             h: band.y + band.h - g.y + lip,
             across: true,
@@ -1802,6 +1803,48 @@ function compute(input, rawOptions = {}) {
           if (options.some(o => o && attempt(new Map([[i, o.next]]), { [i]: o.extra }, true)))
             break;
         }
+      }
+
+    // Centre: an inner run between two sides (boxes or group borders) slides to the middle
+    // of that corridor, so it never hugs one side. Wide-open space leaves a run where it is.
+    const sidesAcross = (h, at, lo, hi) => {
+      let below = -Infinity,
+        above = Infinity;
+      for (const r of near) {
+        const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
+        if (run <= 1) continue;
+        for (const v of h ? [r.y, r.y + r.h] : [r.x, r.x + r.w]) {
+          // A box's inside is never a corridor: only borders count from both sides.
+          if (!r.border && v === (h ? r.y + r.h : r.x + r.w) && at < v - EPS) continue;
+          if (!r.border && v === (h ? r.y : r.x) && at > v + EPS) continue;
+          if (v <= at + EPS) below = Math.max(below, v);
+          if (v >= at - EPS) above = Math.min(above, v);
+        }
+      }
+      return [below, above];
+    };
+    for (let i = 0; i < routes.length; i++)
+      for (let k = 1; k < routes[i].points.length - 2; k++) {
+        const ps = routes[i].points,
+          a = ps[k],
+          b = ps[k + 1],
+          h = Math.abs(a.y - b.y) < EPS,
+          axis = h ? 'y' : 'x',
+          along = h ? 'x' : 'y';
+        if (distance(a, b) <= 12) continue;
+        const [below, above] = sidesAcross(
+            h,
+            a[axis],
+            Math.min(a[along], b[along]),
+            Math.max(a[along], b[along]),
+          ),
+          width = above - below,
+          mid = round((below + above) / 2);
+        if (!(width <= 4 * s.standoff) || Math.abs(mid - a[axis]) < 1) continue;
+        const next = clone(ps);
+        next[k][axis] = mid;
+        next[k + 1][axis] = mid;
+        attempt(new Map([[i, next]]));
       }
 
     // Corridors: parallel inner runs close together keep one pitch.
