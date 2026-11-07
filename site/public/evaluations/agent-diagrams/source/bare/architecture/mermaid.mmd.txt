@@ -1,0 +1,33 @@
+---
+title: Checkout service architecture
+---
+flowchart LR
+    Customer([Customer])
+
+    subgraph Clients
+        WebApp[Web app]
+        MobileApp[Mobile app]
+    end
+
+    subgraph Services
+        Gateway[API gateway]
+        Auth[Auth service]
+        Order[Order service]
+        Worker[Worker]
+    end
+
+    subgraph Data
+        OrdersDB[(Orders database)]
+        Queue[[Queue]]
+    end
+
+    Customer --> WebApp
+    Customer --> MobileApp
+    WebApp -->|HTTPS| Gateway
+    MobileApp -->|HTTPS| Gateway
+    Gateway -->|validate token| Auth
+    Gateway -->|requests| Order
+    Order <-->|read/write| OrdersDB
+    Order -->|publish| Queue
+    Queue -->|consume| Worker
+    Worker -->|update| OrdersDB

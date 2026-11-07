@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="650" viewBox="0 0 860 650" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="860" height="650" fill="#fff"/>
+  <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#222">Checkout service architecture</text>
+  <rect x="120" y="55" width="520" height="110" rx="10" fill="#eef5ff" stroke="#6b8fc7" stroke-dasharray="6 4"/>
+  <text x="132" y="75" font-size="13" font-weight="bold" fill="#3a5f99">Clients</text>
+  <rect x="20" y="200" width="800" height="210" rx="10" fill="#effaf0" stroke="#6aa874" stroke-dasharray="6 4"/>
+  <text x="32" y="220" font-size="13" font-weight="bold" fill="#3c7a46">Services</text>
+  <rect x="280" y="450" width="570" height="175" rx="10" fill="#fff6e8" stroke="#c9974a" stroke-dasharray="6 4"/>
+  <text x="292" y="470" font-size="13" font-weight="bold" fill="#93652a">Data</text>
+  <rect x="160" y="95" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="235" y="125" text-anchor="middle" font-size="14">Web app</text>
+  <rect x="450" y="95" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="525" y="125" text-anchor="middle" font-size="14">Mobile app</text>
+  <rect x="40" y="240" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="115" y="270" text-anchor="middle" font-size="14">Auth service</text>
+  <rect x="300" y="240" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="375" y="270" text-anchor="middle" font-size="14">API gateway</text>
+  <rect x="300" y="340" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="375" y="370" text-anchor="middle" font-size="14">Order service</text>
+  <rect x="620" y="340" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="695" y="370" text-anchor="middle" font-size="14">Worker</text>
+  <rect x="300" y="485" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="375" y="515" text-anchor="middle" font-size="14">Orders database</text>
+  <rect x="620" y="485" width="150" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="695" y="515" text-anchor="middle" font-size="14">Queue</text>
+  <line x1="235" y1="145" x2="350" y2="240" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="282" y="196" text-anchor="end" font-size="12" fill="#555">HTTPS</text>
+  <line x1="525" y1="145" x2="400" y2="240" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="470" y="196" font-size="12" fill="#555">HTTPS</text>
+  <line x1="300" y1="265" x2="190" y2="265" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="245" y="257" text-anchor="middle" font-size="12" fill="#555">validate token</text>
+  <line x1="375" y1="290" x2="375" y2="340" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="383" y="320" font-size="12" fill="#555">requests</text>
+  <line x1="375" y1="390" x2="375" y2="485" stroke="#333" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="383" y="442" font-size="12" fill="#555">read/write</text>
+  <line x1="450" y1="380" x2="620" y2="500" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="545" y="424" text-anchor="middle" font-size="12" fill="#555">publish</text>
+  <line x1="695" y1="485" x2="695" y2="390" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="703" y="442" font-size="12" fill="#555">consume</text>
+  <path d="M770,365 H830 V600 H375 V535" fill="none" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="600" y="594" text-anchor="middle" font-size="12" fill="#555">update orders</text>
+</svg>

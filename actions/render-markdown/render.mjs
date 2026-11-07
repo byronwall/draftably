@@ -82,7 +82,7 @@ function renderFile(path) {
       if (lines[next] === '' && lines[next + 1]?.startsWith('![')) next++;
       if (lines[next]?.startsWith('![')) i = next;
     }
-    const title = /<title>([^<]*)<\/title>/
+    const title = /<title[^>]*>([^<]*)<\/title>/
       .exec(svg)?.[1]
       .replace(
         /&(lt|gt|quot|#39|amp);/g,

@@ -11,6 +11,7 @@
     "site:dev": "vite -c vite.site.config.ts",
     "site:build": "pnpm build && vite build -c vite.site.config.ts && node scripts/site-pages.ts && cp -R dist dist-site/app",
     "site:og": "node scripts/og-image.ts",
+    "docs:assets": "node scripts/diagram-compare/downloads.ts",
     "site:preview": "vite preview -c vite.site.config.ts",
     "build": "pnpm typecheck && vite build",
     "typecheck": "pnpm runtime:build && tsc --noEmit",

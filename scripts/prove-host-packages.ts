@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const examples = resolve(root, 'integration-examples');
+const docsPath = resolve(root, 'site/docs/pages/documentation-sites.md');
 const nodeVersion = process.versions.node.split('.').map(Number);
 if (nodeVersion[0] < 22 || (nodeVersion[0] === 22 && nodeVersion[1] < 22)) {
   throw new Error(
@@ -87,6 +88,29 @@ async function prepareConsumer(
   return consumer;
 }
 
+async function copyDocumentedSnippets(consumer: string, section: string): Promise<void> {
+  const markdown = await readFile(docsPath, 'utf8');
+  const start = markdown.indexOf(`## ${section}\n`);
+  if (start < 0) throw new Error(`Documentation section not found: ${section}`);
+  const nextSection = markdown.indexOf('\n## ', start + 1);
+  const content = markdown.slice(start, nextSection < 0 ? undefined : nextSection);
+  const fences = content.matchAll(/```(?:js|mjs|javascript)\n([\s\S]*?)```/g);
+  let copied = 0;
+  for (const match of fences) {
+    const file = match[1].match(/^\/\/ ([\w./-]+)\n/);
+    if (!file) continue;
+    const destination = resolve(consumer, file[1]);
+    const relativePath = relative(consumer, destination);
+    if (relativePath.startsWith(`..${sep}`) || relativePath === '..')
+      throw new Error(`Documentation snippet escapes consumer: ${file[1]}`);
+    await mkdir(dirname(destination), { recursive: true });
+    await writeFile(destination, match[1]);
+    copied++;
+  }
+  if (copied === 0) throw new Error(`No named code snippets found in ${section}`);
+  console.log(`${section}: copied ${copied} documented file(s) into the consumer`);
+}
+
 const hosts = [
   {
     name: 'astro-starlight',
@@ -110,6 +134,12 @@ const hosts = [
     build: ['build'],
   },
 ] as const;
+const requestedHost = process.argv[2];
+if (requestedHost && !hosts.some(host => host.name === requestedHost))
+  throw new Error(
+    `Unknown host ${requestedHost}; choose ${hosts.map(host => host.name).join(', ')}.`,
+  );
+const selectedHosts = requestedHost ? hosts.filter(host => host.name === requestedHost) : hosts;
 
 await run('pnpm', ['runtime:build']);
 await run('pnpm', ['markdown:build']);
@@ -123,8 +153,15 @@ const report: Record<string, unknown> = {
   consumers: {},
 };
 
-for (const host of hosts) {
+for (const host of selectedHosts) {
   const consumer = await prepareConsumer(host.name, runtimeTarball, markdownTarball);
+  const section =
+    host.name === 'astro-starlight'
+      ? 'Astro and Starlight'
+      : host.name === 'docusaurus'
+        ? 'Docusaurus'
+        : 'VitePress';
+  await copyDocumentedSnippets(consumer, section);
   const installed = JSON.parse(await capture('pnpm', ['list', '--depth=0', '--json'], consumer));
   const packageVersions = installed[0]?.dependencies ?? {};
   console.log(

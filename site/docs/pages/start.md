@@ -6,6 +6,7 @@ Draftably turns short text into laid-out diagrams: write the boxes and lines, an
 
 - **Try it now, no install.** [Get started](#get-started) walks through a first diagram in the
   browser, then on disk.
+- **Start from a task.** [Recipes](#recipes) gives copyable patterns for common diagrams.
 - **Learn the language.** [Rules](#rules) lists every statement. [Examples](#examples) shows
   finished diagrams with their source.
 - **Pick a diagram kind.** [Swim lanes](#swim-lanes), [sequence diagrams](#sequence-diagrams) and

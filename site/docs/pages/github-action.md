@@ -11,7 +11,8 @@ CI. For each ` ```draft ` fence in your Markdown files, it:
 A rerun updates the SVG and the link in place. It does not add a second link. Files that do not
 change are not written.
 
-The action does not commit. Your workflow commits the result.
+The action does not commit. The workflow below commits changed Markdown and SVG files. Grant
+`contents: write` only when you use a commit step.
 
 ## Workflow
 
@@ -41,8 +42,9 @@ jobs:
           commit_message: Render Draftably diagrams
 ```
 
-A commit made with the default `GITHUB_TOKEN` does not start another workflow run, so the job does
-not loop.
+A commit made with the default `GITHUB_TOKEN` does not start another workflow run, so this job does
+not loop. After a successful run, changed Markdown files contain the marker and image link below,
+and each referenced SVG sits beside its Markdown file.
 
 ## Inputs
 
@@ -66,7 +68,8 @@ edge e1 web -> api "HTTPS"
 ![Request path](readme-1.svg)
 ````
 
-The image is named `<markdown file>-<fence number>.svg`, and its alt text is the diagram title.
+For `README.md`, the first image is `readme-1.svg`; its alt text is the diagram title, or `Diagram`
+when the diagram has no title. The action writes the image beside the Markdown file.
 The [fence options](#fence-options) change this:
 
 - `id="checkout-flow"` names the image `checkout-flow.svg`. Use it so that adding a fence above
@@ -76,8 +79,12 @@ The [fence options](#fence-options) change this:
 
 For example, ` ```draft {id="checkout-flow" alt="Cart, payment, then receipt."} `.
 
-Do not edit the marker comment or the image line. The next run replaces them. If you delete a
-fence, delete its SVG too.
+Do not edit the marker comment or generated image line. The next run replaces them. If you delete a
+fence, delete its SVG too. Use `id="checkout-flow"` when you want a stable filename after adding
+fences above it.
 
-If a fence does not compile, the action reports the line as an error annotation, renders the other
-fences and then fails.
+If a fence does not compile, the action reports the Markdown path and line as an error annotation,
+renders other fences, then fails. The commit step will not run after that failure. Fix the source
+with `draftably check path/to/file.draft` or copy the fence to a `.draft` file and check it there,
+then rerun the workflow. `files` accepts space or newline separated shell glob patterns; paths
+under `node_modules` are skipped. Set `version` to pin the CLI release instead of using `latest`.

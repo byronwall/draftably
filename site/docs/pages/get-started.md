@@ -33,6 +33,8 @@ your work is kept.
 
 - **Continue in the browser.** Use the [Playground](/play) for short diagrams and shared links. Read
   [Rules](#rules) for every statement.
+- **Build a specific diagram.** Start with a copyable [recipe](#recipes) for a flow, sequence or
+  architecture diagram.
 - **Install the CLI to save files on disk.** Your diagrams become `.draft` files that you can
   commit, check in CI and give to a coding agent. The editor saves each edit to the file. The
   steps are below.
@@ -69,9 +71,8 @@ Every command below works as `npx draftably …` or, once installed, `draftably 
 
 ## Write your first file
 
-Save this as `architecture.draft`. Each line is one statement: a `node` is a box, a `group` is a
-container, and an `edge` is a line between two of them. Change a label or add a node, and the
-drawing redraws.
+Save this source as `architecture.draft`. The live example below shows a small architecture
+diagram with a group, three boxes and two connections:
 
 ```draft
 diagram "Architecture" version=1
@@ -83,8 +84,8 @@ edge request app -> api "HTTPS"
 edge query api -> db "query"
 ```
 
-There are no coordinates in the file. Layout reads the connections and places `app` before `api`
-before `db`. The same file always draws the same picture.
+Each line is one statement. A `node` is a box, a `group` is a container, and an `edge` connects
+objects by ID. The file has no coordinates: Draftably uses the connections to place the boxes.
 
 ## Open it in the editor
 
@@ -92,24 +93,26 @@ before `db`. The same file always draws the same picture.
 npx draftably open architecture.draft
 ```
 
-`open` serves the editor on the first free port from 5180, such as `http://127.0.0.1:5180/`. The
-`Viewer:` line prints the URL, and on macOS your browser opens it. Edits in the editor save back to
-the file, and edits to the file in any other program show in the editor at once.
-Run `open` with no file to get a page that lists every `.draft` file in the folder.
+`open` serves the editor on the first free port from 5180, such as `http://127.0.0.1:5180/`. Open
+the URL on the `Viewer:` line if your browser does not open. Edits in the editor save to the file;
+edits in another program appear in the editor too. Press **Ctrl+C** in the terminal to stop it.
+Run `open` with no file to browse `.draft` files in the current folder or create a new one.
 
 ## Check it and export it
 
 ```sh
-npx draftably check architecture.draft                  # errors, warnings, drawing conflicts
-npx draftably inspect architecture.draft --svg > a.svg  # a static SVG with the source inside
-npx draftably vary architecture.draft                   # try other layouts and rank them
+npx draftably check architecture.draft                            # errors, warnings, drawing conflicts
+npx draftably inspect architecture.draft --svg > architecture.svg # SVG with the source inside
+npx draftably vary architecture.draft                             # try other layouts and rank them
 ```
 
 `check` exits 1 when the file has errors, so it fits in CI. `vary` needs Chrome, Chromium or Edge.
+The SVG is a shareable static image. Its embedded source lets you reopen it in Draftably.
 
-Exported SVG and PNG files carry the source. `draftably open a.svg` writes `a.draft` beside the
-image and edits that file, so the image does not change. If `a.draft` already holds other text,
-`open` stops and writes nothing.
+To continue from the exported image, run `draftably open architecture.svg`. It writes
+`architecture.draft` beside the image if that file is missing, then opens it; the SVG does not
+change. If the file already has the embedded source, Draftably reuses it. If it has different
+content, `open` stops without overwriting it.
 
 ## Update or upgrade draftably
 

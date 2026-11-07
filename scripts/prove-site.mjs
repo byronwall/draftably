@@ -30,6 +30,7 @@ const TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.json': 'application/json',
+  '.zip': 'application/zip',
   '.wasm': 'application/wasm',
 };
 
@@ -97,6 +98,61 @@ const journeys = {
       await page.context().close();
     }
   },
+  async 'docs source links and source ZIP work under the nested base'() {
+    const page = await open('docs/agent-diagram-evaluation', undefined, { acceptDownloads: true });
+    await page.waitForSelector('.docs-search-button');
+    const source = page.locator(
+      '.doc a[href$="/evaluations/agent-diagrams/source/tooled/workflow/mermaid.mmd.txt"]',
+    );
+    const sourceUrl = await source.getAttribute('href');
+    check('the source link keeps the nested site base', sourceUrl?.startsWith(BASE));
+    const sourceNav = page.waitForNavigation();
+    await source.click();
+    const response = await sourceNav;
+    const contentType = response?.headers()['content-type'] ?? '';
+    const sourceBody = await response?.text();
+    check(
+      'the source link serves text, not the SPA fallback',
+      response?.status() === 200 &&
+        /text\/plain/.test(contentType) &&
+        !/<!doctype html/i.test(sourceBody ?? ''),
+      `${response?.status()} ${contentType}; at ${page.url()}`,
+    );
+    check(
+      'the source document has its expected contents',
+      /flowchart|graph/i.test(sourceBody ?? ''),
+      (sourceBody ?? '').slice(0, 80),
+    );
+    await page.goBack();
+    await page.waitForSelector('.doc');
+    const backPath = new URL(page.url()).pathname.replace(/\/$/, '');
+    check(
+      'Back returns to the comparison docs under the nested base',
+      backPath === `${BASE}docs/agent-diagram-evaluation`,
+      backPath,
+    );
+
+    const zip = page.locator('.doc a[href$="/evaluations/agent-diagrams/sources.zip"]');
+    const zipUrl = await zip.getAttribute('href');
+    check('the ZIP link keeps the nested site base', zipUrl?.startsWith(BASE));
+    const [download] = await Promise.all([page.waitForEvent('download'), zip.click()]);
+    const archivePath = await download.path();
+    const archive = archivePath && fs.readFileSync(archivePath);
+    check(
+      'the source download has the expected name',
+      download.suggestedFilename() === 'sources.zip',
+      download.suggestedFilename(),
+    );
+    check(
+      'the source download is a nonempty ZIP archive',
+      !!archive &&
+        archive.length > 4 &&
+        archive.subarray(0, 4).equals(Buffer.from([0x50, 0x4b, 0x03, 0x04])),
+      archive ? `${archive.length} bytes` : 'download has no local path',
+    );
+    await page.context().close();
+  },
+
   async 'landing links reach the editor and carry edits'() {
     const page = await open('');
     await page.click('text=Open the editor');

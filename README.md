@@ -52,24 +52,32 @@ for direct canvas editing and layout tools.
 
 ### On your files
 
-Requires **Node 22.21 or later**. Run the published package without cloning this repository:
+Requires **Node 22.21 or later**. Create a starter file, then run the published CLI without
+cloning this repository:
 
 ```sh
+cat <<'DRAFT' > architecture.draft
+diagram "Architecture" version=1
+node app "Web app"
+node api "API"
+node db "Database" shape=pill
+edge request app -> api "HTTPS"
+edge query api -> db "query"
+DRAFT
 pnpm dlx draftably open architecture.draft
 ```
 
 The CLI serves the bundled editor locally. Open the URL on its `Viewer:` line if your browser
 does not open automatically. Edits save back to the file. Press **Ctrl+C** to stop the server.
-Run `pnpm dlx draftably open` without a file to browse the folder, create a diagram, or try an example.
+Run `pnpm dlx draftably open` without a file to browse the folder, create a diagram, or try an
+example.
 
-For regular use, install it once:
+For regular use, install it once. Then open, check, format or export diagrams from the terminal:
 
 ```sh
 pnpm add --global draftably
 draftably open architecture.draft
 ```
-
-Check, format and export the file from the terminal:
 
 ```sh
 draftably check architecture.draft

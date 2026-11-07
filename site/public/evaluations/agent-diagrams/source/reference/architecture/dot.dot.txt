@@ -1,0 +1,45 @@
+digraph G {
+  graph [rankdir=LR, label="Checkout service architecture", labelloc=t, fontsize=20, fontname="Helvetica"];
+  node  [shape=box, style=rounded, fontname="Helvetica"];
+  edge  [fontname="Helvetica"];
+
+  customer [label="Customer", shape=oval];
+
+  subgraph cluster_clients {
+    label="Clients";
+    style=rounded;
+    web    [label="Web app"];
+    mobile [label="Mobile app"];
+  }
+
+  subgraph cluster_services {
+    label="Services";
+    style=rounded;
+    gateway [label="API gateway"];
+    auth    [label="Auth service"];
+    order   [label="Order service"];
+    worker  [label="Worker"];
+  }
+
+  subgraph cluster_data {
+    label="Data";
+    style=rounded;
+    db    [label="Orders database", shape=cylinder];
+    queue [label="Queue"];
+  }
+
+  customer -> web    [label="uses"];
+  customer -> mobile [label="uses"];
+
+  web    -> gateway [label="HTTPS"];
+  mobile -> gateway [label="HTTPS"];
+
+  gateway -> auth  [label="validates tokens"];
+  gateway -> order [label="requests"];
+
+  order -> db    [label="reads/writes"];
+  order -> queue [label="publishes"];
+
+  queue  -> worker [label="consumes", dir=back];
+  worker -> db     [label="updates"];
+}

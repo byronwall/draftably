@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="1000" height="600" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="600" fill="#ffffff"/>
+
+  <text x="500" y="45" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">Checkout service architecture</text>
+
+  <rect x="30" y="80" width="200" height="460" rx="12" fill="#eef5ff" stroke="#6a9ad8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="46" y="106" font-size="16" font-weight="bold" fill="#2f5f9e">Clients</text>
+  <text x="46" y="124" font-size="11" fill="#2f5f9e">used by customers</text>
+
+  <rect x="270" y="80" width="420" height="460" rx="12" fill="#eefaf0" stroke="#5aa86a" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="286" y="106" font-size="16" font-weight="bold" fill="#2f7a3e">Services</text>
+
+  <rect x="730" y="80" width="240" height="460" rx="12" fill="#fff5ea" stroke="#d8964a" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="746" y="106" font-size="16" font-weight="bold" fill="#9e5d1a">Data</text>
+
+  <rect x="60" y="170" width="140" height="60" rx="8" fill="#ffffff" stroke="#2f5f9e" stroke-width="1.5"/>
+  <text x="130" y="205" text-anchor="middle" font-size="14" fill="#222">Web app</text>
+
+  <rect x="60" y="370" width="140" height="60" rx="8" fill="#ffffff" stroke="#2f5f9e" stroke-width="1.5"/>
+  <text x="130" y="405" text-anchor="middle" font-size="14" fill="#222">Mobile app</text>
+
+  <rect x="300" y="270" width="140" height="60" rx="8" fill="#ffffff" stroke="#2f7a3e" stroke-width="1.5"/>
+  <text x="370" y="305" text-anchor="middle" font-size="14" fill="#222">API gateway</text>
+
+  <rect x="510" y="130" width="150" height="60" rx="8" fill="#ffffff" stroke="#2f7a3e" stroke-width="1.5"/>
+  <text x="585" y="165" text-anchor="middle" font-size="14" fill="#222">Auth service</text>
+
+  <rect x="510" y="270" width="150" height="60" rx="8" fill="#ffffff" stroke="#2f7a3e" stroke-width="1.5"/>
+  <text x="585" y="305" text-anchor="middle" font-size="14" fill="#222">Order service</text>
+
+  <rect x="510" y="430" width="150" height="60" rx="8" fill="#ffffff" stroke="#2f7a3e" stroke-width="1.5"/>
+  <text x="585" y="465" text-anchor="middle" font-size="14" fill="#222">Worker</text>
+
+  <path d="M780,272 V328 A70,10 0 0 0 920,328 V272" fill="#ffffff" stroke="#9e5d1a" stroke-width="1.5"/>
+  <ellipse cx="850" cy="272" rx="70" ry="10" fill="#ffffff" stroke="#9e5d1a" stroke-width="1.5"/>
+  <text x="850" y="310" text-anchor="middle" font-size="14" fill="#222">Orders DB</text>
+
+  <rect x="780" y="430" width="140" height="60" rx="8" fill="#ffffff" stroke="#9e5d1a" stroke-width="1.5"/>
+  <line x1="880" y1="438" x2="880" y2="482" stroke="#d8964a" stroke-width="1"/>
+  <line x1="895" y1="438" x2="895" y2="482" stroke="#d8964a" stroke-width="1"/>
+  <text x="828" y="465" text-anchor="middle" font-size="14" fill="#222">Queue</text>
+
+  <line x1="200" y1="200" x2="298" y2="284" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="250" y="228" text-anchor="middle" font-size="11" fill="#444">HTTPS</text>
+
+  <line x1="200" y1="400" x2="298" y2="316" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="250" y="384" text-anchor="middle" font-size="11" fill="#444">HTTPS</text>
+
+  <path d="M370,270 V160 H508" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="440" y="152" text-anchor="middle" font-size="11" fill="#444">validate token</text>
+
+  <line x1="440" y1="300" x2="508" y2="300" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="474" y="292" text-anchor="middle" font-size="11" fill="#444">requests</text>
+
+  <line x1="662" y1="300" x2="778" y2="300" stroke="#444" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="720" y="292" text-anchor="middle" font-size="11" fill="#444">read / write</text>
+
+  <line x1="660" y1="318" x2="778" y2="448" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="735" y="380" text-anchor="start" font-size="11" fill="#444">publishes</text>
+
+  <line x1="780" y1="472" x2="662" y2="472" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="720" y="487" text-anchor="middle" font-size="11" fill="#444">consumes</text>
+
+  <path d="M585,490 V520 H950 V300 H922" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="710" y="514" text-anchor="middle" font-size="11" fill="#444">updates</text>
+</svg>

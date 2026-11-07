@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="690" viewBox="0 0 700 690">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#333"/>
+    </marker>
+  </defs>
+  <text x="350" y="30" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold">Order approval workflow</text>
+  <ellipse cx="250" cy="70" rx="60" ry="20" fill="#e8f5e9" stroke="#333"/>
+  <text x="250" y="75" text-anchor="middle" font-family="sans-serif" font-size="14">Start</text>
+  <rect x="180" y="110" width="140" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="250" y="140" text-anchor="middle" font-family="sans-serif" font-size="14">Validate order</text>
+  <polygon points="250,175 330,220 250,265 170,220" fill="#fffde7" stroke="#333"/>
+  <text x="250" y="216" text-anchor="middle" font-family="sans-serif" font-size="13">Payment</text>
+  <text x="250" y="232" text-anchor="middle" font-family="sans-serif" font-size="13">authorized?</text>
+  <rect x="180" y="290" width="140" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="250" y="320" text-anchor="middle" font-family="sans-serif" font-size="14">Reserve stock</text>
+  <polygon points="250,355 330,400 250,445 170,400" fill="#fffde7" stroke="#333"/>
+  <text x="250" y="396" text-anchor="middle" font-family="sans-serif" font-size="13">Stock</text>
+  <text x="250" y="412" text-anchor="middle" font-family="sans-serif" font-size="13">available?</text>
+  <rect x="180" y="470" width="140" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="250" y="500" text-anchor="middle" font-family="sans-serif" font-size="14">Pack order</text>
+  <rect x="180" y="545" width="140" height="50" rx="6" fill="#fff" stroke="#333"/>
+  <text x="250" y="575" text-anchor="middle" font-family="sans-serif" font-size="14">Ship order</text>
+  <rect x="460" y="475" width="140" height="50" rx="6" fill="#ffebee" stroke="#333"/>
+  <text x="530" y="505" text-anchor="middle" font-family="sans-serif" font-size="14">Cancel order</text>
+  <ellipse cx="250" cy="650" rx="60" ry="20" fill="#e8f5e9" stroke="#333"/>
+  <text x="250" y="655" text-anchor="middle" font-family="sans-serif" font-size="14">End</text>
+  <line x1="250" y1="90" x2="250" y2="110" stroke="#333" marker-end="url(#arrow)"/>
+  <line x1="250" y1="160" x2="250" y2="175" stroke="#333" marker-end="url(#arrow)"/>
+  <line x1="250" y1="265" x2="250" y2="290" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="258" y="282" font-family="sans-serif" font-size="12" fill="#2e7d32">Yes</text>
+  <line x1="250" y1="340" x2="250" y2="355" stroke="#333" marker-end="url(#arrow)"/>
+  <line x1="250" y1="445" x2="250" y2="470" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="258" y="462" font-family="sans-serif" font-size="12" fill="#2e7d32">Yes</text>
+  <line x1="250" y1="520" x2="250" y2="545" stroke="#333" marker-end="url(#arrow)"/>
+  <line x1="250" y1="595" x2="250" y2="630" stroke="#333" marker-end="url(#arrow)"/>
+  <path d="M330,220 H640 V500 H600" fill="none" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="345" y="212" font-family="sans-serif" font-size="12" fill="#c62828">No</text>
+  <path d="M330,400 H530 V475" fill="none" stroke="#333" marker-end="url(#arrow)"/>
+  <text x="345" y="392" font-family="sans-serif" font-size="12" fill="#c62828">No</text>
+  <path d="M530,525 V650 H310" fill="none" stroke="#333" marker-end="url(#arrow)"/>
+</svg>

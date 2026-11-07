@@ -1,0 +1,28 @@
+digraph OrderApproval {
+    graph [label="Order approval workflow", labelloc=t, fontsize=20, fontname="Helvetica", rankdir=TB, nodesep=0.6, ranksep=0.5];
+    node  [group=main, fontname="Helvetica", fontsize=12, shape=box, style="rounded,filled", fillcolor="#E8F0FE", color="#3B6FB6"];
+    edge  [fontname="Helvetica", fontsize=11, color="#555555"];
+
+    start     [label="Start", shape=ellipse, fillcolor="#D5F5D5", color="#2E8B57"];
+    validate  [label="Validate order"];
+    payment   [label="Payment\nauthorized?", shape=diamond, style=filled, fillcolor="#FFF4CC", color="#C9A227"];
+    reserve   [label="Reserve stock"];
+    stock     [label="Stock\navailable?", shape=diamond, style=filled, fillcolor="#FFF4CC", color="#C9A227"];
+    pack      [label="Pack order"];
+    ship      [label="Ship order"];
+    cancel    [label="Cancel order", group=alt, fillcolor="#FDE2E2", color="#C0392B"];
+    end       [label="End", shape=ellipse, fillcolor="#D5F5D5", color="#2E8B57"];
+
+    start    -> validate;
+    validate -> payment;
+    payment  -> reserve [label=" Yes"];
+    payment  -> cancel  [label=" No"];
+    reserve  -> stock;
+    stock    -> pack    [label=" Yes"];
+    stock    -> cancel  [label=" No"];
+    pack     -> ship;
+    ship     -> end;
+    cancel   -> end;
+
+    { rank=same; stock; cancel; }
+}
