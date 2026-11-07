@@ -477,7 +477,11 @@ const journeys = {
       '#307 nothing selected means the whole diagram',
       /Whole diagram/.test(await panel.textContent()),
     );
-    await page.locator('[data-id="web"]').first().click({ force: true });
+    // Click only once layout and routing settle; an early click can land on a moving edge, which
+    // the status bar counts but the scope ignores.
+    await page.evaluate(() => window.diagramStudio.ready());
+    await page.locator('.node[data-id="web"]').click({ force: true });
+    await page.waitForSelector('.node.selected[data-id="web"]', { timeout: 2000 }).catch(() => {});
     // Selection and the two scope labels update through separate reactive components. Wait for
     // both projections before checking them, and keep their final values in failure output.
     await page
@@ -496,8 +500,13 @@ const journeys = {
       .catch(() => {});
     const selectedScope = (await panel.textContent())?.trim() ?? '(missing)';
     const selectedHint = (await button.getAttribute('data-tip-hint')) ?? '(missing)';
-    const selectionStatus =
-      (await page.locator('.statusbar > span').first().textContent())?.trim() ?? '(missing)';
+    const selectionStatus = `${
+      (await page.locator('.statusbar > span').first().textContent())?.trim() ?? '(missing)'
+    }; selected ${await page.evaluate(() =>
+      JSON.stringify(
+        [...document.querySelectorAll('.canvas .selected[data-id]')].map(e => e.dataset.id),
+      ),
+    )}`;
     check(
       '#307 a selection narrows the scope',
       /1 shape/.test(selectedScope),
