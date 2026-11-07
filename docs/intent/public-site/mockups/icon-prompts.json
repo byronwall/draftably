@@ -1,10 +1,13 @@
 {
-  "date": "2026-10-28",
+  "date": "2026-11-05",
   "tool": "codex exec -m gpt-5.6-sol, $imagegen",
   "rounds": {
     "1": "4x3 contact sheet of 12 directions: boxes and elbow, caret to box, D from box and connector, nested group, braces around a diagram, pencil route, text lines to boxes, D monogram with node, three-node flow, folded paper, arrow around a box, two offset squares with elbow. Palette #6650d9 #15171f #2d7a5c #efebfd #ffffff; flat; readable at 32px.",
     "2": "3x2 refinements on solid violet tiles: D monogram with mint node (white and ink), D as one connector line, two offset squares with elbow, braces with a square, text lines turning into a square.",
-    "3": "Chosen: two text lines, the lower one stepping down through one elbow into a rounded square, white on violet; shown at three sizes, white and mint-square variants. White chosen: the mint square loses contrast on violet at small sizes."
+    "3": "Chosen: two text lines, the lower one stepping down through one elbow into a rounded square, white on violet; shown at three sizes, white and mint-square variants. White chosen: the mint square loses contrast on violet at small sizes.",
+    "4": "2026-11-05 redesign: the round 3 mark read as a random glyph at 16 px. Style block: flat violet #6650d9 tile, white marks, optional mint #7fe0b5 or ink #15171f, strokes at least 9% of width, at most 3 shapes, readable at 16 px. Four 3x3 sheets: connected nodes, d monogram from diagram parts, text becomes a diagram, drafting tools.",
+    "5": "Two 3x3 sheets with rounds 4a and 4b as references: a d built from two nodes and a visible edge, and a node-edge graph whose silhouette hints at a d. Letter-only d marks were rejected as 'just a letter'.",
+    "6": "Chosen: sheet F cell 2, a large node at lower left joined by an elbow edge up to a small node at upper right. Edge thickened to 7/64 for 16 px."
   },
-  "final": "src/assets/logo.svg, written by hand on a 64-unit grid against round 3. Touch icon: site/public/apple-touch-icon.png (180, full-bleed violet)."
+  "final": "src/assets/logo.svg, written by hand on a 64-unit grid against round 6; integration-example favicons are copies. Touch icon: site/public/apple-touch-icon.png (180, full-bleed violet), rendered from the same SVG without the corner radius."
 }
