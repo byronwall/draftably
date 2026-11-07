@@ -101,9 +101,9 @@ Run `open` with no file to browse `.draft` files in the current folder or create
 ## Check it and export it
 
 ```sh
-npx draftably check architecture.draft                  # errors, warnings, drawing conflicts
+npx draftably check architecture.draft                            # errors, warnings, drawing conflicts
 npx draftably inspect architecture.draft --svg > architecture.svg # SVG with the source inside
-npx draftably vary architecture.draft                   # try other layouts and rank them
+npx draftably vary architecture.draft                             # try other layouts and rank them
 ```
 
 `check` exits 1 when the file has errors, so it fits in CI. `vary` needs Chrome, Chromium or Edge.
