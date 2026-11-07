@@ -72,11 +72,14 @@ export function Canvas(props: CanvasProps) {
     };
     stage.addEventListener('pointerdown', press, true);
     stage.addEventListener('focusin', activate, true);
+    // Keyboard, screen-reader and synthetic clicks needn't come with a pointerdown or focusin.
+    stage.addEventListener('click', activate, true);
     onCleanup(() => {
       observer.disconnect();
       svg.removeEventListener('wheel', s.onWheel);
       stage.removeEventListener('pointerdown', press, true);
       stage.removeEventListener('focusin', activate, true);
+      stage.removeEventListener('click', activate, true);
     });
   });
 
