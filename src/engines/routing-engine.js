@@ -754,8 +754,9 @@ function compute(input, rawOptions = {}) {
           // straight into or out of a member's top: never run along or through.
           obstacles.push({
             id: id + ':header-band',
-            x: g.x - lip,
-            w: g.w + 2 * lip,
+            // Beside the group only a clearance out, so a line can pass midway along its side.
+            x: g.x - s.clearance,
+            w: g.w + 2 * s.clearance,
             y: g.y - lip,
             h: band.y + band.h - g.y + lip,
             across: true,
@@ -1651,73 +1652,121 @@ function compute(input, rawOptions = {}) {
       tip = (ps, end, k = 0) => (end === 'from' ? ps[k] : ps[ps.length - 1 - k]);
 
     // Ports: shift a side's ports so their mean sits on the side's centre.
-    const sides = new Map();
-    routes.forEach((r, i) => {
-      for (const end of ends) {
-        const key = r[end] + '|' + r[end + 'Side'];
-        if (!sides.has(key)) sides.set(key, []);
-        sides.get(key).push({ i, end });
-      }
-    });
-    for (const [key, list] of sides) {
-      const [id, side] = key.split('|'),
-        rect = rects.get(id),
-        vertical = side === 'left' || side === 'right',
-        axis = vertical ? 'y' : 'x',
-        mid = center(rect)[axis],
-        limit = (vertical ? rect.h : rect.w) / 2 - 10,
-        at = [...new Set(list.map(({ i, end }) => round(tip(routes[i].points, end)[axis])))];
-      // Diamonds and round shapes keep their ports on the tips.
-      if (at.length < 2 || !flat(rect)) continue;
-      const d = round(mid - at.reduce((n, v) => n + v, 0) / at.length);
-      if (Math.abs(d) < 2 || at.some(v => Math.abs(v + d - mid) > limit + EPS)) continue;
-      const changes = new Map(),
-        extra = {};
-      for (const { i, end } of list) {
-        const ps = clone(changes.get(i) ?? routes[i].points),
-          offset = round(tip(ps, end)[axis] + d - mid),
-          moved = port(rect, side, offset);
-        Object.assign(tip(ps, end), moved);
-        extra[i] = { ...extra[i], [end + 'Offset']: offset };
-        if (ps.length === 2) {
-          // A straight route slides as a whole, moving its other port too.
-          const other = end === 'from' ? 'to' : 'from',
-            far = rects.get(routes[i][other]),
-            otherOffset = round(tip(ps, other)[axis] + d - center(far)[axis]);
-          if (!flat(far)) {
-            changes.clear();
-            break;
-          }
-          Object.assign(tip(ps, other), port(far, routes[i][other + 'Side'], otherOffset));
-          extra[i][other + 'Offset'] = otherOffset;
-        } else tip(ps, end, 1)[axis] = moved[axis];
-        changes.set(i, ps);
-      }
-      if (!changes.size) continue;
-      // A line that turns in beside the side runs alongside it a stub away; the shift can
-      // lengthen that run into a hug. Turn a full standoff out instead, where the line allows.
-      const across = vertical ? 'x' : 'y',
-        face = { left: rect.x, right: rect.x + rect.w, top: rect.y, bottom: rect.y + rect.h }[side],
-        out = side === 'left' || side === 'top' ? -1 : 1,
-        wide = new Map(
-          [...changes].map(([i, ps]) => {
-            const end = list.find(l => l.i === i).end,
-              q = clone(ps);
-            if (
-              q.length >= 4 &&
-              Math.abs(tip(q, end, 1)[across] - tip(q, end, 2)[across]) < EPS &&
-              Math.abs(tip(q, end, 1)[across] - face) < s.standoff
-            ) {
-              tip(q, end, 1)[across] = face + out * s.standoff;
-              tip(q, end, 2)[across] = face + out * s.standoff;
+    // Jogs can slide a port off its side's centre, so this runs again after them.
+    // Whether a port at `offset` stays within 2px of the side's face at its middle. Always true
+    // for flat sides; on a round end it allows a small slide off the tip.
+    const nearTip = (r, side, offset) => {
+      const across = side === 'left' || side === 'right' ? 'x' : 'y';
+      return flat(r) || Math.abs(port(r, side, offset)[across] - port(r, side)[across]) <= 2;
+    };
+    const centrePorts = () => {
+      const sides = new Map();
+      routes.forEach((r, i) => {
+        for (const end of ends) {
+          const key = r[end] + '|' + r[end + 'Side'];
+          if (!sides.has(key)) sides.set(key, []);
+          sides.get(key).push({ i, end });
+        }
+      });
+      for (const [key, list] of sides) {
+        const [id, side] = key.split('|'),
+          rect = rects.get(id),
+          vertical = side === 'left' || side === 'right',
+          axis = vertical ? 'y' : 'x',
+          mid = center(rect)[axis],
+          limit = (vertical ? rect.h : rect.w) / 2 - 10,
+          at = [...new Set(list.map(({ i, end }) => round(tip(routes[i].points, end)[axis])))];
+        if (at.length < 2) continue;
+        const d = round(mid - at.reduce((n, v) => n + v, 0) / at.length);
+        if (Math.abs(d) < 2 || at.some(v => Math.abs(v + d - mid) > limit + EPS)) continue;
+        // Diamonds keep their ports on the tips; round ends allow a small slide.
+        if (at.some(v => !nearTip(rect, side, v + d - mid))) continue;
+        const changes = new Map(),
+          extra = {},
+          farSides = new Set();
+        for (const { i, end } of list) {
+          const ps = clone(changes.get(i) ?? routes[i].points),
+            offset = round(tip(ps, end)[axis] + d - mid),
+            moved = port(rect, side, offset);
+          Object.assign(tip(ps, end), moved);
+          extra[i] = { ...extra[i], [end + 'Offset']: offset };
+          if (ps.length === 2) {
+            // A straight route slides as a whole, moving its other port too.
+            const other = end === 'from' ? 'to' : 'from',
+              far = rects.get(routes[i][other]),
+              otherSide = routes[i][other + 'Side'],
+              otherOffset = round(tip(ps, other)[axis] + d - center(far)[axis]);
+            if (!nearTip(far, otherSide, otherOffset)) {
+              changes.clear();
+              break;
             }
-            return [i, q];
-          }),
-        );
-      // Centring a side is worth a little standoff: a port gap's shift barely moves a line.
-      const slack = PORT_SLACK * changes.size;
-      if (!attempt(wide, extra, false, slack)) attempt(changes, extra, false, slack);
-    }
+            Object.assign(tip(ps, other), port(far, otherSide, otherOffset));
+            extra[i][other + 'Offset'] = otherOffset;
+            farSides.add(routes[i][other] + '|' + otherSide);
+          } else tip(ps, end, 1)[axis] = moved[axis];
+          changes.set(i, ps);
+        }
+        // This side alone, in case the far side's shift is rejected.
+        const own = new Map(changes);
+        // The far side of a slid straight line keeps its own ports centred: its bent lines
+        // shift together so the side's mean stays on its middle.
+        for (const fk of farSides) {
+          const [fid, fside] = fk.split('|'),
+            far = rects.get(fid),
+            fmid = center(far)[axis],
+            flimit = (vertical ? far.h : far.w) / 2 - 10,
+            entries = sides.get(fk) ?? [],
+            pos = ({ i, end }) => tip(changes.get(i) ?? routes[i].points, end)[axis],
+            movable = entries.filter(({ i }) => !changes.has(i) && routes[i].points.length >= 4);
+          if (!movable.length || !flat(far)) continue;
+          const sum = entries.reduce((n, en) => n + pos(en), 0),
+            delta = round((entries.length * fmid - sum) / movable.length);
+          if (Math.abs(delta) < 2) continue;
+          for (const en of movable) {
+            const ps = clone(routes[en.i].points),
+              offset = round(tip(ps, en.end)[axis] + delta - fmid);
+            if (Math.abs(offset) > flimit + EPS) continue;
+            Object.assign(tip(ps, en.end), port(far, fside, offset));
+            tip(ps, en.end, 1)[axis] = tip(ps, en.end)[axis];
+            extra[en.i] = { ...extra[en.i], [en.end + 'Offset']: offset };
+            changes.set(en.i, ps);
+          }
+        }
+        if (!changes.size) continue;
+        // A line that turns in beside the side runs alongside it a stub away; the shift can
+        // lengthen that run into a hug. Turn a full standoff out instead, where the line allows.
+        const across = vertical ? 'x' : 'y',
+          face = { left: rect.x, right: rect.x + rect.w, top: rect.y, bottom: rect.y + rect.h }[
+            side
+          ],
+          out = side === 'left' || side === 'top' ? -1 : 1,
+          widen = moves =>
+            new Map(
+              [...moves].map(([i, ps]) => {
+                const end = list.find(l => l.i === i)?.end,
+                  q = clone(ps);
+                if (
+                  end &&
+                  q.length >= 4 &&
+                  Math.abs(tip(q, end, 1)[across] - tip(q, end, 2)[across]) < EPS &&
+                  Math.abs(tip(q, end, 1)[across] - face) < s.standoff
+                ) {
+                  tip(q, end, 1)[across] = face + out * s.standoff;
+                  tip(q, end, 2)[across] = face + out * s.standoff;
+                }
+                return [i, q];
+              }),
+            );
+        // Centring a side is worth a little standoff: a port gap's shift barely moves a line.
+        for (const moves of changes.size > own.size ? [changes, own] : [own])
+          if (
+            attempt(widen(moves), extra, false, PORT_SLACK * moves.size) ||
+            attempt(moves, extra, false, PORT_SLACK * moves.size)
+          )
+            break;
+      }
+    };
+    centrePorts();
 
     // Fans: edges leaving (or entering) one side turn on a shared line.
     const fans = new Map();
@@ -1802,6 +1851,51 @@ function compute(input, rawOptions = {}) {
           if (options.some(o => o && attempt(new Map([[i, o.next]]), { [i]: o.extra }, true)))
             break;
         }
+      }
+
+    centrePorts();
+
+    // Centre: an inner run between two sides (boxes or group borders) slides to the middle
+    // of that corridor, so it never hugs one side. Wide-open space leaves a run where it is.
+    const sidesAcross = (h, at, lo, hi) => {
+      let below = -Infinity,
+        above = Infinity;
+      for (const r of near) {
+        const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
+        if (run <= 1) continue;
+        for (const v of h ? [r.y, r.y + r.h] : [r.x, r.x + r.w]) {
+          // A box's inside is never a corridor: only borders count from both sides.
+          if (!r.border && v === (h ? r.y + r.h : r.x + r.w) && at < v - EPS) continue;
+          if (!r.border && v === (h ? r.y : r.x) && at > v + EPS) continue;
+          if (v <= at + EPS) below = Math.max(below, v);
+          if (v >= at - EPS) above = Math.min(above, v);
+        }
+      }
+      return [below, above];
+    };
+    for (let i = 0; i < routes.length; i++)
+      for (let k = 1; k < routes[i].points.length - 2; k++) {
+        const ps = routes[i].points,
+          a = ps[k],
+          b = ps[k + 1],
+          h = Math.abs(a.y - b.y) < EPS,
+          axis = h ? 'y' : 'x',
+          along = h ? 'x' : 'y';
+        if (distance(a, b) <= 12) continue;
+        const [below, above] = sidesAcross(
+            h,
+            a[axis],
+            Math.min(a[along], b[along]),
+            Math.max(a[along], b[along]),
+          ),
+          width = above - below,
+          mid = round((below + above) / 2);
+        if (!(width <= 4 * s.standoff) || Math.abs(mid - a[axis]) < 1) continue;
+        const next = clone(ps);
+        next[k][axis] = mid;
+        next[k + 1][axis] = mid;
+        // As for ports, centring is worth a little standoff; the slack never buys a hug.
+        attempt(new Map([[i, next]]), {}, false, PORT_SLACK);
       }
 
     // Corridors: parallel inner runs close together keep one pitch.

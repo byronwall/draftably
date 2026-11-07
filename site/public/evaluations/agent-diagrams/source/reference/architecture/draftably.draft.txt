@@ -1,0 +1,26 @@
+diagram "Checkout service architecture" version=1
+
+group clients "Clients" color=blue
+node web "Web app" in=clients
+node mobile "Mobile app" in=clients
+
+group services "Services" color=mint
+node gateway "API gateway" in=services
+node auth "Auth service" in=services
+node order "Order service" in=services
+node worker "Worker" in=services
+
+group data "Data" color=amber
+node db "Orders database" in=data
+node queue "Queue" in=data shape=pill
+
+edge web_https web -> gateway "HTTPS"
+edge mobile_https mobile -> gateway "HTTPS"
+edge validate gateway -> auth "validate token"
+edge route gateway -> order "requests"
+edge readwrite order -> db "read/write"
+edge publish order -> queue "publish" kind=async
+edge consume queue -> worker "consume" kind=async
+edge update worker -> db "update"
+
+layout root engine=compound-flow fit=slide

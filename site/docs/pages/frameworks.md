@@ -1,4 +1,4 @@
-# Use with your framework
+# Frameworks
 
 Every framework gets the same diagram viewer: zoom, pan, fit, a keyboard outline, and cleanup when
 the component unmounts. Put as many diagrams on one page as you like. Each one owns its viewer.
@@ -16,45 +16,67 @@ viewer's worker loads in development.
 
 ## Props
 
-| Prop      | Meaning                                                                                   |
-| --------- | ----------------------------------------------------------------------------------------- |
-| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                     |
-| `label`   | The accessible name.                                                                      |
-| `outline` | `'visible'` keeps the item list under the drawing. Default: hidden until it has focus.    |
-| `state`   | A declared [emphasis state](#emphasis-states) to show.                                    |
-| `svg`     | Static SVG shown until the viewer draws. See [Server rendering](#server-rendering).       |
-| `options` | Viewer options: `toolbar`, link policy and render settings.                               |
-| update    | Called with each result: `onUpdate` (React, Solid), `@update` (Vue), `onupdate` (Svelte). |
+| Prop      | Meaning                                                                                |
+| --------- | -------------------------------------------------------------------------------------- |
+| `source`  | The `.draft` text. A change redraws the diagram and keeps the camera.                  |
+| `label`   | The accessible name.                                                                   |
+| `outline` | `'visible'` keeps the item list under the drawing. Default: hidden until it has focus. |
+| `state`   | A declared [emphasis state](#emphasis-states) to show.                                 |
+| `svg`     | Static SVG shown until the viewer draws. See [Server rendering](#server-rendering).    |
+| `options` | Viewer options: `toolbar`, link policy and render settings.                            |
 
-An invalid update keeps the last good drawing and reports the error to the update callback.
+Use `onUpdate` in React or Solid, `@update` in Vue, or `onupdate` in Svelte to receive render results.
+The callback receives an object whose `status` is `committed`, `error` or a cancellation status. On an initial error, the
+component keeps its `svg` fallback visible. A later error keeps the last committed drawing.
 
 ## React
 
 ```tsx
+import { useState } from 'react';
 import { DraftDiagram } from '@draftably/react';
 
 export function Architecture() {
+  const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
   return (
-    <DraftDiagram
-      source={'node web "Web"\nnode api "API"\nedge e1 web -> api'}
-      label="Architecture"
-    />
+    <main>
+      <button onClick={() => setSource('node api "Updated API"')}>Update</button>
+      <DraftDiagram
+        source={source}
+        label="Architecture"
+        onUpdate={result => {
+          if (result.status === 'error') console.error(result.error.diagnostics);
+        }}
+      />
+    </main>
   );
 }
 ```
 
-The ref is the `<draft-diagram>` element. Await `ref.current.updateComplete` after a change.
+The ref points to the `<draft-diagram>` element. After React applies a source change, read
+`ref.current.updateComplete` to await that render. Check for `status === 'error'`; syntax and
+worker failures are returned as results, not thrown.
 
 ## Solid
 
 ```tsx
+import { createSignal } from 'solid-js';
 import { DraftDiagram } from '@draftably/solid';
 
-<DraftDiagram
-  source={source()}
-  label="Architecture"
-  onUpdate={result => console.log(result.status)}
-/>;
+export function Architecture() {
+  const [source, setSource] = createSignal('node web "Web"\nnode api "API"\nedge e1 web -> api');
+  return (
+    <main>
+      <button onClick={() => setSource('node api "Updated API"')}>Update</button>
+      <DraftDiagram
+        source={source()}
+        label="Architecture"
+        onUpdate={result => {
+          if (result.status === 'error') console.error(result.error.diagnostics);
+        }}
+      />
+    </main>
+  );
+}
 ```
 
 The package ships its JSX source under the `solid` export condition, so `vite-plugin-solid`
@@ -64,11 +86,16 @@ compiles it for the browser and for SolidStart's server.
 
 ```vue
 <script setup>
+import { ref } from 'vue';
 import { DraftDiagram } from '@draftably/vue';
+const source = ref('node web "Web"\nnode api "API"\nedge e1 web -> api');
+const record = result => {
+  if (result.status === 'error') console.error(result.error.diagnostics);
+};
 </script>
 
 <template>
-  <DraftDiagram :source="source" label="Architecture" @update="r => console.log(r.status)" />
+  <DraftDiagram :source="source" label="Architecture" @update="record" />
 </template>
 ```
 
@@ -80,9 +107,12 @@ No `isCustomElement` compiler setting is needed.
 <script>
   import { DraftDiagram } from '@draftably/svelte';
   let source = $state('node web "Web"\nnode api "API"\nedge e1 web -> api');
+  const record = result => {
+    if (result.status === 'error') console.error(result.error.diagnostics);
+  };
 </script>
 
-<DraftDiagram {source} label="Architecture" onupdate={r => console.log(r.status)} />
+<DraftDiagram {source} label="Architecture" onupdate={record} />
 ```
 
 ## Angular and plain HTML
@@ -107,33 +137,22 @@ Listen for the `draft-update` event for results.
 
 ## Edit diagrams
 
-`DraftEditor` is the editor: drag boxes and lines, add shapes with **N**, edit labels, undo. It
-reports the `.draft` source after every edit. Pass that text back as `source`; the editor does not
-redraw its own echo. Any number of editors can share a page.
+`DraftEditor` from `@draftably/react/editor` (or `/solid/editor`, `/vue/editor`,
+`/svelte/editor`) lets users drag boxes and lines and reports the new source after each edit:
 
 ```tsx
 import { DraftEditor } from '@draftably/react/editor';
 
-const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
 <DraftEditor source={source} onChange={setSource} style={{ height: '28rem' }} />;
 ```
 
-| Framework       | Import                                                      | Change callback      |
-| --------------- | ----------------------------------------------------------- | -------------------- |
-| React           | `DraftEditor` from `@draftably/react/editor`                | `onChange`           |
-| Solid           | `DraftEditor` from `@draftably/solid/editor`                | `onChange`           |
-| Vue             | `DraftEditor` from `@draftably/vue/editor`                  | `@change`            |
-| Svelte          | `DraftEditor` from `@draftably/svelte/editor`               | `onchange`           |
-| Angular, others | `import '@draftably/editor/element'`, then `<draft-editor>` | `draft-change` event |
-
-The editor loads in the browser after the component mounts, so server rendering and pages that
-only show diagrams never download it. Its styles apply only inside the editor.
+[Editor component](#editor-component) has the props for each framework.
 
 ## Server rendering
 
 Render the static SVG on the server and pass it as `svg`. The page then shows the diagram before
-JavaScript loads, and search engines and link previews see it. The viewer replaces it after its
-first draw.
+JavaScript loads. The viewer replaces it after its first successful draw; if that draw fails, the
+SVG remains visible. The SVG is also available to search engines and link previews.
 
 ```ts
 import { renderSvg } from '@draftably/runtime';
@@ -142,5 +161,7 @@ const result = await renderSvg(source, { target: 'inline', idPrefix: 'architectu
 const svg = result.ok ? result.value.svg : undefined;
 ```
 
-Give each diagram on a page its own `idPrefix`. This works in a Next.js server component, a
-SolidStart route, a Nuxt page or a SvelteKit `load` function.
+Give each inline diagram on a page its own `idPrefix`. This works in a Next.js server component, a
+SolidStart route, a Nuxt server route or a SvelteKit server `load` function. Pass the resulting
+string to the framework component's `svg` prop; render the component on the client so its viewer
+can attach after hydration.

@@ -1,4 +1,4 @@
-# CLI
+# CLI guide
 
 `draftably` checks, formats, draws and edits `.draft` files, and serves the editor. Run any
 command with `--help` for its own options, and `draftably --version` for the version.
@@ -248,6 +248,23 @@ The install did not finish, or its folder is not on your `PATH`.
 - With pnpm, run `pnpm setup`, open a new terminal and install again.
 - With npm, add `$(npm prefix --global)/bin` to your `PATH`.
 - With neither, run `npx draftably` in its place.
+
+### `No such file or folder`
+
+`open`, `check` and `inspect` need an existing path. To create a new diagram, run
+`draftably open` with no file, then select **New diagram**. Or save text as a `.draft` file before
+running a command on it.
+
+### The editor still shows an older version
+
+`open` reuses the editor already serving the folder. To stop it and start the installed version,
+run:
+
+```sh
+draftably open architecture.draft --replace
+```
+
+Use `draftably open --status` to see which folders and versions are running.
 
 ### PNG or PDF output fails
 

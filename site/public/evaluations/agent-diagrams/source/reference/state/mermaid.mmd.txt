@@ -1,0 +1,21 @@
+---
+title: Publishing state machine
+---
+stateDiagram-v2
+    direction LR
+    state "Draft" as Draft
+    state "In review" as InReview
+    state "Changes requested" as ChangesRequested
+    state "Approved" as Approved
+    state "Published" as Published
+    state "Archived" as Archived
+
+    [*] --> Draft
+    Draft --> InReview : submit
+    InReview --> ChangesRequested : request edits
+    ChangesRequested --> Draft : revise
+    InReview --> Approved : approve
+    Approved --> Published : publish
+    Approved --> Draft : withdraw
+    Published --> Archived : archive
+    Archived --> Draft : restore

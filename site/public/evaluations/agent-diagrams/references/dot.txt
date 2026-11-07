@@ -1,0 +1,31 @@
+Condensed from the Graphviz DOT language docs (https://graphviz.org/doc/info/lang.html).
+
+digraph G {
+  graph [rankdir=LR, label="My diagram", labelloc=t, fontsize=20];
+  node  [shape=box, style=rounded, fontname="Helvetica"];
+  edge  [fontname="Helvetica"];
+
+  start [label="Start", shape=oval];
+  check [label="Valid?", shape=diamond];
+  done  [label="Done"];
+
+  start -> check;
+  check -> done [label="yes"];
+  check -> start [label="no", style=dashed];
+
+  subgraph cluster_data {
+    label="Data";
+    style=rounded;
+    db [label="Database", shape=cylinder];
+  }
+  done -> db;
+}
+
+`digraph` draws directed edges with ->; `graph` draws undirected edges with --.
+Attributes go in square brackets. `graph`, `node` and `edge` statements set defaults.
+A subgraph whose name starts with `cluster` is drawn as a box around its nodes.
+rankdir: TB (default), LR, BT, RL.
+`{rank=same; a; b;}` puts nodes in the same rank.
+Shapes include box, ellipse, oval, circle, diamond, cylinder, note, plaintext, record.
+Quote IDs and labels that hold spaces or symbols.
+Comments use // or /* */.

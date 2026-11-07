@@ -52,24 +52,32 @@ for direct canvas editing and layout tools.
 
 ### On your files
 
-Requires **Node 22.21 or later**. Run the published package without cloning this repository:
+Requires **Node 22.21 or later**. Create a starter file, then run the published CLI without
+cloning this repository:
 
 ```sh
+cat <<'DRAFT' > architecture.draft
+diagram "Architecture" version=1
+node app "Web app"
+node api "API"
+node db "Database" shape=pill
+edge request app -> api "HTTPS"
+edge query api -> db "query"
+DRAFT
 pnpm dlx draftably open architecture.draft
 ```
 
 The CLI serves the bundled editor locally. Open the URL on its `Viewer:` line if your browser
 does not open automatically. Edits save back to the file. Press **Ctrl+C** to stop the server.
-Run `pnpm dlx draftably open` without a file to browse the folder, create a diagram, or try an example.
+Run `pnpm dlx draftably open` without a file to browse the folder, create a diagram, or try an
+example.
 
-For regular use, install it once:
+For regular use, install it once. Then open, check, format or export diagrams from the terminal:
 
 ```sh
 pnpm add --global draftably
 draftably open architecture.draft
 ```
-
-Check, format and export the file from the terminal:
 
 ```sh
 draftably check architecture.draft
@@ -122,7 +130,7 @@ The agent edits text and checks the result with the CLI. You can refine the draw
 and return the same file to the agent. Read the [skill](skills/draftably/SKILL.md) or the
 [agent guide](https://draftably.dev/docs/agent-skill) for the full workflow.
 
-Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](docs/IMPORTING.md).
+Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](https://draftably.dev/docs/import).
 
 ## Integrate
 
@@ -138,10 +146,10 @@ import '@draftably/runtime/element';
 // <draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
 ```
 
-[Use Draftably in your project](docs/integrations/README.md) compares every route, from a
-committed image to a documentation-site plugin, with a complete start for each. The
-[support matrix](docs/integrations/support.md) lists tested hosts. The
-[contributor guide](docs/integrations/contributing.md) shows how to build another adapter.
+[Embed diagrams](https://draftably.dev/docs/embed) compares every route, from a committed image to a
+documentation-site plugin, with a complete start for each. Using Mermaid today?
+[Switch from Mermaid](https://draftably.dev/docs/from-mermaid) with one alias. [Support](https://draftably.dev/docs/support) lists tested
+hosts, and [Build an adapter](https://draftably.dev/docs/build-an-adapter) shows how to add another.
 
 ## Develop
 

@@ -27,23 +27,24 @@ export interface Page {
   headings: Heading[];
   /** Every `.draft` source the page draws, so it can be drawn before the page shows. */
   drafts: string[];
-  /** The Markdown on GitHub. */
+  /** Where to edit the Markdown on GitHub. */
   source: string;
 }
 
 /** Sidebar groups, in order. A DSL section missing here goes at the end of Language. */
 const GROUPS: [string, string[]][] = [
+  ['Start', ['start', 'get-started', 'recipes', 'saving']],
   [
-    'Start here',
+    'Use Draftably',
     [
-      'get-started',
-      'saving',
       'cli',
+      'command-line',
+      'editing-in-the-viewer',
+      'shortcuts',
       'themes',
+      'import',
       'agent-skill',
-      'from-mermaid',
-      'embed',
-      'frameworks',
+      'examples',
     ],
   ],
   [
@@ -60,8 +61,22 @@ const GROUPS: [string, string[]][] = [
   ],
   ['Diagram kinds', ['swim-lanes', 'sequence-diagrams', 'cells']],
   ['Layout', ['layout-engines', 'routing', 'layout-tools']],
-  ['Tools', ['command-line', 'editing-in-the-viewer', 'shortcuts', 'examples']],
-  ['Comparisons', ['agent-diagram-evaluation']],
+  [
+    'Embed and integrate',
+    [
+      'embed',
+      'from-mermaid',
+      'frameworks',
+      'element',
+      'editor-component',
+      'render-svg',
+      'markdown',
+      'documentation-sites',
+      'github-action',
+      'support',
+    ],
+  ],
+  ['Project', ['agent-diagram-evaluation', 'build-an-adapter']],
 ];
 
 /** Sidebar titles that differ from the section's heading. */
@@ -138,11 +153,11 @@ function makePage(slug: string, title: string, md: string, source: string): Page
 function dslPages(): Page[] {
   const parts = dsl.split(/^(?=## )/m);
   const intro = parts.shift()!.replace(/^# .*\n/, '');
-  const file = `${GITHUB}/blob/main/docs/DSL.md`;
+  const file = `${GITHUB}/edit/main/docs/DSL.md`;
   const pages = [makePage('overview', 'Overview', intro, file)];
   for (const part of parts) {
     const title = plain(part.slice(3, part.indexOf('\n')));
-    pages.push(makePage(slugify(title), title, part, `${file}#${slugify(title)}`));
+    pages.push(makePage(slugify(title), title, part, file));
   }
   return pages;
 }
@@ -156,7 +171,7 @@ const guides = import.meta.glob<string>('./pages/*.md', {
 function guidePages(): Page[] {
   return Object.entries(guides).map(([file, md]) => {
     const slug = file.replace(/^.*\//, '').replace(/\.md$/, '');
-    const source = `${GITHUB}/blob/main/site/docs/pages/${slug}.md`;
+    const source = `${GITHUB}/edit/main/site/docs/pages/${slug}.md`;
     return makePage(slug, plain(/^# (.*)$/m.exec(md)?.[1] ?? slug), md, source);
   });
 }
@@ -181,6 +196,8 @@ function ordered(): Page[] {
 }
 
 export const PAGES = ordered();
+/** The docs home: it only routes to other pages. */
+export const HOME = 'start';
 export const findPage = (slug: string) => PAGES.find(p => p.slug === slug);
 export const docsPath = (slug: string, hash = '') => `/docs/${slug}${hash ? `#${hash}` : ''}`;
 
@@ -253,11 +270,11 @@ const md = new Marked({
     link(t) {
       const href = resolveHref(t.href);
       const external = /^https?:/.test(href) && !href.startsWith(location.origin);
-      // The Editor is a separate build, so the site's router must leave these links alone.
-      const editor = href.startsWith(`${BASE}app/`);
+      // The Editor and static downloads must bypass the site's client router.
+      const separate = href.startsWith(`${BASE}app/`) || href.startsWith(`${BASE}evaluations/`);
       const attrs = external
         ? ' target="_blank" rel="noreferrer"'
-        : editor
+        : separate
           ? ' rel="external"'
           : '';
       return `<a href="${esc(href)}"${attrs}>${this.parser.parseInline(t.tokens)}</a>`;

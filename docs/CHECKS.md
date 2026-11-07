@@ -35,8 +35,11 @@ the packed runtime. It checks Unified, MDX, markdown-it, includes, diagnostics, 
 and asset replay after an output directory is cleared. `pnpm markdown:browser-check` checks the real
 viewer client after the packed browser is installed.
 `pnpm host:pack-check` installs the packed packages in fresh Astro/Starlight, Docusaurus, and
-VitePress consumers. It runs two clean production builds per host, edits an included source between
-builds, and verifies that each nested-base image URL points to an SVG in the output directory.
+VitePress consumers. It copies the named config and setup snippets from the documentation into each
+consumer. It runs two clean production builds per host, edits an included source between builds,
+and verifies that each nested-base image URL points to an SVG in the output directory.
+Pass `astro-starlight`, `docusaurus`, or `vitepress` to check one host, such as
+`pnpm host:pack-check vitepress`.
 The host proof requires Node 22.22.0 or newer for Astro 7.4.5.
 
 ## Performance
@@ -106,6 +109,11 @@ checks its real worker, source updates, fallback, removal and reconnection,
 keyboard controls, narrow layout, and isolation from host styles.
 
 ## The public site
+
+`pnpm docs:assets` refreshes the comparison study's published sources, supporting documents and
+download ZIP from the originals. Commit the generated files with any study change.
+`tests/site-downloads.test.ts` rejects stale copies or a stale ZIP during `check:fast` and opens
+the archive with `unzip` (included on macOS and the Ubuntu CI runner).
 
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in
 Chromium with real clicks and keys. It covers the links between surfaces, narrow Playground panes,

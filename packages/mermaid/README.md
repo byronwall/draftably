@@ -21,12 +21,11 @@ Point the `mermaid` name at this package. No code changes:
 pnpm add mermaid@npm:@draftably/mermaid
 ```
 
-Your `package.json` now has `"mermaid": "npm:@draftably/mermaid@^0.1.0"`, and every
-`import mermaid from 'mermaid'` in your app gets Draftably. A plugin with its own Mermaid
-dependency, such as `@docusaurus/theme-mermaid`, also needs an override:
-`overrides: { mermaid: npm:@draftably/mermaid@^0.1.0 }` in `pnpm-workspace.yaml`, or `"overrides"`
-(npm) or `"resolutions"` (Yarn) in `package.json`. With Vite, add
-`optimizeDeps: { exclude: ['@draftably/runtime'] }`.
+Your `package.json` now points the `mermaid` dependency at the installed `@draftably/mermaid`
+version. Every `import mermaid from 'mermaid'` in your app gets Draftably. A plugin with its own
+Mermaid dependency, such as `@docusaurus/theme-mermaid`, also needs a package-manager override so
+it uses the same drop-in. See the [Mermaid migration guide](https://draftably.dev/docs/from-mermaid)
+for pnpm, npm and Yarn syntax, Docusaurus notes, and Vite's dependency optimizer setting.
 
 The real Mermaid installs under the name `mermaid-upstream`, so an override cannot point the
 drop-in at itself.
@@ -60,6 +59,9 @@ returns `renderer: 'draftably' | 'mermaid'` beside Mermaid's `svg` and `diagramT
 
 - The conversion keeps nodes, groups, labels, connections and sequences. It recomputes the layout,
   and it drops Mermaid `classDef` styling, click callbacks and activation bars. See
-  [Import diagrams](https://github.com/byronwall/draftably/blob/main/docs/IMPORTING.md).
+  [Import diagrams](https://draftably.dev/docs/import).
 - Server-side Mermaid renderers such as GitHub's do not load page scripts, so this package cannot
   change them.
+
+[Switch from Mermaid](https://draftably.dev/docs/from-mermaid) covers every route, including
+Markdown builds and `draftably migrate`.

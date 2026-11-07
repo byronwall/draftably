@@ -208,6 +208,7 @@ main {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 16px;
+  text-wrap: pretty;
 }
 
 .hero-sub code {
@@ -307,6 +308,7 @@ main {
 
 .copy code {
   flex: 1;
+  min-width: 0;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -1002,7 +1004,8 @@ main {
 /* Examples */
 
 .examples,
-.install {
+.install,
+.switch {
   max-width: var(--page);
   margin: 0 auto;
   padding: 56px var(--gutter) 0;
@@ -1104,8 +1107,8 @@ main {
 
 .install-cols {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
 }
 
 .install-cols > div {
@@ -1157,6 +1160,24 @@ main {
   margin-bottom: 14px;
 }
 
+/* A command breaks between words, never after a hyphen; a word wider than the box still breaks. */
+.copy-word {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.install p code,
+.switch p code {
+  white-space: nowrap;
+}
+
+/* One height for the row's commands, so their boxes line up whatever their length. */
+/* Room for two lines, so the row's command boxes match whether a command wraps or not. */
+.install-cols .copy {
+  min-height: 60px;
+}
+
 .install .commands {
   margin-top: 28px;
 }
@@ -1182,6 +1203,141 @@ main {
   color: var(--muted);
 }
 
+/* Coming from Mermaid: the two routes and a comparison beside the user's own source, drawn. */
+
+.switch-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 40px;
+  align-items: start;
+}
+
+.switch-lead {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 16px;
+}
+
+.switch-routes {
+  display: grid;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.switch-routes > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.switch-routes p {
+  margin: 6px 0 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.switch .copy {
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  min-height: 40px;
+  margin-top: auto;
+  padding: 10px 12px;
+  line-height: 20px;
+}
+
+.switch .copy code {
+  white-space: normal;
+}
+
+.switch .copy-icon {
+  margin-top: 2px;
+}
+
+.switch-table {
+  width: 100%;
+  margin-top: 28px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.switch-table th,
+.switch-table td {
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.switch-table thead th {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.switch-table tbody th {
+  font-weight: 600;
+}
+
+.switch-table td {
+  color: var(--muted);
+}
+
+.switch-table td:last-child {
+  color: var(--text);
+}
+
+.switch-figure {
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.switch-caption {
+  margin: 0;
+  padding: 10px 14px 0;
+  color: var(--muted);
+  font: 600 12px var(--font);
+}
+
+.switch-pane {
+  min-width: 0;
+}
+
+.switch-pane-drawing {
+  position: relative;
+  border-top: 1px solid var(--line);
+  background: var(--canvas);
+}
+
+.switch-source {
+  margin: 0;
+  padding: 8px 14px 14px;
+  font: 500 12.5px / 19px var(--mono);
+  font-variant-ligatures: none;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.switch-drawing {
+  /* The drawing's own shape, so the space is held before it draws. */
+  aspect-ratio: 2.3;
+  padding: 8px;
+}
+
+.switch-drawing svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* Footer */
 
 .footer {
@@ -1201,7 +1357,8 @@ main {
 
 .footer-links {
   display: flex;
-  gap: 22px;
+  flex-wrap: wrap;
+  gap: 4px 22px;
   margin-left: auto;
   font-size: 13px;
 }
@@ -1237,16 +1394,30 @@ main {
   .cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .install-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .switch-body {
+    grid-template-columns: 1fr;
+  }
+
+  /* With the full width, the source sits beside its drawing. */
+  .switch-figure {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .switch-pane-drawing {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
 }
 
 @media (max-width: 900px) {
   .hero .live {
     height: auto;
-  }
-
-  .install-cols {
-    grid-template-columns: 1fr;
-    gap: 32px;
   }
 }
 
@@ -1277,6 +1448,23 @@ main {
   .commands {
     grid-template-columns: 1fr;
     gap: 2px;
+  }
+
+  .install-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .switch-figure {
+    display: block;
+  }
+
+  .switch-pane-drawing {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .switch-table tbody th {
+    width: 32%;
   }
 
   .commands dd {
@@ -2604,6 +2792,49 @@ kbd {
   color: var(--accent-hover);
 }
 
+/* A link that leaves for GitHub carries its mark. */
+.doc-md a[href^='https://github.com/']::after {
+  content: '';
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.25em;
+  vertical-align: -0.05em;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  opacity: 0.7;
+}
+
+/* The docs home: its three sections side by side where there is room. */
+@media (min-width: 1280px) {
+  .doc[data-page='start'] .doc-md {
+    columns: 3;
+    column-gap: 32px;
+  }
+
+  .doc[data-page='start'] .doc-md > * {
+    max-width: none;
+  }
+
+  .doc[data-page='start'] .doc-md h2 {
+    margin-top: 0;
+  }
+
+  .doc[data-page='start'] .doc-md h2:not(:first-child) {
+    break-before: column;
+  }
+
+  .doc[data-page='start'] .doc-md li {
+    break-inside: avoid;
+  }
+
+  .doc[data-page='start'] .doc-md > p:last-child {
+    column-span: all;
+    margin-top: 28px;
+  }
+}
+
 .doc :not(pre) > code {
   padding: 1px 3px;
   border-radius: 4px;
@@ -2791,6 +3022,48 @@ kbd {
   background: var(--bg);
 }
 
+/* The emphasis states of an example, one button each, like the Editor's chips. */
+.doc-example-states {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  min-height: 34px;
+  padding: 4px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font: 600 12px var(--font);
+}
+
+.doc-example-states span {
+  margin-right: 4px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.doc-example-states button {
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.doc-example-states button:hover {
+  color: var(--accent);
+}
+
+.doc-example-states button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .doc-example-label {
   min-width: 0;
   margin-right: auto;
@@ -2854,6 +3127,17 @@ kbd {
   position: relative;
   flex: 1;
   min-width: max-content;
+  isolation: isolate;
+}
+
+/* The line of the state picked in the State row. One line is 20px, as in .doc-example-source. */
+.doc-example-mark {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  height: 20px;
+  background: var(--accent-soft);
 }
 
 .doc-example-hl,

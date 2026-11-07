@@ -54,7 +54,7 @@ overrides:
 pnpm add ${quote(markdown)} ${quote(runtime)}
 \`\`\`
 
-Start with docs/integrations/README.md in the Draftably repository.
+Start with https://draftably.dev/docs/embed.
 These archives are local previews. This command does not publish them.
 `;
   step = 'write preview instructions';

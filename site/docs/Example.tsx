@@ -1,9 +1,13 @@
-import { createEffect, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
+import { createEffect, createSignal, For, Index, onCleanup, Show, untrack } from 'solid-js';
 import { draw, paperOf, type Drawing } from '../draw';
 import { highlightHtml } from '../highlight';
 import { themed } from './content';
 import { playUrl } from './play-link';
 import { Zoom } from './Zoom';
+
+/** The emphasis states a drawing declares, in file order. */
+const statesOf = (d?: Drawing) =>
+  (d?.scene?.model.appearance.states ?? []).map(s => ({ id: s.id, label: s.label || s.id }));
 
 /** Drawings of the docs' examples, kept so a page can draw them all before it shows. */
 const cache = new Map<string, Promise<Drawing>>();
@@ -45,6 +49,11 @@ export function Example(props: { source: string; themes?: boolean }) {
 
   const [source, setSource] = createSignal(original);
   const [svgs, setSvgs] = createSignal(first);
+  // A file with states gets a row to pick one, as the Editor's chips do. Their order and labels
+  // follow edits; the row itself shows from the first drawing on, so an edit moves nothing.
+  const [states, setStates] = createSignal(statesOf(done.get(variants(original)[0].source)));
+  const hasStates = untrack(states).length > 0;
+  const [state, setState] = createSignal('');
   const [error, setError] = createSignal('');
   const [zoomed, setZoomed] = createSignal<string>();
   // Decided once, from the first drawing, so an edit never flips the layout.
@@ -52,17 +61,37 @@ export function Example(props: { source: string; themes?: boolean }) {
 
   let run = 0;
   let timer: ReturnType<typeof setTimeout> | undefined;
+  const redraw = async (text: string) => {
+    const mine = ++run;
+    let results = await Promise.all(variants(text).map(v => draw(v.source, state() || undefined)));
+    // An edit can remove the state on show; then show the whole diagram.
+    if (state() && !statesOf(results[0]).some(s => s.id === state())) {
+      setState('');
+      results = await Promise.all(variants(text).map(v => draw(v.source)));
+    }
+    if (mine !== run) return;
+    const err = results[0].diagnostics.find(d => d.level === 'error');
+    setError(err ? `${err.line ? `Line ${err.line}: ` : ''}${err.message}` : '');
+    if (!err) {
+      setSvgs(results.map(r => r.svg ?? ''));
+      setStates(statesOf(results[0]));
+    }
+  };
   const edit = (text: string) => {
     setSource(text);
     clearTimeout(timer);
-    timer = setTimeout(async () => {
-      const mine = ++run;
-      const results = await Promise.all(variants(text).map(v => draw(v.source)));
-      if (mine !== run) return;
-      const err = results[0].diagnostics.find(d => d.level === 'error');
-      setError(err ? `${err.line ? `Line ${err.line}: ` : ''}${err.message}` : '');
-      if (!err) setSvgs(results.map(r => r.svg ?? ''));
-    }, 160);
+    timer = setTimeout(() => void redraw(text), 160);
+  };
+  // The picked state's own line in the source, tinted so the row and the text agree.
+  const stateLine = () =>
+    state()
+      ? source()
+          .split('\n')
+          .findIndex(l => l.trim().startsWith(`state ${state()} `))
+      : -1;
+  const pick = (id: string) => {
+    setState(id);
+    void redraw(source());
   };
   onCleanup(() => clearTimeout(timer));
 
@@ -101,12 +130,28 @@ export function Example(props: { source: string; themes?: boolean }) {
           Playground →
         </a>
       </div>
+      <Show when={hasStates}>
+        <div class="doc-example-states" role="group" aria-label="Emphasis state">
+          <span>State</span>
+          {/* Index keeps each button through a redraw, so focus stays on the one clicked. */}
+          <Index each={[{ id: '', label: 'All' }, ...states()]}>
+            {s => (
+              <button type="button" aria-pressed={state() === s().id} onClick={() => pick(s().id)}>
+                {s().label}
+              </button>
+            )}
+          </Index>
+        </div>
+      </Show>
       <div class="doc-example-body">
         <div class="doc-example-source">
           <pre class="doc-example-gutter" aria-hidden="true">
             {Array.from({ length: lines() }, (_, i) => i + 1).join('\n')}
           </pre>
           <div class="doc-example-code">
+            <Show when={stateLine() >= 0}>
+              <div class="doc-example-mark" style={{ top: `${stateLine() * 20}px` }} />
+            </Show>
             <pre
               class="doc-example-hl"
               aria-hidden="true"

@@ -1,0 +1,33 @@
+title: Publishing state machine {
+  near: top-center
+  shape: text
+  style.font-size: 28
+  style.bold: true
+}
+
+direction: down
+
+start: "" {
+  shape: circle
+  width: 20
+  height: 20
+  style.fill: "#333333"
+  style.stroke: "#333333"
+}
+
+draft: Draft
+in_review: In review
+changes_requested: Changes requested
+approved: Approved
+published: Published
+archived: Archived
+
+start -> draft
+draft -> in_review: submit
+in_review -> changes_requested: request edits
+changes_requested -> draft: revise
+in_review -> approved: approve
+approved -> published: publish
+approved -> draft: withdraw
+published -> archived: archive
+archived -> draft: restore
