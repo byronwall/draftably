@@ -1,5 +1,11 @@
 # draftably
 
+## 0.11.1
+
+### Patch Changes
+
+- c3e8f25: New app icon: two nodes joined by an elbow edge, which reads clearly at favicon size.
+
 ## 0.11.0
 
 ### Minor Changes
