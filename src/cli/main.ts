@@ -54,8 +54,8 @@ Commands:
        [--state <id>]       Draw it in one emphasis state (also with --png).
        [--states]           Draw every emphasis state as its own aligned panel.
   inspect <file> --png <out.png> [--scale 2] [--max-width <px>]
-                            Save the drawing as a PNG (needs Chrome or Chromium). --max-width
-                            lowers the scale so the image is at most that many pixels wide.
+                            Save the drawing as a PNG. --max-width lowers the scale so the
+                            image is at most that many pixels wide.
                             PNG and SVG output embed the source; --no-source leaves it out.
   inspect <file> --clipboard [--scale 2]
                             Put the drawing on the macOS clipboard: a PNG with its source, and

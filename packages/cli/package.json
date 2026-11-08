@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@d2lang/d2": "0.1.34",
+    "@resvg/resvg-js": "2.6.2",
     "jsdom": "26.1.0",
     "mermaid": "12.2.0"
   }

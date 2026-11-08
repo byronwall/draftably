@@ -34,7 +34,7 @@ const write = (name: string, text: string) => {
   return file;
 };
 
-describe.skipIf(!hasChrome)('source embedded in exported PNGs', () => {
+describe('source embedded in exported PNGs', () => {
   it('gives back the formatted source of a plain file byte for byte', async () => {
     const draft = 'examples/checkout.draft',
       png = path.join(dir, 'plain.png');
