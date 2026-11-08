@@ -3,6 +3,9 @@
  * emphasis state) from the same SVG `inspect --svg` draws, then pdf-lib adds bookmarks and
  * attaches each file's `.draft` source, which `check` and `open` read back.
  */
+// The editor's declaration build reaches this file but not src/*.d.ts, so name the types here.
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="./svg-to-pdfkit.d.ts" />
 import fs from 'node:fs';
 import path from 'node:path';
 import {
