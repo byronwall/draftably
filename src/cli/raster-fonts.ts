@@ -1,16 +1,17 @@
 /**
  * The bundled diagram fonts as TrueType files on disk, for the PNG and PDF writers. resvg and
- * PDFKit read TrueType, not WOFF2, and resvg loads fonts reliably only from files.
+ * PDFKit read TrueType, not WOFF2, and resvg loads fonts reliably only from files. The TrueType
+ * files are the WOFF2 files in `src/assets/fonts`, decompressed; only the CLI ships them.
  */
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import type { FaceId } from '../model/fonts';
-import sans500 from '../assets/fonts/inter-latin-500-normal.ttf?inline';
-import sans600 from '../assets/fonts/inter-latin-600-normal.ttf?inline';
-import serif600 from '../assets/fonts/source-serif-4-latin-600-normal.ttf?inline';
-import mono500 from '../assets/fonts/jetbrains-mono-latin-500-normal.ttf?inline';
+import sans500 from './fonts/inter-latin-500-normal.ttf?inline';
+import sans600 from './fonts/inter-latin-600-normal.ttf?inline';
+import serif600 from './fonts/source-serif-4-latin-600-normal.ttf?inline';
+import mono500 from './fonts/jetbrains-mono-latin-500-normal.ttf?inline';
 
 const DATA: Record<FaceId, string> = {
   'sans-500': sans500,
