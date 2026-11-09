@@ -285,6 +285,16 @@ function standoffLines(near, xs, ys) {
     }
   }
 }
+// The part of `cost` that does not depend on other lines or boxes: length, bends and jogs. The
+// rest of `cost` is never negative, so this is a lower bound on it.
+function ownCost(ps, s) {
+  const segs = segments(ps);
+  return (
+    segs.reduce((n, [a, b]) => n + distance(a, b), 0) +
+    Math.max(0, ps.length - 2) * s.bendPenalty +
+    segs.slice(1, -1).reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
+  );
+}
 function cost(ps, used, s, near = []) {
   const c = conflicts(ps, used);
   return (
@@ -641,7 +651,8 @@ const ARRIVE_BELOW = 40,
   LEAVE_BACK = 12,
   DETOUR_WEIGHT = 0.5,
   // Per unit of a line's run inside a container that holds only one of its ends.
-  LINGER_WEIGHT = 0.3;
+  LINGER_WEIGHT = 0.3,
+  BOUND_SLACK = 1;
 /** Length of a route's axis-aligned segments that lies inside rectangle `r`. */
 function insideLength(ps, r) {
   let n = 0;
@@ -1028,7 +1039,9 @@ function compute(input, rawOptions = {}) {
         );
         return sum + Math.max(0, insideLength(points, g) - Math.max(0, shortest));
       }, 0);
-    function score(points, c) {
+    // `bound`: the score a candidate must beat. One whose cheap terms already reach it returns
+    // Infinity without the line-against-line checks, which take most of the routing time.
+    function score(points, c, bound = Infinity) {
       const v = vector[c.fs],
         w = vector[c.ts],
         delta = { x: cb.x - ca.x, y: cb.y - ca.y };
@@ -1062,6 +1075,20 @@ function compute(input, rawOptions = {}) {
       // Out of one side and back into the same side of the other end: a U-turn, which a line
       // into a perpendicular side draws with one bend fewer.
       const hook = facingFans && c.fs === c.ts && points.length > 3 ? HOOK_PENALTY : 0;
+      // Every term left out here is at least zero, except `packed`'s sibling credit, which the
+      // lane deficit in `cost` always covers (to its rounding: `BOUND_SLACK`).
+      if (
+        ownCost(points, s) +
+          backwards +
+          convention +
+          hook +
+          stability +
+          fanout +
+          axis(c) -
+          BOUND_SLACK >=
+        bound
+      )
+        return Infinity;
       // A fan planned at `TIGHT_PITCH` keeps to its side: leaving by another side costs, and
       // the close pitch to its siblings there is the plan, not a lane conflict.
       let packed = 0;
@@ -1120,7 +1147,7 @@ function compute(input, rawOptions = {}) {
         segments(full).some(([u, v], i) => i > 0 && i < full.length - 2 && blocked(u, v, o))
       )
         return;
-      const scoreValue = score(full, c);
+      const scoreValue = score(full, c, best ? best.score - 0.01 : Infinity);
       if (!best || scoreValue < best.score - 0.01) best = { ...c, points: full, score: scoreValue };
     };
     // A diamond's ports sit on its four vertices, one edge each; a further edge goes to a free
@@ -1390,22 +1417,26 @@ function compute(input, rawOptions = {}) {
         !routes.some(far)
       )
         break;
+      // Each route's crossings with the others, counted once rather than in every comparison.
+      const crossed = new Map(
+        routes.map(r => [
+          r.id,
+          conflicts(
+            r.points,
+            routes.filter(q => q !== r),
+          ).crossings,
+        ]),
+      );
       const order = [...edges].sort((a, b) => {
         const ra = routes.find(r => r.id === a.id),
           rb = routes.find(r => r.id === b.id);
         return (
           Number(rb.blocked) - Number(ra.blocked) ||
-          conflicts(
-            rb.points,
-            routes.filter(r => r !== rb),
-          ).crossings -
-            conflicts(
-              ra.points,
-              routes.filter(r => r !== ra),
-            ).crossings ||
+          crossed.get(rb.id) - crossed.get(ra.id) ||
           cmp(a.id, b.id)
         );
       });
+      let current = total(routes);
       for (const e of order) {
         const i = routes.findIndex(r => r.id === e.id),
           used = routes.filter((_, j) => j !== i),
@@ -1421,8 +1452,10 @@ function compute(input, rawOptions = {}) {
         const next = find(e, used, routes[i]),
           candidate = [...routes];
         candidate[i] = next;
-        if (total(candidate) < total(routes) - 0.1) {
+        const value = total(candidate);
+        if (value < current - 0.1) {
           routes = candidate;
+          current = value;
           syncOpen();
           accepted++;
         }
