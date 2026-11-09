@@ -223,9 +223,10 @@ time that grows with the number of lines and how often they cross.
 | `full`            | Always repairs. Use it for a final export, or when time does not matter.               |
 | `quick`           | Never repairs. Lines can cross more often on a dense graph.                            |
 
-With `auto`, a graph of 100 nodes lays out in about a second on a laptop, and a sparse one in a
-third of that. A dense graph of that size gets `quick` routes, which cross about a fifth more
-often than `full` ones.
+With `auto`, a tree or chain of 100 nodes lays out in about a fifth of a second on a laptop, with
+`full` routes. A dense graph of that size, such as a DAG with 127 edges, gets `quick` routes in
+about half a second. They cross about a fifth more often than `full` ones, which take about 3
+seconds there.
 
 ## Errors and warnings
 

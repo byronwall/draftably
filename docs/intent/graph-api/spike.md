@@ -217,11 +217,34 @@ Other measured times with A: chain of 100 nodes 0.39 s (was 1.14 s); tree of 40 
    `route` directly.
 4. #510: `DraftablyELK`, `dagreLayout`, the Cytoscape layout, `layoutSync` and `fold`.
 
+5. The performance layer on top of the stack: `flow` places each object level with what it links
+   to and gives each gap a lane per turning line, and the router skips work that cannot change
+   its result. See [Performance follow-up](#performance-follow-up).
+
+## Performance follow-up
+
+Measured against real elkjs 0.12.1 (layered, orthogonal) on the harness graphs as ELK JSON:
+
+- Node placement caused most of the cost. `flow` stacked each rank from the top, so a tree's
+  children sat far from their parents, and gaps between ranks were 48px however many lines
+  turned in them. The router then routed round other boxes: a 63-node tree drew 199 crossings
+  and took 5 s. Placing each object at its median neighbour (a least-move fit that keeps order
+  and gaps), and widening each gap to fit its lanes, is what a layered layout does. That tree
+  now has no crossings, fewer bends than elkjs, and routes in 0.05 s.
+- Exact router work, checked against every draft file and the harness: a typed-array A* heap
+  and inlined pair tests, doglegs skipped for side pairs that cannot win, fan-out priced once
+  per side pair, and flat route boxes per `findIn`. Crossing repairs run only on drawings of 32
+  edges or fewer; above that none was accepted.
+- Audit: corpus DI −0.1, held-out −0.7, examples −0.4.
+
 ## Still open
 
-- Router cost on dense graphs: about a second for a dense 100-node graph even with quick routes,
-  and the ELK stand-in is about 4 times slower than elkjs. A new candidate search (Decision 4, D)
-  needs the quality audit loop.
+- The ELK stand-in is still about 13 times slower than elkjs over the harness (2.3 s against
+  0.17 s), and denser: a 100-node DAG draws 149 crossings against elkjs's 85, as DAG rank
+  ordering (`byBarycenter`) is weaker than ELK's crossing minimisation. Full routing of that
+  DAG takes 3 s, mostly improvement passes that reroute crossing lines against all the others.
+- A fan of many children from one side gives each line its own port and lane. A shared trunk
+  (FEEL.md: "a horizontal stub may join a vertical trunk") would draw it as elkjs does.
 - Fixed port positions (Finding 4) and caller label sizes for `route()` (Finding 5).
 - Cytoscape edges: map routes to `segments` offsets.
 - The DSL default gap: a `layout` line without `gap=` spaces a root flow 28px apart, against 48px
