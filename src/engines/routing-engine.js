@@ -1363,12 +1363,6 @@ function compute(input, rawOptions = {}) {
           if (clearOf(end, far, e.to)) bs = far;
         }
         const c = { fs, ts, fo, toff, start, end, as, bs, obs };
-        if (tight) {
-          if (cfg.waypoints?.length) continue;
-          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
-          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
-          continue;
-        }
         // Through any waypoints, so a side facing away from the first one ranks last.
         const via = [start, ...(cfg.waypoints || []), end];
         c.lower =
@@ -1376,6 +1370,15 @@ function compute(input, rawOptions = {}) {
           axis(c) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
           (old && ts !== old.toSide ? s.portStability : 0);
+        // No route for this side pair scores below `lower` (less `score`'s slack), so once the
+        // best beats that, its doglegs cannot win and are not built.
+        const hopeless = () => best && c.lower - BOUND_SLACK > best.score;
+        if (tight) {
+          if (cfg.waypoints?.length || hopeless()) continue;
+          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
+          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
+          continue;
+        }
         candidates.push(c);
         if (cfg.waypoints?.length) continue;
         // Preserve genuinely straight facing connections even when two 13px
@@ -1395,7 +1398,7 @@ function compute(input, rawOptions = {}) {
           )
         )
           remember([start, end], c);
-        for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
+        if (!hopeless()) for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
       }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
