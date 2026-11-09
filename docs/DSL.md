@@ -66,7 +66,10 @@ family of the nearest colored group. Without a `layout` line, `root` uses `flow 
 use `column gap=24`.
 
 `flow` ranks objects along its direction by their connections. A loop keeps its path in that
-direction, and only the edge that closes it runs backwards. A run of ranks that is wider than
+direction, and only the edge that closes it runs backwards. Within its rank, an object lines up
+with what it connects to in the rank before: the first of several branches continues its
+parent's line and the others follow it, so a main path runs straight and a tree reads as a tree.
+A gap between ranks widens until each line that turns in it has a lane of its own. A run of ranks that is wider than
 the canvas (1100×720) and more than three times longer than it is deep folds into rows (or
 columns, for `direction=down`) that each start again at the beginning, like lines of text.
 `fold=never` keeps it on one line. `engine=layered` folds the same way unless it has `fold=never`.

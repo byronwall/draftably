@@ -115,6 +115,68 @@ function compress(ps) {
 function segments(ps) {
   return ps.slice(1).map((b, i) => [ps[i], b]);
 }
+// A path's segments as flat arrays, kept per points array (paths are never changed in place):
+// whether each runs level (`h`), its range along its own axis (`lo`, `hi`), and the coordinate
+// across it (`at`), all as `intersection` and `parallelNear` read them; and the path's box.
+const spans = new WeakMap();
+function spanOf(ps) {
+  let v = spans.get(ps);
+  if (!v) {
+    const n = Math.max(0, ps.length - 1),
+      h = new Uint8Array(n),
+      lo = new Float64Array(n),
+      hi = new Float64Array(n),
+      at = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      const a = ps[i],
+        b = ps[i + 1],
+        level = Math.abs(a.y - b.y) < EPS;
+      h[i] = level ? 1 : 0;
+      lo[i] = level ? Math.min(a.x, b.x) : Math.min(a.y, b.y);
+      hi[i] = level ? Math.max(a.x, b.x) : Math.max(a.y, b.y);
+      at[i] = level ? a.y : a.x;
+    }
+    const xs = ps.map(p => p.x),
+      ys = ps.map(p => p.y);
+    v = {
+      n,
+      h,
+      lo,
+      hi,
+      at,
+      x0: Math.min(...xs),
+      y0: Math.min(...ys),
+      x1: Math.max(...xs),
+      y1: Math.max(...ys),
+    };
+    spans.set(ps, v);
+  }
+  return v;
+}
+// Whether two paths' boxes, grown by `pad`, meet. Paths whose boxes do not can neither cross,
+// share a run, nor run within `pad` of each other, so the pair checks below skip them.
+const within = (a, b, pad) =>
+  a.x0 - pad <= b.x1 + EPS &&
+  b.x0 - pad <= a.x1 + EPS &&
+  a.y0 - pad <= b.y1 + EPS &&
+  b.y0 - pad <= a.y1 + EPS;
+// The spans and boxes of a `used` list, flat, while `findIn` checks many candidates against it:
+// a route far from a candidate is passed over on four comparisons, with no lookup.
+const flat = new WeakMap();
+function flatten(used) {
+  if (flat.has(used)) return false;
+  const spansOf = used.map(r => spanOf(r.points)),
+    box = new Float64Array(used.length * 4);
+  spansOf.forEach((v, i) => box.set([v.x0, v.y0, v.x1, v.y1], i * 4));
+  flat.set(used, { spansOf, box });
+  return true;
+}
+// Whether `own`, grown by `pad`, may meet route `i` of a flattened list (`within`'s test).
+const near = (box, i, own, pad) =>
+  own.x0 - pad <= box[i * 4 + 2] + EPS &&
+  box[i * 4] - pad <= own.x1 + EPS &&
+  own.y0 - pad <= box[i * 4 + 3] + EPS &&
+  box[i * 4 + 1] - pad <= own.y1 + EPS;
 function intersection(a, b, c, d) {
   const h = Math.abs(a.y - b.y) < EPS,
     k = Math.abs(c.y - d.y) < EPS;
@@ -154,21 +216,33 @@ function parallelNear(a, b, c, d, gap) {
     ? { overlap, separation, deficit: (overlap * (gap - separation)) / gap }
     : null;
 }
+// The pair checks below work on `spanOf` arrays: `parallelNear` and `intersection` on numbers,
+// in the same order, without building a point or result for every pair.
 function parallelConflicts(points, used, gap) {
   let deficit = 0,
     pairs = 0,
     minGap = Infinity;
-  for (const r of used)
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
-        const p = parallelNear(a, b, c, d, gap);
-        if (!p) continue;
+  const own = spanOf(points),
+    limit = gap - 0.05,
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, gap)) continue;
+    const other = f ? f.spansOf[q] : spanOf(used[q].points);
+    if (!within(own, other, gap)) continue;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] !== other.h[j]) continue;
+        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+        if (!(overlap > 1)) continue;
+        const separation = Math.abs(own.at[i] - other.at[j]);
+        if (!(separation < limit)) continue;
         // Duplicate terminals need a short common fan-out; do not count the single
         // endpoint itself, but a shared run with positive length still counts.
         pairs++;
-        deficit += p.deficit;
-        minGap = Math.min(minGap, p.separation);
+        deficit += (overlap * (gap - separation)) / gap;
+        minGap = Math.min(minGap, separation);
       }
+  }
   return {
     lanePairs: pairs,
     laneDeficit: round(deficit),
@@ -178,26 +252,50 @@ function parallelConflicts(points, used, gap) {
 // Lane deficit against `used` from runs at least `min` apart.
 function siblingDeficit(points, used, min, gap) {
   let deficit = 0;
-  for (const r of used)
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
-        const p = parallelNear(a, b, c, d, gap);
-        if (p && p.separation >= min) deficit += p.deficit;
+  const own = spanOf(points),
+    limit = gap - 0.05,
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, gap)) continue;
+    const other = f ? f.spansOf[q] : spanOf(used[q].points);
+    if (!within(own, other, gap)) continue;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] !== other.h[j]) continue;
+        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+        if (!(overlap > 1)) continue;
+        const separation = Math.abs(own.at[i] - other.at[j]);
+        if (separation < limit && separation >= min)
+          deficit += (overlap * (gap - separation)) / gap;
       }
+  }
   return deficit;
 }
 function conflicts(points, used) {
   const hits = new Set();
   let shared = 0;
-  for (const r of used) {
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
-        const p = intersection(a, b, c, d);
-        if (!p) continue;
-        if (p.shared) {
-          shared += p.shared;
+  const own = spanOf(points),
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, 0)) continue;
+    const r = used[q],
+      other = f ? f.spansOf[q] : spanOf(r.points);
+    if (!within(own, other, 0)) continue;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] === other.h[j]) {
+          if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
+          const amount = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+          if (amount > EPS) shared += amount;
           continue;
         }
+        // One level, one upright: they meet where the upright's x crosses the level's y.
+        const [l, li, u, ui] = own.h[i] ? [own, i, other, j] : [other, j, own, i],
+          x = u.at[ui],
+          y = l.at[li];
+        if (x < l.lo[li] - EPS || x > l.hi[li] + EPS || y < u.lo[ui] - EPS || y > u.hi[ui] + EPS)
+          continue;
+        const p = { x, y };
         // A shared shape terminal is connectivity, not an edge crossing.
         if (
           (same(p, points[0]) || same(p, points.at(-1))) &&
@@ -239,6 +337,28 @@ function standoffCost(ps, near) {
   }
   return n * STANDOFF_WEIGHT;
 }
+// `standoffCost` of the one segment a→b, without building its segment list.
+function standoffSegment(a, b, near) {
+  let n = 0;
+  const h = Math.abs(a.y - b.y) < EPS;
+  if (!h && Math.abs(a.x - b.x) >= EPS) return 0;
+  const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+    hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
+    at = h ? a.y : a.x;
+  for (const r of near) {
+    const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
+    if (run <= 1) continue;
+    const s0 = h ? r.y : r.x,
+      s1 = h ? r.y + r.h : r.x + r.w;
+    let d;
+    if (r.border) d = Math.min(Math.abs(at - s0), Math.abs(at - s1));
+    else if (at <= s0) d = s0 - at;
+    else if (at >= s1) d = at - s1;
+    else d = 0;
+    if (d < r.band) n += run * (1 - d / r.band) * (r.weight ?? 1);
+  }
+  return n * STANDOFF_WEIGHT;
+}
 function standoffLines(near, xs, ys) {
   for (const r of near) {
     const add = r.border ? [-r.band, r.band] : [-r.band];
@@ -247,6 +367,16 @@ function standoffLines(near, xs, ys) {
       ys.push(r.y + k, r.y + r.h - k);
     }
   }
+}
+// The part of `cost` that does not depend on other lines or boxes: length, bends and jogs. The
+// rest of `cost` is never negative, so this is a lower bound on it.
+function ownCost(ps, s) {
+  const segs = segments(ps);
+  return (
+    segs.reduce((n, [a, b]) => n + distance(a, b), 0) +
+    Math.max(0, ps.length - 2) * s.bendPenalty +
+    segs.slice(1, -1).reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
+  );
 }
 function cost(ps, used, s, near = []) {
   const c = conflicts(ps, used);
@@ -262,39 +392,64 @@ function cost(ps, used, s, near = []) {
       .reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
   );
 }
+/** A binary min-heap on `f`, in typed arrays. `pop` leaves the entry in `key` and `g`. */
 class Heap {
   constructor() {
-    this.q = [];
+    this.keys = new Int32Array(256);
+    this.gs = new Float64Array(256);
+    this.fs = new Float64Array(256);
+    this.length = 0;
+    this.key = -1;
+    this.g = 0;
   }
-  push(v) {
-    let i = this.q.length;
-    this.q.push(v);
+  push(key, g, f) {
+    if (this.length === this.keys.length) {
+      const grow = (a, T) => {
+        const b = new T(a.length * 2);
+        b.set(a);
+        return b;
+      };
+      this.keys = grow(this.keys, Int32Array);
+      this.gs = grow(this.gs, Float64Array);
+      this.fs = grow(this.fs, Float64Array);
+    }
+    const { keys, gs, fs } = this;
+    let i = this.length++;
     while (i) {
       const p = (i - 1) >> 1;
-      if (this.q[p].f <= v.f) break;
-      this.q[i] = this.q[p];
+      if (fs[p] <= f) break;
+      keys[i] = keys[p];
+      gs[i] = gs[p];
+      fs[i] = fs[p];
       i = p;
     }
-    this.q[i] = v;
+    keys[i] = key;
+    gs[i] = g;
+    fs[i] = f;
   }
   pop() {
-    const r = this.q[0],
-      v = this.q.pop();
-    if (this.q.length) {
+    const { keys, gs, fs } = this,
+      n = --this.length;
+    this.key = keys[0];
+    this.g = gs[0];
+    if (n) {
+      const key = keys[n],
+        g = gs[n],
+        f = fs[n];
       let i = 0;
-      while (i * 2 + 1 < this.q.length) {
+      while (i * 2 + 1 < n) {
         let j = i * 2 + 1;
-        if (j + 1 < this.q.length && this.q[j + 1].f < this.q[j].f) j++;
-        if (this.q[j].f >= v.f) break;
-        this.q[i] = this.q[j];
+        if (j + 1 < n && fs[j + 1] < fs[j]) j++;
+        if (fs[j] >= f) break;
+        keys[i] = keys[j];
+        gs[i] = gs[j];
+        fs[i] = fs[j];
         i = j;
       }
-      this.q[i] = v;
+      keys[i] = key;
+      gs[i] = g;
+      fs[i] = f;
     }
-    return r;
-  }
-  get length() {
-    return this.q.length;
   }
 }
 /** A* moves on the grid: right, down, left, up, with the axis each runs along. */
@@ -352,24 +507,50 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
     scores = new Float64Array(nx * ny * 2).fill(Infinity),
     prev = new Int32Array(nx * ny * 2).fill(-1),
     cache = new Float64Array(nx * ny * 2).fill(NaN);
-  // Compile route geometry once per search; avoid allocating paths and segment
-  // arrays for every grid edge visited by A*. Touching terminals are excluded.
-  const existing = used.flatMap(r =>
-    segments(r.points).map(([a, b]) => ({
-      a,
-      b,
-      id: r.id,
-      first: r.points[0],
-      last: r.points.at(-1),
-      x0: Math.min(a.x, b.x),
-      x1: Math.max(a.x, b.x),
-      y0: Math.min(a.y, b.y),
-      y1: Math.max(a.y, b.y),
-    })),
-  );
   // A segment farther than this from a grid edge can neither cross, share nor run parallel
   // within the edge gap, so its cost terms are zero; skipping it changes no result.
   const reach = Math.max(s.edgeGap, EPS) + 1;
+  // Every grid edge lies inside the grid's box. An obstacle, standoff box or route segment that
+  // cannot reach that box can neither block nor cost an edge, so each list keeps only those that
+  // can, in their original order (so sums add up identically).
+  const gx0 = X[0],
+    gx1 = X[nx - 1],
+    gy0 = Y[0],
+    gy1 = Y[ny - 1],
+    obsIn = obs.filter(r => r.x < gx1 && r.x + r.w > gx0 && r.y < gy1 && r.y + r.h > gy0),
+    nearIn = near.filter(
+      r =>
+        r.x - r.band < gx1 &&
+        r.x + r.w + r.band > gx0 &&
+        r.y - r.band < gy1 &&
+        r.y + r.h + r.band > gy0,
+    );
+  // Compile route geometry once per search; avoid allocating paths and segment
+  // arrays for every grid edge visited by A*. Touching terminals are excluded.
+  const existing = [];
+  for (const r of used) {
+    const box = spanOf(r.points);
+    if (
+      box.x1 < gx0 - reach ||
+      box.x0 > gx1 + reach ||
+      box.y1 < gy0 - reach ||
+      box.y0 > gy1 + reach
+    )
+      continue;
+    for (const [a, b] of segments(r.points))
+      existing.push({
+        a,
+        b,
+        h: Math.abs(a.y - b.y) < EPS,
+        id: r.id,
+        first: r.points[0],
+        last: r.points.at(-1),
+        x0: Math.min(a.x, b.x),
+        x1: Math.max(a.x, b.x),
+        y0: Math.min(a.y, b.y),
+        y1: Math.max(a.y, b.y),
+      });
+  }
   // Grid edges run along one grid line, so only what lies across that line can block or cost
   // them. Each line's share of the obstacles, standoff boxes and route segments is gathered once,
   // in their original order (so sums add up identically), and the exact tests below run on it.
@@ -383,40 +564,59 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
       t0 = horizontal ? 'y0' : 'x0',
       t1 = horizontal ? 'y1' : 'x1';
     hit = {
-      obs: obs.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
-      near: near.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
+      obs: obsIn.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
+      near: nearIn.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
       existing: existing.filter(t => t[t1] >= at - reach && t[t0] <= at + reach),
     };
     memo.set(at, hit);
     return hit;
   }
+  // `intersection` and `parallelNear` against each close segment, inlined on numbers: the same
+  // tests and sums in the same order, without a result object per pair.
+  const gap = s.edgeGap,
+    laneLimit = gap - 0.05;
   function segmentCost(a, b, line) {
-    let shared = 0;
-    const hits = new Set(),
-      x0 = Math.min(a.x, b.x) - reach,
-      x1 = Math.max(a.x, b.x) + reach,
-      y0 = Math.min(a.y, b.y) - reach,
-      y1 = Math.max(a.y, b.y) + reach,
-      close = line.existing.filter(t => t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1);
-    for (const t of close) {
-      const p = intersection(a, b, t.a, t.b);
-      if (!p) continue;
-      if (p.shared) {
-        shared += p.shared;
+    let shared = 0,
+      lanes = 0,
+      hits = null;
+    const h = Math.abs(a.y - b.y) < EPS,
+      ax0 = Math.min(a.x, b.x),
+      ax1 = Math.max(a.x, b.x),
+      ay0 = Math.min(a.y, b.y),
+      ay1 = Math.max(a.y, b.y),
+      x0 = ax0 - reach,
+      x1 = ax1 + reach,
+      y0 = ay0 - reach,
+      y1 = ay1 + reach;
+    for (const t of line.existing) {
+      if (!(t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1)) continue;
+      if (h === t.h) {
+        const overlap = h
+            ? Math.min(ax1, t.x1) - Math.max(ax0, t.x0)
+            : Math.min(ay1, t.y1) - Math.max(ay0, t.y0),
+          separation = h ? Math.abs(a.y - t.a.y) : Math.abs(a.x - t.a.x);
+        if (!(separation > EPS) && overlap > EPS) shared += overlap;
+        if (overlap > 1 && separation < laneLimit) lanes += (overlap * (gap - separation)) / gap;
         continue;
       }
+      // One level, one upright: they meet where the upright's x crosses the level's y.
+      const px = h ? t.a.x : a.x,
+        py = h ? a.y : t.a.y;
+      if (
+        px < (h ? ax0 : t.x0) - EPS ||
+        px > (h ? ax1 : t.x1) + EPS ||
+        py < (h ? t.y0 : ay0) - EPS ||
+        py > (h ? t.y1 : ay1) + EPS
+      )
+        continue;
+      const p = { x: px, y: py };
       if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
-      hits.add(t.id + ':' + p.x + ',' + p.y);
-    }
-    let lanes = 0;
-    for (const t of close) {
-      const q = parallelNear(a, b, t.a, t.b, s.edgeGap);
-      if (q) lanes += q.deficit;
+      (hits ??= new Set()).add(t.id + ':' + px + ',' + py);
     }
     return (
       distance(a, b) +
-      (near.length ? standoffCost([a, b], line.near) : 0) +
-      hits.size * s.crossingPenalty +
+      (near.length ? standoffSegment(a, b, line.near) : 0) +
+      (hits ? hits.size : 0) * s.crossingPenalty +
       shared * s.sharedPenalty +
       lanes * s.parallelPenalty
     );
@@ -425,30 +625,32 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
   for (const dir of [0, 1]) {
     const key = startCell * 2 + dir;
     scores[key] = 0;
-    heap.push({ key, g: 0, f: distance(start, end) });
+    heap.push(key, 0, distance(start, end));
   }
   let result = null,
     visits = 0;
   while (heap.length && visits++ < limit) {
-    const c = heap.pop();
-    if (c.g !== scores[c.key]) continue;
-    const cell = Math.floor(c.key / 2),
-      dir = c.key % 2;
+    heap.pop();
+    const ckey = heap.key,
+      cg = heap.g;
+    if (cg !== scores[ckey]) continue;
+    const cell = ckey >> 1,
+      dir = ckey & 1;
     if (cell === endCell) {
-      result = c.key;
+      result = ckey;
       break;
     }
     const x = cell % nx,
-      y = Math.floor(cell / nx);
+      y = (cell - x) / nx;
     for (let i = 0; i < 4; i++) {
-      const [dx, dy, nd] = STEPS[i],
-        xx = x + dx,
-        yy = y + dy;
+      const nd = i & 1,
+        xx = i === 0 ? x + 1 : i === 2 ? x - 1 : x,
+        yy = i === 1 ? y + 1 : i === 3 ? y - 1 : y;
       if (xx < 0 || yy < 0 || xx >= nx || yy >= ny) continue;
       const nc = yy * nx + xx,
         key = nc * 2 + nd,
         // The grid edge between two neighbouring cells: the lower cell, and which way it runs.
-        ck = Math.min(cell, nc) * 2 + nd;
+        ck = (cell < nc ? cell : nc) * 2 + nd;
       let k = cache[ck];
       if (k !== k) {
         const a = { x: X[x], y: Y[y] },
@@ -458,11 +660,11 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
         cache[ck] = k;
       }
       if (k === Infinity) continue;
-      const g = c.g + k + (dir !== nd ? s.bendPenalty : 0);
+      const g = cg + k + (dir !== nd ? s.bendPenalty : 0);
       if (g >= scores[key] - 0.001) continue;
       scores[key] = g;
-      prev[key] = c.key;
-      heap.push({ key, g, f: g + Math.abs(X[xx] - end.x) + Math.abs(Y[yy] - end.y) });
+      prev[key] = ckey;
+      heap.push(key, g, g + Math.abs(X[xx] - end.x) + Math.abs(Y[yy] - end.y));
     }
   }
   if (result === null) return null;
@@ -604,7 +806,8 @@ const ARRIVE_BELOW = 40,
   LEAVE_BACK = 12,
   DETOUR_WEIGHT = 0.5,
   // Per unit of a line's run inside a container that holds only one of its ends.
-  LINGER_WEIGHT = 0.3;
+  LINGER_WEIGHT = 0.3,
+  BOUND_SLACK = 1;
 /** Length of a route's axis-aligned segments that lies inside rectangle `r`. */
 function insideLength(ps, r) {
   let n = 0;
@@ -637,7 +840,11 @@ const FAR_PENALTY = 100,
 // try routes up to four lines again (most of the router's time on a 30-box file). Across the
 // quality corpus, held-out set and examples every repair that was kept came within the first four
 // tries; later ones only cost time.
-const MAX_REPAIRS = 4;
+const MAX_REPAIRS = 4,
+  // Repairs reroute each pair against the whole drawing, so their cost grows with its size while
+  // one crossing matters less. On larger drawings they rarely find a better pair: none did on the
+  // graph harness's DAGs. Hand-drawn diagrams stay well below this.
+  REPAIR_EDGES = 32;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
 function gate(obs, start, fs, end, ts) {
   if (!obs.some(r => r.gates)) return obs;
@@ -895,7 +1102,16 @@ function compute(input, rawOptions = {}) {
       (BACK_OUT[flow].includes(r.fromSide) || BACK_IN[flow].includes(r.toSide))
     );
   }
+  // `used` stays the same through a `findIn`, which checks many candidates against it.
   function findIn(e, used, old, open, wall = []) {
+    const flattened = flatten(used);
+    try {
+      return findAmong(e, used, old, open, wall);
+    } finally {
+      if (flattened) flat.delete(used);
+    }
+  }
+  function findAmong(e, used, old, open, wall = []) {
     const a = rects.get(e.from),
       b = rects.get(e.to),
       cfg = e.cfg,
@@ -991,7 +1207,10 @@ function compute(input, rawOptions = {}) {
         );
         return sum + Math.max(0, insideLength(points, g) - Math.max(0, shortest));
       }, 0);
-    function score(points, c) {
+    // `bound`: the score a candidate must beat. One whose cheap terms already reach it returns
+    // Infinity without the line-against-line checks, which take most of the routing time.
+    // `floor`: return 0 once the cheap terms fall below `bound`, without the rest.
+    function score(points, c, bound = Infinity, floor = false) {
       const v = vector[c.fs],
         w = vector[c.ts],
         delta = { x: cb.x - ca.x, y: cb.y - ca.y };
@@ -1021,10 +1240,27 @@ function compute(input, rawOptions = {}) {
         ? (c.fs !== old.fromSide ? s.portStability : 0) +
           (c.ts !== old.toSide ? s.portStability : 0)
         : 0;
-      const fanout = fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to);
+      // Fan-out depends on the side pair alone, so it is worked out once per candidate.
+      const fanout = (c.fanout ??=
+        fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to));
       // Out of one side and back into the same side of the other end: a U-turn, which a line
       // into a perpendicular side draws with one bend fewer.
       const hook = facingFans && c.fs === c.ts && points.length > 3 ? HOOK_PENALTY : 0;
+      // Every term left out here is at least zero, except `packed`'s sibling credit, which the
+      // lane deficit in `cost` always covers (to its rounding: `BOUND_SLACK`).
+      if (
+        ownCost(points, s) +
+          backwards +
+          convention +
+          hook +
+          stability +
+          fanout +
+          axis(c) -
+          BOUND_SLACK >=
+        bound
+      )
+        return Infinity;
+      if (floor) return 0;
       // A fan planned at `TIGHT_PITCH` keeps to its side: leaving by another side costs, and
       // the close pitch to its siblings there is the plan, not a lane conflict.
       let packed = 0;
@@ -1076,14 +1312,15 @@ function compute(input, rawOptions = {}) {
         )
           return;
       }
-
+      // A path whose cheap terms cannot beat the best needs no obstacle checks.
+      if (best && score(full, c, best.score - 0.01, true) === Infinity) return;
       // No doubled-back first/last segments after attaching shape stubs.
       if (
         full.length < 2 ||
         segments(full).some(([u, v], i) => i > 0 && i < full.length - 2 && blocked(u, v, o))
       )
         return;
-      const scoreValue = score(full, c);
+      const scoreValue = score(full, c, best ? best.score - 0.01 : Infinity);
       if (!best || scoreValue < best.score - 0.01) best = { ...c, points: full, score: scoreValue };
     };
     // A diamond's ports sit on its four vertices, one edge each; a further edge goes to a free
@@ -1168,12 +1405,6 @@ function compute(input, rawOptions = {}) {
           if (clearOf(end, far, e.to)) bs = far;
         }
         const c = { fs, ts, fo, toff, start, end, as, bs, obs };
-        if (tight) {
-          if (cfg.waypoints?.length) continue;
-          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
-          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
-          continue;
-        }
         // Through any waypoints, so a side facing away from the first one ranks last.
         const via = [start, ...(cfg.waypoints || []), end];
         c.lower =
@@ -1181,6 +1412,15 @@ function compute(input, rawOptions = {}) {
           axis(c) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
           (old && ts !== old.toSide ? s.portStability : 0);
+        // No route for this side pair scores below `lower` (less `score`'s slack), so once the
+        // best beats that, its doglegs cannot win and are not built.
+        const hopeless = () => best && c.lower - BOUND_SLACK > best.score;
+        if (tight) {
+          if (cfg.waypoints?.length || hopeless()) continue;
+          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
+          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
+          continue;
+        }
         candidates.push(c);
         if (cfg.waypoints?.length) continue;
         // Preserve genuinely straight facing connections even when two 13px
@@ -1200,7 +1440,7 @@ function compute(input, rawOptions = {}) {
           )
         )
           remember([start, end], c);
-        for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
+        if (!hopeless()) for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
       }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
@@ -1248,7 +1488,7 @@ function compute(input, rawOptions = {}) {
       }
       if (ok) remember(path, c);
     }
-    if (!best && rawOptions.quick && old) return findIn(e, used, null, open, wall);
+    if (!best && rawOptions.quick && old) return findAmong(e, used, null, open, wall);
     if (!best) {
       const fs = from[0],
         ts = to[0],
@@ -1353,22 +1593,26 @@ function compute(input, rawOptions = {}) {
         !routes.some(far)
       )
         break;
+      // Each route's crossings with the others, counted once rather than in every comparison.
+      const crossed = new Map(
+        routes.map(r => [
+          r.id,
+          conflicts(
+            r.points,
+            routes.filter(q => q !== r),
+          ).crossings,
+        ]),
+      );
       const order = [...edges].sort((a, b) => {
         const ra = routes.find(r => r.id === a.id),
           rb = routes.find(r => r.id === b.id);
         return (
           Number(rb.blocked) - Number(ra.blocked) ||
-          conflicts(
-            rb.points,
-            routes.filter(r => r !== rb),
-          ).crossings -
-            conflicts(
-              ra.points,
-              routes.filter(r => r !== ra),
-            ).crossings ||
+          crossed.get(rb.id) - crossed.get(ra.id) ||
           cmp(a.id, b.id)
         );
       });
+      let current = total(routes);
       for (const e of order) {
         const i = routes.findIndex(r => r.id === e.id),
           used = routes.filter((_, j) => j !== i),
@@ -1384,8 +1628,10 @@ function compute(input, rawOptions = {}) {
         const next = find(e, used, routes[i]),
           candidate = [...routes];
         candidate[i] = next;
-        if (total(candidate) < total(routes) - 0.1) {
+        const value = total(candidate);
+        if (value < current - 0.1) {
           routes = candidate;
+          current = value;
           syncOpen();
           accepted++;
         }
@@ -1396,7 +1642,7 @@ function compute(input, rawOptions = {}) {
   // together: route one with the other's line as a wall, then the other round it, and keep the
   // pair when the drawing as a whole costs less (NEXT.md item 9, R6).
   let repaired = 0;
-  if (!rawOptions.quick && facingFans) {
+  if (!rawOptions.quick && facingFans && edges.length <= REPAIR_EDGES) {
     // A repair buys its crossing with length or bends, never with a line that reads backwards:
     // into a box from below, out of or into a far side, or a U-turn (FEEL.md: never arrive from
     // below; a loop round the outside is worse than one crossing).

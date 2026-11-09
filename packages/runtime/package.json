@@ -26,6 +26,10 @@
       "types": "./dist/types/src/runtime/element.d.ts",
       "import": "./dist/element.js"
     },
+    "./graph": {
+      "types": "./dist/types/src/graph-api/index.d.ts",
+      "import": "./dist/graph.js"
+    },
     "./viewer.css": "./dist/viewer.css",
     "./fonts.css": "./dist/fonts.css",
     "./browser": {

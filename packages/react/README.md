@@ -10,3 +10,15 @@ pnpm add @draftably/react
 
 See [Frameworks](https://draftably.dev/docs/frameworks) for the component, server
 rendering with the `svg` prop, and a complete example.
+
+## React Flow
+
+`@draftably/react/flow` exports `DraftablyEdge`, a React Flow custom edge that draws the lines
+and labels that `layout({ reactFlow })` from `@draftably/runtime/graph` routed. It does not need
+React Flow as a dependency. See [Layout API](https://draftably.dev/docs/layout-api#react-flow-and-svelte-flow).
+
+```tsx
+import { DraftablyEdge } from '@draftably/react/flow';
+
+<ReactFlow nodes={nodes} edges={edges} edgeTypes={{ draftably: DraftablyEdge }} />;
+```

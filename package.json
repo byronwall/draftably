@@ -43,6 +43,7 @@
     "audit:compare": "node scripts/audit-compare.mjs",
     "shoot": "node scripts/shoot.mjs",
     "bench": "node scripts/bench/run.mjs",
+    "bench:graph": "pnpm runtime:build && node scripts/bench/graph.mjs",
     "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
     "eval:diagrams:tooled": "node scripts/diagram-compare/tooled.mjs",
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",
@@ -62,6 +63,7 @@
     "mermaid:build": "node scripts/build-mermaid.ts",
     "frameworks:build": "node scripts/build-frameworks.ts",
     "prove:frameworks": "node scripts/prove-frameworks.ts",
+    "prove:react-flow": "node scripts/prove-react-flow.ts",
     "editor:build": "node scripts/build-editor.ts"
   },
   "dependencies": {
