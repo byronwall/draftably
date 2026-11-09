@@ -160,6 +160,58 @@ Svelte Flow nodes and edges have the same shape. Pass them under `svelteFlow`, a
 
 `integration-examples/react-flow` is a complete React Flow app that does all of this.
 
+## Switch from elkjs, dagre or Cytoscape
+
+Each of these keeps the call your code already makes and the shape it already reads.
+
+**elkjs.** Replace `new ELK()` with `new DraftablyELK()`. `layout(graph, { layoutOptions })` takes
+the same ELK JSON and returns it the way elkjs does. Node `x` and `y` are relative to the parent.
+Edge `sections` and edge labels are relative to the edge's `container`, which is set on each
+edge. You can also call `layout({ elk: graph })`.
+
+```ts
+import { DraftablyELK } from '@draftably/runtime/graph';
+
+const elk = new DraftablyELK();
+const placed = await elk.layout(graph);
+elk.warnings; // ELK options that draftably did not use
+```
+
+A node with `children` is a group. `elk.direction` (all four), `elk.spacing.nodeNode`,
+`elk.layered.spacing.nodeNodeBetweenLayers`, `elk.port.side` and `elk.algorithm` (`layered`,
+`force`, `stress`, `mrtree`, `rectpacking`) are read. A hyperedge becomes one line per source and
+target. Other options are listed in `warnings`. Ports keep their side, not their position.
+
+**dagre.** Build the graph with graphlib as before, and call `dagreLayout(g)` where you called
+`dagre.layout(g)`. It writes `x` and `y` (centres), `width` and `height` to each node, `points`
+(and a label's `x` and `y`) to each edge, and `width` and `height` to the graph. Clusters set with
+`setParent` are groups. `rankdir` (`TB`, `BT`, `LR`, `RL`) and `ranksep` are read. Like
+`dagre.layout`, it runs synchronously.
+
+```ts
+import { dagreLayout } from '@draftably/runtime/graph';
+
+dagreLayout(g); // where you called dagre.layout(g)
+```
+
+**Cytoscape.js.** Register the layout once, then run it by name. It places nodes, with compound
+parents as groups. Cytoscape draws the edges itself; the routed lines are on `layout.result` for
+an app that draws its own.
+
+```ts
+import cytoscape from 'cytoscape';
+import { draftablyLayout } from '@draftably/runtime/graph';
+
+cytoscape.use(draftablyLayout);
+cy.layout({ name: 'draftably', direction: 'right' }).run();
+```
+
+`layoutSync` is the synchronous `layout` that `dagreLayout` and the Cytoscape layout use. It cannot
+run `engine:` arrangements or `fit`; use `layout` for those.
+
+ELK and dagre do not fold a long drawing into rows, so their adapters set `fold: 'never'`, and
+groups flow in the drawing's direction. Pass `fold` to any keyed call to choose.
+
 ## Routing quality
 
 The router can repair crossings and even out lanes after it routes each line. That pass costs
