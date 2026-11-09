@@ -2007,6 +2007,110 @@ function gapRoom(
   });
 }
 
+/**
+ * Move each rank's members across the run toward the members they connect to, keeping their
+ * order and the gaps between them (`start`, changed in place): a child sits beside its parent and
+ * a parent between its children, as a layered layout places nodes. Sweeps down by each member's
+ * links to earlier ranks, up by its links to later ranks, and down again. Each sweep places a
+ * rank as close to those wishes as the gaps allow, by least squares.
+ */
+function beside(
+  layers: string[][],
+  pairs: Array<[string, string]>,
+  rank: Map<string, number>,
+  start: Map<string, number>,
+  minor: (id: string) => number,
+) {
+  const before = new Map<string, string[]>(),
+    after = new Map<string, string[]>();
+  for (const [a, b] of pairs) {
+    const ra = rank.get(a),
+      rb = rank.get(b);
+    if (ra === undefined || rb === undefined || ra === rb) continue;
+    const [u, v] = ra < rb ? [a, b] : [b, a];
+    before.set(v, [...(before.get(v) ?? []), u]);
+    after.set(u, [...(after.get(u) ?? []), v]);
+  }
+  const centre = (id: string) => start.get(id)! + minor(id) / 2;
+  const place = (layer: string[], links: Map<string, string[]>) => {
+    if (!layer.some(id => links.get(id)?.length)) return;
+    // The gap each member keeps from the one before it, from the stacked layout.
+    const offset: number[] = [];
+    for (const [j, id] of layer.entries())
+      offset.push(j ? offset[j - 1] + start.get(id)! - start.get(layer[j - 1])! : 0);
+    const want = layer.map((id, j) => {
+      // The median neighbour (the first of two), so a member lines up with one of them and
+      // that line runs straight.
+      const cs = (links.get(id) ?? []).map(centre).sort((p, q) => p - q),
+        c = cs.length ? cs[(cs.length - 1) >> 1] : centre(id);
+      return c - minor(id) / 2 - offset[j];
+    });
+    // Pool adjacent violators: the non-decreasing fit to `want` with the least total move. A
+    // pooled run sits at its members' median wish, the first of the middle two: when siblings
+    // want one place, the first takes it and its line runs straight, and the rest hang after it.
+    const blocks: number[][] = [],
+      at = (b: number[]) => b[b.length >> 1];
+    for (const w of want) {
+      blocks.push([w]);
+      while (blocks.length > 1 && at(blocks.at(-2)!) > at(blocks.at(-1)!)) {
+        const b = blocks.pop()!;
+        blocks.push([...blocks.pop()!, ...b].sort((p, q) => p - q));
+      }
+    }
+    let j = 0;
+    for (const b of blocks)
+      for (let k = 0; k < b.length; k++, j++) start.set(layer[j], round(at(b) + offset[j]));
+  };
+  for (const layer of layers.slice(1)) place(layer, before);
+  for (const layer of [...layers].reverse().slice(1)) place(layer, after);
+  for (const layer of layers.slice(1)) place(layer, before);
+  const low = Math.min(...start.values());
+  for (const [id, v] of start) start.set(id, v - low);
+}
+
+/** Space between neighbouring lines that run along a gap, as the router keeps them (`edgeGap`). */
+const LINE_PITCH = 16;
+
+/**
+ * The room each gap between ranks needs for the lines that turn in it, as a layered layout
+ * leaves room for its edge channels. A line between ranks whose ends sit at different places
+ * across the run runs along the gap between them. Lines whose runs overlap need a lane each,
+ * `LINE_PITCH` apart and a standoff clear of the boxes on both sides; without that room the
+ * router takes them round other boxes and across each other.
+ */
+function laneRoom(
+  count: number,
+  pairs: Array<[string, string]>,
+  rank: Map<string, number>,
+  centre: (id: string) => number,
+): number[] {
+  const runs: Array<Array<[number, number]>> = Array.from({ length: count }, () => []);
+  for (const [a, b] of pairs) {
+    const ra = rank.get(a),
+      rb = rank.get(b);
+    if (ra === undefined || rb === undefined || ra === rb) continue;
+    const lo = Math.min(centre(a), centre(b)),
+      hi = Math.max(centre(a), centre(b));
+    if (hi - lo < 1) continue;
+    // A line turns in the gap it leaves its source by, or, over several ranks, the one it
+    // enters its target by.
+    runs[Math.min(ra, rb)].push([lo, hi]);
+    if (Math.abs(ra - rb) > 1) runs[Math.max(ra, rb) - 1].push([lo, hi]);
+  }
+  return runs.map(list => {
+    // The most runs that overlap at one place.
+    const ends = list.flatMap(([lo, hi]) => [
+      [lo, 1],
+      [hi, -1],
+    ]);
+    ends.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+    let open = 0,
+      most = 0;
+    for (const [, d] of ends) most = Math.max(most, (open += d));
+    return most > 1 ? 2 * GAP_STANDOFF + (most - 1) * LINE_PITCH : 0;
+  });
+}
+
 function baseLayout(
   items: Item[],
   layout: ModelLayout,
@@ -2049,18 +2153,29 @@ function baseLayout(
     // A gap between ranks grows to fit the labels on edges that cross it.
     const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const))),
       busy = gapRoom(layers, lines, rooms, axis);
-    let at = 0;
-    for (const [i, layer] of layers.entries()) {
-      let across = 0,
-        after = Math.max(gap, busy[i] ?? 0);
+    // Each member's place across the run, then the lanes each gap needs for the lines that turn
+    // in it (`laneRoom`).
+    const start = new Map<string, number>();
+    for (const layer of layers) {
+      let across = 0;
       for (const [j, id] of layer.entries()) {
-        out.set(id, axis === 'right' ? { x: at, y: across } : { x: across, y: at });
+        start.set(id, across);
         across +=
           minor(id) +
           Math.max(
             roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right'),
             layer[j + 1] ? softRoom(chainOf(id), chainOf(layer[j + 1]), axis === 'right') : 0,
           );
+      }
+    }
+    if (pairs.length) beside(layers, pairs, rank, start, minor);
+    const lanes = laneRoom(layers.length, pairs, rank, id => start.get(id)! + minor(id) / 2);
+    let at = 0;
+    for (const [i, layer] of layers.entries()) {
+      let after = Math.max(gap, busy[i] ?? 0, lanes[i] ?? 0);
+      for (const id of layer) {
+        const across = start.get(id)!;
+        out.set(id, axis === 'right' ? { x: at, y: across } : { x: across, y: at });
       }
       if (layers[i + 1])
         after = Math.max(after, rankRoom(layer, layers[i + 1], chainOf, axis === 'down'));
