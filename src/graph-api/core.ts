@@ -5,7 +5,7 @@
  * file parses to, so the file compiler runs unchanged, and it returns that file as `draft`.
  * `route(graph)` draws lines between boxes the caller already placed.
  */
-import { compile } from '../dsl/compile';
+import { checkSource, compile, type Scene } from '../dsl/compile';
 import { projectScene, visibleRects } from '../dsl/project';
 import { bare, parseModel, printSource, quoted, type SourceLine, type Word } from '../dsl/syntax';
 import { emptyDiagram } from '../model/document';
@@ -66,6 +66,11 @@ export interface GraphIn {
   direction?: 'right' | 'down';
   gap?: number;
   fit?: 'wide' | 'slide' | 'square' | 'page' | 'tall';
+  /**
+   * `auto` (the default) folds a long `flow` into rows, like lines of text, when it is much
+   * wider than a 1100×720 page; `never` keeps one row.
+   */
+  fold?: 'auto' | 'never';
   routing?: RoutingOptions;
 }
 
@@ -290,8 +295,8 @@ function sized(n: NodeIn, warnings: string[]) {
   return { width: fit(n.width, 40, 1200, 'width'), height: fit(n.height, 24, 1200, 'height') };
 }
 
-/** Place and route a graph the way a `.draft` file with the same content draws. */
-export async function layout(graph: GraphIn): Promise<LayoutResult> {
+/** The file a graph is, parsed, with what is needed to report its result under the caller's IDs. */
+function build(graph: GraphIn) {
   const groups = graph.groups ?? [],
     nodes = graph.nodes ?? [],
     edges = graph.edges ?? [],
@@ -305,6 +310,7 @@ export async function layout(graph: GraphIn): Promise<LayoutResult> {
     ...groups.map(g =>
       statement('group', [bare(of(g.id, 'group')), quoted(g.label ?? g.id)], {
         in: g.parent && of(g.parent, `Group "${g.id}"`),
+        fold: graph.fold === 'never' ? 'never' : undefined,
       }),
     ),
     ...nodes.map(n =>
@@ -332,6 +338,7 @@ export async function layout(graph: GraphIn): Promise<LayoutResult> {
       gap: graph.gap ?? ((graph.arrange ?? 'flow') === 'flow' ? 48 : undefined),
       direction: graph.direction,
       fit: graph.fit,
+      fold: graph.fold === 'never' ? 'never' : undefined,
     }),
     ...groups
       .filter(g => g.arrange || g.direction || g.gap)
@@ -362,11 +369,16 @@ export async function layout(graph: GraphIn): Promise<LayoutResult> {
         ]
       : []),
   ];
-  const draft = printSource({ lines: doc }),
-    // Parse first so a bad graph fails with the file's own message, not a layout error.
-    model = parseModel({ lines: doc }),
-    scene = await compile(draft),
-    out = placed(projectScene(scene), quality, objects.back, lines.back);
+  const draft = printSource({ lines: doc });
+  // Parse first so a bad graph fails with the file's own message, not a layout error.
+  return { draft, model: parseModel({ lines: doc }), quality, objects, lines, warnings };
+}
+
+function finish(
+  { draft, model, quality, objects, lines, warnings }: ReturnType<typeof build>,
+  scene: Scene,
+): LayoutResult {
+  const out = placed(projectScene(scene), quality, objects.back, lines.back);
   return {
     ...out,
     draft,
@@ -380,6 +392,23 @@ export async function layout(graph: GraphIn): Promise<LayoutResult> {
       ...out.warnings,
     ],
   };
+}
+
+/** Place and route a graph the way a `.draft` file with the same content draws. */
+export async function layout(graph: GraphIn): Promise<LayoutResult> {
+  const built = build(graph);
+  return finish(built, await compile(built.draft));
+}
+
+/**
+ * `layout` without a promise, for callers that cannot wait, such as a stand-in for a synchronous
+ * library. It cannot run a layout engine (`engine:` arrangements) or `fit`, which need `layout`.
+ */
+export function layoutSync(graph: GraphIn): LayoutResult {
+  const built = build(graph);
+  if (built.model.layouts.some(l => l.engine || l.fit))
+    throw Error('layoutSync cannot run layout engines or fit; use layout().');
+  return finish(built, checkSource(built.draft));
 }
 
 export interface PlacedNodeIn extends Box {
