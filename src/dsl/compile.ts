@@ -2259,10 +2259,10 @@ function fewerCrossings(
   for (const [i, [a, b]] of pairs.entries()) {
     const ra = rank.get(a),
       rb = rank.get(b);
-    if (ra === undefined || rb === undefined || ra === rb) continue;
-    const [u, v, lo, hi] = ra < rb ? [a, b, ra, rb] : [b, a, rb, ra];
-    let prev = u;
-    for (let r = lo + 1; r < hi; r++) {
+    // A line that runs back to an earlier rank goes round the run, not through its ranks.
+    if (ra === undefined || rb === undefined || ra >= rb) continue;
+    let prev = a;
+    for (let r = ra + 1; r < rb; r++) {
       const id = `\0${i}:${r}`;
       // A stand-in starts beside the end it leaves, so the first count is fair.
       const at = order[r].indexOf(prev);
@@ -2270,7 +2270,7 @@ function fewerCrossings(
       link(prev, id);
       prev = id;
     }
-    link(prev, v);
+    link(prev, b);
   }
   if (order.length < 2) return first;
   const keep = (layer: string[]) => group(layer.filter(id => real.has(id)));
