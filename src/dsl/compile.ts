@@ -2146,7 +2146,7 @@ function baseLayout(
     const ids = items.map(n => n.id);
     const chainOf = (id: string) => by.get(id)!.soft;
     const layers = pairs.length
-      ? byBarycenter(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
+      ? fewerCrossings(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
       : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
@@ -2226,6 +2226,136 @@ function byBarycenter(
     out.push(group(layer));
   }
   return out;
+}
+
+/** Sweeps up and down the ranks that `fewerCrossings` tries before it gives up on a better order. */
+const ORDER_SWEEPS = 8;
+
+/**
+ * Order each rank so fewer lines between ranks cross, as a layered layout minimises crossings.
+ * Starts from `byBarycenter`. A line that skips ranks gets a stand-in in each rank it passes, so
+ * it counts and moves like a chain of short lines. Then it sweeps down and up the ranks: each
+ * sweep sorts a rank by the mean place of its neighbours in the rank just set, and swaps
+ * neighbours in the rank while a swap removes crossings. It keeps the order with the fewest
+ * crossings, and the first such, so an order with none stays as it is. `group` keeps soft groups
+ * together: a swap that it would undo is not made.
+ */
+function fewerCrossings(
+  layers: string[][],
+  pairs: Array<[string, string]>,
+  group: (layer: string[]) => string[] = layer => layer,
+): string[][] {
+  const first = byBarycenter(layers, pairs, group);
+  const rank = new Map(first.flatMap((layer, i) => layer.map(id => [id, i] as const)));
+  // Each rank with stand-ins, and each node's neighbours in the rank before and after.
+  const order = first.map(layer => [...layer]),
+    up = new Map<string, string[]>(),
+    down = new Map<string, string[]>();
+  const link = (a: string, b: string) => {
+    down.set(a, [...(down.get(a) ?? []), b]);
+    up.set(b, [...(up.get(b) ?? []), a]);
+  };
+  const real = new Set(rank.keys());
+  for (const [i, [a, b]] of pairs.entries()) {
+    const ra = rank.get(a),
+      rb = rank.get(b);
+    if (ra === undefined || rb === undefined || ra === rb) continue;
+    const [u, v, lo, hi] = ra < rb ? [a, b, ra, rb] : [b, a, rb, ra];
+    let prev = u;
+    for (let r = lo + 1; r < hi; r++) {
+      const id = `\0${i}:${r}`;
+      // A stand-in starts beside the end it leaves, so the first count is fair.
+      const at = order[r].indexOf(prev);
+      order[r].splice(at < 0 ? order[r].length : at + 1, 0, id);
+      link(prev, id);
+      prev = id;
+    }
+    link(prev, v);
+  }
+  if (order.length < 2) return first;
+  const keep = (layer: string[]) => group(layer.filter(id => real.has(id)));
+  const regroup = (layer: string[]) => {
+    // Soft groups apply to real members; stand-ins keep their places among them.
+    const kept = keep(layer);
+    let k = 0;
+    return layer.map(id => (real.has(id) ? kept[k++] : id));
+  };
+
+  /** Crossings between rank `i` and the next, counting each pair of lines that swap order. */
+  const between = (i: number) => {
+    const at = new Map(order[i + 1].map((id, k) => [id, k]));
+    const ends = order[i].flatMap(id =>
+      (down.get(id) ?? []).map(w => at.get(w)!).sort((p, q) => p - q),
+    );
+    let n = 0;
+    for (let j = 0; j < ends.length; j++)
+      for (let k = j + 1; k < ends.length; k++) if (ends[j] > ends[k]) n++;
+    return n;
+  };
+  const total = () => order.slice(1).reduce((s, _, i) => s + between(i), 0);
+  /** Crossings among the lines of `a` and `b` to the rank whose places are `at`, `a` first. */
+  const pair = (a: string, b: string, links: Map<string, string[]>, at: Map<string, number>) => {
+    let n = 0;
+    for (const p of links.get(a) ?? [])
+      for (const q of links.get(b) ?? []) if (at.get(p)! > at.get(q)!) n++;
+    return n;
+  };
+  const places = (i: number) => new Map((order[i] ?? []).map((id, k) => [id, k]));
+  /** Swap neighbours in rank `i` while a swap removes crossings with the ranks either side. */
+  const transpose = (i: number) => {
+    const layer = order[i],
+      above = places(i - 1),
+      below = places(i + 1);
+    const cost = (a: string, b: string) => pair(a, b, up, above) + pair(a, b, down, below);
+    for (let better = true, n = 0; better && n < layer.length; n++) {
+      better = false;
+      for (let k = 0; k + 1 < layer.length; k++) {
+        const a = layer[k],
+          b = layer[k + 1];
+        if (cost(b, a) >= cost(a, b)) continue;
+        [layer[k], layer[k + 1]] = [b, a];
+        if (keep(layer).join('\n') !== layer.filter(id => real.has(id)).join('\n')) {
+          [layer[k], layer[k + 1]] = [a, b];
+          continue;
+        }
+        better = true;
+      }
+    }
+  };
+  /** Sort rank `i` by the mean place of its neighbours in the rank `links` points to. */
+  const sort = (i: number, links: Map<string, string[]>, at: Map<string, number>) => {
+    const keyed = order[i].map((id, k) => {
+      const ns = (links.get(id) ?? []).map(n => at.get(n)!);
+      return { id, k, key: ns.length ? ns.reduce((s, v) => s + v, 0) / ns.length : null };
+    });
+    const free = keyed.filter(x => x.key !== null),
+      slots = free.map(x => x.k),
+      layer = [...order[i]];
+    [...free]
+      .sort((a, b) => a.key! - b.key! || a.k - b.k)
+      .forEach((x, j) => (layer[slots[j]] = x.id));
+    order[i] = regroup(layer);
+  };
+
+  let best = order.map(layer => [...layer]),
+    fewest = total();
+  for (let s = 0, stale = 0; s < ORDER_SWEEPS && fewest && stale < 2; s++) {
+    const downward = s % 2 === 0;
+    const ranks = downward
+      ? order.map((_, i) => i).slice(1)
+      : order
+          .map((_, i) => i)
+          .reverse()
+          .slice(1);
+    for (const i of ranks) {
+      sort(i, downward ? up : down, places(downward ? i - 1 : i + 1));
+      transpose(i);
+    }
+    const n = total();
+    if (n < fewest) [best, fewest, stale] = [order.map(layer => [...layer]), n, 0];
+    else stale++;
+  }
+  return best.map(layer => layer.filter(id => real.has(id)));
 }
 
 class Union {
