@@ -1176,7 +1176,8 @@ function compute(input, rawOptions = {}) {
       }, 0);
     // `bound`: the score a candidate must beat. One whose cheap terms already reach it returns
     // Infinity without the line-against-line checks, which take most of the routing time.
-    function score(points, c, bound = Infinity) {
+    // `floor`: return 0 once the cheap terms fall below `bound`, without the rest.
+    function score(points, c, bound = Infinity, floor = false) {
       const v = vector[c.fs],
         w = vector[c.ts],
         delta = { x: cb.x - ca.x, y: cb.y - ca.y };
@@ -1206,7 +1207,9 @@ function compute(input, rawOptions = {}) {
         ? (c.fs !== old.fromSide ? s.portStability : 0) +
           (c.ts !== old.toSide ? s.portStability : 0)
         : 0;
-      const fanout = fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to);
+      // Fan-out depends on the side pair alone, so it is worked out once per candidate.
+      const fanout = (c.fanout ??=
+        fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to));
       // Out of one side and back into the same side of the other end: a U-turn, which a line
       // into a perpendicular side draws with one bend fewer.
       const hook = facingFans && c.fs === c.ts && points.length > 3 ? HOOK_PENALTY : 0;
@@ -1224,6 +1227,7 @@ function compute(input, rawOptions = {}) {
         bound
       )
         return Infinity;
+      if (floor) return 0;
       // A fan planned at `TIGHT_PITCH` keeps to its side: leaving by another side costs, and
       // the close pitch to its siblings there is the plan, not a lane conflict.
       let packed = 0;
@@ -1275,7 +1279,8 @@ function compute(input, rawOptions = {}) {
         )
           return;
       }
-
+      // A path whose cheap terms cannot beat the best needs no obstacle checks.
+      if (best && score(full, c, best.score - 0.01, true) === Infinity) return;
       // No doubled-back first/last segments after attaching shape stubs.
       if (
         full.length < 2 ||
