@@ -160,6 +160,23 @@ const within = (a, b, pad) =>
   b.x0 - pad <= a.x1 + EPS &&
   a.y0 - pad <= b.y1 + EPS &&
   b.y0 - pad <= a.y1 + EPS;
+// The spans and boxes of a `used` list, flat, while `findIn` checks many candidates against it:
+// a route far from a candidate is passed over on four comparisons, with no lookup.
+const flat = new WeakMap();
+function flatten(used) {
+  if (flat.has(used)) return false;
+  const spansOf = used.map(r => spanOf(r.points)),
+    box = new Float64Array(used.length * 4);
+  spansOf.forEach((v, i) => box.set([v.x0, v.y0, v.x1, v.y1], i * 4));
+  flat.set(used, { spansOf, box });
+  return true;
+}
+// Whether `own`, grown by `pad`, may meet route `i` of a flattened list (`within`'s test).
+const near = (box, i, own, pad) =>
+  own.x0 - pad <= box[i * 4 + 2] + EPS &&
+  box[i * 4] - pad <= own.x1 + EPS &&
+  own.y0 - pad <= box[i * 4 + 3] + EPS &&
+  box[i * 4 + 1] - pad <= own.y1 + EPS;
 function intersection(a, b, c, d) {
   const h = Math.abs(a.y - b.y) < EPS,
     k = Math.abs(c.y - d.y) < EPS;
@@ -206,9 +223,11 @@ function parallelConflicts(points, used, gap) {
     pairs = 0,
     minGap = Infinity;
   const own = spanOf(points),
-    limit = gap - 0.05;
-  for (const r of used) {
-    const other = spanOf(r.points);
+    limit = gap - 0.05,
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, gap)) continue;
+    const other = f ? f.spansOf[q] : spanOf(used[q].points);
     if (!within(own, other, gap)) continue;
     for (let i = 0; i < own.n; i++)
       for (let j = 0; j < other.n; j++) {
@@ -234,9 +253,11 @@ function parallelConflicts(points, used, gap) {
 function siblingDeficit(points, used, min, gap) {
   let deficit = 0;
   const own = spanOf(points),
-    limit = gap - 0.05;
-  for (const r of used) {
-    const other = spanOf(r.points);
+    limit = gap - 0.05,
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, gap)) continue;
+    const other = f ? f.spansOf[q] : spanOf(used[q].points);
     if (!within(own, other, gap)) continue;
     for (let i = 0; i < own.n; i++)
       for (let j = 0; j < other.n; j++) {
@@ -253,9 +274,12 @@ function siblingDeficit(points, used, min, gap) {
 function conflicts(points, used) {
   const hits = new Set();
   let shared = 0;
-  const own = spanOf(points);
-  for (const r of used) {
-    const other = spanOf(r.points);
+  const own = spanOf(points),
+    f = flat.get(used);
+  for (let q = 0; q < used.length; q++) {
+    if (f && !near(f.box, q, own, 0)) continue;
+    const r = used[q],
+      other = f ? f.spansOf[q] : spanOf(r.points);
     if (!within(own, other, 0)) continue;
     for (let i = 0; i < own.n; i++)
       for (let j = 0; j < other.n; j++) {
@@ -1078,7 +1102,16 @@ function compute(input, rawOptions = {}) {
       (BACK_OUT[flow].includes(r.fromSide) || BACK_IN[flow].includes(r.toSide))
     );
   }
+  // `used` stays the same through a `findIn`, which checks many candidates against it.
   function findIn(e, used, old, open, wall = []) {
+    const flattened = flatten(used);
+    try {
+      return findAmong(e, used, old, open, wall);
+    } finally {
+      if (flattened) flat.delete(used);
+    }
+  }
+  function findAmong(e, used, old, open, wall = []) {
     const a = rects.get(e.from),
       b = rects.get(e.to),
       cfg = e.cfg,
@@ -1455,7 +1488,7 @@ function compute(input, rawOptions = {}) {
       }
       if (ok) remember(path, c);
     }
-    if (!best && rawOptions.quick && old) return findIn(e, used, null, open, wall);
+    if (!best && rawOptions.quick && old) return findAmong(e, used, null, open, wall);
     if (!best) {
       const fs = from[0],
         ts = to[0],
