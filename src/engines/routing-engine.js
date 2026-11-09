@@ -816,7 +816,11 @@ const FAR_PENALTY = 100,
 // try routes up to four lines again (most of the router's time on a 30-box file). Across the
 // quality corpus, held-out set and examples every repair that was kept came within the first four
 // tries; later ones only cost time.
-const MAX_REPAIRS = 4;
+const MAX_REPAIRS = 4,
+  // Repairs reroute each pair against the whole drawing, so their cost grows with its size while
+  // one crossing matters less. On larger drawings they rarely find a better pair: none did on the
+  // graph harness's DAGs. Hand-drawn diagrams stay well below this.
+  REPAIR_EDGES = 32;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
 function gate(obs, start, fs, end, ts) {
   if (!obs.some(r => r.gates)) return obs;
@@ -1600,7 +1604,7 @@ function compute(input, rawOptions = {}) {
   // together: route one with the other's line as a wall, then the other round it, and keep the
   // pair when the drawing as a whole costs less (NEXT.md item 9, R6).
   let repaired = 0;
-  if (!rawOptions.quick && facingFans) {
+  if (!rawOptions.quick && facingFans && edges.length <= REPAIR_EDGES) {
     // A repair buys its crossing with length or bends, never with a line that reads backwards:
     // into a box from below, out of or into a far side, or a U-turn (FEEL.md: never arrive from
     // below; a loop round the outside is worse than one crossing).
