@@ -30,6 +30,7 @@ await build({
         index: path.join(root, 'src/runtime/index.ts'),
         viewer: path.join(root, 'src/runtime/viewer.ts'),
         element: path.join(root, 'src/runtime/element.ts'),
+        graph: path.join(root, 'src/graph-api/index.ts'),
       },
       formats: ['es'],
       fileName: (_format, name) => `${name}.js`,
