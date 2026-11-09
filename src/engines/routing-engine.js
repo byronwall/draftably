@@ -115,16 +115,35 @@ function compress(ps) {
 function segments(ps) {
   return ps.slice(1).map((b, i) => [ps[i], b]);
 }
-// A path's segments and bounding box, kept per points array. Paths are never changed in
-// place, so the array identifies them.
+// A path's segments as flat arrays, kept per points array (paths are never changed in place):
+// whether each runs level (`h`), its range along its own axis (`lo`, `hi`), and the coordinate
+// across it (`at`), all as `intersection` and `parallelNear` read them; and the path's box.
 const spans = new WeakMap();
 function spanOf(ps) {
   let v = spans.get(ps);
   if (!v) {
+    const n = Math.max(0, ps.length - 1),
+      h = new Uint8Array(n),
+      lo = new Float64Array(n),
+      hi = new Float64Array(n),
+      at = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      const a = ps[i],
+        b = ps[i + 1],
+        level = Math.abs(a.y - b.y) < EPS;
+      h[i] = level ? 1 : 0;
+      lo[i] = level ? Math.min(a.x, b.x) : Math.min(a.y, b.y);
+      hi[i] = level ? Math.max(a.x, b.x) : Math.max(a.y, b.y);
+      at[i] = level ? a.y : a.x;
+    }
     const xs = ps.map(p => p.x),
       ys = ps.map(p => p.y);
     v = {
-      segs: segments(ps),
+      n,
+      h,
+      lo,
+      hi,
+      at,
       x0: Math.min(...xs),
       y0: Math.min(...ys),
       x1: Math.max(...xs),
@@ -180,23 +199,29 @@ function parallelNear(a, b, c, d, gap) {
     ? { overlap, separation, deficit: (overlap * (gap - separation)) / gap }
     : null;
 }
+// The pair checks below work on `spanOf` arrays: `parallelNear` and `intersection` on numbers,
+// in the same order, without building a point or result for every pair.
 function parallelConflicts(points, used, gap) {
   let deficit = 0,
     pairs = 0,
     minGap = Infinity;
-  const own = spanOf(points);
+  const own = spanOf(points),
+    limit = gap - 0.05;
   for (const r of used) {
     const other = spanOf(r.points);
     if (!within(own, other, gap)) continue;
-    for (const [a, b] of own.segs)
-      for (const [c, d] of other.segs) {
-        const p = parallelNear(a, b, c, d, gap);
-        if (!p) continue;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] !== other.h[j]) continue;
+        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+        if (!(overlap > 1)) continue;
+        const separation = Math.abs(own.at[i] - other.at[j]);
+        if (!(separation < limit)) continue;
         // Duplicate terminals need a short common fan-out; do not count the single
         // endpoint itself, but a shared run with positive length still counts.
         pairs++;
-        deficit += p.deficit;
-        minGap = Math.min(minGap, p.separation);
+        deficit += (overlap * (gap - separation)) / gap;
+        minGap = Math.min(minGap, separation);
       }
   }
   return {
@@ -208,14 +233,19 @@ function parallelConflicts(points, used, gap) {
 // Lane deficit against `used` from runs at least `min` apart.
 function siblingDeficit(points, used, min, gap) {
   let deficit = 0;
-  const own = spanOf(points);
+  const own = spanOf(points),
+    limit = gap - 0.05;
   for (const r of used) {
     const other = spanOf(r.points);
     if (!within(own, other, gap)) continue;
-    for (const [a, b] of own.segs)
-      for (const [c, d] of other.segs) {
-        const p = parallelNear(a, b, c, d, gap);
-        if (p && p.separation >= min) deficit += p.deficit;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] !== other.h[j]) continue;
+        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+        if (!(overlap > 1)) continue;
+        const separation = Math.abs(own.at[i] - other.at[j]);
+        if (separation < limit && separation >= min)
+          deficit += (overlap * (gap - separation)) / gap;
       }
   }
   return deficit;
@@ -227,14 +257,21 @@ function conflicts(points, used) {
   for (const r of used) {
     const other = spanOf(r.points);
     if (!within(own, other, 0)) continue;
-    for (const [a, b] of own.segs)
-      for (const [c, d] of other.segs) {
-        const p = intersection(a, b, c, d);
-        if (!p) continue;
-        if (p.shared) {
-          shared += p.shared;
+    for (let i = 0; i < own.n; i++)
+      for (let j = 0; j < other.n; j++) {
+        if (own.h[i] === other.h[j]) {
+          if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
+          const amount = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
+          if (amount > EPS) shared += amount;
           continue;
         }
+        // One level, one upright: they meet where the upright's x crosses the level's y.
+        const [l, li, u, ui] = own.h[i] ? [own, i, other, j] : [other, j, own, i],
+          x = u.at[ui],
+          y = l.at[li];
+        if (x < l.lo[li] - EPS || x > l.hi[li] + EPS || y < u.lo[ui] - EPS || y > u.hi[ui] + EPS)
+          continue;
+        const p = { x, y };
         // A shared shape terminal is connectivity, not an edge crossing.
         if (
           (same(p, points[0]) || same(p, points.at(-1))) &&
