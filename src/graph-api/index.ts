@@ -29,7 +29,15 @@ import {
   type FlowOptions,
 } from './react-flow';
 
-export { AUTO_FULL_LIMIT } from './core';
+import { layoutElk, type ElkNode } from './elk';
+
+export { AUTO_FULL_LIMIT, layoutSync } from './core';
+export { DraftablyELK } from './elk';
+export { dagreLayout } from './dagre';
+export { draftablyLayout } from './cytoscape';
+export type { ElkEdge, ElkEdgeSection, ElkLabel, ElkNode, ElkPort } from './elk';
+export type { DagreGraph } from './dagre';
+export type { CytoscapeLayoutOptions } from './cytoscape';
 export type * from './core';
 export type {
   DraftablyEdgeData,
@@ -42,7 +50,7 @@ export type {
 } from './react-flow';
 
 /** Settings a keyed call takes beside its graph. */
-export type Common = Pick<GraphIn, 'arrange' | 'direction' | 'gap' | 'fit' | 'routing'>;
+export type Common = Pick<GraphIn, 'arrange' | 'direction' | 'gap' | 'fit' | 'fold' | 'routing'>;
 
 type FlowLayout<N extends FlowNode, E extends FlowEdge> = FlowGraph<FlowNodeOut<N>, FlowEdgeOut<E>>;
 type FlowRouted<N extends FlowNode, E extends FlowEdge> = FlowGraph<N, FlowEdgeOut<E>>;
@@ -54,7 +62,14 @@ export function layout<N extends FlowNode, E extends FlowEdge>(
 export function layout<N extends FlowNode, E extends FlowEdge>(
   input: { svelteFlow: FlowGraph<N, E> } & FlowOptions & Common,
 ): Promise<{ svelteFlow: FlowLayout<N, E>; result: LayoutResult }>;
+export function layout(
+  input: { elk: ElkNode } & Common,
+): Promise<{ elk: ElkNode; result: LayoutResult }>;
 export async function layout(input: object): Promise<unknown> {
+  if ('elk' in input) {
+    const { elk, ...common } = input as { elk: ElkNode } & Common;
+    return layoutElk(elk, undefined, common);
+  }
   for (const key of ['reactFlow', 'svelteFlow'] as const)
     if (key in input) {
       const {
