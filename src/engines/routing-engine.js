@@ -115,6 +115,32 @@ function compress(ps) {
 function segments(ps) {
   return ps.slice(1).map((b, i) => [ps[i], b]);
 }
+// A path's segments and bounding box, kept per points array. Paths are never changed in
+// place, so the array identifies them.
+const spans = new WeakMap();
+function spanOf(ps) {
+  let v = spans.get(ps);
+  if (!v) {
+    const xs = ps.map(p => p.x),
+      ys = ps.map(p => p.y);
+    v = {
+      segs: segments(ps),
+      x0: Math.min(...xs),
+      y0: Math.min(...ys),
+      x1: Math.max(...xs),
+      y1: Math.max(...ys),
+    };
+    spans.set(ps, v);
+  }
+  return v;
+}
+// Whether two paths' boxes, grown by `pad`, meet. Paths whose boxes do not can neither cross,
+// share a run, nor run within `pad` of each other, so the pair checks below skip them.
+const within = (a, b, pad) =>
+  a.x0 - pad <= b.x1 + EPS &&
+  b.x0 - pad <= a.x1 + EPS &&
+  a.y0 - pad <= b.y1 + EPS &&
+  b.y0 - pad <= a.y1 + EPS;
 function intersection(a, b, c, d) {
   const h = Math.abs(a.y - b.y) < EPS,
     k = Math.abs(c.y - d.y) < EPS;
@@ -158,9 +184,12 @@ function parallelConflicts(points, used, gap) {
   let deficit = 0,
     pairs = 0,
     minGap = Infinity;
-  for (const r of used)
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
+  const own = spanOf(points);
+  for (const r of used) {
+    const other = spanOf(r.points);
+    if (!within(own, other, gap)) continue;
+    for (const [a, b] of own.segs)
+      for (const [c, d] of other.segs) {
         const p = parallelNear(a, b, c, d, gap);
         if (!p) continue;
         // Duplicate terminals need a short common fan-out; do not count the single
@@ -169,6 +198,7 @@ function parallelConflicts(points, used, gap) {
         deficit += p.deficit;
         minGap = Math.min(minGap, p.separation);
       }
+  }
   return {
     lanePairs: pairs,
     laneDeficit: round(deficit),
@@ -178,20 +208,27 @@ function parallelConflicts(points, used, gap) {
 // Lane deficit against `used` from runs at least `min` apart.
 function siblingDeficit(points, used, min, gap) {
   let deficit = 0;
-  for (const r of used)
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
+  const own = spanOf(points);
+  for (const r of used) {
+    const other = spanOf(r.points);
+    if (!within(own, other, gap)) continue;
+    for (const [a, b] of own.segs)
+      for (const [c, d] of other.segs) {
         const p = parallelNear(a, b, c, d, gap);
         if (p && p.separation >= min) deficit += p.deficit;
       }
+  }
   return deficit;
 }
 function conflicts(points, used) {
   const hits = new Set();
   let shared = 0;
+  const own = spanOf(points);
   for (const r of used) {
-    for (const [a, b] of segments(points))
-      for (const [c, d] of segments(r.points)) {
+    const other = spanOf(r.points);
+    if (!within(own, other, 0)) continue;
+    for (const [a, b] of own.segs)
+      for (const [c, d] of other.segs) {
         const p = intersection(a, b, c, d);
         if (!p) continue;
         if (p.shared) {
