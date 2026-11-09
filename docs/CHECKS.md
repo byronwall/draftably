@@ -56,6 +56,13 @@ pnpm bench --only cli --files xl               # one part, some diagrams
 pnpm bench --out tmp/bench/after.json --compare tmp/bench/before.json   # before → after cells
 ```
 
+`pnpm bench:graph` builds the runtime and lays out each graph in `scripts/bench/graph-corpus.mjs`
+through `@draftably/runtime/graph`: edge cases (empty, self loops, awkward IDs, nested groups) and
+chains, trees, DAGs and architectures of up to 100 nodes. It fails on a throw, a missing ID,
+overlapping boxes, a child outside its group, a line that misses its boxes, or different output
+for the same input. It reports blocked lines and times over the 1 s load budget. Add
+`--quality full|quick` to time one router mode, and `--only <name>` for some graphs.
+
 CI runs it once per change as a non-blocking `bench` job and puts the table in the job summary.
 Performance PRs paste a before → after table.
 
