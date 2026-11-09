@@ -1,6 +1,7 @@
 # Spike: draftably layout and routing as a graph API
 
-Status: spike, 2026-11-08. The prototype is in `src/graph-api/` and `tests/graph-api.test.ts`.
+Status: built in the stack #506, #507, #509 and #510 (2026-11-09). This report is the spike
+that chose the design; the sections below record the decisions and what is still open.
 
 ## Goal
 
@@ -203,14 +204,25 @@ Other measured times with A: chain of 100 nodes 0.39 s (was 1.14 s); tree of 40 
   D stays research for the quality audit loop.
 - **Watch:** B gives 21% more crossings on dense graphs. Say so in the API docs.
 
-## Next steps
+## What was built
 
-A stack of small PRs:
+1. #506: the router, 2 to 7 times faster with the same routes (Decision 4, A).
+2. #507: `@draftably/runtime/graph` with `layout()`, `route()` and `routing.quality`
+   (Decision 4, B, with `auto` quick above a predicted cost), the `pnpm bench:graph` harness and
+   the Layout API docs page. The harness found and #507 fixed four bugs: router stub IDs on edges
+   into groups, colliding aliases, sizes outside the file's range, and the 28px root gap that
+   blocked a line into a group (Finding 2).
+3. #509: React Flow and Svelte Flow keys, `DraftablyEdge` in `@draftably/react/flow`, and a React
+   Flow example with a browser proof. A hook was not needed: the example uses `layout` and
+   `route` directly.
+4. #510: `DraftablyELK`, `dagreLayout`, the Cytoscape layout, `layoutSync` and `fold`.
 
-1. Exact pruning in the router (Decision 4, A). Same routes, 2 to 3 times faster.
-2. `@draftably/runtime/graph`: core `layout()` and `route()` with `routing.quality`, docs on the
-   site and a changeset. Do not publish yet.
-3. React Flow and Svelte Flow adapter, plus `DraftablyEdge` and `useDraftablyLayout` in the
-   framework packages, with a demo page. Publish 2 and 3 together.
-4. `DraftablyELK` and the dagre drop-in.
-5. Cytoscape layout extension.
+## Still open
+
+- Router cost on dense graphs: about a second for a dense 100-node graph even with quick routes,
+  and the ELK stand-in is about 4 times slower than elkjs. A new candidate search (Decision 4, D)
+  needs the quality audit loop.
+- Fixed port positions (Finding 4) and caller label sizes for `route()` (Finding 5).
+- Cytoscape edges: map routes to `segments` offsets.
+- The DSL default gap: a `layout` line without `gap=` spaces a root flow 28px apart, against 48px
+  with no layout line.
