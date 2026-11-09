@@ -313,6 +313,28 @@ function standoffCost(ps, near) {
   }
   return n * STANDOFF_WEIGHT;
 }
+// `standoffCost` of the one segment a→b, without building its segment list.
+function standoffSegment(a, b, near) {
+  let n = 0;
+  const h = Math.abs(a.y - b.y) < EPS;
+  if (!h && Math.abs(a.x - b.x) >= EPS) return 0;
+  const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+    hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
+    at = h ? a.y : a.x;
+  for (const r of near) {
+    const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
+    if (run <= 1) continue;
+    const s0 = h ? r.y : r.x,
+      s1 = h ? r.y + r.h : r.x + r.w;
+    let d;
+    if (r.border) d = Math.min(Math.abs(at - s0), Math.abs(at - s1));
+    else if (at <= s0) d = s0 - at;
+    else if (at >= s1) d = at - s1;
+    else d = 0;
+    if (d < r.band) n += run * (1 - d / r.band) * (r.weight ?? 1);
+  }
+  return n * STANDOFF_WEIGHT;
+}
 function standoffLines(near, xs, ys) {
   for (const r of near) {
     const add = r.border ? [-r.band, r.band] : [-r.band];
@@ -346,39 +368,64 @@ function cost(ps, used, s, near = []) {
       .reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
   );
 }
+/** A binary min-heap on `f`, in typed arrays. `pop` leaves the entry in `key` and `g`. */
 class Heap {
   constructor() {
-    this.q = [];
+    this.keys = new Int32Array(256);
+    this.gs = new Float64Array(256);
+    this.fs = new Float64Array(256);
+    this.length = 0;
+    this.key = -1;
+    this.g = 0;
   }
-  push(v) {
-    let i = this.q.length;
-    this.q.push(v);
+  push(key, g, f) {
+    if (this.length === this.keys.length) {
+      const grow = (a, T) => {
+        const b = new T(a.length * 2);
+        b.set(a);
+        return b;
+      };
+      this.keys = grow(this.keys, Int32Array);
+      this.gs = grow(this.gs, Float64Array);
+      this.fs = grow(this.fs, Float64Array);
+    }
+    const { keys, gs, fs } = this;
+    let i = this.length++;
     while (i) {
       const p = (i - 1) >> 1;
-      if (this.q[p].f <= v.f) break;
-      this.q[i] = this.q[p];
+      if (fs[p] <= f) break;
+      keys[i] = keys[p];
+      gs[i] = gs[p];
+      fs[i] = fs[p];
       i = p;
     }
-    this.q[i] = v;
+    keys[i] = key;
+    gs[i] = g;
+    fs[i] = f;
   }
   pop() {
-    const r = this.q[0],
-      v = this.q.pop();
-    if (this.q.length) {
+    const { keys, gs, fs } = this,
+      n = --this.length;
+    this.key = keys[0];
+    this.g = gs[0];
+    if (n) {
+      const key = keys[n],
+        g = gs[n],
+        f = fs[n];
       let i = 0;
-      while (i * 2 + 1 < this.q.length) {
+      while (i * 2 + 1 < n) {
         let j = i * 2 + 1;
-        if (j + 1 < this.q.length && this.q[j + 1].f < this.q[j].f) j++;
-        if (this.q[j].f >= v.f) break;
-        this.q[i] = this.q[j];
+        if (j + 1 < n && fs[j + 1] < fs[j]) j++;
+        if (fs[j] >= f) break;
+        keys[i] = keys[j];
+        gs[i] = gs[j];
+        fs[i] = fs[j];
         i = j;
       }
-      this.q[i] = v;
+      keys[i] = key;
+      gs[i] = g;
+      fs[i] = f;
     }
-    return r;
-  }
-  get length() {
-    return this.q.length;
   }
 }
 /** A* moves on the grid: right, down, left, up, with the axis each runs along. */
@@ -436,24 +483,50 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
     scores = new Float64Array(nx * ny * 2).fill(Infinity),
     prev = new Int32Array(nx * ny * 2).fill(-1),
     cache = new Float64Array(nx * ny * 2).fill(NaN);
-  // Compile route geometry once per search; avoid allocating paths and segment
-  // arrays for every grid edge visited by A*. Touching terminals are excluded.
-  const existing = used.flatMap(r =>
-    segments(r.points).map(([a, b]) => ({
-      a,
-      b,
-      id: r.id,
-      first: r.points[0],
-      last: r.points.at(-1),
-      x0: Math.min(a.x, b.x),
-      x1: Math.max(a.x, b.x),
-      y0: Math.min(a.y, b.y),
-      y1: Math.max(a.y, b.y),
-    })),
-  );
   // A segment farther than this from a grid edge can neither cross, share nor run parallel
   // within the edge gap, so its cost terms are zero; skipping it changes no result.
   const reach = Math.max(s.edgeGap, EPS) + 1;
+  // Every grid edge lies inside the grid's box. An obstacle, standoff box or route segment that
+  // cannot reach that box can neither block nor cost an edge, so each list keeps only those that
+  // can, in their original order (so sums add up identically).
+  const gx0 = X[0],
+    gx1 = X[nx - 1],
+    gy0 = Y[0],
+    gy1 = Y[ny - 1],
+    obsIn = obs.filter(r => r.x < gx1 && r.x + r.w > gx0 && r.y < gy1 && r.y + r.h > gy0),
+    nearIn = near.filter(
+      r =>
+        r.x - r.band < gx1 &&
+        r.x + r.w + r.band > gx0 &&
+        r.y - r.band < gy1 &&
+        r.y + r.h + r.band > gy0,
+    );
+  // Compile route geometry once per search; avoid allocating paths and segment
+  // arrays for every grid edge visited by A*. Touching terminals are excluded.
+  const existing = [];
+  for (const r of used) {
+    const box = spanOf(r.points);
+    if (
+      box.x1 < gx0 - reach ||
+      box.x0 > gx1 + reach ||
+      box.y1 < gy0 - reach ||
+      box.y0 > gy1 + reach
+    )
+      continue;
+    for (const [a, b] of segments(r.points))
+      existing.push({
+        a,
+        b,
+        h: Math.abs(a.y - b.y) < EPS,
+        id: r.id,
+        first: r.points[0],
+        last: r.points.at(-1),
+        x0: Math.min(a.x, b.x),
+        x1: Math.max(a.x, b.x),
+        y0: Math.min(a.y, b.y),
+        y1: Math.max(a.y, b.y),
+      });
+  }
   // Grid edges run along one grid line, so only what lies across that line can block or cost
   // them. Each line's share of the obstacles, standoff boxes and route segments is gathered once,
   // in their original order (so sums add up identically), and the exact tests below run on it.
@@ -467,40 +540,59 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
       t0 = horizontal ? 'y0' : 'x0',
       t1 = horizontal ? 'y1' : 'x1';
     hit = {
-      obs: obs.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
-      near: near.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
+      obs: obsIn.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
+      near: nearIn.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
       existing: existing.filter(t => t[t1] >= at - reach && t[t0] <= at + reach),
     };
     memo.set(at, hit);
     return hit;
   }
+  // `intersection` and `parallelNear` against each close segment, inlined on numbers: the same
+  // tests and sums in the same order, without a result object per pair.
+  const gap = s.edgeGap,
+    laneLimit = gap - 0.05;
   function segmentCost(a, b, line) {
-    let shared = 0;
-    const hits = new Set(),
-      x0 = Math.min(a.x, b.x) - reach,
-      x1 = Math.max(a.x, b.x) + reach,
-      y0 = Math.min(a.y, b.y) - reach,
-      y1 = Math.max(a.y, b.y) + reach,
-      close = line.existing.filter(t => t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1);
-    for (const t of close) {
-      const p = intersection(a, b, t.a, t.b);
-      if (!p) continue;
-      if (p.shared) {
-        shared += p.shared;
+    let shared = 0,
+      lanes = 0,
+      hits = null;
+    const h = Math.abs(a.y - b.y) < EPS,
+      ax0 = Math.min(a.x, b.x),
+      ax1 = Math.max(a.x, b.x),
+      ay0 = Math.min(a.y, b.y),
+      ay1 = Math.max(a.y, b.y),
+      x0 = ax0 - reach,
+      x1 = ax1 + reach,
+      y0 = ay0 - reach,
+      y1 = ay1 + reach;
+    for (const t of line.existing) {
+      if (!(t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1)) continue;
+      if (h === t.h) {
+        const overlap = h
+            ? Math.min(ax1, t.x1) - Math.max(ax0, t.x0)
+            : Math.min(ay1, t.y1) - Math.max(ay0, t.y0),
+          separation = h ? Math.abs(a.y - t.a.y) : Math.abs(a.x - t.a.x);
+        if (!(separation > EPS) && overlap > EPS) shared += overlap;
+        if (overlap > 1 && separation < laneLimit) lanes += (overlap * (gap - separation)) / gap;
         continue;
       }
+      // One level, one upright: they meet where the upright's x crosses the level's y.
+      const px = h ? t.a.x : a.x,
+        py = h ? a.y : t.a.y;
+      if (
+        px < (h ? ax0 : t.x0) - EPS ||
+        px > (h ? ax1 : t.x1) + EPS ||
+        py < (h ? t.y0 : ay0) - EPS ||
+        py > (h ? t.y1 : ay1) + EPS
+      )
+        continue;
+      const p = { x: px, y: py };
       if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
-      hits.add(t.id + ':' + p.x + ',' + p.y);
-    }
-    let lanes = 0;
-    for (const t of close) {
-      const q = parallelNear(a, b, t.a, t.b, s.edgeGap);
-      if (q) lanes += q.deficit;
+      (hits ??= new Set()).add(t.id + ':' + px + ',' + py);
     }
     return (
       distance(a, b) +
-      (near.length ? standoffCost([a, b], line.near) : 0) +
-      hits.size * s.crossingPenalty +
+      (near.length ? standoffSegment(a, b, line.near) : 0) +
+      (hits ? hits.size : 0) * s.crossingPenalty +
       shared * s.sharedPenalty +
       lanes * s.parallelPenalty
     );
@@ -509,30 +601,32 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
   for (const dir of [0, 1]) {
     const key = startCell * 2 + dir;
     scores[key] = 0;
-    heap.push({ key, g: 0, f: distance(start, end) });
+    heap.push(key, 0, distance(start, end));
   }
   let result = null,
     visits = 0;
   while (heap.length && visits++ < limit) {
-    const c = heap.pop();
-    if (c.g !== scores[c.key]) continue;
-    const cell = Math.floor(c.key / 2),
-      dir = c.key % 2;
+    heap.pop();
+    const ckey = heap.key,
+      cg = heap.g;
+    if (cg !== scores[ckey]) continue;
+    const cell = ckey >> 1,
+      dir = ckey & 1;
     if (cell === endCell) {
-      result = c.key;
+      result = ckey;
       break;
     }
     const x = cell % nx,
-      y = Math.floor(cell / nx);
+      y = (cell - x) / nx;
     for (let i = 0; i < 4; i++) {
-      const [dx, dy, nd] = STEPS[i],
-        xx = x + dx,
-        yy = y + dy;
+      const nd = i & 1,
+        xx = i === 0 ? x + 1 : i === 2 ? x - 1 : x,
+        yy = i === 1 ? y + 1 : i === 3 ? y - 1 : y;
       if (xx < 0 || yy < 0 || xx >= nx || yy >= ny) continue;
       const nc = yy * nx + xx,
         key = nc * 2 + nd,
         // The grid edge between two neighbouring cells: the lower cell, and which way it runs.
-        ck = Math.min(cell, nc) * 2 + nd;
+        ck = (cell < nc ? cell : nc) * 2 + nd;
       let k = cache[ck];
       if (k !== k) {
         const a = { x: X[x], y: Y[y] },
@@ -542,11 +636,11 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
         cache[ck] = k;
       }
       if (k === Infinity) continue;
-      const g = c.g + k + (dir !== nd ? s.bendPenalty : 0);
+      const g = cg + k + (dir !== nd ? s.bendPenalty : 0);
       if (g >= scores[key] - 0.001) continue;
       scores[key] = g;
-      prev[key] = c.key;
-      heap.push({ key, g, f: g + Math.abs(X[xx] - end.x) + Math.abs(Y[yy] - end.y) });
+      prev[key] = ckey;
+      heap.push(key, g, g + Math.abs(X[xx] - end.x) + Math.abs(Y[yy] - end.y));
     }
   }
   if (result === null) return null;
