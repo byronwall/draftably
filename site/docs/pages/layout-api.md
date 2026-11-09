@@ -102,6 +102,64 @@ const { edges } = route({
 Group boxes and node shapes are obstacles, as in a `.draft` drawing. Give a group its `label` so
 lines keep out of its title band. `route` runs synchronously.
 
+## React Flow and Svelte Flow
+
+Pass your React Flow nodes and edges under `reactFlow`. You get them back in the same shape, under
+the same key:
+
+```tsx
+import { layout, route } from '@draftably/runtime/graph';
+import { DraftablyEdge } from '@draftably/react/flow';
+
+const edgeTypes = { draftably: DraftablyEdge };
+
+// After React Flow has measured the nodes (`useNodesInitialized`):
+const { reactFlow } = await layout({ reactFlow: { nodes: getNodes(), edges } });
+setNodes(reactFlow.nodes);
+setEdges(reactFlow.edges);
+
+<ReactFlow nodes={nodes} edges={edges} edgeTypes={edgeTypes} />;
+```
+
+- Nodes get a `position`, relative to their parent for sub-flows, and a `width` and `height`.
+  A node that React Flow measured keeps its measured size.
+- A node with `type: 'group'`, or one that another node names in `parentId`, is a group.
+- Edges keep their fields and get `type: 'draftably'` (unless they have a type) and
+  `data.draftably`: the routed `path`, `points` and `label` box. `DraftablyEdge` draws them, with
+  the edge's `label` on a white backing and React Flow's `markerEnd`.
+- An edge's `sourceHandle` or `targetHandle` named `left`, `right`, `top` or `bottom` fixes that
+  side. `animated: true` draws the line dashed.
+- Draftably chooses where each line meets its node, so hide the handle dots with
+  `.react-flow__handle { opacity: 0 }` unless users connect nodes by dragging.
+
+To route the lines again while a user drags nodes, call `route` with the nodes where they are now:
+
+```tsx
+const onNodesChange = changes => {
+  const next = applyNodeChanges(changes, nodes);
+  setNodes(next);
+  const { reactFlow } = route({ reactFlow: { nodes: next, edges }, routing: { quality: 'quick' } });
+  setEdges(reactFlow.edges);
+};
+```
+
+`route` reads each node's measured size, so it skips a node, and keeps its edges' last routes,
+until React Flow has measured it.
+
+Svelte Flow nodes and edges have the same shape. Pass them under `svelteFlow`, and draw
+`data.draftably.path` in a custom edge with `BaseEdge`:
+
+```svelte
+<script>
+  import { BaseEdge } from '@xyflow/svelte';
+  let { data, markerEnd } = $props();
+</script>
+
+<BaseEdge path={data.draftably.path} {markerEnd} />
+```
+
+`integration-examples/react-flow` is a complete React Flow app that does all of this.
+
 ## Routing quality
 
 The router can repair crossings and even out lanes after it routes each line. That pass costs

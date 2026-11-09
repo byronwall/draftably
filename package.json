@@ -63,6 +63,7 @@
     "mermaid:build": "node scripts/build-mermaid.ts",
     "frameworks:build": "node scripts/build-frameworks.ts",
     "prove:frameworks": "node scripts/prove-frameworks.ts",
+    "prove:react-flow": "node scripts/prove-react-flow.ts",
     "editor:build": "node scripts/build-editor.ts"
   },
   "dependencies": {
