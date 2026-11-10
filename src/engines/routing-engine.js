@@ -621,9 +621,8 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
         y1: Math.max(a.y, b.y),
       });
   }
-  // Grid edges run along one grid line, so only what lies across that line can block or cost
-  // them. Each line's share of the obstacles, standoff boxes and route segments is gathered once,
-  // in their original order (so sums add up identically), and the exact tests below run on it.
+  // A grid line has fixed crossing points. Count each route once per point, then query the
+  // sorted coordinates for every grid edge. Parallel costs keep their original summation order.
   const lineCache = [new Map(), new Map()];
   function onLine(horizontal, at) {
     const memo = lineCache[horizontal ? 0 : 1];
@@ -636,57 +635,49 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
     hit = {
       obs: obsIn.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
       near: nearIn.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
-      existing: existing.filter(t => t[t1] >= at - reach && t[t0] <= at + reach),
+      parallel: [],
+      crossings: [],
     };
+    const seen = new Set();
+    for (const t of existing) {
+      if (t[t1] < at - reach || t[t0] > at + reach) continue;
+      if (horizontal === t.h) {
+        hit.parallel.push(t);
+        continue;
+      }
+      if (at < t[t0] - EPS || at > t[t1] + EPS) continue;
+      const p = horizontal ? { x: t.a.x, y: at } : { x: at, y: t.a.y };
+      if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
+      const key = t.id + ':' + p.x + ',' + p.y;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      hit.crossings.push(horizontal ? p.x : p.y);
+    }
+    hit.crossings.sort((a, b) => a - b);
     memo.set(at, hit);
     return hit;
   }
-  // `intersection` and `parallelNear` against each close segment, inlined on numbers: the same
-  // tests and sums in the same order, without a result object per pair.
+  // Shared and parallel runs use the same tests and sums, in the same order.
   const gap = s.edgeGap,
     laneLimit = gap - 0.05;
   function segmentCost(a, b, line) {
     let shared = 0,
-      lanes = 0,
-      hits = null;
+      lanes = 0;
     const h = Math.abs(a.y - b.y) < EPS,
-      ax0 = Math.min(a.x, b.x),
-      ax1 = Math.max(a.x, b.x),
-      ay0 = Math.min(a.y, b.y),
-      ay1 = Math.max(a.y, b.y),
-      x0 = ax0 - reach,
-      x1 = ax1 + reach,
-      y0 = ay0 - reach,
-      y1 = ay1 + reach;
-    for (const t of line.existing) {
-      if (!(t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1)) continue;
-      if (h === t.h) {
-        const overlap = h
-            ? Math.min(ax1, t.x1) - Math.max(ax0, t.x0)
-            : Math.min(ay1, t.y1) - Math.max(ay0, t.y0),
-          separation = h ? Math.abs(a.y - t.a.y) : Math.abs(a.x - t.a.x);
-        if (!(separation > EPS) && overlap > EPS) shared += overlap;
-        if (overlap > 1 && separation < laneLimit) lanes += (overlap * (gap - separation)) / gap;
-        continue;
-      }
-      // One level, one upright: they meet where the upright's x crosses the level's y.
-      const px = h ? t.a.x : a.x,
-        py = h ? a.y : t.a.y;
-      if (
-        px < (h ? ax0 : t.x0) - EPS ||
-        px > (h ? ax1 : t.x1) + EPS ||
-        py < (h ? t.y0 : ay0) - EPS ||
-        py > (h ? t.y1 : ay1) + EPS
-      )
-        continue;
-      const p = { x: px, y: py };
-      if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
-      (hits ??= new Set()).add(t.id + ':' + px + ',' + py);
+      lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+      hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
+      at = h ? a.y : a.x;
+    for (const t of line.parallel) {
+      const overlap = Math.min(hi, h ? t.x1 : t.y1) - Math.max(lo, h ? t.x0 : t.y0),
+        separation = Math.abs(at - (h ? t.a.y : t.a.x));
+      if (!(separation > EPS) && overlap > EPS) shared += overlap;
+      if (overlap > 1 && separation < laneLimit) lanes += (overlap * (gap - separation)) / gap;
     }
+    const hits = atMost(line.crossings, hi + EPS) - below(line.crossings, lo - EPS);
     return (
       distance(a, b) +
       (near.length ? standoffSegment(a, b, line.near) : 0) +
-      (hits ? hits.size : 0) * s.crossingPenalty +
+      hits * s.crossingPenalty +
       shared * s.sharedPenalty +
       lanes * s.parallelPenalty
     );
@@ -759,7 +750,7 @@ function laneLines(used, s) {
 }
 // Paths of up to two bends from `a` to `b`, before `compress` and before the obstacle checks: the
 // caller makes those on the paths that may win. `visit(path, k)` gets each path shorter than
-// `room`, with `k` its place in the fixed order of all of them.
+// `room`, with `k` its place in the fixed order and the middle run's axis for a two-bend path.
 function doglegs(a, b, obs, s, lanes, near, room, visit) {
   const xs = new Set([(a.x + b.x) / 2]),
     ys = new Set([(a.y + b.y) / 2]);
@@ -797,12 +788,12 @@ function doglegs(a, b, obs, s, lanes, near, room, visit) {
     dx = Math.abs(a.x - b.x);
   for (const x of xs) {
     if (Math.abs(a.x - x) + Math.abs(x - b.x) + dy < room)
-      visit([a, { x, y: a.y }, { x, y: b.y }, b], k);
+      visit([a, { x, y: a.y }, { x, y: b.y }, b], k, false);
     k++;
   }
   for (const y of ys) {
     if (Math.abs(a.y - y) + Math.abs(y - b.y) + dx < room)
-      visit([a, { x: a.x, y }, { x: b.x, y }, b], k);
+      visit([a, { x: a.x, y }, { x: b.x, y }, b], k, true);
     k++;
   }
 }
@@ -878,8 +869,8 @@ function crossingFloor(used) {
     }
     return b;
   };
-  // Crossings of the run p→q along a fixed line, or of a middle run that moves with its lane.
-  const run = (p, q, middle) => {
+  // Crossings of a straight path or an L, whose runs lie on fixed lines.
+  const run = (p, q) => {
     const flat = Math.abs(p.y - q.y) < EPS;
     if (!flat && Math.abs(p.x - q.x) >= EPS) return 0;
     const at = flat ? p.y : p.x,
@@ -888,18 +879,57 @@ function crossingFloor(used) {
     if (hi - lo <= 2 * INSIDE) return 0;
     // A level run crosses upright segments, and an upright run level ones.
     const list = flat ? upright : level;
-    if (middle) {
-      const b = band((flat ? 'H' : 'V') + lo + ',' + hi, list, lo, hi);
-      // Segments that start before `at` less those that end by it: never more than span it.
-      return Math.max(0, below(b.los, at - INSIDE) - atMost(b.his, at + INSIDE));
-    }
     const xs = line((flat ? 'h' : 'v') + at, list, at);
     return Math.max(0, below(xs, hi - INSIDE) - atMost(xs, lo + INSIDE));
   };
-  return raw => {
-    let n = 0;
-    for (let i = 1; i < raw.length; i++) n += run(raw[i - 1], raw[i], raw.length === 4 && i === 2);
-    return n;
+  // A side pair fixes both outer runs and the middle span. Prepare their endpoint ranks once;
+  // only the lane coordinate changes between its doglegs.
+  const arm = (xs, end) => ({ xs, end, lo: below(xs, end - INSIDE), hi: atMost(xs, end + INSIDE) });
+  const along = (arm, at) => {
+    if (Math.abs(at - arm.end) <= 2 * INSIDE) return 0;
+    return Math.max(
+      0,
+      at > arm.end ? below(arm.xs, at - INSIDE) - arm.hi : arm.lo - atMost(arm.xs, at + INSIDE),
+    );
+  };
+  return (a, b) => {
+    const pairs = [];
+    return (raw, horizontal) => {
+      if (raw.length !== 4) {
+        let n = 0;
+        for (let i = 1; i < raw.length; i++) n += run(raw[i - 1], raw[i]);
+        return n;
+      }
+      const axis = horizontal ? 0 : 1;
+      let pair = pairs[axis];
+      if (!pair) {
+        const lo = horizontal ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+          hi = horizontal ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
+          at0 = horizontal ? a.x : a.y,
+          at1 = horizontal ? b.x : b.y,
+          list = horizontal ? level : upright;
+        pair = {
+          first: arm(line((horizontal ? 'v' : 'h') + at0, list, at0), horizontal ? a.y : a.x),
+          last: arm(line((horizontal ? 'v' : 'h') + at1, list, at1), horizontal ? b.y : b.x),
+          middle:
+            hi - lo <= 2 * INSIDE
+              ? null
+              : band(
+                  (horizontal ? 'H' : 'V') + lo + ',' + hi,
+                  horizontal ? upright : level,
+                  lo,
+                  hi,
+                ),
+        };
+        pairs[axis] = pair;
+      }
+      const at = horizontal ? raw[1].y : raw[1].x,
+        mid = pair.middle,
+        n =
+          along(pair.first, at) +
+          (mid ? Math.max(0, below(mid.los, at - INSIDE) - atMost(mid.his, at + INSIDE)) : 0);
+      return n + along(pair.last, at);
+    };
   };
 }
 /** A binary min-heap of objects ordered by `before`. */
@@ -1651,13 +1681,15 @@ function compute(input, rawOptions = {}) {
     const genOf = p => p.idx * 1e6 + p.k + 1;
     // Crossings no dogleg can avoid also go in its floor.
     const crossed = crossingFloor(used);
-    const expand = ({ c, o, stubs, idx }) =>
-      doglegs(c.as, c.bs, o, s, lanes, near, cutoff() - stubs, (raw, k) => {
+    const expand = ({ c, o, stubs, idx }) => {
+      const crossings = crossed(c.as, c.bs);
+      doglegs(c.as, c.bs, o, s, lanes, near, cutoff() - stubs, (raw, k, horizontal) => {
         let floor = stubs + lengthOf(raw) + bendsOf(c.start, raw, c.end) * s.bendPenalty;
         if (floor >= cutoff()) return;
-        floor += crossed(raw) * s.crossingPenalty;
+        floor += crossings(raw, horizontal) * s.crossingPenalty;
         if (floor < cutoff()) pool.push({ c, o, raw, floor, idx, k });
       });
+    };
     for (const fs of from)
       for (const ts of to) {
         if (e.from === e.to && fs === ts) continue;
