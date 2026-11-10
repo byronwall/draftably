@@ -709,15 +709,11 @@ function laneLines(used, s) {
     }
   return { xs, ys };
 }
-// Paths of up to two bends from `a` to `b` that miss `obs`, in a fixed order. `worth(path)` passes
-// over a path before its obstacle checks: one that cannot beat the best so far.
-function* doglegs(a, b, obs, s, lanes, near = [], worth = () => true) {
-  const choices = [
-      [a, b],
-      [a, { x: b.x, y: a.y }, b],
-      [a, { x: a.x, y: b.y }, b],
-    ],
-    xs = new Set([(a.x + b.x) / 2]),
+// Paths of up to two bends from `a` to `b`, before `compress` and before the obstacle checks: the
+// caller makes those on the paths that may win. `visit(path, k)` gets each path shorter than
+// `room`, with `k` its place in the fixed order of all of them.
+function doglegs(a, b, obs, s, lanes, near, room, visit) {
+  const xs = new Set([(a.x + b.x) / 2]),
     ys = new Set([(a.y + b.y) / 2]);
   for (const r of obs) {
     if (r.x < Math.max(a.x, b.x) + 80 && r.x + r.w > Math.min(a.x, b.x) - 80) {
@@ -741,13 +737,90 @@ function* doglegs(a, b, obs, s, lanes, near = [], worth = () => true) {
   xs.add(Math.max(a.x, b.x) + s.portGap);
   ys.add(Math.min(a.y, b.y) - s.portGap);
   ys.add(Math.max(a.y, b.y) + s.portGap);
-  for (const x of xs) choices.push([a, { x, y: a.y }, { x, y: b.y }, b]);
-  for (const y of ys) choices.push([a, { x: a.x, y }, { x: b.x, y }, b]);
-  for (const raw of choices) {
-    if (!worth(raw)) continue;
-    const ps = compress(raw);
-    if (!segments(ps).some(([c, d]) => blocked(c, d, obs))) yield ps;
+  const across = distance(a, b);
+  if (across < room) {
+    visit([a, b], 0);
+    visit([a, { x: b.x, y: a.y }, b], 1);
+    visit([a, { x: a.x, y: b.y }, b], 2);
   }
+  let k = 3;
+  // A lane outside the span between the ends adds twice its distance from it.
+  const dy = Math.abs(a.y - b.y),
+    dx = Math.abs(a.x - b.x);
+  for (const x of xs) {
+    if (Math.abs(a.x - x) + Math.abs(x - b.x) + dy < room)
+      visit([a, { x, y: a.y }, { x, y: b.y }, b], k);
+    k++;
+  }
+  for (const y of ys) {
+    if (Math.abs(a.y - y) + Math.abs(y - b.y) + dx < room)
+      visit([a, { x: a.x, y }, { x: b.x, y }, b], k);
+    k++;
+  }
+}
+/** A binary min-heap of objects ordered by `before`. */
+class Queue {
+  constructor(before) {
+    this.items = [];
+    this.before = before;
+  }
+  push(v) {
+    const q = this.items;
+    let i = q.push(v) - 1;
+    while (i) {
+      const p = (i - 1) >> 1;
+      if (!this.before(v, q[p])) break;
+      q[i] = q[p];
+      i = p;
+    }
+    q[i] = v;
+  }
+  pop() {
+    const q = this.items,
+      top = q[0],
+      last = q.pop();
+    if (q.length) {
+      let i = 0;
+      for (;;) {
+        let j = i * 2 + 1;
+        if (j >= q.length) break;
+        if (j + 1 < q.length && this.before(q[j + 1], q[j])) j++;
+        if (!this.before(q[j], last)) break;
+        q[i] = q[j];
+        i = j;
+      }
+      q[i] = last;
+    }
+    return top;
+  }
+}
+// The length of a path, as `pathLength` adds it, without building its segments.
+function lengthOf(ps) {
+  let n = 0;
+  for (let i = 1; i < ps.length; i++) n += distance(ps[i - 1], ps[i]);
+  return n;
+}
+// Bends `compress` leaves in `start`, `ps`, `end`, or fewer: a turn between two runs, each at
+// least 0.02 long so that rounding cannot erase it.
+function bendsOf(start, ps, end) {
+  let n = 0,
+    dx = 0,
+    dy = 0,
+    last = start;
+  const step = p => {
+    const x = p.x - last.x,
+      y = p.y - last.y;
+    if (Math.abs(x) + Math.abs(y) < 0.02) return;
+    const ux = Math.sign(Math.abs(x) < 0.02 ? 0 : x),
+      uy = Math.sign(Math.abs(y) < 0.02 ? 0 : y);
+    if ((dx || dy) && (ux !== dx || uy !== dy)) n++;
+    dx = ux;
+    dy = uy;
+    last = p;
+  };
+  for (const p of ps) step(p);
+  step(end);
+  return n;
 }
 function port(rect, side, offset = 0) {
   const r = rect,
@@ -1383,21 +1456,51 @@ function compute(input, rawOptions = {}) {
         vertexTaken(id, side) &&
         sides.some(x => !vertexTaken(id, x));
     const lanes = laneLines(used, s);
-    // `remember` turns a path down when its cheap terms reach the best score. A path's length
-    // with its stubs, and the side terms, are a floor under those terms (`compress` keeps length),
-    // so a path whose floor reaches the best is passed over before its obstacle checks.
-    const worth = c => {
-      const fixed =
-        distance(c.start, c.as) +
-        distance(c.bs, c.end) +
-        axis(c) +
+    // Every straight line and dogleg of every side pair, tried best first below. `floor` is under
+    // the score `remember` gives the path: its length with its stubs (`compress` keeps length) and
+    // the side terms, less `score`'s slack and a unit for the coordinates `compress` rounds.
+    // Ties go to the side pair, then the path, built first.
+    const pool = new Queue(
+      (p, q) =>
+        p.floor < q.floor ||
+        (p.floor === q.floor && (p.idx < q.idx || (p.idx === q.idx && p.k < q.k))),
+    );
+    // The terms of `score` that depend on the side pair alone: far sides, conventions, port
+    // stability, fan-out and axis.
+    const sideFloor = c => {
+      const delta = { x: cb.x - ca.x, y: cb.y - ca.y },
+        v = vector[c.fs],
+        w = vector[c.ts],
+        far = facingFans ? FAR_PENALTY : 18;
+      return (
+        (v.x * delta.x + v.y * delta.y < -0.01 ? far : 0) +
+        (w.x * -delta.x + w.y * -delta.y < -0.01 ? far : 0) +
+        (facingFans
+          ? (c.ts === 'bottom' ? ARRIVE_BELOW : 0) +
+            (c.ts === 'right' ? ARRIVE_RIGHT : 0) +
+            (c.fs === 'top' || c.fs === 'left' ? LEAVE_BACK : 0)
+          : 0) +
         (old && c.fs !== old.fromSide ? s.portStability : 0) +
-        (old && c.ts !== old.toSide ? s.portStability : 0) -
+        (old && c.ts !== old.toSide ? s.portStability : 0) +
+        (c.fanout ??= fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to)) +
+        axis(c) -
         BOUND_SLACK -
-        // Coordinates `compress` rounds may lengthen the path by up to this much.
-        1;
-      return ps => !best || fixed + pathLength(ps) < best.score - 0.01;
+        1
+      );
     };
+    // Side pairs whose doglegs are built only when the best path so far leaves them room: `min`
+    // is under the floor of each of their doglegs.
+    const pairs = [];
+    const addDoglegs = (c, o) => {
+      const stubs = sideFloor(c) + distance(c.start, c.as) + distance(c.bs, c.end);
+      pairs.push({ c, o, stubs, idx: pairs.length, min: stubs + distance(c.as, c.bs) });
+    };
+    const cutoff = () => (best ? best.score - 0.01 : Infinity);
+    const expand = ({ c, o, stubs, idx }) =>
+      doglegs(c.as, c.bs, o, s, lanes, near, cutoff() - stubs, (raw, k) => {
+        const floor = stubs + lengthOf(raw) + bendsOf(c.start, raw, c.end) * s.bendPenalty;
+        if (floor < cutoff()) pool.push({ c, o, raw, floor, idx, k });
+      });
     for (const fs of from)
       for (const ts of to) {
         if (e.from === e.to && fs === ts) continue;
@@ -1475,13 +1578,9 @@ function compute(input, rawOptions = {}) {
           axis(c) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
           (old && ts !== old.toSide ? s.portStability : 0);
-        // No route for this side pair scores below `lower` (less `score`'s slack), so once the
-        // best beats that, its doglegs cannot win and are not built.
-        const hopeless = () => best && c.lower - BOUND_SLACK > best.score;
         if (tight) {
-          if (cfg.waypoints?.length || hopeless()) continue;
-          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
-          for (const path of doglegs(as, bs, o, s, lanes, near, worth(c))) remember(path, c, o);
+          if (cfg.waypoints?.length) continue;
+          addDoglegs(c, [...ends, { ...a, id: e.from }, { ...b, id: e.to }]);
           continue;
         }
         candidates.push(c);
@@ -1502,10 +1601,35 @@ function compute(input, rawOptions = {}) {
             obs.filter(r => r.id !== e.from && r.id !== e.to),
           )
         )
-          remember([start, end], c);
-        if (!hopeless())
-          for (const path of doglegs(as, bs, obs, s, lanes, near, worth(c))) remember(path, c);
+          pool.push({
+            c,
+            o: obs,
+            path: [start, end],
+            floor: sideFloor(c) + distance(start, end),
+            idx: pairs.length,
+            k: -1,
+          });
+        addDoglegs(c, obs);
       }
+    // Best first, so the best route is found early and the floor stops the rest. A side pair's
+    // doglegs join the queue before any path whose floor is at or above the pair's `min`.
+    pairs.sort((p, q) => p.min - q.min || p.idx - q.idx);
+    for (let next = 0; ;) {
+      const head = pool.items[0];
+      if (next < pairs.length && (!head || pairs[next].min <= head.floor)) {
+        if (pairs[next].min >= cutoff()) next = pairs.length;
+        else expand(pairs[next++]);
+        continue;
+      }
+      if (!head || head.floor >= cutoff()) break;
+      const p = pool.pop();
+      if (p.path) {
+        remember(p.path, p.c);
+        continue;
+      }
+      const ps = compress(p.raw);
+      if (!segments(ps).some(([u, v]) => blocked(u, v, p.o))) remember(ps, p.c, p.o);
+    }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
     // Dragging keeps this bounded; settled diagrams receive refinement passes.
