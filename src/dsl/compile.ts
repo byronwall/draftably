@@ -2153,10 +2153,12 @@ function baseLayout(
       ? fewerCrossings(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
       : null;
     const layers = ordered ? ordered.layers : ids.map(id => [id]);
-    // A line that skips ranks keeps a corridor through each rank it passes, where its stand-in
-    // sat when the ranks were ordered, as a layered layout routes long edges between its nodes.
-    // Soft groups keep their members together, so they keep the ranks without corridors.
-    const kept = !!ordered && ordered.chains.size > 0 && !items.some(n => n.soft?.length);
+    // In a large scope, a line that skips ranks keeps a corridor through each rank it passes,
+    // where its stand-in sat when the ranks were ordered, as a layered layout routes long edges
+    // between its nodes; the lines then follow planned routes (`planRoutes`). Soft groups keep
+    // their members together, so they keep the ranks without corridors.
+    const kept =
+      !!ordered && ordered.chains.size >= CORRIDOR_LINES && !items.some(n => n.soft?.length);
     const all = kept ? ordered!.order : layers;
     const links: Array<[string, string]> = kept
       ? pairs.flatMap(([a, b], i) => {
@@ -2435,6 +2437,14 @@ export interface Corridors {
   chains: Map<number, string[]>;
   across: Map<string, number>;
 }
+/**
+ * Forward lines a `flow` scope needs before it keeps corridors and plans its routes. A hand-drawn
+ * diagram stays below this: there the router routes every line in a few milliseconds, and its
+ * routes read better round labels, diamonds and small groups than a layered plan. Above it the
+ * router's search grows with every line, and a plan takes milliseconds where search takes
+ * seconds.
+ */
+const CORRIDOR_LINES = 40;
 /** A stand-in's ID: it holds a long line's place in a rank it passes. */
 const standIn = (id: string) => id.charCodeAt(0) === 0;
 
