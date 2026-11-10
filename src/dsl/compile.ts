@@ -30,7 +30,7 @@ import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
-import { planRoutes, trackRoom, type PlanLine, type Planned } from './corridors';
+import { planRoutes, trackRoom, type PlanLine, type Planned, type Spacing } from './corridors';
 import {
   CELLS_TITLE_CHROME,
   GROUP_HEADER,
@@ -2120,6 +2120,7 @@ function baseLayout(
   pairs: Array<[string, string]>,
   rooms: LabelRoom[] = [],
   lines: ScopeLine[] = [],
+  spacing?: Spacing,
 ) {
   const out = new Map<string, Pos>(),
     gap = layout.gap,
@@ -2157,7 +2158,8 @@ function baseLayout(
     // where its stand-in sat when the ranks were ordered, as a layered layout routes long edges
     // between its nodes; the lines then follow planned routes (`planRoutes`). Soft groups keep
     // their members together, so they keep the ranks without corridors.
-    // shortcut: keep searched routing above two rank crossings per line until dense corridor ordering improves.
+    // A tangled order (over two crossings per line) keeps searched routes: its plan crosses more
+    // and needs more tracks than the router's detours.
     const kept =
       !!ordered &&
       ordered.chains.size >= CORRIDOR_LINES &&
@@ -2222,6 +2224,7 @@ function baseLayout(
               ? { x: 0, y: start.get(id)!, w: major(id), h: minor(id) }
               : { x: start.get(id)!, y: 0, w: minor(id), h: major(id) },
         id => start.get(id),
+        spacing,
       );
       tracksIn.forEach((room, i) => (lanes[i] = Math.max(lanes[i] ?? 0, room)));
     }
@@ -2875,7 +2878,12 @@ function layoutPass(
   packFold?: PackFold,
 ): Scene {
   /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
-  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false);
+  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false),
+    // Planned routes keep the router's spacing (`planRoutes`).
+    spacing: Spacing = {
+      port: Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
+      track: m.routing.edgeGap ?? 16,
+    };
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -3335,7 +3343,7 @@ function layoutPass(
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
-            : baseLayout(list, layout, pairs, with_, lines);
+            : baseLayout(list, layout, pairs, with_, lines, spacing);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
       // whose labels have nowhere else to go widen.
       const plain = rooms.length ? laidOut([]) : undefined;
@@ -3711,7 +3719,7 @@ function layoutPass(
     }
   };
   place('root', { x: 0, y: 0 }, 0);
-  const plans = planCorridors(corridorScopes, objects, ranking, immediate);
+  const plans = planCorridors(corridorScopes, objects, ranking, immediate, spacing);
   const lanes = wrapLanes(
     folds,
     m.edges,
@@ -3774,6 +3782,7 @@ function planCorridors(
   objects: SceneObject[],
   ranking: ModelEdge[],
   immediate: (id: string, scope: string) => string | undefined,
+  spacing: Spacing,
 ): Map<string, Planned> {
   const plans = new Map<string, Planned>(),
     byId = new Map(objects.map(o => [o.id, o]));
@@ -3803,6 +3812,7 @@ function planCorridors(
       lines,
       id => byId.get(id),
       id => corridors.across.get(id),
+      spacing,
     ))
       plans.set(id, plan);
   }

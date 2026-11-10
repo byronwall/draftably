@@ -24,4 +24,23 @@ describe('corridor ports', () => {
     for (let i = 1; i < ports.length; i++)
       expect(ports[i] - ports[i - 1]).toBeGreaterThanOrEqual(16);
   });
+
+  it('spaces ports by the router’s gaps', () => {
+    const targets = [180, 200, 220].map(x => [`b${x}`, { x, y: 200, w: 164, h: 56 }] as const);
+    const boxes = new Map<string, Rect>([['a', { x: 200, y: 0, w: 164, h: 56 }], ...targets]);
+    const ports = (spacing?: { port: number; track: number }) =>
+      [
+        ...planRoutes(
+          'down',
+          [['a'], targets.map(([id]) => id)],
+          targets.map(([id]) => ({ id, chain: ['a', id] })),
+          id => boxes.get(id),
+          () => undefined,
+          spacing,
+        ).values(),
+      ].map(p => p.points[0].x);
+    // The targets sit 20 apart: room enough at the default pitch, too close at 28.
+    expect(ports().sort((a, b) => a - b)).toEqual([262, 282, 302]);
+    expect(ports({ port: 28, track: 32 }).sort((a, b) => a - b)).toEqual([254, 282, 310]);
+  });
 });

@@ -19,8 +19,15 @@ export interface Planned {
   toOffset: number;
 }
 
-/** Space between ports on one side, and between neighbouring tracks in a gap. */
-const PITCH = 16;
+/**
+ * Space between ports on one side and between neighbouring tracks in a gap, as the router keeps
+ * them: ports `max(portGap, edgeGap)` apart and tracks `edgeGap` apart.
+ */
+export interface Spacing {
+  port: number;
+  track: number;
+}
+const DEFAULT_SPACING: Spacing = { port: 16, track: 16 };
 /** How far a port stays from a side's corner. */
 const CORNER = 12;
 /** How far the first and last tracks stay from the boxes either side of a gap. */
@@ -39,10 +46,18 @@ export function planRoutes(
   lines: PlanLine[],
   box: (id: string) => Rect | undefined,
   across: (id: string) => number | undefined,
+  spacing: Spacing = DEFAULT_SPACING,
 ): Map<string, Planned> {
   const flip = axis === 'right',
     out = new Map<string, Planned>(),
-    { rectOf, usable, outPort, inPort, gaps, runs } = tracks(axis, order, lines, box, across);
+    { rectOf, usable, outPort, inPort, gaps, runs } = tracks(
+      axis,
+      order,
+      lines,
+      box,
+      across,
+      spacing,
+    );
   // Each rank's band down the page, from its real members.
   const top: number[] = [],
     bottom: number[] = [];
@@ -57,7 +72,8 @@ export function planRoutes(
   for (const [g, { placed, level }] of gaps) {
     const levels = Math.max(0, ...level) + 1,
       height = (top[g + 1] ?? 0) - (bottom[g] ?? 0),
-      pitch = levels > 1 ? Math.min(PITCH, Math.max(0, height - 2 * STANDOFF) / (levels - 1)) : 0,
+      pitch =
+        levels > 1 ? Math.min(spacing.track, Math.max(0, height - 2 * STANDOFF) / (levels - 1)) : 0,
       first = (bottom[g] ?? 0) + (height - (levels - 1) * pitch) / 2;
     placed.forEach((r, i) => (r.y = round(first + level[i] * pitch)));
   }
@@ -89,10 +105,11 @@ export function trackRoom(
   lines: PlanLine[],
   box: (id: string) => Rect | undefined,
   across: (id: string) => number | undefined,
+  spacing: Spacing = DEFAULT_SPACING,
 ): number[] {
   const room: number[] = [];
-  for (const [g, { level }] of tracks(axis, order, lines, box, across).gaps)
-    room[g] = 2 * STANDOFF + Math.max(0, ...level) * PITCH;
+  for (const [g, { level }] of tracks(axis, order, lines, box, across, spacing).gaps)
+    room[g] = 2 * STANDOFF + Math.max(0, ...level) * spacing.track;
   return room;
 }
 
@@ -113,6 +130,7 @@ function tracks(
   lines: PlanLine[],
   box: (id: string) => Rect | undefined,
   across: (id: string) => number | undefined,
+  spacing: Spacing,
 ) {
   // Work going down; a rightward scope swaps x and y on the way in and out.
   const flip = axis === 'right',
@@ -145,7 +163,7 @@ function tracks(
       hi = r.x + r.w - CORNER,
       n = wants.length;
     wants.sort((a, b) => a.want - b.want || (a.line < b.line ? -1 : 1));
-    const pitch = n > 1 ? Math.min(PITCH, Math.max(0, hi - lo) / (n - 1)) : 0;
+    const pitch = n > 1 ? Math.min(spacing.port, Math.max(0, hi - lo) / (n - 1)) : 0;
     // The nearest non-decreasing fit to the wishes, less a pitch per place: pooled runs sit at
     // their mean.
     const blocks: Array<{ sum: number; n: number }> = [];
@@ -209,7 +227,7 @@ function tracks(
   // its way down lies inside the other's span, and the other's way in from above lies inside its.
   const inside = (x: number, r: Run) => x > r.lo + STRAIGHT && x < r.hi - STRAIGHT;
   const cost = (a: Run, b: Run) => (inside(a.low, b) ? 1 : 0) + (inside(b.up, a) ? 1 : 0);
-  const meet = (a: Run, b: Run) => a.lo < b.hi + PITCH && b.lo < a.hi + PITCH;
+  const meet = (a: Run, b: Run) => a.lo < b.hi + spacing.track && b.lo < a.hi + spacing.track;
   const gaps = new Map<number, { placed: Run[]; level: number[] }>();
   for (const [g, list] of byGap) {
     const placed: Run[] = [];
