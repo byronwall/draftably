@@ -2246,6 +2246,8 @@ function compute(input, rawOptions = {}) {
         const r = next[i],
           e = byId.get(r.id),
           waypoints = e.cfg.waypoints || [];
+        // Planned routes keep their ports and tracks.
+        if (fixedPlans.has(r.id)) return false;
         // Waypoint routes stay as authored, as in the nudge pass.
         if (waypoints.length && !(throughWaypoints && waypoints.every(p => onPath(p, r.points))))
           return false;

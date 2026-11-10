@@ -75,6 +75,36 @@ describe('graph api layout', () => {
     expect((await layout({ ...graph, routing: { quality: 'quick' } })).quality).toBe('quick');
     expect((await layout({ ...graph, routing: { quality: 'full' } })).quality).toBe('full');
   });
+
+  it('plans a large flow’s lines from its ranks, through corridors between the boxes', async () => {
+    // 60 nodes; each links to one earlier node, and every fourth also to one three ranks up.
+    const nodes = Array.from({ length: 60 }, (_, i) => ({ id: `n${i}` })),
+      edges = nodes.slice(1).flatMap((_, k) => {
+        const i = k + 1,
+          parent = Math.floor((i - 1) / 2);
+        return [
+          { source: `n${parent}`, target: `n${i}` },
+          ...(i % 4 === 0 && i >= 15 ? [{ source: `n${Math.floor(i / 8)}`, target: `n${i}` }] : []),
+        ];
+      });
+    const quick = await layout({ nodes, edges, direction: 'down', routing: { quality: 'quick' } }),
+      full = await layout({ nodes, edges, direction: 'down', routing: { quality: 'full' } });
+    const boxes = Object.entries(quick.nodes);
+    for (const e of Object.values(quick.edges)) {
+      expect([e.sourceSide, e.targetSide, e.blocked]).toEqual(['bottom', 'top', false]);
+      // No run passes through a box other than its own ends.
+      for (const [id, b] of boxes) {
+        if (id === e.source || id === e.target) continue;
+        for (const [p, q] of e.points.slice(1).map((q, j) => [e.points[j], q])) {
+          const inX = Math.max(p.x, q.x) > b.x && Math.min(p.x, q.x) < b.x + b.width,
+            inY = Math.max(p.y, q.y) > b.y && Math.min(p.y, q.y) < b.y + b.height;
+          expect(inX && inY, `${e.source}→${e.target} runs through ${id}`).toBe(false);
+        }
+      }
+    }
+    // Planned lines stay as planned in the full passes.
+    expect(full.edges).toEqual(quick.edges);
+  });
 });
 
 describe('graph api route', () => {
