@@ -1867,9 +1867,8 @@ function compute(input, rawOptions = {}) {
     scores.set(found, best.score);
     return found;
   }
-  // A line's planned route (`plan`, from a `flow` scope's ranks) is its first route when it
-  // leaves and enters by facing sides and clears every box; the full router's passes may still
-  // improve it.
+  // A line's planned route (`plan`, from a `flow` scope's ranks) is its route when it leaves and
+  // enters by facing sides and clears every box.
   const planned = e => {
     const plan = e.cfg.plan;
     if (!plan || e.from === e.to || e.cfg.waypoints?.length) return null;
@@ -1905,7 +1904,14 @@ function compute(input, rawOptions = {}) {
     };
   };
   let routes = [];
-  for (const e of edges) routes.push(planned(e) ?? find(e, routes, previous.get(e.id)));
+  // Planned routes stay as planned: the passes below trade a crossing for bends or a backwards
+  // side, which the plan's ranks avoid.
+  const fixedPlans = new Set();
+  for (const e of edges) {
+    const plan = planned(e);
+    if (plan) fixedPlans.add(e.id);
+    routes.push(plan ?? find(e, routes, previous.get(e.id)));
+  }
   syncOpen();
   const metrics = rs => {
     let crossings = 0,
@@ -1996,6 +2002,7 @@ function compute(input, rawOptions = {}) {
       });
       let current = total(routes);
       for (const e of order) {
+        if (fixedPlans.has(e.id)) continue;
         const i = routes.findIndex(r => r.id === e.id),
           used = routes.filter((_, j) => j !== i),
           c = conflicts(routes[i].points, used);
@@ -2054,7 +2061,7 @@ function compute(input, rawOptions = {}) {
         );
     };
     const byId = new Map(edges.map(e => [e.id, e])),
-      fixed = e => e.cfg.waypoints?.length > 0;
+      fixed = e => e.cfg.waypoints?.length > 0 || fixedPlans.has(e.id);
     const tried = new Set();
     for (let sweep = 0; sweep < 2; sweep++) {
       let changed = false;
@@ -2129,7 +2136,7 @@ function compute(input, rawOptions = {}) {
       for (let ri = 0; ri < routes.length; ri++) {
         const route = routes[ri],
           e = edges.find(e => e.id === route.id);
-        if (route.blocked || e.cfg.waypoints?.length) continue;
+        if (route.blocked || e.cfg.waypoints?.length || fixedPlans.has(e.id)) continue;
         const used = routes.filter((_, j) => j !== ri),
           obs = obsFor(e);
         if (!parallelConflicts(route.points, used, s.edgeGap).lanePairs) continue;
