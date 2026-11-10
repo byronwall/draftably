@@ -27,6 +27,7 @@ import {
   type FlowNode,
   type FlowNodeOut,
   type FlowOptions,
+  type SvelteFlowNodeOut,
 } from './react-flow';
 
 import { layoutElk, type ElkNode } from './elk';
@@ -47,12 +48,17 @@ export type {
   FlowNode,
   FlowNodeOut,
   FlowOptions,
+  SvelteFlowNodeOut,
 } from './react-flow';
 
 /** Settings a keyed call takes beside its graph. */
 export type Common = Pick<GraphIn, 'arrange' | 'direction' | 'gap' | 'fit' | 'fold' | 'routing'>;
 
 type FlowLayout<N extends FlowNode, E extends FlowEdge> = FlowGraph<FlowNodeOut<N>, FlowEdgeOut<E>>;
+type SvelteLayout<N extends FlowNode, E extends FlowEdge> = FlowGraph<
+  SvelteFlowNodeOut<N>,
+  FlowEdgeOut<E>
+>;
 type FlowRouted<N extends FlowNode, E extends FlowEdge> = FlowGraph<N, FlowEdgeOut<E>>;
 
 export function layout(graph: GraphIn): Promise<LayoutResult>;
@@ -61,7 +67,7 @@ export function layout<N extends FlowNode, E extends FlowEdge>(
 ): Promise<{ reactFlow: FlowLayout<N, E>; result: LayoutResult }>;
 export function layout<N extends FlowNode, E extends FlowEdge>(
   input: { svelteFlow: FlowGraph<N, E> } & FlowOptions & Common,
-): Promise<{ svelteFlow: FlowLayout<N, E>; result: LayoutResult }>;
+): Promise<{ svelteFlow: SvelteLayout<N, E>; result: LayoutResult }>;
 export function layout(
   input: { elk: ElkNode } & Common,
 ): Promise<{ elk: ElkNode; result: LayoutResult }>;
@@ -78,7 +84,7 @@ export async function layout(input: object): Promise<unknown> {
         ...common
       } = input as Record<typeof key, FlowGraph> & FlowOptions & Common;
       const result = await layoutGraph({ ...fromFlow(flow, { shape }), ...common });
-      return { [key]: toFlow(flow, result), result };
+      return { [key]: toFlow(flow, result, key === 'svelteFlow'), result };
     }
   return layoutGraph(input as GraphIn);
 }
