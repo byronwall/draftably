@@ -286,7 +286,20 @@ function conflicts(points, used) {
     const r = used[q],
       other = f ? f.spansOf[q] : spanOf(r.points);
     if (!within(own, other, 0)) continue;
-    for (let i = 0; i < own.n; i++)
+    for (let i = 0; i < own.n; i++) {
+      // A segment that misses the other line's box can neither cross nor share a run with it.
+      const level = own.h[i] === 1,
+        x0 = level ? own.lo[i] : own.at[i],
+        x1 = level ? own.hi[i] : own.at[i],
+        y0 = level ? own.at[i] : own.lo[i],
+        y1 = level ? own.at[i] : own.hi[i];
+      if (
+        x1 < other.x0 - 2 * EPS ||
+        x0 > other.x1 + 2 * EPS ||
+        y1 < other.y0 - 2 * EPS ||
+        y0 > other.y1 + 2 * EPS
+      )
+        continue;
       for (let j = 0; j < other.n; j++) {
         if (own.h[i] === other.h[j]) {
           if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
@@ -321,6 +334,7 @@ function conflicts(points, used) {
         }
         seen.set([q, rx, ry], hits++ * 3);
       }
+    }
   }
   return { crossings: hits, shared };
 }
