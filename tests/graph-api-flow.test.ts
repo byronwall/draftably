@@ -37,6 +37,11 @@ describe('graph api for React Flow', () => {
     expect(svelte.svelteFlow.nodes.map(n => n.position)).toEqual(
       reactFlow.nodes.map(n => n.position),
     );
+    // Svelte Flow's style is a CSS string, and it sizes a node from width and height.
+    const styled = await layout({
+      svelteFlow: { nodes: nodes.map(n => ({ ...n, style: 'color: red' })), edges },
+    });
+    expect(styled.svelteFlow.nodes[0]).toMatchObject({ style: 'color: red', width: 150 });
   });
 
   it('routes again where the nodes are now, and keeps old routes for unmeasured ones', async () => {

@@ -15,7 +15,7 @@ rendering with the `svg` prop, and a complete example.
 
 `@draftably/react/flow` exports `DraftablyEdge`, a React Flow custom edge that draws the lines
 and labels that `layout({ reactFlow })` from `@draftably/runtime/graph` routed. It does not need
-React Flow as a dependency. See [Layout API](https://draftably.dev/docs/layout-api#react-flow-and-svelte-flow).
+React Flow as a dependency. See [Drop in your graph layout](https://draftably.dev/docs/layout-drop-in#react-flow).
 
 ```tsx
 import { DraftablyEdge } from '@draftably/react/flow';

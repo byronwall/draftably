@@ -31,7 +31,8 @@ export interface FlowNode {
   width?: number | null;
   height?: number | null;
   measured?: { width?: number; height?: number };
-  style?: { width?: number | string; height?: number | string };
+  /** React Flow's style object, or Svelte Flow's CSS string. */
+  style?: string | { width?: number | string; height?: number | string };
 }
 
 export interface FlowEdge {
@@ -66,12 +67,16 @@ export interface DraftablyEdgeData {
   blocked: boolean;
 }
 
-/** A node as `layout` returns it: placed relative to its parent, with the size it was given. */
-export type FlowNodeOut<N extends FlowNode> = N & {
+/** A Svelte Flow node as `layout` returns it: placed relative to its parent, with its size. */
+export type SvelteFlowNodeOut<N extends FlowNode> = N & {
   position: { x: number; y: number };
   width: number;
   height: number;
-  style: NonNullable<N['style']> & { width: number; height: number };
+};
+
+/** A React Flow node as `layout` returns it: the size is also in its `style`. */
+export type FlowNodeOut<N extends FlowNode> = SvelteFlowNodeOut<N> & {
+  style: Exclude<NonNullable<N['style']>, string> & { width: number; height: number };
 };
 
 export type FlowEdgeOut<E extends FlowEdge> = E & {
@@ -87,10 +92,13 @@ const size = (v: unknown) => (typeof v === 'number' && v > 0 ? v : undefined);
 const parentOf = (n: FlowNode) => n.parentId ?? n.parentNode;
 const labelOf = (n: FlowNode) => (typeof n.data?.label === 'string' ? n.data.label : n.id);
 /** The size React Flow measured, or one the app set. */
-const measured = (n: FlowNode) => ({
-  width: size(n.measured?.width) ?? size(n.width) ?? size(n.style?.width),
-  height: size(n.measured?.height) ?? size(n.height) ?? size(n.style?.height),
-});
+const measured = (n: FlowNode) => {
+  const style = typeof n.style === 'object' ? n.style : undefined;
+  return {
+    width: size(n.measured?.width) ?? size(n.width) ?? size(style?.width),
+    height: size(n.measured?.height) ?? size(n.height) ?? size(style?.height),
+  };
+};
 /** Group nodes: those another node names as its parent, and `type: 'group'`. */
 const groupIds = (nodes: FlowNode[]) =>
   new Set([
@@ -153,9 +161,14 @@ function withRoutes<E extends FlowEdge>(edges: E[], routed: Routed['edges']): Fl
   });
 }
 
+/**
+ * Svelte Flow keeps `style` as a CSS string and sizes a node from `width` and `height`, so its
+ * nodes keep their own style; React Flow nodes also get the size in `style`.
+ */
 export function toFlow<N extends FlowNode, E extends FlowEdge>(
   { nodes, edges }: FlowGraph<N, E>,
   out: LayoutResult,
+  svelte = false,
 ): FlowGraph<FlowNodeOut<N>, FlowEdgeOut<E>> {
   const box = (id: string) => out.nodes[id] ?? out.groups[id];
   return {
@@ -168,7 +181,7 @@ export function toFlow<N extends FlowNode, E extends FlowEdge>(
         ...n,
         position: { x: b.x - (p?.x ?? 0), y: b.y - (p?.y ?? 0) },
         ...dims,
-        style: { ...n.style, ...dims },
+        ...(svelte || typeof n.style === 'string' ? {} : { style: { ...n.style, ...dims } }),
       } as FlowNodeOut<N>;
     }),
     edges: withRoutes(edges, out.edges),
