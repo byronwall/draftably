@@ -2157,8 +2157,12 @@ function baseLayout(
     // where its stand-in sat when the ranks were ordered, as a layered layout routes long edges
     // between its nodes; the lines then follow planned routes (`planRoutes`). Soft groups keep
     // their members together, so they keep the ranks without corridors.
+    // shortcut: keep searched routing above two rank crossings per line until dense corridor ordering improves.
     const kept =
-      !!ordered && ordered.chains.size >= CORRIDOR_LINES && !items.some(n => n.soft?.length);
+      !!ordered &&
+      ordered.chains.size >= CORRIDOR_LINES &&
+      ordered.crossings <= 2 * ordered.chains.size &&
+      !items.some(n => n.soft?.length);
     const all = kept ? ordered!.order : layers;
     const links: Array<[string, string]> = kept
       ? pairs.flatMap(([a, b], i) => {
@@ -2332,7 +2336,7 @@ function fewerCrossings(
     }
     link(prev, b);
   }
-  if (order.length < 2) return { layers: first, order: first, chains };
+  if (order.length < 2) return { layers: first, order: first, chains, crossings: 0 };
   const keep = (layer: string[]) => group(layer.filter(id => real.has(id)));
   const regroup = (layer: string[]) => {
     // Soft groups apply to real members; stand-ins keep their places among them.
@@ -2415,7 +2419,12 @@ function fewerCrossings(
     if (n < fewest) [best, fewest, stale] = [order.map(layer => [...layer]), n, 0];
     else stale++;
   }
-  return { layers: best.map(layer => layer.filter(id => real.has(id))), order: best, chains };
+  return {
+    layers: best.map(layer => layer.filter(id => real.has(id))),
+    order: best,
+    chains,
+    crossings: fewest,
+  };
 }
 
 /**
@@ -2426,6 +2435,7 @@ interface Ordered {
   layers: string[][];
   order: string[][];
   chains: Map<number, string[]>;
+  crossings: number;
 }
 /**
  * The corridors a `flow` scope keeps for lines that skip ranks: the ranks with their stand-ins,
