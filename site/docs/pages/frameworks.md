@@ -56,6 +56,9 @@ The ref points to the `<draft-diagram>` element. After React applies a source ch
 `ref.current.updateComplete` to await that render. Check for `status === 'error'`; syntax and
 worker failures are returned as results, not thrown.
 
+Draw your graph with React Flow? `@draftably/react/flow` draws the lines that Draftably routes.
+See [Drop in your graph layout](#react-flow).
+
 ## Solid
 
 ```tsx
@@ -114,6 +117,9 @@ No `isCustomElement` compiler setting is needed.
 
 <DraftDiagram {source} label="Architecture" onupdate={record} />
 ```
+
+Draw your graph with Svelte Flow? See [Drop in your graph layout](#svelte-flow) to place its
+nodes and route its lines with Draftably.
 
 ## Angular and plain HTML
 

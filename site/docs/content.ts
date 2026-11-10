@@ -70,6 +70,7 @@ const GROUPS: [string, string[]][] = [
       'element',
       'editor-component',
       'render-svg',
+      'layout-drop-in',
       'layout-api',
       'markdown',
       'documentation-sites',

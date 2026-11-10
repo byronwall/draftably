@@ -11,6 +11,7 @@ matches what you ship.
 | Add an interactive diagram to any page           | [Element and viewer](#element)                  | `@draftably/runtime`                      |
 | Let users edit a diagram in your app             | [Editor component](#editor-component)           | `@draftably/editor`                       |
 | Generate SVG in a script or build step           | [Render SVG](#render-svg)                       | `@draftably/runtime`                      |
+| Lay out React Flow, elkjs, dagre or Cytoscape    | [Drop in your graph layout](#layout-drop-in)    | `@draftably/runtime`                      |
 | Turn `draft` fences into images                  | [Markdown](#markdown)                           | `@draftably/markdown`                     |
 | Add diagrams to Starlight, Docusaurus, VitePress | [Documentation sites](#documentation-sites)     | `@draftably/markdown`                     |
 | Draw diagrams in a GitHub README                 | [GitHub Action](#github-action)                 | A workflow step                           |
