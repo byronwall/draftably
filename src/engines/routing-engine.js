@@ -274,7 +274,8 @@ function siblingDeficit(points, used, min, gap) {
 // Crossing points already counted by `conflicts`, as route index, x, y: a crossing at a corner
 // meets two segments of a line but counts once. Reused between calls.
 let seen = new Float64Array(96);
-function conflicts(points, used) {
+// A finite bound needs only enough conflicts to rule out a candidate. Reports use Infinity.
+function conflicts(points, used, bound = Infinity, s = defaults) {
   let shared = 0,
     hits = 0;
   const own = spanOf(points),
@@ -286,6 +287,7 @@ function conflicts(points, used) {
     const r = used[q],
       other = f ? f.spansOf[q] : spanOf(r.points);
     if (!within(own, other, 0)) continue;
+    const first = hits; // A crossing can repeat only within this route.
     for (let i = 0; i < own.n; i++) {
       // A segment that misses the other line's box can neither cross nor share a run with it.
       const level = own.h[i] === 1,
@@ -305,6 +307,8 @@ function conflicts(points, used) {
           if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
           const amount = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
           if (amount > EPS) shared += amount;
+          if (bound < Infinity && hits * s.crossingPenalty + shared * s.sharedPenalty >= bound)
+            return { crossings: hits, shared };
           continue;
         }
         // One level, one upright: they meet where the upright's x crosses the level's y.
@@ -323,7 +327,7 @@ function conflicts(points, used) {
           continue;
         const rx = round(x),
           ry = round(y);
-        let k = 0;
+        let k = first;
         while (k < hits && !(seen[k * 3] === q && seen[k * 3 + 1] === rx && seen[k * 3 + 2] === ry))
           k++;
         if (k < hits) continue;
@@ -333,6 +337,8 @@ function conflicts(points, used) {
           seen = grown;
         }
         seen.set([q, rx, ry], hits++ * 3);
+        if (bound < Infinity && hits * s.crossingPenalty + shared * s.sharedPenalty >= bound)
+          return { crossings: hits, shared };
       }
     }
   }
@@ -1419,7 +1425,7 @@ function compute(input, rawOptions = {}) {
       if (over(sum)) return Infinity;
       const standoff = near.length ? standoffCost(points, near) : 0;
       if (over((sum += standoff))) return Infinity;
-      const crossed = conflicts(points, used);
+      const crossed = conflicts(points, used, bound - sum + 1e-3, s);
       if (over((sum += crossed.crossings * s.crossingPenalty + crossed.shared * s.sharedPenalty)))
         return Infinity;
       const lanes = parallelConflicts(points, used, s.edgeGap).laneDeficit;
