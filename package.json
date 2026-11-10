@@ -44,6 +44,7 @@
     "shoot": "node scripts/shoot.mjs",
     "bench": "node scripts/bench/run.mjs",
     "bench:graph": "pnpm runtime:build && node scripts/bench/graph.mjs",
+    "bench:fresh": "pnpm runtime:build && node scripts/bench/graph-fresh.mjs",
     "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
     "eval:diagrams:tooled": "node scripts/diagram-compare/tooled.mjs",
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",

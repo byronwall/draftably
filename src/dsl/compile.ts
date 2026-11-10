@@ -30,6 +30,7 @@ import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
+import { planRoutes, trackRoom, type PlanLine, type Planned, type Spacing } from './corridors';
 import {
   CELLS_TITLE_CHROME,
   GROUP_HEADER,
@@ -101,6 +102,8 @@ export interface Diagnostic {
 /** A connection as the file declares it, plus the lane a fold's wrap edge returns along. */
 export interface SceneEdge extends ModelEdge {
   lane?: Lane;
+  /** A forward line's route, planned from its scope's ranks and corridors (`planRoutes`). */
+  plan?: Planned;
   /** A sequence message: the height of its row; it is drawn straight between lifelines there. */
   row?: number;
 }
@@ -2117,10 +2120,12 @@ function baseLayout(
   pairs: Array<[string, string]>,
   rooms: LabelRoom[] = [],
   lines: ScopeLine[] = [],
+  spacing?: Spacing,
 ) {
   const out = new Map<string, Pos>(),
     gap = layout.gap,
     axis = axisOf(layout);
+  let corridors: Corridors | undefined;
   const by = new Map(items.map(n => [n.id, n]));
   if (layout.algorithm === 'row' || layout.algorithm === 'column') {
     const row = layout.algorithm === 'row',
@@ -2145,31 +2150,84 @@ function baseLayout(
   } else {
     const ids = items.map(n => n.id);
     const chainOf = (id: string) => by.get(id)!.soft;
-    const layers = pairs.length
+    const ordered = pairs.length
       ? fewerCrossings(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
-      : ids.map(id => [id]);
-    const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
-    const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
+      : null;
+    const layers = ordered ? ordered.layers : ids.map(id => [id]);
+    // In a large scope, a line that skips ranks keeps a corridor through each rank it passes,
+    // where its stand-in sat when the ranks were ordered, as a layered layout routes long edges
+    // between its nodes; the lines then follow planned routes (`planRoutes`). Soft groups keep
+    // their members together, so they keep the ranks without corridors.
+    // A tangled order (over two crossings per line) keeps searched routes: its plan crosses more
+    // and needs more tracks than the router's detours.
+    const kept =
+      !!ordered &&
+      ordered.chains.size >= CORRIDOR_LINES &&
+      ordered.crossings <= 2 * ordered.chains.size &&
+      !items.some(n => n.soft?.length);
+    const all = kept ? ordered!.order : layers;
+    const links: Array<[string, string]> = kept
+      ? pairs.flatMap(([a, b], i) => {
+          const chain = [a, ...(ordered!.chains.get(i) ?? []), b];
+          return chain.slice(1).map((v, k) => [chain[k], v] as [string, string]);
+        })
+      : pairs;
+    const major = (id: string) =>
+      standIn(id) ? 0 : axis === 'right' ? by.get(id)!.w : by.get(id)!.h;
+    const minor = (id: string) =>
+      standIn(id) ? 0 : axis === 'right' ? by.get(id)!.h : by.get(id)!.w;
     // A gap between ranks grows to fit the labels on edges that cross it.
-    const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const))),
+    const rank = new Map(all.flatMap((layer, i) => layer.map(id => [id, i] as const))),
       busy = gapRoom(layers, lines, rooms, axis);
     // Each member's place across the run, then the lanes each gap needs for the lines that turn
-    // in it (`laneRoom`).
+    // in it (`laneRoom`). A corridor keeps a standoff from the boxes beside it and a line's pitch
+    // from the next corridor; two boxes keep their own gap however many corridors lie between.
     const start = new Map<string, number>();
-    for (const layer of layers) {
-      let across = 0;
+    for (const layer of all) {
+      let across = 0,
+        last: string | undefined;
       for (const [j, id] of layer.entries()) {
-        start.set(id, across);
-        across +=
-          minor(id) +
-          Math.max(
-            roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right'),
-            layer[j + 1] ? softRoom(chainOf(id), chainOf(layer[j + 1]), axis === 'right') : 0,
+        const prev = layer[j - 1];
+        if (prev !== undefined && standIn(prev)) across += standIn(id) ? LINE_PITCH : GAP_STANDOFF;
+        else if (prev !== undefined && standIn(id)) across += GAP_STANDOFF;
+        if (!standIn(id) && last !== undefined)
+          across = Math.max(
+            across,
+            start.get(last)! +
+              minor(last) +
+              Math.max(
+                roomBetween(rooms, last, id, gap, axis !== 'right'),
+                softRoom(chainOf(last), chainOf(id), axis === 'right'),
+              ),
           );
+        start.set(id, across);
+        across += minor(id);
+        if (!standIn(id)) last = id;
       }
     }
-    if (pairs.length) beside(layers, pairs, rank, start, minor);
-    const lanes = laneRoom(layers.length, pairs, rank, id => start.get(id)! + minor(id) / 2);
+    if (pairs.length) beside(all, links, rank, start, minor);
+    const lanes = laneRoom(all.length, links, rank, id => start.get(id)! + minor(id) / 2);
+    // With corridors, each gap fits the tracks its lines' planned routes take there.
+    if (kept) {
+      const tracksIn = trackRoom(
+        axis,
+        all,
+        pairs.flatMap(([a, b], i) =>
+          rank.get(a)! < rank.get(b)!
+            ? [{ id: String(i), chain: [a, ...(ordered!.chains.get(i) ?? []), b] }]
+            : [],
+        ),
+        id =>
+          standIn(id)
+            ? undefined
+            : axis === 'right'
+              ? { x: 0, y: start.get(id)!, w: major(id), h: minor(id) }
+              : { x: start.get(id)!, y: 0, w: minor(id), h: major(id) },
+        id => start.get(id),
+        spacing,
+      );
+      tracksIn.forEach((room, i) => (lanes[i] = Math.max(lanes[i] ?? 0, room)));
+    }
     let at = 0;
     for (const [i, layer] of layers.entries()) {
       let after = Math.max(gap, busy[i] ?? 0, lanes[i] ?? 0);
@@ -2187,8 +2245,14 @@ function baseLayout(
           after = Math.max(after, axis === 'right' ? r.w : r.h);
       at += Math.max(...layer.map(major)) + after;
     }
+    if (kept)
+      corridors = {
+        order: all,
+        chains: ordered!.chains,
+        across: new Map(all.flat().flatMap(id => (standIn(id) ? [[id, start.get(id)!]] : []))),
+      };
   }
-  return { positions: out, axis };
+  return { positions: out, axis, corridors };
 }
 
 /**
@@ -2244,7 +2308,7 @@ function fewerCrossings(
   layers: string[][],
   pairs: Array<[string, string]>,
   group: (layer: string[]) => string[] = layer => layer,
-): string[][] {
+): Ordered {
   const first = byBarycenter(layers, pairs, group);
   const rank = new Map(first.flatMap((layer, i) => layer.map(id => [id, i] as const)));
   // Each rank with stand-ins, and each node's neighbours in the rank before and after.
@@ -2255,15 +2319,18 @@ function fewerCrossings(
     down.set(a, [...(down.get(a) ?? []), b]);
     up.set(b, [...(up.get(b) ?? []), a]);
   };
-  const real = new Set(rank.keys());
+  const real = new Set(rank.keys()),
+    chains = new Map<number, string[]>();
   for (const [i, [a, b]] of pairs.entries()) {
     const ra = rank.get(a),
       rb = rank.get(b);
     // A line that runs back to an earlier rank goes round the run, not through its ranks.
     if (ra === undefined || rb === undefined || ra >= rb) continue;
     let prev = a;
+    chains.set(i, []);
     for (let r = ra + 1; r < rb; r++) {
       const id = `\0${i}:${r}`;
+      chains.get(i)!.push(id);
       // A stand-in starts beside the end it leaves, so the first count is fair.
       const at = order[r].indexOf(prev);
       order[r].splice(at < 0 ? order[r].length : at + 1, 0, id);
@@ -2272,7 +2339,7 @@ function fewerCrossings(
     }
     link(prev, b);
   }
-  if (order.length < 2) return first;
+  if (order.length < 2) return { layers: first, order: first, chains, crossings: 0 };
   const keep = (layer: string[]) => group(layer.filter(id => real.has(id)));
   const regroup = (layer: string[]) => {
     // Soft groups apply to real members; stand-ins keep their places among them.
@@ -2355,8 +2422,44 @@ function fewerCrossings(
     if (n < fewest) [best, fewest, stale] = [order.map(layer => [...layer]), n, 0];
     else stale++;
   }
-  return best.map(layer => layer.filter(id => real.has(id)));
+  return {
+    layers: best.map(layer => layer.filter(id => real.has(id))),
+    order: best,
+    chains,
+    crossings: fewest,
+  };
 }
+
+/**
+ * Ranks in their order, without and with the stand-ins of lines that skip ranks, and each such
+ * line's stand-ins by its index in the pairs.
+ */
+interface Ordered {
+  layers: string[][];
+  order: string[][];
+  chains: Map<number, string[]>;
+  crossings: number;
+}
+/**
+ * The corridors a `flow` scope keeps for lines that skip ranks: the ranks with their stand-ins,
+ * each line's stand-ins by its index in the scope's pairs, and each stand-in's place across the
+ * run, in the scope's coordinates.
+ */
+export interface Corridors {
+  order: string[][];
+  chains: Map<number, string[]>;
+  across: Map<string, number>;
+}
+/**
+ * Forward lines a `flow` scope needs before it keeps corridors and plans its routes. A hand-drawn
+ * diagram stays below this: there the router routes every line in a few milliseconds, and its
+ * routes read better round labels, diamonds and small groups than a layered plan. Above it the
+ * router's search grows with every line, and a plan takes milliseconds where search takes
+ * seconds.
+ */
+const CORRIDOR_LINES = 40;
+/** A stand-in's ID: it holds a long line's place in a rank it passes. */
+const standIn = (id: string) => id.charCodeAt(0) === 0;
 
 class Union {
   private parent: Map<string, string>;
@@ -2775,7 +2878,12 @@ function layoutPass(
   packFold?: PackFold,
 ): Scene {
   /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
-  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false);
+  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false),
+    // Planned routes keep the router's spacing (`planRoutes`).
+    spacing: Spacing = {
+      port: Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
+      track: m.routing.edgeGap ?? 16,
+    };
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -2808,7 +2916,9 @@ function layoutPass(
   };
 
   const folds: Array<{ scope: string; fold: Fold }> = [],
-    flows: FlowScope[] = [];
+    flows: FlowScope[] = [],
+    // Scopes whose long lines keep corridors, laid out as planned (no fold, nothing moved).
+    corridorScopes = new Map<string, { axis: 'down' | 'right'; corridors: Corridors }>();
   /** Packed groups that fold their own long runs, and whether the drawing wraps: see below. */
   const foldGroups = new Set<string>(packFold?.groups);
   let wrapRoot = packFold?.wrap ?? false;
@@ -3233,7 +3343,7 @@ function layoutPass(
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
-            : baseLayout(list, layout, pairs, with_, lines);
+            : baseLayout(list, layout, pairs, with_, lines, spacing);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
       // whose labels have nowhere else to go widen.
       const plain = rooms.length ? laidOut([]) : undefined;
@@ -3365,6 +3475,19 @@ function layoutPass(
       laid = lay({ w: 0, h: 0 });
     }
     if (laid.fold) folds.push({ scope, fold: laid.fold });
+    const kept = (laid.base as { corridors?: Corridors }).corridors;
+    if (
+      kept &&
+      scope === 'root' &&
+      !laid.fold &&
+      !channels?.get(scope) &&
+      list.every(n => {
+        const p = laid.pos.get(n.id),
+          q = laid.base.positions.get(n.id);
+        return p && q && Math.abs(p.x - q.x) < 0.01 && Math.abs(p.y - q.y) < 0.01;
+      })
+    )
+      corridorScopes.set(scope, { axis: laid.base.axis, corridors: kept });
     if (engine ? engine.algorithm === 'layered' : !governing?.engine && layout.algorithm === 'flow')
       flows.push({ scope, axis: laid.base.axis });
     // Drawn boxes, in this scope's coordinates. Group content starts at 0,0, so a box that spills
@@ -3596,6 +3719,7 @@ function layoutPass(
     }
   };
   place('root', { x: 0, y: 0 }, 0);
+  const plans = planCorridors(corridorScopes, objects, ranking, immediate, spacing);
   const lanes = wrapLanes(
     folds,
     m.edges,
@@ -3635,11 +3759,62 @@ function layoutPass(
     title: m.title,
     objects,
     byId: new Map(objects.map(o => [o.id, o])),
-    edges: m.edges.map(e => (lanes.has(e.id) ? { ...e, lane: lanes.get(e.id) } : e)),
+    edges: m.edges.map(e => {
+      const lane = lanes.get(e.id),
+        plan = lane ? undefined : plans.get(e.id);
+      return lane ? { ...e, lane } : plan ? { ...e, plan } : e;
+    }),
     diagnostics,
     look,
     cells: chrome,
   };
   packFolds.set(scene, { groups: foldGroups, wrap: wrapRoot });
   return scene;
+}
+
+/**
+ * The planned routes of the forward lines in scopes that kept corridors. A scope's pairs follow
+ * `ranking` as `pairsIn` builds them, so a pair's index names its edge. Only lines between two
+ * plain boxes of the scope are planned; the router routes the rest.
+ */
+function planCorridors(
+  scopes: Map<string, { axis: 'down' | 'right'; corridors: Corridors }>,
+  objects: SceneObject[],
+  ranking: ModelEdge[],
+  immediate: (id: string, scope: string) => string | undefined,
+  spacing: Spacing,
+): Map<string, Planned> {
+  const plans = new Map<string, Planned>(),
+    byId = new Map(objects.map(o => [o.id, o]));
+  for (const [scope, { axis, corridors }] of scopes) {
+    const edges = ranking.filter(e => {
+      const a = immediate(e.source, scope),
+        b = immediate(e.target, scope);
+      return !!a && !!b && a !== b;
+    });
+    const rank = new Map(corridors.order.flatMap((layer, i) => layer.map(id => [id, i] as const)));
+    const plain = (id: string) => {
+      const o = byId.get(id);
+      return !!o && o.type === 'node' && (o.shape ?? 'box') === 'box';
+    };
+    const lines: PlanLine[] = [];
+    for (const [i, e] of edges.entries()) {
+      const a = e.source,
+        b = e.target;
+      if (immediate(a, scope) !== a || immediate(b, scope) !== b || !plain(a) || !plain(b))
+        continue;
+      if (!(rank.get(a)! < rank.get(b)!)) continue;
+      lines.push({ id: e.id, chain: [a, ...(corridors.chains.get(i) ?? []), b] });
+    }
+    for (const [id, plan] of planRoutes(
+      axis,
+      corridors.order,
+      lines,
+      id => byId.get(id),
+      id => corridors.across.get(id),
+      spacing,
+    ))
+      plans.set(id, plan);
+  }
+  return plans;
 }

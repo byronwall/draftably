@@ -886,31 +886,50 @@ export const HALO_REACH = 7;
 type Seg = [Point, Point];
 const segsOf = (points: Point[]): Seg[] => points.slice(1).map((p, i) => [points[i], p]);
 
+const level = (s: Seg) => Math.abs(s[0].y - s[1].y) < 0.5,
+  upright = (s: Seg) => Math.abs(s[0].x - s[1].x) < 0.5,
+  between = (t: number, p: number, q: number) =>
+    t > Math.min(p, q) + 0.5 && t < Math.max(p, q) - 0.5;
+
 /** Where upright and level segments `a` and `b` cross, strictly inside both. */
 function crossing(a: Seg, b: Seg): Point | null {
-  const level = (s: Seg) => Math.abs(s[0].y - s[1].y) < 0.5,
-    upright = (s: Seg) => Math.abs(s[0].x - s[1].x) < 0.5;
   const [h, v] = level(a) && upright(b) ? [a, b] : upright(a) && level(b) ? [b, a] : [null, null];
   if (!h || !v) return null;
   const x = v[0].x,
-    y = h[0].y,
-    between = (t: number, p: number, q: number) =>
-      t > Math.min(p, q) + 0.5 && t < Math.max(p, q) - 0.5;
+    y = h[0].y;
   return between(x, h[0].x, h[1].x) && between(y, v[0].y, v[1].y) ? { x, y } : null;
 }
+
+type Box = { x0: number; y0: number; x1: number; y1: number };
+function boxOf(points: Point[]): Box {
+  const b = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+  for (const p of points) {
+    b.x0 = Math.min(b.x0, p.x);
+    b.y0 = Math.min(b.y0, p.y);
+    b.x1 = Math.max(b.x1, p.x);
+    b.y1 = Math.max(b.y1, p.y);
+  }
+  return b;
+}
+/** Two lines cross only where their boxes meet: a crossing lies on both. */
+const meet = (a: Box, b: Box) => a.x0 <= b.x1 && b.x0 <= a.x1 && a.y0 <= b.y1 && b.y0 <= a.y1;
 
 /**
  * The lines, by index, that another line's halo would cut at a mark. A halo there leaves half a
  * mark, or on a short line almost nothing, so these lines stay whole.
  */
 export function wholeLines(lines: { points: Point[]; marks: Rect[] }[]): Set<number> {
-  const out = new Set<number>();
-  lines.forEach(({ points, marks }, i) => {
+  const out = new Set<number>(),
+    segs = lines.map(l => segsOf(l.points)),
+    boxes = lines.map(l => boxOf(l.points));
+  lines.forEach(({ marks }, i) => {
+    if (!marks.length) return;
     const hit = lines.some(
-      (other, j) =>
+      (_, j) =>
         j !== i &&
-        segsOf(points).some(s =>
-          segsOf(other.points).some(c => {
+        meet(boxes[i], boxes[j]) &&
+        segs[i].some(s =>
+          segs[j].some(c => {
             const p = crossing(s, c);
             return p && marks.some(m => inside(p, m, HALO_WIDTH / 2));
           }),
@@ -923,8 +942,10 @@ export function wholeLines(lines: { points: Point[]; marks: Rect[] }[]): Set<num
 
 /** The pieces of `points` around each place it crosses `others` or a frame's border, as a path. */
 export function haloPath(points: Point[], others: Point[][], frames: Rect[]): string {
+  const box = boxOf(points);
+  // Lines whose boxes miss this one's cannot cross it; the rest keep their order.
   const cuts = [
-    ...others.flatMap(segsOf),
+    ...others.filter(o => meet(box, boxOf(o))).flatMap(segsOf),
     ...frames.flatMap(r =>
       segsOf([
         { x: r.x, y: r.y },

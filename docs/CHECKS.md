@@ -63,6 +63,14 @@ overlapping boxes, a child outside its group, a line that misses its boxes, or d
 for the same input. It reports blocked lines and times over the 1 s load budget. Add
 `--quality full|quick` to time one router mode, and `--only <name>` for some graphs.
 
+`pnpm bench:fresh` times `layout()` on a new random graph for every call (a tree of 100 nodes and
+DAGs of 50, 100 and 200 nodes), so the router's cache never helps, as with a host that lays out a
+graph once. It reports the median time and drawing measures (crossings, bends, length, lines
+through boxes, blocked lines, area) and a digest of every drawing. The graphs come from fixed
+seeds, so an equal digest proves a speedup changed no drawing. Keep the default 5 runs when you
+compare digests. Add `--quality quick|full`, `--only <name>`, `--out <file>` and
+`--compare <file>` for a before → after table.
+
 CI runs it once per change as a non-blocking `bench` job and puts the table in the job summary.
 Performance PRs paste a before → after table.
 
