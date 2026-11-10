@@ -806,6 +806,102 @@ function doglegs(a, b, obs, s, lanes, near, room, visit) {
     k++;
   }
 }
+// Entries of sorted `a` below `v`, and at or below `v`.
+function below(a, v) {
+  let lo = 0,
+    hi = a.length;
+  while (lo < hi) {
+    const m = (lo + hi) >> 1;
+    if (a[m] < v) lo = m + 1;
+    else hi = m;
+  }
+  return lo;
+}
+function atMost(a, v) {
+  let lo = 0,
+    hi = a.length;
+  while (lo < hi) {
+    const m = (lo + hi) >> 1;
+    if (a[m] <= v) lo = m + 1;
+    else hi = m;
+  }
+  return lo;
+}
+// A crossing counts toward `crossingFloor` only this far inside both segments, more than
+// `compress` rounding can move an end, so `conflicts` always counts it too.
+const INSIDE = 0.02;
+/**
+ * A lower bound on the crossings `conflicts` finds between a dogleg (2 to 4 points, before
+ * `compress`) and `used`: segments that cross well inside both. Two such crossings are never one
+ * point of one route, so each is a crossing `conflicts` counts. Runs along a fixed line use the
+ * level or upright segments that span it; a dogleg's middle run, which moves with its lane, uses
+ * the segments inside its fixed span.
+ */
+function crossingFloor(used) {
+  const level = [],
+    upright = [];
+  for (const r of used) {
+    const v = spanOf(r.points);
+    for (let i = 0; i < v.n; i++)
+      if (v.hi[i] - v.lo[i] > 2 * INSIDE)
+        (v.h[i] ? level : upright).push(v.at[i], v.lo[i], v.hi[i]);
+  }
+  const lines = new Map(),
+    bands = new Map();
+  // Across the line `at`: where the segments of `list` that span it lie, sorted.
+  const line = (key, list, at) => {
+    let xs = lines.get(key);
+    if (!xs) {
+      xs = [];
+      for (let i = 0; i < list.length; i += 3)
+        if (list[i + 1] + INSIDE < at && at < list[i + 2] - INSIDE) xs.push(list[i]);
+      xs.sort((p, q) => p - q);
+      lines.set(key, xs);
+    }
+    return xs;
+  };
+  // The segments of `list` inside the span lo..hi across them: their starts and ends, sorted.
+  const band = (key, list, lo, hi) => {
+    let b = bands.get(key);
+    if (!b) {
+      const los = [],
+        his = [];
+      for (let i = 0; i < list.length; i += 3)
+        if (lo + INSIDE < list[i] && list[i] < hi - INSIDE) {
+          los.push(list[i + 1]);
+          his.push(list[i + 2]);
+        }
+      los.sort((p, q) => p - q);
+      his.sort((p, q) => p - q);
+      b = { los, his };
+      bands.set(key, b);
+    }
+    return b;
+  };
+  // Crossings of the run p→q along a fixed line, or of a middle run that moves with its lane.
+  const run = (p, q, middle) => {
+    const flat = Math.abs(p.y - q.y) < EPS;
+    if (!flat && Math.abs(p.x - q.x) >= EPS) return 0;
+    const at = flat ? p.y : p.x,
+      lo = flat ? Math.min(p.x, q.x) : Math.min(p.y, q.y),
+      hi = flat ? Math.max(p.x, q.x) : Math.max(p.y, q.y);
+    if (hi - lo <= 2 * INSIDE) return 0;
+    // A level run crosses upright segments, and an upright run level ones.
+    const list = flat ? upright : level;
+    if (middle) {
+      const b = band((flat ? 'H' : 'V') + lo + ',' + hi, list, lo, hi);
+      // Segments that start before `at` less those that end by it: never more than span it.
+      return Math.max(0, below(b.los, at - INSIDE) - atMost(b.his, at + INSIDE));
+    }
+    const xs = line((flat ? 'h' : 'v') + at, list, at);
+    return Math.max(0, below(xs, hi - INSIDE) - atMost(xs, lo + INSIDE));
+  };
+  return raw => {
+    let n = 0;
+    for (let i = 1; i < raw.length; i++) n += run(raw[i - 1], raw[i], raw.length === 4 && i === 2);
+    return n;
+  };
+}
 /** A binary min-heap of objects ordered by `before`. */
 class Queue {
   constructor(before) {
@@ -1553,9 +1649,13 @@ function compute(input, rawOptions = {}) {
     const cutoff = () => (best ? best.score + 0.01 : Infinity);
     // A path's place in the order the side pairs build them.
     const genOf = p => p.idx * 1e6 + p.k + 1;
+    // Crossings no dogleg can avoid also go in its floor.
+    const crossed = crossingFloor(used);
     const expand = ({ c, o, stubs, idx }) =>
       doglegs(c.as, c.bs, o, s, lanes, near, cutoff() - stubs, (raw, k) => {
-        const floor = stubs + lengthOf(raw) + bendsOf(c.start, raw, c.end) * s.bendPenalty;
+        let floor = stubs + lengthOf(raw) + bendsOf(c.start, raw, c.end) * s.bendPenalty;
+        if (floor >= cutoff()) return;
+        floor += crossed(raw) * s.crossingPenalty;
         if (floor < cutoff()) pool.push({ c, o, raw, floor, idx, k });
       });
     for (const fs of from)
