@@ -14,25 +14,31 @@ cli/  →  dsl/
 A host app (React, Solid, Vue, Svelte or plain DOM) gets every capability from one
 framework-neutral layer: functions and JSON from `@draftably/runtime`, the `mountViewer` and
 `mountEditor` handles, and the `<draft-diagram>` and `<draft-editor>` elements. A framework package
-in `packages/` only maps that layer to its framework's props, events, refs and portals.
+in `packages/` only maps that layer to its framework's idiom: props, a ref, event props and
+children. The packages differ only in that idiom.
 
-- **Plain DOM first.** A host feature works from plain DOM before any framework package exposes it.
-  A wrapper adds no behavior that plain DOM cannot reach.
-- **One contract for the viewer and the editor.** Both use the same camera shape, method names and
-  event reasons, so a host can switch between them without new code.
-- **Slots for host content.** The host draws its own content into DOM elements that Draftably creates
-  and positions. The host fills a slot with its own framework, so its components run on its own
-  runtime, not on the Solid that `@draftably/editor` bundles.
-- **JSON at the boundary.** Geometry, diagnostics and the camera cross as plain data. Internal types,
-  such as `Scene` or the session store, stay internal.
+- **The element is the contract.** Each custom element exposes everything its handle has: an
+  `options` property for every mount option, and every handle event as a bubbling `draft-<name>` DOM
+  event. A wrapper adds no behavior that plain DOM cannot reach.
+- **One contract for the viewer and the editor.** Both use one camera shape (`centerX`, `centerY`,
+  `zoom` in world units), one set of methods (`fit`, `reveal`, `geometry`), one zoom range and one
+  event-reason union. A host switches between them without new code.
+- **Host content goes in named slots.** A host puts content on an item by rendering an ordinary child,
+  such as `<div slot="body:api">`. Draftably keeps one element per anchored item across updates,
+  positions it and moves it with the camera. The child stays in the host's own tree, so it keeps the
+  host's framework, context, reactivity and CSS. Content never goes into the string renderer.
+- **JSON at the boundary.** Geometry, diagnostics and the camera cross as plain data, in the shapes
+  the graph API already publishes. Internal types, such as `Diagram` or the session store, stay
+  internal.
 - **Layout never reads host content.** A host declares the room it needs in the source (for example
-  `size … min-height=`), so the CLI, exports and every host lay out the diagram the same way.
-- **Measure.** A new host capability adds about 30 lines or less to each framework package. More
-  is a sign that the neutral layer is missing a piece.
+  `size … min-height=`). The CLI, exports, server rendering and a page without the host draw the
+  same layout, with titles in place of host content. Exports never contain host content.
+- **Measure.** A new event, method, option or content kind adds no lines to any framework package.
+  If it does, the neutral layer is missing a piece.
 
 A framework-native entry, such as a Solid scene in the host's own tree, is an exception. Add one only
-when a host shows a need that slots and JSON geometry cannot meet, and build it on the neutral
-layer. The review that set this goal is in
+when a host shows a need that slots, events and JSON geometry cannot meet, and build it on the
+neutral layer. The review that set this goal is in
 [intent/host-contract/plan.md](intent/host-contract/plan.md).
 
 ## model/ — pure data and operations
