@@ -1,5 +1,28 @@
 # @draftably/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 544be76: Add `DraftablyEdge` from `@draftably/react/flow`: a React Flow custom edge that draws the lines and label boxes that `@draftably/runtime/graph` routed.
+
+### Patch Changes
+
+- b4a84ab: `layout({ svelteFlow })` keeps each node's CSS `style` string and takes Svelte Flow's own `Node` and `Edge` types. Before, it spread a style string into an object, and Svelte Flow lost the node's style. The `@draftably/react` README now links to the drop-in layout guide.
+- Updated dependencies [544be76]
+- Updated dependencies [2f625b2]
+- Updated dependencies [da6799e]
+- Updated dependencies [dbf251a]
+- Updated dependencies [f170a08]
+- Updated dependencies [9260ac2]
+- Updated dependencies [7259d8c]
+- Updated dependencies [1ff30f9]
+- Updated dependencies [e8754d1]
+- Updated dependencies [3eba208]
+- Updated dependencies [b4a84ab]
+  - @draftably/runtime@0.3.0
+  - @draftably/editor@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
