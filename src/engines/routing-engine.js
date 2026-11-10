@@ -295,7 +295,11 @@ function conflicts(points, used) {
           continue;
         }
         // One level, one upright: they meet where the upright's x crosses the level's y.
-        const [l, li, u, ui] = own.h[i] ? [own, i, other, j] : [other, j, own, i],
+        const level = own.h[i] === 1,
+          l = level ? own : other,
+          li = level ? i : j,
+          u = level ? other : own,
+          ui = level ? j : i,
           x = u.at[ui],
           y = l.at[li];
         if (x < l.lo[li] - EPS || x > l.hi[li] + EPS || y < u.lo[ui] - EPS || y > u.hi[ui] + EPS)
@@ -328,7 +332,9 @@ const STANDOFF_WEIGHT = 0.5,
   BORDER_WEIGHT = 2;
 function standoffCost(ps, near) {
   let n = 0;
-  for (const [a, b] of segments(ps)) {
+  for (let i = 1; i < ps.length; i++) {
+    const a = ps[i - 1],
+      b = ps[i];
     const h = Math.abs(a.y - b.y) < EPS;
     if (!h && Math.abs(a.x - b.x) >= EPS) continue;
     const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
@@ -384,12 +390,13 @@ function standoffLines(near, xs, ys) {
 // The part of `cost` that does not depend on other lines or boxes: length, bends and jogs. The
 // rest of `cost` is never negative, so this is a lower bound on it.
 function ownCost(ps, s) {
-  const segs = segments(ps);
-  return (
-    segs.reduce((n, [a, b]) => n + distance(a, b), 0) +
-    Math.max(0, ps.length - 2) * s.bendPenalty +
-    segs.slice(1, -1).reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
-  );
+  return lengthOf(ps) + Math.max(0, ps.length - 2) * s.bendPenalty + jogsOf(ps);
+}
+// What short inner segments cost: a jog under 8 units between two bends reads as a mistake.
+function jogsOf(ps) {
+  let sum = 0;
+  for (let i = 2; i < ps.length - 1; i++) sum += Math.max(0, 8 - distance(ps[i - 1], ps[i])) * 4;
+  return sum;
 }
 function cost(ps, used, s, near = []) {
   return costOf(
@@ -404,14 +411,12 @@ function cost(ps, used, s, near = []) {
 function costOf(ps, s, standoff, c, laneDeficit) {
   return (
     standoff +
-    segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0) +
+    lengthOf(ps) +
     Math.max(0, ps.length - 2) * s.bendPenalty +
     c.crossings * s.crossingPenalty +
     c.shared * s.sharedPenalty +
     laneDeficit * s.parallelPenalty +
-    segments(ps)
-      .slice(1, -1)
-      .reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
+    jogsOf(ps)
   );
 }
 /** A binary min-heap on `f`, in typed arrays. `pop` leaves the entry in `key` and `g`. */
