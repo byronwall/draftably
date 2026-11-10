@@ -350,7 +350,16 @@ function conflicts(points, used, bound = Infinity, s = defaults) {
 const STANDOFF_WEIGHT = 0.5,
   // A line along a group border reads as part of the frame: worse than one beside a box.
   BORDER_WEIGHT = 2;
-function standoffCost(ps, near) {
+// Per `near` list, per grid line: the boxes whose band reaches that line, in their order. Only they
+// can add to a run along it, so the sum keeps its terms and their order.
+const bandsByLine = new WeakMap();
+// With a finite `bound`, stops once the cost passes it: the caller needs only to know that.
+function standoffCost(ps, near, bound = Infinity) {
+  let lines = bandsByLine.get(near);
+  if (!lines && near.length > 4) {
+    lines = [new Map(), new Map()];
+    bandsByLine.set(near, lines);
+  }
   let n = 0;
   for (let i = 1; i < ps.length; i++) {
     const a = ps[i - 1],
@@ -360,7 +369,20 @@ function standoffCost(ps, near) {
     const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
       hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
       at = h ? a.y : a.x;
-    for (const r of near) {
+    let close = near;
+    if (lines) {
+      const axis = lines[h ? 0 : 1];
+      close = axis.get(at);
+      if (!close) {
+        close = near.filter(r =>
+          h
+            ? at >= r.y - r.band && at <= r.y + r.h + r.band
+            : at >= r.x - r.band && at <= r.x + r.w + r.band,
+        );
+        axis.set(at, close);
+      }
+    }
+    for (const r of close) {
       const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
       if (run <= 1) continue;
       const s0 = h ? r.y : r.x,
@@ -373,6 +395,7 @@ function standoffCost(ps, near) {
       else d = 0;
       if (d < r.band) n += run * (1 - d / r.band) * (r.weight ?? 1);
     }
+    if (n * STANDOFF_WEIGHT > bound) return n * STANDOFF_WEIGHT;
   }
   return n * STANDOFF_WEIGHT;
 }
@@ -1423,7 +1446,7 @@ function compute(input, rawOptions = {}) {
         over = sum => bound < Infinity && sum - 1e-6 >= bound;
       let sum = ownCost(points, s) + linger + packed + ownStandoff + sides;
       if (over(sum)) return Infinity;
-      const standoff = near.length ? standoffCost(points, near) : 0;
+      const standoff = near.length ? standoffCost(points, near, bound - sum + 1e-3) : 0;
       if (over((sum += standoff))) return Infinity;
       const crossed = conflicts(points, used, bound - sum + 1e-3, s);
       if (over((sum += crossed.crossings * s.crossingPenalty + crossed.shared * s.sharedPenalty)))
