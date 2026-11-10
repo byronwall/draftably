@@ -1437,8 +1437,14 @@ function compute(input, rawOptions = {}) {
         axis(c)
       );
     }
-    const remember = (points, c, o = c.obs) => {
+    // Paths are tried best first, not in the order the side pairs build them. A path built earlier
+    // (`gen`, lower) still wins a tie within 0.01, as it did when it was tried first; a later one
+    // must beat the best by 0.01.
+    const boundFor = gen =>
+      !best ? Infinity : gen < best.gen ? best.score + 0.01 : best.score - 0.01;
+    const remember = (points, c, o = c.obs, gen = Infinity) => {
       if (!points) return;
+      const bound = boundFor(gen);
       const full = compress([c.start, ...points, c.end]);
       for (let i = 2; i < full.length; i++) {
         const a = full[i - 2],
@@ -1452,15 +1458,15 @@ function compute(input, rawOptions = {}) {
           return;
       }
       // A path whose cheap terms cannot beat the best needs no obstacle checks.
-      if (best && score(full, c, best.score - 0.01, true) === Infinity) return;
+      if (best && score(full, c, bound, true) === Infinity) return;
       // No doubled-back first/last segments after attaching shape stubs.
       if (
         full.length < 2 ||
         segments(full).some(([u, v], i) => i > 0 && i < full.length - 2 && blocked(u, v, o))
       )
         return;
-      const scoreValue = score(full, c, best ? best.score - 0.01 : Infinity);
-      if (!best || scoreValue < best.score - 0.01) best = { ...c, points: full, score: scoreValue };
+      const scoreValue = score(full, c, bound);
+      if (!best || scoreValue < bound) best = { ...c, points: full, score: scoreValue, gen };
     };
     // A diamond's ports sit on its four vertices, one edge each; a further edge goes to a free
     // vertex. Only when all four are taken do they share.
@@ -1514,7 +1520,10 @@ function compute(input, rawOptions = {}) {
       const stubs = sideFloor(c) + distance(c.start, c.as) + distance(c.bs, c.end);
       pairs.push({ c, o, stubs, idx: pairs.length, min: stubs + distance(c.as, c.bs) });
     };
-    const cutoff = () => (best ? best.score - 0.01 : Infinity);
+    // A path at or above this can win nothing: not even a tie.
+    const cutoff = () => (best ? best.score + 0.01 : Infinity);
+    // A path's place in the order the side pairs build them.
+    const genOf = p => p.idx * 1e6 + p.k + 1;
     const expand = ({ c, o, stubs, idx }) =>
       doglegs(c.as, c.bs, o, s, lanes, near, cutoff() - stubs, (raw, k) => {
         const floor = stubs + lengthOf(raw) + bendsOf(c.start, raw, c.end) * s.bendPenalty;
@@ -1643,11 +1652,11 @@ function compute(input, rawOptions = {}) {
       if (!head || head.floor >= cutoff()) break;
       const p = pool.pop();
       if (p.path) {
-        remember(p.path, p.c);
+        remember(p.path, p.c, p.c.obs, genOf(p));
         continue;
       }
       const ps = compress(p.raw);
-      if (!segments(ps).some(([u, v]) => blocked(u, v, p.o))) remember(ps, p.c, p.o);
+      if (!segments(ps).some(([u, v]) => blocked(u, v, p.o))) remember(ps, p.c, p.o, genOf(p));
     }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
