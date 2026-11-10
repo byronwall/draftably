@@ -106,7 +106,7 @@ npx draftably inspect architecture.draft --svg > architecture.svg # SVG with the
 npx draftably vary architecture.draft                             # try other layouts and rank them
 ```
 
-`check` exits 1 when the file has errors, so it fits in CI. `vary` needs Chrome, Chromium or Edge.
+`check` exits 1 when the file has errors, so it fits in CI.
 The SVG is a shareable static image. Its embedded source lets you reopen it in Draftably.
 
 To continue from the exported image, run `draftably open architecture.svg`. It writes
