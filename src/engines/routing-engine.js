@@ -271,11 +271,16 @@ function siblingDeficit(points, used, min, gap) {
   }
   return deficit;
 }
+// Crossing points already counted by `conflicts`, as route index, x, y: a crossing at a corner
+// meets two segments of a line but counts once. Reused between calls.
+let seen = new Float64Array(96);
 function conflicts(points, used) {
-  const hits = new Set();
-  let shared = 0;
+  let shared = 0,
+    hits = 0;
   const own = spanOf(points),
-    f = flat.get(used);
+    f = flat.get(used),
+    p0 = points[0],
+    p1 = points.at(-1);
   for (let q = 0; q < used.length; q++) {
     if (f && !near(f.box, q, own, 0)) continue;
     const r = used[q],
@@ -297,15 +302,23 @@ function conflicts(points, used) {
           continue;
         const p = { x, y };
         // A shared shape terminal is connectivity, not an edge crossing.
-        if (
-          (same(p, points[0]) || same(p, points.at(-1))) &&
-          (same(p, r.points[0]) || same(p, r.points.at(-1)))
-        )
+        if ((same(p, p0) || same(p, p1)) && (same(p, r.points[0]) || same(p, r.points.at(-1))))
           continue;
-        hits.add(r.id + ':' + round(p.x) + ',' + round(p.y));
+        const rx = round(x),
+          ry = round(y);
+        let k = 0;
+        while (k < hits && !(seen[k * 3] === q && seen[k * 3 + 1] === rx && seen[k * 3 + 2] === ry))
+          k++;
+        if (k < hits) continue;
+        if (hits * 3 + 3 > seen.length) {
+          const grown = new Float64Array(seen.length * 2);
+          grown.set(seen);
+          seen = grown;
+        }
+        seen.set([q, rx, ry], hits++ * 3);
       }
   }
-  return { crossings: hits.size, shared };
+  return { crossings: hits, shared };
 }
 // Soft clearance: a run parallel to a box side inside `band` costs more the closer
 // it gets. Group borders (`border`) count from both sides. The hard clearance
