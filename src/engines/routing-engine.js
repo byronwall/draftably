@@ -1884,10 +1884,16 @@ function compute(input, rawOptions = {}) {
             : 'right'
           : end.y > last.y
             ? 'top'
-            : 'bottom';
+            : 'bottom',
+      startPort = port(rects.get(e.from), fs, plan.fromOffset),
+      endPort = port(rects.get(e.to), ts, plan.toOffset);
+    // Plans round both the port and its offset to hundredths.
     if (
       (e.cfg.fromSide && e.cfg.fromSide !== 'auto' && e.cfg.fromSide !== fs) ||
       (e.cfg.toSide && e.cfg.toSide !== 'auto' && e.cfg.toSide !== ts) ||
+      (typeof e.cfg.toOffset === 'number' && e.cfg.toOffset !== plan.toOffset) ||
+      distance(ps[0], startPort) > 0.02 ||
+      distance(end, endPort) > 0.02 ||
       !validPath(ps, e, fs, ts, obsFor(e))
     )
       return null;

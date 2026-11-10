@@ -161,10 +161,11 @@ function tracks(
       }
     }
     const xs: number[] = [];
-    for (const b of blocks) for (let k = 0; k < b.n; k++) xs.push(b.sum / b.n + xs.length * pitch);
-    // Keep the whole fan on the side.
-    const shift = Math.max(lo - xs[0], Math.min(0, hi - xs[n - 1]));
-    wants.forEach((w, k) => into.set(w.line, round(xs[k] + shift)));
+    // Bound each pooled start before restoring its pitch; a whole-fan shift cannot fit split fans.
+    for (const b of blocks)
+      for (let k = 0; k < b.n; k++)
+        xs.push(Math.max(lo, Math.min(hi - (n - 1) * pitch, b.sum / b.n)) + xs.length * pitch);
+    wants.forEach((w, k) => into.set(w.line, round(xs[k])));
   };
   const leaving = new Map<string, Array<{ line: string; want: number }>>(),
     arriving = new Map<string, Array<{ line: string; want: number }>>();
