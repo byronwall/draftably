@@ -43,8 +43,8 @@ The graph API is in `@draftably/runtime` 0.3.0 and later. It runs in Node and in
   and React Flow handle positions are not kept.
 - **Label sizes come from Draftably's fonts.** A node without a size fits its label. The sizes you
   give to edge labels are not used.
-- **Two directions in its own shape.** `direction` is `right` or `down`. The ELK and dagre
-  drop-ins also draw left and up, as a mirror.
+- **Right or down.** `direction` is `right` or `down`. The ELK and dagre drop-ins also draw
+  left and up, as a mirror image.
 - **Each call lays out the whole graph.** To keep nodes where a user put them, call `route`, which
   draws only the lines.
 
