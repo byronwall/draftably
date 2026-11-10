@@ -1867,8 +1867,45 @@ function compute(input, rawOptions = {}) {
     scores.set(found, best.score);
     return found;
   }
+  // A line's planned route (`plan`, from a `flow` scope's ranks) is its first route when it
+  // leaves and enters by facing sides and clears every box; the full router's passes may still
+  // improve it.
+  const planned = e => {
+    const plan = e.cfg.plan;
+    if (!plan || e.from === e.to || e.cfg.waypoints?.length) return null;
+    const ps = plan.points,
+      level = Math.abs(ps[0].y - ps[1].y) < EPS,
+      fs = level ? (ps[1].x > ps[0].x ? 'right' : 'left') : ps[1].y > ps[0].y ? 'bottom' : 'top',
+      last = ps.at(-2),
+      end = ps.at(-1),
+      ts =
+        Math.abs(last.y - end.y) < EPS
+          ? end.x > last.x
+            ? 'left'
+            : 'right'
+          : end.y > last.y
+            ? 'top'
+            : 'bottom';
+    if (
+      (e.cfg.fromSide && e.cfg.fromSide !== 'auto' && e.cfg.fromSide !== fs) ||
+      (e.cfg.toSide && e.cfg.toSide !== 'auto' && e.cfg.toSide !== ts) ||
+      !validPath(ps, e, fs, ts, obsFor(e))
+    )
+      return null;
+    return {
+      id: e.id,
+      from: e.from,
+      to: e.to,
+      fromSide: fs,
+      toSide: ts,
+      fromOffset: plan.fromOffset,
+      toOffset: plan.toOffset,
+      points: ps.map(p => ({ x: p.x, y: p.y })),
+      blocked: false,
+    };
+  };
   let routes = [];
-  for (const e of edges) routes.push(find(e, routes, previous.get(e.id)));
+  for (const e of edges) routes.push(planned(e) ?? find(e, routes, previous.get(e.id)));
   syncOpen();
   const metrics = rs => {
     let crossings = 0,
