@@ -379,14 +379,23 @@ function ownCost(ps, s) {
   );
 }
 function cost(ps, used, s, near = []) {
-  const c = conflicts(ps, used);
+  return costOf(
+    ps,
+    s,
+    near.length ? standoffCost(ps, near) : 0,
+    conflicts(ps, used),
+    parallelConflicts(ps, used, s.edgeGap).laneDeficit,
+  );
+}
+// `cost` from its parts: the standoff, the conflicts and the lane deficit against the other lines.
+function costOf(ps, s, standoff, c, laneDeficit) {
   return (
-    (near.length ? standoffCost(ps, near) : 0) +
+    standoff +
     segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0) +
     Math.max(0, ps.length - 2) * s.bendPenalty +
     c.crossings * s.crossingPenalty +
     c.shared * s.sharedPenalty +
-    parallelConflicts(ps, used, s.edgeGap).laneDeficit * s.parallelPenalty +
+    laneDeficit * s.parallelPenalty +
     segments(ps)
       .slice(1, -1)
       .reduce((sum, [a, b]) => sum + Math.max(0, 8 - distance(a, b)) * 4, 0)
@@ -675,7 +684,21 @@ function search(start, end, obs, used, s, near = [], limit = 16000, win = null) 
   }
   return compress(ps.reverse());
 }
-function doglegs(a, b, obs, s, used = [], near = []) {
+// Grid lines a lane beside each segment of `used`, in order, as `doglegs` tries them. They do not
+// depend on the line being routed, so `findAmong` works them out once for all its side pairs.
+function laneLines(used, s) {
+  const xs = [],
+    ys = [];
+  for (const r of used)
+    for (const [u, v] of segments(r.points)) {
+      if (Math.abs(u.x - v.x) < EPS) xs.push(u.x - s.edgeGap, u.x + s.edgeGap);
+      else ys.push(u.y - s.edgeGap, u.y + s.edgeGap);
+    }
+  return { xs, ys };
+}
+// Paths of up to two bends from `a` to `b` that miss `obs`, in a fixed order. `worth(path)` passes
+// over a path before its obstacle checks: one that cannot beat the best so far.
+function* doglegs(a, b, obs, s, lanes, near = [], worth = () => true) {
   const choices = [
       [a, b],
       [a, { x: b.x, y: a.y }, b],
@@ -693,16 +716,8 @@ function doglegs(a, b, obs, s, used = [], near = []) {
       xs.add(r.x + r.w);
     }
   }
-  for (const r of used)
-    for (const [u, v] of segments(r.points)) {
-      if (Math.abs(u.x - v.x) < EPS) {
-        xs.add(u.x - s.edgeGap);
-        xs.add(u.x + s.edgeGap);
-      } else {
-        ys.add(u.y - s.edgeGap);
-        ys.add(u.y + s.edgeGap);
-      }
-    }
+  for (const x of lanes.xs) xs.add(x);
+  for (const y of lanes.ys) ys.add(y);
   const lines = { x: [], y: [] };
   standoffLines(near, lines.x, lines.y);
   for (const x of lines.x)
@@ -715,7 +730,11 @@ function doglegs(a, b, obs, s, used = [], near = []) {
   ys.add(Math.max(a.y, b.y) + s.portGap);
   for (const x of xs) choices.push([a, { x, y: a.y }, { x, y: b.y }, b]);
   for (const y of ys) choices.push([a, { x: a.x, y }, { x: b.x, y }, b]);
-  return choices.map(compress).filter(ps => !segments(ps).some(([c, d]) => blocked(c, d, obs)));
+  for (const raw of choices) {
+    if (!worth(raw)) continue;
+    const ps = compress(raw);
+    if (!segments(ps).some(([c, d]) => blocked(c, d, obs))) yield ps;
+  }
 }
 function port(rect, side, offset = 0) {
   const r = rect,
@@ -1285,11 +1304,26 @@ function compute(input, rawOptions = {}) {
           siblingDeficit(points, siblings, want.includes(side) ? 0 : FAN_PITCH, s.edgeGap) *
           s.parallelPenalty;
       }
+      // The line-against-line terms come last, each only while the sum so far stays under
+      // `bound`: every term is at least zero, `packed` aside, which is already in the sum.
+      const linger = LINGER_WEIGHT * lingering(points),
+        ownStandoff = own.length ? standoffCost(points, own) * OWN_STANDOFF : 0,
+        sides = backwards + convention + hook + stability + fanout + axis(c),
+        over = sum => bound < Infinity && sum - 1e-6 >= bound;
+      let sum = ownCost(points, s) + linger + packed + ownStandoff + sides;
+      if (over(sum)) return Infinity;
+      const standoff = near.length ? standoffCost(points, near) : 0;
+      if (over((sum += standoff))) return Infinity;
+      const crossed = conflicts(points, used);
+      if (over((sum += crossed.crossings * s.crossingPenalty + crossed.shared * s.sharedPenalty)))
+        return Infinity;
+      const lanes = parallelConflicts(points, used, s.edgeGap).laneDeficit;
+      // The same sum as before the early returns, term for term, so scores do not drift.
       return (
-        LINGER_WEIGHT * lingering(points) +
+        linger +
         packed +
-        cost(points, used, s, near) +
-        (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
+        costOf(points, s, standoff, crossed, lanes) +
+        ownStandoff +
         backwards +
         convention +
         hook +
@@ -1335,6 +1369,22 @@ function compute(input, rawOptions = {}) {
         sides.length > 1 &&
         vertexTaken(id, side) &&
         sides.some(x => !vertexTaken(id, x));
+    const lanes = laneLines(used, s);
+    // `remember` turns a path down when its cheap terms reach the best score. A path's length
+    // with its stubs, and the side terms, are a floor under those terms (`compress` keeps length),
+    // so a path whose floor reaches the best is passed over before its obstacle checks.
+    const worth = c => {
+      const fixed =
+        distance(c.start, c.as) +
+        distance(c.bs, c.end) +
+        axis(c) +
+        (old && c.fs !== old.fromSide ? s.portStability : 0) +
+        (old && c.ts !== old.toSide ? s.portStability : 0) -
+        BOUND_SLACK -
+        // Coordinates `compress` rounds may lengthen the path by up to this much.
+        1;
+      return ps => !best || fixed + pathLength(ps) < best.score - 0.01;
+    };
     for (const fs of from)
       for (const ts of to) {
         if (e.from === e.to && fs === ts) continue;
@@ -1418,7 +1468,7 @@ function compute(input, rawOptions = {}) {
         if (tight) {
           if (cfg.waypoints?.length || hopeless()) continue;
           const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
-          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
+          for (const path of doglegs(as, bs, o, s, lanes, near, worth(c))) remember(path, c, o);
           continue;
         }
         candidates.push(c);
@@ -1440,7 +1490,8 @@ function compute(input, rawOptions = {}) {
           )
         )
           remember([start, end], c);
-        if (!hopeless()) for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
+        if (!hopeless())
+          for (const path of doglegs(as, bs, obs, s, lanes, near, worth(c))) remember(path, c);
       }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
