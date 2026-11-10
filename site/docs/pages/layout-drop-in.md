@@ -136,8 +136,8 @@ routes.
 Without a `direction`, Draftably picks the one that fits best. A long flow folds into rows, like
 lines of text. Pass `fold: 'never'` to keep one row, as dagre does.
 
-[`integration-examples/react-flow`](https://github.com/byronwall/draftably/tree/main/integration-examples/react-flow)
-is a complete React Flow app that does all of this.
+The repository's `integration-examples/react-flow` is a complete React Flow app that does all of
+this.
 
 ## Svelte Flow
 
@@ -271,9 +271,9 @@ result.edges['web->api'].path; // SVG path data. A named edge is 'v->w:name'.
 | `ranksep`                                                     | The gap between boxes, from 8 to 300.        |
 | Node `width`, `height`, `label`                               | Read.                                        |
 | `setParent` clusters                                          | Groups with a title band.                    |
-| Edge `label`                                                  | Read. Its `width` and `height` are not used. |
+| `label` on an edge                                            | Read. Its `width` and `height` are not used. |
 | `nodesep`, `edgesep`, `marginx`, `marginy`, `align`, `ranker` | Not used, with no warning.                   |
-| Edge `minlen`, `weight`, `labelpos`                           | Not used.                                    |
+| `minlen`, `weight`, `labelpos` on an edge                     | Not used.                                    |
 
 `dagreLayout` reads only the graphlib methods it needs, so a graph from `@dagrejs/graphlib` or
 from `dagre.graphlib` works. Pass `dagreLayout(g, { routing: { quality: 'full' } })` to choose the
