@@ -30,15 +30,17 @@ The graph API is in `@draftably/runtime` 0.3.0 and later. It runs in Node and in
 - **Groups.** Nested groups get a box and a title band, and lines keep out of the title band.
 - **Lines that follow a drag.** In React Flow and Svelte Flow, `route` draws the lines again
   where the nodes are now.
+- **The same speed.** On a laptop, Draftably lays out and routes a tree of 100 nodes, or a graph
+  of 100 nodes and 127 lines, in about 20 ms. elkjs takes 25–35 ms and dagre 13–20 ms on the same
+  graphs.
 - **The same drawing as a `.draft` file.** The result's `draft` is that file. Open it in the
   viewer to see what Draftably drew, or to share it.
 
 ## What to know first
 
-- **It is slower.** On a laptop, elkjs and dagre place a 100-node graph in 15–35 ms. Draftably
-  takes 0.2–0.6 s, because it measures labels and routes every line around the boxes. Lay out once,
-  when the graph changes, and call `layout` from a Web Worker for large graphs. If you lay out
-  hundreds of nodes on every change, keep your current library.
+- **A tangled graph is slow.** A graph whose lines skip across many ranks gets a slower search
+  for each route. On a laptop, a random graph of 200 nodes and 260 lines takes about 2 s, where
+  elkjs and dagre take about 60 ms. Call `layout` from a Web Worker for graphs like that.
 - **Draftably chooses the line ends.** A line can end on a side that you name. ELK port positions
   and React Flow handle positions are not kept.
 - **Label sizes come from Draftably's fonts.** A node without a size fits its label. The sizes you

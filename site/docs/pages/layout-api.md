@@ -122,10 +122,10 @@ time that grows with the number of lines and how often they cross.
 | `full`            | Always repairs. Use it for a final export, or when time does not matter.               |
 | `quick`           | Never repairs. Lines can cross more often on a dense graph.                            |
 
-With `auto`, a tree or chain of 100 nodes lays out in about a fifth of a second on a laptop, with
-`full` routes. A dense graph of that size, such as a DAG with 127 edges, gets `quick` routes in
-about half a second. They cross about a fifth more often than `full` ones, which take about 3
-seconds there.
+With `auto`, a tree of 100 nodes, or a graph of 100 nodes and 127 lines, lays out in about 20 ms
+on a laptop. A large graph that flows one way gets planned lanes, so `full` adds little time and
+crosses no fewer lines there. A tangled graph, whose lines skip across many ranks, routes each line
+with a slower search: a random graph of 200 nodes and 260 lines takes about 2 seconds with `auto`.
 
 ## Errors and warnings
 
@@ -137,6 +137,6 @@ Problems that still draw are in `warnings`.
 
 ## Run it off the main thread
 
-Layout and routing run on the calling thread. A large graph can take most of a second. In a
+Layout and routing run on the calling thread. A tangled graph of a few hundred nodes can take seconds. In a
 browser, call `layout` from a Web Worker when your page must stay responsive while it runs. The
 input and output are plain data, so they cross `postMessage` unchanged.
