@@ -27,6 +27,9 @@ children. The packages differ only in that idiom.
   such as `<div slot="body:api">`. Draftably keeps one element per anchored item across updates,
   positions it and moves it with the camera. The child stays in the host's own tree, so it keeps the
   host's framework, context, reactivity and CSS. Content never goes into the string renderer.
+- **Two ways in, by who draws.** When Draftably draws, a host uses the elements and puts content in
+  slots. When the host draws, it uses the graph API (`@draftably/runtime/graph`): a graph or a
+  `.draft` source in, boxes and routed lines out. Neither path has framework code.
 - **JSON at the boundary.** Geometry, diagnostics and the camera cross as plain data, in the shapes
   the graph API already publishes. Internal types, such as `Diagram` or the session store, stay
   internal.

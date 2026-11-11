@@ -82,14 +82,92 @@ package for every future capability. C was the choice of both reviews. It fails 
 `<draft-diagram>` renders in shadow DOM, so host CSS (Tailwind classes, theme rules) does not style
 content portalled into it. Named slots solve that, and need no portal at all.
 
-**Gate.** Before step 3 below, a spike must prove three things. If it fails, fall back to C, with
-the targets for the editor in light DOM.
+**Gate: passed on 2026-11-10.** D needed three proofs before the slots step. Each ran with real
+mouse and keyboard input in Chromium, Firefox and WebKit (Playwright 1.64).
 
-1. The editor works inside a shadow root: keyboard shortcuts, inline editing, focus,
-   `document.activeElement` (`pointer.ts:274`) and `elementFromPoint` (`StateBar.tsx:102`).
-2. A `<slot>` inside the anchor layer projects and positions content in Chrome, Firefox and Safari.
-3. React 19, Solid, Vue 3 and Svelte 5 each pass a `slot` attribute through on a custom element's
-   child. Svelte is the doubtful one.
+1. **Slots in an anchor layer work in all three browsers.** A prototype element replaced its whole
+   SVG on every update, as the viewer does, and kept one stable target per item. Each target held a
+   named `<slot>`. `body:` content filled its box and scaled with the camera. `overlay:` content
+   stayed in screen space and did not scale. Content moved with an update, and content for a removed
+   item drew nothing. Host CSS styled the content. An input inside it took typing, and
+   `composedPath()` showed the element its `data-draft-input` marker. `document.elementFromPoint`
+   found the content, and empty space passed through to the SVG.
+2. **All four frameworks pass `slot` through.** React 19.2, Solid 1.9, Vue 3.5 and Svelte 5.57 each
+   rendered static `slot="overlay:a"` and dynamic ``slot={`body:${id}`}`` children in a keyed list.
+   They kept them correct through a move, a relabel, an add and a remove. Every framework passed
+   every check in every browser, with no compiler or console warnings. Svelte needed nothing
+   special.
+3. **The editor works in a shadow root after one small fix.** The built editor passed every check in
+   light DOM: select, drag, Delete, undo, `N` with typing, inline edit, `C Enter Tab Enter`, and
+   connect by dragging from a port. In a shadow root, three failed. An event from inside a shadow
+   root reaches `document` with its target changed to the host, and `document` lookups cannot see
+   inside. Six call sites read the page instead of the editor's own root. With them changed, every
+   check passed in all three browsers, with the editor's CSS copied into the root:
+
+   | Call site                                                                | Today                                          | Change                                       |
+   | ------------------------------------------------------------------------ | ---------------------------------------------- | -------------------------------------------- |
+   | `editor/mount.tsx:19`                                                    | `e.target`                                     | `e.composedPath()[0]`                        |
+   | `state/canvas-keyboard.ts:66,243,251`                                    | `e.target`                                     | `e.composedPath()[0]`                        |
+   | `state/canvas-keyboard.ts:111`                                           | `target === document.querySelector('.canvas')` | `target.matches('.canvas')`                  |
+   | `state/canvas-keyboard.ts:170`                                           | `document.querySelector('[data-id=…]')`        | `target.closest('.canvas').querySelector(…)` |
+   | `state/session/sculpt.ts:826`                                            | `e.target`                                     | `e.composedPath()[0]`                        |
+   | `state/session/pointer.ts:689,738`, `components/canvas/StateBar.tsx:102` | `document.elementFromPoint`                    | `getRootNode().elementFromPoint`             |
+
+   The handlers that Solid delegates already see the real target, so clicks and drags worked
+   unchanged. Two of these lines also misbehave today with two editors on a page (from the code; not
+   run): line 111 treats only the first editor's canvas as a canvas, and line 170 focuses the first
+   shape with that ID on the page, which can be in the other editor.
+   `pointer.ts:274` reads `document.activeElement` for the app's title field, which the embedded
+   editor does not render.
+
+The slots step also needs these, which the spike showed:
+
+- The editor build injects its CSS into `document.head` (`scripts/build-editor.ts:49-54`). The element
+  must put the same CSS into its shadow root instead.
+- A guard keeps the fix: a test that fails on `document.elementFromPoint`, `document.activeElement`,
+  `document.querySelector` or a bare `e.target` in a document-level listener under
+  `src/components/canvas`, `src/components/scene`, `src/state` and `src/editor`.
+
+## Two ways in: Draftably draws, or the host draws
+
+The graph API (`@draftably/runtime/graph`, in runtime 0.3.0) already serves a host that draws
+everything itself. `layout(graph)` takes nodes, groups and edges and returns each box, each routed
+line as points and SVG path data, the side where each line ends, and each label's box. A node can
+carry a size that the host measured. `route(graph)` routes lines between boxes the host placed. It
+runs synchronously, so lines can follow a drag. The input and output are plain data, with no DOM
+and no framework, so this path needs no framework code at all (`src/graph-api/core.ts:29-117,398,435`).
+
+| A host that wants                                                 | Uses                     | Draftably draws | The host draws           |
+| ----------------------------------------------------------------- | ------------------------ | --------------- | ------------------------ |
+| Draftably's look, pan and zoom, editing, and content on items     | the elements, with slots | the diagram     | slot content             |
+| Its own look and components, with Draftably's layout and routing  | `layout`, `route`        | nothing         | everything               |
+| A flow library (React Flow, Svelte Flow, elkjs, dagre, Cytoscape) | the drop-ins             | nothing         | nodes; lines from `path` |
+
+**What it settles for Callsheet.**
+
+- **#502.** If Callsheet wants every shape in its own Solid tree, `layout` gives the boxes and lines.
+  No Solid scene, `draw` or `measureText` export is needed.
+- **#501.** A host that draws its own nodes measures them and passes `width` and `height`. That path
+  needs no `min-height`. Layout still never measures host content: the host gives numbers.
+
+**What it does not cover.**
+
+1. **`.draft` text.** Callsheet writes `.draft` files. The graph API takes a graph, and no public
+   call returns a `LayoutResult` for a `.draft` source. Add `layout({ draft })` to the graph API. It
+   returns a `LayoutResult` with each item's label, shape and style, which is the data `geometry()`
+   returns. One function closes the gap, with no new shape.
+2. **The look.** A host that draws must draw shapes, group bands, labels, arrowheads and colors.
+   The result's `draft` field opens the same graph in the viewer when the host wants Draftably's
+   look.
+3. **Fonts.** Draftably sizes a box without a size from its own font metrics. A host with other
+   fonts passes sizes.
+4. **Editing, the camera and accessibility.** These stay with the elements. Callsheet's editor (#500)
+   still needs the element path.
+5. **Views the graph input cannot state.** States, compare, panels, emphasis and icons draw through
+   the elements, or through `layout({ draft })`.
+
+A host chooses by who draws. Both paths are framework-neutral. A Solid scene in the host's tree
+(#502) is a third renderer for one framework, and neither path needs it.
 
 ## The contract
 
@@ -280,13 +358,13 @@ slot kind adds no lines to any of them.
 
 ## What to do with each PR
 
-| PR                          | Verdict                                                                                                                                                                                                                                                                                            |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| #498 canvas click activates | Merge as written.                                                                                                                                                                                                                                                                                  |
-| #499 memoize `viewerFrame`  | Merge as written. `createScene` runs inside the session's root. The gain is smaller than stated, because `Frame.tsx` and `TextHits.tsx` already memoize their reads.                                                                                                                               |
-| #500 editor camera API      | Keep the change that sends every camera write through `setCamera` (`pointer.ts:189,469,477`). Rebuild the rest on the handle (step 2), folded into the existing `fitRects` and `revealObject`, with the viewer's camera shape.                                                                     |
-| #501 node content           | Hold `min-height` until three fixes land: diamonds return before the floor (`compile.ts:1027`), the second cells path drops it (`compile.ts:~3546`), and a resize drops it (`translate.ts:758`). Replace `nodeContent` with `body:` slots.                                                         |
-| #502 Solid host entry       | Close. Land its scene fixes as one PR: `fill="none"` on lines, text anchors, `LinkMark` without `state/`, and `NodeView` and `Lifelines` importing from `runtime/svg-renderer`, not `cli/`. Do not export `measureText`: host bodies use host fonts and CSS, and it would freeze `model/fonts.ts`. |
+| PR                          | Verdict                                                                                                                                                                                                                                                                                                                                                                         |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #498 canvas click activates | Merge as written.                                                                                                                                                                                                                                                                                                                                                               |
+| #499 memoize `viewerFrame`  | Merge as written. `createScene` runs inside the session's root. The gain is smaller than stated, because `Frame.tsx` and `TextHits.tsx` already memoize their reads.                                                                                                                                                                                                            |
+| #500 editor camera API      | Keep the change that sends every camera write through `setCamera` (`pointer.ts:189,469,477`). Rebuild the rest on the handle (step 2), folded into the existing `fitRects` and `revealObject`, with the viewer's camera shape.                                                                                                                                                  |
+| #501 node content           | Hold `min-height` until three fixes land: diamonds return before the floor (`compile.ts:1027`), the second cells path drops it (`compile.ts:~3546`), and a resize drops it (`translate.ts:758`). Replace `nodeContent` with `body:` slots.                                                                                                                                      |
+| #502 Solid host entry       | Close. Land its scene fixes as one PR: `fill="none"` on lines, text anchors, `LinkMark` without `state/`, and `NodeView` and `Lifelines` importing from `runtime/svg-renderer`, not `cli/`. Do not export `measureText`: host bodies use host fonts and CSS, and it would freeze `model/fonts.ts`. For shapes drawn in Callsheet's own tree, point to the graph API's `layout`. |
 
 ## Order of work
 
@@ -296,13 +374,16 @@ Each step is one PR in a stack.
 2. **Element parity.** `options` on both elements, the no-change guard, `draft-<name>` re-dispatch,
    listeners that survive a re-mount, Svelte `bind:element`, the generic `on` map in all four
    wrappers. This fixes the parity gaps above on its own.
-3. **Spike** the three gate items. Record the result in this plan.
+3. **Spike** the three gate items. Done: all three passed (see Gate above).
 4. **One camera.** Shared `Camera`, zoom range, reasons, `fit(ids)`, `reveal`, `MoveResult`, one
    event per frame. Remove `MountedEditor.session` from the public type.
-5. **Geometry.** `geometry()` and `renderSvg(...).geometry` in the graph API's shapes.
+5. **Geometry.** `geometry()` and `renderSvg(...).geometry` in the graph API's shapes, and
+   `layout({ draft })` in the graph API with the same result.
 6. **Events.** `select`, `hover`, `contextmenu` on both handles.
-7. **Slots.** The editor in a shadow root, the anchor layer in both elements, children pass-through
-   in the wrappers, `data-draft-input`, the `:not(:defined)` rule.
+7. **Slots.** The six root-lookup fixes and their guard, the editor's CSS in its shadow root, the
+   editor in a shadow root, the anchor layer in both elements, children pass-through in the
+   wrappers, `data-draft-input`, the `:not(:defined)` rule. The root-lookup fixes can land first, on
+   their own.
 8. **Flow edges.** Svelte Flow and Vue Flow edge components that match React's `DraftablyEdge`.
 9. Prove each framework with `scripts/prove-frameworks.ts`: a body slot that reads host context
    and host CSS, survives a source update, and takes input with `data-draft-input`; two instances
@@ -321,15 +402,17 @@ Each step is one PR in a stack.
 - **`worldToClient` and `clientToWorld` helpers (Sol).** Overlay slots cover the first use. Add them
   when a host draws its own layer.
 - **A display list that each framework draws (both reviews).** A third renderer, and its drawings
-  could drift from the other two.
+  could drift from the other two. A host that wants to draw uses the graph API, and draws its own
+  look, not a copy of Draftably's.
 
 ## Open questions for Callsheet
 
 1. Do you use the published `@draftably/editor`, or build from `src/` on your own Solid? #501 and
    #502 only work as written in the second case.
 2. Why do you want the scene in your own tree: one Solid in the bundle, reactivity per node, or your
-   own handlers on shapes? Slots and events cover the last two. Only the first one needs a
-   Solid-native entry.
+   own handlers on shapes? Slots and events cover the last two. If you want to draw every shape
+   yourself, `layout` from `@draftably/runtime/graph` gives the boxes and lines with no Solid at
+   all. Would `layout({ draft })` meet that need?
 3. Must node bodies take input (buttons, fields)? `data-draft-input` assumes yes.
 4. Do you need selection sync both ways, or only events from Draftably?
 5. Can `min-height` live in the user's saved `.draft` file?
