@@ -66,8 +66,9 @@ The editor's controls follow the page's color scheme, as its drawing does. Set
 `--success`, `--warning`, `--danger`, `--font` and `--mono`.
 
 The canvas and the drawing follow the page's color scheme, as `<draft-diagram>` does (see
-[Dark pages](#dark-pages)). On a dark page, a source with no `theme` line draws dark, and
-`draft-editor { color-scheme: light }` keeps it light. The editor never writes a `theme` line on
+[Dark pages](#dark-pages)). On a page whose `color-scheme` allows dark, a source with no `theme`
+line draws dark, and a page that declares no scheme stays light.
+`draft-editor { color-scheme: light }` keeps one editor light. The editor never writes a `theme` line on
 its own, so the drawing keeps following the page. `data-theme` sets the editor's controls, not
 the drawing.
 

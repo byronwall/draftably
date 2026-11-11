@@ -6,7 +6,8 @@
  * `theme drafting` line. It checks: a light page draws light; setting `color-scheme: dark` on the
  * page draws the viewer and the editor dark, with no new render and no moved box; the forced and
  * the themed diagrams stay light; the editor's controls follow the page unless it sets its own
- * `data-theme`; with no `color-scheme` on the page, the system setting decides.
+ * `data-theme`; a page with no `color-scheme` stays light on a dark system, and
+ * `color-scheme: light dark` on the page follows the system setting.
  * Screenshots go to tmp/proof-color-scheme/.
  *
  * Usage: pnpm runtime:build && pnpm editor:build && node scripts/prove-color-scheme.mjs [chromium,firefox,webkit]
@@ -210,15 +211,43 @@ for (const name of only) {
       back.viewer,
     );
 
-    // No color-scheme on the page: the system setting decides.
+    // No color-scheme on the page: a dark system setting changes nothing.
     await tab.emulateMedia({ colorScheme: 'dark' });
     await frames();
     await sleep(200);
-    const system = await read();
+    const unset = await read();
     check(
-      'with no color-scheme on the page, a dark system setting draws dark',
-      system.viewer === DARK && system.editor === DARK && system.forced === LIGHT,
-      { viewer: system.viewer, editor: system.editor, forced: system.forced },
+      'with no color-scheme on the page, a dark system setting stays light',
+      unset.viewer === LIGHT &&
+        unset.editor === LIGHT &&
+        unset.controls === UI_LIGHT &&
+        unset.forced === LIGHT,
+      { viewer: unset.viewer, editor: unset.editor, controls: unset.controls },
+    );
+
+    // The page opts in with one line, and then the system setting decides.
+    await tab.addStyleTag({ content: ':root { color-scheme: light dark }' });
+    await frames();
+    await sleep(200);
+    const both = await read();
+    check(
+      'color-scheme: light dark on the page draws dark on a dark system',
+      both.viewer === DARK && both.editor === DARK && both.controls === UI_DARK,
+      { viewer: both.viewer, editor: both.editor, controls: both.controls },
+    );
+    check(
+      'color-scheme: light on the element stays light on an opted-in page and a dark system',
+      both.forced === LIGHT,
+      both.forced,
+    );
+    await tab.emulateMedia({ colorScheme: 'light' });
+    await frames();
+    await sleep(200);
+    const lightSystem = await read();
+    check(
+      'color-scheme: light dark draws light again when the system turns light',
+      lightSystem.viewer === LIGHT && lightSystem.editor === LIGHT,
+      { viewer: lightSystem.viewer, editor: lightSystem.editor },
     );
   } catch (e) {
     check('ran to completion', false, String(e.message).split('\n')[0]);

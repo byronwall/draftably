@@ -138,10 +138,11 @@ no node; and both send `anchors` with `[]` on removal. Screenshots go to `tmp/pr
 WebKit: a viewer and an editor of a source with no `theme` line, a viewer forced light with
 `color-scheme: light`, and a viewer of a source with `theme drafting`. A light page draws all of
 them light. `color-scheme: dark` on the page draws the first two dark, with no new render and no
-moved box, and the forced and themed ones stay light. Without a `color-scheme` on the page, the
-system setting decides. Build first, as for slots. Screenshots go to `tmp/proof-color-scheme/`.
-`pnpm prove:frameworks` also checks that each wrapper's diagrams draw dark on a dark system
-setting, and saves `tmp/frameworks/<framework>-dark.png`.
+moved box, and the forced and themed ones stay light. With no `color-scheme` on the page, a dark
+system setting leaves all of them light; `color-scheme: light dark` on the page then draws the
+first two dark. Build first, as for slots. Screenshots go to `tmp/proof-color-scheme/`.
+`pnpm prove:frameworks` also checks that each wrapper's diagrams stay light on a dark system
+setting until the page sets `color-scheme: light dark`, then draw dark, and saves `tmp/frameworks/<framework>-dark.png`.
 
 `pnpm prove:frameworks` (CI) runs the checks that depend on the host through the React, Solid,
 Vue and Svelte wrappers in Chromium, with the content rendered and updated by each framework:

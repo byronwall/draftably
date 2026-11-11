@@ -1,8 +1,9 @@
 /**
  * Which scheme a host's page asks for, and when that changes. The element's computed
- * `color-scheme` decides (a page sets it on `:root`, a dark class, or the element itself); where
- * it names both schemes or none, the user's `prefers-color-scheme` decides. A host forces light
- * with `draft-diagram { color-scheme: light }`.
+ * `color-scheme` decides (a page sets it on `:root`, a dark class, or the element itself): `dark`
+ * draws dark, and `light dark` draws dark while the user's system prefers dark. `normal` (nothing
+ * declared) and `light` draw light, so a page that never opted in to dark stays light on a dark
+ * system. A page opts in with `:root { color-scheme: light dark }`.
  */
 const DARK = /\bdark\b/,
   LIGHT = /\blight\b/;
@@ -10,7 +11,8 @@ const DARK = /\bdark\b/,
 /**
  * Calls `onChange(dark)` now and whenever the scheme in `host` changes: an element, or a shadow
  * root, whose children inherit the element's scheme. A hidden probe in `host` has a `light-dark()` color, so a scheme change anywhere above it (a class flip on the
- * page, a style) starts a transition there; the media query covers a change of system setting.
+ * page, a style) starts a transition there; the media query covers a change of system setting
+ * under `light dark`.
  * Returns a function that stops watching and removes the probe.
  */
 export function watchColorScheme(
@@ -29,7 +31,7 @@ export function watchColorScheme(
   let last: boolean | undefined;
   const check = () => {
     const scheme = win?.getComputedStyle(probe).colorScheme ?? '',
-      dark = DARK.test(scheme) !== LIGHT.test(scheme) ? DARK.test(scheme) : !!media?.matches;
+      dark = DARK.test(scheme) && (!LIGHT.test(scheme) || !!media?.matches);
     if (dark === last) return;
     last = dark;
     onChange(dark);

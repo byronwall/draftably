@@ -40,17 +40,33 @@ cores), one stylesheet and one copy of each font. A worker stops after 30 second
 
 The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
 has no `theme` line draws dark, in the default theme's dark variant, and the frame goes dark too.
-The element reads its own computed `color-scheme`, which it inherits from the page. Where the page
-sets none, the system setting decides. A change of scheme switches the drawing at once, with
-nothing drawn again.
+The element reads its own computed `color-scheme`, which it inherits from the page:
 
-Set the scheme on the page, as most dark modes already do:
+| Computed `color-scheme`     | The diagram draws                  |
+| --------------------------- | ---------------------------------- |
+| `normal` (nothing declared) | Light, also on a dark system       |
+| `light`                     | Light                              |
+| `dark`                      | Dark                               |
+| `light dark`                | Dark while the system prefers dark |
+
+A page that declares no scheme stays light, so a light-only site never shows a dark diagram. A
+dark-mode site opts in with one line. To follow the system setting:
+
+```css
+:root {
+  color-scheme: light dark;
+}
+```
+
+Or, for a dark-mode class:
 
 ```css
 :root.dark {
   color-scheme: dark;
 }
 ```
+
+A change of scheme switches the drawing at once, with nothing drawn again.
 
 To keep one diagram light on a dark page, set its scheme:
 

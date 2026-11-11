@@ -40,8 +40,11 @@ The Editor writes the `theme` line for you.
 | `blueprint`  | Dark: white lines on blueprint blue, monospace titles.          |
 
 A file with no `theme` line follows the page it is embedded in: on a dark page the viewer and the
-editor draw it in a dark variant of `drafting`, with the same type and spacing. Write a `theme`
-line, even `theme drafting`, to keep the same colors on every page.
+editor draw it in a dark variant of `drafting`, with the same type and spacing. A page is dark only
+when its `color-scheme` allows dark. A page that declares none stays light, also on a dark system.
+A dark-mode site opts in with one line, `:root { color-scheme: light dark }` to follow the system
+setting or `color-scheme: dark` on its dark class (see [Dark pages](#dark-pages)).
+Write a `theme` line, even `theme drafting`, to keep the same colors on every page.
 
 The `theme` line also takes overrides such as `padding-x=`, `radius=` and `title-font=`, and
 `theme-color` lines change or add color families. [Themes and colors](#themes-and-colors) lists
