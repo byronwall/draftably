@@ -52,6 +52,8 @@ if (
       private _fallback!: HTMLSlotElement;
       private _status!: HTMLParagraphElement;
       private _style!: HTMLStyleElement;
+      /** The nonce the inserted style carries; null until the style is inserted. */
+      private _nonce: string | undefined | null = null;
       private _generation = 0;
       private _revision = 0;
       private _scheduled = false;
@@ -74,7 +76,8 @@ if (
         this._status.className = 'draft-diagram__status';
         this._status.setAttribute('role', 'status');
         this._status.setAttribute('aria-live', 'polite');
-        this.shadowRoot!.append(this._style, this._host, this._fallback, this._status);
+        // The style goes in at mount, with its nonce: a strict CSP blocks a style without one.
+        this.shadowRoot!.append(this._host, this._fallback, this._status);
         if (options) this._options = options;
         if (outline) this.outline = outline;
         if (source !== undefined) this.source = source;
@@ -212,8 +215,13 @@ if (
 
       private _setNonce() {
         const nonce = this._options.render?.styleNonce;
+        if (nonce === this._nonce) return;
+        this._nonce = nonce;
+        // CSP checks a style when it is inserted, so a new nonce needs a fresh insert.
+        this._style.remove();
         if (nonce) this._style.setAttribute('nonce', nonce);
         else this._style.removeAttribute('nonce');
+        this.shadowRoot!.prepend(this._style);
       }
 
       private _mount() {
