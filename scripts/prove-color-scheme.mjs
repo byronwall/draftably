@@ -216,6 +216,7 @@ for (const name of only) {
     await frames();
     await sleep(200);
     const unset = await read();
+    await tab.screenshot({ path: path.join(out, `${name}-system-unset.png`) });
     check(
       'with no color-scheme on the page, a dark system setting stays light',
       unset.viewer === LIGHT &&
@@ -230,6 +231,7 @@ for (const name of only) {
     await frames();
     await sleep(200);
     const both = await read();
+    await tab.screenshot({ path: path.join(out, `${name}-system-opted.png`) });
     check(
       'color-scheme: light dark on the page draws dark on a dark system',
       both.viewer === DARK && both.editor === DARK && both.controls === UI_DARK,
