@@ -7,7 +7,8 @@
  *
  * Every fenced block whose first line names a file (`// src/App.tsx`, `<!-- src/App.vue -->`,
  * `/* src/theme.css *\/`) is written into a fresh Vite app: the blocks in "Recipes" go into every
- * app, and each framework's section adds its own. The script then installs the packed packages,
+ * app, and each framework's section adds its own. The script then installs the packed packages
+ * that the section's `pnpm add` line names, and only those,
  * type-checks (tsc, vue-tsc or svelte-check), builds, calls the recipe's server `render()`, and
  * loads the built page in Chromium: the diagram and the editor must reach `status="ready"`, the
  * body must be assigned, and the console must stay clean. Last, it starts `vite` in development
@@ -27,8 +28,6 @@ const docs = readFileSync(path.join(root, 'site/docs/pages/frameworks.md'), 'utf
 
 interface Recipe {
   section: string;
-  /** The wrapper package, if any. */
-  wrapper?: string;
   deps: Record<string, string>;
   dev: Record<string, string>;
   check: string[];
@@ -42,7 +41,6 @@ const vite = { vite: '6.4.5', typescript: '5.9.3' };
 const RECIPES: Record<string, Recipe> = {
   react: {
     section: 'React',
-    wrapper: 'react',
     deps: { react: '19.2.0', 'react-dom': '19.2.0' },
     dev: {
       ...vite,
@@ -57,7 +55,6 @@ const RECIPES: Record<string, Recipe> = {
   },
   solid: {
     section: 'Solid',
-    wrapper: 'solid',
     deps: { 'solid-js': '1.9.9' },
     dev: { ...vite, 'vite-plugin-solid': '2.11.15' },
     check: ['tsc', '--noEmit'],
@@ -67,7 +64,6 @@ const RECIPES: Record<string, Recipe> = {
   },
   vue: {
     section: 'Vue',
-    wrapper: 'vue',
     deps: { vue: '3.5.22' },
     dev: { ...vite, '@vitejs/plugin-vue': '5.2.4', 'vue-tsc': '3.3.14' },
     check: ['vue-tsc', '--noEmit'],
@@ -77,7 +73,6 @@ const RECIPES: Record<string, Recipe> = {
   },
   svelte: {
     section: 'Svelte',
-    wrapper: 'svelte',
     deps: { svelte: '5.57.3' },
     dev: { ...vite, '@sveltejs/vite-plugin-svelte': '5.1.1', 'svelte-check': '4.7.8' },
     check: ['svelte-check', '--fail-on-warnings'],
@@ -95,12 +90,23 @@ const RECIPES: Record<string, Recipe> = {
   },
 };
 
-/** The files a section names in its fenced blocks. */
-function files(section: string): Map<string, string> {
+function sectionText(section: string): string {
   const start = docs.indexOf(`\n## ${section}\n`);
   if (start < 0) throw new Error(`frameworks.md has no "## ${section}" section`);
   const end = docs.indexOf('\n## ', start + 1);
-  const text = docs.slice(start, end < 0 ? undefined : end);
+  return docs.slice(start, end < 0 ? undefined : end);
+}
+
+/** The Draftably packages the section's `pnpm add` line installs, and nothing else. */
+function installs(section: string): string[] {
+  const line = sectionText(section).match(/```sh\npnpm add ([^\n]+)\n```/)?.[1];
+  if (!line) throw new Error(`"## ${section}" has no pnpm add line`);
+  return line.split(/\s+/).filter(name => name.startsWith('@draftably/'));
+}
+
+/** The files a section names in its fenced blocks. */
+function files(section: string): Map<string, string> {
+  const text = sectionText(section);
   const found = new Map<string, string>();
   for (const [, body] of text.matchAll(/```[\w-]*\n([\s\S]*?)```/g)) {
     const name = body.match(/^(?:\/\/ |\/\* |<!-- )([\w./-]+)(?: \*\/| -->)?\n/)?.[1];
@@ -216,12 +222,13 @@ for (const name of only.length ? only : Object.keys(RECIPES)) {
       mkdirSync(path.dirname(path.join(app, file)), { recursive: true });
       writeFileSync(path.join(app, file), body);
     }
-    const deps: Record<string, string> = {
-      ...recipe.deps,
-      '@draftably/runtime': `file:${runtime}`,
-      '@draftably/editor': `file:${editor}`,
-    };
-    if (recipe.wrapper) deps[`@draftably/${recipe.wrapper}`] = `file:${pack(recipe.wrapper)}`;
+    // Only what the recipe's install line names: pnpm does not let an app import a package it
+    // does not list, so a missing package fails here as it would for a reader.
+    const deps: Record<string, string> = { ...recipe.deps };
+    for (const name of installs(recipe.section)) {
+      const dir = name.slice('@draftably/'.length);
+      deps[name] = `file:${dir === 'runtime' ? runtime : dir === 'editor' ? editor : pack(dir)}`;
+    }
     writeFileSync(
       path.join(app, 'package.json'),
       JSON.stringify(

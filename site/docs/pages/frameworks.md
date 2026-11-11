@@ -3,19 +3,23 @@
 Every framework gets the same diagram viewer: zoom, pan, fit, a keyboard outline, and cleanup when
 the component unmounts. Put as many diagrams on one page as you like. Each one owns its viewer.
 
-| Framework       | Install                       | Component                                      |
-| --------------- | ----------------------------- | ---------------------------------------------- |
-| React 19        | `pnpm add @draftably/react`   | `<DraftDiagram source={…} />`                  |
-| Solid           | `pnpm add @draftably/solid`   | `<DraftDiagram source={…} />`                  |
-| Vue 3           | `pnpm add @draftably/vue`     | `<DraftDiagram :source="…" />`                 |
-| Svelte 5        | `pnpm add @draftably/svelte`  | `<DraftDiagram {source} />`                    |
-| Angular, others | `pnpm add @draftably/runtime` | `<draft-diagram source="…">`, a custom element |
+| Framework       | Install                                         | Component                                      |
+| --------------- | ----------------------------------------------- | ---------------------------------------------- |
+| React 19        | `pnpm add @draftably/react @draftably/runtime`  | `<DraftDiagram source={…} />`                  |
+| Solid           | `pnpm add @draftably/solid @draftably/runtime`  | `<DraftDiagram source={…} />`                  |
+| Vue 3           | `pnpm add @draftably/vue @draftably/runtime`    | `<DraftDiagram :source="…" />`                 |
+| Svelte 5        | `pnpm add @draftably/svelte @draftably/runtime` | `<DraftDiagram {source} />`                    |
+| Angular, others | `pnpm add @draftably/runtime`                   | `<draft-diagram source="…">`, a custom element |
+
+Install `@draftably/runtime` beside a framework package: your app imports
+`@draftably/runtime/host.css` itself, and pnpm does not let an app import a package it does not
+list. Without a framework, add `@draftably/editor` too for `<draft-editor>`.
 
 With Vite 5–7, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
 `vite.config`, so the viewer's and the editor's workers load in development. Vite 8 needs no
 setting. Import `@draftably/runtime/host.css` once in your client
-entry, in every framework: it holds the element's height and hides slot content until the element
-loads.
+entry, in every framework: it holds the element's height, hides slot content until the element
+loads, and lets content marked `data-draft-input` take the pointer.
 
 ## Props
 
@@ -138,6 +142,10 @@ colors. The editor's own properties are listed in [Editor colors](#editor-colors
 
 ## React
 
+```sh
+pnpm add @draftably/react @draftably/runtime
+```
+
 ```ts
 // vite.config.ts
 import react from '@vitejs/plugin-react';
@@ -236,6 +244,10 @@ See [Drop in your graph layout](#react-flow).
 
 ## Solid
 
+```sh
+pnpm add @draftably/solid @draftably/runtime
+```
+
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
@@ -322,6 +334,10 @@ focus in it. The package ships its JSX source under the `solid` export condition
 
 ## Vue
 
+```sh
+pnpm add @draftably/vue @draftably/runtime
+```
+
 ```ts
 // vite.config.ts
 import vue from '@vitejs/plugin-vue';
@@ -407,6 +423,10 @@ the element, and `ref` on a component gives `.element`.
 
 ## Svelte
 
+```sh
+pnpm add @draftably/svelte @draftably/runtime
+```
+
 ```ts
 // vite.config.ts
 import { svelte } from '@sveltejs/vite-plugin-svelte';
@@ -488,6 +508,10 @@ Draw your graph with Svelte Flow? See [Drop in your graph layout](#svelte-flow) 
 nodes and route its lines with Draftably.
 
 ## Plain HTML
+
+```sh
+pnpm add @draftably/runtime @draftably/editor
+```
 
 ```html
 <!-- index.html -->
@@ -671,10 +695,12 @@ data on the server, and pass the same string to the component when it hydrates:
 The editor loads in the browser only, after the component mounts. Its element renders on the
 server as an empty, sized box.
 
-`pnpm prove:meta` builds a small app in each of these four frameworks and checks it in Chromium:
-server HTML, hydration that keeps the server's nodes, a body that reads the framework's context
-and page CSS, a marked button, a caret across a source update, two editors with separate
-shortcuts, a failed update, a strict CSP and 50 mount cycles.
+Each framework has a complete example app with server rendering and a strict CSP:
+[Next.js](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/next), [SolidStart](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/solid-start), [Nuxt](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/nuxt) and
+[SvelteKit](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/sveltekit). Draftably's tests build each one for production and check server
+HTML, hydration, a body that reads the framework's context and page CSS, a marked button, a caret
+across a source update, two editors with separate shortcuts, a failed update, the strict CSP, and
+50 mount cycles.
 
 ## Strict CSP
 
@@ -706,7 +732,7 @@ reaches the element as a `draft-<name>` event:
 ```ts
 const el = document.querySelector('draft-diagram')!;
 el.addEventListener('draft-diagnostics', event => console.table(event.detail.diagnostics));
-el.getAttribute('status'); // 'loading', 'ready' or 'error'
+el.getAttribute('status'); // 'loading', 'ready' or 'error'; a later failed update keeps 'ready'
 await el.updateComplete; // the latest update's result
 el.viewer?.geometry(); // every node, group and edge, in world units
 el.viewer?.getCamera();

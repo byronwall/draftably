@@ -171,15 +171,18 @@ at baseline. Screenshots and the server HTML go next to each run's output.
   checks.
 - `pnpm prove:meta [next solid-start nuxt sveltekit]` builds each app in
   `integration-examples/meta/` for production with the packed packages, starts its server and
-  runs it there. `proof.config.json` in each app names the proof files to copy in and the build
-  and start commands. Installs take minutes (Next.js downloads about 80 MB), so run it in the
+  runs it there. Each app holds a copy of its proof page, so it runs on its own;
+  `proof.config.json` names the copies and the build and start commands. A copy that differs from
+  its source in `integration-examples/frameworks/` fails the run: `pnpm prove:meta --write`
+  refreshes them. Installs take minutes (Next.js downloads about 80 MB), so run it in the
   background. It is not in CI. Output goes to `tmp/meta/`.
 
 `pnpm prove:recipes` (CI) copies every named code block of the recipes in
 `site/docs/pages/frameworks.md` into a fresh Vite app per framework (React, Solid, Vue, Svelte,
-plain HTML) with the packed packages. It type-checks (`tsc`, `vue-tsc` or `svelte-check`),
+plain HTML), and installs only the packed packages that the recipe's `pnpm add` line names. It type-checks (`tsc`, `vue-tsc` or `svelte-check`),
 builds, calls the recipe's server `render()`, and loads the page: the diagram and the editor must
-reach `status="ready"` with the body assigned, the dark theme applied, and no console errors. A
+reach `status="ready"` with the body assigned, the dark frame applied, and no console errors. Then it
+starts `vite` in development and deletes a node in the editor, which fails on a worker 404. A
 recipe that stops compiling fails CI. Screenshots go to `tmp/recipes/`.
 
 ## File-backed editing
