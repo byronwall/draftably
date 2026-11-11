@@ -507,7 +507,9 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   };
   /** Slot content is the host's: its nodes are never drawing items. */
   const fromHost = (event: Event) =>
-    !(event.target instanceof win.Node && viewport.contains(event.target));
+    !(event.target instanceof win.Node) ||
+    !viewport.contains(event.target) ||
+    anchorLayer.el.contains(event.target);
   /** Marked content (`data-draft-input`) takes its own pointer, wheel and keys. */
   const hostInput = (event: Event) =>
     event
@@ -595,12 +597,15 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   // returns to the drawing, and so does losing the item that held focus.
   anchorLayer.el.addEventListener('focusin', event => {
     const id = event.target instanceof win.Node ? anchorLayer.idOf(event.target) : undefined;
-    if (id) handle.reveal(id);
+    // A press on marked content focuses it too; a camera move then could lose its click.
+    if (id && !anchorLayer.pressed()) handle.reveal(id);
   });
   anchorLayer.el.addEventListener('keydown', event => {
-    if (event.key === 'Escape') viewport.focus();
+    if (event.key === 'Escape') viewport.focus({ preventScroll: true });
   });
-  anchorLayer.el.addEventListener('draft-anchor-focus-lost', () => viewport.focus());
+  anchorLayer.el.addEventListener('draft-anchor-focus-lost', () =>
+    viewport.focus({ preventScroll: true }),
+  );
   viewport.addEventListener('keydown', event => {
     if (event.target !== viewport || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === '+' || event.key === '=') zoomBy(1.2);

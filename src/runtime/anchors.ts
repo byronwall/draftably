@@ -40,6 +40,8 @@ export interface AnchorLayer {
   bodyIds(): string[];
   /** Slot warnings: unknown IDs and content that overflows its box. */
   warnings(): Diagnostic[];
+  /** A pointer press that began in the layer is still down: focus it moves is not a Tab. */
+  pressed(): boolean;
   /** The target holding `node`, if any. */
   idOf(node: Node): string | undefined;
   destroy(): void;
@@ -77,25 +79,68 @@ export function createAnchorLayer(
   let zoom = 1;
   const overflowing = new Set<string>();
   const win = doc.defaultView;
-  const sizes = win?.ResizeObserver
-    ? new win.ResizeObserver(() => {
-        // Content larger than its box: the host draws more than the room the source declares.
-        let changed = false;
-        for (const [slot, t] of targets) {
-          if (!t.body) continue;
-          const content = contentOf(t.el),
-            over = content.some(
-              c => c.offsetWidth > t.box.width + 0.5 || c.offsetHeight > t.box.height + 0.5,
-            );
-          if (over !== overflowing.has(slot)) {
-            changed = true;
-            if (over) overflowing.add(slot);
-            else overflowing.delete(slot);
+  /** Content larger than its box: the host draws more than the room the source declares. */
+  const checkOverflow = () => {
+    let changed = false;
+    for (const [slot, t] of targets) {
+      if (!t.body) continue;
+      const over = (watched.get(t) ?? []).some(
+        c => c.offsetWidth > t.box.width + 0.5 || c.offsetHeight > t.box.height + 0.5,
+      );
+      if (over !== overflowing.has(slot)) {
+        changed = true;
+        if (over) overflowing.add(slot);
+        else overflowing.delete(slot);
+      }
+    }
+    if (changed) options.onOverflow?.();
+  };
+  const sizes = win?.ResizeObserver ? new win.ResizeObserver(checkOverflow) : undefined;
+  /** The content each body target shows, as the size observer sees it. */
+  const watched = new Map<Target, HTMLElement[]>();
+  const watch = (t: Target) => {
+    if (!sizes || !t.body) return;
+    for (const c of watched.get(t) ?? []) sizes.unobserve(c);
+    const content = contentOf(t.el);
+    watched.set(t, content);
+    for (const c of content) sizes.observe(c);
+  };
+  const unwatch = (t: Target) => {
+    for (const c of watched.get(t) ?? []) sizes?.unobserve(c);
+    watched.delete(t);
+  };
+  const targetOf = (node: Node) => {
+    const slot = (node as Element)
+      .closest?.('[data-draft-anchor]')
+      ?.getAttribute('data-draft-anchor');
+    return slot ? targets.get(slot) : undefined;
+  };
+  // Content arrives after its target: the element assigns it (slotchange), and a host with the
+  // handle alone appends it to the target.
+  layer.addEventListener('slotchange', event => {
+    const t = targetOf(event.target as Node);
+    if (t) watch(t);
+  });
+  const appended = win?.MutationObserver
+    ? new win.MutationObserver(records => {
+        const seen = new Set<Target>();
+        for (const r of records) {
+          const t = (r.target as HTMLElement).dataset?.draftAnchor ? targetOf(r.target) : undefined;
+          if (t && !seen.has(t)) {
+            seen.add(t);
+            watch(t);
           }
         }
-        if (changed) options.onOverflow?.();
       })
     : undefined;
+  appended?.observe(bodies, { childList: true, subtree: true });
+
+  let pressed = false;
+  const press = () => (pressed = true),
+    release = () => (pressed = false);
+  layer.addEventListener('pointerdown', press, true);
+  doc.addEventListener('pointerup', release, true);
+  doc.addEventListener('pointercancel', release, true);
 
   /** What a target shows: a slot's assigned elements, or its own children. */
   function contentOf(el: HTMLElement): HTMLElement[] {
@@ -105,19 +150,32 @@ export function createAnchorLayer(
     return [...el.children].filter((e): e is HTMLElement => e instanceof HTMLElement);
   }
 
+  /** The focused element, through any shadow roots on the way. */
+  function focused(): Element | null {
+    let el = doc.activeElement;
+    while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+    return el;
+  }
+
+  /**
+   * Fits the targets to the slots and the drawing. Returns true when a target was added or
+   * removed; otherwise it only moved the bodies, which is all a drag frame needs.
+   */
   function reconcile(): boolean {
-    let changed = false;
+    let changed = false,
+      resized = false;
     const keep = new Set<string>();
     unknown = [];
     /** Drawing order, so Tab moves through targets as a reader sees the items. */
     let rank: Map<string, number> | undefined;
-    const rankOf = (id: string) => {
+    const rankOf = (el: Element) => {
       rank ??= new Map(
         [geometry!.nodes, geometry!.groups, geometry!.edges]
           .flatMap(Object.keys)
           .map((k, i) => [k, i]),
       );
-      return rank.get(id) ?? Infinity;
+      const s = (el as HTMLElement).dataset.draftAnchor!;
+      return rank.get(s.slice(s.indexOf(':') + 1)) ?? Infinity;
     };
     for (const slot of wanted) {
       const colon = slot.indexOf(':'),
@@ -133,27 +191,33 @@ export function createAnchorLayer(
       const box = itemBox(geometry, id)!;
       let t = targets.get(slot);
       if (!t || t.kind !== kind) {
-        if (t) t.el.remove();
+        if (t) {
+          t.el.remove();
+          unwatch(t);
+        }
         const el = doc.createElement('div');
         el.className = `draft-anchor draft-anchor--${part}`;
         el.dataset.draftAnchor = slot;
         t = { el, id, kind, body: part === 'body', box };
         targets.set(slot, t);
         // A new target goes in drawing order; a target that exists never moves, so focus in its
-        // content survives.
+        // content survives. The children are in drawing order unless an update reordered items,
+        // so a binary search finds the place.
         const parent = t.body ? bodies : overlays,
-          at = rankOf(id);
-        let next: Element | null = null;
-        for (const c of parent.children) {
-          const s = (c as HTMLElement).dataset.draftAnchor!;
-          if (rankOf(s.slice(s.indexOf(':') + 1)) > at) {
-            next = c;
-            break;
-          }
+          list = parent.children,
+          at = rankOf(el);
+        let lo = 0,
+          hi = list.length;
+        while (lo < hi) {
+          const mid = (lo + hi) >> 1;
+          if (rankOf(list[mid]!) > at) hi = mid;
+          else lo = mid + 1;
         }
-        parent.insertBefore(el, next);
+        parent.insertBefore(el, list[lo] ?? null);
+        watch(t);
         changed = true;
-      }
+      } else if (t.body && (t.box.width !== box.width || t.box.height !== box.height))
+        resized = true;
       t.box = box;
       if (t.body) {
         const s = t.el.style;
@@ -165,20 +229,19 @@ export function createAnchorLayer(
     }
     for (const [slot, t] of targets) {
       if (keep.has(slot)) continue;
-      const focused = doc.activeElement,
-        hadFocus = !!focused && contentOf(t.el).some(c => c.contains(focused));
+      const active = focused(),
+        hadFocus =
+          !!active && (t.el.contains(active) || contentOf(t.el).some(c => c.contains(active)));
       t.el.remove();
+      unwatch(t);
       targets.delete(slot);
       overflowing.delete(slot);
       changed = true;
       // Focus inside a removed item goes back to the drawing.
       if (hadFocus) layer.dispatchEvent(new CustomEvent('draft-anchor-focus-lost'));
     }
-    if (sizes) {
-      sizes.disconnect();
-      for (const t of targets.values())
-        if (t.body) for (const c of contentOf(t.el)) sizes.observe(c);
-    }
+    // A box that changed size can now hold its content, or no longer does.
+    if (resized && sizes) checkOverflow();
     return changed;
   }
 
@@ -195,6 +258,8 @@ export function createAnchorLayer(
       return reconcile();
     },
     place(originX, originY, k) {
+      // No slots, no cost: the next setSlots is followed by a place.
+      if (!wanted.length) return;
       // A changed custom property restyles every target: write it only when the zoom changes.
       if (k !== zoom || !layer.style.getPropertyValue('--draft-zoom'))
         layer.style.setProperty('--draft-zoom', String(k));
@@ -220,10 +285,8 @@ export function createAnchorLayer(
         kind: t.kind,
         el: t.el,
       })),
-    bodyIds: () =>
-      zoom < LOW_DETAIL_ZOOM && options.detail !== 'full'
-        ? []
-        : [...targets.values()].filter(t => t.body).map(t => t.id),
+    // Every anchored body, at any zoom: CSS shows titles again below LOW_DETAIL_ZOOM.
+    bodyIds: () => [...targets.values()].filter(t => t.body).map(t => t.id),
     warnings: () => [
       ...unknown.map(slot =>
         warn(
@@ -242,6 +305,7 @@ export function createAnchorLayer(
         ),
       ),
     ],
+    pressed: () => pressed,
     idOf(node) {
       for (const t of targets.values())
         if (t.el.contains(node) || contentOf(t.el).some(c => c.contains(node))) return t.id;
@@ -249,6 +313,10 @@ export function createAnchorLayer(
     },
     destroy() {
       sizes?.disconnect();
+      appended?.disconnect();
+      doc.removeEventListener('pointerup', release, true);
+      doc.removeEventListener('pointercancel', release, true);
+      watched.clear();
       targets.clear();
       layer.remove();
     },

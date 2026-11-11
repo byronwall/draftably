@@ -881,9 +881,11 @@
 .stage[data-draft-detail='full'] .canvas .node[data-draft-body] text {
   opacity: 0;
 }
-/* Its ports and handles move to the chrome layer, above the body. */
-.canvas .node[data-draft-body] .port,
-.canvas .node[data-draft-body] .resize-handle {
+/* Its ports and handles move to the chrome layer, above the body. Zoomed out, the body hides and
+   they stay in the drawing. */
+.stage[data-draft-detail='full'] .canvas .node[data-draft-body] .port,
+.stage[data-draft-detail='full'] .canvas .node[data-draft-body] .resize-handle,
+.stage[data-draft-detail='low'] .canvas-chrome {
   display: none;
 }
 .canvas-chrome {

@@ -263,8 +263,10 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   };
   const drawAnchors = (g: Geometry) => {
     const before = anchorLayer.warnings().length;
-    anchorLayer.setGeometry(g);
+    const changed = anchorLayer.setGeometry(g);
     placeAnchors();
+    // A drag frame only moves targets: no target came or went, so there is nothing to tell.
+    if (!changed) return;
     tellAnchors();
     if (before || anchorLayer.warnings().length) tellSlots();
   };
@@ -272,18 +274,21 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   const syncAnchors = () => {
     if (opened && !destroyed && anchorLayer.hasSlots()) drawAnchors(handle.geometry()!);
   };
+  let stage: Element | null = null;
   const placeAnchors = () => {
+    if (!anchorLayer.hasSlots()) return;
     const c = session.doc.camera;
     anchorLayer.place(c.x, c.y, c.k);
-    const stage = host.querySelector('.stage'),
-      detail = anchorLayer.el.dataset.draftDetail!;
+    stage ??= host.querySelector('.stage');
+    const detail = anchorLayer.el.dataset.draftDetail!;
     if (stage && stage.getAttribute('data-draft-detail') !== detail)
       stage.setAttribute('data-draft-detail', detail);
   };
   anchorLayer.el.addEventListener('focusin', e => {
     const target = eventTarget(e);
     const id = target instanceof Node ? anchorLayer.idOf(target) : undefined;
-    if (id) handle.reveal(id);
+    // A press on marked content focuses it too; a camera move then could lose its click.
+    if (id && !anchorLayer.pressed()) handle.reveal(id);
   });
   anchorLayer.el.addEventListener('keydown', e => {
     if (e.key === 'Escape') session.focusCanvas();
@@ -315,8 +320,6 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       const { x, y, k } = session.doc.camera;
       void [x, y, k];
       placeAnchors();
-      const next = anchorLayer.bodyIds();
-      if (next.join('\n') !== [...bodies()].join('\n')) setBodies(new Set(next));
     });
     // Every selection change is reported once, with who made it.
     createEffect(
