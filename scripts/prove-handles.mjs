@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * One camera for both handles. Serves tests/browser/camera.html through Vite: a viewer and an
- * editor of one file, side by side at one size. Checks that both report `{ centerX, centerY,
- * zoom }`, frame the same items at the same world point and zoom, reveal with the least move,
- * share the zoom range, send at most one camera event per frame during a drag, and run a fit
- * asked for before the viewport had a size. Screenshots go to tmp/proof-camera/.
+ * Both handles keep one contract. Serves tests/browser/handles.html through Vite: a viewer and an
+ * editor of one file, side by side at one size. Camera: both report `{ centerX, centerY, zoom }`,
+ * frame the same items at the same world point and zoom, reveal with the least move, share the
+ * zoom range, send at most one camera event per frame during a drag, and run a fit asked for
+ * before the viewport had a size. Geometry and events: both report the same boxes, `geometry()`
+ * is one object per revision, `ready` resolves, and `select`, `contextmenu` and `link` arrive.
+ * Screenshots go to tmp/proof-handles/.
  *
- * Usage: pnpm prove:camera
+ * Usage: pnpm prove:handles
  */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,12 +17,12 @@ import { createServer } from 'vite';
 import { createProof, sleep, waitFor } from './lib/proof.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const proof = createProof(path.join(root, 'tmp/proof-camera'));
+const proof = createProof(path.join(root, 'tmp/proof-handles'));
 const { check } = proof;
 
 const server = await createServer({ root, server: { port: 0 }, logLevel: 'error' });
 await server.listen();
-const url = `${server.resolvedUrls.local[0]}tests/browser/camera.html`;
+const url = `${server.resolvedUrls.local[0]}tests/browser/handles.html`;
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1280, height: 640 } });
 proof.watch(page);
@@ -172,6 +174,109 @@ try {
     );
   }
   await page.screenshot({ path: path.join(proof.out, 'after-pan.png') });
+
+  // Geometry: one world, one object per revision, the same boxes in both handles.
+  const geo = await page.evaluate(async () => {
+    const ready = [(await window.viewer.ready).status, (await window.editor.ready).status];
+    const v = window.viewer.geometry(),
+      e = window.editor.geometry(),
+      last = window.log.render.at(-1);
+    const gap = (a, b) =>
+      Math.max(
+        ...Object.keys(a).map(id =>
+          Math.max(
+            ...['x', 'y', 'width', 'height'].map(k => Math.abs(a[id][k] - (b[id]?.[k] ?? 1e9))),
+          ),
+        ),
+      );
+    return {
+      ready,
+      same: window.viewer.geometry() === v && window.editor.geometry() === e,
+      revision: v.revision === last.revision && !!last.geometry,
+      nodes: [Object.keys(v.nodes).sort().join(), Object.keys(e.nodes).sort().join()],
+      nodeGap: gap(v.nodes, e.nodes),
+      groupGap: gap(v.groups, e.groups),
+      edgeEnds: Object.keys(v.edges).every(
+        id =>
+          v.edges[id].source === e.edges[id]?.source && v.edges[id].target === e.edges[id]?.target,
+      ),
+    };
+  });
+  check(
+    'ready resolves committed on both',
+    geo.ready.join() === 'committed,committed',
+    geo.ready.join(),
+  );
+  check('geometry() is one object per revision', geo.same);
+  check('the render event carries the geometry of its revision', geo.revision);
+  check(
+    'both handles report the same nodes, groups and edge ends',
+    geo.nodes[0] === geo.nodes[1] && geo.nodeGap < 0.5 && geo.groupGap < 0.5 && geo.edgeEnds,
+    `nodes ${geo.nodes[0]}; largest gap ${geo.nodeGap.toFixed(2)} / ${geo.groupGap.toFixed(2)}`,
+  );
+
+  // Selection: api from the host, user from a click.
+  await page.evaluate(() => {
+    window.viewer.fit();
+    window.editor.fit();
+    window.log.select.length = 0;
+  });
+  await sleep(300);
+  await page.evaluate(() => window.editor.select(['api', 'db', 'nope']));
+  await sleep(50);
+  const db = page.locator('#editor [data-kind="node"][data-id="queue"]').first();
+  const b = await db.boundingBox();
+  await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
+  await sleep(100);
+  const sel = await page.evaluate(() => ({
+    log: window.log.select,
+    now: window.editor.selection(),
+  }));
+  check(
+    'select reports api, then user, and selection() reads it',
+    JSON.stringify(sel.log) ===
+      JSON.stringify([
+        { ids: ['api', 'db'], reason: 'api' },
+        { ids: ['queue'], reason: 'user' },
+      ]) && sel.now.join() === 'queue',
+    JSON.stringify(sel),
+  );
+
+  // Context menu on an item in each handle, and on the background.
+  await page.evaluate(() => {
+    window.viewer.fit();
+    window.editor.fit();
+  });
+  await sleep(300);
+  for (const side of ['viewer', 'editor']) {
+    const node = page.locator(`#${side} [data-id="api"]`).first();
+    const box = await node.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, { button: 'right' });
+  }
+  await sleep(100);
+  const menus = await page.evaluate(() => window.log.contextmenu);
+  check(
+    'contextmenu names the item in both handles',
+    JSON.stringify(menus) ===
+      JSON.stringify([
+        { side: 'viewer', id: 'api', kind: 'node' },
+        { side: 'editor', id: 'api', kind: 'node' },
+      ]),
+    JSON.stringify(menus),
+  );
+
+  // A link the host handles: the page stays put.
+  const link = page.locator('#viewer a[href]').first();
+  const lb = await link.boundingBox();
+  await page.mouse.click(lb.x + lb.width / 2, lb.y + lb.height / 2);
+  await sleep(200);
+  const linked = await page.evaluate(() => ({ log: window.log.link, href: location.href }));
+  check(
+    'a link the host prevents does not navigate',
+    linked.log.join() === 'https://example.com/web' && linked.href.includes('handles.html'),
+    JSON.stringify(linked),
+  );
+  await page.screenshot({ path: path.join(proof.out, 'events.png') });
 
   // A viewer inside a hidden box: fit waits for a size, then runs.
   const pending = await page.evaluate(() => window.hidden.fit(['api']));

@@ -2,12 +2,13 @@ import viewerCss from './viewer.css?inline';
 import {
   mountFailure,
   redispatch,
+  relay,
   sameValue,
   sharedSheet,
   takeEarly,
   warnOtherCopy,
 } from './element-base';
-import type { DraftStatus, HostEvents } from './host';
+import type { DraftStatus } from './host';
 import { runtimeVersion } from './version';
 import { mountViewer } from './viewer';
 import type { UpdateResult, ViewerEvents, ViewerHandle, ViewerOptions } from './viewer';
@@ -37,7 +38,14 @@ declare global {
 
 const tag = 'draft-diagram';
 const ELEMENT_CSS = `${viewerCss}\n:host{display:block;height:26rem;min-height:16rem;box-sizing:border-box}.draft-diagram__viewer{height:100%;min-height:0}.draft-diagram__viewer[hidden]{display:none}.draft-diagram__fallback{display:block}.draft-diagram__fallback[hidden]{display:none}.draft-diagram__status{margin:.35rem 0;color:var(--draft-warning-ink,#9a3412);font:14px/1.45 system-ui,sans-serif}.draft-diagram__status:empty{display:none}`;
-const VIEWER_EVENTS = ['render', 'diagnostics', 'camera', 'itemactivate', 'link'] as const;
+const VIEWER_EVENTS = [
+  'render',
+  'diagnostics',
+  'camera',
+  'itemactivate',
+  'link',
+  'contextmenu',
+] as const;
 
 if (
   typeof globalThis.document !== 'undefined' &&
@@ -249,11 +257,7 @@ if (
         const viewer = this._viewer;
         for (const type of VIEWER_EVENTS)
           viewer.on(type, (event: ViewerEvents[typeof type]) => {
-            if (viewer !== this._viewer) return;
-            if (type === 'link') {
-              const { preventDefault, ...detail } = event as ViewerEvents['link'];
-              if (!redispatch(this, 'link', detail)) preventDefault();
-            } else redispatch(this, type, event as HostEvents[typeof type]);
+            if (viewer === this._viewer) relay(this, type, event);
           });
         this._update();
       }

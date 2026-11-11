@@ -11,6 +11,7 @@ import { bare, parseModel, printSource, quoted, type SourceLine, type Word } fro
 import { emptyDiagram } from '../model/document';
 import type { VisibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
+import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect, RoutingSettings, Side } from '../model/types';
 
 export type Shape = 'box' | 'pill' | 'circle' | 'diamond' | 'text';
@@ -184,18 +185,6 @@ function layoutLine(scope: string, arrange: Arrange, attrs: Record<string, unkno
   });
 }
 
-function bounds(boxes: Box[]): Box {
-  if (!boxes.length) return { x: 0, y: 0, width: 0, height: 0 };
-  const x = Math.min(...boxes.map(b => b.x)),
-    y = Math.min(...boxes.map(b => b.y));
-  return {
-    x,
-    y,
-    width: Math.max(...boxes.map(b => b.x + b.width)) - x,
-    height: Math.max(...boxes.map(b => b.y + b.height)) - y,
-  };
-}
-
 /**
  * `auto` routes fully when the quick routes predict a full pass within the budget. The full
  * pass reroutes each line with a crossing or crowded lane against all the others, so its cost
@@ -227,49 +216,10 @@ function placed(
 ) {
   const { vg, rects } = visibleRects(doc),
     routed = routesFor(doc, vg, rects, quality),
-    parent = new Map([...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId])),
-    // A route's ends may be router stubs, such as a group's frame; report the edge's own ends.
-    ends = new Map(doc.graph.edges.map(e => [e.id, e]));
-  const box = (id: string): PlacedBox => {
-    const r = rects.get(id)!,
-      p = parent.get(id);
-    return { x: r.x, y: r.y, width: r.w, height: r.h, ...(p ? { parent: objectId(p) } : {}) };
-  };
-  const nodes = Object.fromEntries(vg.nodes.map(n => [objectId(n.id), box(n.id)])),
-    groups = Object.fromEntries(vg.groups.map(g => [objectId(g.id), box(g.id)])),
-    edges = Object.fromEntries(
-      routed.routes.map(r => [
-        edgeId(r.id),
-        {
-          source: objectId(ends.get(r.id)?.from ?? r.from),
-          target: objectId(ends.get(r.id)?.to ?? r.to),
-          sourceSide: r.fromSide,
-          targetSide: r.toSide,
-          points: r.points,
-          path: r.path,
-          label: r.label
-            ? {
-                x: r.label.x - r.label.w / 2,
-                y: r.label.y - r.label.h / 2,
-                width: r.label.w,
-                height: r.label.h,
-              }
-            : null,
-          blocked: r.blocked,
-        } satisfies EdgeOut,
-      ]),
-    );
-  const all: Box[] = [...Object.values(nodes), ...Object.values(groups)];
-  for (const e of Object.values(edges)) {
-    if (e.label) all.push(e.label);
-    all.push(bounds(e.points.map(p => ({ ...p, width: 0, height: 0 }))));
-  }
-  const blocked = Object.values(edges).filter(e => e.blocked).length;
+    out = placedItems(doc, rects, routed.routes, objectId, edgeId),
+    blocked = Object.values(out.edges).filter(e => e.blocked).length;
   return {
-    nodes,
-    groups,
-    edges,
-    bounds: bounds(all),
+    ...out,
     quality: routed.quality,
     warnings: blocked ? [`${blocked} line${blocked > 1 ? 's' : ''} found no clear way.`] : [],
   };

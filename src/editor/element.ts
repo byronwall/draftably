@@ -6,6 +6,7 @@
 import {
   mountFailure,
   redispatch,
+  relay,
   sameValue,
   takeEarly,
   warnOtherCopy,
@@ -134,7 +135,8 @@ if (typeof customElements !== 'undefined') {
             return;
           }
           this.editor = editor;
-          editor.on('camera', event => redispatch(this, 'camera', event));
+          for (const type of ['camera', 'select', 'contextmenu'] as const)
+            editor.on(type, event => relay(this, type, event));
           editor.ready.then(
             () => this.editor === editor && this._setStatus('ready'),
             () => this.editor === editor && this._setStatus('error'),

@@ -90,6 +90,7 @@ prints median and p95 per row with ✓ or ✗. Add `--runs N` (default 5) and `-
 | Source update to commit, 28 boxes            | ≤ 200 ms                                                  |
 | Workers, 20 instances × 20 updates           | ≤ min(4, cores − 1) render workers per page               |
 | 20 instances: stylesheets, fonts, long tasks | 1 sheet; 1 font set; no long task over 200 ms             |
+| `geometry()` at 200 nodes                    | ≤ 1 ms; the same object for one revision                  |
 | Mount and destroy, 50 cycles                 | heap within 5 %; listeners, workers and fonts at baseline |
 
 Each change from the host contract on must keep every ✓ row ✓ and must not make a ✗ row slower.

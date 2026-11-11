@@ -9,6 +9,7 @@ import {
   type FrameOptions,
   type MoveResult,
 } from './camera';
+import { itemBox, type Geometry } from './geometry';
 import { releaseFace, renderInWorker, retainFace, sharedFace } from './page-shared';
 import { fontMetricsVersion, runtimeVersion } from './version';
 import { FACES } from '../model/font-faces';
@@ -24,6 +25,7 @@ import type {
 export { fontMetricsVersion, runtimeVersion };
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
+export type { Box, EdgeOut, Geometry, PlacedBox } from './geometry';
 export { ZOOM_MAX, ZOOM_MIN } from './camera';
 
 export type ViewerExecution =
@@ -62,7 +64,12 @@ export type UpdateResult =
   | { status: 'superseded' | 'destroyed' | 'aborted'; revision: number };
 
 export interface ViewerEvents {
-  render: { revision: number; value: Extract<RenderResult, { ok: true }>['value'] };
+  /** After each commit: the drawing, and where each item is (`null` for compare and states). */
+  render: {
+    revision: number;
+    value: Extract<RenderResult, { ok: true }>['value'];
+    geometry: Geometry | null;
+  };
   diagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean };
   /** At most once per animation frame, with the latest reason. */
   camera: { camera: Camera; reason: CameraReason };
@@ -72,11 +79,26 @@ export interface ViewerEvents {
     input: 'pointer' | 'keyboard';
     revision: number;
   };
+  /** `preventDefault()` stops the viewer opening the link. */
   link: { itemId: string; href: string; target: '_self' | '_blank'; preventDefault(): void };
+  /** A right-click or the menu key; `id` is null on the background. `preventDefault()` stops the browser's menu. */
+  contextmenu: {
+    id: string | null;
+    kind?: ItemKind;
+    clientX: number;
+    clientY: number;
+    preventDefault(): void;
+  };
 }
 
+export type ItemKind = 'node' | 'group' | 'edge';
+
 export interface ViewerHandle {
+  /** Resolves after the first commit or failure; then after each later one. */
+  readonly ready: Promise<UpdateResult>;
   update(source: string, options?: UpdateOptions): Promise<UpdateResult>;
+  /** Where each item is drawn, in world units. `null` before the first commit, and for compare and states. The same object for one revision. */
+  geometry(): Geometry | null;
   on<K extends keyof ViewerEvents>(type: K, listener: (event: ViewerEvents[K]) => void): () => void;
   getCamera(): Camera;
   /** Zoom is clamped to `ZOOM_MIN`–`ZOOM_MAX`. */
@@ -326,23 +348,9 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     const [x, y, width, height] = drawing!.viewBox;
     return { x, y, width, height };
   };
-  /** An item's box in world units, measured from the drawing. */
-  const itemBox = (id: string) => {
-    const svg = viewport.querySelector('svg');
-    const mark = Array.from(viewport.querySelectorAll('[data-id]')).find(
-      element => element.getAttribute('data-id') === id,
-    );
-    if (!svg || !mark || !drawing) return undefined;
-    const r = mark.getBoundingClientRect(),
-      s = svg.getBoundingClientRect(),
-      unit = s.width / drawing.viewBox[2] || camera.zoom;
-    return {
-      x: drawing.viewBox[0] + (r.left - s.left) / unit,
-      y: drawing.viewBox[1] + (r.top - s.top) / unit,
-      width: r.width / unit,
-      height: r.height / unit,
-    };
-  };
+  /** The committed drawing's geometry, with its revision; one object per revision. */
+  let geometry: Geometry | null = null;
+  const boxOf = (id: string) => (geometry ? itemBox(geometry, id) : undefined);
   /** The latest fit or reveal asked for before the viewport had a size or a drawing. */
   let pendingMove: (() => MoveResult) | undefined;
   const whenSized = (run: () => MoveResult): MoveResult => {
@@ -360,7 +368,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     reason: CameraReason,
   ): MoveResult =>
     whenSized(() => {
-      const box = ids ? unionBox(ids.flatMap(id => itemBox(id) ?? [])) : frameBox();
+      const box = ids ? unionBox(ids.flatMap(id => boxOf(id) ?? [])) : frameBox();
       if (!box) return 'missing';
       // A whole-drawing fit follows later resizes; a framed selection stays put.
       return move(fitCamera(box, size, frameOptions), reason, !!ids);
@@ -521,6 +529,18 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     const item = drawing?.items.find(value => value.id === id);
     if (item) emit('itemactivate', { id: item.id, kind: item.kind, input: 'pointer', revision });
   });
+  viewport.addEventListener('contextmenu', event => {
+    const target = event.target instanceof win.Element ? event.target : null;
+    const id = target?.closest('[data-id]')?.getAttribute('data-id') ?? null;
+    const item = id ? drawing?.items.find(value => value.id === id) : undefined;
+    emit('contextmenu', {
+      id: item?.id ?? null,
+      ...(item ? { kind: item.kind } : {}),
+      clientX: event.clientX,
+      clientY: event.clientY,
+      preventDefault: () => event.preventDefault(),
+    });
+  });
   viewport.addEventListener('keydown', event => {
     if (event.target !== viewport || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === '+' || event.key === '=') zoomBy(1.2);
@@ -648,6 +668,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           }
           const hadDrawing = !!drawing;
           drawing = result.value;
+          geometry = drawing.geometry ? { ...drawing.geometry, revision: id } : null;
           viewport.replaceChildren(svg);
           outline.replaceChildren(
             ...drawing.items.map(item => {
@@ -712,9 +733,10 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             value: drawing,
             diagnostics: result.diagnostics,
           };
-          finish(committed);
-          emit('render', { revision: id, value: drawing });
+          // Listeners hear the commit before `update` and `ready` resolve.
+          emit('render', { revision: id, value: drawing, geometry });
           emit('diagnostics', { revision: id, diagnostics: result.diagnostics, stale: false });
+          finish(committed);
         })
         .catch(error => {
           if (destroyed || id !== revision || updateOptions.signal?.aborted) {
@@ -735,8 +757,26 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     });
   };
 
+  /** The latest update's settled result; a superseded one waits for the update that replaced it. */
+  let latest: Promise<UpdateResult> | undefined;
+  let firstSettled!: (result: UpdateResult) => void;
+  const first = new Promise<UpdateResult>(resolve => (firstSettled = resolve));
+  const tracked = (source: string, updateOptions?: UpdateOptions) => {
+    const result = update(source, updateOptions);
+    const settled: Promise<UpdateResult> = result.then(r =>
+      r.status === 'superseded' && latest !== settled ? latest! : r,
+    );
+    latest = settled;
+    void settled.then(firstSettled);
+    return result;
+  };
+
   return {
-    update,
+    get ready() {
+      return latest ?? first;
+    },
+    update: tracked,
+    geometry: () => geometry,
     on(type, listener) {
       if (destroyed) return () => {};
       const set = listeners.get(type) ?? new Set();
@@ -759,7 +799,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     fit: (ids, frameOptions) => fitTo(ids, frameOptions, 'api'),
     reveal: (id, frameOptions) =>
       whenSized(() => {
-        const box = itemBox(id);
+        const box = boxOf(id);
         return box ? move(revealCamera(camera, box, size, frameOptions), 'api', true) : 'missing';
       }),
     focusItem(id) {

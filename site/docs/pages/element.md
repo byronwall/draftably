@@ -165,14 +165,16 @@ with source.
 The element dispatches every viewer event as a bubbling `draft-<name>` `CustomEvent`, with the
 event's data in `detail`. Listeners on the element survive a new viewer.
 
-| Event                | `detail`                                                                 |
-| -------------------- | ------------------------------------------------------------------------ |
-| `draft-update`       | The `UpdateResult` of each update.                                       |
-| `draft-render`       | `{ revision, value }` after each drawing.                                |
-| `draft-diagnostics`  | `{ revision, diagnostics, stale }`.                                      |
-| `draft-camera`       | `{ camera, reason }` after a pan, zoom or fit.                           |
-| `draft-itemactivate` | `{ id, kind, input, revision }` when the user picks an item.             |
-| `draft-link`         | `{ itemId, href, target }`. Call `preventDefault()` to open it yourself. |
+| Event                | `detail`                                                                                                                                |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `draft-update`       | The `UpdateResult` of each update.                                                                                                      |
+| `draft-render`       | `{ revision, value, geometry }` after each drawing.                                                                                     |
+| `draft-diagnostics`  | `{ revision, diagnostics, stale }`.                                                                                                     |
+| `draft-camera`       | `{ camera, reason }` after a pan, zoom or fit.                                                                                          |
+| `draft-itemactivate` | `{ id, kind, input, revision }` when the user picks an item.                                                                            |
+| `draft-link`         | `{ itemId, href, target }`. Call `preventDefault()` to open it yourself.                                                                |
+| `draft-contextmenu`  | `{ id, kind, clientX, clientY }`; `id` is null on the background. Call `preventDefault()` to stop the browser's menu and show your own. |
+| `draft-select`       | `{ ids, reason }`, on `<draft-editor>` only: the selection changed.                                                                     |
 
 ```ts
 diagram.addEventListener('draft-itemactivate', event => console.log(event.detail.id));
@@ -257,6 +259,23 @@ The viewer zooms with the wheel, pans with a background drag, and has zoom and f
 its viewport has focus, `+`, `-` and `f` zoom and fit. **Fit diagram** shows the whole diagram with
 a margin, capped at actual size. Your camera changes stay through source updates and resizes;
 call `fit()` or update with `{ camera: 'fit' }` for a new overview.
+
+### Find where things are
+
+`geometry()` returns where every node, group and edge is drawn, in world units, in the
+[graph API's shapes](#layout-api): a `Box` per node and group, and per edge its points, its SVG
+path and its label box. `frame` is the whole drawing, with the heading and legend; `bounds` holds
+the shapes and lines only. It is `null` before the first drawing, and for `compare` and `states`
+drawings, which draw an item more than once.
+
+```ts
+const g = diagram.viewer!.geometry();
+const api = g?.nodes.api; // { x, y, width, height, parent? }
+```
+
+The object is the same until the next drawing, whose `revision` it carries; the `render` event
+brings the new one. `renderSvg` returns the same `geometry` with a successful result, in the SVG's
+`viewBox` units. `ready` resolves after the first drawing or failure, then after each later one.
 
 ### Steer the camera
 

@@ -159,4 +159,27 @@ describe('draft-diagram element', () => {
     expect(rejections).toEqual([]);
     expect(element.viewer).toBeUndefined();
   });
+
+  it('dispatches contextmenu as a cancelable event, and a host cancel stops the browser menu', async () => {
+    const element = document.createElement('draft-diagram');
+    element.options = { execution: { mode: 'main' } };
+    element.source = 'node a "A"';
+    document.body.append(element);
+    await element.updateComplete;
+    const menus: Array<{ id: string | null }> = [];
+    element.addEventListener('draft-contextmenu', e => {
+      menus.push(e.detail);
+      if (e.detail.id) e.preventDefault();
+    });
+    const right = (target: Element) => {
+      const event = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+      target.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+    const shadow = element.shadowRoot!;
+    expect(right(shadow.querySelector('[data-id="a"]')!)).toBe(true);
+    expect(right(shadow.querySelector('.draft-viewer__viewport')!)).toBe(false);
+    expect(menus.map(m => m.id)).toEqual(['a', null]);
+    expect(element.viewer!.geometry()?.nodes.a).toMatchObject({ width: expect.any(Number) });
+  });
 });
