@@ -65,7 +65,7 @@ describe('docs search', () => {
     ['back edge', /Feedback lines and ties/],
     ['group layout', /Scopes and groups/],
     ['docusaurus', /Documentation sites/],
-    ['mountViewer', /Element and viewer/],
+    ['mountViewer', /API reference/],
     ['renderSvg', /Render SVG/],
     ['mermaid drop-in', /Switch from Mermaid/],
   ])('ranks the right page first: %s', (query, page) => {
