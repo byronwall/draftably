@@ -34,7 +34,8 @@ export function elementAttributes(rest) {
 /**
  * Sets `attributes` on `node` and returns the undo. For `<draft-editor>`, which registers after
  * the first render: a Svelte spread on an element that is not yet defined writes `options` as the
- * text "[object Object]".
+ * text "[object Object]". These attributes are set in the browser only, so the editor's server
+ * HTML has none; the editor itself renders in the browser only.
  * @param {HTMLElement} node
  * @param {Record<string, unknown>} attributes
  */
@@ -45,7 +46,8 @@ export function applyAttributes(node, attributes) {
       node.addEventListener(key.slice(2), listener);
       return () => node.removeEventListener(key.slice(2), listener);
     }
-    if (value == null || value === false) return () => {};
+    // As the spread on `<draft-diagram>` does: `false` is the text "false", as for `aria-*`.
+    if (value == null) return () => {};
     node.setAttribute(key, value === true ? '' : String(value));
     return () => node.removeAttribute(key);
   });

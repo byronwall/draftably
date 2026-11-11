@@ -11,6 +11,9 @@ The framework components pass every other attribute, such as `data-theme`, `id` 
 their element. Before, React, Solid and Svelte dropped them with no warning, so
 `<DraftEditor data-theme="dark" />` stayed light.
 
+The Svelte components no longer write `options="[object Object]"` on their elements in server
+HTML. `DraftEditor` sets its other attributes in the browser, so its server HTML has none.
+
 Event props can cancel. `onLink` and `onContextmenu` (`@link`, `onlink`, …) receive the event's
 `detail` with a `preventDefault()` that cancels the DOM event, so
 `onContextmenu={e => e.preventDefault()}` stops the browser's menu with no listener on the
