@@ -4,7 +4,7 @@ import { brokenRectPath } from '../../model/geometry';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
-import { drawnSwatch, participantAccent } from '../../model/colors';
+import { detailInk, drawnSwatch, participantAccent } from '../../model/colors';
 import { accentPath } from '../../cli/svg';
 import { HALO_GAP, haloInk, MARKER, statusPaint } from '../../model/status';
 import { countText, STACK_OFFSETS } from '../../model/stack';
@@ -13,7 +13,7 @@ import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { pinSpot, PositionBadge, RemovedMarker, ResizeHandles, SceneText } from './parts';
+import { NodeTitle, pinSpot, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
 
@@ -41,6 +41,7 @@ export function NodeView(props: NodeViewProps) {
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
   const paint = () => statusPaint(look(), style().status, style().spot);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
+  const inside = () => label().mode === 'center' && style().shape !== 'text';
   const ringRadius = () => {
     const { shape } = style(),
       r = props.rect;
@@ -188,14 +189,11 @@ export function NodeView(props: NodeViewProps) {
           <SceneGlyph name={style().icon} x={g().x} y={g().y} size={g().size} color={color().ink} />
         )}
       </Show>
-      <SceneText
-        class="node-title"
-        lines={label().lines}
-        x={label().x}
-        y={label().y}
-        lineHeight={label().lineHeight}
-        type={look().title}
-        fill={label().mode === 'center' && style().shape !== 'text' ? color().ink : look().text}
+      <NodeTitle
+        label={label()}
+        look={look()}
+        fill={inside() ? color().ink : look().text}
+        detailFill={inside() ? detailInk(look(), color()) : look().muted}
         strike={paint().strike}
         fade={paint().inkFade}
       />

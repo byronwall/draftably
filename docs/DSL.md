@@ -714,6 +714,12 @@ title at the same place. A word too long for a line breaks where an identifier's
 its default width, rather than break a word in the middle. Exported SVG files embed the fonts
 they use.
 
+A node title's first `\n` splits it into a name and a detail: `node gh "GitHub\nopen PRs, CI"`.
+The name keeps the title type. The detail lines are 1px smaller, in the lighter annotation weight,
+and in a muted ink: the theme's `muted` on a neutral node, or the family's ink moved toward its
+fill on a colored one (at least 4.5:1). Later `\n` breaks start new detail lines. Group titles
+and connection labels draw every line alike.
+
 ### Families and shades
 
 Built-in families: `primary` and `secondary` (the theme's own accents),

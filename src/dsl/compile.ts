@@ -21,6 +21,7 @@ import {
   SELF_LOOP,
   selfMessageInk,
   titleArea,
+  textHeight,
   titleHeight,
   wrapTitle,
 } from '../model/labels';
@@ -1006,8 +1007,16 @@ const MAX_GROW = 2;
  * rewraps in balanced lines.
  */
 function fitWidth(o: ModelObject, base: { w: number; h: number }, look: ResolvedAppearance) {
+  // Each explicit line in the type it is drawn in: the name, then detail lines.
   const rows = o.label.includes('\n') && o.shape !== 'circle' ? o.label.split('\n') : [],
-    need = Math.max(widestPiece(o.label, look.title), ...rows.map(l => measureText(l, look.title)));
+    type = (i: number) => (i ? look.detail : look.title),
+    name = o.label.split('\n')[0],
+    rest = o.label.slice(name.length + 1),
+    need = Math.max(
+      widestPiece(name, look.title),
+      rest ? widestPiece(rest, look.detail) : 0,
+      ...rows.map((l, i) => measureText(l, type(i))),
+    );
   let w = base.w;
   while (titleArea(o.shape, w, base.h, look).width < need && w < base.w * MAX_GROW) w += 4;
   return Math.min(w, base.w * MAX_GROW);
@@ -1027,12 +1036,12 @@ export function leafSize(
   if (o.shape === 'diamond') return diamondSize(o, size, base, look);
   const w = size?.width ?? fitWidth(o, base, look);
   const area = titleArea(o.shape, w, size?.height ?? base.h, look),
-    lines = wrapTitle(o.label, area.width, look).length;
+    text = textHeight(wrapTitle(o.label, area.width, look), look);
   if (size?.height !== undefined)
-    return { w, h: size.height, overflow: lines * look.title.lineHeight > area.maxHeight + 0.5 };
+    return { w, h: size.height, overflow: text > area.maxHeight + 0.5 };
   return {
     w,
-    h: titleHeight(o.shape, lines, o.shape === 'circle' ? base.h : 0, look),
+    h: titleHeight(o.shape, text, o.shape === 'circle' ? base.h : 0, look),
     overflow: false,
   };
 }

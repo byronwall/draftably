@@ -13,7 +13,10 @@
  * The canvas, the CLI's SVG and exports all draw through `drawnSwatch`.
  */
 import {
+  CONTRAST,
+  ensureContrast,
   groupShadeFor,
+  mixColors,
   memberShadeFor,
   NODE_SHADE,
   PRESETS,
@@ -98,6 +101,16 @@ export function participantAccent(
     family = styleOf(doc, id).color;
   if ((!family || family === 'auto') && shade === undefined) return undefined;
   return swatchFor(look, family, shade, 'node').fill;
+}
+
+/**
+ * Ink for a title's detail lines on a swatch: the theme's muted ink on the neutral surface, or the
+ * swatch's own ink moved toward its fill on a colored one, held to 4.5:1 on the fill.
+ */
+export function detailInk(look: ResolvedAppearance, swatch: Swatch): string {
+  if (swatch.fill === look.node.fill && swatch.ink === look.node.ink)
+    return ensureContrast(look.muted, swatch.fill, CONTRAST.connection);
+  return ensureContrast(mixColors(swatch.ink, swatch.fill, 0.3), swatch.fill, CONTRAST.connection);
 }
 
 const clampIndex = (i: number) => Math.max(0, Math.min(SHADES.length - 1, i));
