@@ -42,9 +42,10 @@ The editor mounts in a microtask after it connects, so options set in the same t
 start. Callbacks apply live. Only a new `storageKey` mounts a new editor. Like `<draft-diagram>`,
 the element reflects `status="loading | ready | error"`.
 
-A shortcut goes to the editor the user last pointed at or focused. A press on the page outside
-every editor ends that, so typing on the page after a click on empty space never edits a diagram.
-A removed editor never takes shortcuts.
+A shortcut goes to the editor the user last pointed at or focused. A press on the drawing moves
+focus into the editor, so a field elsewhere on the page, such as one in a viewer's slot, gives up
+its keys. A press on the page outside every editor ends that, so typing on the page after a click
+on empty space never edits a diagram. A removed editor never takes shortcuts.
 
 ## Editor colors
 

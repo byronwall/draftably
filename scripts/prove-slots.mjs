@@ -10,7 +10,8 @@
  * `overflow: clip` keeps the element from scrolling, an unknown slot is a `DRAFT_SLOT_UNKNOWN`
  * warning, content larger than its node is a `DRAFT_SLOT_OVERFLOW` warning, and low detail hides
  * bodies, also after a commit made zoomed out. For the editor also: its styles in the shadow root, page
- * tokens on `:host`, ports and handles above a body, and no shortcut from a marked input.
+ * tokens on `:host`, ports and handles above a body, no shortcut from a marked input, and a press
+ * on its drawing takes the keys from a focused field in the viewer's slot.
  * Screenshots go to tmp/proof-slots/.
  *
  * Usage: pnpm runtime:build && pnpm editor:build && node scripts/prove-slots.mjs [chromium,firefox,webkit]
@@ -482,6 +483,28 @@ for (const name of only) {
       await ev(([s, c]) => H(s).handle().setCamera(c), [side, start]);
       await frames();
     }
+
+    // A press on the editor's drawing takes focus from a field in the viewer's slot: Backspace
+    // then deletes the selected node, and the field keeps its text.
+    await at(await ev(() => rect(card('viewer', 'api').querySelector('.field'))));
+    await tab.keyboard.type('xy');
+    const typed = await ev(() => card('viewer', 'api').querySelector('.field').value);
+    await ev(() => editor.editor.reveal('db'));
+    await frames();
+    const db = await ev(() => itemBox('editor', 'db'));
+    await tab.mouse.click(db.x + db.w / 2, db.y + db.h / 2);
+    await tab.keyboard.press('Backspace');
+    await sleep(300);
+    const keys = await ev(() => ({
+      field: card('viewer', 'api').querySelector('.field').value,
+      focus: document.activeElement?.localName,
+      db: editor.editor.source().includes('node db'),
+    }));
+    check(
+      "editor: a press on its drawing takes the keys from a viewer slot's field",
+      keys.field === typed && keys.focus === 'draft-editor' && !keys.db,
+      { typed, ...keys },
+    );
 
     // The editor: styles in its shadow root, page tokens on :host, chrome above bodies.
     const styled = await ev(async () => {
