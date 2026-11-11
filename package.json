@@ -39,6 +39,7 @@
     "prove:editors": "node scripts/prove-two-editors.mjs",
     "prove:handles": "node scripts/prove-handles.mjs",
     "prove:slots": "node scripts/prove-slots.mjs",
+    "prove:color-scheme": "node scripts/prove-color-scheme.mjs",
     "prove:site": "node scripts/prove-site.mjs",
     "prove:themes": "node scripts/prove-themes.mjs",
     "font-metrics": "node scripts/font-metrics.mjs",

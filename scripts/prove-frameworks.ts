@@ -335,6 +335,25 @@ writeFileSync('dist/proof.html', page);`,
     assert.equal(sources[0], changes[0].at(-1), `${fw}: the editor holds the source it reported`);
     await editorSlots(page, fw);
     await page.screenshot({ path: path.join(out, `${fw}.png`), fullPage: true });
+    // The page sets no color-scheme, so a dark system setting draws every diagram dark.
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.waitForTimeout(300);
+    const canvases = await page.evaluate(() => [
+      ...[...document.querySelectorAll('draft-diagram')].map(
+        el =>
+          getComputedStyle(el.shadowRoot!.querySelector('.draft-viewer__viewport > svg > rect')!)
+            .fill,
+      ),
+      ...[...document.querySelectorAll('draft-editor')].map(
+        el => getComputedStyle(el.shadowRoot!.querySelector('.stage')!).backgroundColor,
+      ),
+    ]);
+    assert.ok(
+      canvases.every(c => c === 'rgb(22, 25, 30)'),
+      `${fw}: a dark system setting draws every diagram dark ${JSON.stringify(canvases)}`,
+    );
+    await page.screenshot({ path: path.join(out, `${fw}-dark.png`), fullPage: true });
+    await page.emulateMedia({ colorScheme: 'light' });
     assert.deepEqual(errors, [], `${fw}: no console errors`);
     await page.close();
     const proof = await proveHost(browser, `${server.url}proof.html`, `vite-${fw}`, out);
@@ -342,7 +361,7 @@ writeFileSync('dist/proof.html', page);`,
     server.close();
     assert.deepEqual(proof.failed, [], `${fw}: the host proof passes`);
     console.log(
-      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options, slots in the viewer and the editor`,
+      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options, slots in the viewer and the editor, dark system scheme`,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

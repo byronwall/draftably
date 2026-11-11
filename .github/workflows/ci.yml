@@ -45,7 +45,7 @@ jobs:
       # The runner's apt mirror sometimes fails to resolve; retry before failing the job.
       - run: for i in 1 2 3; do pnpm exec playwright-core install --with-deps chromium firefox webkit && exit 0; sleep 30; done; exit 1
       - run: pnpm site:build
-      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks && pnpm prove:recipes && pnpm prove:slots
+      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks && pnpm prove:recipes && pnpm prove:slots && pnpm prove:color-scheme
       - run: pnpm prove:file
       - run: pnpm prove:layout
       - run: pnpm prove:site

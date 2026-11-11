@@ -134,6 +134,15 @@ its shadow root; a page value for a token wins; `data-theme="dark"` switches the
 resize handles of a body node sit above the body and resize it; typing **N** in a marked input adds
 no node; and both send `anchors` with `[]` on removal. Screenshots go to `tmp/proof-slots/`.
 
+`pnpm prove:color-scheme` loads the built elements on one plain page in Chromium, Firefox and
+WebKit: a viewer and an editor of a source with no `theme` line, a viewer forced light with
+`color-scheme: light`, and a viewer of a source with `theme drafting`. A light page draws all of
+them light. `color-scheme: dark` on the page draws the first two dark, with no new render and no
+moved box, and the forced and themed ones stay light. Without a `color-scheme` on the page, the
+system setting decides. Build first, as for slots. Screenshots go to `tmp/proof-color-scheme/`.
+`pnpm prove:frameworks` also checks that each wrapper's diagrams draw dark on a dark system
+setting, and saves `tmp/frameworks/<framework>-dark.png`.
+
 `pnpm prove:frameworks` (CI) runs the checks that depend on the host through the React, Solid,
 Vue and Svelte wrappers in Chromium, with the content rendered and updated by each framework:
 pass-through and assignment, the unknown-slot warning, geometry and camera scale, host CSS, orphan
