@@ -163,6 +163,13 @@ editors with `mountEditor`. The proof drags, selects, adds a node and undoes in 
 mouse and keys. The other editor's document, selection and source must not change. Screenshots go to
 `tmp/proof-editors/`.
 
+## Links in file mode
+
+No script covers this. Run `pnpm draftably open tests/fixtures/links.draft` and click each ↗
+mark. A URL opens as written in a new tab, `examples/theme-proof.draft` opens in the viewer, and a
+file path opens the editor at its line, from the git root. A click on a box away from its mark only
+selects it.
+
 ## Browser
 
 The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at 1440 × 900 and

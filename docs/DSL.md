@@ -153,8 +153,8 @@ new tab, a `.draft` in the Editor, and a file path in VS Code. A file path may e
 `:42:5` to open at that line and column. A relative path starts at the diagram's git root, or its
 folder outside a repository.
 
-In `inspect --svg` and the Editor's SVG export, each linked object is an `<a>` with a tooltip
-naming its target, and its outline thickens on hover. A URL stays as written and opens in a new
+In `inspect --svg` and the Editor's SVG export, each linked object is an `<a>`, and its outline
+thickens on hover. Nothing pops up on hover, so the browser's status bar shows the target. A URL stays as written and opens in a new
 tab. A file link is written as a path from the diagram's folder, without its line, so it opens
 when the SVG is saved beside the `.draft`. Each object's group carries `data-id` with its ID.
 
