@@ -15,4 +15,4 @@ export {
 } from '../components/session-context';
 export type { CanvasProps } from '../components/canvas/Canvas';
 export { Editor } from './Editor';
-export { mountEditor, type MountedEditor, type MountOptions } from './mount';
+export { mountEditor, type EditorOptions, type MountedEditor, type MountOptions } from './mount';

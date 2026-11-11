@@ -120,6 +120,28 @@ process.stdout.write(html);`,
     assert.ok(outlines[0] > 20, `${fw}: outline="visible" shows the first outline`);
     assert.ok(outlines[1] <= 1, `${fw}: the default outline is visually hidden`);
     assert.ok(before[1].includes('Beta worker'), `${fw}: second diagram shows its own source`);
+    // The host contract: status, the element from the wrapper, live options, event props.
+    const contract = () =>
+      page.evaluate(() => {
+        const els = [...document.querySelectorAll('draft-diagram')];
+        const w = window as { __first?: Element; __events?: Record<string, number> };
+        return {
+          status: els.map(el => el.getAttribute('status')),
+          first: w.__first === els[0],
+          toolbar: (els[1].shadowRoot!.querySelector('.draft-viewer__toolbar') as HTMLElement)
+            .hidden,
+          camera: w.__events?.camera ?? 0,
+        };
+      });
+    const parity = await contract();
+    assert.deepEqual(parity.status, ['ready', 'ready', 'ready'], `${fw}: status="ready"`);
+    assert.ok(parity.first, `${fw}: the wrapper gives the element (ref, expose or bind)`);
+    assert.ok(parity.toolbar, `${fw}: options reach the element`);
+    assert.ok(parity.camera >= 3, `${fw}: the camera event prop fires`);
+    await page.evaluate(() => {
+      (window as { __second?: unknown }).__second =
+        document.querySelectorAll('draft-diagram')[1].viewer;
+    });
     await page.click('#update');
     await page.waitForFunction(
       () =>
@@ -132,6 +154,14 @@ process.stdout.write(html);`,
     );
     const after = await drawn();
     assert.equal(after[1], before[1], `${fw}: updating the first diagram leaves the second alone`);
+    assert.ok(
+      await page.evaluate(
+        () =>
+          document.querySelectorAll('draft-diagram')[1].viewer ===
+          (window as { __second?: unknown }).__second,
+      ),
+      `${fw}: a new options object with the same values does not re-mount`,
+    );
     await page.click('#remove');
     await page.waitForFunction(() => document.querySelectorAll('draft-diagram').length === 2);
     const updates = await page.evaluate(() => (window as { __updates?: string[] }).__updates ?? []);
@@ -166,6 +196,12 @@ process.stdout.write(html);`,
       { timeout: 10000 },
     );
     const changes = await page.evaluate(() => (window as { __changes?: string[][] }).__changes!);
+    const editorState = await page.evaluate(() => ({
+      status: [...document.querySelectorAll('draft-editor')].map(el => el.getAttribute('status')),
+      interact: (window as { __events?: Record<string, number> }).__events?.interact ?? 0,
+    }));
+    assert.deepEqual(editorState.status, ['ready', 'ready'], `${fw}: editor status="ready"`);
+    assert.ok(editorState.interact > 0, `${fw}: an editor callback option runs`);
     assert.equal(changes[1].length, 0, `${fw}: the second editor reports no change`);
     assert.match(
       changes[0].at(-1)!,
@@ -182,7 +218,7 @@ process.stdout.write(html);`,
     await page.close();
     server.close();
     console.log(
-      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, update, remove, onUpdate, editor drag`,
+      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options`,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

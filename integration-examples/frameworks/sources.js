@@ -11,3 +11,18 @@ export const recordChange = (i, source) => {
   const all = (globalThis.__changes ??= [[], []]);
   all[i].push(source);
 };
+
+/** Test hook: count each host event the wrappers deliver through their event props. */
+export const recordEvent = name => {
+  const all = (globalThis.__events ??= {});
+  all[name] = (all[name] ?? 0) + 1;
+};
+
+/** Test hook: the first diagram's element, from the wrapper's ref or binding. */
+export const recordElement = el => {
+  if (el) globalThis.__first = el;
+};
+
+/** Options as a new object on every render; the element must not re-mount for it. */
+export const viewerOptions = () => ({ toolbar: false });
+export const editorOptions = () => ({ onInteract: () => recordEvent('interact') });

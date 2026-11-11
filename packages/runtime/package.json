@@ -26,6 +26,10 @@
       "types": "./dist/types/src/runtime/element.d.ts",
       "import": "./dist/element.js"
     },
+    "./host": {
+      "types": "./dist/types/src/runtime/host.d.ts",
+      "import": "./dist/host.js"
+    },
     "./graph": {
       "types": "./dist/types/src/graph-api/index.d.ts",
       "import": "./dist/graph.js"

@@ -1,9 +1,13 @@
-/** `<DraftDiagram>` for Solid: the `<draft-diagram>` element with Solid props, a ref and `onUpdate`. */
+/** `<DraftDiagram>` for Solid: the `<draft-diagram>` element with Solid props, a ref and event props. */
 import '@draftably/runtime/element';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
-import { createEffect, onCleanup, Show, type JSX } from 'solid-js';
+import { Show, type JSX } from 'solid-js';
+import { listenHostEvents, type HostEventProps } from './events.js';
 
+export { renderSvg } from '@draftably/runtime';
+export { HOST_EVENTS } from '@draftably/runtime/host';
+export type { HostEventName, HostEventProps, HostEvents } from './events.js';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
 declare module 'solid-js' {
@@ -15,12 +19,13 @@ declare module 'solid-js' {
         state?: string;
         label?: string;
         outline?: 'visible' | 'hidden';
+        'prop:options'?: ViewerOptions;
       };
     }
   }
 }
 
-export interface DraftDiagramProps {
+export interface DraftDiagramProps extends HostEventProps {
   /** `.draft` source. A change redraws the diagram and keeps the camera. */
   source: string;
   /** A declared emphasis state to show. */
@@ -34,36 +39,25 @@ export interface DraftDiagramProps {
    * draws. Server rendering and readers without JavaScript see it.
    */
   svg?: string;
+  /** Every `mountViewer` option. A new object with the same values does nothing. */
   options?: ViewerOptions;
-  onUpdate?: (result: UpdateResult) => void;
   ref?: (element: DraftDiagramElement) => void;
   class?: string;
   style?: JSX.CSSProperties | string;
 }
 
 export function DraftDiagram(props: DraftDiagramProps) {
-  let el: DraftDiagramElement | undefined;
-  createEffect(() => {
-    if (el && props.options) el.options = props.options;
-  });
-  createEffect(() => {
-    const node = el;
-    const onUpdate = props.onUpdate;
-    if (!node || !onUpdate) return;
-    const listen = (event: Event) => onUpdate((event as CustomEvent<UpdateResult>).detail);
-    node.addEventListener('draft-update', listen);
-    onCleanup(() => node.removeEventListener('draft-update', listen));
-  });
   return (
     <draft-diagram
       ref={(node: DraftDiagramElement) => {
-        el = node;
+        listenHostEvents(node, props);
         props.ref?.(node);
       }}
       source={props.source}
       state={props.state ?? undefined}
       label={props.label}
       outline={props.outline}
+      prop:options={props.options ?? {}}
       class={props.class}
       style={props.style}
     >

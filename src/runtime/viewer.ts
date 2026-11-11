@@ -326,12 +326,11 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     applyCamera();
     emit('camera', { camera: { ...camera }, reason: 'user' });
   };
-  if (options.toolbar !== false) {
-    addButton('Zoom in', () => zoomBy(1.2));
-    addButton('Zoom out', () => zoomBy(1 / 1.2));
-    addButton('Fit diagram', () => fit());
-    addButton('Actual size', actualSize);
-  }
+  addButton('Zoom in', () => zoomBy(1.2));
+  addButton('Zoom out', () => zoomBy(1 / 1.2));
+  addButton('Fit diagram', () => fit());
+  addButton('Actual size', actualSize);
+  toolbar.hidden = options.toolbar === false;
 
   const resize = new win.ResizeObserver(() => {
     if (drawing && !viewport.getBoundingClientRect().width) return;

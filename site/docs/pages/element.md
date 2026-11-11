@@ -118,13 +118,44 @@ diagram.source = source;
 document.querySelector('#diagrams')!.append(diagram);
 ```
 
-Replacing `options`, `label` or `outline` remounts the viewer. Set `render.styleNonce` before
-connection when your CSP requires a style nonce. Source and options assigned before the element
-registers survive its upgrade. Importing the element entry in Node is safe; it registers and
-renders only in a browser.
+The element mounts once, in a microtask after it connects, so every property you set in the same
+task lands before the first draw. `label`, `outline`, `toolbar` and render settings apply without a
+new viewer, and keep the camera. Only a new `execution` or `render.fonts` mounts a new viewer.
+`options` compares by value, so assigning a new object with the same values does nothing. Set
+`render.styleNonce` when your CSP requires a style nonce. Source and options assigned before the
+element registers survive its upgrade. Importing the element entry in Node is safe; it registers
+and renders only in a browser.
 
-The read-only `viewer` property gives `fit()`, camera control and viewer events while the element
-is connected with source.
+The read-only `viewer` property gives `fit()` and camera control while the element is connected
+with source.
+
+## Events and status
+
+The element dispatches every viewer event as a bubbling `draft-<name>` `CustomEvent`, with the
+event's data in `detail`. Listeners on the element survive a new viewer.
+
+| Event                | `detail`                                                                 |
+| -------------------- | ------------------------------------------------------------------------ |
+| `draft-update`       | The `UpdateResult` of each update.                                       |
+| `draft-render`       | `{ revision, value }` after each drawing.                                |
+| `draft-diagnostics`  | `{ revision, diagnostics, stale }`.                                      |
+| `draft-camera`       | `{ camera, reason }` after a pan, zoom or fit.                           |
+| `draft-itemactivate` | `{ id, kind, input, revision }` when the user picks an item.             |
+| `draft-link`         | `{ itemId, href, target }`. Call `preventDefault()` to open it yourself. |
+
+```ts
+diagram.addEventListener('draft-itemactivate', event => console.log(event.detail.id));
+```
+
+The `@draftably/runtime` types add these events to `HTMLElementEventMap`, so `event.detail` needs
+no cast. `HOST_EVENTS` from `@draftably/runtime/host` lists every event name.
+
+The element reflects its state in a `status` attribute: `loading`, `ready` or `error`. Style each
+state with ordinary CSS, such as `draft-diagram[status='loading'] { opacity: 0.6; }`. A failed
+first update keeps the fallback and shows its diagnostics in the element.
+
+If two copies of the runtime load on one page, the second copy warns once in the console and the
+first copy's element stays in use.
 
 ## Mount a viewer yourself
 

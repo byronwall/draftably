@@ -21,15 +21,29 @@ camera. Keyboard shortcuts go to the editor the user last pointed at.
 
 ## Read and set the source
 
-Listen for `draft-change`. Its `detail` is the new source after every kept edit, undo and redo:
+Listen for `draft-change`. Its `detail` is `{ source }`, after every kept edit, undo and redo:
 
 ```ts
 const editor = document.querySelector('draft-editor')!;
-editor.addEventListener('draft-change', e => save((e as CustomEvent<string>).detail));
+editor.addEventListener('draft-change', e => save(e.detail.source));
 ```
 
 Set `source` to load other text, such as a file the user picked. The editor does not redraw for a
 value it reported itself, so you can pass each change straight back.
+
+Set `options` for the other `mountEditor` options (see the table below):
+
+```ts
+editor.options = { openLink: href => router.open(href), onInteract: closeMenus };
+```
+
+The editor mounts in a microtask after it connects, so options set in the same task apply from the
+start. Callbacks apply live. Only a new `storageKey` mounts a new editor. Like `<draft-diagram>`,
+the element reflects `status="loading | ready | error"`.
+
+A shortcut goes to the editor the user last pointed at or focused. A press on the page outside
+every editor ends that, so typing on the page after a click on empty space never edits a diagram.
+A removed editor never takes shortcuts.
 
 ## In a framework
 
@@ -40,13 +54,22 @@ value it reported itself, so you can pass each change straight back.
 | Vue       | `DraftEditor` from `@draftably/vue/editor`    | `@change`       |
 | Svelte    | `DraftEditor` from `@draftably/svelte/editor` | `onchange`      |
 
+Each callback receives `{ source }`. Each component also takes `options`, and the same element
+access and event props as `DraftDiagram` (see [Frameworks](#frameworks)).
+
 ```tsx
 import { useState } from 'react';
 import { DraftEditor } from '@draftably/react/editor';
 
 export function DiagramField() {
   const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
-  return <DraftEditor source={source} onChange={setSource} style={{ height: '28rem' }} />;
+  return (
+    <DraftEditor
+      source={source}
+      onChange={change => setSource(change.source)}
+      style={{ height: '28rem' }}
+    />
+  );
 }
 ```
 
