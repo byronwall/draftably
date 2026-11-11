@@ -1,4 +1,4 @@
-import type { Component } from 'svelte';
+import type { Component, Snippet } from 'svelte';
 import type { DraftEditorElement, EditorOptions } from '@draftably/editor/element';
 import type { HostEventProps } from './events';
 
@@ -13,6 +13,8 @@ export interface DraftEditorProps extends HostEventProps {
   element?: DraftEditorElement;
   class?: string;
   style?: string;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: Snippet;
 }
 
 export const DraftEditor: Component<DraftEditorProps, Record<string, never>, 'element'>;

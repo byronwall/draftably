@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
   useRef,
   type CSSProperties,
+  type ReactNode,
 } from 'react';
 import { useBeforeMount, useHostEvents, type HostEventProps } from './events.js';
 
@@ -20,11 +21,13 @@ export interface DraftEditorProps extends HostEventProps {
   options?: EditorOptions;
   className?: string;
   style?: CSSProperties;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: ReactNode;
 }
 
 export const DraftEditor = forwardRef<DraftEditorElement | null, DraftEditorProps>(
   function DraftEditor(props, ref) {
-    const { source, options, className, style } = props;
+    const { source, options, className, style, children } = props;
     const el = useRef<DraftEditorElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
@@ -38,6 +41,6 @@ export const DraftEditor = forwardRef<DraftEditorElement | null, DraftEditorProp
         el.current?.setAttribute('data-error', String(error));
       });
     }, []);
-    return createElement('draft-editor', { ref: el, source, className, style });
+    return createElement('draft-editor', { ref: el, source, className, style }, children);
   },
 );

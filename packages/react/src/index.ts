@@ -3,7 +3,14 @@
 import '@draftably/runtime/element';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
-import { createElement, forwardRef, useImperativeHandle, useRef, type CSSProperties } from 'react';
+import {
+  createElement,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 import { useBeforeMount, useHostEvents, type HostEventProps } from './events.js';
 
 export { renderSvg } from '@draftably/runtime';
@@ -29,11 +36,13 @@ export interface DraftDiagramProps extends HostEventProps {
   options?: ViewerOptions;
   className?: string;
   style?: CSSProperties;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: ReactNode;
 }
 
 export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramProps>(
   function DraftDiagram(props, ref) {
-    const { source, state, label, outline, svg, options, className, style } = props;
+    const { source, state, label, outline, svg, options, className, style, children } = props;
     const el = useRef<DraftDiagramElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
@@ -44,6 +53,7 @@ export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramP
       'draft-diagram',
       { ref: el, source, state: state ?? undefined, label, outline, className, style },
       svg ? createElement('div', { dangerouslySetInnerHTML: { __html: svg } }) : null,
+      children,
     );
   },
 );

@@ -35,6 +35,7 @@
       "import": "./dist/graph.js"
     },
     "./viewer.css": "./dist/viewer.css",
+    "./host.css": "./dist/host.css",
     "./fonts.css": "./dist/fonts.css",
     "./browser": {
       "types": "./dist/types/src/runtime/index.d.ts",

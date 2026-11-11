@@ -1,4 +1,4 @@
-import { createEffect, createMemo, on, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, on, untrack } from 'solid-js';
 import { render } from 'solid-js/web';
 import { registerFonts } from '../lib/font-data';
 import { resolveAppearance } from '../model/appearance';
@@ -20,6 +20,9 @@ import {
 import { findEdge, findNode, isGroup, objectRect } from '../model/graph';
 import { placedItems, type Geometry } from '../runtime/geometry';
 import { drawnLegend, usedStatuses } from '../model/status';
+import { createAnchorLayer, type Anchor, type DraftSlot } from '../runtime/anchors';
+import type { Diagnostic } from '../runtime/types';
+import { adoptEditorCss } from './css';
 import { Editor } from './Editor';
 import { sessions } from './internal';
 import '../styles/app.css';
@@ -37,6 +40,9 @@ const forEditor =
   <E extends Event>(handle: (e: E) => unknown) =>
   (e: Event) => {
     if (!hasActiveSession()) return;
+    // Marked host content takes its own keys; shortcuts never fire there.
+    if (e.composedPath().some(n => n instanceof Element && n.hasAttribute('data-draft-input')))
+      return;
     const target = eventTarget(e) as Element;
     if ((target === document.body && engaged) || target.closest?.('.draft-editor'))
       void handle(e as E);
@@ -54,7 +60,10 @@ let mounted = 0;
 export type EditorOptions = Pick<
   SessionOptions,
   'storageKey' | 'openLink' | 'confirm' | 'onInteract'
->;
+> & {
+  /** `auto` (default) hides slot bodies and shows titles again below a zoom of 0.4. */
+  detail?: 'auto' | 'full';
+};
 
 export interface MountOptions extends EditorOptions {
   /** The `.draft` text to edit. */
@@ -65,6 +74,10 @@ export interface MountOptions extends EditorOptions {
 
 /** What `on` reports. `camera` comes at most once per animation frame. */
 export interface EditorEvents {
+  /** After each drawing, after `anchor()`, and with `[]` before `destroy` detaches the targets. */
+  anchors: { anchors: readonly Anchor[] };
+  /** Slot warnings: an unknown slot, or content larger than its node. */
+  diagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean };
   camera: { camera: Camera; reason: CameraReason };
   /** The selection changed, by the user or through `select()`. */
   select: { ids: readonly string[]; reason: 'user' | 'api' };
@@ -94,6 +107,8 @@ export interface MountedEditor {
   /** Select these items (unknown IDs are dropped); `[]` clears the selection. */
   select(ids: readonly string[]): void;
   selection(): readonly string[];
+  /** Plain-DOM hosts only: keep a target per slot; `<draft-editor>` sets this from its children. */
+  anchor(slots: readonly DraftSlot[]): void;
   getCamera(): Camera;
   /** Zoom is clamped to `ZOOM_MIN`–`ZOOM_MAX`, as in the viewer. */
   setCamera(camera: Camera): void;
@@ -150,6 +165,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     .then(() => {
       opened = true;
       if (destroyed) return;
+      syncAnchors();
       firstFit = requestAnimationFrame(() => {
         session.fitView();
         if (pendingMove) whenSized(pendingMove);
@@ -232,6 +248,53 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   // The first editor on a page is active until another one is used.
   if (!hasActiveSession()) setActiveSession(session);
 
+  // Host slots: the layer sits between the drawing and the chrome layer, for the editor's life.
+  const anchorLayer = createAnchorLayer(document, {
+    detail: options.detail,
+    onOverflow: () => tellSlots(),
+  });
+  const [bodies, setBodies] = createSignal<ReadonlySet<string>>(new Set());
+  const tellSlots = () =>
+    emit('diagnostics', { revision, diagnostics: anchorLayer.warnings(), stale: false });
+  const tellAnchors = () => {
+    const next = anchorLayer.bodyIds();
+    if (next.join('\n') !== [...bodies()].join('\n')) setBodies(new Set(next));
+    emit('anchors', { anchors: anchorLayer.anchors() });
+  };
+  const drawAnchors = (g: Geometry) => {
+    const before = anchorLayer.warnings().length;
+    const changed = anchorLayer.setGeometry(g);
+    placeAnchors();
+    // A drag frame only moves targets: no target came or went, so there is nothing to tell.
+    if (!changed) return;
+    tellAnchors();
+    if (before || anchorLayer.warnings().length) tellSlots();
+  };
+  /** Only an editor with slots reads geometry, so one without them stays lazy. */
+  const syncAnchors = () => {
+    if (opened && !destroyed && anchorLayer.hasSlots()) drawAnchors(handle.geometry()!);
+  };
+  let stage: Element | null = null;
+  const placeAnchors = () => {
+    if (!anchorLayer.hasSlots()) return;
+    const c = session.doc.camera;
+    anchorLayer.place(c.x, c.y, c.k);
+    stage ??= host.querySelector('.stage');
+    const detail = anchorLayer.el.dataset.draftDetail!;
+    if (stage && stage.getAttribute('data-draft-detail') !== detail)
+      stage.setAttribute('data-draft-detail', detail);
+  };
+  anchorLayer.el.addEventListener('focusin', e => {
+    const target = eventTarget(e);
+    const id = target instanceof Node ? anchorLayer.idOf(target) : undefined;
+    // A press on marked content focuses it too; a camera move then could lose its click.
+    if (id && !anchorLayer.pressed()) handle.reveal(id);
+  });
+  anchorLayer.el.addEventListener('keydown', e => {
+    if (e.key === 'Escape') session.focusCanvas();
+  });
+  anchorLayer.el.addEventListener('draft-anchor-focus-lost', () => session.focusCanvas());
+
   const dispose = render(() => {
     createEffect(() =>
       host.style.setProperty('--diagram-canvas', resolveAppearance(session.doc.appearance).canvas),
@@ -249,6 +312,15 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       return ++revision;
     });
     revisionNow = changes;
+    // Slots follow each new drawing. Before the first text is drawn no slot is unknown yet, and
+    // `ready` places the targets.
+    createEffect(on(changes, syncAnchors, { defer: true }));
+    createEffect(() => {
+      // Track the camera.
+      const { x, y, k } = session.doc.camera;
+      void [x, y, k];
+      placeAnchors();
+    });
     // Every selection change is reported once, with who made it.
     createEffect(
       on(
@@ -268,6 +340,8 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     return (
       <Editor
         session={session}
+        anchorLayer={anchorLayer.el}
+        bodies={bodies}
         onContextMenu={e => {
           const id =
             (eventTarget(e) as Element | null)?.closest?.('[data-id]')?.getAttribute('data-id') ??
@@ -285,6 +359,10 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     );
   }, host);
   host.classList.add('draft-editor');
+  // Tokens live on the mounted host, or on `:host` when the editor is in an element's shadow root.
+  const shadow = host.getRootNode() instanceof ShadowRoot;
+  if (!shadow) host.classList.add('draft-editor-root');
+  adoptEditorCss(host.getRootNode() as Document | ShadowRoot);
   if (!mounted++)
     for (const [type, fn, capture] of KEYS) document.addEventListener(type, fn, capture);
 
@@ -319,6 +397,16 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       queueMicrotask(() => (selectReason = 'user'));
     },
     selection: () => session.selectedIds(),
+    anchor(slots) {
+      if (destroyed) return;
+      const before = anchorLayer.warnings().length;
+      anchorLayer.setSlots(slots);
+      // The layer saw no drawing while it had no slots.
+      if (opened) anchorLayer.setGeometry(handle.geometry());
+      placeAnchors();
+      tellAnchors();
+      if (before || anchorLayer.warnings().length) tellSlots();
+    },
     getCamera: () => toCamera(session.doc.camera, session.stageSize()),
     setCamera(camera) {
       if (
@@ -359,6 +447,8 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       cancelAnimationFrame(firstFit);
       cancelAnimationFrame(cameraFrame);
       stopCamera();
+      emit('anchors', { anchors: [] });
+      anchorLayer.destroy();
       listeners.clear();
       if (!--mounted)
         for (const [type, fn, capture] of KEYS) document.removeEventListener(type, fn, capture);
@@ -367,7 +457,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       session.closeFileSession();
       dispose();
       session.dispose();
-      host.classList.remove('draft-editor');
+      host.classList.remove('draft-editor', 'draft-editor-root');
     },
   };
   sessions.set(handle, session);
@@ -376,4 +466,5 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from '../runtime/camera';
 export type { Box, EdgeOut, Geometry, PlacedBox } from '../runtime/geometry';
+export type { Anchor, DraftSlot } from '../runtime/anchors';
 export { ZOOM_MAX, ZOOM_MIN } from '../runtime/camera';

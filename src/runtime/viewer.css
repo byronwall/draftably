@@ -23,7 +23,7 @@
   font:
     14px/1.45 system-ui,
     sans-serif;
-  overflow: hidden;
+  overflow: clip;
 }
 .draft-viewer__toolbar[hidden] {
   display: none;
@@ -53,7 +53,8 @@
 .draft-viewer__viewport {
   grid-row: 2;
   position: relative;
-  overflow: hidden;
+  /* clip, not hidden: focus on off-screen slot content must not scroll the drawing away. */
+  overflow: clip;
   min-height: 8rem;
   touch-action: none;
   cursor: grab;
@@ -122,4 +123,45 @@
   .draft-viewer__toolbar button {
     padding-inline: 0.45rem;
   }
+}
+
+/* The anchor layer: slot targets above the drawing. Slot content takes no pointer input unless
+   it is marked data-draft-input (host.css). */
+.draft-anchors {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.draft-anchors__bodies {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+}
+.draft-anchors__overlays {
+  position: absolute;
+  inset: 0;
+}
+.draft-anchor {
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.draft-anchor--body {
+  overflow: clip;
+}
+.draft-anchor--overlay {
+  left: 0;
+  top: 0;
+  overflow: visible;
+}
+.draft-anchors[data-draft-detail='low'] .draft-anchors__bodies {
+  visibility: hidden;
+}
+/* A body replaces its node's drawn title; the title stays for screen readers. */
+.draft-viewer__viewport[data-draft-detail='full'] [data-draft-body] text {
+  opacity: 0;
 }

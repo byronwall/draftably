@@ -1,5 +1,6 @@
 import viewerCss from './viewer.css?inline';
 import {
+  createSlotting,
   mountFailure,
   redispatch,
   relay,
@@ -11,7 +12,7 @@ import {
 import type { DraftStatus } from './host';
 import { runtimeVersion } from './version';
 import { mountViewer } from './viewer';
-import type { UpdateResult, ViewerEvents, ViewerHandle, ViewerOptions } from './viewer';
+import type { DraftSlot, UpdateResult, ViewerEvents, ViewerHandle, ViewerOptions } from './viewer';
 
 export type { DraftEventMap, DraftStatus, HostEventName, HostEvents } from './host';
 export { HOST_EVENTS } from './host';
@@ -39,6 +40,7 @@ declare global {
 const tag = 'draft-diagram';
 const ELEMENT_CSS = `${viewerCss}\n:host{display:block;height:26rem;min-height:16rem;box-sizing:border-box}.draft-diagram__viewer{height:100%;min-height:0}.draft-diagram__viewer[hidden]{display:none}.draft-diagram__fallback{display:block}.draft-diagram__fallback[hidden]{display:none}.draft-diagram__status{margin:.35rem 0;color:var(--draft-warning-ink,#9a3412);font:14px/1.45 system-ui,sans-serif}.draft-diagram__status:empty{display:none}`;
 const VIEWER_EVENTS = [
+  'anchors',
   'render',
   'diagnostics',
   'camera',
@@ -73,13 +75,16 @@ if (
       private _revision = 0;
       private _scheduled = false;
       private _hasCommitted = false;
+      private _slotting!: ReturnType<typeof createSlotting>;
 
       constructor() {
         super();
         const source = takeEarly<string>(this, 'source');
         const options = takeEarly<ViewerOptions>(this, 'options');
         const outline = takeEarly<'visible' | 'hidden'>(this, 'outline');
-        this.attachShadow({ mode: 'open' });
+        // Manual assignment: the element puts marked children in slot targets, and never writes
+        // to the host's DOM.
+        this.attachShadow({ mode: 'open', slotAssignment: 'manual' });
         this._host = this.ownerDocument.createElement('div');
         this._host.className = 'draft-diagram__viewer';
         this._host.hidden = true;
@@ -97,6 +102,9 @@ if (
           this.shadowRoot!.append(this._style);
         }
         this.shadowRoot!.append(this._host, this._fallback, this._status);
+        this._slotting = createSlotting(this, this._fallback, names =>
+          this._viewer?.anchor(names as DraftSlot[]),
+        );
         if (options) this._options = options;
         if (outline) this.outline = outline;
         if (source !== undefined) this.source = source;
@@ -152,10 +160,12 @@ if (
       }
 
       connectedCallback() {
+        this._slotting.start();
         this._schedule();
       }
 
       disconnectedCallback() {
+        this._slotting.stop();
         this._reset();
         this.removeAttribute('status');
       }
@@ -259,6 +269,8 @@ if (
           viewer.on(type, (event: ViewerEvents[typeof type]) => {
             if (viewer === this._viewer) relay(this, type, event);
           });
+        viewer.on('anchors', ({ anchors }) => this._slotting.setAnchors(anchors));
+        viewer.anchor(this._slotting.names() as DraftSlot[]);
         this._update();
       }
 

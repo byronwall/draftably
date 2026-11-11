@@ -4,6 +4,7 @@
  * It mounts in a microtask after it is added to the page, and stops its session when removed.
  */
 import {
+  createSlotting,
   mountFailure,
   redispatch,
   relay,
@@ -13,7 +14,7 @@ import {
 } from '../runtime/element-base';
 import type { DraftStatus } from '../runtime/host';
 import { runtimeVersion } from '../runtime/version';
-import { mountEditor, type EditorOptions, type MountedEditor } from './mount';
+import { mountEditor, type DraftSlot, type EditorOptions, type MountedEditor } from './mount';
 
 export type { DraftEventMap, HostEventName, HostEvents } from '../runtime/host';
 export type { EditorOptions };
@@ -79,9 +80,22 @@ if (typeof customElements !== 'undefined') {
           const options = takeEarly<EditorOptions>(this, 'options');
           if (options) this._options = options;
           if (source !== undefined) this.setAttribute('source', String(source));
+          // The editor renders in a shadow root with its own styles; marked children go into slot
+          // targets by manual assignment, and the element never writes to the host's DOM.
+          const shadow = this.attachShadow({ mode: 'open', slotAssignment: 'manual' });
+          this._root = this.ownerDocument.createElement('div');
+          this._root.style.cssText = 'display:flex;flex-direction:column;height:100%;min-height:0';
+          shadow.append(this._root);
+          this._slotting = createSlotting(this, null, names =>
+            this.editor?.anchor(names as DraftSlot[]),
+          );
         }
 
+        private _root: HTMLDivElement;
+        private _slotting: ReturnType<typeof createSlotting>;
+
         connectedCallback() {
+          this._slotting.start();
           this._schedule();
         }
 
@@ -106,7 +120,7 @@ if (typeof customElements !== 'undefined') {
           const opts = () => this._options;
           let editor: MountedEditor;
           try {
-            editor = mountEditor(this, {
+            editor = mountEditor(this._root, {
               source: this.last,
               onChange: source => {
                 this.last = source;
@@ -124,6 +138,9 @@ if (typeof customElements !== 'undefined') {
               get onInteract() {
                 return opts().onInteract;
               },
+              get detail() {
+                return opts().detail;
+              },
             });
           } catch (error) {
             // Fail as <draft-diagram> does: status, a visible message, and an update event.
@@ -135,8 +152,10 @@ if (typeof customElements !== 'undefined') {
             return;
           }
           this.editor = editor;
-          for (const type of ['camera', 'select', 'contextmenu'] as const)
+          for (const type of ['anchors', 'diagnostics', 'camera', 'select', 'contextmenu'] as const)
             editor.on(type, event => relay(this, type, event));
+          editor.on('anchors', ({ anchors }) => this._slotting.setAnchors(anchors));
+          editor.anchor(this._slotting.names() as DraftSlot[]);
           editor.ready.then(
             () => this.editor === editor && this._setStatus('ready'),
             () => this.editor === editor && this._setStatus('error'),
@@ -155,6 +174,7 @@ if (typeof customElements !== 'undefined') {
         }
 
         disconnectedCallback() {
+          this._slotting.stop();
           this._destroy();
           this.removeAttribute('status');
           this.removeAttribute('data-error');

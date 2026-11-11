@@ -3,7 +3,7 @@
   import { listenHostEvents } from './events.js';
 
   /** @type {import('./editor').DraftEditorProps} */
-  let { source, options = {}, element = $bindable(), class: className, style, ...events } = $props();
+  let { source, options = {}, element = $bindable(), class: className, style, children, ...events } = $props();
 
   $effect(() => listenHostEvents(element, events));
 
@@ -16,4 +16,4 @@
   });
 </script>
 
-<draft-editor bind:this={element} {source} {options} class={className} {style}></draft-editor>
+<draft-editor bind:this={element} {source} {options} class={className} {style}>{@render children?.()}</draft-editor>

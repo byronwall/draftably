@@ -9,6 +9,7 @@ import {
   type FrameOptions,
   type MoveResult,
 } from './camera';
+import { createAnchorLayer, type Anchor, type DraftSlot } from './anchors';
 import { itemBox, type Geometry } from './geometry';
 import { releaseFace, renderInWorker, retainFace, sharedFace } from './page-shared';
 import { fontMetricsVersion, runtimeVersion } from './version';
@@ -26,6 +27,7 @@ export { fontMetricsVersion, runtimeVersion };
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
 export type { Box, EdgeOut, Geometry, PlacedBox } from './geometry';
+export type { Anchor, DraftSlot } from './anchors';
 export { ZOOM_MAX, ZOOM_MIN } from './camera';
 
 export type ViewerExecution =
@@ -44,6 +46,8 @@ export interface ViewerOptions {
    */
   outline?: 'visible' | 'hidden';
   execution?: ViewerExecution;
+  /** `auto` (default) hides slot bodies and shows titles again below a zoom of 0.4. */
+  detail?: 'auto' | 'full';
   render?: ViewerRenderOptions;
 }
 
@@ -64,6 +68,8 @@ export type UpdateResult =
   | { status: 'superseded' | 'destroyed' | 'aborted'; revision: number };
 
 export interface ViewerEvents {
+  /** After each commit, after `anchor()`, and with `[]` before `destroy` detaches the targets. */
+  anchors: { anchors: readonly Anchor[] };
   /** After each commit: the drawing, and where each item is (`null` for compare and states). */
   render: {
     revision: number;
@@ -108,6 +114,11 @@ export interface ViewerHandle {
   /** The least move that shows the item; zooms out only if it does not fit. */
   reveal(id: string, options?: FrameOptions): MoveResult;
   focusItem(id: string): boolean;
+  /**
+   * Plain-DOM hosts only: keep a target for each slot (`body:<id>`, `overlay:<id>`). Targets come
+   * in the `anchors` event; put content in them. The elements set this from their marked children.
+   */
+  anchor(slots: readonly DraftSlot[]): void;
   destroy(): void;
 }
 
@@ -277,6 +288,12 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   outline.className = 'draft-viewer__outline';
   outline.setAttribute('aria-label', 'Diagram outline');
   root.append(toolbar, viewport, live, outline);
+  // The anchor layer sits above the drawing and is never detached while the viewer lives.
+  const anchorLayer = createAnchorLayer(doc, {
+    detail: options.detail,
+    onOverflow: () => tellDiagnostics(),
+  });
+  viewport.append(anchorLayer.el);
   host.append(root);
 
   const idPrefix = `draftViewer${(++instanceCount).toString(36)}${Math.random().toString(36).slice(2, 9)}`;
@@ -321,7 +338,28 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     svg.style.width = `${drawing.width}px`;
     svg.style.height = `${drawing.height}px`;
     svg.style.maxWidth = 'none';
+    anchorLayer.place(tx - x * scale, ty - y * scale, scale);
+    const detail = anchorLayer.el.dataset.draftDetail;
+    if (viewport.dataset.draftDetail !== detail) viewport.dataset.draftDetail = detail;
   };
+  /** Nodes with a body hide their drawn title; the anchors event names every target. */
+  const tellAnchors = () => {
+    const ids = new Set(anchorLayer.bodyIds());
+    for (const g of viewport.querySelectorAll<SVGElement>(':scope > svg [data-id]'))
+      g.toggleAttribute('data-draft-body', ids.has(g.getAttribute('data-id')!));
+    emit('anchors', { anchors: anchorLayer.anchors() });
+  };
+  let lastDiagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean } = {
+    revision: 0,
+    diagnostics: [],
+    stale: false,
+  };
+  /** Diagnostics with the slot warnings of this moment. */
+  const tellDiagnostics = () =>
+    emit('diagnostics', {
+      ...lastDiagnostics,
+      diagnostics: [...lastDiagnostics.diagnostics, ...anchorLayer.warnings()],
+    });
   /** Camera events go out at most once per animation frame, with the latest reason. */
   let cameraReason: CameraReason = 'user',
     cameraFrame = 0;
@@ -395,7 +433,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   const setError = (at: number, diagnostics: readonly Diagnostic[]) => {
     live.textContent = diagnostics.map(diagnostic => diagnostic.message).join(' ');
     root.classList.add('draft-viewer--stale');
-    emit('diagnostics', { revision: at, diagnostics, stale: !!drawing });
+    lastDiagnostics = { revision: at, diagnostics, stale: !!drawing };
+    tellDiagnostics();
   };
   const prepareFonts = async (
     parsed: XMLDocument,
@@ -466,9 +505,20 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     const background = svg?.querySelector(':scope > rect');
     return target === viewport || target === svg || target === background;
   };
+  /** Slot content is the host's: its nodes are never drawing items. */
+  const fromHost = (event: Event) =>
+    !(event.target instanceof win.Node) ||
+    !viewport.contains(event.target) ||
+    anchorLayer.el.contains(event.target);
+  /** Marked content (`data-draft-input`) takes its own pointer, wheel and keys. */
+  const hostInput = (event: Event) =>
+    event
+      .composedPath()
+      .some(node => node instanceof win.Element && node.hasAttribute('data-draft-input'));
   viewport.addEventListener(
     'wheel',
     event => {
+      if (hostInput(event)) return;
       event.preventDefault();
       zoomBy(event.deltaY < 0 ? 1.1 : 1 / 1.1);
     },
@@ -510,6 +560,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   viewport.addEventListener('pointerup', endPan);
   viewport.addEventListener('pointercancel', endPan);
   viewport.addEventListener('click', event => {
+    if (fromHost(event)) return;
     const target = event.target instanceof win.Element ? event.target : null;
     const anchor = target?.closest('a[href]');
     if (anchor && viewport.contains(anchor)) {
@@ -530,6 +581,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     if (item) emit('itemactivate', { id: item.id, kind: item.kind, input: 'pointer', revision });
   });
   viewport.addEventListener('contextmenu', event => {
+    if (fromHost(event)) return;
     const target = event.target instanceof win.Element ? event.target : null;
     const id = target?.closest('[data-id]')?.getAttribute('data-id') ?? null;
     const item = id ? drawing?.items.find(value => value.id === id) : undefined;
@@ -541,6 +593,19 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       preventDefault: () => event.preventDefault(),
     });
   });
+  // Focus that enters a body or overlay brings its item into view; Escape from marked content
+  // returns to the drawing, and so does losing the item that held focus.
+  anchorLayer.el.addEventListener('focusin', event => {
+    const id = event.target instanceof win.Node ? anchorLayer.idOf(event.target) : undefined;
+    // A press on marked content focuses it too; a camera move then could lose its click.
+    if (id && !anchorLayer.pressed()) handle.reveal(id);
+  });
+  anchorLayer.el.addEventListener('keydown', event => {
+    if (event.key === 'Escape') viewport.focus({ preventScroll: true });
+  });
+  anchorLayer.el.addEventListener('draft-anchor-focus-lost', () =>
+    viewport.focus({ preventScroll: true }),
+  );
   viewport.addEventListener('keydown', event => {
     if (event.target !== viewport || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === '+' || event.key === '=') zoomBy(1.2);
@@ -669,7 +734,11 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           const hadDrawing = !!drawing;
           drawing = result.value;
           geometry = drawing.geometry ? { ...drawing.geometry, revision: id } : null;
-          viewport.replaceChildren(svg);
+          // Replace only the drawing: the anchor layer beside it keeps its targets.
+          const old = viewport.querySelector(':scope > svg');
+          if (old) old.replaceWith(svg);
+          else viewport.prepend(svg);
+          anchorLayer.setGeometry(geometry);
           outline.replaceChildren(
             ...drawing.items.map(item => {
               const li = doc.createElement('li');
@@ -735,7 +804,9 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           };
           // Listeners hear the commit before `update` and `ready` resolve.
           emit('render', { revision: id, value: drawing, geometry });
-          emit('diagnostics', { revision: id, diagnostics: result.diagnostics, stale: false });
+          lastDiagnostics = { revision: id, diagnostics: result.diagnostics, stale: false };
+          tellDiagnostics();
+          tellAnchors();
           finish(committed);
         })
         .catch(error => {
@@ -771,12 +842,20 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     return result;
   };
 
-  return {
+  const handle: ViewerHandle = {
     get ready() {
       return latest ?? first;
     },
     update: tracked,
     geometry: () => geometry,
+    anchor(slots) {
+      if (destroyed) return;
+      const unknownBefore = anchorLayer.warnings().length;
+      anchorLayer.setSlots(slots);
+      applyCamera();
+      tellAnchors();
+      if (anchorLayer.warnings().length || unknownBefore) tellDiagnostics();
+    },
     on(type, listener) {
       if (destroyed) return () => {};
       const set = listeners.get(type) ?? new Set();
@@ -831,11 +910,14 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       for (const key of heldFonts) releaseFace(doc, key);
       heldFonts.clear();
       resize.disconnect();
+      emit('anchors', { anchors: [] });
+      anchorLayer.destroy();
       listeners.clear();
       host.replaceChildren();
       drawing = undefined;
     },
   };
+  return handle;
 }
 
 export type { LinkPolicy };

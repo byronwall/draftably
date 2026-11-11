@@ -27,7 +27,7 @@ export const DraftDiagram = defineComponent({
     options: { type: Object as PropType<ViewerOptions>, default: undefined },
   },
   emits: hostEmits,
-  setup(props, { emit, expose }) {
+  setup(props, { emit, expose, slots }) {
     const el = ref<DraftDiagramElement>();
     onMounted(() => listenHostEvents(el.value!, emit as (name: string, detail: unknown) => void));
     expose({ element: el });
@@ -42,7 +42,8 @@ export const DraftDiagram = defineComponent({
           outline: props.outline,
           '.options': props.options ?? {},
         },
-        props.svg ? [h('div', { innerHTML: props.svg })] : [],
+        // The default slot holds slot content: children marked `data-draft-slot`.
+        [...(props.svg ? [h('div', { innerHTML: props.svg })] : []), ...(slots.default?.() ?? [])],
       );
   },
 });

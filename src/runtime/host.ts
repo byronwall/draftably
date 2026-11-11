@@ -7,8 +7,11 @@ import type { UpdateResult, ViewerEvents } from './viewer';
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
 export type { Box, EdgeOut, Geometry, PlacedBox } from './geometry';
+export type { Anchor, DraftSlot } from './anchors';
 
 export interface HostEvents {
+  /** After each commit, after the marked children change, and with `[]` before destroy. */
+  anchors: ViewerEvents['anchors'];
   /** Each update's result: committed, error or a cancellation. */
   update: UpdateResult;
   render: ViewerEvents['render'];
@@ -29,6 +32,7 @@ export type HostEventName = keyof HostEvents;
 
 /** Every event, in one list. Each element dispatches these as bubbling `draft-<name>` events. */
 export const HOST_EVENTS = [
+  'anchors',
   'update',
   'render',
   'diagnostics',

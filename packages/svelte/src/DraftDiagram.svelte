@@ -14,6 +14,7 @@
     element = $bindable(),
     class: className,
     style,
+    children,
     ...events
   } = $props();
 
@@ -22,4 +23,5 @@
 
 <draft-diagram bind:this={element} {source} state={emphasis ?? undefined} {label} {outline} {options} class={className} {style}>
   {#if svg}<div>{@html svg}</div>{/if}
+  {@render children?.()}
 </draft-diagram>
