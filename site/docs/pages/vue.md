@@ -10,9 +10,13 @@ and server rendering. Start from `pnpm create vite` with the `vue-ts` template, 
 files below. CI builds this app from this page: it type-checks it, builds it, renders it on the
 server, loads it, and edits a diagram under the development server.
 
+### Install
+
 ```sh
 pnpm add @draftably/vue @draftably/runtime
 ```
+
+### Configure Vite
 
 ```ts
 // vite.config.ts
@@ -25,6 +29,8 @@ export default defineConfig({
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
+
+### The diagram and its theme
 
 ```ts
 // src/diagram.ts
@@ -41,8 +47,8 @@ size api width=220 height=auto min-height=120
 
 ```css
 /* src/theme.css */
-/* Host CSS reaches slot content. `color-scheme: dark` darkens the drawings too; the --draft-*
-   properties color the viewer's frame and controls. */
+/* Host CSS reaches slot content. `color-scheme: dark` darkens the drawings, the viewers' frames
+   and the editor. */
 .app {
   display: grid;
   gap: 16px;
@@ -52,12 +58,6 @@ size api width=220 height=auto min-height=120
   color-scheme: dark;
   background: #020617;
   color: #e2e8f0;
-  --draft-bg: #0f172a;
-  --draft-ink: #e2e8f0;
-  --draft-border: #334155;
-  --draft-focus: #38bdf8;
-  --draft-warning-ink: #fdba74;
-  --draft-warning-bg: #431407;
 }
 .app draft-diagram {
   height: 20rem;
@@ -80,10 +80,12 @@ size api width=220 height=auto min-height=120
 }
 ```
 
-The page's `color-scheme` sets the drawings' colors, so `.app.dark` draws the diagram and the
-editor's canvas dark. The `--draft-*` properties color the viewer's frame and controls, and
-`data-theme="dark"` on the editor darkens its panels and toolbar. [Theming](#theming) has every
-property and the opt-out.
+The page's `color-scheme` sets the colors: `.app.dark` draws the diagrams, the viewers' frames and
+the whole editor dark, with no `--draft-*` values. `data-theme="dark"` on the editor fixes its
+panels and toolbar to the dark set whatever the page does. [Theming](#theming) has every property
+and the opt-out.
+
+### The app
 
 ```vue
 <!-- src/App.vue -->
@@ -127,6 +129,8 @@ const warn = ({ diagnostics }: HostEvents['diagnostics']) =>
 </template>
 ```
 
+### The client entry
+
 ```ts
 // src/main.ts
 import '@draftably/runtime/host.css';
@@ -137,6 +141,8 @@ import App from './App.vue';
 // With HTML from src/server.ts, use createSSRApp with the same `svg` instead.
 createApp(App).mount('#app');
 ```
+
+### Render on the server
 
 ```ts
 // src/server.ts
@@ -159,13 +165,19 @@ the element, and `ref` on a component gives `.element`.
 ## Nuxt
 
 Nuxt runs `renderSvg` in `useAsyncData`, and the payload carries the SVG to the client for
-hydration. Register the components in a page as usual:
+hydration. Move the Vite app's files into `app/`, and rename `App.vue` to
+`components/Checkout.vue`: Nuxt's root component is `app.vue`, and on macOS and Windows `App.vue`
+and `app.vue` are the same file. Give `Checkout.vue` a `nonce` prop beside `svg`:
+
+```ts
+defineProps<{ svg?: string; nonce?: string }>();
+```
 
 ```vue
 <!-- app/app.vue -->
 <script setup lang="ts">
 import { renderSvg } from '@draftably/vue';
-import App from './App.vue';
+import Checkout from './components/Checkout.vue';
 import { initial } from './diagram';
 
 // From server/plugins/csp.ts below. Without a CSP, drop the nonce.
@@ -182,11 +194,11 @@ const { data } = await useAsyncData('diagram', async () => {
 </script>
 
 <template>
-  <App :svg="data?.svg" :nonce="data?.nonce" />
+  <Checkout :svg="data?.svg" :nonce="data?.nonce" />
 </template>
 ```
 
-Pass the nonce on to the viewer, which adds a `<style>` to its drawing:
+In `Checkout.vue`, pass the nonce on to the viewer, which adds a `<style>` to its drawing:
 `:options="{ detail: 'full', render: { styleNonce: nonce } }"`.
 
 ```ts

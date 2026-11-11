@@ -1,7 +1,48 @@
 # Plain HTML and no bundler
 
-`<draft-diagram>` and `<draft-editor>` are custom elements, so any page can use them: plain HTML,
-Angular, a server-rendered template, or a page with no build step.
+`<draft-diagram>` and `<draft-editor>` are custom elements, so any page can use them: a page with
+no build step, a CDN, a server-rendered template, Angular, or a Vite app.
+
+## No bundler
+
+Without a bundler, serve each package's `dist` folder from your own origin and load the element
+with a module script. Keep every file in `dist` in place: the element imports its chunks, its
+workers and its fonts from beside itself.
+
+```html
+<link rel="stylesheet" href="/draftably/runtime/dist/host.css" />
+<script type="module" src="/draftably/runtime/dist/element.js"></script>
+<script type="module" src="/draftably/editor/dist/element.js"></script>
+
+<draft-diagram source='node web "Web"&#10;node api "API"&#10;edge e1 web -> api'></draft-diagram>
+```
+
+Copy the folders from `node_modules/@draftably/runtime/dist` and `node_modules/@draftably/editor/dist`
+to the paths your server serves, here `/draftably/…/dist`. The editor is needed only for
+`<draft-editor>`.
+
+### From a CDN
+
+A browser runs a module worker only from the page's own origin, so a diagram loaded from a CDN
+cannot start its render worker. Draw on the main thread instead, and set that before the element
+mounts:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@draftably/runtime@0.4/dist/host.css" />
+
+<draft-diagram source='node web "Web"&#10;node api "API"&#10;edge e1 web -> api'></draft-diagram>
+
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/@draftably/runtime@0.4/dist/element.js';
+
+  // In the same task as the import, so it lands before the first draw.
+  document.querySelector('draft-diagram').options = { execution: { mode: 'main' } };
+</script>
+```
+
+The main thread then compiles each diagram, which blocks the page for a large one: use it for
+small diagrams, or serve `dist` from your origin as above. The editor's engine moves to the main
+thread by itself when its worker cannot start, and says so in the console.
 
 ## Build the app
 
@@ -10,9 +51,13 @@ server rendering. Start from `pnpm create vite` with the `vanilla-ts` template, 
 below. CI builds this app from this page: it type-checks it, builds it, renders it on the server,
 loads it, and edits a diagram under the development server.
 
+### Install
+
 ```sh
 pnpm add @draftably/runtime @draftably/editor
 ```
+
+### The page
 
 ```html
 <!-- index.html -->
@@ -38,6 +83,8 @@ pnpm add @draftably/runtime @draftably/editor
 </html>
 ```
 
+### Configure Vite
+
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
@@ -47,6 +94,8 @@ export default defineConfig({
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
+
+### The diagram and its theme
 
 ```ts
 // src/diagram.ts
@@ -63,8 +112,8 @@ size api width=220 height=auto min-height=120
 
 ```css
 /* src/theme.css */
-/* Host CSS reaches slot content. `color-scheme: dark` darkens the drawings too; the --draft-*
-   properties color the viewer's frame and controls. */
+/* Host CSS reaches slot content. `color-scheme: dark` darkens the drawings, the viewers' frames
+   and the editor. */
 .app {
   display: grid;
   gap: 16px;
@@ -74,12 +123,6 @@ size api width=220 height=auto min-height=120
   color-scheme: dark;
   background: #020617;
   color: #e2e8f0;
-  --draft-bg: #0f172a;
-  --draft-ink: #e2e8f0;
-  --draft-border: #334155;
-  --draft-focus: #38bdf8;
-  --draft-warning-ink: #fdba74;
-  --draft-warning-bg: #431407;
 }
 .app draft-diagram {
   height: 20rem;
@@ -102,10 +145,12 @@ size api width=220 height=auto min-height=120
 }
 ```
 
-The page's `color-scheme` sets the drawings' colors, so `.app.dark` draws the diagram and the
-editor's canvas dark. The `--draft-*` properties color the viewer's frame and controls, and
-`data-theme="dark"` on the editor darkens its panels and toolbar. [Theming](#theming) has every
-property and the opt-out.
+The page's `color-scheme` sets the colors: `.app.dark` draws the diagrams, the viewers' frames and
+the whole editor dark, with no `--draft-*` values. `data-theme="dark"` on the editor fixes its
+panels and toolbar to the dark set whatever the page does. [Theming](#theming) has every property
+and the opt-out.
+
+### The client entry
 
 ```ts
 // src/main.ts
@@ -133,6 +178,8 @@ editor.addEventListener('draft-change', event => {
 });
 ```
 
+### Render on the server
+
 ```ts
 // src/server.ts
 import { renderSvg } from '@draftably/runtime';
@@ -154,41 +201,3 @@ export async function render(): Promise<string> {
 Angular uses the same elements. Add `CUSTOM_ELEMENTS_SCHEMA` to the component that uses them,
 and bind the source as an attribute: `<draft-diagram [attr.source]="source">`. Import
 `@draftably/runtime/element` and `@draftably/runtime/host.css` once.
-
-## No bundler
-
-Without a bundler, serve each package's `dist` folder from your own origin and load the element
-with a module script. Keep every file in `dist` in place: the element imports its chunks, its
-workers and its fonts from beside itself.
-
-```html
-<link rel="stylesheet" href="/draftably/runtime/dist/host.css" />
-<script type="module" src="/draftably/runtime/dist/element.js"></script>
-<script type="module" src="/draftably/editor/dist/element.js"></script>
-
-<draft-diagram source='node web "Web"&#10;node api "API"&#10;edge e1 web -> api'></draft-diagram>
-```
-
-Copy the folders from `node_modules/@draftably/runtime/dist` and `node_modules/@draftably/editor/dist`
-to the paths your server serves, here `/draftably/…/dist`. The editor is needed only for
-`<draft-editor>`.
-
-### From a CDN
-
-A browser runs a module worker only from the page's own origin. Loaded from a CDN, the element
-draws its error: the render worker cannot start. Draw on the main thread instead, before the
-element mounts:
-
-```html
-<script type="module">
-  import 'https://cdn.jsdelivr.net/npm/@draftably/runtime@0.4/dist/element.js';
-
-  const diagram = document.querySelector('draft-diagram');
-  diagram.options = { execution: { mode: 'main' } };
-</script>
-```
-
-Set `options` in the same task as the import, so it lands before the first draw. The main thread
-then compiles each diagram, which blocks the page for a large one: use it for small diagrams, or
-serve `dist` from your origin. The editor's engine moves to the main thread by itself when its
-worker cannot start, and says so in the console.
