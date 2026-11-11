@@ -3,13 +3,14 @@
  * They inherit through the shadow root; the defaults below apply only when unset.
  */
 .draft-viewer {
-  --dv-border: var(--draft-border, #cbd5e1);
-  --dv-ink: var(--draft-ink, #1e293b);
-  --dv-bg: var(--draft-bg, #fff);
-  --dv-focus: var(--draft-focus, #2563eb);
-  --dv-shadow: var(--draft-shadow, rgb(15 23 42 / 0.12));
-  --dv-warning-ink: var(--draft-warning-ink, #9a3412);
-  --dv-warning-bg: var(--draft-warning-bg, #fff7ed);
+  /* The viewer sets color-scheme from the page; each default has a dark value. */
+  --dv-border: var(--draft-border, light-dark(#cbd5e1, #3d4450));
+  --dv-ink: var(--draft-ink, light-dark(#1e293b, #e7eaef));
+  --dv-bg: var(--draft-bg, light-dark(#fff, #16191e));
+  --dv-focus: var(--draft-focus, light-dark(#2563eb, #7fa4e6));
+  --dv-shadow: var(--draft-shadow, light-dark(rgb(15 23 42 / 0.12), rgb(0 0 0 / 0.4)));
+  --dv-warning-ink: var(--draft-warning-ink, light-dark(#9a3412, #fdba74));
+  --dv-warning-bg: var(--draft-warning-bg, light-dark(#fff7ed, #431407));
   position: relative;
   display: grid;
   grid-template-rows: auto minmax(8rem, 1fr) auto auto;

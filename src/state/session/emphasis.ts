@@ -3,6 +3,7 @@
  * view state, like the camera: they live in the URL (`?state=write`), never in the file.
  */
 import { createSignal } from 'solid-js';
+import { forScheme } from '../../model/appearance';
 import { withState } from '../../model/status';
 import type { DocumentPart } from './document';
 
@@ -44,10 +45,16 @@ export function createEmphasis(s: DocumentPart) {
     return true;
   }
 
-  /** The document as the canvas draws it: in the active state, or as it is. */
+  /** The page around the editor is dark: a file without a theme line draws dark too. */
+  const [dark, setDark] = createSignal(false);
+  /** The appearance the canvas draws: the file's own, or its dark variant on a dark page. */
+  const drawnAppearance = () => forScheme(s.doc.appearance, dark());
+  /** The document as the canvas draws it: in the active state, or as it is, in the page's scheme. */
   const drawnDoc = () => {
-    const id = activeState();
-    return id ? withState(s.doc, id) : s.doc;
+    const id = activeState(),
+      doc = id ? withState(s.doc, id) : s.doc,
+      appearance = forScheme(doc.appearance, dark());
+    return appearance === doc.appearance ? doc : { ...doc, appearance };
   };
   return {
     states,
@@ -57,6 +64,9 @@ export function createEmphasis(s: DocumentPart) {
     showState,
     stepState,
     drawnDoc,
+    dark,
+    setDark,
+    drawnAppearance,
   };
 }
 

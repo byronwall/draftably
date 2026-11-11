@@ -21,10 +21,29 @@ const APP_CSS = path.join(root, 'src/styles/app.css');
  * editor itself.
  */
 function scope(css: string) {
-  const ast = postcss.parse(css);
+  const ast = postcss.parse(css),
+    made = new Set<Rule>();
   ast.walkRules((rule: Rule) => {
+    if (made.has(rule)) return;
     if (rule.parent?.type === 'atrule' && /keyframes/.test((rule.parent as { name: string }).name))
       return;
+    // `color-scheme` styles the editor's own controls. On the host it would hide the page's
+    // scheme, which the drawing follows, so it moves to the editor inside.
+    const scheme = /^:root(\[[^\]]*\])?$/.exec(rule.selector);
+    if (scheme)
+      rule.walkDecls('color-scheme', decl => {
+        const attr = scheme[1] ?? '';
+        const inside = postcss.rule({
+          selectors: [
+            `:host${attr ? `(${attr})` : ''} .draft-editor`,
+            `.draft-editor-root${attr} .draft-editor`,
+          ],
+          nodes: [decl.clone()],
+        });
+        made.add(inside);
+        rule.after(inside);
+        decl.remove();
+      });
     rule.selectors = rule.selectors.flatMap(sel => {
       const root = /^:root(\[[^\]]*\])?/.exec(sel);
       if (root) {

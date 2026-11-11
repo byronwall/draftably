@@ -21,6 +21,7 @@ import { findEdge, findNode, isGroup, objectRect } from '../model/graph';
 import { placedItems, type Geometry } from '../runtime/geometry';
 import { drawnLegend, usedStatuses } from '../model/status';
 import { createAnchorLayer, type Anchor, type DraftSlot } from '../runtime/anchors';
+import { watchColorScheme } from '../runtime/color-scheme';
 import type { Diagnostic } from '../runtime/types';
 import type { EditorUpdate } from '../runtime/host';
 import { adoptEditorCss } from './css';
@@ -357,7 +358,10 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
 
   const dispose = render(() => {
     createEffect(() =>
-      host.style.setProperty('--diagram-canvas', resolveAppearance(session.doc.appearance).canvas),
+      host.style.setProperty(
+        '--diagram-canvas',
+        resolveAppearance(session.drawnAppearance()).canvas,
+      ),
     );
     // Reads the drawing's inputs and builds nothing from them, so a drag with no geometry
     // reader never runs the frame and item placement.
@@ -423,6 +427,13 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   const shadow = host.getRootNode() instanceof ShadowRoot;
   if (!shadow) host.classList.add('draft-editor-root');
   adoptEditorCss(host.getRootNode() as Document | ShadowRoot);
+  // A file without a theme line draws dark on a dark page. The canvas redraws its colors only:
+  // the dark theme has the light one's sizes, so nothing moves. The editor's own controls set
+  // their color-scheme inside a shadow root, so there the page's scheme is read at its top.
+  const stopScheme = watchColorScheme(
+    shadow ? (host.getRootNode() as ShadowRoot) : host,
+    session.setDark,
+  );
   if (!mounted++)
     for (const [type, fn, capture] of KEYS) document.addEventListener(type, fn, capture);
 
@@ -507,6 +518,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       cancelAnimationFrame(firstFit);
       cancelAnimationFrame(cameraFrame);
       stopCamera();
+      stopScheme();
       emit('anchors', { anchors: [] });
       anchorLayer.destroy();
       listeners.clear();
