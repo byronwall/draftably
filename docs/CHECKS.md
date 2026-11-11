@@ -86,8 +86,9 @@ prints median and p95 per row with ✓ or ✗. Add `--runs N` (default 5) and `-
 | Main-thread JS, viewer-only page             | ≤ 40 KB gz; no editor request                             |
 | First diagram, 28-box file, cold (4× CPU)    | ≤ 1 s                                                     |
 | First diagram, 28-box file, warm             | ≤ 300 ms (not met: see below)                             |
+| 20 instances of the 28-box file              | every diagram commits; no timeouts                        |
 | Source update to commit, 28 boxes            | ≤ 200 ms                                                  |
-| Workers, 20 instances × 20 updates           | 1 render worker per page                                  |
+| Workers, 20 instances × 20 updates           | ≤ min(4, cores − 1) render workers per page               |
 | 20 instances: stylesheets, fonts, long tasks | 1 sheet; 1 font set; no long task over 200 ms             |
 | Mount and destroy, 50 cycles                 | heap within 5 %; listeners, workers and fonts at baseline |
 

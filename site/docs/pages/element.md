@@ -28,8 +28,8 @@ The element supplies its styles, a 26rem height, a module worker and bundled fon
 added to the page and cleans up when removed. Its shadow root keeps page styles from changing the
 drawing or controls. Override its height with ordinary CSS: `draft-diagram { height: 32rem; }`.
 
-All diagrams on a page share one render worker, one stylesheet and one copy of each font. The
-worker stops after 30 seconds with no work and starts again on the next update.
+All diagrams on a page share a pool of at most four render workers (one fewer than the device's
+cores), one stylesheet and one copy of each font. A worker stops after 30 seconds with no work.
 
 ### Frame colors
 
@@ -241,7 +241,7 @@ export function DraftDiagram({ source }: { source: string }) {
 ### Worker and fonts
 
 The viewer compiles in a module worker, served from the same origin as a module-relative asset. All
-viewers on a page share it. A restrictive CSP must allow that worker. The element's styles are a
+viewers on a page share a small pool of them. A restrictive CSP must allow that worker. The element's styles are a
 constructable stylesheet, so a strict `style-src` needs no nonce for them. A worker that does not start or times out returns an
 update error; the viewer does not switch to main-thread compilation by itself. Set
 `execution: { mode: 'main' }` only for known small inputs, or when you pass a host link resolver,

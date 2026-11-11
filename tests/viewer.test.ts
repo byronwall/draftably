@@ -1,5 +1,13 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+// Three cores: the page's worker pool holds two workers (cores − 1).
+vi.hoisted(() =>
+  Object.defineProperty(globalThis.navigator, 'hardwareConcurrency', {
+    value: 3,
+    configurable: true,
+  }),
+);
 import { resetPageShared } from '../src/runtime/page-shared';
 import { mountViewer } from '../src/runtime/viewer';
 import { renderSvg } from '../src/runtime/render';
@@ -11,7 +19,6 @@ node b "Store"
 edge ab a -> b "reads"
 `;
 const jobs: Array<{ worker: FakeWorker; id: number; source: string; options: RenderOptions }> = [];
-const cancels: number[] = [];
 const workers: FakeWorker[] = [];
 let workerMode: 'render' | 'hold' | 'error' = 'render';
 let fontMode: 'loaded' | 'blocked' = 'loaded';
@@ -72,10 +79,7 @@ class FakeWorker {
   removeEventListener(type: string, callback: (event: never) => void) {
     this.listeners.get(type)?.delete(callback);
   }
-  postMessage(
-    request: { id: number; source: string; options: RenderOptions } | { cancel: number },
-  ) {
-    if ('cancel' in request) return void cancels.push(request.cancel);
+  postMessage(request: { id: number; source: string; options: RenderOptions }) {
     jobs.push({ worker: this, ...request });
     if (workerMode === 'error')
       queueMicrotask(() =>
@@ -120,6 +124,11 @@ Object.defineProperty(window, 'ResizeObserver', { value: ResizeObserverMock, con
 Object.defineProperty(window, 'FontFace', { value: FontFaceMock, configurable: true });
 const fontSet = new FontSetMock();
 Object.defineProperty(document, 'fonts', { value: fontSet, configurable: true });
+/** Answer a held job with a real render. */
+const reply = async (job: (typeof jobs)[number]) =>
+  job.worker.fire('message', {
+    data: { id: job.id, result: await renderSvg(job.source, job.options) },
+  });
 const host = () => {
   const el = document.createElement('div');
   document.body.append(el);
@@ -129,7 +138,6 @@ afterEach(() => {
   document.body.replaceChildren();
   resetPageShared();
   jobs.length = 0;
-  cancels.length = 0;
   workers.length = 0;
   ResizeObserverMock.current.length = 0;
   workerMode = 'render';
@@ -194,34 +202,53 @@ describe('independent viewer lifecycle', () => {
     viewer.destroy();
   });
 
-  it('shares one worker, cancels superseded work in it, and settles destroyed work', async () => {
+  it('shares a pool of two workers, drops superseded work, and settles destroyed work', async () => {
     workerMode = 'hold';
     const element = host(),
       viewer = mountViewer(element),
       other = mountViewer(host());
     const old = viewer.update(source);
-    const oldJob = jobs[0].id;
     const latest = viewer.update(source);
     void other.update(source);
+    void other.update(source);
     await expect(old).resolves.toMatchObject({ status: 'superseded' });
-    expect(workers).toHaveLength(1);
-    expect(workers[0].terminated).toBe(false);
-    expect(cancels).toEqual([oldJob]);
-    const active = jobs[1];
-    const result = await renderSvg(active.source, active.options);
-    active.worker.fire('message', { data: { id: active.id, result } });
+    expect(workers).toHaveLength(2);
+    // Both workers are busy; the other viewer's superseded queued job never reaches a worker.
+    expect(jobs).toHaveLength(2);
+    await reply(jobs[0]);
+    await reply(jobs[1]);
+    await reply(jobs[2]);
     await expect(latest).resolves.toMatchObject({ status: 'committed' });
+    expect(jobs).toHaveLength(3);
     const controller = new AbortController();
     const aborted = viewer.update(source, { signal: controller.signal });
     controller.abort();
     await expect(aborted).resolves.toMatchObject({ status: 'aborted' });
-    expect(cancels).toContain(jobs.at(-1)!.id);
     const pending = viewer.update(source);
     viewer.destroy();
     other.destroy();
     await expect(pending).resolves.toMatchObject({ status: 'destroyed' });
-    expect(workers).toHaveLength(1);
+    expect(workers).toHaveLength(2);
     expect(element.childNodes).toHaveLength(0);
+  });
+
+  it('times a job from dispatch, so a job that waited in the queue still draws', async () => {
+    workerMode = 'hold';
+    const options = { execution: { mode: 'worker' as const, timeoutMs: 40 } };
+    const viewers = [0, 1, 2].map(() => mountViewer(host(), options));
+    const results = viewers.map(v => v.update(source));
+    expect(jobs).toHaveLength(2);
+    await new Promise(r => setTimeout(r, 25));
+    await reply(jobs[0]);
+    await reply(jobs[1]);
+    expect(jobs).toHaveLength(3);
+    // The third job waited 25 ms and runs 25 more: past 40 ms in all, within it once dispatched.
+    await new Promise(r => setTimeout(r, 25));
+    await reply(jobs[2]);
+    for (const result of results)
+      await expect(result).resolves.toMatchObject({ status: 'committed' });
+    expect(workers.every(w => !w.terminated)).toBe(true);
+    for (const v of viewers) v.destroy();
   });
 
   it('reports worker errors and timeouts without falling back to the main thread', async () => {

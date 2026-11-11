@@ -459,25 +459,25 @@ that holds a second copy of the compiler. Each `update()` stops the worker and s
 (`viewer.ts:545`). Each instance owns its worker and its font set (`viewer.ts:263`). The editor entry
 is 321 KB gz, with a 104 KB gz engine worker.
 
-**Runtime cost changes:** import the main-thread renderer only with `execution: { mode: 'main' }`; one render
-worker per page that stays up and ends on idle; one font registry per page; the viewport size from
+**Runtime cost changes:** import the main-thread renderer only with `execution: { mode: 'main' }`; a pool of at most
+min(4, cores − 1) render workers per page that stay up and end on idle; one font registry per page; the viewport size from
 a `ResizeObserver`; shared constructable sheets.
 
 **Budgets.** Each proof records median and p95 on one named laptop, with a 4× CPU throttle for the
 cold numbers.
 
-| Area                                 | Budget                                                                    | Proof                                                    |
-| ------------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------- |
-| Main-thread JS, viewer-only page     | ≤ 40 KB gz before the first render request; no editor request             | Packed consumer build; network log                       |
-| Workers                              | 1 render worker per page, whatever the instance and update count          | Count workers on a page with 20 instances and 20 updates |
-| First diagram, 28-box bench file     | ≤ 1 s cold, ≤ 300 ms warm, from navigation to the committed update        | Playwright trace                                         |
-| Source update to commit, 28 boxes    | ≤ 200 ms                                                                  | `pnpm bench`                                             |
-| 20 instances                         | 1 stylesheet per element type; 1 font set; no long task over 200 ms       | `Performance.getMetrics`; long-task observer             |
-| Camera frame, 10 / 100 / 500 targets | ≤ 8 ms p95 at 500; 0 forced layouts                                       | Trace of pan and zoom; long-animation-frame observer     |
-| Target reconcile per update          | ≤ 10 ms at 500; no target re-created for an unchanged ID                  | `MutationObserver` count on the shadow root              |
-| `geometry()` at 200 nodes            | ≤ 1 ms; the same object for one revision                                  | Microbench; identity check                               |
-| `route` during a drag, `quick`       | ≤ 16 ms p95 at 100 nodes, ≤ 50 ms at 200; `auto` again on drop            | `bench:graph` with a drag mode                           |
-| Mount and destroy, 50 cycles         | Heap within 5 %; listeners, workers and `document.fonts.size` at baseline | CDP heap and listener counts                             |
+| Area                                 | Budget                                                                                                                                         | Proof                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Main-thread JS, viewer-only page     | ≤ 40 KB gz before the first render request; no editor request                                                                                  | Packed consumer build; network log                       |
+| Workers                              | ≤ min(4, cores − 1) render workers per page, whatever the instance and update count; 20 instances of the bench file all commit with no timeout | Count workers on a page with 20 instances and 20 updates |
+| First diagram, 28-box bench file     | ≤ 1 s cold, ≤ 300 ms warm, from navigation to the committed update                                                                             | Playwright trace                                         |
+| Source update to commit, 28 boxes    | ≤ 200 ms                                                                                                                                       | `pnpm bench`                                             |
+| 20 instances                         | 1 stylesheet per element type; 1 font set; no long task over 200 ms                                                                            | `Performance.getMetrics`; long-task observer             |
+| Camera frame, 10 / 100 / 500 targets | ≤ 8 ms p95 at 500; 0 forced layouts                                                                                                            | Trace of pan and zoom; long-animation-frame observer     |
+| Target reconcile per update          | ≤ 10 ms at 500; no target re-created for an unchanged ID                                                                                       | `MutationObserver` count on the shadow root              |
+| `geometry()` at 200 nodes            | ≤ 1 ms; the same object for one revision                                                                                                       | Microbench; identity check                               |
+| `route` during a drag, `quick`       | ≤ 16 ms p95 at 100 nodes, ≤ 50 ms at 200; `auto` again on drop                                                                                 | `bench:graph` with a drag mode                           |
+| Mount and destroy, 50 cycles         | Heap within 5 %; listeners, workers and `document.fonts.size` at baseline                                                                      | CDP heap and listener counts                             |
 
 The budgets use 500 targets, because the runtime limit is 500 objects (`render.ts:19`).
 
@@ -486,6 +486,12 @@ meet it. A fresh layout of the 28-box bench file takes about 600 ms in the route
 reload has no layout cache. Every other step-3 row passes. CDP's CPU throttle slows the page, not
 the worker, so the cold row mostly measures the same layout. The budget stays as a target for the
 router. `pnpm bench:host` reports it, and later steps must not make it slower.
+
+**Changed in step 3, after review.** One worker per page ran jobs one at a time, so a page of
+large diagrams drew serially, and a job's timeout counted its time in the queue. The page now has
+a pool of at most min(4, cores − 1) workers. Jobs queue on the main thread, a superseded job leaves
+the queue before a worker sees it, and a job's timeout starts when a worker takes it and stops only
+that worker.
 
 ## Breaking changes
 

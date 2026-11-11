@@ -56,12 +56,21 @@ window.add = () => {
   document.body.append(el);
   return el;
 };
+/** The first update of an element, whatever its status. */
+window.settled = el =>
+  new Promise(resolve =>
+    el.addEventListener(
+      'draft-update',
+      e => resolve({ status: e.detail.status, t: performance.now() }),
+      { once: true },
+    ),
+  );
 window.loaded = import('/dist/element.js');
+const first = q.has('empty') ? [] : Array.from({ length: n }, window.add).map(window.settled);
+window.firstUpdates = Promise.all(first);
 window.firstCommit = q.has('empty')
   ? undefined
-  : Promise.all(Array.from({ length: n }, window.add).map(window.committed)).then(t =>
-      Math.max(...t),
-    );
+  : window.firstUpdates.then(all => Math.max(...all.map(u => u.t)));
 </script>`;
 
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.woff2': 'font/woff2' };
@@ -167,9 +176,17 @@ async function open(query, { throttle = 1, context } = {}) {
 }
 
 // 20 instances, then 20 updates each: workers, stylesheets, fonts and long tasks.
+const pool = Math.max(1, Math.min(4, os.cpus().length - 1));
 {
   const { ctx, tab, workers } = await open('n=20');
-  await tab.evaluate(() => window.firstCommit);
+  const first = await tab.evaluate(() => window.firstUpdates);
+  const committed = first.filter(u => u.status === 'committed').length;
+  row(
+    `20 instances of the ${nodes}-box file`,
+    'every diagram commits; no timeouts',
+    `${committed}/20 committed; last at ${Math.round(Math.max(...first.map(u => u.t)))} ms`,
+    committed === 20,
+  );
   await tab.evaluate(async () => {
     const els = [...document.querySelectorAll('draft-diagram')];
     for (let round = 0; round < 20; round++)
@@ -193,9 +210,9 @@ async function open(query, { throttle = 1, context } = {}) {
   });
   row(
     'Workers, 20 instances × 20 updates',
-    '1 render worker per page',
+    `≤ min(4, cores − 1) = ${pool} render workers per page`,
     `${workers.length} created`,
-    workers.length === 1,
+    workers.length <= pool,
   );
   row(
     '20 instances: stylesheets, fonts, long tasks',
