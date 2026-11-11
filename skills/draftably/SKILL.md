@@ -429,6 +429,9 @@ Rules that save a debugging round:
   (`@itemactivate` in Vue, `onitemactivate` in Svelte). Each receives the event's `detail`.
   `onLink` and `onContextmenu` also get `preventDefault()`. Any other attribute, such as
   `data-theme`, goes to the element.
+- Diagrams follow the page's `color-scheme`: a page that declares none draws light; add
+  `:root { color-scheme: light dark }` to follow the user's setting, or `color-scheme: light` on
+  the element to keep one light.
 - Content on a node: a child marked `data-draft-slot="body:api"` fills node `api`;
   `overlay:api` sits over it at screen size. Mark buttons and fields `data-draft-input` so they
   take the pointer. Layout never measures this content: give the node room in the source with
