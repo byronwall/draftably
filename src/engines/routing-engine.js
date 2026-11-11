@@ -1120,6 +1120,8 @@ const FAR_PENALTY = 100,
 // quality corpus, held-out set and examples every repair that was kept came within the first four
 // tries; later ones only cost time.
 const MAX_REPAIRS = 4,
+  // Lines a fan-order repair routes again at most: the crossing pair and the lines beside them.
+  FAN_GROUP = 4,
   // Repairs reroute each pair against the whole drawing, so their cost grows with its size while
   // one crossing matters less. On larger drawings they rarely find a better pair: none did on the
   // graph harness's DAGs. Hand-drawn diagrams stay well below this.
@@ -1397,14 +1399,18 @@ function compute(input, rawOptions = {}) {
       edgeObs = wall.length ? [...obsFor(e, open), ...wall] : obsFor(e, open),
       ca = center(a),
       cb = center(b);
-    const from =
-        cfg.fromSide && cfg.fromSide !== 'auto'
+    // `e.pin`: the repair pass's port order for a fan, a side and offset at either end.
+    const pin = e.pin || {};
+    const from = pin.from
+        ? [pin.from.side]
+        : cfg.fromSide && cfg.fromSide !== 'auto'
           ? [cfg.fromSide]
           : rawOptions.quick && old
             ? [old.fromSide]
             : SIDES,
-      to =
-        cfg.toSide && cfg.toSide !== 'auto'
+      to = pin.to
+        ? [pin.to.side]
+        : cfg.toSide && cfg.toSide !== 'auto'
           ? [cfg.toSide]
           : rawOptions.quick && old
             ? [old.toSide]
@@ -1720,6 +1726,8 @@ function compute(input, rawOptions = {}) {
         // A lane may say where along the target's side the edge arrives.
         if (typeof cfg.toOffset === 'number' && cfg.toSide === ts && !vertices(b))
           toff = cfg.toOffset;
+        if (pin.from) fo = pin.from.offset;
+        if (pin.to) toff = pin.to.offset;
         const start = port(a, fs, fo),
           end = port(b, ts, toff),
           obs = gate(edgeObs, start, fs, end, ts);
@@ -2100,6 +2108,72 @@ function compute(input, rawOptions = {}) {
     };
     const byId = new Map(edges.map(e => [e.id, e])),
       fixed = e => e.cfg.waypoints?.length > 0 || fixedPlans.has(e.id);
+    // Two lines that cross where they share a box side often hold its ports out of order: the line
+    // from farther along took a middle port because it was routed last. Route the pair and every
+    // line beside them again, with the ports on each side they share in the order of their far
+    // ends, so the fan nests.
+    const both = ['from', 'to'],
+      sideOf = (r, end) => r[end] + '|' + r[end + 'Side'];
+    const fanTries = (i, j) => {
+      const sides = new Set([routes[i], routes[j]].flatMap(r => both.map(end => sideOf(r, end))));
+      const group = routes.flatMap((r, q) =>
+        q === i || q === j || (r.from !== r.to && both.some(end => sides.has(sideOf(r, end))))
+          ? [q]
+          : [],
+      );
+      if (group.length > FAN_GROUP || group.some(q => fixed(byId.get(routes[q].id)))) return [];
+      const at = new Map();
+      for (const q of group)
+        for (const end of both) {
+          const key = sideOf(routes[q], end);
+          if (!at.has(key)) at.set(key, []);
+          at.get(key).push({ q, end });
+        }
+      const pins = new Map(group.map(q => [q, {}]));
+      let moved = false;
+      for (const list of at.values()) {
+        if (list.length < 2) continue;
+        const side = routes[list[0].q][list[0].end + 'Side'],
+          axis = side === 'left' || side === 'right' ? 'y' : 'x',
+          offset = ({ q, end }) => routes[q][end + 'Offset'],
+          far = ({ q, end }) => center(rects.get(routes[q][end === 'from' ? 'to' : 'from']))[axis],
+          offsets = list.map(offset).sort((a, b) => a - b);
+        [...list]
+          .sort((a, b) => far(a) - far(b) || offset(a) - offset(b))
+          .forEach((x, n) => {
+            if (offsets[n] !== offset(x)) moved = true;
+            pins.get(x.q)[x.end] = { side, offset: offsets[n] };
+          });
+      }
+      if (!moved) return [];
+      // Routed in turn, each line takes the track it likes best and the next goes round it. The
+      // line that leaves farthest along its side should take the track nearest the far box, so
+      // the group also goes in the order of its start ports, both ways for a fan that turns up
+      // or down.
+      const rest = routes.filter((_, q) => !group.includes(q)),
+        start = q => {
+          const r = routes[q],
+            pin = pins.get(q).from,
+            p = pin ? port(rects.get(r.from), pin.side, pin.offset) : r.points[0];
+          return r.fromSide === 'left' || r.fromSide === 'right' ? p.y : p.x;
+        },
+        byStart = [...group].sort((a, b) => start(a) - start(b) || a - b),
+        orders = new Map(
+          [group, [...group].reverse(), byStart, [...byStart].reverse()].map(o => [o.join(), o]),
+        );
+      return [...orders.values()].map(order => {
+        const t = [...routes],
+          done = [];
+        for (const q of order) {
+          const e = byId.get(routes[q].id),
+            r = find({ ...e, pin: pins.get(q) }, [...rest, ...done], routes[q]);
+          if (r.blocked) return routes;
+          t[q] = r;
+          done.push(r);
+        }
+        return t;
+      });
+    };
     const tried = new Set();
     for (let sweep = 0; sweep < 2; sweep++) {
       let changed = false;
@@ -2111,6 +2185,18 @@ function compute(input, rawOptions = {}) {
           tried.add(key);
           let best = null,
             bestValue = value(routes) - 0.1;
+          const consider = t => {
+            if (
+              t.some((r, q) => r !== routes[q] && backwards(r) && !backwards(routes[q])) ||
+              metrics(t).crossings >= metrics(routes).crossings
+            )
+              return;
+            const v = value(t);
+            if (v < bestValue) {
+              best = t;
+              bestValue = v;
+            }
+          };
           for (const [m, k] of [
             [i, j],
             [j, i],
@@ -2142,19 +2228,10 @@ function compute(input, rawOptions = {}) {
                 tries.push(swap);
               }
             }
-            for (const t of tries) {
-              if (
-                t.some((r, q) => r !== routes[q] && backwards(r) && !backwards(routes[q])) ||
-                metrics(t).crossings >= metrics(routes).crossings
-              )
-                continue;
-              const v = value(t);
-              if (v < bestValue) {
-                best = t;
-                bestValue = v;
-              }
-            }
+            for (const t of tries) consider(t);
           }
+          // The fan's order is the last resort: a pair that moves alone draws fewer changes.
+          if (!best) for (const t of fanTries(i, j)) consider(t);
           if (best) {
             routes = best;
             syncOpen();
