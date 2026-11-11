@@ -17,7 +17,7 @@ To write a `.draft` file, read the agent skill first. It has the syntax, the lay
 
 ## Embed in an app
 
-- [Choose how to embed](https://draftably.dev/docs/embed/): Draftably draws, your app draws, or a static image, with a row per framework
+- [Choose how to embed](https://draftably.dev/docs/embed/): who draws (Draftably, your app, a flow library, or nobody at runtime), with a row per framework
 - [Quick start](https://draftably.dev/docs/embed-quick-start/): install the framework package with `@draftably/runtime`, import `host.css` once, the Vite 5–7 `optimizeDeps` setting, one diagram and one event
 - [How embedding works](https://draftably.dev/docs/embed-concepts/): `<draft-diagram>` and `<draft-editor>` are the contract; the microtask mount, live options, `status`
 - [React and Next.js](https://draftably.dev/docs/react/): a complete Vite app, a Next.js server component and a strict-CSP `proxy.ts`
@@ -38,7 +38,7 @@ To write a `.draft` file, read the agent skill first. It has the syntax, the lay
 
 ## Graph layout
 
-- [Your app draws](https://draftably.dev/docs/your-app-draws/): who draws what, and a `layout()` sample that draws boxes, lines, arrowheads and labels
+- [Your app draws](https://draftably.dev/docs/your-app-draws/): when to draw with your own components, and a `layout()` sample that draws boxes, lines, arrowheads and labels
 - [Layout API](https://draftably.dev/docs/layout-api/): `layout` and `route` for a graph your app draws
 - [Drop in your graph layout](https://draftably.dev/docs/layout-drop-in/): React Flow, Svelte Flow, elkjs, dagre and Cytoscape.js
 
