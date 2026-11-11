@@ -4,6 +4,7 @@ import { DraftDiagram } from '@draftably/vue';
 import { DraftEditor } from '@draftably/vue/editor';
 import {
   PROOF_OWNER,
+  cancelLink,
   cancelMenu,
   cycleSource,
   editorSources,
@@ -66,6 +67,7 @@ export const Proof = defineComponent({
               options,
               'data-proof': 'viewer',
               onContextmenu: cancelMenu,
+              onLink: cancelLink,
             },
             { default: () => [h(Card)] },
           ),

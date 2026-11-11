@@ -87,7 +87,12 @@ type Log = {
   diagnostics: { stale: boolean; codes: string[] }[];
   activate: string[];
 };
-type Hooks = { changes: string[][]; clicks: number; menus: (string | null)[] };
+type Hooks = {
+  changes: string[][];
+  clicks: number;
+  menus: (string | null)[];
+  links: string[];
+};
 
 export async function proveHost(
   browser: Browser,
@@ -314,6 +319,20 @@ export async function proveHost(
         'other attributes reach both elements',
         attrs,
       );
+      // Event props and options are not attributes: none may land on an element as text.
+      const stray = await ev(() =>
+        [...document.querySelectorAll('draft-diagram, draft-editor')].flatMap(el =>
+          [...el.attributes]
+            .map(a => a.name)
+            .filter(name => name.startsWith('on') || name === 'options')
+            .map(name => `${el.localName}[${name}]`),
+        ),
+      );
+      check(
+        stray.length === 0,
+        'no event prop or options lands on an element as an attribute',
+        stray,
+      );
       await page.locator('#p-viewer').scrollIntoViewIfNeeded();
       // A listener on the window runs after the element's own, so it sees whether the menu was
       // cancelled.
@@ -340,6 +359,30 @@ export async function proveHost(
         menu.menus.at(-1) === 'web' && menu.prevented === true,
         "an event prop's preventDefault() cancels the browser's menu",
         menu,
+      );
+
+      // A real click on the link mark: the event prop cancels it, so nothing opens.
+      const pagesBefore = page.context().pages().length;
+      const urlBefore = page.url();
+      const link = await ev(() => {
+        const root = document.querySelector('#p-viewer draft-diagram')!.shadowRoot!;
+        const r = [...root.querySelectorAll('a[href]')]
+          .map(el => el.getBoundingClientRect())
+          .find(b => b.width > 0 && b.height > 0);
+        return r && { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+      });
+      if (!link) throw Error('the viewer shows no link');
+      await page.mouse.click(link.x, link.y);
+      await page.waitForTimeout(400);
+      const opened = {
+        links: (await hooks()).links,
+        pages: page.context().pages().length - pagesBefore,
+        moved: page.url() !== urlBefore,
+      };
+      check(
+        opened.links.at(-1) === 'https://example.com/web' && opened.pages === 0 && !opened.moved,
+        "an onLink prop's preventDefault() keeps the link from opening",
+        opened,
       );
     });
 
