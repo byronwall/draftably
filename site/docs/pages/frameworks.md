@@ -44,122 +44,499 @@ prop: `update`, `render`, `diagnostics`, `camera`, `itemactivate`, `link`, `cont
 an initial error, the component keeps its `svg` fallback visible. A later error keeps the last
 committed drawing.
 
+## Recipes
+
+Each recipe below is a complete Vite app for one framework. It shows both components, an event,
+a body on a node with a field in it, a dark theme, `host.css`, server rendering with `renderSvg`
+and the Vite config. Start from `pnpm create vite` with the framework's TypeScript template, then
+add the files. CI copies every file below into a fresh app with the packed packages, type-checks
+it, builds it and renders it on the server, so the recipes compile.
+
+Every recipe uses these two files.
+
+```ts
+// src/diagram.ts
+// `size api … min-height=120` gives the body on `api` room. Layout never measures host content.
+export const initial = `diagram "Checkout" version=1
+node web "Web"
+node api "API"
+node db "Orders" shape=pill
+edge e1 web -> api "submit"
+edge e2 api -> db "save"
+size api width=220 height=auto min-height=120
+`;
+```
+
+```css
+/* src/theme.css */
+/* Host CSS reaches slot content. The --draft-* properties color the viewer's frame. */
+.app {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+.app.dark {
+  color-scheme: dark;
+  background: #020617;
+  color: #e2e8f0;
+  --draft-bg: #0f172a;
+  --draft-ink: #e2e8f0;
+  --draft-border: #334155;
+  --draft-focus: #38bdf8;
+  --draft-warning-ink: #fdba74;
+  --draft-warning-bg: #431407;
+}
+.app draft-diagram {
+  height: 20rem;
+}
+.app draft-editor {
+  height: 24rem;
+}
+.card {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #1d4ed8;
+  color: #fff;
+  font:
+    13px/1.3 system-ui,
+    sans-serif;
+}
+```
+
+The editor takes its dark colors from `data-theme="dark"` on the `<draft-editor>` element, as
+each recipe sets it. Its own properties are listed in
+[Editor colors](#editor-colors).
+
 ## React
 
-```tsx
-import { useState } from 'react';
-import { DraftDiagram } from '@draftably/react';
-import '@draftably/runtime/host.css';
+```ts
+// vite.config.ts
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
-export function Architecture() {
-  const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
+export default defineConfig({
+  plugins: [react()],
+  // Keep the viewer's worker beside its package in development.
+  optimizeDeps: { exclude: ['@draftably/runtime'] },
+});
+```
+
+```tsx
+// src/App.tsx
+import { useState } from 'react';
+import { DraftDiagram, type ViewerOptions } from '@draftably/react';
+import { DraftEditor } from '@draftably/react/editor';
+import { initial } from './diagram';
+
+// `detail: 'full'` keeps the body at every zoom. A new object with equal values also does nothing.
+const options: ViewerOptions = { detail: 'full' };
+
+export function App({ svg }: { svg?: string }) {
+  const [source, setSource] = useState(initial);
+  const [note, setNote] = useState('');
+  const [picked, setPicked] = useState('nothing');
   return (
-    <main>
-      <button onClick={() => setSource('node api "Updated API"')}>Update</button>
+    <main className="app dark">
       <DraftDiagram
         source={source}
-        label="Architecture"
-        onUpdate={result => {
-          if (result.status === 'error') console.error(result.error.diagnostics);
-        }}
+        svg={svg}
+        label="Checkout"
+        options={options}
+        onItemactivate={({ id }) => setPicked(id)}
+        onDiagnostics={({ diagnostics }) => diagnostics.forEach(d => console.warn(d.message))}
+      >
+        <div data-draft-slot="body:api" className="card">
+          <strong>API</strong>
+          <input
+            data-draft-input=""
+            value={note}
+            placeholder="Add a note"
+            onChange={event => setNote(event.target.value)}
+          />
+        </div>
+      </DraftDiagram>
+      <p>Picked: {picked}</p>
+      <DraftEditor
+        ref={el => el?.setAttribute('data-theme', 'dark')}
+        source={source}
+        onChange={({ source: next }) => setSource(next)}
       />
     </main>
   );
 }
 ```
 
-The ref points to the `<draft-diagram>` element. After React applies a source change, read
-`ref.current.updateComplete` to await that render. Check for `status === 'error'`; syntax and
-worker failures are returned as results, not thrown.
+```tsx
+// src/main.tsx
+import '@draftably/runtime/host.css';
+import './theme.css';
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+
+// With HTML from src/server.tsx, call hydrateRoot with the same `svg` instead.
+createRoot(document.getElementById('root')!).render(<App />);
+```
+
+```tsx
+// src/server.tsx
+import { renderToString } from 'react-dom/server';
+import { renderSvg } from '@draftably/react';
+import { App } from './App';
+import { initial } from './diagram';
+
+/** The page's HTML, with the diagram drawn before any script runs. */
+export async function render(): Promise<string> {
+  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  return renderToString(<App svg={result.ok ? result.value.svg : undefined} />);
+}
+```
+
+The ref points to the `<draft-diagram>` or `<draft-editor>` element. Every event prop receives
+the event's `detail`: `onUpdate`, `onRender`, `onDiagnostics`, `onCamera`, `onItemactivate`,
+`onLink`, `onContextmenu`, `onAnchors`, and on the editor `onSelect` and `onChange`.
+
+In a Next.js server component, import `renderSvg` from `@draftably/react/server`. The main entry
+is a client module, and a server component cannot call its exports.
 
 Draw your graph with React Flow? `@draftably/react/flow` draws the lines that Draftably routes.
 See [Drop in your graph layout](#react-flow).
 
 ## Solid
 
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import solid from 'vite-plugin-solid';
+
+export default defineConfig({
+  // `ssr: true` compiles for both the browser and src/server.tsx.
+  plugins: [solid({ ssr: true })],
+  optimizeDeps: { exclude: ['@draftably/runtime'] },
+});
+```
+
 ```tsx
+// src/App.tsx
 import { createSignal } from 'solid-js';
 import { DraftDiagram } from '@draftably/solid';
-import '@draftably/runtime/host.css';
+import { DraftEditor } from '@draftably/solid/editor';
+import { initial } from './diagram';
 
-export function Architecture() {
-  const [source, setSource] = createSignal('node web "Web"\nnode api "API"\nedge e1 web -> api');
+export function App(props: { svg?: string }) {
+  const [source, setSource] = createSignal(initial);
+  const [note, setNote] = createSignal('');
+  const [picked, setPicked] = createSignal('nothing');
   return (
-    <main>
-      <button onClick={() => setSource('node api "Updated API"')}>Update</button>
+    <main class="app dark">
       <DraftDiagram
         source={source()}
-        label="Architecture"
-        onUpdate={result => {
-          if (result.status === 'error') console.error(result.error.diagnostics);
-        }}
+        svg={props.svg}
+        label="Checkout"
+        options={{ detail: 'full' }}
+        onItemactivate={({ id }) => setPicked(id)}
+        onDiagnostics={({ diagnostics }) => diagnostics.forEach(d => console.warn(d.message))}
+      >
+        <div data-draft-slot="body:api" class="card">
+          <strong>API</strong>
+          <input
+            data-draft-input
+            value={note()}
+            placeholder="Add a note"
+            onInput={event => setNote(event.currentTarget.value)}
+          />
+        </div>
+      </DraftDiagram>
+      <p>Picked: {picked()}</p>
+      <DraftEditor
+        ref={el => el.setAttribute('data-theme', 'dark')}
+        source={source()}
+        onChange={({ source: next }) => setSource(next)}
       />
     </main>
   );
 }
 ```
 
-The package ships its JSX source under the `solid` export condition, so `vite-plugin-solid`
-compiles it for the browser and for SolidStart's server.
+```tsx
+// src/main.tsx
+import '@draftably/runtime/host.css';
+import './theme.css';
+import { render } from 'solid-js/web';
+import { App } from './App';
+
+// With HTML from src/server.tsx, call hydrate with the same `svg` instead.
+render(() => <App />, document.getElementById('root')!);
+```
+
+```tsx
+// src/server.tsx
+import { renderToString } from 'solid-js/web';
+import { renderSvg } from '@draftably/solid';
+import { App } from './App';
+import { initial } from './diagram';
+
+/** The page's HTML, with the diagram drawn before any script runs. */
+export async function render(): Promise<string> {
+  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  return renderToString(() => <App svg={result.ok ? result.value.svg : undefined} />);
+}
+```
+
+Key a list of bodies by ID (`<For each={ids()}>`), so a changed label keeps its element and the
+focus in it. The package ships its JSX source under the `solid` export condition, so
+`vite-plugin-solid` compiles it for the browser and for SolidStart's server.
 
 ## Vue
 
+```ts
+// vite.config.ts
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [vue()],
+  optimizeDeps: { exclude: ['@draftably/runtime'] },
+});
+```
+
 ```vue
-<script setup>
+<!-- src/App.vue -->
+<script setup lang="ts">
 import { ref } from 'vue';
-import { DraftDiagram } from '@draftably/vue';
-import '@draftably/runtime/host.css';
-const source = ref('node web "Web"\nnode api "API"\nedge e1 web -> api');
-const record = result => {
-  if (result.status === 'error') console.error(result.error.diagnostics);
-};
+import { DraftDiagram, type HostEvents } from '@draftably/vue';
+import { DraftEditor } from '@draftably/vue/editor';
+import { initial } from './diagram';
+
+defineProps<{ svg?: string }>();
+const source = ref(initial);
+const note = ref('');
+const picked = ref('nothing');
+const options = { detail: 'full' } as const;
+const warn = ({ diagnostics }: HostEvents['diagnostics']) =>
+  diagnostics.forEach(d => console.warn(d.message));
 </script>
 
 <template>
-  <DraftDiagram :source="source" label="Architecture" @update="record" />
+  <main class="app dark">
+    <DraftDiagram
+      :source="source"
+      :svg="svg"
+      label="Checkout"
+      :options="options"
+      @itemactivate="({ id }) => (picked = id)"
+      @diagnostics="warn"
+    >
+      <div data-draft-slot="body:api" class="card">
+        <strong>API</strong>
+        <input v-model="note" data-draft-input placeholder="Add a note" />
+      </div>
+    </DraftDiagram>
+    <p>Picked: {{ picked }}</p>
+    <DraftEditor
+      :source="source"
+      data-theme="dark"
+      @change="({ source: next }) => (source = next)"
+    />
+  </main>
 </template>
 ```
 
-No `isCustomElement` compiler setting is needed.
+```ts
+// src/main.ts
+import '@draftably/runtime/host.css';
+import './theme.css';
+import { createApp } from 'vue';
+import App from './App.vue';
+
+// With HTML from src/server.ts, use createSSRApp with the same `svg` instead.
+createApp(App).mount('#app');
+```
+
+```ts
+// src/server.ts
+import { createSSRApp } from 'vue';
+import { renderToString } from 'vue/server-renderer';
+import { renderSvg } from '@draftably/vue';
+import App from './App.vue';
+import { initial } from './diagram';
+
+/** The page's HTML, with the diagram drawn before any script runs. */
+export async function render(): Promise<string> {
+  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  return renderToString(createSSRApp(App, { svg: result.ok ? result.value.svg : undefined }));
+}
+```
+
+No `isCustomElement` compiler setting is needed. Attributes such as `data-theme` fall through to
+the element, and `ref` on a component gives `.element`.
 
 ## Svelte
 
+```ts
+// vite.config.ts
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [svelte()],
+  optimizeDeps: { exclude: ['@draftably/runtime'] },
+});
+```
+
+```js
+// svelte.config.js
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+export default { preprocess: vitePreprocess() };
+```
+
 ```svelte
-<script>
+<!-- src/App.svelte -->
+<script lang="ts">
   import { DraftDiagram } from '@draftably/svelte';
-  import '@draftably/runtime/host.css';
-  let source = $state('node web "Web"\nnode api "API"\nedge e1 web -> api');
-  const record = result => {
-    if (result.status === 'error') console.error(result.error.diagnostics);
-  };
+  import { DraftEditor, type DraftEditorElement } from '@draftably/svelte/editor';
+  import { initial } from './diagram';
+
+  let { svg }: { svg?: string } = $props();
+  let source = $state(initial);
+  let note = $state('');
+  let picked = $state('nothing');
+  let editor = $state<DraftEditorElement>();
+  $effect(() => editor?.setAttribute('data-theme', 'dark'));
+  const options = { detail: 'full' } as const;
 </script>
 
-<DraftDiagram {source} label="Architecture" onupdate={record} />
+<main class="app dark">
+  <DraftDiagram
+    {source}
+    {svg}
+    label="Checkout"
+    {options}
+    onitemactivate={({ id }) => (picked = id)}
+    ondiagnostics={({ diagnostics }) => diagnostics.forEach(d => console.warn(d.message))}
+  >
+    <div data-draft-slot="body:api" class="card">
+      <strong>API</strong>
+      <input data-draft-input bind:value={note} placeholder="Add a note" />
+    </div>
+  </DraftDiagram>
+  <p>Picked: {picked}</p>
+  <DraftEditor bind:element={editor} {source} onchange={({ source: next }) => (source = next)} />
+</main>
+```
+
+```ts
+// src/main.ts
+import '@draftably/runtime/host.css';
+import './theme.css';
+import { mount } from 'svelte';
+import App from './App.svelte';
+
+// With HTML from src/server.ts, call hydrate with the same `svg` instead.
+mount(App, { target: document.getElementById('app')! });
+```
+
+```ts
+// src/server.ts
+import { render as renderApp } from 'svelte/server';
+import { renderSvg } from '@draftably/svelte';
+import App from './App.svelte';
+import { initial } from './diagram';
+
+/** The page's HTML, with the diagram drawn before any script runs. */
+export async function render(): Promise<string> {
+  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  return renderApp(App, { props: { svg: result.ok ? result.value.svg : undefined } }).body;
+}
 ```
 
 Draw your graph with Svelte Flow? See [Drop in your graph layout](#svelte-flow) to place its
 nodes and route its lines with Draftably.
 
-## Angular and plain HTML
+## Plain HTML
 
-Import the element once. Angular needs `CUSTOM_ELEMENTS_SCHEMA` in the component that uses it:
+```html
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Checkout</title>
+  </head>
+  <body>
+    <main class="app dark">
+      <draft-diagram label="Checkout">
+        <div data-draft-slot="body:api" class="card">
+          <strong>API</strong>
+          <input data-draft-input placeholder="Add a note" />
+        </div>
+      </draft-diagram>
+      <p>Picked: <output id="picked">nothing</output></p>
+      <draft-editor data-theme="dark"></draft-editor>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+```
 
 ```ts
-import '@draftably/runtime/element';
-import '@draftably/runtime/host.css';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// vite.config.ts
+import { defineConfig } from 'vite';
 
-@Component({
-  selector: 'app-architecture',
-  template: `<draft-diagram [attr.source]="source" label="Architecture"></draft-diagram>`,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-})
-export class ArchitectureComponent {
-  source = 'node web "Web"\nnode api "API"\nedge e1 web -> api';
+export default defineConfig({
+  optimizeDeps: { exclude: ['@draftably/runtime'] },
+});
+```
+
+```ts
+// src/main.ts
+import '@draftably/runtime/element';
+import '@draftably/editor/element';
+import '@draftably/runtime/host.css';
+import './theme.css';
+import { initial } from './diagram';
+
+const diagram = document.querySelector('draft-diagram')!;
+const editor = document.querySelector('draft-editor')!;
+diagram.options = { detail: 'full' };
+diagram.source = initial;
+editor.source = initial;
+
+// Every draft-<name> event is in HTMLElementEventMap, so `detail` is typed with no cast.
+diagram.addEventListener('draft-itemactivate', event => {
+  document.querySelector('#picked')!.textContent = event.detail.id;
+});
+diagram.addEventListener('draft-diagnostics', event => {
+  for (const d of event.detail.diagnostics) console.warn(d.message);
+});
+editor.addEventListener('draft-change', event => {
+  diagram.source = event.detail.source;
+});
+```
+
+```ts
+// src/server.ts
+import { renderSvg } from '@draftably/runtime';
+import { initial } from './diagram';
+
+const attr = (text: string) =>
+  text.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+
+/** The diagram's markup with its static SVG, for a page your server sends. */
+export async function render(): Promise<string> {
+  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  const svg = result.ok ? result.value.svg : '';
+  return `<draft-diagram label="Checkout" source="${attr(initial)}">${svg}</draft-diagram>`;
 }
 ```
 
-Listen for the `draft-update` event for results.
+Angular uses the same elements. Add `CUSTOM_ELEMENTS_SCHEMA` to the component that uses them,
+and bind the source as an attribute: `<draft-diagram [attr.source]="source">`. Import
+`@draftably/runtime/element` and `@draftably/runtime/host.css` once.
 
 ## Put your components on nodes
 
