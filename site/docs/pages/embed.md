@@ -1,16 +1,35 @@
-# Embed diagrams
+# Choose how to embed
 
 Show `.draft` diagrams in your own pages, apps and documentation. Every route draws with the same
-compiler and renderer as the CLI, so a diagram looks the same everywhere. Pick the row that
-matches what you ship.
+compiler and router as the CLI, so a diagram looks the same everywhere. First decide who draws.
+
+| Who draws          | You get                                                                        | Start with                        |
+| ------------------ | ------------------------------------------------------------------------------ | --------------------------------- |
+| Draftably          | Its look, pan and zoom, a keyboard outline, editing, and your content on nodes | [Quick start](#embed-quick-start) |
+| Your app           | Boxes and routed lines as data, drawn with your own components                 | [Your app draws](#your-app-draws) |
+| Nobody, at runtime | A static SVG or PNG from a build step or the CLI                               | [Render SVG](#render-svg)         |
+
+## Draftably draws
+
+Pick your framework. Each page has a complete app, server rendering for its meta-framework, and a
+strict Content Security Policy.
+
+| You build with             | Read                                     | Install                                         |
+| -------------------------- | ---------------------------------------- | ----------------------------------------------- |
+| React or Next.js           | [React and Next.js](#react)              | `pnpm add @draftably/react @draftably/runtime`  |
+| Solid or SolidStart        | [Solid and SolidStart](#solid)           | `pnpm add @draftably/solid @draftably/runtime`  |
+| Vue or Nuxt                | [Vue and Nuxt](#vue)                     | `pnpm add @draftably/vue @draftably/runtime`    |
+| Svelte or SvelteKit        | [Svelte and SvelteKit](#svelte)          | `pnpm add @draftably/svelte @draftably/runtime` |
+| Plain HTML, Angular, a CDN | [Plain HTML and no bundler](#plain-html) | `pnpm add @draftably/runtime`                   |
+
+Add the [editor](#editor-component) to let users change a diagram. [How embedding
+works](#embed-concepts) explains the model that every framework shares.
+
+## Other routes
 
 | You want to                                      | Read                                            | Install                                   |
 | ------------------------------------------------ | ----------------------------------------------- | ----------------------------------------- |
 | Replace Mermaid on a site you run                | [Switch from Mermaid](#from-mermaid)            | `pnpm add mermaid@npm:@draftably/mermaid` |
-| Show a diagram in React, Solid, Vue, Svelte      | [Frameworks](#frameworks)                       | `@draftably/react` and others             |
-| Add an interactive diagram to any page           | [Element and viewer](#element)                  | `@draftably/runtime`                      |
-| Let users edit a diagram in your app             | [Editor component](#editor-component)           | `@draftably/editor`                       |
-| Generate SVG in a script or build step           | [Render SVG](#render-svg)                       | `@draftably/runtime`                      |
 | Lay out React Flow, elkjs, dagre or Cytoscape    | [Drop in your graph layout](#layout-drop-in)    | `@draftably/runtime`                      |
 | Turn `draft` fences into images                  | [Markdown](#markdown)                           | `@draftably/markdown`                     |
 | Add diagrams to Starlight, Docusaurus, VitePress | [Documentation sites](#documentation-sites)     | `@draftably/markdown`                     |
@@ -19,22 +38,6 @@ matches what you ship.
 
 The packages need Node 22.21 or later and are ES modules only. [Support](#support) lists each
 package and the hosts it is tested on.
-
-## The shortest route
-
-An interactive diagram on a page is two lines:
-
-```ts
-import '@draftably/runtime/element';
-```
-
-```html
-<draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
-```
-
-The element brings its own styles, worker, zoom controls and cleanup. Set its `source` property to
-redraw it. With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
-`vite.config.ts`. [Element and viewer](#element) has the rest.
 
 ## An image for any host
 
@@ -48,12 +51,3 @@ draftably inspect architecture.draft --png architecture.png
 
 The image holds its source, so `draftably open architecture.svg` opens it again for editing. Use
 PNG where a host blocks SVG.
-
-## When something fails
-
-| Symptom                                           | Fix                                                                                              |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| A worker error in Vite 5–7 development            | Add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to the Vite config. |
-| An image URL returns 404                          | Match `publicPath` to the served folder and the site's base path.                                |
-| An edit to an included `.draft` file is not shown | Follow your [site's recipe](#documentation-sites) for watching includes.                         |
-| A diagram does not draw                           | Read `updateComplete`; on an error, `result.error.diagnostics`. Keep a fallback image.           |

@@ -1,13 +1,13 @@
 /**
- * Compiles the framework recipes in `site/docs/pages/frameworks.md` from the packed packages, so a
- * recipe that stops compiling fails CI.
+ * Compiles the app on each framework page (`site/docs/pages/react.md`, `solid.md`, `vue.md`,
+ * `svelte.md`, `plain-html.md`) from the packed packages, so a recipe that stops compiling fails CI.
  *
  *   pnpm runtime:build && pnpm editor:build && pnpm frameworks:build
  *   pnpm prove:recipes [react solid vue svelte plain]
  *
- * Every fenced block whose first line names a file (`// src/App.tsx`, `<!-- src/App.vue -->`,
- * `/* src/theme.css *\/`) is written into a fresh Vite app: the blocks in "Recipes" go into every
- * app, and each framework's section adds its own. The script then installs the packed packages
+ * Every fenced block in the page's "Build the app" section whose first line names a file
+ * (`// src/App.tsx`, `<!-- src/App.vue -->`, `/* src/theme.css *\/`) is written into a fresh Vite
+ * app. The script then installs the packed packages
  * that the section's `pnpm add` line names, and only those,
  * type-checks (tsc, vue-tsc or svelte-check), builds, calls the recipe's server `render()`, and
  * loads the built page in Chromium: the diagram and the editor must reach `status="ready"`, the
@@ -24,10 +24,10 @@ import { chromium } from 'playwright-core';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'tmp/recipes');
-const docs = readFileSync(path.join(root, 'site/docs/pages/frameworks.md'), 'utf8');
 
 interface Recipe {
-  section: string;
+  /** The docs page, `site/docs/pages/<page>.md`. */
+  page: string;
   deps: Record<string, string>;
   dev: Record<string, string>;
   check: string[];
@@ -40,7 +40,7 @@ interface Recipe {
 const vite = { vite: '6.4.5', typescript: '5.9.3' };
 const RECIPES: Record<string, Recipe> = {
   react: {
-    section: 'React',
+    page: 'react',
     deps: { react: '19.2.0', 'react-dom': '19.2.0' },
     dev: {
       ...vite,
@@ -54,7 +54,7 @@ const RECIPES: Record<string, Recipe> = {
     server: '/src/server.tsx',
   },
   solid: {
-    section: 'Solid',
+    page: 'solid',
     deps: { 'solid-js': '1.9.9' },
     dev: { ...vite, 'vite-plugin-solid': '2.11.15' },
     check: ['tsc', '--noEmit'],
@@ -63,7 +63,7 @@ const RECIPES: Record<string, Recipe> = {
     server: '/src/server.tsx',
   },
   vue: {
-    section: 'Vue',
+    page: 'vue',
     deps: { vue: '3.5.22' },
     dev: { ...vite, '@vitejs/plugin-vue': '5.2.4', 'vue-tsc': '3.3.14' },
     check: ['vue-tsc', '--noEmit'],
@@ -72,7 +72,7 @@ const RECIPES: Record<string, Recipe> = {
     server: '/src/server.ts',
   },
   svelte: {
-    section: 'Svelte',
+    page: 'svelte',
     deps: { svelte: '5.57.3' },
     dev: { ...vite, '@sveltejs/vite-plugin-svelte': '5.1.1', 'svelte-check': '4.7.8' },
     check: ['svelte-check', '--fail-on-warnings'],
@@ -81,7 +81,7 @@ const RECIPES: Record<string, Recipe> = {
     server: '/src/server.ts',
   },
   plain: {
-    section: 'Plain HTML',
+    page: 'plain-html',
     deps: {},
     dev: vite,
     check: ['tsc', '--noEmit'],
@@ -90,29 +90,31 @@ const RECIPES: Record<string, Recipe> = {
   },
 };
 
-function sectionText(section: string): string {
-  const start = docs.indexOf(`\n## ${section}\n`);
-  if (start < 0) throw new Error(`frameworks.md has no "## ${section}" section`);
+/** The page's "Build the app" section: the app, and nothing from its other sections. */
+function sectionText(page: string): string {
+  const docs = readFileSync(path.join(root, 'site/docs/pages', `${page}.md`), 'utf8');
+  const start = docs.indexOf('\n## Build the app\n');
+  if (start < 0) throw new Error(`${page}.md has no "## Build the app" section`);
   const end = docs.indexOf('\n## ', start + 1);
   return docs.slice(start, end < 0 ? undefined : end);
 }
 
 /** The Draftably packages the section's `pnpm add` line installs, and nothing else. */
-function installs(section: string): string[] {
-  const line = sectionText(section).match(/```sh\npnpm add ([^\n]+)\n```/)?.[1];
-  if (!line) throw new Error(`"## ${section}" has no pnpm add line`);
+function installs(page: string): string[] {
+  const line = sectionText(page).match(/```sh\npnpm add ([^\n]+)\n```/)?.[1];
+  if (!line) throw new Error(`${page}.md has no pnpm add line`);
   return line.split(/\s+/).filter(name => name.startsWith('@draftably/'));
 }
 
 /** The files a section names in its fenced blocks. */
-function files(section: string): Map<string, string> {
-  const text = sectionText(section);
+function files(page: string): Map<string, string> {
+  const text = sectionText(page);
   const found = new Map<string, string>();
   for (const [, body] of text.matchAll(/```[\w-]*\n([\s\S]*?)```/g)) {
     const name = body.match(/^(?:\/\/ |\/\* |<!-- )([\w./-]+)(?: \*\/| -->)?\n/)?.[1];
     if (name) found.set(name, body);
   }
-  if (!found.size) throw new Error(`"## ${section}" names no files`);
+  if (!found.size) throw new Error(`${page}.md names no files`);
   return found;
 }
 
@@ -207,7 +209,6 @@ const pack = (dir: string) =>
   );
 const runtime = pack('runtime');
 const editor = pack('editor');
-const shared = files('Recipes');
 
 const only = process.argv.slice(2);
 const browser = await chromium.launch();
@@ -218,14 +219,14 @@ for (const name of only.length ? only : Object.keys(RECIPES)) {
   const step = { now: 'write' };
   try {
     mkdirSync(app, { recursive: true });
-    for (const [file, body] of [...shared, ...files(recipe.section)]) {
+    for (const [file, body] of files(recipe.page)) {
       mkdirSync(path.dirname(path.join(app, file)), { recursive: true });
       writeFileSync(path.join(app, file), body);
     }
     // Only what the recipe's install line names: pnpm does not let an app import a package it
     // does not list, so a missing package fails here as it would for a reader.
     const deps: Record<string, string> = { ...recipe.deps };
-    for (const name of installs(recipe.section)) {
+    for (const name of installs(recipe.page)) {
       const dir = name.slice('@draftably/'.length);
       deps[name] = `file:${dir === 'runtime' ? runtime : dir === 'editor' ? editor : pack(dir)}`;
     }
