@@ -1,5 +1,6 @@
 /** Helpers both custom elements share. No side effects. */
 import { CANCELABLE_EVENTS, type HostEvents } from './host';
+import type { Anchor } from './anchors';
 import type { UpdateResult } from './viewer';
 import { runtimeVersion } from './version';
 
@@ -111,4 +112,74 @@ export function relay<K extends keyof HostEvents>(
   if (!('preventDefault' in (event as object))) return void redispatch(el, type, event);
   const { preventDefault, ...detail } = event as HostEvents[K] & { preventDefault(): void };
   if (!redispatch(el, type, detail as unknown as HostEvents[K])) preventDefault();
+}
+
+/**
+ * Manual slot assignment for an element's children. A child marked `data-draft-slot="body:api"`
+ * goes into the target for that slot; other children go to `fallback`. The element never writes
+ * to the host's DOM: it only calls `slot.assign()`.
+ */
+export function createSlotting(
+  host: HTMLElement,
+  fallback: HTMLSlotElement | null,
+  onSlots: (names: string[]) => void,
+) {
+  const doc = host.ownerDocument;
+  const canAssign = typeof HTMLSlotElement !== 'undefined' && 'assign' in HTMLSlotElement.prototype;
+  const slots = new WeakMap<HTMLElement, HTMLSlotElement>();
+  let marked = new Map<string, Element[]>();
+  let anchors: readonly Anchor[] = [];
+  const fill = () => {
+    if (!canAssign) return;
+    for (const a of anchors) {
+      let slot = slots.get(a.el);
+      if (!slot) {
+        slot = doc.createElement('slot');
+        a.el.append(slot);
+        slots.set(a.el, slot);
+      }
+      slot.assign(...(marked.get(a.slot) ?? []));
+    }
+  };
+  const read = () => {
+    const before = [...marked.keys()].join('\n');
+    marked = new Map();
+    const rest: Array<Element | Text> = [];
+    for (const node of host.childNodes) {
+      const name = node instanceof Element ? node.getAttribute('data-draft-slot') : null;
+      if (name) marked.set(name, [...(marked.get(name) ?? []), node as Element]);
+      else if (node instanceof Element || (node instanceof Text && node.data.trim()))
+        rest.push(node as Element | Text);
+    }
+    if (canAssign) fallback?.assign(...rest);
+    if ([...marked.keys()].join('\n') !== before) onSlots([...marked.keys()]);
+    fill();
+  };
+  // Direct children come and go; a marker can change on any of them.
+  const children = new MutationObserver(read);
+  const markers = new MutationObserver(records => {
+    if (records.some(r => r.target.parentNode === host)) read();
+  });
+  return {
+    start() {
+      children.observe(host, { childList: true });
+      markers.observe(host, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-draft-slot'],
+      });
+      marked = new Map();
+      read();
+    },
+    stop() {
+      children.disconnect();
+      markers.disconnect();
+    },
+    /** The handle's targets changed: put each slot's children in its target. */
+    setAnchors(next: readonly Anchor[]) {
+      anchors = next;
+      fill();
+    },
+    names: () => [...marked.keys()],
+  };
 }

@@ -81,6 +81,7 @@ const css = Object.values(FACES)
   .join('\n');
 writeFileSync(path.join(out, 'fonts.css'), css);
 cpSync(path.join(root, 'src/runtime/viewer.css'), path.join(out, 'viewer.css'));
+cpSync(path.join(root, 'src/runtime/host.css'), path.join(out, 'host.css'));
 cpSync(path.join(root, 'LICENSE'), path.join(out, 'LICENSE'));
 writeFileSync(
   path.join(out, 'THIRD_PARTY_NOTICES'),
