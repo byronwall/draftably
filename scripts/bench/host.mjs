@@ -102,6 +102,41 @@ window.firstCommit = q.has('empty')
   : window.firstUpdates.then(all => Math.max(...all.map(u => u.t)));
 </script>`;
 
+/**
+ * One `<draft-editor>` of the 200-node file. `?slots`: a body and an overlay on every node. It
+ * counts what a drag must not do with slots: anchors events, size-observer calls and slot
+ * assignments.
+ */
+const editorPage = `<!doctype html><meta charset="utf-8"><title>editor bench</title>
+<link rel="stylesheet" href="/dist/host.css">
+<style>body{margin:0}draft-editor{display:block;width:1200px;height:700px}.b{font:11px system-ui;background:#dbeafe;height:100%}</style>
+<script type="module">
+const el = document.createElement('draft-editor');
+if (location.search.includes('slots'))
+  for (let i = 0; i < 200; i++) {
+    const body = document.createElement('div'), badge = document.createElement('span');
+    body.className = 'b';
+    body.dataset.draftSlot = 'body:n' + i;
+    body.textContent = 'Card ' + i;
+    badge.dataset.draftSlot = 'overlay:n' + i;
+    badge.textContent = '•';
+    el.append(body, badge);
+  }
+el.source = ${JSON.stringify(big)};
+window.counts = { anchors: 0, observe: 0, assign: 0 };
+el.addEventListener('draft-anchors', () => counts.anchors++);
+const observe = ResizeObserver.prototype.observe,
+  assign = HTMLSlotElement.prototype.assign;
+ResizeObserver.prototype.observe = function (...a) { counts.observe++; return observe.apply(this, a); };
+HTMLSlotElement.prototype.assign = function (...a) { counts.assign++; return assign.apply(this, a); };
+document.body.append(el);
+await import('/editor/element.js');
+await el.updateComplete;
+await el.editor.ready;
+window.ready = true;
+</script>`;
+
+const editorDist = path.join(root, 'packages/editor/dist');
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.woff2': 'font/woff2' };
 const server = http.createServer((req, res) => {
   const url = new URL(req.url ?? '/', 'http://x');
@@ -109,8 +144,15 @@ const server = http.createServer((req, res) => {
     res.setHeader('content-type', 'text/html');
     return res.end(page(url.search));
   }
-  const file = path.join(dist, decodeURIComponent(url.pathname.replace(/^\/dist\//, '')));
-  if (!file.startsWith(dist) || !fs.existsSync(file)) return res.writeHead(404).end();
+  if (url.pathname === '/editor.html') {
+    res.setHeader('content-type', 'text/html');
+    return res.end(editorPage);
+  }
+  const [from, rel] = url.pathname.startsWith('/editor/')
+    ? [editorDist, url.pathname.slice('/editor/'.length)]
+    : [dist, url.pathname.replace(/^\/dist\//, '')];
+  const file = path.join(from, decodeURIComponent(rel));
+  if (!file.startsWith(from) || !fs.existsSync(file)) return res.writeHead(404).end();
   res.setHeader('content-type', types[path.extname(file)] ?? 'application/octet-stream');
   res.setHeader('cache-control', 'max-age=3600');
   res.end(fs.readFileSync(file));
@@ -127,6 +169,7 @@ const sorted = xs => [...xs].sort((a, b) => a - b);
 const median = xs => sorted(xs)[Math.floor(xs.length / 2)];
 const p95 = xs => sorted(xs)[Math.min(xs.length - 1, Math.ceil(xs.length * 0.95) - 1)];
 const rows = [];
+let dragBase = 0;
 const row = (area, budget, measured, ok) => {
   rows.push({ area, budget, measured, ok });
   console.error(`${ok ? '✓' : '✗'} ${area}: ${measured} (budget ${budget})`);
@@ -407,6 +450,69 @@ for (const count of [10, 100, 500]) {
   );
   await ctx.close();
 }
+
+// Editor drag at 200 nodes, with no slots and with a body and an overlay on each node. A drag
+// frame runs in pointermove; the time is from a window capture listener to a window bubble
+// listener, plus the style and layout it causes. With slots, a frame moves targets only: it
+// fires no anchors event, observes no content again and assigns no slot, and adds at most 5 % to
+// the frame. The frame itself is slow at 200 nodes with or without slots: each edge view scans
+// every edge (isDiff, findEdge) on each move.
+if (fs.existsSync(path.join(editorDist, 'element.js')))
+  for (const slots of [false, true]) {
+    const ctx = await browser.newContext({ viewport: { width: 1200, height: 700 } });
+    const tab = await ctx.newPage();
+    await tab.goto(`${base}/editor.html${slots ? '?slots' : ''}`);
+    await tab.waitForFunction(() => window.ready, null, { timeout: 60000 });
+    // Zoom 1 on n5, so bodies are at full detail, then find n5 on screen.
+    const at = await tab.evaluate(async () => {
+      const el = document.querySelector('draft-editor'),
+        h = el.editor,
+        b = h.geometry().nodes.n5;
+      h.setCamera({ centerX: b.x + b.width / 2, centerY: b.y + b.height / 2, zoom: 1 });
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const stage = el.shadowRoot.querySelector('.stage').getBoundingClientRect();
+      window.times = [];
+      let t = 0;
+      addEventListener('pointermove', () => (t = performance.now()), true);
+      addEventListener('pointermove', () => {
+        el.shadowRoot.querySelector('.stage').getBoundingClientRect();
+        if (t) window.times.push(performance.now() - t);
+      });
+      window.before = { ...window.counts };
+      return { x: stage.x + stage.width / 2, y: stage.y + stage.height / 2 };
+    });
+    await tab.mouse.move(at.x, at.y);
+    await tab.mouse.down();
+    await tab.mouse.move(at.x + 240, at.y + 160, { steps: 60 });
+    await tab.mouse.up();
+    const r = await tab.evaluate(() => {
+      const el = document.querySelector('draft-editor');
+      return {
+        times: window.times.slice(2),
+        anchors: window.counts.anchors - window.before.anchors,
+        observe: window.counts.observe - window.before.observe,
+        assign: window.counts.assign - window.before.assign,
+        targets: el.shadowRoot.querySelectorAll('[data-draft-anchor]').length,
+      };
+    });
+    const frame = `${median(r.times).toFixed(2)} ms median, ${p95(r.times).toFixed(2)} ms p95`;
+    if (!slots) {
+      dragBase = median(r.times);
+      row('Editor drag frame, 200 nodes, no slots', 'reference', frame, r.times.length > 50);
+    } else
+      row(
+        'Editor drag frame, 200 nodes, 400 targets',
+        'median ≤ no slots + 5 %; no anchors event, re-observe or assign',
+        `${r.targets} targets; ${frame} (${(median(r.times) - dragBase).toFixed(2)} ms median over no slots); ${r.anchors} anchors events, ${r.observe} observe calls, ${r.assign} assigns in ${r.times.length + 2} moves`,
+        r.targets === 400 &&
+          r.times.length > 50 &&
+          median(r.times) <= dragBase * 1.05 &&
+          r.anchors === 0 &&
+          r.observe === 0 &&
+          r.assign === 0,
+      );
+    await ctx.close();
+  }
 
 // Mount and destroy 50 times: heap, workers, fonts and listeners back at baseline.
 {
