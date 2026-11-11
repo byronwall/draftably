@@ -2,12 +2,24 @@
 import '@draftably/runtime/element';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
-import { Show, type JSX } from 'solid-js';
-import { listenHostEvents, type HostEventProps } from './events.js';
+import { Show, splitProps, type JSX } from 'solid-js';
+import {
+  elementAttributes,
+  EVENT_PROPS,
+  listenHostEvents,
+  type ElementAttributes,
+  type HostEventProps,
+} from './events.js';
 
 export { renderSvg } from '@draftably/runtime';
 export { HOST_EVENTS } from '@draftably/runtime/host';
-export type { HostEventName, HostEventProps, HostEvents } from './events.js';
+export type {
+  ElementAttributes,
+  HostEventDetail,
+  HostEventName,
+  HostEventProps,
+  HostEvents,
+} from './events.js';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
 declare module 'solid-js' {
@@ -25,7 +37,8 @@ declare module 'solid-js' {
   }
 }
 
-export interface DraftDiagramProps extends HostEventProps {
+/** The element's props, its event props, and any other attribute, such as `data-theme`. */
+export interface DraftDiagramProps extends HostEventProps, ElementAttributes {
   /** `.draft` source. A change redraws the diagram and keeps the camera. */
   source: string;
   /** A declared emphasis state to show. */
@@ -48,7 +61,21 @@ export interface DraftDiagramProps extends HostEventProps {
   children?: JSX.Element;
 }
 
+const OWN = [
+  'source',
+  'state',
+  'label',
+  'outline',
+  'svg',
+  'options',
+  'ref',
+  'class',
+  'style',
+  'children',
+] as const;
+
 export function DraftDiagram(props: DraftDiagramProps) {
+  const [, , rest] = splitProps(props, OWN, EVENT_PROPS);
   return (
     <draft-diagram
       ref={(node: DraftDiagramElement) => {
@@ -64,6 +91,7 @@ export function DraftDiagram(props: DraftDiagramProps) {
       {...(props.style === undefined ? {} : { style: props.style })}
       // Only when set, so options a host set through the ref survive.
       {...(props.options === undefined ? {} : { 'prop:options': props.options })}
+      {...elementAttributes(rest)}
     >
       <Show when={props.svg}>{svg => <div innerHTML={svg()} />}</Show>
       {props.children}

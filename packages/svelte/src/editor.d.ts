@@ -1,10 +1,11 @@
 import type { Component, Snippet } from 'svelte';
 import type { DraftEditorElement, EditorOptions } from '@draftably/editor/element';
-import type { HostEventProps } from './events';
+import type { ElementAttributes, HostEventProps } from './events';
 
 export type { DraftEditorElement, EditorOptions };
 
-export interface DraftEditorProps extends HostEventProps {
+/** The element's props, its event props, and any other attribute, such as `data-theme`. */
+export interface DraftEditorProps extends HostEventProps, ElementAttributes {
   /** `.draft` source. Passing back the source from `onchange` does not redraw. */
   source: string;
   /** Every `mountEditor` option but `source` and `onChange`. Callbacks apply live. */

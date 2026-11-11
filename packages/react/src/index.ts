@@ -3,22 +3,28 @@
 import '@draftably/runtime/element';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
+import { createElement, forwardRef, useImperativeHandle, useRef, type ReactNode } from 'react';
 import {
-  createElement,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  type CSSProperties,
-  type ReactNode,
-} from 'react';
-import { useBeforeMount, useHostEvents, type HostEventProps } from './events.js';
+  elementProps,
+  useBeforeMount,
+  useHostEvents,
+  type ElementAttributes,
+  type HostEventProps,
+} from './events.js';
 
 export { renderSvg } from '@draftably/runtime';
 export { HOST_EVENTS } from '@draftably/runtime/host';
-export type { HostEventName, HostEventProps, HostEvents } from './events.js';
+export type {
+  ElementAttributes,
+  HostEventDetail,
+  HostEventName,
+  HostEventProps,
+  HostEvents,
+} from './events.js';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
-export interface DraftDiagramProps extends HostEventProps {
+/** The element's props, its event props, and any other attribute, such as `data-theme`. */
+export interface DraftDiagramProps extends HostEventProps, ElementAttributes {
   /** `.draft` source. A change redraws the diagram and keeps the camera. */
   source: string;
   /** A declared emphasis state to show. */
@@ -34,15 +40,13 @@ export interface DraftDiagramProps extends HostEventProps {
   svg?: string;
   /** Every `mountViewer` option. A new object with the same values does nothing. */
   options?: ViewerOptions;
-  className?: string;
-  style?: CSSProperties;
   /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
   children?: ReactNode;
 }
 
 export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramProps>(
   function DraftDiagram(props, ref) {
-    const { source, state, label, outline, svg, options, className, style, children } = props;
+    const { state, svg, options, children } = props;
     const el = useRef<DraftDiagramElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
@@ -52,7 +56,11 @@ export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramP
     useHostEvents(el, props);
     return createElement(
       'draft-diagram',
-      { ref: el, source, state: state ?? undefined, label, outline, className, style },
+      {
+        ...elementProps(props, ['state', 'svg', 'options', 'children']),
+        ref: el,
+        state: state ?? undefined,
+      },
       svg ? createElement('div', { dangerouslySetInnerHTML: { __html: svg } }) : null,
       children,
     );

@@ -7,7 +7,7 @@ import { hostEmits, listenHostEvents } from './events.js';
 
 export { renderSvg } from '@draftably/runtime';
 export { HOST_EVENTS } from '@draftably/runtime/host';
-export type { HostEmits, HostEventName, HostEvents } from './events.js';
+export type { HostEmits, HostEventDetail, HostEventName, HostEvents } from './events.js';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
 export const DraftDiagram = defineComponent({

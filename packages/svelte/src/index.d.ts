@@ -1,14 +1,21 @@
 import type { Component, Snippet } from 'svelte';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
-import type { HostEventProps } from './events';
+import type { ElementAttributes, HostEventProps } from './events';
 
 export { renderSvg } from '@draftably/runtime';
 export { HOST_EVENTS } from '@draftably/runtime/host';
-export type { HostEventName, HostEventProps, HostEvents } from './events';
+export type {
+  ElementAttributes,
+  HostEventDetail,
+  HostEventName,
+  HostEventProps,
+  HostEvents,
+} from './events';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
-export interface DraftDiagramProps extends HostEventProps {
+/** The element's props, its event props, and any other attribute, such as `data-theme`. */
+export interface DraftDiagramProps extends HostEventProps, ElementAttributes {
   /** `.draft` source. A change redraws the diagram and keeps the camera. */
   source: string;
   /** A declared emphasis state to show. */

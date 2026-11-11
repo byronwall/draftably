@@ -7,27 +7,31 @@ import {
   useEffect,
   useImperativeHandle,
   useRef,
-  type CSSProperties,
   type ReactNode,
 } from 'react';
-import { useBeforeMount, useHostEvents, type HostEventProps } from './events.js';
+import {
+  elementProps,
+  useBeforeMount,
+  useHostEvents,
+  type ElementAttributes,
+  type HostEventProps,
+} from './events.js';
 
 export type { DraftEditorElement, EditorOptions };
 
-export interface DraftEditorProps extends HostEventProps {
+/** The element's props, its event props, and any other attribute, such as `data-theme`. */
+export interface DraftEditorProps extends HostEventProps, ElementAttributes {
   /** `.draft` source. Passing back the source from `onChange` does not redraw. */
   source: string;
   /** Every `mountEditor` option but `source` and `onChange`. Callbacks apply live. */
   options?: EditorOptions;
-  className?: string;
-  style?: CSSProperties;
   /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
   children?: ReactNode;
 }
 
 export const DraftEditor = forwardRef<DraftEditorElement | null, DraftEditorProps>(
   function DraftEditor(props, ref) {
-    const { source, options, className, style, children } = props;
+    const { options, children } = props;
     const el = useRef<DraftEditorElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
@@ -42,6 +46,10 @@ export const DraftEditor = forwardRef<DraftEditorElement | null, DraftEditorProp
         el.current?.setAttribute('data-error', String(error));
       });
     }, []);
-    return createElement('draft-editor', { ref: el, source, className, style }, children);
+    return createElement(
+      'draft-editor',
+      { ...elementProps(props, ['options', 'children']), ref: el },
+      children,
+    );
   },
 );
