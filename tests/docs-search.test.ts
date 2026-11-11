@@ -40,7 +40,8 @@ describe('docs search', () => {
 
   it.each([
     ['colour', /Themes/],
-    ['dark mode', /Themes/],
+    // A dark page draws the diagram dark; the section says how, and how to opt out.
+    ['dark mode', /Dark pages/],
     ['swimlane', /Swim lanes/],
     ['codex', /Agent skill/],
     ['offline', /Save/],

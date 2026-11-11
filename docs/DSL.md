@@ -677,7 +677,9 @@ the Editor takes it out of every state.
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its
 diagram-wide values; `theme-color` lines change or add colors. Every value is optional: anything
-not written comes from the preset, and a file with no `theme` line uses Drafting.
+not written comes from the preset, and a file with no `theme` line uses Drafting. On a dark page,
+the viewer and the editor draw a file with no `theme` line in Drafting's dark variant, with the
+same sizes; a `theme` line, even `theme drafting`, keeps its colors on every page.
 
 ```draft
 theme fieldnotes padding-x=18 padding-y=12 radius=3 title-font=serif annotation-font=sans

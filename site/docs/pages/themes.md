@@ -39,6 +39,10 @@ The Editor writes the `theme` line for you.
 | `ink`        | Sumi ink tones, indigo and a vermilion seal, generous padding.  |
 | `blueprint`  | Dark: white lines on blueprint blue, monospace titles.          |
 
+A file with no `theme` line follows the page it is embedded in: on a dark page the viewer and the
+editor draw it in a dark variant of `drafting`, with the same type and spacing. Write a `theme`
+line, even `theme drafting`, to keep the same colors on every page.
+
 The `theme` line also takes overrides such as `padding-x=`, `radius=` and `title-font=`, and
 `theme-color` lines change or add color families. [Themes and colors](#themes-and-colors) lists
 them all.
