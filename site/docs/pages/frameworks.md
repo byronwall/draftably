@@ -695,8 +695,9 @@ data on the server, and pass the same string to the component when it hydrates:
 The editor loads in the browser only, after the component mounts. Its element renders on the
 server as an empty, sized box.
 
-Draftably's tests build a small app in each of these four frameworks for production, with server
-rendering and a strict CSP, and check server HTML, hydration, a body that reads the framework's
+Before each release, `pnpm prove:meta` in Draftably's repository builds a small app in each of
+these four frameworks for production, with server rendering and a strict CSP. It is not part of
+CI. It checks server HTML, hydration, a body that reads the framework's
 context and page CSS, a marked button, a caret across a source update, two editors with separate
 shortcuts, a failed update, the CSP, and 50 mount cycles.
 
