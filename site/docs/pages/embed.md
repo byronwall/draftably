@@ -53,7 +53,7 @@ PNG where a host blocks SVG.
 
 | Symptom                                           | Fix                                                                                              |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| A worker error in Vite development                | Add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to the Vite config. |
+| A worker error in Vite 5–7 development            | Add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to the Vite config. |
 | An image URL returns 404                          | Match `publicPath` to the served folder and the site's base path.                                |
 | An edit to an included `.draft` file is not shown | Follow your [site's recipe](#documentation-sites) for watching includes.                         |
-| A diagram does not draw                           | Read `updateComplete` or `result.diagnostics`, and keep a fallback image.                        |
+| A diagram does not draw                           | Read `updateComplete`; on an error, `result.error.diagnostics`. Keep a fallback image.           |
