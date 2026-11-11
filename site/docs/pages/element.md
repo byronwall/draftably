@@ -237,7 +237,9 @@ diagram.addEventListener('draft-itemactivate', event => console.log(event.detail
 ```
 
 The `@draftably/runtime` types add these events to `HTMLElementEventMap`, so `event.detail` needs
-no cast. `HOST_EVENTS` from `@draftably/runtime/host` lists every event name.
+no cast. `HOST_EVENTS` from `@draftably/runtime/host` lists every event name. A framework
+component's `onLink` or `onContextmenu` prop receives the `detail` with the same
+`preventDefault()`, so you can cancel either one without a listener on the element.
 
 The element reflects its state in a `status` attribute: `loading`, `ready` or `error`. Style each
 state with ordinary CSS, such as `draft-diagram[status='loading'] { opacity: 0.6; }`. A failed

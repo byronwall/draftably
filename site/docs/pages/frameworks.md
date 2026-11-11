@@ -35,11 +35,31 @@ Every package maps the same element to its own idiom:
 | Events      | `onUpdate`, `onCamera`, … | `onUpdate`, … | `@update`, `@camera`, … | `onupdate`, `oncamera`, … |
 | Server SVG  | `renderSvg`, re-exported  | the same      | the same                | the same                  |
 | Slots       | `children`                | `children`    | default slot            | `children`                |
+| Attributes  | passed to the element     | the same      | the same                | the same                  |
 
 Each package builds its event props from one list, `HOST_EVENTS`, so every element event has a
 prop: `update`, `render`, `diagnostics`, `camera`, `itemactivate`, `link`, `contextmenu`,
 `anchors` and, on the editor, `select` and `change`. The editor sends no `render` or
-`itemactivate`. A callback receives the event's `detail`. See [Events and status](#events-and-status).
+`itemactivate`. A callback receives the event's `detail`.
+On `link` and `contextmenu` it also has `preventDefault()`, which cancels the DOM event as the
+element's own listeners would. See [Events and status](#events-and-status).
+
+```tsx
+// Show your own menu instead of the browser's, and open links in your router.
+<DraftDiagram
+  source={source}
+  onContextmenu={event => {
+    event.preventDefault();
+    openMenu(event.id, event.clientX, event.clientY);
+  }}
+  onLink={event => {
+    event.preventDefault();
+    navigate(event.href);
+  }}
+/>
+```
+
+Any other attribute, such as `data-theme`, `id`, `class` or `aria-*`, goes to the element.
 
 `onUpdate` receives an object whose `status` is `committed`, `error` or a cancellation status. On
 an initial error, the component keeps its `svg` fallback visible. A later error keeps the last
@@ -48,7 +68,7 @@ committed drawing.
 ## Recipes
 
 Each recipe below is a complete Vite app for one framework. It shows both components, an event,
-a body on a node with a field in it, a dark theme, `host.css`, server rendering with `renderSvg`
+a body on a node with a field in it, a dark frame, `host.css`, server rendering with `renderSvg`
 and the Vite config. Start from `pnpm create vite` with the framework's TypeScript template, then
 add the files. CI copies every file below into a fresh app with the packed packages, type-checks
 it, builds it and renders it on the server, so the recipes compile.
@@ -108,8 +128,10 @@ size api width=220 height=auto min-height=120
 }
 ```
 
-The editor takes its dark colors from `data-theme="dark"` on the `<draft-editor>` element, as
-each recipe sets it. Its own properties are listed in
+The `--draft-*` properties color the viewer's frame and controls, and `data-theme="dark"` on
+`<DraftEditor>` darkens the editor's panels and toolbar. Each component passes that attribute to
+its element. The drawing itself keeps the colors of its source's theme, so it stays on light
+paper inside the dark frame. The editor's own properties are listed in
 [Editor colors](#editor-colors).
 
 ## React
@@ -162,7 +184,7 @@ export function App({ svg }: { svg?: string }) {
       </DraftDiagram>
       <p>Picked: {picked}</p>
       <DraftEditor
-        ref={el => el?.setAttribute('data-theme', 'dark')}
+        data-theme="dark"
         source={source}
         onChange={({ source: next }) => setSource(next)}
       />
@@ -253,7 +275,7 @@ export function App(props: { svg?: string }) {
       </DraftDiagram>
       <p>Picked: {picked()}</p>
       <DraftEditor
-        ref={el => el.setAttribute('data-theme', 'dark')}
+        data-theme="dark"
         source={source()}
         onChange={({ source: next }) => setSource(next)}
       />
@@ -399,15 +421,13 @@ export default { preprocess: vitePreprocess() };
 <!-- src/App.svelte -->
 <script lang="ts">
   import { DraftDiagram } from '@draftably/svelte';
-  import { DraftEditor, type DraftEditorElement } from '@draftably/svelte/editor';
+  import { DraftEditor } from '@draftably/svelte/editor';
   import { initial } from './diagram';
 
   let { svg }: { svg?: string } = $props();
   let source = $state(initial);
   let note = $state('');
   let picked = $state('nothing');
-  let editor = $state<DraftEditorElement>();
-  $effect(() => editor?.setAttribute('data-theme', 'dark'));
   const options = { detail: 'full' } as const;
 </script>
 
@@ -426,7 +446,7 @@ export default { preprocess: vitePreprocess() };
     </div>
   </DraftDiagram>
   <p>Picked: {picked}</p>
-  <DraftEditor bind:element={editor} {source} onchange={({ source: next }) => (source = next)} />
+  <DraftEditor data-theme="dark" {source} onchange={({ source: next }) => (source = next)} />
 </main>
 ```
 

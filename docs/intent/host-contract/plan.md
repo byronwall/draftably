@@ -75,9 +75,8 @@ its route announcer has an inline `style` attribute, so its policy adds
 
 - **Touch.** Pinch zoom in the viewer, and one-finger page scroll over a viewer until the user
   activates it, are not built. The viewport is still `touch-action: none`.
-- **The editor's dark theme through a wrapper.** The React, Solid and Svelte wrappers pass no
-  arbitrary attributes, so the recipes set `data-theme="dark"` through the element (`ref`,
-  `bind:element`). Vue passes it through. A wrapper attribute pass-through is a small follow-up.
+- ~~**The editor's dark theme through a wrapper.**~~ Done in the embedded-docs stack: every
+  wrapper passes other attributes, such as `data-theme`, to its element.
 - **The warm first-diagram budget** stays unmet; it is layout-bound (step 3).
 - **`pnpm prove:meta` is not in CI.** Four production installs take minutes; Next.js alone
   downloads about 80 MB. Run it before a release.
