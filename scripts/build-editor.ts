@@ -3,6 +3,7 @@
 import { cpSync, readFileSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { relativeWorkerUrls } from './lib/worker-urls.ts';
 import { fileURLToPath } from 'node:url';
 import postcss, { type Rule } from 'postcss';
 import { build, type Plugin } from 'vite';
@@ -116,4 +117,5 @@ await build({
     rollupOptions: { output: { chunkFileNames: 'chunks/[name]-[hash].js' } },
   },
 });
+relativeWorkerUrls(out);
 cpSync(path.join(root, 'LICENSE'), path.join(out, 'LICENSE'));
