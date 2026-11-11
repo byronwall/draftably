@@ -756,7 +756,17 @@ function placeSelection(
     }
 
     if (resized && compiled && !(lanes && compiled.type === 'group')) {
-      if (compiled.type === 'node') {
+      const width = num(Math.min(1200, Math.max(40, is.w))),
+        auto = statements(source).find(
+          s =>
+            s.command === 'size' &&
+            s.args[0]?.value === sourceId &&
+            getAttr(s, 'height')?.value === 'auto',
+        );
+      if (compiled.type === 'node' && auto && Math.abs(is.h - compiled.h) <= 0.5) {
+        // A width-only resize keeps `height=auto` and its `min-height` floor.
+        setAttr(auto, 'width', width);
+      } else if (compiled.type === 'node') {
         removeWhere(source, s => s.command === 'size' && s.args[0]?.value === sourceId);
         addRefinement(
           source,
@@ -764,7 +774,7 @@ function placeSelection(
             'size',
             [bare(sourceId)],
             [
-              ['width', num(Math.min(1200, Math.max(40, is.w)))],
+              ['width', width],
               ['height', num(Math.min(1200, Math.max(24, is.h)))],
             ],
           ),

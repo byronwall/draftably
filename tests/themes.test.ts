@@ -88,6 +88,23 @@ describe('type metrics', () => {
     expect(checkSource(proof).diagnostics.some(d => d.code === 'text-overflow')).toBe(false);
   });
 
+  it('raises an auto height to min-height for boxes, diamonds and cells, with height=auto only', () => {
+    const h = (source: string) => checkSource(source).byId.get('a')!.h;
+    expect(h('node a "Build"\nsize a width=140 height=auto min-height=90')).toBe(90);
+    expect(h('node a "Build"\nsize a width=140 height=auto min-height=24')).toBe(
+      h('node a "Build"\nsize a width=140 height=auto'),
+    );
+    expect(h('node a "Ok?" shape=diamond\nsize a width=90 height=auto min-height=150')).toBe(150);
+    expect(
+      h(
+        'group g "G"\nlayout g cells\nnode a "A" in=g\nnode b "B" in=g\nsize a width=140 height=auto min-height=90',
+      ),
+    ).toBe(90);
+    expect(() => checkSource('node a "Build"\nsize a width=140 height=60 min-height=90')).toThrow(
+      /min-height/,
+    );
+  });
+
   it('compiles the same geometry every time', () => {
     const a = canonicalGeometry(projectScene(checkSource(proof))),
       b = canonicalGeometry(projectScene(checkSource(proof)));
