@@ -46,7 +46,7 @@ and groups. References may point to later lines.
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                  |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                          |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                             |
-| `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                 |
+| `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                            |
 | `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                   |
 | `footnote 1 "text"`                | An entry in the block under the drawing, above the legend. The marker (`1`, `a`, `*`) is optional; a label points at it as `[1]`. Text takes `[label](href)` links. See [Footnotes](#footnotes).                                                                                                                                                                                                                                      |
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
@@ -730,8 +730,13 @@ never its shade. A node with neither color nor shade uses the theme's neutral su
 
 Drawing keeps an object apart from a container of its own family. A group inside a same-family
 group steps one shade toward emphasis per level (100, 200, 300 in light themes; 900, 800, 700 in
-Blueprint), so nested frames read as layers rather than one fill. A node whose shade is within
-two steps of its container's moves three steps past it. `check` notes a file with more than four
+Blueprint), so nested frames read as layers rather than one fill. A node in its container's
+family with no `shade=` of its own is a member card: shade 50 on the frame's tint (950 in
+Blueprint), with the family's outline and ink, so members stand apart from the frame by fill and
+a group of them stays calm. This holds while the frame is a pale surface shade (300 or lighter;
+700 or darker in Blueprint). A node that names a color keeps 500, so it can be the one strong
+highlight. Any other node whose shade is within two steps of its container's moves three steps
+past it. `check` notes a file with more than four
 accent families (`many-colors`; `slate` and `stone` don't count) and a member that names its
 container's family (`color-matches-container`).
 
@@ -743,7 +748,9 @@ not defined is an error on the referencing line. Each family and shade may be de
 ### Legend
 
 `legend family "meaning"` adds an entry to the diagram's key, in file order: a swatch of that
-family (`shade=` picks one; 500 by default) and its meaning. `legend line dashed "meaning"` and
+family (`shade=` picks one) and its meaning. With no `shade=`, the swatch draws what the
+family's nodes draw: 500 when a node names the family, or the member card's 50 (950 in
+Blueprint) when the family's nodes all inherit it from a group. `legend line dashed "meaning"` and
 `legend line solid "meaning"` add a short line in that style and its meaning, for files whose
 dashed lines say something. The viewer, `inspect --svg` and exports draw the key under the
 drawing, left to right, and start a new row only when the next entry would pass the drawing's

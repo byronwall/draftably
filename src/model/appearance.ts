@@ -21,6 +21,12 @@ export const isShade = (n: unknown): n is Shade => SHADES.includes(n as Shade);
 /** Shade of a node that names a color without a shade. */
 export const NODE_SHADE: Shade = 500;
 /**
+ * Shade of a member card: a node drawn in its container's family with no shade of its own. It is
+ * the palest stop on the canvas side of the frame (50 in light themes, 950 in dark ones), so the
+ * card stands apart from its frame by fill and keeps the family's outline and ink.
+ */
+export const memberShadeFor = (theme: ThemeId): Shade => (PRESETS[theme]?.dark ? 950 : 50);
+/**
  * Shade of a group that names a color without a shade. Groups are quiet surfaces behind nodes, so
  * this is a pale shade in light themes and a deep one in dark themes; the scale itself never flips.
  */

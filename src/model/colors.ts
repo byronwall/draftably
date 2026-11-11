@@ -4,13 +4,17 @@
  *
  * - A container inside a container of the same family steps one shade toward emphasis per level
  *   (lighter frames underneath, smaller and stronger ones on top), instead of repeating the fill.
- * - A shape whose shade is within two steps of its container's, in the same family, moves three
- *   steps past the container, so a member never melts into its frame.
+ * - A member card: a shape in its container's family with no shade of its own draws as a pale
+ *   card on the frame's tint (`memberShadeFor`), so a group of members reads as calm cards
+ *   rather than a column of dark slabs. This holds while the frame is a quiet surface shade.
+ * - Any other shape whose shade is within two steps of its container's, in the same family, moves
+ *   three steps past the container, so a member never melts into its frame.
  *
  * The canvas, the CLI's SVG and exports all draw through `drawnSwatch`.
  */
 import {
   groupShadeFor,
+  memberShadeFor,
   NODE_SHADE,
   PRESETS,
   SHADES,
@@ -40,8 +44,11 @@ export function drawnShade(doc: Diagram, look: ResolvedAppearance, id: string): 
   if (!parent || styleOf(doc, parent.id).color !== family) return own;
   const outer = drawnShade(doc, look, parent.id);
   if (outer === undefined) return own;
+  const dark = !!PRESETS[look.theme]?.dark;
+  if (!group && style.shade === undefined && (dark ? outer >= 700 : outer <= 300))
+    return nearestShade(look, family, memberShadeFor(look.theme));
   const need = group ? GROUP_STEP : NODE_STEP,
-    toward = PRESETS[look.theme]?.dark ? -1 : 1,
+    toward = dark ? -1 : 1,
     at = SHADES.indexOf(own),
     from = SHADES.indexOf(outer);
   // Far enough from the frame already, on the emphasis side or well past it on the other.
