@@ -127,7 +127,7 @@
 }
 
 /* The anchor layer: slot targets above the drawing. Slot content takes no pointer input unless
-   it is marked data-draft-input (host.css). */
+   it is marked data-draft-input. */
 .draft-anchors {
   position: absolute;
   inset: 0;
@@ -150,6 +150,11 @@
   position: absolute;
   box-sizing: border-box;
   pointer-events: none;
+}
+/* Marked content in a mountViewer target, in the page's DOM. The element's slotted content gets the
+   same rule from host.css, because these selectors do not reach into slots. */
+.draft-anchor [data-draft-input] {
+  pointer-events: auto;
 }
 .draft-anchor--body {
   overflow: clip;

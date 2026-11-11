@@ -19,9 +19,10 @@ import '@draftably/runtime/element';
 import '@draftably/runtime/host.css';
 ```
 
-`host.css` holds the rules that must work before the element loads: it reserves the element's
-height and hides [slot content](#put-your-content-on-a-node) until the element is defined, so the
-page does not shift or flash.
+`host.css` holds the rules that must work in the page, not in the element's shadow root: it
+reserves the element's height and hides [slot content](#put-your-content-on-a-node) until the
+element is defined, so the page does not shift or flash. It also lets content marked
+`data-draft-input` take the pointer; without it, a button in a slot takes no clicks.
 
 Then add a diagram in HTML:
 
@@ -110,11 +111,9 @@ Import the element entry once in your client entry point. Listen before changing
 the update result:
 
 ```ts
-import type { UpdateResult } from '@draftably/runtime/viewer';
-
 const diagram = document.querySelector('draft-diagram')!;
-diagram.addEventListener('draft-update', (event: Event) => {
-  const result = (event as CustomEvent<UpdateResult>).detail;
+diagram.addEventListener('draft-update', event => {
+  const result = event.detail; // an UpdateResult, typed with no cast
   if (result.status === 'error') console.error(result.error.diagnostics);
   else if (result.status === 'committed') console.log('Diagram ready.');
 });
@@ -166,8 +165,9 @@ Rules:
   `DRAFT_SLOT_UNKNOWN` warning. `compare` and `states` drawings repeat items, so slots are off
   there, with the same warning.
 - **Zoomed out.** Below a zoom of 0.4, bodies hide and titles show again. Set `detail: 'full'` in
-  `options` to keep bodies at every zoom. The anchor layer carries `data-draft-detail="low | full"`
-  and `--draft-zoom` for your own rules.
+  `options` to keep bodies at every zoom. Slot content inherits `--draft-zoom`, the current zoom,
+  for your own rules. The layer's `data-draft-detail` attribute is inside the shadow root, so page
+  CSS cannot read it.
 - **Static output.** Exports, the CLI and `renderSvg` never contain your content. A server-rendered
   fallback draws titles.
 
@@ -176,7 +176,8 @@ root, so your framework stays the only owner of that DOM. The `anchors` event li
 after each change.
 
 Without the element, `mountViewer` gives the same layer: call `viewer.anchor(['body:api'])`, then
-put content in each target the `anchors` event names.
+put content in each target the `anchors` event names. `viewer.css` lets content marked
+`data-draft-input` in a target take the pointer, so you need no `host.css` rule there.
 
 ## Change the source
 
@@ -243,7 +244,14 @@ element registers survive its upgrade. Importing the element entry in Node is sa
 and renders only in a browser.
 
 The read-only `viewer` property gives `fit()` and camera control while the element is connected
-with source.
+with source. It is `undefined` until the mount microtask runs, and while `source` is empty, so
+await `updateComplete` before you read it:
+
+```ts
+document.body.append(diagram);
+await diagram.updateComplete;
+diagram.viewer?.fit();
+```
 
 ## Events and status
 
@@ -273,9 +281,18 @@ no cast. `HOST_EVENTS` from `@draftably/runtime/host` lists every event name. A 
 component's `onLink` or `onContextmenu` prop receives the `detail` with the same
 `preventDefault()`, so you can cancel either one without a listener on the element.
 
-The element reflects its state in a `status` attribute: `loading`, `ready` or `error`. Style each
-state with ordinary CSS, such as `draft-diagram[status='loading'] { opacity: 0.6; }`. A failed
-first update keeps the fallback and shows its diagnostics in the element.
+The element reflects its state in a `status` attribute. Style each state with ordinary CSS, such as
+`draft-diagram[status='loading'] { opacity: 0.6; }`.
+
+| `status`     | When                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| `loading`    | From the mount until the first update ends.                                                            |
+| `ready`      | After the first drawing. It stays `ready` when a later update fails: the last drawing stays on screen. |
+| `error`      | The first update failed, or the viewer could not mount. The fallback stays and the element shows why.  |
+| no attribute | `source` is empty.                                                                                     |
+
+A later failed update keeps `ready`, so watch `draft-update` or `draft-diagnostics` for it, not the
+attribute.
 
 If two copies of the runtime load on one page, the second copy warns once in the console and the
 first copy's element stays in use.
@@ -360,7 +377,7 @@ the shapes and lines only. It is `null` before the first drawing, and for `compa
 drawings, which draw an item more than once.
 
 ```ts
-const g = diagram.viewer!.geometry();
+const g = diagram.viewer?.geometry();
 const api = g?.nodes.api; // { x, y, width, height, parent? }
 ```
 
@@ -374,6 +391,7 @@ The viewer and the editor share one camera: the world point at the centre of the
 zoom from 0.02 to 8. The same call moves both the same way.
 
 ```ts
+await diagram.updateComplete; // the viewer exists after the first update
 const viewer = diagram.viewer!;
 viewer.fit(['api', 'db']); // frame these items; no ids frames the whole drawing
 viewer.reveal('queue'); // the least move that shows it; zooms out only if it does not fit
@@ -404,7 +422,10 @@ mountViewer(host, { label: 'Checkout diagram', outline: 'visible' });
 
 ## Static rendering and SSR
 
-Render an SVG during the build and show it as an ordinary image. To make it interactive, keep the
-image as a sibling fallback and mount into an empty sibling after hydration. Hide the image only
-after an update returns `committed`, and keep it on error, so a failed worker or font still leaves
-a useful page. Frameworks must not reconcile children inside the viewer host.
+The element shows server-rendered SVG until the viewer draws, and keeps it when the first update
+fails. See [Keep an image as a fallback](#keep-an-image-as-a-fallback); the framework components
+take the same SVG as their `svg` prop, and [Server rendering](#server-rendering) has the code for
+each framework.
+
+With `mountViewer`, keep the image as a sibling of an empty host. Hide it only after an update
+returns `committed`, so a failed worker or font still leaves a useful page.
