@@ -187,7 +187,7 @@ export function createPointer(
         MIN_ZOOM,
         MAX_ZOOM,
       );
-    s.setDoc('camera', { x: mid.x - pinch.world.x * k, y: mid.y - pinch.world.y * k, k });
+    s.setCamera({ x: mid.x - pinch.world.x * k, y: mid.y - pinch.world.y * k, k });
     return true;
   }
 
@@ -467,7 +467,7 @@ export function createPointer(
           MAX_ZOOM,
         ),
         r = canvas.getBoundingClientRect();
-      s.setDoc('camera', {
+      s.setCamera({
         x: g.startClient.x - r.left - g.start.x * k,
         y: g.startClient.y - r.top - g.start.y * k,
         k,
@@ -475,7 +475,7 @@ export function createPointer(
       return;
     }
     if (g.kind === 'pan') {
-      s.setDoc('camera', {
+      s.setCamera({
         ...g.camera,
         x: g.camera.x + e.clientX - g.startClient.x,
         y: g.camera.y + e.clientY - g.startClient.y,

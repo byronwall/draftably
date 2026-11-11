@@ -90,8 +90,14 @@ const editor = mountEditor(document.querySelector('#editor')!, {
 });
 await editor.update('node web "Web"\nnode api "API"'); // show text you changed
 editor.source(); // the text the editor holds now
+editor.fit(['api']); // the viewer's camera methods: fit, reveal, getCamera, setCamera
+editor.on('camera', ({ camera, reason }) => saveView(camera));
 editor.destroy(); // when the host is removed
 ```
+
+The editor's handle has the viewer's camera, with the same `{ centerX, centerY, zoom }` shape,
+zoom range and rules: see [Steer the camera](#steer-the-camera). `ready` resolves once the first
+text is drawn.
 
 | Option       | Effect                                                                     |
 | ------------ | -------------------------------------------------------------------------- |

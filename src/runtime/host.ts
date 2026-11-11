@@ -5,6 +5,8 @@
  */
 import type { UpdateResult, ViewerEvents } from './viewer';
 
+export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
+
 export interface HostEvents {
   /** Each update's result: committed, error or a cancellation. */
   update: UpdateResult;

@@ -134,6 +134,7 @@ if (typeof customElements !== 'undefined') {
             return;
           }
           this.editor = editor;
+          editor.on('camera', event => redispatch(this, 'camera', event));
           editor.ready.then(
             () => this.editor === editor && this._setStatus('ready'),
             () => this.editor === editor && this._setStatus('error'),

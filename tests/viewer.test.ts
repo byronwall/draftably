@@ -341,4 +341,21 @@ describe('independent viewer lifecycle', () => {
     expect(viewer.getCamera()).toEqual(camera);
     viewer.destroy();
   });
+
+  it('runs a fit asked for before the viewport has a size, and sends one camera event a frame', async () => {
+    const viewer = mountViewer(host());
+    const events: string[] = [];
+    viewer.on('camera', e => events.push(e.reason));
+    expect(viewer.fit()).toBe('pending');
+    expect((await viewer.update(source)).status).toBe('committed');
+    ResizeObserverMock.current.at(-1)!.trigger(600, 400);
+    expect(viewer.getCamera().centerX).toBeGreaterThan(0);
+    expect(viewer.fit()).toBe('unchanged');
+    expect(viewer.reveal('nope')).toBe('missing');
+    for (const zoom of [0.5, 0.6, 0.7, 20]) viewer.setCamera({ centerX: 1, centerY: 2, zoom });
+    expect(viewer.getCamera().zoom).toBe(8);
+    await new Promise(r => requestAnimationFrame(() => r(null)));
+    expect(events).toEqual(['api']);
+    viewer.destroy();
+  });
 });

@@ -276,13 +276,11 @@ if (
           if (generation !== this._generation || !this.isConnected || viewer !== this._viewer)
             return result;
           if (result?.status === 'committed') {
-            const firstCommit = !this._hasCommitted;
             this._hasCommitted = true;
             this._host.hidden = false;
             this._fallback.hidden = true;
             this._status.textContent = '';
             this._setStatus('ready');
-            if (firstCommit) viewer.fit();
           } else if (result?.status === 'error') {
             this._status.textContent = this._hasCommitted
               ? ''

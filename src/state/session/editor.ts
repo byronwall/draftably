@@ -8,6 +8,7 @@ import { findNode, objectRect } from '../../model/graph';
 import type { NodeGeometry, Point, PortSide, Rect } from '../../model/types';
 import type { DocumentPart } from './document';
 import type { ScenePart } from './scene';
+import { ZOOM_MAX, ZOOM_MIN } from '../../runtime/camera';
 
 export type Tool =
   'select' | 'pan' | 'box' | 'diamond' | 'circle' | 'text' | 'container' | 'connect' | 'brush';
@@ -36,8 +37,9 @@ export interface DragFeedback {
   text?: { rect: Rect; near?: string };
 }
 
-export const MIN_ZOOM = 0.08;
-export const MAX_ZOOM = 4;
+/** The zoom range both handles share: `ZOOM_MIN`–`ZOOM_MAX` in `runtime/camera.ts`. */
+export const MIN_ZOOM = ZOOM_MIN;
+export const MAX_ZOOM = ZOOM_MAX;
 /** The share of the stage a fitted diagram fills. */
 const FIT_SHARE = 0.92;
 export { NodeGeometry };
@@ -170,11 +172,14 @@ export function createEditor(s: DocumentPart & ScenePart) {
         MIN_ZOOM,
         1,
       );
-    s.setCamera({
-      x: (w - b.w * k) / 2 - b.x * k,
-      y: (h - bottom + pad - b.h * k) / 2 - b.y * k,
-      k,
-    });
+    s.setCamera(
+      {
+        x: (w - b.w * k) / 2 - b.x * k,
+        y: (h - bottom + pad - b.h * k) / 2 - b.y * k,
+        k,
+      },
+      'fit',
+    );
   }
 
   /** Some of the diagram lies outside the canvas, or under the zoom controls. */

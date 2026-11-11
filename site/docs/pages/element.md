@@ -258,6 +258,28 @@ its viewport has focus, `+`, `-` and `f` zoom and fit. **Fit diagram** shows the
 a margin, capped at actual size. Your camera changes stay through source updates and resizes;
 call `fit()` or update with `{ camera: 'fit' }` for a new overview.
 
+### Steer the camera
+
+The viewer and the editor share one camera: the world point at the centre of the view, and a
+zoom from 0.02 to 8. The same call moves both the same way.
+
+```ts
+const viewer = diagram.viewer!;
+viewer.fit(['api', 'db']); // frame these items; no ids frames the whole drawing
+viewer.reveal('queue'); // the least move that shows it; zooms out only if it does not fit
+viewer.fit(undefined, { padding: { top: 16, right: 16, bottom: 16, left: 320 } }); // a side panel
+const camera = viewer.getCamera(); // { centerX, centerY, zoom }, to save and restore
+viewer.setCamera(camera);
+```
+
+`fit` and `reveal` return `moved`, `unchanged` or `missing` (no such item). Before the viewport
+has a size or a drawing, they return `pending` and run the latest call once it has both.
+`padding` (screen pixels, default 32), `minZoom` and `maxZoom` (default 1 for `fit`) shape both.
+
+The `camera` event (`draft-camera` on the element) comes at most once per animation frame, also
+during a drag, with a `reason`: `user`, `api`, `fit`, `resize`, or `restore` when the editor
+brings a saved or undone view back.
+
 The outline is a numbered list of item buttons, one for each node, group and edge. Screen readers
 and keyboard users always have it. By default it is visually hidden: press Tab from the viewport
 and it shows over the bottom of the drawing while it has focus. Selecting an item centers it at
