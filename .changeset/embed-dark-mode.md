@@ -4,7 +4,7 @@
 '@draftably/editor': minor
 ---
 
-Diagrams now follow a dark page. On a page whose `color-scheme` is dark, or with no `color-scheme` and a dark system setting, `<draft-diagram>`, `mountViewer`, `<draft-editor>` and `mountEditor` draw a source with no `theme` line in a dark variant of the default theme: graphite surfaces, light text and lines, and the same color families stepped for a dark page. It has the default theme's type and spacing, so every box stays in place. A change of scheme, such as a class on the page that sets `color-scheme`, switches the drawing at once. The viewer draws nothing again: its SVG holds both schemes as `light-dark()` colors. The viewer's frame defaults follow the scheme too.
+Diagrams now follow a dark page. On a page whose `color-scheme` is dark, or with no `color-scheme` and a dark system setting, `<draft-diagram>`, `mountViewer`, `<draft-editor>` and `mountEditor` draw a source with no `theme` line in a dark variant of the default theme: graphite surfaces, light text and lines, and the same color families stepped for a dark page. It has the default theme's type and spacing, so every box stays in place. A change of scheme, such as a class on the page that sets `color-scheme`, switches the drawing at once. The viewer draws nothing again: its SVG holds both schemes as `light-dark()` colors. The viewer's frame defaults follow the scheme too, and so do the editor's controls (panels, menus, the zoom control) unless the element sets its own `data-theme`.
 
 To keep a diagram light on a dark page, set its scheme:
 

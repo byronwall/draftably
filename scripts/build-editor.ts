@@ -20,6 +20,21 @@ const APP_CSS = path.join(root, 'src/styles/app.css');
  * (`.draft-editor-root`) elsewhere; `:root[data-theme=x]` follows. `html` and `body` become the
  * editor itself.
  */
+/**
+ * The elements that hold the tokens of `:root<attr>`. The dark set also applies when the page is
+ * dark (the editor sets `data-draft-scheme`) and the element has no `data-theme` of its own, so
+ * the editor's controls follow the page as its drawing does.
+ */
+function hostsFor(attr: string) {
+  const own = [`:host${attr ? `(${attr})` : ''}`, `.draft-editor-root${attr}`];
+  if (!/data-theme=['"]?dark/.test(attr)) return own;
+  return [
+    ...own,
+    `:host([data-draft-scheme='dark']:not([data-theme]))`,
+    `.draft-editor-root[data-draft-scheme='dark']:not([data-theme])`,
+  ];
+}
+
 function scope(css: string) {
   const ast = postcss.parse(css),
     made = new Set<Rule>();
@@ -34,10 +49,7 @@ function scope(css: string) {
       rule.walkDecls('color-scheme', decl => {
         const attr = scheme[1] ?? '';
         const inside = postcss.rule({
-          selectors: [
-            `:host${attr ? `(${attr})` : ''} .draft-editor`,
-            `.draft-editor-root${attr} .draft-editor`,
-          ],
+          selectors: hostsFor(attr).map(host => `${host} .draft-editor`),
           nodes: [decl.clone()],
         });
         made.add(inside);
@@ -49,7 +61,7 @@ function scope(css: string) {
       if (root) {
         const rest = sel.slice(root[0].length),
           attr = root[1] ?? '';
-        return [`:host${attr ? `(${attr})` : ''}${rest}`, `.draft-editor-root${attr}${rest}`];
+        return hostsFor(attr).map(host => `${host}${rest}`);
       }
       if (/^(html|body)\b/.test(sel)) return [sel.replace(/^(html|body)/, '.draft-editor')];
       return [`.draft-editor ${sel}`];

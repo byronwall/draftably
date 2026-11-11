@@ -5,7 +5,8 @@
  * line, a `<draft-diagram>` forced light with `color-scheme: light`, and one of a file with its own
  * `theme drafting` line. It checks: a light page draws light; setting `color-scheme: dark` on the
  * page draws the viewer and the editor dark, with no new render and no moved box; the forced and
- * the themed diagrams stay light; with no `color-scheme` on the page, the system setting decides.
+ * the themed diagrams stay light; the editor's controls follow the page unless it sets its own
+ * `data-theme`; with no `color-scheme` on the page, the system setting decides.
  * Screenshots go to tmp/proof-color-scheme/.
  *
  * Usage: pnpm runtime:build && pnpm editor:build && node scripts/prove-color-scheme.mjs [chromium,firefox,webkit]
@@ -78,6 +79,9 @@ const base = `http://127.0.0.1:${server.address().port}/`;
 /** Canvas colors: the default theme's, and its dark variant's. */
 const LIGHT = 'rgb(247, 247, 244)',
   DARK = 'rgb(22, 25, 30)';
+/** The editor's own `--bg`, light and dark. */
+const UI_LIGHT = '#f4f4f1',
+  UI_DARK = '#16171a';
 const engines = { chromium, firefox, webkit };
 const only = process.argv[2]?.split(',') ?? Object.keys(engines);
 const failures = [];
@@ -110,9 +114,11 @@ for (const name of only) {
         return getComputedStyle(svg.querySelector(':scope > rect')).fill;
       };
       const stage = editor.shadowRoot.querySelector('.stage');
+      const ui = editor.shadowRoot.querySelector('.draft-editor');
       return {
         viewer: canvas(viewer),
         editor: getComputedStyle(stage).backgroundColor,
+        controls: getComputedStyle(ui).getPropertyValue('--bg').trim(),
         forced: canvas(forced),
         themed: canvas(themed),
         renders: window.renders,
@@ -127,8 +133,11 @@ for (const name of only) {
     const light = await read();
     check(
       'a light page draws the viewer and the editor light',
-      light.viewer === LIGHT && light.editor === LIGHT && light.forced === LIGHT,
-      light,
+      light.viewer === LIGHT &&
+        light.editor === LIGHT &&
+        light.forced === LIGHT &&
+        light.controls === UI_LIGHT,
+      { ...light, boxes: undefined },
     );
     await tab.screenshot({ path: path.join(out, `${name}-light.png`) });
     const svgBefore = await tab.evaluateHandle(() =>
@@ -154,6 +163,34 @@ for (const name of only) {
       dark.renders === light.renders && sameSvg && dark.boxes === light.boxes,
       { renders: [light.renders, dark.renders], sameSvg },
     );
+    check(
+      "the editor's controls follow the page, with no data-theme",
+      dark.controls === UI_DARK,
+      dark.controls,
+    );
+    // An explicit data-theme wins over the page, and removing it follows the page again.
+    const own = await tab.evaluate(async () => {
+      const bg = () =>
+        getComputedStyle(editor.shadowRoot.querySelector('.draft-editor'))
+          .getPropertyValue('--bg')
+          .trim();
+      editor.dataset.theme = 'light';
+      const light = bg();
+      delete editor.dataset.theme;
+      return { light, back: bg() };
+    });
+    check(
+      'data-theme="light" on the editor keeps its controls light on a dark page',
+      own.light === UI_LIGHT && own.back === UI_DARK,
+      own,
+    );
+    await tab.screenshot({
+      path: path.join(out, `${name}-editor-dark.png`),
+      clip: await tab.evaluate(() => {
+        const r = editor.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      }),
+    });
     check(
       'color-scheme: light on the element stays light on a dark page',
       dark.forced === LIGHT,

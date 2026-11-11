@@ -430,10 +430,13 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   // A file without a theme line draws dark on a dark page. The canvas redraws its colors only:
   // the dark theme has the light one's sizes, so nothing moves. The editor's own controls set
   // their color-scheme inside a shadow root, so there the page's scheme is read at its top.
-  const stopScheme = watchColorScheme(
-    shadow ? (host.getRootNode() as ShadowRoot) : host,
-    session.setDark,
-  );
+  // The element that holds the tokens, `<draft-editor>` or the mounted host, says the page's
+  // scheme too: the editor's controls go dark with the page unless it sets its own `data-theme`.
+  const themed = shadow ? (host.getRootNode() as ShadowRoot).host : host;
+  const stopScheme = watchColorScheme(shadow ? (host.getRootNode() as ShadowRoot) : host, dark => {
+    session.setDark(dark);
+    themed.setAttribute('data-draft-scheme', dark ? 'dark' : 'light');
+  });
   if (!mounted++)
     for (const [type, fn, capture] of KEYS) document.addEventListener(type, fn, capture);
 
@@ -530,6 +533,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       dispose();
       session.dispose();
       host.classList.remove('draft-editor', 'draft-editor-root');
+      themed.removeAttribute('data-draft-scheme');
     },
   };
   sessions.set(handle, session);

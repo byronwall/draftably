@@ -59,7 +59,8 @@ draft-editor {
 }
 ```
 
-Set `data-theme="dark"` on the element for the dark set. The properties include `--bg`,
+The editor's controls follow the page's color scheme, as its drawing does. Set
+`data-theme="dark"` or `data-theme="light"` on the element to choose them yourself. The properties include `--bg`,
 `--surface`, `--surface-2`, `--hover`, `--line`, `--line-strong`, `--text`, `--muted`, `--ink`,
 `--ink-hover`, `--ink-on`, `--accent`, `--accent-hover`, `--accent-soft`, `--accent-ink`,
 `--success`, `--warning`, `--danger`, `--font` and `--mono`.
@@ -67,7 +68,8 @@ Set `data-theme="dark"` on the element for the dark set. The properties include 
 The canvas and the drawing follow the page's color scheme, as `<draft-diagram>` does (see
 [Dark pages](#dark-pages)). On a dark page, a source with no `theme` line draws dark, and
 `draft-editor { color-scheme: light }` keeps it light. The editor never writes a `theme` line on
-its own, so the drawing keeps following the page. `data-theme` sets the editor's controls only.
+its own, so the drawing keeps following the page. `data-theme` sets the editor's controls, not
+the drawing.
 
 ## Put your content on a node
 
