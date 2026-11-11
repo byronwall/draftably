@@ -1,5 +1,6 @@
 /** Helpers both custom elements share. No side effects. */
 import { CANCELABLE_EVENTS, type HostEvents } from './host';
+import type { UpdateResult } from './viewer';
 import { runtimeVersion } from './version';
 
 /** Structural equality for option values. Functions are read live, so any two are equal. */
@@ -47,4 +48,28 @@ export function redispatch<K extends keyof HostEvents>(
       cancelable: CANCELABLE_EVENTS.includes(type),
     }),
   );
+}
+
+/** The update result for an element whose handle could not start. */
+export function mountFailure(
+  revision: number,
+  error: unknown,
+  fallback: string,
+): Extract<UpdateResult, { status: 'error' }> {
+  return {
+    status: 'error',
+    revision,
+    error: {
+      ok: false,
+      reason: 'environment',
+      diagnostics: [
+        {
+          code: 'DRAFT_ELEMENT_MOUNT',
+          severity: 'error',
+          message: error instanceof Error ? error.message : fallback,
+          itemIds: [],
+        },
+      ],
+    },
+  };
 }

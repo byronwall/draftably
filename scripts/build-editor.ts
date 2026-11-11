@@ -43,7 +43,7 @@ const scopedCss: Plugin = {
     const file = `${id.slice('\0draft-css:'.length)}.css`;
     const css =
       (file === APP_CSS
-        ? 'draft-editor{height:28rem}draft-editor,.draft-editor{display:flex;flex-direction:column;position:relative}\n'
+        ? "draft-editor{height:28rem}draft-editor,.draft-editor{display:flex;flex-direction:column;position:relative}draft-editor[status='error']::before{content:attr(data-error);margin:.35rem;color:#9a3412;font:14px/1.45 system-ui,sans-serif}\n"
         : '') + scope(readFileSync(file, 'utf8'));
     const key = path.relative(root, file);
     return `const css = ${JSON.stringify(css)};

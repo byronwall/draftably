@@ -3,7 +3,13 @@
  * attribute or property sets the text; every kept edit fires `draft-change` with `{ source }`.
  * It mounts in a microtask after it is added to the page, and stops its session when removed.
  */
-import { redispatch, sameValue, takeEarly, warnOtherCopy } from '../runtime/element-base';
+import {
+  mountFailure,
+  redispatch,
+  sameValue,
+  takeEarly,
+  warnOtherCopy,
+} from '../runtime/element-base';
 import type { DraftStatus } from '../runtime/host';
 import { runtimeVersion } from '../runtime/version';
 import { mountEditor, type EditorOptions, type MountedEditor } from './mount';
@@ -97,25 +103,36 @@ if (typeof customElements !== 'undefined') {
           this._setStatus('loading');
           // Getters read the latest options, so a new callback applies without a new editor.
           const opts = () => this._options;
-          const editor = mountEditor(this, {
-            source: this.last,
-            onChange: source => {
-              this.last = source;
-              redispatch(this, 'change', { source });
-            },
-            get storageKey() {
-              return opts().storageKey;
-            },
-            get openLink() {
-              return opts().openLink;
-            },
-            get confirm() {
-              return opts().confirm;
-            },
-            get onInteract() {
-              return opts().onInteract;
-            },
-          });
+          let editor: MountedEditor;
+          try {
+            editor = mountEditor(this, {
+              source: this.last,
+              onChange: source => {
+                this.last = source;
+                redispatch(this, 'change', { source });
+              },
+              get storageKey() {
+                return opts().storageKey;
+              },
+              get openLink() {
+                return opts().openLink;
+              },
+              get confirm() {
+                return opts().confirm;
+              },
+              get onInteract() {
+                return opts().onInteract;
+              },
+            });
+          } catch (error) {
+            // Fail as <draft-diagram> does: status, a visible message, and an update event.
+            const result = mountFailure(1, error, 'The diagram editor could not start.');
+            const message = result.error.diagnostics[0].message;
+            this._setStatus('error');
+            this.setAttribute('data-error', message);
+            redispatch(this, 'update', result);
+            return;
+          }
           this.editor = editor;
           editor.ready.then(
             () => this.editor === editor && this._setStatus('ready'),
@@ -137,6 +154,7 @@ if (typeof customElements !== 'undefined') {
         disconnectedCallback() {
           this._destroy();
           this.removeAttribute('status');
+          this.removeAttribute('data-error');
         }
       },
     );

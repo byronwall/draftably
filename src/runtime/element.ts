@@ -1,5 +1,5 @@
 import viewerCss from './viewer.css?inline';
-import { redispatch, sameValue, takeEarly, warnOtherCopy } from './element-base';
+import { mountFailure, redispatch, sameValue, takeEarly, warnOtherCopy } from './element-base';
 import type { DraftStatus, HostEvents } from './host';
 import { runtimeVersion } from './version';
 import { mountViewer } from './viewer';
@@ -155,13 +155,15 @@ if (
         if (this._scheduled) return;
         this._scheduled = true;
         // `updateComplete` follows the mount that is still queued.
-        this._updateComplete = new Promise(resolve =>
+        const scheduled: Promise<UpdateResult | undefined> = new Promise(resolve =>
           queueMicrotask(() => {
             this._scheduled = false;
             this._mount();
-            resolve(this._updateComplete);
+            // A mount that did not start (removed in the same tick) settles with no result.
+            resolve(this._updateComplete === scheduled ? undefined : this._updateComplete);
           }),
         );
+        this._updateComplete = scheduled;
       }
 
       private _setStatus(status: DraftStatus | null) {
@@ -243,22 +245,7 @@ if (
       }
 
       private _mountFailure(error: unknown) {
-        const result: UpdateResult = {
-          status: 'error',
-          revision: ++this._revision,
-          error: {
-            ok: false,
-            reason: 'environment',
-            diagnostics: [
-              {
-                code: 'DRAFT_ELEMENT_MOUNT',
-                severity: 'error',
-                message: error instanceof Error ? error.message : 'Diagram viewer could not start.',
-                itemIds: [],
-              },
-            ],
-          },
-        };
+        const result = mountFailure(++this._revision, error, 'Diagram viewer could not start.');
         this._status.textContent = result.error.diagnostics[0].message;
         this._setStatus('error');
         this._updateComplete = Promise.resolve(result);

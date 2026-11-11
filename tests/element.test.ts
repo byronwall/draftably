@@ -144,4 +144,19 @@ describe('draft-diagram element', () => {
     expect(element.viewer).not.toBe(viewer);
     expect(updates.length).toBe(2);
   });
+
+  it('settles a mount that never started, when connected and removed in one tick', async () => {
+    const rejections: unknown[] = [];
+    const onReject = (e: PromiseRejectionEvent) => rejections.push(e.reason);
+    window.addEventListener('unhandledrejection', onReject);
+    const element = document.createElement('draft-diagram');
+    element.source = 'node a "A"';
+    document.body.append(element);
+    element.remove();
+    await expect(element.updateComplete).resolves.toBeUndefined();
+    await new Promise(r => setTimeout(r, 0));
+    window.removeEventListener('unhandledrejection', onReject);
+    expect(rejections).toEqual([]);
+    expect(element.viewer).toBeUndefined();
+  });
 });
