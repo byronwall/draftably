@@ -2,8 +2,8 @@
 title: 'Host contract — one contract for every framework'
 slug: 'host-contract'
 phase: plan
-status: proposed
-last_updated: '2026-11-10'
+status: implemented
+last_updated: '2026-11-11'
 ---
 
 # One host contract for every framework
@@ -18,6 +18,60 @@ GPT 6.1 Sol thread, each designing blind before reading the plan), an audit of t
 packages, a browser spike, and a final review of performance, developer experience and end-user
 experience by a second clean Opus agent and Sol thread. The spike's second round tested their
 guesses. Every fact below was checked against `main` at `a8f6247b`.
+
+## Status
+
+**Built, in review, as one stack** (#528): #526 this plan, #527 step 1, #531 step 2, #535 step 3,
+#537 step 4, #538 step 5, #539 step 6, and step 7 on `claude/hc-7-prove-docs`. The stack ships as
+one minor release; `.changeset/host-contract-release.md` lists every breaking change with
+before-and-after examples.
+
+Shipped, as planned unless a "Changed in step N" note says otherwise:
+
+- One contract on both elements: `options`, mount once, live fields, `draft-<name>` events from
+  `HOST_EVENTS`, `status`, the version warning, typed events (step 2).
+- A shared worker pool, one font set, constructable sheets, `--draft-*` tokens, the size from a
+  `ResizeObserver`, and `pnpm bench:host` (step 3).
+- One camera, `fit(ids)`, `reveal`, `MoveResult` (step 4); `geometry()`, `ready`, `select`,
+  `contextmenu`, cancelable `link` (step 5).
+- Slots, `data-draft-input`, level of detail, slot diagnostics, the editor in a shadow root and
+  `host.css` (step 6).
+- A complete recipe per framework and plain HTML, compiled in CI (`pnpm prove:recipes`). The host
+  proof (`scripts/lib/host-proof.ts`) on server-rendered, hydrated pages in the four Vite apps
+  (`pnpm prove:frameworks`, CI) and in Next.js, SolidStart, Nuxt and SvelteKit
+  (`pnpm prove:meta`). The docs show `el.viewer`, `el.editor` and `diagnostics` for debugging,
+  and a complete strict CSP (step 7).
+
+**Changed in step 7.** The proofs found four problems, now fixed:
+
+- The built packages created their workers in a nested form,
+  `new URL("" + new URL("assets/x.js", import.meta.url).href, import.meta.url)`. Turbopack
+  (Next.js) turned it into a `file://` URL, and Nuxt's `assets` alias took the bare `assets/`
+  path. Both lost the worker, so the viewer failed to start. The runtime and editor builds now
+  write the plain `new Worker(new URL("./assets/x.js", import.meta.url))`, which webpack,
+  Turbopack and Vite all bundle.
+- A Next.js server component cannot call `renderSvg` from `@draftably/react`, a client module.
+  `@draftably/react/server` exports it.
+- Solid's server HTML wrote `style=""` for an unset `style`, a CSP violation per element.
+- A viewer update dropped a focused outline button (the screen-reader item below). Focus now
+  returns to the same item, or to the drawing.
+
+Every meta-framework passes the strict CSP with a per-request nonce. SvelteKit adds one hash:
+its route announcer has an inline `style` attribute, so its policy adds
+`style-src-attr 'unsafe-hashes' 'sha256-…'` for that one value.
+
+**Deferred.**
+
+- **Touch.** Pinch zoom in the viewer, and one-finger page scroll over a viewer until the user
+  activates it, are not built. The viewport is still `touch-action: none`.
+- **The editor's dark theme through a wrapper.** The React, Solid and Svelte wrappers pass no
+  arbitrary attributes, so the recipes set `data-theme="dark"` through the element (`ref`,
+  `bind:element`). Vue passes it through. A wrapper attribute pass-through is a small follow-up.
+- **The warm first-diagram budget** stays unmet; it is layout-bound (step 3).
+- **`pnpm prove:meta` is not in CI.** Four production installs take minutes; Next.js alone
+  downloads about 80 MB. Run it before a release.
+- Already deferred: `hover`, `layout({ draft })`, Svelte Flow and Vue Flow edge components, and
+  the open questions for Callsheet below.
 
 ## Facts
 
