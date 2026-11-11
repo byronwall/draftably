@@ -14,8 +14,10 @@ It starts from five PRs by joshuafcole for Callsheet, a Solid app that embeds Dr
 byronwall/draftably#498, #499, #500, #501 and #502.
 
 **Sources.** A first plan, then two independent architecture reviews (a clean Opus agent and a
-GPT 6.1 Sol thread, each designing blind before reading the plan), and an audit of the four
-framework packages. Every fact below was checked against `main` at `a8f6247b`.
+GPT 6.1 Sol thread, each designing blind before reading the plan), an audit of the four framework
+packages, a browser spike, and a final review of performance, developer experience and end-user
+experience by a second clean Opus agent and Sol thread. The spike's second round tested their
+guesses. Every fact below was checked against `main` at `a8f6247b`.
 
 ## Facts
 
@@ -67,7 +69,7 @@ the elements expose less than the handles behind them.
 Five approaches were scored. Dimensions come from the owner's goals (least code per framework,
 parity, few future requests) and from the failure modes found in code.
 
-| Dimension                                          | A. Merge PRs as written | B. Callbacks in the renderers (`mount(el)`, plan v1) |                                   C. Target registry + a portal helper per framework |      **D. Target registry + named slots on both elements** | E. Display list; each framework draws |
+| Dimension                                          | A. Merge PRs as written | B. Callbacks in the renderers (`mount(el)`, plan v1) |                                   C. Target registry + a portal helper per framework |            **D. Target registry + slots on both elements** | E. Display list; each framework draws |
 | -------------------------------------------------- | ----------------------: | ---------------------------------------------------: | -----------------------------------------------------------------------------------: | ---------------------------------------------------------: | ------------------------------------: |
 | Lines per framework for host content               |                       2 |                                                    6 |                          6: a portal helper, about 15–40 lines; Svelte has no portal |                              **10**: children pass through |                    3: a renderer each |
 | Host context, reactivity and CSS reach the content |                       3 |                                    3: separate roots | 5: context yes, but host CSS does not reach a portal inside the viewer's shadow root | **10**: content stays a light-DOM child of the host's tree |                                     9 |
@@ -80,23 +82,36 @@ parity, few future requests) and from the failure modes found in code.
 **Choice: D.** The editor rework is a one-time cost. The other options cost code in every framework
 package for every future capability. C was the choice of both reviews. It fails one fact they missed:
 `<draft-diagram>` renders in shadow DOM, so host CSS (Tailwind classes, theme rules) does not style
-content portalled into it. Named slots solve that, and need no portal at all.
+content portalled into it. Slots solve that, and need no portal at all.
 
-**Gate: passed on 2026-11-10.** D needed three proofs before the slots step. Each ran with real
-mouse and keyboard input in Chromium, Firefox and WebKit (Playwright 1.64).
+**Gate: passed on 2026-11-10, in two rounds.** D needed three proofs before the slots step. Each
+ran with real mouse and keyboard input in Chromium, Firefox and WebKit (Playwright 1.64). Round 2
+followed a final review by a clean Opus agent and a GPT 6.1 Sol thread, and tested their guesses.
 
-1. **Slots in an anchor layer work in all three browsers.** A prototype element replaced its whole
+1. **Slots in an anchor layer work in all three browsers (round 1).** A prototype element replaced its whole
    SVG on every update, as the viewer does, and kept one stable target per item. Each target held a
    named `<slot>`. `body:` content filled its box and scaled with the camera. `overlay:` content
    stayed in screen space and did not scale. Content moved with an update, and content for a removed
    item drew nothing. Host CSS styled the content. An input inside it took typing, and
    `composedPath()` showed the element its `data-draft-input` marker. `document.elementFromPoint`
    found the content, and empty space passed through to the SVG.
-2. **All four frameworks pass `slot` through.** React 19.2, Solid 1.9, Vue 3.5 and Svelte 5.57 each
-   rendered static `slot="overlay:a"` and dynamic ``slot={`body:${id}`}`` children in a keyed list.
-   They kept them correct through a move, a relabel, an add and a remove. Every framework passed
-   every check in every browser, with no compiler or console warnings. Svelte needed nothing
-   special.
+2. **All four frameworks pass slot content through a wrapper, marked with `data-draft-slot`.**
+   Round 1 put `slot="…"` children directly on the element, and React 19.2, Solid 1.9, Vue 3.5 and
+   Svelte 5.57 all passed. Round 2 put them through a wrapper component, as the real packages do.
+   There Svelte 5 fails to compile ``slot={`body:${id}`}`` ("Element with a slot='...' attribute
+   must be a child of a component or a descendant of a custom element"). A static `slot="x"` under
+   a component compiles as a legacy named slot, so it never reaches `children`. The fix is one rule
+   for every framework: the host marks content with `data-draft-slot="body:api"`, and the element
+   assigns it with manual slot assignment (`attachShadow({ slotAssignment: 'manual' })` and
+   `slot.assign()`). The element never writes to the host's DOM. With that, all five pages (plain
+   DOM and the four wrappers) passed all 13–14 checks in all three browsers, with no warnings:
+   - the content moved, relabelled, was added and was removed with the framework's list;
+   - the default `pointer-events: none` let a click on body text reach the drawing, and a nested
+     `<button data-draft-input>` still took its click, through one page-level rule;
+   - an input kept focus and its caret (`selectionStart`) across a source update;
+   - `overflow: clip` kept the host from scrolling when off-screen content took focus. With
+     `overflow: hidden`, Chromium and Firefox scrolled the host, which would move the content away
+     from the camera. WebKit did not scroll in either case.
 3. **The editor works in a shadow root after one small fix.** The built editor passed every check in
    light DOM: select, drag, Delete, undo, `N` with typing, inline edit, `C Enter Tab Enter`, and
    connect by dragging from a port. In a shadow root, three failed. An event from inside a shadow
@@ -125,8 +140,9 @@ The slots step also needs these, which the spike showed:
 - The editor build injects its CSS into `document.head` (`scripts/build-editor.ts:49-54`). The element
   must put the same CSS into its shadow root instead.
 - A guard keeps the fix: a test that fails on `document.elementFromPoint`, `document.activeElement`,
-  `document.querySelector` or a bare `e.target` in a document-level listener under
-  `src/components/canvas`, `src/components/scene`, `src/state` and `src/editor`.
+  `document.querySelector` or a bare `e.target` in a document-level listener, in the modules of the
+  editor bundle only (`scripts/build-editor.ts` already walks that graph). App-shell files use
+  `document` on purpose. Behavior proofs in a shadow root back the guard.
 
 ## Two ways in: Draftably draws, or the host draws
 
@@ -153,9 +169,10 @@ and no framework, so this path needs no framework code at all (`src/graph-api/co
 **What it does not cover.**
 
 1. **`.draft` text.** Callsheet writes `.draft` files. The graph API takes a graph, and no public
-   call returns a `LayoutResult` for a `.draft` source. Add `layout({ draft })` to the graph API. It
-   returns a `LayoutResult` with each item's label, shape and style, which is the data `geometry()`
-   returns. One function closes the gap, with no new shape.
+   call returns a `LayoutResult` for a `.draft` source. `layout({ draft })` would close the gap. It
+   needs fields that `PlacedBox` lacks today (`src/graph-api/core.ts:84-86`): `label`, `shape` and a
+   `color` token for each node and group. It covers single-panel drawings only. Build it when a host
+   asks, after Callsheet answers open question 2.
 2. **The look.** A host that draws must draw shapes, group bands, labels, arrowheads and colors.
    The result's `draft` field opens the same graph in the viewer when the host wants Draftably's
    look.
@@ -164,7 +181,7 @@ and no framework, so this path needs no framework code at all (`src/graph-api/co
 4. **Editing, the camera and accessibility.** These stay with the elements. Callsheet's editor (#500)
    still needs the element path.
 5. **Views the graph input cannot state.** States, compare, panels, emphasis and icons draw through
-   the elements, or through `layout({ draft })`.
+   the elements, or later through `layout({ draft })`.
 
 A host chooses by who draws. Both paths are framework-neutral. A Solid scene in the host's tree
 (#502) is a third renderer for one framework, and neither path needs it.
@@ -180,12 +197,14 @@ import type { Box, PlacedBox, EdgeOut } from '@draftably/runtime/graph';
 export interface Camera {
   centerX: number;
   centerY: number;
-  zoom: number;
+  zoom: number; // ZOOM_MIN 0.02 to ZOOM_MAX 8, for both the viewer and the editor
 }
 export type CameraReason = 'user' | 'api' | 'fit' | 'resize' | 'restore';
 export type ItemKind = 'node' | 'group' | 'edge';
 /** `pending`: the viewport has no size yet; the latest call runs once it has one. */
 export type MoveResult = 'moved' | 'unchanged' | 'missing' | 'pending';
+/** A slot name. IDs come from source text, so the type cannot check them; diagnostics do. */
+export type DraftSlot = `body:${string}` | `overlay:${string}`;
 
 /** The graph API's shapes, in world units, for the drawing now committed. */
 export interface Geometry {
@@ -194,55 +213,47 @@ export interface Geometry {
   bounds: Box; // shapes, lines and labels only
   nodes: Record<string, PlacedBox>;
   groups: Record<string, PlacedBox>;
-  edges: Record<string, EdgeOut>;
-  /** Set for `compare` and `states`: each panel's offset. IDs above are the first panel's. */
-  panels?: { id: string; x: number; y: number }[];
+  edges: Record<string, EdgeOut>; // the routes as drawn
 }
 
 export interface FrameOptions {
-  /** Screen pixels kept clear, for example under a host panel. */
+  /** Screen pixels kept clear, for example under a host panel. Default 32. */
   padding?: number | { top: number; right: number; bottom: number; left: number };
   minZoom?: number;
-  maxZoom?: number;
+  maxZoom?: number; // default 1 for fit: a small diagram is not blown up
 }
 
 export interface Anchor {
-  slot: string;
+  slot: DraftSlot;
   id: string;
   kind: ItemKind;
-  mode: 'body' | 'overlay';
-  el: HTMLElement;
+  el: HTMLElement; // the stable target
 }
 
 export interface HostEvents {
-  render: { revision: number; geometry: Geometry };
+  render: { revision: number; value: RenderValue; geometry: Geometry | null };
   diagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean };
   camera: { camera: Camera; reason: CameraReason }; // at most once per animation frame
   anchors: { anchors: readonly Anchor[] }; // after the DOM commit
-  itemactivate: { id: string; kind: ItemKind; input: 'pointer' | 'keyboard' };
-  hover: { id: string | null; kind?: ItemKind };
-  contextmenu: {
-    id: string | null;
-    kind?: ItemKind;
-    clientX: number;
-    clientY: number;
-    preventDefault(): void;
-  };
-  select: { ids: readonly string[]; reason: 'user' | 'api' }; // the viewer never fires it
-  link: { itemId: string; href: string; target: '_self' | '_blank'; preventDefault(): void };
+  itemactivate: { id: string; kind: ItemKind; input: 'pointer' | 'keyboard'; revision: number };
+  contextmenu: { id: string | null; kind?: ItemKind; clientX: number; clientY: number }; // cancelable
+  select: { ids: readonly string[]; reason: 'user' | 'api' }; // the editor only
+  link: { itemId: string; href: string; target: '_self' | '_blank' }; // cancelable
   change: { source: string }; // the editor only
 }
 
 export interface DiagramHandle {
+  /** Resolves after the first commit or failure; then after each later one. */
+  readonly ready: Promise<UpdateResult>;
   getCamera(): Camera;
   setCamera(camera: Camera): void;
   fit(ids?: readonly string[], options?: FrameOptions): MoveResult; // no ids: the whole frame
   reveal(id: string, options?: FrameOptions): MoveResult; // least move; zooms out only if needed
-  geometry(): Geometry | null; // null before the first commit
-  /** Plain-DOM hosts only. The elements set this from their slotted children. */
-  anchor(slots: readonly string[]): void;
+  geometry(): Geometry | null; // null before the first commit, and for compare and states
+  /** Plain-DOM hosts only. The elements set this from their marked children. */
+  anchor(slots: readonly DraftSlot[]): void;
   on<K extends keyof HostEvents>(type: K, listener: (event: HostEvents[K]) => void): () => void;
-  destroy(): void;
+  destroy(): void; // safe to call twice
 }
 
 export interface ViewerHandle extends DiagramHandle {
@@ -258,70 +269,118 @@ export interface EditorHandle extends DiagramHandle {
 }
 ```
 
-`renderSvg` adds `geometry: Geometry` to a successful result. `MountedEditor.session` leaves the
-public type; `EditorHandle` replaces it. The packages are 0.x, so this ships as a minor change with
-no shim.
+`renderSvg` adds `geometry: Geometry | null` to a successful result. A cancelable event is a
+`CustomEvent` with `cancelable: true`; `preventDefault()` stops Draftably's default (its menu, or
+opening the link).
 
 ### Elements
 
 - Both `<draft-diagram>` and `<draft-editor>` have an `options` property that takes every mount
   option, including `styleNonce`, `openLink`, `confirm`, `storageKey` and `onInteract`.
-- Setting `options` re-mounts only when a field that needs it changes. A new object with the same
-  values does nothing.
+- **Mount once.** Each element mounts in a microtask after it connects, so every property a framework
+  sets in the same tick lands before the first mount. Each element takes own properties set before
+  it is defined (`source`, `options`), as `element.ts:47-58` does for the viewer today.
+- **Live or re-mount, per field.** Callbacks, `label` and `outline` are live: a change takes effect
+  with no re-mount, and callbacks are read through the latest reference. Only `execution`,
+  `render.fonts` and `storageKey` re-mount. Nested values compare by structure, so a new object
+  with the same values does nothing.
 - Both re-dispatch every `HostEvents` type as a bubbling `draft-<type>` `CustomEvent`. Listeners on
   the element survive a re-mount.
-- `el.viewer` and `el.editor` stay the handles.
-- Both render in a shadow root, and both expose named slots.
+- Both reflect `status="loading | ready | error"`, so host CSS styles each state with no wrapper
+  code. A failed first update keeps the fallback and shows its diagnostics in the element.
+- `el.viewer` and `el.editor` stay the handles. `el.updateComplete` is the handle's `ready`.
+- Both render in a shadow root with manual slot assignment.
+- If the element is already defined by another copy of the runtime with a different
+  `runtimeVersion`, the second copy warns in the console once.
 
 ### Slots
 
-A host puts content on an item with an ordinary child of the element:
+A host puts content on an item with an ordinary child of the element, marked with
+`data-draft-slot`:
 
 ```html
 <draft-diagram source="…">
-  <div slot="body:api">…</div>
+  <div data-draft-slot="body:api">…</div>
   <!-- fills node api, scales with the diagram -->
-  <span slot="overlay:db">3</span>
-  <!-- a badge at db, stays at screen size -->
+  <span data-draft-slot="overlay:db">3</span>
+  <!-- covers db's box on screen, at screen size -->
 </draft-diagram>
 ```
 
-- **`body:<id>`** fills the item's box, in world space. It scales and clips with the item, sits over
-  the shape and under the editor's ports and handles, and replaces the title. Nodes and groups only.
-- **`overlay:<id>`** sits at the item's top-right corner in screen space. It does not scale or clip.
-  Any item kind.
-- The element watches its children's `slot` attributes and creates one `<slot>` per name inside a
-  stable target element. The target keeps its identity while the item exists, across source updates
-  and camera moves. A camera move changes only a CSS transform.
-- A slot for an ID the drawing does not have, or for a `compare` or `states` drawing, shows nothing.
-- Slot content stays in the host's tree. It keeps the host's framework, context, reactivity, CSS
-  and event handlers.
+- **`body:<id>`** fills a node's box, in world space. It scales and clips with the node and replaces
+  the visible title. The node keeps its title as its accessible name. Nodes only: a group's box
+  holds its members.
+- **`overlay:<id>`** is a box the size of the item on screen, at screen scale, with
+  `overflow: visible`. Host CSS places a badge or menu anywhere in or around it. Any item kind.
+- The element watches its children's `data-draft-slot` attributes and assigns each child to a
+  stable target with `slot.assign()`. The target keeps its identity while the item exists, across
+  source updates and camera moves. It writes nothing to the host's DOM.
+- **Layers.** The anchor layer is a sibling of the SVG, above it, and is never detached:
+  `replaceChildren` on the SVG (`viewer.ts:652`) and on the element host (`element.ts:137`) must not
+  reach it. The viewport uses `overflow: clip`. The editor draws selection, ports and resize
+  handles in its own top layer above the anchor layer, so a body never hides them.
+- **Camera moves.** A camera move writes one transform on the body layer and one position per
+  overlay, in one animation frame, with no layout reads. The viewport size comes from a
+  `ResizeObserver`, not from `getBoundingClientRect` per move (`viewer.ts:289`). Body positions
+  change only on a commit.
+- **Level of detail.** The anchor layer carries `--draft-zoom` and
+  `data-draft-detail="low | full"`. Below a zoom of 0.4 the default is `low`: bodies hide and titles
+  show again, and low bodies are `inert`. A host can turn this off.
+- A slot for an ID the drawing does not have, or in a `compare` or `states` drawing, shows nothing
+  and adds a `DRAFT_SLOT_UNKNOWN` warning to `diagnostics`. Content that overflows its box adds
+  `DRAFT_SLOT_OVERFLOW`, from a `ResizeObserver` on the content. Layout never reads it.
+- Targets are in drawing order, so Tab moves through bodies in the order a reader sees them.
 
 ### Input
 
-- By default a slot target has `pointer-events: none`. The pointer selects, drags and edits the
-  item underneath.
-- A host element marked `data-draft-input` takes its own pointer and keyboard input. Draftably starts
-  no gesture and runs no shortcut from inside it.
+- Slot content has `pointer-events: none` by default. The pointer selects, drags and edits the item
+  underneath.
+- An element marked `data-draft-input`, at any depth, takes its own pointer and keyboard input. A
+  page-level rule makes it `pointer-events: auto`. The editor's key handler (`mount.tsx:16-21`),
+  pointer handler and `sculptKey` check `composedPath()` for the marker and do nothing.
+- Wheel and pinch over marked content belong to the host. Over other slot content they move the
+  camera.
+- Focus that enters a body calls `reveal(id)`. When an item with focused content is removed, focus
+  moves to the canvas.
+- An editor that is destroyed, or that the user leaves with a pointer press outside every editor,
+  stops being the target of shortcuts. Today the active session outlives `destroy`
+  (`mount.tsx:57-61,77-84`), and a key after a click on page whitespace still reaches it
+  (`mount.tsx:20`).
+
+### Styles and theming
+
+- Each element type builds one constructable stylesheet per page and shares it across instances
+  (`adoptedStyleSheets`). Today each viewer adds its own `<style>` (`element.ts:60-61`), and the
+  editor build injects into `document.head` on import, with no nonce (`build-editor.ts:49-54`).
+  Constructable sheets need no nonce under a strict CSP; the CSP proof confirms this.
+- Color tokens move from `.draft-viewer` (`viewer.css:1-4`) to `:host`, so the host page's values
+  win. `:root[data-theme=x]` in the editor's CSS maps to `:host([data-theme=x])`. The docs publish
+  the list of `--draft-*` properties and a dark-mode example.
+- `@draftably/runtime/host.css` is one small file that every quick start imports. It holds the rules
+  that must work before the element is defined:
+  `draft-diagram:not(:defined) > [data-draft-slot], draft-editor:not(:defined) > [data-draft-slot]
+{ display: none }`, a reserved height for both elements, and
+  `draft-diagram [data-draft-input], draft-editor [data-draft-input] { pointer-events: auto }`.
 
 ### Lifecycle
 
 - One commit installs geometry, camera and anchors, then notifies listeners, then resolves
-  `update`. A superseded update installs nothing.
-- `anchors` fires after each commit, after a change in slotted children, and with `[]` before
+  `update` and `ready`. A superseded update installs nothing.
+- `anchors` fires after each commit, after a change in marked children, and with `[]` before
   `destroy` detaches the targets.
-- A host call made inside a listener runs after the current batch of listeners. A listener that
-  throws does not stop the others, as `viewer.ts:268-273` already does.
+- Handle calls are synchronous, also inside a listener. A listener that throws does not stop the
+  others, as `viewer.ts:268-273` already does. Camera events coalesce to one per animation frame.
 - `fit` and `reveal` before the viewport has a size return `pending` and run the latest call once
   it has one.
+- `destroy` cancels pending work (the first fit at `mount.tsx:56`, layout, workers it owns) and
+  is idempotent. A late result after `destroy` writes nothing.
 
 ### Server rendering and exports
 
 - The server sends the `svg` fallback, which draws titles. Slot content appears after the element
-  is defined.
-- `@draftably/runtime/viewer.css` hides slotted children until then:
-  `draft-diagram:not(:defined) > [slot], draft-editor:not(:defined) > [slot] { display: none }`.
-- Exports, the CLI and `renderSvg` never contain host content.
+  is defined. `host.css` hides it until then and reserves the element's height, so nothing shifts.
+- Exports, the CLI and `renderSvg` never contain host content. Print fits the diagram on
+  `beforeprint` and shows slot content as the page does.
 
 ### Layout input
 
@@ -331,18 +390,25 @@ A host puts content on an item with an ordinary child of the element:
 
 ### Framework packages
 
-Each package holds the same five things. Only the idiom differs.
+Each package holds the same pieces. Only the idiom differs. Each wrapper builds its event props by
+looping over one exported `HOST_EVENTS` list, so a new event adds no lines.
 
-| Piece                                                                                       | React       | Solid      | Vue                   | Svelte               |
-| ------------------------------------------------------------------------------------------- | ----------- | ---------- | --------------------- | -------------------- |
-| Component props: `source`, `state`, `label`, `outline`, `svg`, `options`                    | props       | props      | props                 | props                |
-| Element access                                                                              | `ref`       | `ref`      | `expose({ element })` | `bind:element` (new) |
-| Events: one typed `on` map, `{ camera, select, … }` → `draft-<name>` listeners, in one loop | `on`        | `on`       | `on`                  | `on`                 |
-| Children pass through into the element, for slots                                           | `children`  | `children` | default slot          | `children` snippet   |
-| Load the editor in the browser only                                                         | `useEffect` | `onMount`  | `onMounted`           | `$effect`            |
+| Piece                                               | React                     | Solid               | Vue                   | Svelte               |
+| --------------------------------------------------- | ------------------------- | ------------------- | --------------------- | -------------------- |
+| Props: `source`, `state`, `label`, `outline`, `svg` | props                     | props               | props                 | props                |
+| `options`, set as a property at creation            | prop                      | `prop:options`      | `.prop`               | property             |
+| Element access                                      | `ref`                     | `ref`               | `expose({ element })` | `bind:element` (new) |
+| Events from `HOST_EVENTS`                           | `onCamera`, `onSelect`, … | `onCamera`, …       | `@camera`, …          | `oncamera`, …        |
+| Slot content                                        | `children`                | `children`          | default slot          | `children` snippet   |
+| Load the editor in the browser only                 | `useEffect`               | `onMount`           | `onMounted`           | `$effect`            |
+| Types                                               | JSX `IntrinsicElements`   | `IntrinsicElements` | `GlobalComponents`    | generated `.d.ts`    |
 
-The existing `onUpdate` / `onChange` props stay as named shortcuts. A new event, method, option or
-slot kind adds no lines to any of them.
+- `@draftably/runtime` adds `HTMLElementEventMap` entries for every `draft-<type>` event, so plain
+  DOM `addEventListener` needs no cast.
+- Each wrapper re-exports `renderSvg`, so server rendering needs no second install and loads one
+  copy of the runtime.
+- Each wrapper's editor component returns the import promise to a `status` and shows the error in
+  the element when the import fails. Today the promise is dropped (`packages/react/src/editor.ts:29`).
 
 ### Invariants
 
@@ -350,11 +416,88 @@ slot kind adds no lines to any of them.
    viewer, the editor and `renderSvg`.
 2. One camera shape, one zoom range and one reason union for both handles. The editor converts
    `{ x, y, k }` at its edge and keeps it internal.
-3. A slot target keeps its identity while its item exists.
+3. A slot target keeps its identity while its item exists, and the anchor layer is never detached.
 4. Layout never measures host content.
 5. Without a host, every diagram draws correctly, with titles in place of bodies.
 6. No public type names `Diagram`, `DiagramSession`, `VisibleGraph`, Solid or font internals.
 7. A wrapper adds no behavior that plain DOM cannot reach.
+8. Draftably never writes to the host's DOM nodes.
+
+## First experience
+
+The goal is a first hour with no stall. Both reviews walked install, a diagram, the editor, a click,
+an own component on a node, a theme and a release in nine setups. The stalls, and the fix for each:
+
+| Stall                                                                                                               | Fix                                                                              |
+| ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Every framework guide links elsewhere; no page shows both components, events, slots and a theme                     | One complete typed recipe per framework, compiled from the packed packages in CI |
+| Vite dev needs `optimizeDeps.exclude` for the worker; the error is "Viewer render worker failed."                   | The error names the worker URL and the Vite fix; each recipe has the config      |
+| Slot content flashes before the element defines; the editor grows from 0 to 28rem                                   | `host.css` in every quick start; `status` attribute                              |
+| Events need casts in plain DOM and React                                                                            | `HTMLElementEventMap` entries; typed event props from `HOST_EVENTS`              |
+| Dark mode cannot reach the viewer                                                                                   | Tokens on `:host`; a published property list                                     |
+| A strict CSP blocks the editor's `<style>` and the `data:` fonts (`viewer.ts:377`)                                  | Constructable sheets; the docs state `font-src data:`, or a URL font option      |
+| Meta-frameworks (Next.js, SolidStart, Nuxt, SvelteKit) are not proven; `prove-frameworks.ts` builds plain Vite only | One proof app per meta-framework: server HTML, hydration, a slot, a click        |
+| `window.diagramStudio` is the app's, not the library's                                                              | The docs show `el.viewer`, `el.editor` and `diagnostics` for debugging           |
+
+End-user experience the plan now sets:
+
+- Keyboard: Tab moves through bodies in drawing order; Escape from marked content returns focus to
+  the canvas; shortcuts never fire while focus is in marked content.
+- Screen readers: a body never removes the item's accessible name. Today a viewer update rebuilds
+  the outline and drops a focused button (`viewer.ts:653`); the rebuild keeps focus by ID.
+- Touch: the viewer adds pinch zoom. Over a viewer, one finger scrolls the page until the user
+  activates the canvas (`touch-action: none` today, `viewer.css:45`).
+- Motion: camera animation follows `prefers-reduced-motion`, as `viewer.css:97` does now; host
+  content is the host's.
+- Empty, loading and error states have a default look and the `status` attribute for host styles.
+
+## Performance
+
+Measured today on the built packages (gzip -9). A viewer-only page loads 125 KB gz on the main
+thread, because `viewer.ts:1` imports `renderSvg` and with it the compiler, plus a 209 KB gz worker
+that holds a second copy of the compiler. Each `update()` stops the worker and starts a new one
+(`viewer.ts:545`). Each instance owns its worker and its font set (`viewer.ts:263`). The editor entry
+is 321 KB gz, with a 104 KB gz engine worker.
+
+**Runtime cost changes:** import the main-thread renderer only with `execution: { mode: 'main' }`; one render
+worker per page that stays up and ends on idle; one font registry per page; the viewport size from
+a `ResizeObserver`; shared constructable sheets.
+
+**Budgets.** Each proof records median and p95 on one named laptop, with a 4× CPU throttle for the
+cold numbers.
+
+| Area                                 | Budget                                                                    | Proof                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Main-thread JS, viewer-only page     | ≤ 40 KB gz before the first render request; no editor request             | Packed consumer build; network log                       |
+| Workers                              | 1 render worker per page, whatever the instance and update count          | Count workers on a page with 20 instances and 20 updates |
+| First diagram, 28-box bench file     | ≤ 1 s cold, ≤ 300 ms warm, from navigation to the committed update        | Playwright trace                                         |
+| Source update to commit, 28 boxes    | ≤ 200 ms                                                                  | `pnpm bench`                                             |
+| 20 instances                         | 1 stylesheet per element type; 1 font set; no long task over 200 ms       | `Performance.getMetrics`; long-task observer             |
+| Camera frame, 10 / 100 / 500 targets | ≤ 8 ms p95 at 500; 0 forced layouts                                       | Trace of pan and zoom; long-animation-frame observer     |
+| Target reconcile per update          | ≤ 10 ms at 500; no target re-created for an unchanged ID                  | `MutationObserver` count on the shadow root              |
+| `geometry()` at 200 nodes            | ≤ 1 ms; the same object for one revision                                  | Microbench; identity check                               |
+| `route` during a drag, `quick`       | ≤ 16 ms p95 at 100 nodes, ≤ 50 ms at 200; `auto` again on drop            | `bench:graph` with a drag mode                           |
+| Mount and destroy, 50 cycles         | Heap within 5 %; listeners, workers and `document.fonts.size` at baseline | CDP heap and listener counts                             |
+
+The budgets use 500 targets, because the runtime limit is 500 objects (`render.ts:19`).
+
+## Breaking changes
+
+The packages are 0.x. The whole stack ships as one minor release, with every break listed and
+before-and-after examples in the changelog. No shims. Runtime, editor and the four wrappers move to
+one changesets `fixed` group (`.changeset/config.json` has none today).
+
+| Change                                  | Before                                     | After                            |
+| --------------------------------------- | ------------------------------------------ | -------------------------------- |
+| `MountedEditor.session`                 | the internal store                         | removed; `EditorHandle`          |
+| Viewer camera event reason              | `'user' \| 'resize' \| 'fit' \| 'api'`     | adds `'restore'`                 |
+| `draft-change` detail                   | the source string (`editor/element.ts:53`) | `{ source }`                     |
+| `link` event                            | `preventDefault()` in the detail           | a cancelable `CustomEvent`       |
+| Editor zoom range                       | 0.08–4                                     | 0.02–8                           |
+| `viewer.on(...)` on a re-mounted viewer | listeners lost                             | listeners on the element survive |
+
+`render` keeps `value` and adds `geometry`; `itemactivate` keeps `revision`. The `onUpdate` and
+`onChange` wrapper props stay.
 
 ## What to do with each PR
 
@@ -362,53 +505,68 @@ slot kind adds no lines to any of them.
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | #498 canvas click activates | Merge as written.                                                                                                                                                                                                                                                                                                                                                               |
 | #499 memoize `viewerFrame`  | Merge as written. `createScene` runs inside the session's root. The gain is smaller than stated, because `Frame.tsx` and `TextHits.tsx` already memoize their reads.                                                                                                                                                                                                            |
-| #500 editor camera API      | Keep the change that sends every camera write through `setCamera` (`pointer.ts:189,469,477`). Rebuild the rest on the handle (step 2), folded into the existing `fitRects` and `revealObject`, with the viewer's camera shape.                                                                                                                                                  |
+| #500 editor camera API      | Keep the change that sends every camera write through `setCamera` (`pointer.ts:189,469,477`). Rebuild the rest on the handle (step 4), folded into the existing `fitRects` and `revealObject`, with the viewer's camera shape.                                                                                                                                                  |
 | #501 node content           | Hold `min-height` until three fixes land: diamonds return before the floor (`compile.ts:1027`), the second cells path drops it (`compile.ts:~3546`), and a resize drops it (`translate.ts:758`). Replace `nodeContent` with `body:` slots.                                                                                                                                      |
 | #502 Solid host entry       | Close. Land its scene fixes as one PR: `fill="none"` on lines, text anchors, `LinkMark` without `state/`, and `NodeView` and `Lifelines` importing from `runtime/svg-renderer`, not `cli/`. Do not export `measureText`: host bodies use host fonts and CSS, and it would freeze `model/fonts.ts`. For shapes drawn in Callsheet's own tree, point to the graph API's `layout`. |
 
 ## Order of work
 
-Each step is one PR in a stack.
+Each step is one PR in a stack. Each step ships its docs and its proof in the same PR. The stack
+releases once, as one minor version.
 
-1. Merge #498 and #499. Land the #502 scene fixes and the fixed `min-height`.
-2. **Element parity.** `options` on both elements, the no-change guard, `draft-<name>` re-dispatch,
-   listeners that survive a re-mount, Svelte `bind:element`, the generic `on` map in all four
-   wrappers. This fixes the parity gaps above on its own.
-3. **Spike** the three gate items. Done: all three passed (see Gate above).
+1. **Small fixes.** Merge #498 and #499. Land the #502 scene fixes and the fixed `min-height`.
+2. **Element parity.** `options` on both elements, mount once in a microtask, live and re-mount
+   fields, `draft-<name>` re-dispatch, listeners that survive a re-mount, `status`, the version
+   warning, Svelte `bind:element`, `HOST_EVENTS` event props in all four wrappers, the event-map
+   and JSX types. Also the six root-lookup fixes and their guard, and the active-session fix. This
+   fixes the parity gaps and two bugs on its own.
+3. **Runtime cost.** Lazy main-thread renderer, one worker per page, one font registry, the
+   viewport size from a `ResizeObserver`, shared constructable sheets, tokens on `:host`. Add the
+   budgets to `docs/CHECKS.md` and `pnpm bench`; every later step holds them.
 4. **One camera.** Shared `Camera`, zoom range, reasons, `fit(ids)`, `reveal`, `MoveResult`, one
    event per frame. Remove `MountedEditor.session` from the public type.
-5. **Geometry.** `geometry()` and `renderSvg(...).geometry` in the graph API's shapes, and
-   `layout({ draft })` in the graph API with the same result.
-6. **Events.** `select`, `hover`, `contextmenu` on both handles.
-7. **Slots.** The six root-lookup fixes and their guard, the editor's CSS in its shadow root, the
-   editor in a shadow root, the anchor layer in both elements, children pass-through in the
-   wrappers, `data-draft-input`, the `:not(:defined)` rule. The root-lookup fixes can land first, on
-   their own.
-8. **Flow edges.** Svelte Flow and Vue Flow edge components that match React's `DraftablyEdge`.
-9. Prove each framework with `scripts/prove-frameworks.ts`: a body slot that reads host context
-   and host CSS, survives a source update, and takes input with `data-draft-input`; two instances
-   with separate shortcuts; a failed update; the server fallback; a strict CSP.
+5. **Geometry and events.** `geometry()`, `renderSvg(...).geometry`, `ready`, `select`,
+   `contextmenu`, cancelable `link`.
+6. **Slots.** The editor in a shadow root with its own top handle layer, the anchor layer in both
+   elements with manual assignment, `data-draft-slot`, `data-draft-input`, level of detail, slot
+   diagnostics, `host.css`. Gate: the real viewer and editor pass round 2's checks through all four
+   wrappers.
+7. **Prove and document.** One recipe per framework, compiled from the packed packages. Proof apps
+   for Vite in each framework and for Next.js, SolidStart, Nuxt and SvelteKit: server HTML,
+   hydration, a body that reads host context and CSS, a caret that survives an update, a marked
+   button, two instances with separate shortcuts, a failed update, a strict CSP, 50 mount cycles.
+
+Deferred until a host asks: `hover` (it fires often), `layout({ draft })`, and Svelte Flow and Vue
+Flow edge components (not host-contract work; the docs show a ten-line `BaseEdge`).
 
 ## Considered and not chosen
 
 - **Callbacks in the renderer (plan v1).** The viewer's sanitizer strips `foreignObject`, and every
   update would destroy and re-mount the host content.
-- **A portal helper per framework (both reviews).** It works, but host CSS does not reach the
-  viewer's shadow root, and Svelte has no portal. It is the fallback if the spike fails.
-- **Occurrence keys for every drawn item (Sol).** Geometry carries `panels` instead. Slots stay off
-  in `compare` and `states`. Add keys only if a host needs content in those views.
+- **A portal helper per framework (first reviews).** It works, but host CSS does not reach the
+  viewer's shadow root, and Svelte has no portal.
+- **The `slot` attribute.** Svelte 5 rejects a dynamic `slot` through a wrapper component (round 2).
+  `data-draft-slot` with manual assignment works in every framework and keeps the host's DOM
+  untouched.
+- **Geometry per panel for `compare` and `states`.** Panels can hold different items and routes
+  (`svg-renderer.ts:592`), so offsets cannot describe them. `geometry()` returns `null` there, and
+  slots stay off. Add per-panel geometry if a host needs it.
+- **Occurrence keys for every drawn item (Sol).** Not needed while slots stay off in `compare` and
+  `states`.
 - **Named regions inside an item (Sol).** `body` fills the box. Add regions when a host needs content
   beside the title.
 - **`worldToClient` and `clientToWorld` helpers (Sol).** Overlay slots cover the first use. Add them
   when a host draws its own layer.
-- **A display list that each framework draws (both reviews).** A third renderer, and its drawings
+- **A display list that each framework draws (first reviews).** A third renderer, and its drawings
   could drift from the other two. A host that wants to draw uses the graph API, and draws its own
   look, not a copy of Draftably's.
+- **`options.theme`.** A dark host can set the `--draft-*` tokens. A diagram's own theme stays the
+  author's choice in the source, unless Callsheet needs to override it (question 6).
 
 ## Open questions for Callsheet
 
 1. Do you use the published `@draftably/editor`, or build from `src/` on your own Solid? #501 and
-   #502 only work as written in the second case.
+   #502 only work as written in the second case. Which `session` members do you call today?
 2. Why do you want the scene in your own tree: one Solid in the bundle, reactivity per node, or your
    own handlers on shapes? Slots and events cover the last two. If you want to draw every shape
    yourself, `layout` from `@draftably/runtime/graph` gives the boxes and lines with no Solid at
@@ -416,3 +574,7 @@ Each step is one PR in a stack.
 3. Must node bodies take input (buttons, fields)? `data-draft-input` assumes yes.
 4. Do you need selection sync both ways, or only events from Draftably?
 5. Can `min-height` live in the user's saved `.draft` file?
+6. In a dark host, must the diagram follow the host's theme, or is the source's theme correct?
+7. How many diagrams per page, and how many items with bodies, do you show? Which meta-framework,
+   and do you need phones?
+8. Must host content appear in print or in exports?

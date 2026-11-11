@@ -22,22 +22,27 @@ children. The packages differ only in that idiom.
   event. A wrapper adds no behavior that plain DOM cannot reach.
 - **One contract for the viewer and the editor.** Both use one camera shape (`centerX`, `centerY`,
   `zoom` in world units), one set of methods (`fit`, `reveal`, `geometry`), one zoom range and one
-  event-reason union. A host switches between them without new code.
-- **Host content goes in named slots.** A host puts content on an item by rendering an ordinary child,
-  such as `<div slot="body:api">`. Draftably keeps one element per anchored item across updates,
+  event-reason union. A capability that both have uses the same types and the same behavior. The
+  editor adds editing; it does not change what the shared parts mean.
+- **Host content goes in slots.** A host puts content on an item by rendering an ordinary child,
+  such as `<div data-draft-slot="body:api">`. The element assigns it with manual slot assignment and
+  never writes to the host's DOM. Draftably keeps one element per anchored item across updates,
   positions it and moves it with the camera. The child stays in the host's own tree, so it keeps the
   host's framework, context, reactivity and CSS. Content never goes into the string renderer.
 - **Two ways in, by who draws.** When Draftably draws, a host uses the elements and puts content in
-  slots. When the host draws, it uses the graph API (`@draftably/runtime/graph`): a graph or a
-  `.draft` source in, boxes and routed lines out. Neither path has framework code.
+  slots. When the host draws, it uses the graph API (`@draftably/runtime/graph`): a graph in,
+  boxes and routed lines out. Neither path has framework code.
 - **JSON at the boundary.** Geometry, diagnostics and the camera cross as plain data, in the shapes
   the graph API already publishes. Internal types, such as `Diagram` or the session store, stay
   internal.
 - **Layout never reads host content.** A host declares the room it needs in the source (for example
   `size … min-height=`). The CLI, exports, server rendering and a page without the host draw the
   same layout, with titles in place of host content. Exports never contain host content.
-- **Measure.** A new event, method, option or content kind adds no lines to any framework package.
-  If it does, the neutral layer is missing a piece.
+- **Measure.** A new event, method, option or content kind adds no lines to any framework package,
+  in its source or its types. Each wrapper loops over one exported list of events. If a feature
+  needs wrapper lines, the neutral layer is missing a piece.
+- **The first hour has no stall.** Each framework has one complete, typed recipe that CI compiles
+  from the packed packages. The performance budgets in the plan hold for every change.
 
 A framework-native entry, such as a Solid scene in the host's own tree, is an exception. Add one only
 when a host shows a need that slots, events and JSON geometry cannot meet, and build it on the
