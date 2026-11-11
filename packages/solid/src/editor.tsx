@@ -25,6 +25,8 @@ export interface DraftEditorProps extends HostEventProps {
   ref?: (element: DraftEditorElement) => void;
   class?: string;
   style?: JSX.CSSProperties | string;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: JSX.Element;
 }
 
 export function DraftEditor(props: DraftEditorProps) {
@@ -47,6 +49,8 @@ export function DraftEditor(props: DraftEditorProps) {
       prop:options={props.options ?? {}}
       class={props.class}
       style={props.style}
-    />
+    >
+      {props.children}
+    </draft-editor>
   );
 }

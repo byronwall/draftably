@@ -14,7 +14,7 @@ export const DraftEditor = defineComponent({
     options: { type: Object as PropType<EditorOptions>, default: undefined },
   },
   emits: hostEmits,
-  setup(props, { emit, expose }) {
+  setup(props, { emit, expose, slots }) {
     const el = ref<DraftEditorElement>();
     onMounted(() => {
       listenHostEvents(el.value!, emit as (name: string, detail: unknown) => void);
@@ -25,7 +25,12 @@ export const DraftEditor = defineComponent({
       });
     });
     expose({ element: el });
+    // The default slot holds slot content: children marked `data-draft-slot`.
     return () =>
-      h('draft-editor', { ref: el, source: props.source, '.options': props.options ?? {} });
+      h(
+        'draft-editor',
+        { ref: el, source: props.source, '.options': props.options ?? {} },
+        slots.default?.(),
+      );
   },
 });

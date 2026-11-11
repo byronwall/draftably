@@ -44,6 +44,8 @@ export interface DraftDiagramProps extends HostEventProps {
   ref?: (element: DraftDiagramElement) => void;
   class?: string;
   style?: JSX.CSSProperties | string;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: JSX.Element;
 }
 
 export function DraftDiagram(props: DraftDiagramProps) {
@@ -62,6 +64,7 @@ export function DraftDiagram(props: DraftDiagramProps) {
       style={props.style}
     >
       <Show when={props.svg}>{svg => <div innerHTML={svg()} />}</Show>
+      {props.children}
     </draft-diagram>
   );
 }

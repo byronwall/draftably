@@ -1,4 +1,4 @@
-import type { Component } from 'svelte';
+import type { Component, Snippet } from 'svelte';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
 import type { HostEventProps } from './events';
@@ -25,6 +25,8 @@ export interface DraftDiagramProps extends HostEventProps {
   element?: DraftDiagramElement;
   class?: string;
   style?: string;
+  /** Slot content: children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"`. */
+  children?: Snippet;
 }
 
 export const DraftDiagram: Component<DraftDiagramProps, Record<string, never>, 'element'>;
