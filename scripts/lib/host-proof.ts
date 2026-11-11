@@ -87,7 +87,7 @@ type Log = {
   diagnostics: { stale: boolean; codes: string[] }[];
   activate: string[];
 };
-type Hooks = { changes: string[][]; clicks: number };
+type Hooks = { changes: string[][]; clicks: number; menus: (string | null)[] };
 
 export async function proveHost(
   browser: Browser,
@@ -299,6 +299,47 @@ export async function proveHost(
           second.kept,
         'Delete in the second editor changes only the second editor',
         { changes: second.changes.map(c => c.length), kept: second.kept, other: second.selected },
+      );
+    });
+
+    await step('attributes and cancel', async () => {
+      const attrs = await ev(() => ({
+        viewer: document.querySelector('#p-viewer draft-diagram')?.getAttribute('data-proof'),
+        editors: [...document.querySelectorAll('#p-editors draft-editor')].map(el =>
+          el.getAttribute('data-proof'),
+        ),
+      }));
+      check(
+        attrs.viewer === 'viewer' && attrs.editors.every(a => a === 'editor'),
+        'other attributes reach both elements',
+        attrs,
+      );
+      await page.locator('#p-viewer').scrollIntoViewIfNeeded();
+      // A listener on the window runs after the element's own, so it sees whether the menu was
+      // cancelled.
+      await ev(() =>
+        window.addEventListener('contextmenu', e => {
+          (window as unknown as { __nativeMenu: boolean }).__nativeMenu = e.defaultPrevented;
+        }),
+      );
+      // A real right-click at the node's center, as a user makes it.
+      const box = await ev(() => {
+        const root = document.querySelector('#p-viewer draft-diagram')!.shadowRoot!;
+        return [...root.querySelectorAll('[data-id="web"]')]
+          .map(el => el.getBoundingClientRect())
+          .map(r => ({ x: r.x, y: r.y, width: r.width, height: r.height }))
+          .find(r => r.width > 0 && r.height > 0);
+      });
+      if (!box) throw Error('the viewer shows no node web');
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, { button: 'right' });
+      const menu = await ev(() => ({
+        menus: (window as unknown as { __proof: Hooks }).__proof.menus,
+        prevented: (window as unknown as { __nativeMenu?: boolean }).__nativeMenu,
+      }));
+      check(
+        menu.menus.at(-1) === 'web' && menu.prevented === true,
+        "an event prop's preventDefault() cancels the browser's menu",
+        menu,
       );
     });
 

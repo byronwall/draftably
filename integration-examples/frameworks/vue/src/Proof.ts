@@ -4,6 +4,7 @@ import { DraftDiagram } from '@draftably/vue';
 import { DraftEditor } from '@draftably/vue/editor';
 import {
   PROOF_OWNER,
+  cancelMenu,
   cycleSource,
   editorSources,
   exposeProof,
@@ -58,7 +59,14 @@ export const Proof = defineComponent({
         h('section', { id: 'p-viewer' }, [
           h(
             DraftDiagram,
-            { source: source.value, svg: props.svg, label: 'Proof', options },
+            {
+              source: source.value,
+              svg: props.svg,
+              label: 'Proof',
+              options,
+              'data-proof': 'viewer',
+              onContextmenu: cancelMenu,
+            },
             { default: () => [h(Card)] },
           ),
         ]),
@@ -70,6 +78,7 @@ export const Proof = defineComponent({
               key: i,
               source: s,
               class: 'proof-editor',
+              'data-proof': 'editor',
               onChange: ({ source: next }: { source: string }) =>
                 proofHooks().changes[i].push(next),
             }),

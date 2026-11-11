@@ -5,7 +5,9 @@
  *
  * - `#p-viewer`: a `DraftDiagram` with a body on `api`. The body is a component that reads
  *   `PROOF_OWNER` from the framework's context, and holds a marked button and a marked input.
- * - `#p-editors`: two `DraftEditor`s. Each reports its changes to `__proof.changes[i]`.
+ *   It passes `data-proof="viewer"` through and cancels its `contextmenu` with `cancelMenu`.
+ * - `#p-editors`: two `DraftEditor`s with `data-proof="editor"`. Each reports its changes to
+ *   `__proof.changes[i]`.
  * - `#p-cycle`: a `DraftDiagram` and a `DraftEditor` that `__proofToggle()` mounts and removes.
  * - `__proofUpdate()` and `__proofFail()` set the viewer's source; `__proofHydrated` is set
  *   once the framework has hydrated the server HTML.
@@ -26,8 +28,19 @@ export const editorSources = [
 export const cycleSource =
   'diagram "Cycle" version=1\nnode one "One"\nnode two "Two"\nedge e1 one -> two\n';
 
-/** Test hooks: editor changes and marked-button clicks. */
-export const proofHooks = () => (globalThis.__proof ??= { changes: [[], []], clicks: 0 });
+/** Test hooks: editor changes, marked-button clicks and the viewer's cancelled menus. */
+export const proofHooks = () =>
+  (globalThis.__proof ??= { changes: [[], []], clicks: 0, menus: [] });
+
+/**
+ * The viewer's `contextmenu` event prop: it cancels the browser's menu through the prop alone,
+ * with no listener on the element.
+ * @param {{ id: string | null; preventDefault(): void }} event
+ */
+export const cancelMenu = event => {
+  event.preventDefault();
+  proofHooks().menus.push(event.id);
+};
 
 /**
  * The viewer's options. `detail: 'full'` keeps the body at any zoom.

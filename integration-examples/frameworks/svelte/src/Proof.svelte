@@ -4,7 +4,7 @@
   import { DraftDiagram } from '@draftably/svelte';
   import { DraftEditor } from '@draftably/svelte/editor';
   import Card from './Card.svelte';
-  import { PROOF_OWNER, cycleSource, editorSources, exposeProof, proofBroken, proofHooks, proofSource, proofUpdated, viewerOptions } from '../../proof.js';
+  import { PROOF_OWNER, cancelMenu, cycleSource, editorSources, exposeProof, proofBroken, proofHooks, proofSource, proofUpdated, viewerOptions } from '../../proof.js';
 
   /** @type {{ svg?: string; nonce?: string }} */
   let { svg, nonce } = $props();
@@ -22,11 +22,11 @@
 </script>
 
 <section id="p-viewer">
-  <DraftDiagram {source} {svg} label="Proof" {options}><Card /></DraftDiagram>
+  <DraftDiagram {source} {svg} label="Proof" {options} data-proof="viewer" oncontextmenu={cancelMenu}><Card /></DraftDiagram>
 </section>
 <section id="p-editors">
   {#each editorSources as s, i (i)}
-    <DraftEditor source={s} class="proof-editor" onchange={({ source: next }) => proofHooks().changes[i].push(next)} />
+    <DraftEditor source={s} class="proof-editor" data-proof="editor" onchange={({ source: next }) => proofHooks().changes[i].push(next)} />
   {/each}
 </section>
 <section id="p-cycle">
