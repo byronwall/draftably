@@ -4,6 +4,7 @@ import { DraftDiagram } from '@draftably/solid';
 import { DraftEditor } from '@draftably/solid/editor';
 import {
   PROOF_OWNER,
+  cancelLink,
   cancelMenu,
   cycleSource,
   editorSources,
@@ -60,6 +61,7 @@ export function Proof(props: { svg?: string; nonce?: string }) {
           options={options}
           data-proof="viewer"
           onContextmenu={cancelMenu}
+          onLink={cancelLink}
         >
           <Card />
         </DraftDiagram>

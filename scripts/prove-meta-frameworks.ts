@@ -118,9 +118,18 @@ function prepare(name: string): { app: string; config: AppConfig } {
   });
   const wrapper = pack(config.framework);
   const manifest = JSON.parse(readFileSync(path.join(app, 'package.json'), 'utf8'));
-  manifest.dependencies[`@draftably/${config.framework}`] = `file:${wrapper}`;
-  manifest.dependencies['@draftably/runtime'] = `file:${runtime}`;
-  manifest.dependencies['@draftably/editor'] = `file:${editor}`;
+  // Point the app's own Draftably dependencies at the packs, and add none: a package the app
+  // imports but does not list fails to install here, as it would for a reader.
+  const packs: Record<string, string> = {
+    [`@draftably/${config.framework}`]: wrapper,
+    '@draftably/runtime': runtime,
+    '@draftably/editor': editor,
+  };
+  for (const name of Object.keys(manifest.dependencies))
+    if (name.startsWith('@draftably/')) {
+      if (!packs[name]) throw new Error(`${name}: no pack for this dependency`);
+      manifest.dependencies[name] = `file:${packs[name]}`;
+    }
   writeFileSync(path.join(app, 'package.json'), JSON.stringify(manifest, null, 2));
   writeFileSync(
     path.join(app, 'pnpm-workspace.yaml'),

@@ -5,7 +5,8 @@
  *
  * - `#p-viewer`: a `DraftDiagram` with a body on `api`. The body is a component that reads
  *   `PROOF_OWNER` from the framework's context, and holds a marked button and a marked input.
- *   It passes `data-proof="viewer"` through and cancels its `contextmenu` with `cancelMenu`.
+ *   It passes `data-proof="viewer"` through, and cancels its `contextmenu` and `link` with
+ *   `cancelMenu` and `cancelLink`.
  * - `#p-editors`: two `DraftEditor`s with `data-proof="editor"`. Each reports its changes to
  *   `__proof.changes[i]`.
  * - `#p-cycle`: a `DraftDiagram` and a `DraftEditor` that `__proofToggle()` mounts and removes.
@@ -15,7 +16,7 @@
 export const PROOF_OWNER = 'Proof host';
 
 export const proofSource =
-  'diagram "Proof" version=1\nnode web "Web"\nnode api "API"\nedge e1 web -> api "calls"\nsize api width=220 height=auto min-height=110\n';
+  'diagram "Proof" version=1\nnode web "Web" href="https://example.com/web"\nnode api "API"\nedge e1 web -> api "calls"\nsize api width=220 height=auto min-height=110\n';
 /** Adds a node, so every target must keep its identity while the drawing moves. */
 export const proofUpdated = `${proofSource}node cache "Cache"\nedge e2 api -> cache "reads"\n`;
 /** An unterminated label: the viewer keeps its last drawing and reports the error. */
@@ -30,7 +31,7 @@ export const cycleSource =
 
 /** Test hooks: editor changes, marked-button clicks and the viewer's cancelled menus. */
 export const proofHooks = () =>
-  (globalThis.__proof ??= { changes: [[], []], clicks: 0, menus: [] });
+  (globalThis.__proof ??= { changes: [[], []], clicks: 0, menus: [], links: [] });
 
 /**
  * The viewer's `contextmenu` event prop: it cancels the browser's menu through the prop alone,
@@ -43,13 +44,22 @@ export const cancelMenu = event => {
 };
 
 /**
+ * The viewer's `link` event prop: it keeps the page where it is through the prop alone.
+ * @param {{ href: string; preventDefault(): void }} event
+ */
+export const cancelLink = event => {
+  event.preventDefault();
+  proofHooks().links.push(event.href);
+};
+
+/**
  * The viewer's options. `detail: 'full'` keeps the body at any zoom.
  * @param {string | undefined} nonce
  * @returns {import('@draftably/runtime/viewer').ViewerOptions}
  */
 export const viewerOptions = nonce => ({
   detail: 'full',
-  ...(nonce ? { render: { styleNonce: nonce } } : {}),
+  render: { links: { mode: 'safe' }, ...(nonce ? { styleNonce: nonce } : {}) },
 });
 
 /** Exposes the page's actions to the driver. */
