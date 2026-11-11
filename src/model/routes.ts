@@ -106,6 +106,12 @@ const LINE_CLEARANCE = 8;
  */
 /** Gap a label keeps from a box when its line offers a spot that far away. */
 const BOX_CLEARANCE = 10;
+/**
+ * Cost of a spot beside a level line instead of on it. More than a crowding line or a nearby
+ * label costs, so a label stays on its own line, sliding along it first, and steps beside it only
+ * when another line would run through it there.
+ */
+const OFF_LINE = 2;
 
 function labelSpots(
   label: string,
@@ -190,7 +196,7 @@ function labelSpots(
           ...p,
           w,
           h,
-          cost: cost(p),
+          cost: cost(p) + (flat && offset ? OFF_LINE : 0),
           // Prefer long level segments, the middle of a segment, on the line, then above it.
           score: base - Math.abs(t - 0.5) * len * 0.5 - Math.abs(offset) * 3 + (offset < 0 ? 1 : 0),
         });
@@ -240,7 +246,9 @@ export function placeEdgeLabels(
     for (const s of spots) {
       const r = rectOf(i, s);
       if (others.some(o => overlaps(r, o, 6))) continue;
-      const c = s.cost + others.filter(o => overlaps(r, o, h)).length;
+      // A label within its height of another reads as one phrase with it: that costs as much as
+      // stepping off the line, so a close pair (a two-way link) sits beside its lines instead.
+      const c = s.cost + others.filter(o => overlaps(r, o, h)).length * OFF_LINE;
       if (c < bestCost || (c === bestCost && s.score > best!.score)) [best, bestCost] = [s, c];
     }
     if (best) {
