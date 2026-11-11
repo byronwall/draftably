@@ -1,7 +1,7 @@
 # API reference
 
-Every export, element property, option and handle method, in one place. The guides show each one
-in use.
+Every export, element property, option and handle method for embedding, in one place. The guides
+show each one in use, and the [Layout API](#layout-api) documents the graph functions.
 
 ## Packages
 
@@ -26,17 +26,17 @@ Each framework package re-exports `renderSvg` and `HOST_EVENTS`.
 
 ## Elements
 
-| Member           | On              | Meaning                                                                              |
-| ---------------- | --------------- | ------------------------------------------------------------------------------------ |
-| `source`         | both            | Attribute and property: the `.draft` text.                                           |
-| `label`          | `draft-diagram` | Attribute and property: the accessible name.                                         |
-| `state`          | `draft-diagram` | Attribute and property: an emphasis state to show.                                   |
-| `outline`        | `draft-diagram` | Attribute and property: `visible` or `hidden` (default).                             |
-| `options`        | both            | Property: [viewer options](#viewer-options) or [editor options](#mount-it-yourself). |
-| `status`         | both            | Attribute the element sets: `loading`, `ready` or `error`.                           |
-| `viewer`         | `draft-diagram` | The [viewer handle](#viewer-handle), after the mount.                                |
-| `editor`         | `draft-editor`  | The editor handle, after the mount: see [Mount it yourself](#mount-it-yourself).     |
-| `updateComplete` | `draft-diagram` | A promise for the latest update's result, or `undefined` with no source.             |
+| Member           | On              | Meaning                                                                           |
+| ---------------- | --------------- | --------------------------------------------------------------------------------- |
+| `source`         | both            | Attribute and property: the `.draft` text.                                        |
+| `label`          | `draft-diagram` | Attribute and property: the accessible name.                                      |
+| `state`          | `draft-diagram` | Attribute and property: an emphasis state to show.                                |
+| `outline`        | `draft-diagram` | Attribute and property: `visible` or `hidden` (default).                          |
+| `options`        | both            | Property: [viewer options](#viewer-options) or [editor options](#editor-options). |
+| `status`         | both            | Attribute the element sets: `loading`, `ready` or `error`.                        |
+| `viewer`         | `draft-diagram` | The [viewer handle](#viewer-handle), after the mount.                             |
+| `editor`         | `draft-editor`  | The [editor handle](#editor-handle), after the mount.                             |
+| `updateComplete` | `draft-diagram` | A promise for the latest update's result, or `undefined` with no source.          |
 
 `draft-<name>` events: see [Events and status](#events-and-status). The mount: see [How embedding
 works](#one-mount-in-a-microtask).
@@ -84,6 +84,38 @@ A new `execution` or `render.fonts` mounts a new viewer. Every other option appl
 | `focusItem(id)`                         | Focuses an item's outline button. `false` when the item does not exist.                                     |
 | `anchor(slots)`                         | Keeps a target for each slot, for content without the element. See [Content on nodes](#content-on-nodes).   |
 | `destroy()`                             | Removes the viewer and its listeners.                                                                       |
+
+## Editor options
+
+`mountEditor(host, options)` and `<draft-editor>`'s `options` property take these. The element
+sets `source` and `onChange` itself.
+
+| Option       | Default   | Meaning                                                                     |
+| ------------ | --------- | --------------------------------------------------------------------------- |
+| `source`     | none      | The `.draft` text to edit.                                                  |
+| `onChange`   | none      | Receives the new text after every kept edit, undo and redo.                 |
+| `storageKey` | none      | Keeps the diagram in browser storage under this key. A new key mounts anew. |
+| `openLink`   | a new tab | Opens an object's link.                                                     |
+| `confirm`    | none      | Asks before an action that replaces the diagram.                            |
+| `onInteract` | none      | Called when the user starts a gesture, so you can close your own menus.     |
+| `detail`     | `auto`    | `full` keeps slot bodies at every zoom; `auto` hides them below 0.4.        |
+
+## Editor handle
+
+`el.editor`, or the value `mountEditor` returns:
+
+| Member                                  | Meaning                                                                         |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| `source()`                              | The text the editor holds now.                                                  |
+| `update(source)`                        | Shows text the host changed. Resolves to `{ status, revision }` once drawn.     |
+| `ready`                                 | Resolves once the first text is drawn.                                          |
+| `geometry()`                            | Where each item is drawn, in the viewer's shapes. The same object per revision. |
+| `select(ids)`, `selection()`            | Sets or reads the selection. Unknown IDs are dropped; `[]` clears it.           |
+| `getCamera()`, `setCamera(camera)`      | The same camera as the viewer.                                                  |
+| `fit(ids?, opts?)`, `reveal(id, opts?)` | Moves the camera, as in the viewer.                                             |
+| `on(type, listener)`                    | Listens for an event; returns the function that stops it.                       |
+| `anchor(slots)`                         | Keeps a target for each slot, for content without the element.                  |
+| `destroy()`                             | Removes the editor. Safe to call twice.                                         |
 
 ## Mount a viewer yourself
 

@@ -130,5 +130,5 @@ reports a slot for an unknown ID or content larger than its node.
 
 `<draft-editor>` takes the same children. A node with a body keeps its ports, resize handles and
 selection ring above the body, so users still connect, resize and select it. A press on body text
-selects the node, as a press on its title does. Keys typed in `data-draft-input` content never reach the editor's
+selects the node and drags it, as a press on its title does. Keys typed in `data-draft-input` content never reach the editor's
 shortcuts, so typing **N** in a field adds no node.

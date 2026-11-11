@@ -64,17 +64,9 @@ diagram.viewer?.fit();
 
 ## Status
 
-Both elements reflect their state in a `status` attribute:
-
-| `status`     | When                                                                                                   |
-| ------------ | ------------------------------------------------------------------------------------------------------ |
-| `loading`    | From the mount until the first update ends.                                                            |
-| `ready`      | After the first drawing. It stays `ready` when a later update fails: the last drawing stays on screen. |
-| `error`      | The first update failed, or the element could not mount. A fallback stays and the element says why.    |
-| no attribute | `source` is empty.                                                                                     |
-
-Style each state with CSS, such as `draft-diagram[status='loading'] { opacity: 0.6; }`. Watch the
-`update` or `diagnostics` event for a later failure, not the attribute.
+Both elements reflect their state in a `status` attribute: `loading`, `ready` or `error`, and no
+attribute while `source` is empty. A later failed update keeps `ready` and the last drawing.
+[The status attribute](#the-status-attribute) has the full table.
 
 ## World units
 
@@ -82,7 +74,7 @@ Positions and sizes in `geometry()`, the camera and the `.draft` source share on
 the drawing at zoom 1. The camera is the world point at the center of the view and a zoom from
 0.02 to 8. [Camera and geometry](#camera-and-geometry) has the calls.
 
-## Content on nodes
+## Your content on a node
 
 Children marked `data-draft-slot="body:<id>"` or `"overlay:<id>"` go on a node. The element puts
 them in place without changing your DOM, so your framework keeps rendering them and your page CSS
@@ -90,6 +82,5 @@ styles them. [Content on nodes](#content-on-nodes) has the rules.
 
 ## Workers and fonts
 
-Diagrams compile in module workers, beside each package. All diagrams on a page share at most four
-render workers (one fewer than the device's cores), one stylesheet and one copy of each font. A
-worker stops after 30 seconds with no work. [Performance](#performance) gives the costs.
+Diagrams compile in module workers that load from beside each package, and every diagram on a
+page shares them. [Performance](#many-diagrams-on-a-page) gives the pool's size and costs.

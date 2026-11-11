@@ -3,11 +3,12 @@
 Show `.draft` diagrams in your own pages, apps and documentation. Every route draws with the same
 compiler and router as the CLI, so a diagram looks the same everywhere. First decide who draws.
 
-| Who draws          | You get                                                                        | Start with                        |
-| ------------------ | ------------------------------------------------------------------------------ | --------------------------------- |
-| Draftably          | Its look, pan and zoom, a keyboard outline, editing, and your content on nodes | [Quick start](#embed-quick-start) |
-| Your app           | Boxes and routed lines as data, drawn with your own components                 | [Your app draws](#your-app-draws) |
-| Nobody, at runtime | A static SVG or PNG from a build step or the CLI                               | [Render SVG](#render-svg)         |
+| Who draws          | Draftably gives                                                  | Your app draws                    | Start with                                   |
+| ------------------ | ---------------------------------------------------------------- | --------------------------------- | -------------------------------------------- |
+| Draftably          | The drawing, pan and zoom, a keyboard outline, editing           | Content on nodes, if you want any | [Quick start](#embed-quick-start)            |
+| Your app           | Layout and routed lines, as data                                 | Everything: boxes, lines, labels  | [Your app draws](#your-app-draws)            |
+| A flow library     | Layout for React Flow, Svelte Flow, elkjs, dagre or Cytoscape.js | Nodes, and lines from each `path` | [Drop in your graph layout](#layout-drop-in) |
+| Nobody, at runtime | A static SVG or PNG from a build step or the CLI                 | Nothing                           | [Render SVG](#render-svg)                    |
 
 ## Draftably draws
 
@@ -20,7 +21,7 @@ strict Content Security Policy.
 | Solid or SolidStart        | [Solid and SolidStart](#solid)           | `pnpm add @draftably/solid @draftably/runtime`  |
 | Vue or Nuxt                | [Vue and Nuxt](#vue)                     | `pnpm add @draftably/vue @draftably/runtime`    |
 | Svelte or SvelteKit        | [Svelte and SvelteKit](#svelte)          | `pnpm add @draftably/svelte @draftably/runtime` |
-| Plain HTML, Angular, a CDN | [Plain HTML and no bundler](#plain-html) | `pnpm add @draftably/runtime`                   |
+| Plain HTML, Angular, a CDN | [Plain HTML and no bundler](#plain-html) | `pnpm add @draftably/runtime @draftably/editor` |
 
 Add the [editor](#editor-component) to let users change a diagram. [How embedding
 works](#embed-concepts) explains the model that every framework shares.
@@ -30,7 +31,6 @@ works](#embed-concepts) explains the model that every framework shares.
 | You want to                                      | Read                                            | Install                                   |
 | ------------------------------------------------ | ----------------------------------------------- | ----------------------------------------- |
 | Replace Mermaid on a site you run                | [Switch from Mermaid](#from-mermaid)            | `pnpm add mermaid@npm:@draftably/mermaid` |
-| Lay out React Flow, elkjs, dagre or Cytoscape    | [Drop in your graph layout](#layout-drop-in)    | `@draftably/runtime`                      |
 | Turn `draft` fences into images                  | [Markdown](#markdown)                           | `@draftably/markdown`                     |
 | Add diagrams to Starlight, Docusaurus, VitePress | [Documentation sites](#documentation-sites)     | `@draftably/markdown`                     |
 | Draw diagrams in a GitHub README                 | [GitHub Action](#github-action)                 | A workflow step                           |

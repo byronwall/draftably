@@ -24,7 +24,7 @@ Find the symptom, then the fix. Most problems show up in the element's `status` 
 | `onSelect` fires with `ids: []` as the editor loads                                            | The editor reports its first, empty selection. Treat an empty selection as nothing selected.                                                                                                                                           |
 | `<draft-editor>` shows an error and `status="error"`                                           | The editor's script failed to load. The reason is in its `data-error` attribute, which `host.css` shows.                                                                                                                               |
 | An image URL returns 404                                                                       | Match `publicPath` to the served folder and the site's base path.                                                                                                                                                                      |
-| An edit to an included `.draft` file is not shown                                              | Follow your [site's recipe](#documentation-sites) for watching includes.                                                                                                                                                               |
+| An edit to an included `.draft` file is not shown                                              | Follow your [site's setup](#documentation-sites) for watching includes.                                                                                                                                                                |
 
 ## Debug a diagram
 

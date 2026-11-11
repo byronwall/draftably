@@ -72,14 +72,12 @@ line or with `theme drafting` draws dark, and a page that declares no scheme sta
 writes a `theme drafting` line, and the drawing still follows the page. `data-theme` sets the editor's controls, not
 the drawing.
 
-## Put your content on a node
+## Content on nodes in the editor
 
 The editor takes the same slot content as `<draft-diagram>`: children marked
-`data-draft-slot="body:<id>"` or `"overlay:<id>"`. See
-[Put your content on a node](#put-your-content-on-a-node). In the editor, a node with a body keeps
-its ports, resize handles and selection ring above the body, so users still connect, resize and
-select it. A press on body text selects and drags the node. Keys typed in `data-draft-input`
-content never reach the editor's shortcuts, so typing **N** in a field adds no node.
+`data-draft-slot="body:<id>"` or `"overlay:<id>"`. [Content on nodes](#content-on-nodes) has the
+rules, and [In the editor](#in-the-editor) says how a body works with selecting, connecting and
+resizing.
 
 ## In a framework
 

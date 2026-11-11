@@ -1,7 +1,7 @@
 # Quick start
 
-Put an interactive diagram in your app in four steps: install, import two files, add the element,
-and listen for one event.
+Put an interactive diagram in your app in four steps: install, import `host.css`, configure Vite
+5–7 if you use it, and add a diagram that listens for one event.
 
 ## Install
 

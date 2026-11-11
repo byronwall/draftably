@@ -31,22 +31,6 @@ no cast. `HOST_EVENTS` from `@draftably/runtime/host` lists every event name. A 
 component's `onLink` or `onContextmenu` prop receives the `detail` with the same
 `preventDefault()`, so you can cancel either one without a listener on the element.
 
-The element reflects its state in a `status` attribute. Style each state with ordinary CSS, such as
-`draft-diagram[status='loading'] { opacity: 0.6; }`.
-
-| `status`     | When                                                                                                   |
-| ------------ | ------------------------------------------------------------------------------------------------------ |
-| `loading`    | From the mount until the first update ends.                                                            |
-| `ready`      | After the first drawing. It stays `ready` when a later update fails: the last drawing stays on screen. |
-| `error`      | The first update failed, or the viewer could not mount. The fallback stays and the element shows why.  |
-| no attribute | `source` is empty.                                                                                     |
-
-A later failed update keeps `ready`, so watch `draft-update` or `draft-diagnostics` for it, not the
-attribute.
-
-If two copies of the runtime load on one page, the second copy warns once in the console and the
-first copy's element stays in use.
-
 ### Names in each framework
 
 An event prop is `on` and the event's lowercase name. Vue uses the name itself.
@@ -78,6 +62,24 @@ prop receives the `detail` with the same `preventDefault()`:
 
 `id` is `null` for a press on the background. Without a cancel, Draftably opens the link, and the
 browser shows its own menu.
+
+## The status attribute
+
+The element reflects its state in a `status` attribute. Style each state with ordinary CSS, such as
+`draft-diagram[status='loading'] { opacity: 0.6; }`.
+
+| `status`     | When                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| `loading`    | From the mount until the first update ends.                                                            |
+| `ready`      | After the first drawing. It stays `ready` when a later update fails: the last drawing stays on screen. |
+| `error`      | The first update failed, or the viewer could not mount. The fallback stays and the element shows why.  |
+| no attribute | `source` is empty.                                                                                     |
+
+A later failed update keeps `ready`, so watch `draft-update` or `draft-diagnostics` for it, not the
+attribute.
+
+If two copies of the runtime load on one page, the second copy warns once in the console and the
+first copy's element stays in use.
 
 ## Change the source
 

@@ -3,16 +3,11 @@
 Use Draftably's layout and routing, and draw every box and line with your own components. The
 [Layout API](#layout-api) returns plain data, so this path works in any framework, or none.
 
-## Who draws
+## When to draw it yourself
 
-| You want                                                          | Use                              | Draftably draws | Your app draws           |
-| ----------------------------------------------------------------- | -------------------------------- | --------------- | ------------------------ |
-| Draftably's look, pan and zoom, editing, and content on items     | the [elements](#embed-concepts)  | the diagram     | slot content             |
-| Your own look and components, with Draftably's layout and routing | [`layout`, `route`](#layout-api) | nothing         | everything               |
-| A flow library: React Flow, Svelte Flow, elkjs, dagre, Cytoscape  | the [drop-ins](#layout-drop-in)  | nothing         | nodes; lines from `path` |
-
-Choose the elements when you want editing, the camera and the keyboard outline: your app then
-draws nothing. Choose `layout` when your app already has a drawing of its own.
+Choose this path when your app already has a drawing of its own and wants Draftably's layout and
+routing under it. Choose the [elements](#embed-concepts) when you want editing, the camera and the
+keyboard outline: your app then draws nothing. [Choose how to embed](#embed) compares every route.
 
 ## Draw the result
 

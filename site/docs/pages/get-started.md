@@ -39,7 +39,7 @@ your work is kept.
   commit, check in CI and give to a coding agent. The editor saves each edit to the file. The
   steps are below.
 - **Show diagrams in your app.** The [embedding quick start](#embed-quick-start) puts a live
-  diagram in React, Solid, Vue, Svelte or plain HTML.
+  diagram on a page. Each framework has a complete app: [React](#react) · [Solid](#solid) · [Vue](#vue) · [Svelte](#svelte) · [Plain HTML](#plain-html).
 
 ## Install
 

@@ -23,9 +23,9 @@ Draftably turns short text into laid-out diagrams: write the boxes and lines, an
 
 - **Already use Mermaid?** [Switch from Mermaid](#from-mermaid) with one alias. Your page code
   stays the same.
-- **Show diagrams in an app.** The [quick start](#embed-quick-start) puts one on a page in four
-  steps, in React, Solid, Vue, Svelte or plain HTML. Add the [editor](#editor-component) to let
-  users change them.
+- **Show diagrams in an app.** The [quick start](#embed-quick-start) puts one on a page. Each
+  framework has a complete app: [React](#react) · [Solid](#solid) · [Vue](#vue) · [Svelte](#svelte) · [Plain HTML](#plain-html). Add the [editor](#editor-component) to let users
+  change them.
 - **Draw with your own components.** [Your app draws](#your-app-draws) uses Draftably's layout and
   routing under your own look.
 - **Draw diagrams in docs.** [Markdown](#markdown) fences, [documentation sites](#documentation-sites)
