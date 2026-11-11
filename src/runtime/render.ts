@@ -1,7 +1,8 @@
 import { renderSvg as writeSvg, SvgLimitError } from './svg-renderer';
 import { applyLinks, assertOptions, textLink } from './policy';
 import { runtimeVersion, fontMetricsVersion } from './version';
-import { resolveAppearance } from '../model/appearance';
+import { forScheme, resolveAppearance } from '../model/appearance';
+import { mergeSchemes } from './schemes';
 import { compile, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, parseModel, type Model } from '../dsl/syntax';
@@ -315,6 +316,12 @@ export async function renderWithScene(
     };
   let doc = projectScene(scene);
   if (options.state) doc = withState(doc, options.state);
+  // The dark drawing shares the light one's layout; only its theme differs. A file's own theme
+  // draws the same in both, so it needs no second drawing.
+  const scheme = options.colorScheme ?? 'light',
+    darkLook = scheme === 'light' ? doc.appearance : forScheme(doc.appearance, true),
+    both = scheme === 'auto' && darkLook !== doc.appearance;
+  if (scheme === 'dark') doc = { ...doc, appearance: darkLook };
   const linkDiagnostics = applyLinks(doc, options);
   const prefix = options.target === 'inline' ? options.idPrefix : 'draft';
   const esc = (value: string) =>
@@ -341,18 +348,26 @@ export async function renderWithScene(
   let svg: string;
   let drawn: { rects: Map<string, Rect>; routes: DrawnRoute[] } | undefined;
   try {
-    svg = writeSvg(doc, {
-      onDrawn: value => (drawn = value),
-      idPrefix: prefix,
-      fontCss,
-      title: options.title,
-      description: options.description,
-      styleNonce: options.styleNonce,
-      linkTarget: options.links?.mode === 'safe' ? (options.links.target ?? '_self') : '_self',
-      textHref: textLink(options),
-      metadata,
-      maxOutputBytes: limits.maxOutputBytes,
-    });
+    const write = (d: typeof doc) =>
+      writeSvg(d, {
+        onDrawn: value => (drawn = value),
+        idPrefix: prefix,
+        fontCss,
+        title: options.title,
+        description: options.description,
+        styleNonce: options.styleNonce,
+        linkTarget: options.links?.mode === 'safe' ? (options.links.target ?? '_self') : '_self',
+        textHref: textLink(options),
+        metadata,
+        maxOutputBytes: limits.maxOutputBytes,
+      });
+    svg = write(doc);
+    if (both) {
+      // Should the drawings ever differ in more than color, the page gets the light one.
+      svg = mergeSchemes(svg, write({ ...doc, appearance: darkLook })) ?? svg;
+      if (new TextEncoder().encode(svg).length > limits.maxOutputBytes)
+        throw new SvgLimitError(`The SVG is larger than ${limits.maxOutputBytes} bytes.`);
+    }
   } catch (error) {
     return {
       result:
