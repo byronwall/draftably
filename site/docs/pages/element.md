@@ -64,13 +64,13 @@ source.
 }
 ```
 
-With Vite, keep the runtime's worker beside its package during development:
+With Vite, keep the viewer's and the editor's workers beside their packages during development:
 
 ```ts
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 

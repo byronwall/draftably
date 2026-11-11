@@ -11,8 +11,8 @@ the component unmounts. Put as many diagrams on one page as you like. Each one o
 | Svelte 5        | `pnpm add @draftably/svelte`  | `<DraftDiagram {source} />`                    |
 | Angular, others | `pnpm add @draftably/runtime` | `<draft-diagram source="…">`, a custom element |
 
-With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime'] }` to `vite.config`, so the
-viewer's worker loads in development. Import `@draftably/runtime/host.css` once in your client
+With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to `vite.config`, so the
+viewer's and the editor's workers load in development. Import `@draftably/runtime/host.css` once in your client
 entry, in every framework: it holds the element's height and hides slot content until the element
 loads.
 
@@ -121,7 +121,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   // Keep the viewer's worker beside its package in development.
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 
@@ -215,7 +215,7 @@ import solid from 'vite-plugin-solid';
 export default defineConfig({
   // `ssr: true` compiles for both the browser and src/server.tsx.
   plugins: [solid({ ssr: true })],
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 
@@ -299,7 +299,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [vue()],
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 
@@ -383,7 +383,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [svelte()],
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 
@@ -488,7 +488,7 @@ nodes and route its lines with Draftably.
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 

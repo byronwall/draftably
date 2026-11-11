@@ -10,9 +10,11 @@
  * app, and each framework's section adds its own. The script then installs the packed packages,
  * type-checks (tsc, vue-tsc or svelte-check), builds, calls the recipe's server `render()`, and
  * loads the built page in Chromium: the diagram and the editor must reach `status="ready"`, the
- * body must be assigned, and the console must stay clean. Screenshots go to `tmp/recipes/`.
+ * body must be assigned, and the console must stay clean. Last, it starts `vite` in development
+ * and deletes a node in the editor: the dev server serves the packages through its dependency
+ * optimizer, so a worker URL that only a build resolves fails here. Screenshots go to `tmp/recipes/`.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -122,6 +124,64 @@ function serve(dir: string): Promise<{ url: string; close: () => void }> {
       resolve({ url: `http://127.0.0.1:${port}/`, close: () => server.close() });
     }),
   );
+}
+
+/** Starts `vite` in `app`, loads the page and deletes `db` in the editor. */
+async function dev(app: string): Promise<void> {
+  const proc = spawn('pnpm', ['exec', 'vite', '--host', '127.0.0.1', '--port', '0'], {
+    cwd: app,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let log = '';
+  try {
+    const url = await new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`vite did not start:\n${log}`)), 30000);
+      const read = (chunk: Buffer) => {
+        log += chunk.toString();
+        // eslint-disable-next-line no-control-regex
+        const found = log.replace(/\x1b\[[0-9;]*m/g, '').match(/http:\/\/127\.0\.0\.1:\d+\//);
+        if (found) {
+          clearTimeout(timer);
+          resolve(found[0]);
+        }
+      };
+      proc.stdout.on('data', read);
+      proc.stderr.on('data', read);
+      proc.on('exit', code => reject(new Error(`vite exited with ${code}:\n${log}`)));
+    });
+    const page = await browser.newPage({ viewport: { width: 1000, height: 900 } });
+    const errors: string[] = [];
+    page.on('console', m => m.type() === 'error' && errors.push(m.text()));
+    page.on('pageerror', e => errors.push(e.message));
+    page.on('response', r => r.status() >= 400 && errors.push(`${r.status()} ${r.url()}`));
+    await page.goto(url);
+    await page.waitForFunction(
+      () =>
+        document.querySelector('draft-diagram')?.getAttribute('status') === 'ready' &&
+        document.querySelector('draft-editor')?.getAttribute('status') === 'ready',
+      undefined,
+      { timeout: 30000 },
+    );
+    const node = page.locator('draft-editor [data-kind="node"][data-id="db"]');
+    await node.scrollIntoViewIfNeeded();
+    await node.click();
+    await page.keyboard.press('Delete');
+    await page.waitForTimeout(500);
+    const source = await page.evaluate(() =>
+      (
+        document.querySelector('draft-editor') as HTMLElement & { editor: { source(): string } }
+      ).editor.source(),
+    );
+    await page.close();
+    if (/node db /.test(source)) throw new Error('Delete in the editor did not remove db');
+    if (errors.length) throw new Error(`errors: ${errors.join(' | ')}`);
+  } catch (error) {
+    throw new Error(`${(error as Error).message}\nvite log:\n${log.slice(-1500)}`, {
+      cause: error,
+    });
+  } finally {
+    proc.kill();
+  }
 }
 
 rmSync(out, { recursive: true, force: true });
@@ -262,8 +322,11 @@ process.stdout.write(html);`,
     if (state.dark !== 'rgb(2, 6, 23)' || state.editorTheme !== 'dark')
       throw new Error(`the dark theme is not applied: ${JSON.stringify(state)}`);
     if (errors.length) throw new Error(`console errors: ${errors.join(' | ')}`);
+
+    step.now = 'dev server';
+    await dev(app);
     console.log(
-      `PASS ${name}: type check, build, server render, diagram and editor ready, body, dark theme`,
+      `PASS ${name}: type check, build, server render, diagram and editor ready, body, dark theme, dev server edit`,
     );
   } catch (error) {
     const e = error as Error & { stdout?: string; stderr?: string };

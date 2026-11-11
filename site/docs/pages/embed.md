@@ -33,7 +33,7 @@ import '@draftably/runtime/element';
 ```
 
 The element brings its own styles, worker, zoom controls and cleanup. Set its `source` property to
-redraw it. With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime'] }` to
+redraw it. With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
 `vite.config.ts`. [Element and viewer](#element) has the rest.
 
 ## An image for any host
@@ -51,9 +51,9 @@ PNG where a host blocks SVG.
 
 ## When something fails
 
-| Symptom                                           | Fix                                                                         |
-| ------------------------------------------------- | --------------------------------------------------------------------------- |
-| A worker error in Vite development                | Add `optimizeDeps: { exclude: ['@draftably/runtime'] }` to the Vite config. |
-| An image URL returns 404                          | Match `publicPath` to the served folder and the site's base path.           |
-| An edit to an included `.draft` file is not shown | Follow your [site's recipe](#documentation-sites) for watching includes.    |
-| A diagram does not draw                           | Read `updateComplete` or `result.diagnostics`, and keep a fallback image.   |
+| Symptom                                           | Fix                                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| A worker error in Vite development                | Add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to the Vite config. |
+| An image URL returns 404                          | Match `publicPath` to the served folder and the site's base path.                                |
+| An edit to an included `.draft` file is not shown | Follow your [site's recipe](#documentation-sites) for watching includes.                         |
+| A diagram does not draw                           | Read `updateComplete` or `result.diagnostics`, and keep a fallback image.                        |
