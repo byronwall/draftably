@@ -4,11 +4,11 @@
     "title": "Interactive links and emphasis states",
     "slug": "diagram-emphasis",
     "scale": "capability",
-    "current_phase": "plan",
-    "last_updated": "2026-10-26",
+    "current_phase": "reconciliation",
+    "last_updated": "2026-11-10",
     "summary": "Linked objects look and act like links in SVG and the viewer; named emphasis states in the .draft file draw one diagram several ways without moving anything.",
-    "status": "planned",
-    "next_action": "Start milestone 1: the viewer opens links."
+    "status": "completed",
+    "next_action": "Retired; see docs/initiative-history.json"
   },
   "artifacts": {
     "intent_brief": {
@@ -100,7 +100,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["memo"],
+        "sources": [
+          "memo"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -112,7 +114,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["memo"],
+        "sources": [
+          "memo"
+        ],
         "confidence": "high",
         "notes": "Drives the one-line-per-state choice."
       },
@@ -124,7 +128,10 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["memo", "status-code"],
+        "sources": [
+          "memo",
+          "status-code"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -136,7 +143,9 @@
         "importance": "supporting",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["memo"],
+        "sources": [
+          "memo"
+        ],
         "confidence": "medium",
         "notes": "Byron 'doesn't fully buy into' it; question 4 checks how far stepping goes."
       },
@@ -148,7 +157,9 @@
         "importance": "supporting",
         "status": "active",
         "time_horizon": "later",
-        "sources": ["memo"],
+        "sources": [
+          "memo"
+        ],
         "confidence": "medium",
         "notes": "Many states of one file are in scope; multi-file boards and overlays are below the cut line."
       },
@@ -160,7 +171,10 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["feel", "dsl-doc"],
+        "sources": [
+          "feel",
+          "dsl-doc"
+        ],
         "confidence": "high",
         "notes": "Same rule as change marks."
       },
@@ -172,7 +186,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -184,7 +200,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -196,7 +214,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -208,7 +228,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -220,7 +242,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -232,7 +256,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -244,7 +270,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -256,7 +284,9 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       },
@@ -268,12 +298,18 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": ["qa-2026-10-26"],
+        "sources": [
+          "qa-2026-10-26"
+        ],
         "confidence": "high",
         "notes": ""
       }
     ],
-    "themes": ["links", "emphasis states", "multi-state views"],
+    "themes": [
+      "links",
+      "emphasis states",
+      "multi-state views"
+    ],
     "conflicts": [],
     "human_questions": []
   },
@@ -287,7 +323,7 @@
     "status": "current",
     "appetite": "Six small PRs; no new renderer, no layout change, no walkthrough.",
     "problem": "Links are invisible and the viewer cannot open them; one diagram cannot show several emphases.",
-    "recommended_shape": "Viewer links with a corner mark, git-root resolution, editor deep links at path:line and a `config` line; check suggestions; static SVG links as a first guess; `state id \"label\" ids\u2026 rest=dim|plain` painted through the status layer; --state, --states panels, and top-center state chips.",
+    "recommended_shape": "Viewer links with a corner mark, git-root resolution, editor deep links at path:line and a `config` line; check suggestions; static SVG links as a first guess; `state id \"label\" ids… rest=dim|plain` painted through the status layer; --state, --states panels, and top-center state chips.",
     "dsl_options": [
       {
         "id": "A",
@@ -336,10 +372,10 @@
     "open_decisions": []
   },
   "implementation": {
-    "status": "planned",
+    "status": "completed",
     "repository_snapshot": {
-      "root": "diagram-studio",
-      "revision": "b39be5b",
+      "root": "/Users/byronwall/Projects/diagram-studio-worktrees/emphasis-m1-89eda9",
+      "revision": "f1c6a981",
       "worktree_status": "clean",
       "subsystems": [
         "src/dsl",
@@ -349,8 +385,14 @@
         "src/components/scene",
         "src/state"
       ],
-      "test_commands": ["pnpm check:fast", "pnpm check"],
-      "deployment_surfaces": ["CLI package", "viewer build"]
+      "test_commands": [
+        "pnpm check:fast",
+        "pnpm check"
+      ],
+      "deployment_surfaces": [
+        "CLI package",
+        "viewer build"
+      ]
     },
     "dependencies": [],
     "fast_local_loop": {
@@ -360,7 +402,7 @@
       {
         "id": "m1",
         "title": "The viewer opens links",
-        "status": "planned",
+        "status": "completed",
         "outcome": "A linked node shows a mark and opens its target from the viewer.",
         "dependencies_introduced": [],
         "proof": "Browser proof: URL, .draft and path:42 open; plain click selects",
@@ -374,12 +416,15 @@
         ],
         "valid_intermediate_state": "Viewer links work; SVG unchanged",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "Browser proof: URL, .draft and path:42 open; plain click selects"
+        "done_when": "Browser proof: URL, .draft and path:42 open; plain click selects",
+        "evidence": [
+          "PR 140; browser check 2026-11-10"
+        ]
       },
       {
         "id": "m2",
         "title": "The config line and agent help",
-        "status": "planned",
+        "status": "completed",
         "outcome": "Files set link-base and editor; check guides agents to correct paths.",
         "dependencies_introduced": [],
         "proof": "check warning with suggestion; config editor=cursor opens Cursor; skill test",
@@ -392,24 +437,33 @@
         ],
         "valid_intermediate_state": "Links configurable and checked",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "check warning with suggestion; config editor=cursor opens Cursor; skill test"
+        "done_when": "check warning with suggestion; config editor=cursor opens Cursor; skill test",
+        "evidence": [
+          "PR 141"
+        ]
       },
       {
         "id": "m3",
         "title": "Links in static SVG",
-        "status": "planned",
+        "status": "completed",
         "outcome": "Exported SVGs carry working links with mark, tooltip and hover.",
         "dependencies_introduced": [],
         "proof": "SVG beside its .draft opens links; viewer export keeps <a>",
-        "files": ["src/cli/svg.ts", "src/lib/svg-export.ts"],
+        "files": [
+          "src/cli/svg.ts",
+          "src/lib/svg-export.ts"
+        ],
         "valid_intermediate_state": "Links everywhere; no states yet",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "SVG beside its .draft opens links; viewer export keeps <a>"
+        "done_when": "SVG beside its .draft opens links; viewer export keeps <a>",
+        "evidence": [
+          "PR 142"
+        ]
       },
       {
         "id": "m4",
         "title": "Emphasis states and --state",
-        "status": "planned",
+        "status": "completed",
         "outcome": "A file declares states; the CLI draws one.",
         "dependencies_introduced": [],
         "proof": "canonicalGeometry equal across states; check flags bad IDs; rest=plain",
@@ -428,24 +482,35 @@
         ],
         "valid_intermediate_state": "States in CLI; viewer ignores them",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "canonicalGeometry equal across states; check flags bad IDs; rest=plain"
+        "done_when": "canonicalGeometry equal across states; check flags bad IDs; rest=plain",
+        "evidence": [
+          "PR 143"
+        ]
       },
       {
         "id": "m5",
         "title": "All states as small multiples",
-        "status": "planned",
+        "status": "completed",
         "outcome": "The CLI draws every state as aligned panels.",
         "dependencies_introduced": [],
         "proof": "pnpm shoot sheet of a three-state fixture",
-        "files": ["src/cli/svg.ts", "src/cli/main.ts", "docs/DSL.md", "skills/draftably/SKILL.md"],
+        "files": [
+          "src/cli/svg.ts",
+          "src/cli/main.ts",
+          "docs/DSL.md",
+          "skills/draftably/SKILL.md"
+        ],
         "valid_intermediate_state": "CLI multi-state output",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "pnpm shoot sheet of a three-state fixture"
+        "done_when": "pnpm shoot sheet of a three-state fixture",
+        "evidence": [
+          "PR 144"
+        ]
       },
       {
         "id": "m6",
         "title": "The viewer switches states",
-        "status": "planned",
+        "status": "completed",
         "outcome": "Top-center chips switch states and show a grid.",
         "dependencies_introduced": [],
         "proof": "No moves on switch; ?state= survives reload; edits save",
@@ -459,7 +524,10 @@
         ],
         "valid_intermediate_state": "Full feature",
         "rollback": "Revert the PR; files without the new lines draw as before.",
-        "done_when": "No moves on switch; ?state= survives reload; edits save"
+        "done_when": "No moves on switch; ?state= survives reload; edits save",
+        "evidence": [
+          "PR 145"
+        ]
       }
     ],
     "cut_line": [
@@ -476,7 +544,9 @@
     "overlapping_work": [
       {
         "pr": 28,
-        "files": ["src/components/scene/NodeView.tsx"],
+        "files": [
+          "src/components/scene/NodeView.tsx"
+        ],
         "note": "Title icons on the left; link mark goes top-right."
       }
     ]
@@ -491,13 +561,126 @@
       "date": "2026-10-26",
       "event": "Four question rounds answered; viewer links moved first; config line, check suggestions, rest=plain added; six milestones.",
       "status": "planned"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "Reconciled against main f1c6a981: all six milestones shipped 2026-10-27. Byron approved retirement.",
+      "status": "completed"
     }
   ],
-  "closure": null,
+  "closure": {
+    "summary": "All six milestones shipped on 2026-10-27: viewer links (PR 140), the config line and check suggestions (141), static SVG links (142), emphasis states and --state (143), --states panels (144) and the viewer state chips (145). PR 189 and PR 198 followed. Reconciled against main at f1c6a981.",
+    "reason": "Byron approved retirement on 2026-11-10 after a check found the work already shipped while the map still said planned.",
+    "evidence": [
+      "Browser check, 2026-11-10, pnpm draftably open on links.draft: URL mark opened the URL as written; the .draft mark opened examples/theme-proof.draft in the viewer; file marks resolve from the git root (aria-label 'Open <root>/src/model/status.ts:48 in the editor'); a body click selected compile without opening. The editor launch itself was not run.",
+      "tests/links.test.ts and tests/states.test.ts exist; 'never moves anything' covers equal geometry across states. Not rerun for this retirement beyond pnpm check:fast.",
+      "Code anchors: src/model/link.ts, src/state/links.ts, src/state/open-link.ts, src/components/scene/LinkMark.tsx, src/cli/links.ts linkNotes, src/runtime/svg-renderer.ts linked(), src/model/status.ts withState, src/state/session/emphasis.ts, src/components/canvas/StateBar.tsx, src/state/canvas-keyboard.ts."
+    ],
+    "reconciliation": [
+      {
+        "claim_id": "C1",
+        "disposition": "changed",
+        "evidence": "Links work in the viewer and static SVG. The planned hover chip became the ↗ mark as the open button (PR 140). PR 441 (issue 425) removed all hover tooltips, so neither the canvas nor exported SVG shows the target on hover; the Inspector shows it."
+      },
+      {
+        "claim_id": "C2",
+        "disposition": "delivered",
+        "evidence": "One href= per object and one state line per state; docs/DSL.md Emphasis states."
+      },
+      {
+        "claim_id": "C3",
+        "disposition": "delivered",
+        "evidence": "src/model/status.ts Spot focus|ring|dim and withState, PR 143."
+      },
+      {
+        "claim_id": "C4",
+        "disposition": "delivered",
+        "evidence": "No walkthrough, captions or playback exist."
+      },
+      {
+        "claim_id": "C5",
+        "disposition": "changed",
+        "evidence": "Single state, aligned panels (--states, PR 144) and the viewer Grid (PR 145) shipped. Multi-file boards and overlays were left below the cut line by Byron's decision and are a follow-up."
+      },
+      {
+        "claim_id": "C6",
+        "disposition": "delivered",
+        "evidence": "tests/states.test.ts 'never moves anything'."
+      },
+      {
+        "claim_id": "C7",
+        "disposition": "delivered",
+        "evidence": "src/state/open-link.ts; browser check 2026-11-10."
+      },
+      {
+        "claim_id": "C8",
+        "disposition": "delivered",
+        "evidence": "src/state/links.ts linkBase; src/server/file-session.ts root; config link-base, also as a URL (PR 198)."
+      },
+      {
+        "claim_id": "C9",
+        "disposition": "delivered",
+        "evidence": "src/dsl/syntax.ts config keys link-base, editor, strike-removed; PR 141."
+      },
+      {
+        "claim_id": "C10",
+        "disposition": "delivered",
+        "evidence": "src/cli/links.ts linkNotes: link-missing warning with a 'Did you mean' path; never rewrites."
+      },
+      {
+        "claim_id": "C11",
+        "disposition": "delivered",
+        "evidence": "staticHref writes file links relative to the .draft folder; PR 142."
+      },
+      {
+        "claim_id": "C12",
+        "disposition": "delivered",
+        "evidence": "LINK_MARK_PATH at the top-right (PR 189 for circle and diamond); EDITORS with vscode default."
+      },
+      {
+        "claim_id": "C13",
+        "disposition": "delivered",
+        "evidence": "rest=plain in docs/DSL.md and status.ts ring spot."
+      },
+      {
+        "claim_id": "C14",
+        "disposition": "delivered",
+        "evidence": "inspect --state, --states, error with compare (src/cli/main.ts); [ and ] step in canvas-keyboard.ts; ?state= in emphasis.ts."
+      },
+      {
+        "claim_id": "C15",
+        "disposition": "delivered",
+        "evidence": "Multi-file views were held back as decided; recorded as a follow-up."
+      }
+    ],
+    "documentation": [
+      "docs/DSL.md",
+      "docs/ARCHITECTURE.md",
+      "docs/CHECKS.md",
+      "skills/draftably/SKILL.md",
+      "tests/fixtures/links.draft"
+    ],
+    "follow_ups": [
+      "Several diagrams at once (multi-file sheets or boards, overlays) stays a later question from Byron's memo; start a new initiative when wanted.",
+      "Optional: show a link's target without hover tooltips (for example in the status bar on selection), since PR 441 removed the hover tooltip that named it.",
+      "Below the cut line, not planned: editing states in the viewer, captions and playback, tags, per-state camera, a project-wide config file, rewriting SVG links for any output folder."
+    ],
+    "retirement_files": [
+      "intent-brief.md",
+      "shape-brief.md",
+      "implementation-plan.md",
+      "initiative-map.json"
+    ]
+  },
   "question_rounds": [
     {
       "round": 1,
-      "asked": ["unlisted objects", "relative href target", "CLI default", "walkthrough"],
+      "asked": [
+        "unlisted objects",
+        "relative href target",
+        "CLI default",
+        "walkthrough"
+      ],
       "answers": [
         "fade",
         "file path -> VS Code; URLs as written; respect the agent's link",
@@ -507,7 +690,12 @@
     },
     {
       "round": 2,
-      "asked": ["link base", "agent help", "link cue", "multi-file"],
+      "asked": [
+        "link base",
+        "agent help",
+        "link cue",
+        "multi-file"
+      ],
       "answers": [
         "repo root, overridable by a config line",
         "best-guess suggestions, missing-file warning, line anchors, skill guidance",
@@ -517,7 +705,12 @@
     },
     {
       "round": 3,
-      "asked": ["root detection", "override form", "best guess", "static SVG links"],
+      "asked": [
+        "root detection",
+        "override form",
+        "best guess",
+        "static SVG links"
+      ],
       "answers": [
         "git root of the .draft",
         "`config ...` statement",
