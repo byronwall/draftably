@@ -42,9 +42,9 @@ jobs:
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm exec playwright-core install --with-deps chromium firefox webkit
       - run: pnpm site:build
-      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks
+      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks && pnpm prove:slots
       - run: pnpm prove:file
       - run: pnpm prove:layout
       - run: pnpm prove:site
@@ -56,6 +56,7 @@ jobs:
             tmp/proof/
             tmp/proof-layout/
             tmp/proof-site/
+            tmp/proof-slots/
 
   bench:
     # A report, not a gate: times CLI commands and viewer actions against the 200 ms interactive

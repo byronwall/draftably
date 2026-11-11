@@ -37,16 +37,25 @@ const big = [
   ...Array.from({ length: 199 }, (_, i) => `edge e${i} n${i} -> n${i + 1}`),
 ].join('\n');
 
+/** 250 nodes for the slot rows: a body and an overlay on each gives 500 targets. */
+const slotted = [
+  'diagram "Slots" version=1',
+  ...Array.from({ length: 250 }, (_, i) => `node n${i} "Node ${i}"`),
+].join('\n');
+
 /** A plain page: `n` elements of the 28-box file, each a label of its own. */
 const page = query => `<!doctype html><meta charset="utf-8"><title>host bench</title>
-<style>body{margin:0}draft-diagram{height:240px}</style>
+<link rel="stylesheet" href="/dist/host.css">
+<style>body{margin:0}draft-diagram{height:240px}.b{font:11px system-ui;background:#dbeafe;height:100%}</style>
 <style media="${new URLSearchParams(query).has('dark') ? 'all' : 'not all'}">
 body{background:#020617}draft-diagram{--draft-bg:#0f172a;--draft-ink:#e2e8f0;--draft-border:#334155;--draft-focus:#38bdf8}
 </style>
 <script type="module">
 const q = new URLSearchParams(${JSON.stringify(query)});
 const n = Number(q.get('n') ?? 1);
-const source = q.has('big') ? ${JSON.stringify(big)} : ${JSON.stringify(source)};
+const source = q.has('big') ? ${JSON.stringify(big)} : q.has('slots') ? ${JSON.stringify(slotted)} : ${JSON.stringify(source)};
+/** \`slots=N\`: N targets, a body and an overlay on each of the first N / 2 nodes. */
+const slots = Number(q.get('slots') ?? 0);
 window.__long = 0;
 new PerformanceObserver(list => {
   for (const e of list.getEntries()) window.__long = Math.max(window.__long, e.duration);
@@ -62,7 +71,16 @@ window.committed = el =>
   });
 window.add = () => {
   const el = document.createElement('draft-diagram');
-  if (q.has('big')) el.options = { execution: { mode: 'worker', timeoutMs: 120000 } };
+  if (q.has('big') || slots) el.options = { execution: { mode: 'worker', timeoutMs: 120000 } };
+  for (let i = 0; i < slots / 2; i++) {
+    const body = document.createElement('div'), badge = document.createElement('span');
+    body.className = 'b';
+    body.dataset.draftSlot = 'body:n' + i;
+    body.textContent = 'Card ' + i;
+    badge.dataset.draftSlot = 'overlay:n' + i;
+    badge.textContent = '•';
+    el.append(body, badge);
+  }
   el.source = source;
   document.body.append(el);
   return el;
@@ -255,6 +273,112 @@ const pool = Math.max(1, Math.min(4, os.cpus().length - 1));
     '≤ 1 ms; the same object for one revision',
     `${g.ms.toFixed(4)} ms per call; ${g.nodes} nodes; same object: ${g.same ? 'yes' : 'no'}`,
     g.ms <= 1 && g.same && g.nodes === 200,
+  );
+  await ctx.close();
+}
+
+// Camera frames with 10, 100 and 500 slot targets: one transform on the body layer and one
+// position per overlay, with no layout reads. The time includes the style and layout the move
+// causes (read once, in the measurement only). Forced layouts: layouts during 100 moves in one
+// task, less the layouts of an empty task (a frame can land between the CDP calls).
+for (const count of [10, 100, 500]) {
+  const { ctx, tab, cdp } = await open(`n=1&slots=${count}`);
+  await tab.evaluate(() => window.firstUpdates);
+  await cdp.send('Performance.enable');
+  const times = await tab.evaluate(async () => {
+    const el = document.querySelector('draft-diagram'),
+      v = el.viewer,
+      layer = el.shadowRoot.querySelector('.draft-anchors'),
+      c = v.getCamera(),
+      out = [];
+    for (let i = 0; i < 120; i++) {
+      await new Promise(r => requestAnimationFrame(r));
+      const t = performance.now();
+      v.setCamera({
+        centerX: c.centerX + i * 3,
+        centerY: c.centerY + i * 2,
+        zoom: c.zoom * (i % 2 ? 1 : 1 + (i % 30) / 100),
+      });
+      layer.getBoundingClientRect();
+      out.push(performance.now() - t);
+    }
+    return out;
+  });
+  const layouts = async moves => {
+    let least = Infinity;
+    for (let trial = 0; trial < 3; trial++) {
+      await tab.evaluate(() => document.body.getBoundingClientRect());
+      const count = async () =>
+        (await cdp.send('Performance.getMetrics')).metrics.find(m => m.name === 'LayoutCount')
+          .value;
+      const before = await count();
+      await tab.evaluate(moves => {
+        const v = document.querySelector('draft-diagram').viewer,
+          c = v.getCamera();
+        for (let i = 0; i < moves; i++)
+          v.setCamera({ ...c, centerX: c.centerX + i, zoom: c.zoom * (1 + (i % 7) / 50) });
+      }, moves);
+      least = Math.min(least, (await count()) - before);
+    }
+    return least;
+  };
+  const forced = Math.max(0, (await layouts(100)) - (await layouts(0)));
+  const targets = await tab.evaluate(
+    () =>
+      document.querySelector('draft-diagram').shadowRoot.querySelectorAll('[data-draft-anchor]')
+        .length,
+  );
+  row(
+    `Camera frame, ${count} targets`,
+    count === 500 ? '≤ 8 ms p95; 0 forced layouts' : '0 forced layouts',
+    `${targets} targets; ${median(times).toFixed(2)} ms median, ${p95(times).toFixed(2)} ms p95; ${forced} forced layouts`,
+    targets === count && forced === 0 && (count < 500 || p95(times) <= 8),
+  );
+  await ctx.close();
+}
+
+// Target reconcile at 500 targets: the pass each commit runs over every target, timed through
+// anchor() with the same slots (with the style and layout it causes); and a real source update
+// that moves every node, which must re-create no target.
+{
+  const { ctx, tab } = await open('n=1&slots=500');
+  await tab.evaluate(() => window.firstUpdates);
+  const r = await tab.evaluate(async () => {
+    const el = document.querySelector('draft-diagram'),
+      v = el.viewer,
+      layer = el.shadowRoot.querySelector('.draft-anchors'),
+      names = [...el.children].map(c => c.dataset.draftSlot),
+      times = [];
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => requestAnimationFrame(r));
+      const t = performance.now();
+      v.anchor(names);
+      layer.getBoundingClientRect();
+      times.push(performance.now() - t);
+    }
+    let created = 0,
+      removed = 0;
+    const watch = new MutationObserver(records => {
+      for (const m of records) {
+        for (const n of m.addedNodes) if (n.dataset?.draftAnchor) created++;
+        for (const n of m.removedNodes) if (n.dataset?.draftAnchor) removed++;
+      }
+    });
+    watch.observe(el.shadowRoot, { childList: true, subtree: true });
+    const before = v.geometry().nodes.n0;
+    const done = window.committed(el);
+    // A wider first node moves the nodes after it.
+    el.source = `${el.source}\nsize n0 width=320`;
+    await done;
+    await new Promise(r => requestAnimationFrame(r));
+    watch.disconnect();
+    return { times, created, removed, moved: v.geometry().nodes.n0.width !== before.width };
+  });
+  row(
+    'Target reconcile per update, 500 targets',
+    '≤ 10 ms; no target re-created for an unchanged ID',
+    `${median(r.times).toFixed(2)} ms median, ${p95(r.times).toFixed(2)} ms p95; update re-created ${r.created}, removed ${r.removed}${r.moved ? '' : ' (layout did not change)'}`,
+    median(r.times) <= 10 && r.created === 0 && r.removed === 0 && r.moved,
   );
   await ctx.close();
 }
