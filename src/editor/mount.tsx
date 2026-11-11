@@ -17,7 +17,7 @@ import {
   type FrameOptions,
   type MoveResult,
 } from '../runtime/camera';
-import { objectRect } from '../model/graph';
+import { isGroup, objectRect } from '../model/graph';
 import { Editor } from './Editor';
 import { sessions } from './internal';
 import '../styles/app.css';
@@ -167,8 +167,22 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     session.setCamera(next, reason);
     return 'moved';
   };
-  const boxOf = (id: string) =>
-    session.doc.layout.nodes[id] ? toBox(objectRect(session.doc, session.geometry, id)) : undefined;
+  /** Any item's box in world units: a node or group's rectangle, or an edge's route and label. */
+  const boxOf = (id: string) => {
+    if (session.doc.layout.nodes[id] || isGroup(session.doc, id))
+      return toBox(objectRect(session.doc, session.geometry, id));
+    const route = session.routesById().get(id);
+    if (!route) return undefined;
+    const boxes = route.points.map(p => ({ x: p.x, y: p.y, width: 0, height: 0 }));
+    if (route.label)
+      boxes.push({
+        x: route.label.x - route.label.w / 2,
+        y: route.label.y - route.label.h / 2,
+        width: route.label.w,
+        height: route.label.h,
+      });
+    return unionBox(boxes);
+  };
   // The first editor on a page is active until another one is used.
   if (!hasActiveSession()) setActiveSession(session);
 

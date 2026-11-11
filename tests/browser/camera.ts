@@ -4,11 +4,12 @@ import { mountEditor } from '../../src/editor';
 import { mountViewer } from '../../src/runtime/viewer';
 
 const source = `diagram "Camera" version=1
+group back "Back end"
 node web "Web"
 node api "API"
-node db "Database"
-node queue "Queue"
-node worker "Worker"
+node db "Database" in=back
+node queue "Queue" in=back
+node worker "Worker" in=back
 edge e1 web -> api
 edge e2 api -> db
 edge e3 api -> queue

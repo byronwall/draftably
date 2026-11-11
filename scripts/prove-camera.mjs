@@ -94,6 +94,30 @@ try {
     `${twice.join()}; viewer ${fmt(revealed.after[0])}, editor ${fmt(revealed.after[1])}`,
   );
 
+  // A group and an edge frame and reveal the same way in both.
+  for (const id of ['back', 'e4']) {
+    const both = await page.evaluate(id => {
+      const r = [window.viewer.fit([id]), window.editor.fit([id])];
+      return { r, viewer: window.viewer.getCamera(), editor: window.editor.getCamera() };
+    }, id);
+    check(
+      `fit(['${id}']) frames the same camera in both`,
+      both.r.every(x => x !== 'missing') && near(both.viewer, both.editor, 4),
+      `${both.r.join()}; viewer ${fmt(both.viewer)}, editor ${fmt(both.editor)}`,
+    );
+    const shown = await page.evaluate(id => {
+      for (const h of [window.viewer, window.editor])
+        h.setCamera({ centerX: -2000, centerY: -2000, zoom: 1 });
+      const r = [window.viewer.reveal(id), window.editor.reveal(id)];
+      return [...r, window.viewer.reveal(id), window.editor.reveal(id)];
+    }, id);
+    check(
+      `reveal('${id}') moves both, then holds`,
+      shown.join() === 'moved,moved,unchanged,unchanged',
+      shown.join(),
+    );
+  }
+
   const zooms = await page.evaluate(() =>
     [window.viewer, window.editor].map(h => {
       h.setCamera({ ...h.getCamera(), zoom: 0.03 });
