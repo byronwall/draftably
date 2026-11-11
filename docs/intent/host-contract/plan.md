@@ -492,12 +492,18 @@ one changesets `fixed` group (`.changeset/config.json` has none today).
 | `MountedEditor.session`                 | the internal store                         | removed; `EditorHandle`          |
 | Viewer camera event reason              | `'user' \| 'resize' \| 'fit' \| 'api'`     | adds `'restore'`                 |
 | `draft-change` detail                   | the source string (`editor/element.ts:53`) | `{ source }`                     |
+| Wrapper `onChange` argument             | the source string                          | `{ source }`, the event's detail |
 | `link` event                            | `preventDefault()` in the detail           | a cancelable `CustomEvent`       |
 | Editor zoom range                       | 0.08–4                                     | 0.02–8                           |
 | `viewer.on(...)` on a re-mounted viewer | listeners lost                             | listeners on the element survive |
 
 `render` keeps `value` and adds `geometry`; `itemactivate` keeps `revision`. The `onUpdate` and
 `onChange` wrapper props stay.
+
+**Changed in step 2.** The plan kept `onChange`, but every wrapper now builds its event props by
+looping over `HOST_EVENTS`, and each prop receives the event's `detail`. So `onChange` receives
+`{ source }`, not the string. A special case for one event would break the measure that a new event
+adds no wrapper lines.
 
 ## What to do with each PR
 

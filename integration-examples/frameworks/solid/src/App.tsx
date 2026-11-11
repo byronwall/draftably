@@ -1,7 +1,15 @@
 import { createSignal, For } from 'solid-js';
 import { DraftDiagram, type UpdateResult } from '@draftably/solid';
 import { DraftEditor } from '@draftably/solid/editor';
-import { recordChange, sources, updated } from '../../sources.js';
+import {
+  editorOptions,
+  recordChange,
+  recordElement,
+  recordEvent,
+  sources,
+  updated,
+  viewerOptions,
+} from '../../sources.js';
 
 const record = (result: UpdateResult) =>
   ((window as { __updates?: string[] }).__updates ??= []).push(result.status);
@@ -24,7 +32,10 @@ export function App(props: { svgs?: string[] }) {
             label={`Diagram ${i() + 1}`}
             outline={i() === 0 ? 'visible' : undefined}
             svg={props.svgs?.[i()]}
+            ref={el => i() === 0 && recordElement(el)}
+            options={i() === 1 ? viewerOptions() : undefined}
             onUpdate={record}
+            onCamera={() => recordEvent('camera')}
           />
         )}
       </For>
@@ -33,7 +44,8 @@ export function App(props: { svgs?: string[] }) {
           <DraftEditor
             source={source}
             style={{ height: '20rem' }}
-            onChange={next => {
+            options={editorOptions()}
+            onChange={({ source: next }) => {
               recordChange(i(), next);
               setEdits(all => all.map((s, j) => (j === i() ? next : s)));
             }}

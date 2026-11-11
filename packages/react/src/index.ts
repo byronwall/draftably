@@ -1,20 +1,17 @@
 'use client';
-/** `<DraftDiagram>` for React 19: the `<draft-diagram>` element with React props, a ref and `onUpdate`. */
+/** `<DraftDiagram>` for React 19: the `<draft-diagram>` element with React props, a ref and event props. */
 import '@draftably/runtime/element';
 import type { DraftDiagramElement } from '@draftably/runtime/element';
 import type { UpdateResult, ViewerOptions } from '@draftably/runtime/viewer';
-import {
-  createElement,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  type CSSProperties,
-} from 'react';
+import { createElement, forwardRef, useImperativeHandle, useRef, type CSSProperties } from 'react';
+import { useBeforeMount, useHostEvents, type HostEventProps } from './events.js';
 
+export { renderSvg } from '@draftably/runtime';
+export { HOST_EVENTS } from '@draftably/runtime/host';
+export type { HostEventName, HostEventProps, HostEvents } from './events.js';
 export type { DraftDiagramElement, UpdateResult, ViewerOptions };
 
-export interface DraftDiagramProps {
+export interface DraftDiagramProps extends HostEventProps {
   /** `.draft` source. A change redraws the diagram and keeps the camera. */
   source: string;
   /** A declared emphasis state to show. */
@@ -28,29 +25,21 @@ export interface DraftDiagramProps {
    * draws. Server rendering and readers without JavaScript see it.
    */
   svg?: string;
+  /** Every `mountViewer` option. A new object with the same values does nothing. */
   options?: ViewerOptions;
-  onUpdate?: (result: UpdateResult) => void;
   className?: string;
   style?: CSSProperties;
 }
 
 export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramProps>(
-  function DraftDiagram(
-    { source, state, label, outline, svg, options, onUpdate, className, style },
-    ref,
-  ) {
+  function DraftDiagram(props, ref) {
+    const { source, state, label, outline, svg, options, className, style } = props;
     const el = useRef<DraftDiagramElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
-    useEffect(() => {
-      if (el.current && options) el.current.options = options;
+    useBeforeMount(() => {
+      if (el.current) el.current.options = options ?? {};
     }, [options]);
-    useEffect(() => {
-      const node = el.current;
-      if (!node || !onUpdate) return;
-      const listen = (event: Event) => onUpdate((event as CustomEvent<UpdateResult>).detail);
-      node.addEventListener('draft-update', listen);
-      return () => node.removeEventListener('draft-update', listen);
-    }, [onUpdate]);
+    useHostEvents(el, props);
     return createElement(
       'draft-diagram',
       { ref: el, source, state: state ?? undefined, label, outline, className, style },

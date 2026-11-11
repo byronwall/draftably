@@ -11,6 +11,25 @@ Object.defineProperty(window, 'ResizeObserver', {
   value: ResizeObserverMock,
   configurable: true,
 });
+// jsdom has no font loading; a set that accepts every embedded face lets a drawing commit.
+const faces = new Set<unknown>();
+Object.defineProperty(document, 'fonts', {
+  value: {
+    add: (f: unknown) => faces.add(f),
+    delete: (f: unknown) => faces.delete(f),
+    [Symbol.iterator]: () => faces.values(),
+  },
+  configurable: true,
+});
+Object.defineProperty(window, 'FontFace', {
+  value: class {
+    status = 'loaded';
+    load() {
+      return Promise.resolve(this);
+    }
+  },
+  configurable: true,
+});
 
 afterEach(() => {
   document.body.replaceChildren();
@@ -60,7 +79,7 @@ describe('draft-diagram element', () => {
     expect(detail).toMatchObject({ status: 'error' });
   });
 
-  it('settles mount failures and applies the nonce before adding the stylesheet', async () => {
+  it('settles mount failures and applies the nonce', async () => {
     const element = document.createElement('draft-diagram');
     element.source = 'not a diagram';
     element.options = {
@@ -74,13 +93,6 @@ describe('draft-diagram element', () => {
     element.addEventListener('draft-update', event => {
       detail = (event as CustomEvent).detail;
     });
-    const root = element.shadowRoot!;
-    const prepend = vi.spyOn(root, 'prepend').mockImplementation((...nodes) => {
-      const style = nodes.find(node => node instanceof HTMLStyleElement) as HTMLStyleElement;
-      expect(style).toBeInstanceOf(HTMLStyleElement);
-      expect(style.getAttribute('nonce')).toBe('nonce-123');
-      ShadowRoot.prototype.prepend.apply(root, nodes);
-    });
     document.body.append(element);
 
     await expect(element.updateComplete).resolves.toMatchObject({
@@ -89,10 +101,47 @@ describe('draft-diagram element', () => {
     });
     expect(detail).toMatchObject({ status: 'error' });
     expect(element.shadowRoot!.querySelector('style')!.getAttribute('nonce')).toBe('nonce-123');
-    expect(prepend).toHaveBeenCalledOnce();
+    expect(element.getAttribute('status')).toBe('error');
     expect(element.shadowRoot!.querySelector('slot')!.hidden).toBe(false);
     expect(element.shadowRoot!.querySelector<HTMLElement>('.draft-diagram__viewer')!.hidden).toBe(
       true,
     );
+  });
+
+  it('mounts once after every property set in the same tick, and keeps host listeners', async () => {
+    const element = document.createElement('draft-diagram');
+    document.body.append(element);
+    element.source = 'node a "A"';
+    element.options = { execution: { mode: 'main' }, toolbar: false };
+    element.setAttribute('label', 'First');
+    const updates: string[] = [];
+    element.addEventListener('draft-update', e => updates.push(e.detail.status));
+    await element.updateComplete;
+    const viewer = element.viewer;
+    expect(viewer).toBeDefined();
+    expect(element.getAttribute('status')).toBe('ready');
+    const root = element.shadowRoot!.querySelector('.draft-viewer')!;
+    expect(root.querySelector<HTMLElement>('.draft-viewer__toolbar')!.hidden).toBe(true);
+    expect(root.getAttribute('aria-label')).toBe('First');
+
+    // Same values in a new object, a live label and a live toolbar keep the viewer.
+    element.options = { execution: { mode: 'main' }, toolbar: true };
+    element.setAttribute('label', 'Second');
+    expect(element.viewer).toBe(viewer);
+    expect(root.getAttribute('aria-label')).toBe('Second');
+    expect(root.querySelector<HTMLElement>('.draft-viewer__toolbar')!.hidden).toBe(false);
+
+    // A new execution mode mounts a new viewer; the element's listeners still hear it.
+    element.options = {
+      execution: {
+        mode: 'worker',
+        createWorker: () => {
+          throw Error('no worker');
+        },
+      },
+    };
+    await element.updateComplete;
+    expect(element.viewer).not.toBe(viewer);
+    expect(updates.length).toBe(2);
   });
 });

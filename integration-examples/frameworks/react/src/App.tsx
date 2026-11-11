@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { DraftDiagram, type UpdateResult } from '@draftably/react';
 import { DraftEditor } from '@draftably/react/editor';
-import { recordChange, sources, updated } from '../../sources.js';
+import {
+  editorOptions,
+  recordChange,
+  recordElement,
+  recordEvent,
+  sources,
+  updated,
+  viewerOptions,
+} from '../../sources.js';
 
 const record = (result: UpdateResult) =>
   ((window as { __updates?: string[] }).__updates ??= []).push(result.status);
@@ -24,7 +32,10 @@ export function App({ svgs = [] }: { svgs?: string[] }) {
           label={`Diagram ${i + 1}`}
           outline={i === 0 ? 'visible' : undefined}
           svg={svgs[i]}
+          ref={i === 0 ? recordElement : undefined}
+          options={i === 1 ? viewerOptions() : undefined}
           onUpdate={record}
+          onCamera={() => recordEvent('camera')}
         />
       ))}
       {edits.map((source, i) => (
@@ -32,7 +43,8 @@ export function App({ svgs = [] }: { svgs?: string[] }) {
           key={`editor-${i}`}
           source={source}
           style={{ height: '20rem' }}
-          onChange={next => {
+          options={editorOptions()}
+          onChange={({ source: next }) => {
             recordChange(i, next);
             setEdits(all => all.map((s, j) => (j === i ? next : s)));
           }}

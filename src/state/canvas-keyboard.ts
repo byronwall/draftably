@@ -12,6 +12,7 @@ import { parseTextId, removeText, TEXT_NAMES } from './session/canvas-text';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
 import { activeSession } from './active-session';
+import { eventTarget } from './dom-root';
 
 export const isEditable = (el: EventTarget | null) =>
   el instanceof Element && el.matches('input,textarea,select,[contenteditable=true]');
@@ -63,7 +64,7 @@ export function handleCanvasKey(e: KeyboardEvent, closeMenu?: () => boolean): bo
   if (e.isComposing || activeSession().sculptKey(e)) return true;
   const mod = e.ctrlKey || e.metaKey,
     key = shortcutKey(e),
-    target = e.target as Element;
+    target = eventTarget(e) as Element;
 
   if (e.key === 'Escape') {
     if (activeSession().layoutBusy())
@@ -108,7 +109,7 @@ export function handleCanvasKey(e: KeyboardEvent, closeMenu?: () => boolean): bo
     return true;
   }
 
-  const onCanvas = target === document.querySelector('.canvas') || !!target.closest?.('[data-id]');
+  const onCanvas = !!target.matches?.('.canvas') || !!target.closest?.('[data-id]');
   const focusedId = focusedObject(target);
 
   // Keep from anywhere, including the Arrange button that started the preview.
@@ -167,7 +168,11 @@ export function handleCanvasKey(e: KeyboardEvent, closeMenu?: () => boolean): bo
       if (next) {
         e.preventDefault();
         activeSession().setSelection([next]);
-        (document.querySelector(`[data-id="${CSS.escape(next)}"]`) as SVGElement | null)?.focus({
+        (
+          target
+            .closest?.('.canvas')
+            ?.querySelector(`[data-id="${CSS.escape(next)}"]`) as SVGElement | null
+        )?.focus({
           preventScroll: true,
         });
       }
@@ -240,7 +245,7 @@ export function handleKeyUp(e: KeyboardEvent) {
 }
 
 export function copyShapes(e: ClipboardEvent) {
-  if (isEditable(e.target) || !activeSession().selection().size) return;
+  if (isEditable(eventTarget(e)) || !activeSession().selection().size) return;
   const part = activeSession().copySelection();
   e.clipboardData?.setData('text/plain', JSON.stringify(part));
   e.preventDefault();
@@ -248,7 +253,7 @@ export function copyShapes(e: ClipboardEvent) {
 
 /** Paste copied shapes: from the clipboard text, or the session's own copy when it is empty. */
 export function pasteShapes(e: ClipboardEvent) {
-  if (isEditable(e.target) || !e.clipboardData) return;
+  if (isEditable(eventTarget(e)) || !e.clipboardData) return;
   const text = e.clipboardData.getData('text/plain').trim();
   try {
     if (text.startsWith('{')) {

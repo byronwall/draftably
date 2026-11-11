@@ -17,6 +17,9 @@
     sans-serif;
   overflow: hidden;
 }
+.draft-viewer__toolbar[hidden] {
+  display: none;
+}
 .draft-viewer__toolbar {
   display: flex;
   flex-wrap: wrap;

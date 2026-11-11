@@ -1,25 +1,25 @@
-<!-- `<DraftDiagram>` for Svelte 5: the `<draft-diagram>` element with Svelte props and `onupdate`. -->
+<!-- `<DraftDiagram>` for Svelte 5: the `<draft-diagram>` element with Svelte props and event props. -->
 <script>
   import '@draftably/runtime/element';
+  import { listenHostEvents } from './events.js';
 
   /** @type {import('./index').DraftDiagramProps} */
-  let { source, state: emphasis = null, label, outline, svg, options, onupdate, class: className, style } = $props();
-  /** @type {import('@draftably/runtime/element').DraftDiagramElement | undefined} */
-  let el = $state();
+  let {
+    source,
+    state: emphasis = null,
+    label,
+    outline,
+    svg,
+    options = {},
+    element = $bindable(),
+    class: className,
+    style,
+    ...events
+  } = $props();
 
-  $effect(() => {
-    if (el && options) el.options = options;
-  });
-
-  $effect(() => {
-    if (!el || !onupdate) return;
-    const node = el;
-    const listen = event => onupdate(event.detail);
-    node.addEventListener('draft-update', listen);
-    return () => node.removeEventListener('draft-update', listen);
-  });
+  $effect(() => listenHostEvents(element, events));
 </script>
 
-<draft-diagram bind:this={el} {source} state={emphasis ?? undefined} {label} {outline} class={className} {style}>
+<draft-diagram bind:this={element} {source} state={emphasis ?? undefined} {label} {outline} {options} class={className} {style}>
   {#if svg}<div>{@html svg}</div>{/if}
 </draft-diagram>
