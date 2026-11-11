@@ -13,6 +13,6 @@ and hides slot content until the element loads, and it lets marked content take 
 Vite 5–7, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
 `vite.config`.
 
-The [Svelte recipe](https://draftably.dev/docs/frameworks#svelte) is a complete, type-checked app: both
-components, an event, your content on a node, a dark frame and server rendering with the `svg`
-prop. CI compiles it from the packed packages.
+[Svelte and SvelteKit](https://draftably.dev/docs/svelte) has a complete, type-checked app: both components,
+an event, your content on a node, a dark page and server rendering with the `svg` prop. CI
+compiles it from the packed packages. The same page has the SvelteKit server and strict-CSP code.

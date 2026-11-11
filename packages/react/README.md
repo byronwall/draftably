@@ -13,9 +13,9 @@ and hides slot content until the element loads, and it lets marked content take 
 Vite 5–7, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
 `vite.config`.
 
-The [React recipe](https://draftably.dev/docs/frameworks#react) is a complete, type-checked app: both
-components, an event, your content on a node, a dark frame and server rendering with the `svg`
-prop. CI compiles it from the packed packages.
+[React and Next.js](https://draftably.dev/docs/react) has a complete, type-checked app: both components,
+an event, your content on a node, a dark page and server rendering with the `svg` prop. CI
+compiles it from the packed packages. The same page has the Next.js server and strict-CSP code.
 
 ## React Flow
 
