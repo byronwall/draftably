@@ -17,11 +17,10 @@ To write a `.draft` file, read the agent skill first. It has the syntax, the lay
 
 ## Integrations
 
-- [Choose an integration](https://draftably.dev/docs/embed/): static images, interactive viewers, editors and Markdown
 - [Render SVG](https://draftably.dev/docs/render-svg/): the portable runtime in a script or build
 - [Choose how to embed](https://draftably.dev/docs/embed/): React, Solid, Vue, Svelte and plain HTML
 - [Markdown](https://draftably.dev/docs/markdown/): remark and markdown-it adapters, includes and generated assets
-- [Documentation sites](https://draftably.dev/docs/documentation-sites/): Starlight, Docusaurus and VitePress recipes
+- [Documentation sites](https://draftably.dev/docs/documentation-sites/): Starlight, Docusaurus and VitePress setup
 - [Support](https://draftably.dev/docs/support/): package requirements and tested integrations
 
 ## Optional
