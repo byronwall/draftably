@@ -35,8 +35,8 @@ event's `detail`. [Events and status](#events-and-status) lists every event.
 | `options`         | Every `mountViewer` option, as a property. See [API reference](#viewer-options).       |
 
 On the element, `source`, `label`, `state` and `outline` are attributes and properties; `options`
-is a property only. Any other attribute, such as `data-theme`, `id`, `class` or `aria-*`, goes to
-the element unchanged.
+is a property only. Any other attribute, such as `data-theme`, `id` or `aria-*`, goes to the
+element unchanged, and so does your framework's class: `className` in React, `class` in the others.
 
 ## One mount, in a microtask
 

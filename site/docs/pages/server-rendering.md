@@ -23,8 +23,8 @@ Each framework page shows the call in a Vite app and in its meta-framework:
 The editor loads in the browser only, after the component mounts. Its element renders on the
 server as an empty, sized box.
 
-Draftably's tests build an app in each of these four frameworks for production and check server
-HTML, hydration that keeps the server's nodes, content on a node, a caret across a source update,
+Before each release, `pnpm prove:meta` in Draftably's repository builds an app in each of these
+four frameworks for production. It is not part of CI. It checks server HTML, hydration that keeps the server's nodes, content on a node, a caret across a source update,
 two editors with separate shortcuts, a failed update, the strict CSP below, and 50 mount cycles.
 
 ## Keep an image as a fallback
