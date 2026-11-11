@@ -231,7 +231,7 @@ export function startEngineTask<T extends EngineTask>(
       e.preventDefault();
       cleanup();
       console.warn(
-        `[engine] Worker failed to start; computing on the main thread. With Vite, add optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] } to vite.config.`,
+        `[engine] Worker failed to start; computing on the main thread. With Vite 5–7, add optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] } to vite.config.`,
         e.message,
       );
       fallback().then(resolve, reject);

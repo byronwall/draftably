@@ -11,8 +11,9 @@ the component unmounts. Put as many diagrams on one page as you like. Each one o
 | Svelte 5        | `pnpm add @draftably/svelte`  | `<DraftDiagram {source} />`                    |
 | Angular, others | `pnpm add @draftably/runtime` | `<draft-diagram source="…">`, a custom element |
 
-With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to `vite.config`, so the
-viewer's and the editor's workers load in development. Import `@draftably/runtime/host.css` once in your client
+With Vite 5–7, add `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }` to
+`vite.config`, so the viewer's and the editor's workers load in development. Vite 8 needs no
+setting. Import `@draftably/runtime/host.css` once in your client
 entry, in every framework: it holds the element's height and hides slot content until the element
 loads.
 
@@ -143,8 +144,12 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
-  // Keep the viewer's worker beside its package in development.
-  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
+  optimizeDeps: {
+    // Vite 5–7 need this, so the workers load in development. Vite 8 works without it.
+    exclude: ['@draftably/runtime', '@draftably/editor'],
+    // Optimize both entries at start, so adding the editor later loads one copy of React.
+    include: ['@draftably/react', '@draftably/react/editor'],
+  },
 });
 ```
 
@@ -238,6 +243,7 @@ import solid from 'vite-plugin-solid';
 export default defineConfig({
   // `ssr: true` compiles for both the browser and src/server.tsx.
   plugins: [solid({ ssr: true })],
+  // Vite 5–7 need this, so the workers load in development. Vite 8 works without it.
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
@@ -322,6 +328,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [vue()],
+  // Vite 5–7 need this, so the workers load in development. Vite 8 works without it.
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
@@ -406,6 +413,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [svelte()],
+  // Vite 5–7 need this, so the workers load in development. Vite 8 works without it.
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
@@ -509,6 +517,7 @@ nodes and route its lines with Draftably.
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  // Vite 5–7 need this, so the workers load in development. Vite 8 works without it.
   optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
