@@ -234,16 +234,17 @@ describe('independent viewer lifecycle', () => {
 
   it('times a job from dispatch, so a job that waited in the queue still draws', async () => {
     workerMode = 'hold';
-    const options = { execution: { mode: 'worker' as const, timeoutMs: 40 } };
+    // Wide margins: a slow CI runner adds tens of milliseconds to each wait.
+    const options = { execution: { mode: 'worker' as const, timeoutMs: 400 } };
     const viewers = [0, 1, 2].map(() => mountViewer(host(), options));
     const results = viewers.map(v => v.update(source));
     expect(jobs).toHaveLength(2);
-    await new Promise(r => setTimeout(r, 25));
+    await new Promise(r => setTimeout(r, 250));
     await reply(jobs[0]);
     await reply(jobs[1]);
     expect(jobs).toHaveLength(3);
-    // The third job waited 25 ms and runs 25 more: past 40 ms in all, within it once dispatched.
-    await new Promise(r => setTimeout(r, 25));
+    // The third job waited 250 ms and runs 250 more: past 400 ms in all, within it once dispatched.
+    await new Promise(r => setTimeout(r, 250));
     await reply(jobs[2]);
     for (const result of results)
       await expect(result).resolves.toMatchObject({ status: 'committed' });
