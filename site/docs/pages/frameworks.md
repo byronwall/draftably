@@ -60,7 +60,8 @@ element's own listeners would. See [Events and status](#events-and-status).
 />
 ```
 
-Any other attribute, such as `data-theme`, `id`, `class` or `aria-*`, goes to the element.
+Any other attribute, such as `data-theme`, `id` or `aria-*`, goes to the element, and so does your
+framework's class: `className` in React, `class` in the others.
 
 `onUpdate` receives an object whose `status` is `committed`, `error` or a cancellation status. On
 an initial error, the component keeps its `svg` fallback visible. A later error keeps the last
