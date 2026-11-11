@@ -1,5 +1,22 @@
 # draftably
 
+## 0.13.0
+
+### Minor Changes
+
+- f98d285: Draw group members that inherit the group's color as pale cards, and key their legend swatch to match
+- e539e30: Draw the lines after a node title's first line break as a smaller, muted detail line
+- 7348833: Give the boxes in a column layout the widest one's width, so the column's edges line up
+- e46dd29: `size id width= height=auto min-height=N` puts a floor under a node's auto height, for a host that puts more than the title in a node. It works for boxes, diamonds and `cells` members, and an editor resize that changes only the width keeps `height=auto` and the floor. The editor's scene draws its lines unfilled and its labels centred without the editor's stylesheet, and its link marks no longer load the editor's state.
+
+### Patch Changes
+
+- 34c0845: Keep near-fitting group titles on one line, and stop a dashed side input from ranking a box a solid edge already places
+- c0f7e7c: Nest the ports of lines that share a box side, so a fan in or out does not cross itself
+- 244f9e3: Correct the SVG link docs: exported links show no tooltip
+- 0f0df75: Draw notes and sequence panels on a dark panel in dark themes, so their text reads
+- 54a5098: Keep each edge label on its own line, sliding along it first, and step beside it only when another line or label would crowd it
+
 ## 0.12.0
 
 ### Minor Changes
