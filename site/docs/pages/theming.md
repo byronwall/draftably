@@ -8,14 +8,17 @@ properties change the frame and the panels.
 
 The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
 has no `theme` line draws dark, in the default theme's dark variant, and the frame goes dark too.
-Each element reads its own computed `color-scheme`, which it inherits from the page. Where the
-page sets none, the system setting decides.
+Each element reads its own computed `color-scheme`, which it inherits from the page. A diagram
+draws dark only when that value allows dark: `color-scheme: dark`, or `light dark` while the
+user's system prefers dark.
 
-Set the scheme on the page, as most dark modes already do:
+A page that declares no `color-scheme` draws light. To follow the user's setting, add
+`:root { color-scheme: light dark }`; to force dark, `color-scheme: dark`. A page with its own dark
+mode sets both:
 
 ```css
 :root {
-  color-scheme: light dark; /* follow the system */
+  color-scheme: light dark; /* follow the user's setting */
 }
 :root.dark {
   color-scheme: dark; /* or a class your page toggles */
@@ -24,8 +27,8 @@ Set the scheme on the page, as most dark modes already do:
 
 A change of scheme switches the drawing at once, with no new layout.
 
-- **Keep one diagram light.** Set its scheme with CSS: `draft-diagram { color-scheme: light; }`.
-  The same works on `draft-editor`.
+- **Keep one diagram light.** Set `color-scheme: light` on the element:
+  `draft-diagram { color-scheme: light; }`. The same works on `draft-editor`.
 - **Pick a look in the source.** A `theme` line in the `.draft` source wins over the page:
   `theme drafting` stays light, and `theme blueprint` stays dark. See [Themes](#themes).
 - **Server-rendered SVG.** `renderSvg` draws light unless you pass `colorScheme`. For a fallback
@@ -35,8 +38,10 @@ A change of scheme switches the drawing at once, with no new layout.
 
 ## Frame colors
 
-The viewer's frame, toolbar and outline read these properties. Each default follows the page's
-scheme, so a dark page needs none of them. Set them on the element or any ancestor to use your own
+The viewer's frame, toolbar and outline read these properties. Each default follows the element's
+computed `color-scheme`, as the drawing does: the dark default applies only where the page declares
+a scheme that allows dark, and a page that declares none gets the light default. A dark page needs
+none of them. Set them on the element or any ancestor to use your own
 colors; your values win in both schemes.
 
 | Property              | Light default          | Dark default       | Used for                       |

@@ -146,7 +146,8 @@ size api width=220 height=auto min-height=120
 ```
 
 The page's `color-scheme` sets the colors: `.app.dark` draws the diagrams, the viewers' frames and
-the whole editor dark, with no `--draft-*` values. `data-theme="dark"` on the editor fixes its
+the whole editor dark, with no `--draft-*` values. Without that line they stay light, because a page
+that declares no `color-scheme` draws light. `data-theme="dark"` on the editor fixes its
 panels and toolbar to the dark set whatever the page does. [Theming](#theming) has every property
 and the opt-out.
 
