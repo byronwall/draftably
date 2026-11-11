@@ -1,4 +1,2 @@
-# The proof runner copies these in from integration-examples/frameworks/.
-src/lib/proof/
 .svelte-kit/
 build/
