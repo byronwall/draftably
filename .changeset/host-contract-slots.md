@@ -12,12 +12,3 @@ Hosts can put their own content on a node. A child of `<draft-diagram>` or `<dra
 `@draftably/runtime/host.css` holds the rules that must work before the elements load: their heights, hidden slot content, and `pointer-events` for marked content. Import it once per page.
 
 The editor now renders in a shadow root, with its styles adopted there instead of on the page. Its color properties sit on `:host`, so a page value on `draft-editor` wins, and `data-theme="dark"` on the element selects the dark set. A node with a body keeps its ports and resize handles above the body.
-
-Breaking:
-
-| Change                    | Before                                     | After                                         |
-| ------------------------- | ------------------------------------------ | --------------------------------------------- |
-| `<draft-editor>` DOM      | the editor's DOM in the element's children | in its shadow root; children are slot content |
-| Editor styles             | one sheet adopted by the page              | adopted in the element's shadow root          |
-| Editor color tokens       | on `.draft-editor`                         | on `:host`; set them on `draft-editor`        |
-| Viewer viewport and frame | `overflow: hidden`                         | `overflow: clip`                              |

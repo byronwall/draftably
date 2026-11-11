@@ -23,28 +23,57 @@ Also in this release:
 import.meta.url))`, the form every bundler bundles. Next.js (Turbopack) and Nuxt lost the
   nested form the build wrote before, and the viewer failed to start there.
 - The Solid wrappers write no `style=""` when `style` is unset, so a strict CSP logs no violation.
+- The React, Solid and Vue wrappers write `options` only when the prop is set, so options a host
+  sets through the element ref survive. Svelte writes the prop before `bind:element` gives the
+  host the element, so it needed no change.
+- With Vite, exclude both packages from dependency optimization:
+  `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }`. Without the editor in
+  the list, the Vite dev server could not find the editor's worker, and the editor computed
+  layouts on the main thread.
 
 ### Breaking changes
 
 The packages are 0.x, so this minor release carries every break, with no shims.
 
-| Change                                                  | Before                                        | After                                                           |
-| ------------------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------- |
-| `draft-change` detail and the wrappers' change callback | the source string                             | `{ source }`                                                    |
-| Setting `options`, `label` or `outline` on the viewer   | re-mounts the viewer and loses the camera     | applies live; only `execution` and `render.fonts` re-mount      |
-| `ViewerOptions.toolbar: false`                          | no toolbar is built                           | the toolbar is built and hidden                                 |
-| `MountedEditor.session`                                 | the editor's internal store                   | removed; use the handle's methods                               |
-| `MountOptions` for `mountEditor`                        | every session option, including `urlState`    | `storageKey`, `openLink`, `confirm`, `onInteract`, `detail`     |
-| `MountedEditor.update(source)`                          | resolves to nothing                           | resolves to `{ status, revision }`                              |
-| Editor zoom range                                       | 0.08–4                                        | 0.02–8, as the viewer                                           |
-| Camera event reason                                     | `'user' \| 'resize' \| 'fit' \| 'api'`        | adds `'restore'`                                                |
-| Viewer `camera` event during a pan                      | once, on pointer-up                           | at most once per animation frame                                |
-| `viewer.fit()`                                          | returns nothing; fits 92 % of the view        | returns a `MoveResult`; 32 px padding                           |
-| `link` on `<draft-diagram>`                             | reachable only through `el.viewer.on('link')` | `draft-link`, a cancelable event: call `event.preventDefault()` |
-| `<draft-editor>` DOM                                    | the editor's DOM in the element's children    | in its shadow root; children are slot content                   |
-| Editor styles                                           | one sheet on the page                         | adopted in the element's shadow root                            |
-| Editor color properties                                 | on `.draft-editor`                            | on `:host`; set them on `draft-editor`                          |
-| Viewer viewport and frame                               | `overflow: hidden`                            | `overflow: clip`                                                |
+| Change                                                  | Before                                        | After                                                                      |
+| ------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------- |
+| `el.viewer` and `el.editor` after insertion             | set as the element connects                   | set in a microtask; `await el.updateComplete` or listen for `draft-update` |
+| `draft-change` detail and the wrappers' change callback | the source string                             | `{ source }`                                                               |
+| Setting `options`, `label` or `outline` on the viewer   | re-mounts the viewer and loses the camera     | applies live; only `execution` and `render.fonts` re-mount                 |
+| `ViewerOptions.toolbar: false`                          | no toolbar is built                           | the toolbar is built and hidden                                            |
+| `options` on `<draft-editor>`                           | none; options only through `mountEditor`      | applies live; a new `storageKey` mounts a new editor                       |
+| `MountedEditor.session`                                 | the editor's internal store                   | removed; use the handle's methods                                          |
+| `MountOptions` for `mountEditor`                        | every session option, including `urlState`    | `storageKey`, `openLink`, `confirm`, `onInteract`, `detail`                |
+| `MountedEditor.update(source)`                          | resolves to nothing                           | resolves to `{ status, revision }`                                         |
+| Editor zoom range                                       | 0.08–4                                        | 0.02–8, as the viewer                                                      |
+| Camera event reason                                     | `'user' \| 'resize' \| 'fit' \| 'api'`        | adds `'restore'`                                                           |
+| Viewer `camera` event during a pan                      | once, on pointer-up                           | at most once per animation frame                                           |
+| `viewer.fit()`                                          | returns nothing; fits 92 % of the view        | returns a `MoveResult`; 32 px padding                                      |
+| `link` on `<draft-diagram>`                             | reachable only through `el.viewer.on('link')` | `draft-link`, a cancelable event: call `event.preventDefault()`            |
+| `<draft-editor>` DOM                                    | the editor's DOM in the element's children    | in its shadow root; children are slot content                              |
+| Editor styles                                           | one sheet on the page                         | adopted in the element's shadow root                                       |
+| Editor color properties                                 | on `.draft-editor`                            | on `:host`; set them on `draft-editor`                                     |
+| Editor color properties with `mountEditor`              | on `.draft-editor`                            | on `.draft-editor-root`, the element you mount into                        |
+| Viewer viewport and frame                               | `overflow: hidden`                            | `overflow: clip`                                                           |
+
+#### The handles exist after a microtask
+
+```ts
+// Before: the element mounted as it connected.
+document.body.append(diagram);
+diagram.viewer.on('camera', save);
+
+// After: the element mounts once, in a microtask, so every property set in the same tick lands
+// first. Until then `el.viewer` and `el.editor` are undefined.
+document.body.append(diagram);
+await diagram.updateComplete;
+diagram.viewer!.on('camera', save);
+
+// Or listen on the element, which works before the mount and survives a re-mount.
+diagram.addEventListener('draft-camera', e => save(e.detail));
+```
+
+`<draft-editor>` has no `updateComplete`: listen for `draft-update`, or for `status="ready"`.
 
 #### The change callback receives `{ source }`
 

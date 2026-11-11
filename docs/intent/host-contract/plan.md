@@ -56,6 +56,17 @@ Shipped, as planned unless a "Changed in step N" note says otherwise:
 - A viewer update dropped a focused outline button (the screen-reader item below). Focus now
   returns to the same item, or to the drawing.
 
+The review of step 7 found two more:
+
+- The Vite dev server pre-bundled `@draftably/editor`, so the editor's worker URL pointed into
+  `.vite/deps/assets/` and returned 404. The editor then computed layouts on the main thread.
+  The docs, the recipes and the worker error now exclude both packages from `optimizeDeps`, and
+  `pnpm prove:recipes` edits an editor under `vite` in development.
+- The React, Solid and Vue wrappers wrote `options ?? {}` before the mount, which replaced
+  options a host set through the element ref. They now write `options` only when the prop is
+  set. Svelte writes the prop before `bind:element` gives the host the element. A Svelte spread
+  would write the object as a string attribute on the editor, which registers late.
+
 Every meta-framework passes the strict CSP with a per-request nonce. SvelteKit adds one hash:
 its route announcer has an inline `style` attribute, so its policy adds
 `style-src-attr 'unsafe-hashes' 'sha256-…'` for that one value.
