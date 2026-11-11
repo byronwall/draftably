@@ -19,8 +19,9 @@ Also in this release:
 
 - `@draftably/react/server` exports `renderSvg` for React Server Components. The main entry is a
   client module, so a Next.js server component cannot call its exports.
-- The built worker URLs start with `./`. A bundler with an `assets` alias (Nuxt) no longer drops
-  the viewer's and the editor's workers.
+- The viewer and the editor create their workers as `new Worker(new URL("./assets/…",
+import.meta.url))`, the form every bundler bundles. Next.js (Turbopack) and Nuxt lost the
+  nested form the build wrote before, and the viewer failed to start there.
 - The Solid wrappers write no `style=""` when `style` is unset, so a strict CSP logs no violation.
 
 ### Breaking changes
