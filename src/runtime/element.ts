@@ -1,5 +1,12 @@
 import viewerCss from './viewer.css?inline';
-import { mountFailure, redispatch, sameValue, takeEarly, warnOtherCopy } from './element-base';
+import {
+  mountFailure,
+  redispatch,
+  sameValue,
+  sharedSheet,
+  takeEarly,
+  warnOtherCopy,
+} from './element-base';
 import type { DraftStatus, HostEvents } from './host';
 import { runtimeVersion } from './version';
 import { mountViewer } from './viewer';
@@ -29,6 +36,7 @@ declare global {
 }
 
 const tag = 'draft-diagram';
+const ELEMENT_CSS = `${viewerCss}\n:host{display:block;height:26rem;min-height:16rem;box-sizing:border-box}.draft-diagram__viewer{height:100%;min-height:0}.draft-diagram__viewer[hidden]{display:none}.draft-diagram__fallback{display:block}.draft-diagram__fallback[hidden]{display:none}.draft-diagram__status{margin:.35rem 0;color:var(--draft-warning-ink,#9a3412);font:14px/1.45 system-ui,sans-serif}.draft-diagram__status:empty{display:none}`;
 const VIEWER_EVENTS = ['render', 'diagnostics', 'camera', 'itemactivate', 'link'] as const;
 
 if (
@@ -51,9 +59,8 @@ if (
       private _host!: HTMLDivElement;
       private _fallback!: HTMLSlotElement;
       private _status!: HTMLParagraphElement;
-      private _style!: HTMLStyleElement;
-      /** The nonce the inserted style carries; null until the style is inserted. */
-      private _nonce: string | undefined | null = null;
+      /** Only where the browser cannot adopt a shared sheet. */
+      private _style?: HTMLStyleElement;
       private _generation = 0;
       private _revision = 0;
       private _scheduled = false;
@@ -65,8 +72,6 @@ if (
         const options = takeEarly<ViewerOptions>(this, 'options');
         const outline = takeEarly<'visible' | 'hidden'>(this, 'outline');
         this.attachShadow({ mode: 'open' });
-        this._style = this.ownerDocument.createElement('style');
-        this._style.textContent = `${viewerCss}\n:host{display:block;height:26rem;min-height:16rem;box-sizing:border-box}.draft-diagram__viewer{height:100%;min-height:0}.draft-diagram__viewer[hidden]{display:none}.draft-diagram__fallback{display:block}.draft-diagram__fallback[hidden]{display:none}.draft-diagram__status{margin:.35rem 0;color:#9a3412;font:14px/1.45 system-ui,sans-serif}.draft-diagram__status:empty{display:none}`;
         this._host = this.ownerDocument.createElement('div');
         this._host.className = 'draft-diagram__viewer';
         this._host.hidden = true;
@@ -76,7 +81,13 @@ if (
         this._status.className = 'draft-diagram__status';
         this._status.setAttribute('role', 'status');
         this._status.setAttribute('aria-live', 'polite');
-        // The style goes in at mount, with its nonce: a strict CSP blocks a style without one.
+        const sheet = sharedSheet(this.ownerDocument, tag, ELEMENT_CSS);
+        if (sheet) this.shadowRoot!.adoptedStyleSheets = [sheet];
+        else {
+          this._style = this.ownerDocument.createElement('style');
+          this._style.textContent = ELEMENT_CSS;
+          this.shadowRoot!.append(this._style);
+        }
         this.shadowRoot!.append(this._host, this._fallback, this._status);
         if (options) this._options = options;
         if (outline) this.outline = outline;
@@ -215,13 +226,8 @@ if (
 
       private _setNonce() {
         const nonce = this._options.render?.styleNonce;
-        if (nonce === this._nonce) return;
-        this._nonce = nonce;
-        // CSP checks a style when it is inserted, so a new nonce needs a fresh insert.
-        this._style.remove();
-        if (nonce) this._style.setAttribute('nonce', nonce);
-        else this._style.removeAttribute('nonce');
-        this.shadowRoot!.prepend(this._style);
+        if (nonce) this._style?.setAttribute('nonce', nonce);
+        else this._style?.removeAttribute('nonce');
       }
 
       private _mount() {

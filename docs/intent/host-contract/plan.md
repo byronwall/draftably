@@ -481,6 +481,12 @@ cold numbers.
 
 The budgets use 500 targets, because the runtime limit is 500 objects (`render.ts:19`).
 
+**Changed in step 3.** The warm first-diagram budget (≤ 300 ms) is not met, and the runtime cannot
+meet it. A fresh layout of the 28-box bench file takes about 600 ms in the router (M3 Pro), and a
+reload has no layout cache. Every other step-3 row passes. CDP's CPU throttle slows the page, not
+the worker, so the cold row mostly measures the same layout. The budget stays as a target for the
+router. `pnpm bench:host` reports it, and later steps must not make it slower.
+
 ## Breaking changes
 
 The packages are 0.x. The whole stack ships as one minor release, with every break listed and

@@ -73,3 +73,28 @@ export function mountFailure(
     },
   };
 }
+
+const sheets = new WeakMap<Document, Map<string, CSSStyleSheet>>();
+
+/**
+ * One constructable stylesheet per element type and page, shared by every instance. It needs no
+ * nonce under a strict CSP. Undefined where the browser cannot adopt sheets.
+ */
+export function sharedSheet(doc: Document, key: string, css: string): CSSStyleSheet | undefined {
+  const win = doc.defaultView;
+  if (
+    !win ||
+    !('adoptedStyleSheets' in win.ShadowRoot.prototype) ||
+    !('replaceSync' in win.CSSStyleSheet.prototype)
+  )
+    return undefined;
+  const page = sheets.get(doc) ?? new Map<string, CSSStyleSheet>();
+  sheets.set(doc, page);
+  let sheet = page.get(key);
+  if (!sheet) {
+    sheet = new win.CSSStyleSheet();
+    sheet.replaceSync(css);
+    page.set(key, sheet);
+  }
+  return sheet;
+}

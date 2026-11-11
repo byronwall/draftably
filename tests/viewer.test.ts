@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { resetPageShared } from '../src/runtime/page-shared';
 import { mountViewer } from '../src/runtime/viewer';
 import { renderSvg } from '../src/runtime/render';
 import type { RenderOptions } from '../src/runtime/types';
@@ -10,6 +11,7 @@ node b "Store"
 edge ab a -> b "reads"
 `;
 const jobs: Array<{ worker: FakeWorker; id: number; source: string; options: RenderOptions }> = [];
+const cancels: number[] = [];
 const workers: FakeWorker[] = [];
 let workerMode: 'render' | 'hold' | 'error' = 'render';
 let fontMode: 'loaded' | 'blocked' = 'loaded';
@@ -70,7 +72,10 @@ class FakeWorker {
   removeEventListener(type: string, callback: (event: never) => void) {
     this.listeners.get(type)?.delete(callback);
   }
-  postMessage(request: { id: number; source: string; options: RenderOptions }) {
+  postMessage(
+    request: { id: number; source: string; options: RenderOptions } | { cancel: number },
+  ) {
+    if ('cancel' in request) return void cancels.push(request.cancel);
     jobs.push({ worker: this, ...request });
     if (workerMode === 'error')
       queueMicrotask(() =>
@@ -102,8 +107,11 @@ class ResizeObserverMock {
   disconnect() {
     this.disconnected = true;
   }
-  trigger() {
-    this.callback([], this as unknown as ResizeObserver);
+  trigger(width: number, height: number) {
+    this.callback(
+      [{ contentRect: { width, height } } as ResizeObserverEntry],
+      this as unknown as ResizeObserver,
+    );
   }
 }
 
@@ -117,25 +125,11 @@ const host = () => {
   document.body.append(el);
   return el;
 };
-const size = (el: Element, width: number, height: number) =>
-  Object.defineProperty(el, 'getBoundingClientRect', {
-    configurable: true,
-    value: () => ({
-      x: 0,
-      y: 0,
-      top: 0,
-      left: 0,
-      right: width,
-      bottom: height,
-      width,
-      height,
-      toJSON: () => ({}),
-    }),
-  });
-
 afterEach(() => {
   document.body.replaceChildren();
+  resetPageShared();
   jobs.length = 0;
+  cancels.length = 0;
   workers.length = 0;
   ResizeObserverMock.current.length = 0;
   workerMode = 'render';
@@ -200,33 +194,33 @@ describe('independent viewer lifecycle', () => {
     viewer.destroy();
   });
 
-  it('settles superseded and destroyed work and cleans up worker listeners', async () => {
+  it('shares one worker, cancels superseded work in it, and settles destroyed work', async () => {
     workerMode = 'hold';
     const element = host(),
-      viewer = mountViewer(element);
+      viewer = mountViewer(element),
+      other = mountViewer(host());
     const old = viewer.update(source);
-    const oldWorker = workers[0];
+    const oldJob = jobs[0].id;
     const latest = viewer.update(source);
+    void other.update(source);
     await expect(old).resolves.toMatchObject({ status: 'superseded' });
-    expect(oldWorker.terminated).toBe(true);
-    expect(Array.from(oldWorker.listeners.values()).every(set => set.size === 0)).toBe(true);
-    const active = jobs[jobs.length - 1];
+    expect(workers).toHaveLength(1);
+    expect(workers[0].terminated).toBe(false);
+    expect(cancels).toEqual([oldJob]);
+    const active = jobs[1];
     const result = await renderSvg(active.source, active.options);
     active.worker.fire('message', { data: { id: active.id, result } });
     await expect(latest).resolves.toMatchObject({ status: 'committed' });
-    workerMode = 'hold';
     const controller = new AbortController();
     const aborted = viewer.update(source, { signal: controller.signal });
-    const abortedWorker = workers.at(-1)!;
     controller.abort();
     await expect(aborted).resolves.toMatchObject({ status: 'aborted' });
-    expect(abortedWorker.terminated).toBe(true);
-    expect(Array.from(abortedWorker.listeners.values()).every(set => set.size === 0)).toBe(true);
+    expect(cancels).toContain(jobs.at(-1)!.id);
     const pending = viewer.update(source);
     viewer.destroy();
+    other.destroy();
     await expect(pending).resolves.toMatchObject({ status: 'destroyed' });
-    expect(workers.at(-1)?.terminated).toBe(true);
-    expect(Array.from(workers.at(-1)!.listeners.values()).every(set => set.size === 0)).toBe(true);
+    expect(workers).toHaveLength(1);
     expect(element.childNodes).toHaveLength(0);
   });
 
@@ -290,6 +284,8 @@ describe('independent viewer lifecycle', () => {
     const viewer = mountViewer(element);
     expect((await viewer.update(source)).status).toBe('committed');
     const prior = element.querySelector('svg');
+    // A new page: the shared faces are gone, and the font source is now blocked.
+    resetPageShared();
     fontSet.faces.clear();
     fontMode = 'blocked';
     const result = await viewer.update(source.replace('"Store"', '"Archive"'));
@@ -305,20 +301,16 @@ describe('independent viewer lifecycle', () => {
   it('fits a hidden host after resize without recompiling and preserves camera scale', async () => {
     const element = host(),
       viewer = mountViewer(element);
-    const viewport = element.querySelector('.draft-viewer__viewport')!;
-    size(viewport, 0, 0);
     expect((await viewer.update(source)).status).toBe('committed');
     expect(viewer.getCamera().centerX).toBe(0);
     const count = workers.length;
-    size(viewport, 600, 400);
-    ResizeObserverMock.current.at(-1)!.trigger();
+    ResizeObserverMock.current.at(-1)!.trigger(600, 400);
     expect(viewer.getCamera().centerX).toBeGreaterThan(0);
     expect(viewer.getCamera().zoom).toBeLessThanOrEqual(1);
     expect(workers).toHaveLength(count);
     const camera = { centerX: 40, centerY: 20, zoom: 0.37 };
     viewer.setCamera(camera);
-    size(viewport, 300, 200);
-    ResizeObserverMock.current.at(-1)!.trigger();
+    ResizeObserverMock.current.at(-1)!.trigger(300, 200);
     expect(viewer.getCamera()).toEqual(camera);
     viewer.destroy();
   });

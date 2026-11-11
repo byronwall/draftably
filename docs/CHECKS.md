@@ -74,6 +74,29 @@ compare digests. Add `--quality quick|full`, `--only <name>`, `--out <file>` and
 CI runs it once per change as a non-blocking `bench` job and puts the table in the job summary.
 Performance PRs paste a before → after table.
 
+### Host contract budgets
+
+`pnpm bench:host` (also the last part of `pnpm bench`, or `pnpm bench --only host`) builds the
+runtime and loads the built `<draft-diagram>` on plain pages in Chromium, with no bundler. It
+measures the budgets in [the host contract plan](intent/host-contract/plan.md#performance) and
+prints median and p95 per row with ✓ or ✗. Add `--runs N` (default 5) and `--strict` to fail on ✗.
+
+| Area                                         | Budget                                                    |
+| -------------------------------------------- | --------------------------------------------------------- |
+| Main-thread JS, viewer-only page             | ≤ 40 KB gz; no editor request                             |
+| First diagram, 28-box file, cold (4× CPU)    | ≤ 1 s                                                     |
+| First diagram, 28-box file, warm             | ≤ 300 ms (not met: see below)                             |
+| Source update to commit, 28 boxes            | ≤ 200 ms                                                  |
+| Workers, 20 instances × 20 updates           | 1 render worker per page                                  |
+| 20 instances: stylesheets, fonts, long tasks | 1 sheet; 1 font set; no long task over 200 ms             |
+| Mount and destroy, 50 cycles                 | heap within 5 %; listeners, workers and fonts at baseline |
+
+Each change from the host contract on must keep every ✓ row ✓ and must not make a ✗ row slower.
+The warm first diagram is bound by a fresh layout of the 28-box file (about 600 ms of router work
+on an M3 Pro, before any cache), not by the runtime. The CPU throttle slows the page, not the
+worker, so the cold row mostly measures the same layout. Later steps add rows for the camera frame,
+target reconciliation and `geometry()`.
+
 ## File-backed editing
 
 `tests/file-session.test.ts` checks the first title entered after a new shape receives its source
