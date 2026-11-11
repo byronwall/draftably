@@ -41,7 +41,7 @@ import {
   contentOrigin,
 } from './frame';
 import { projectScene } from './project';
-import { legendNotes } from './legend-notes';
+import { legendNotes, settleLegendShades } from './legend-notes';
 import {
   DslError,
   FITS,
@@ -3749,6 +3749,7 @@ function layoutPass(
         ids: [g.id],
       });
   }
+  settleLegendShades(m);
   diagnostics.push(...paletteNotes(m), ...legendNotes(m));
   for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.

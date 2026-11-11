@@ -155,7 +155,8 @@ layout services row gap=56
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
 `mint`, `green`, `amber`, `orange`, `red`, `rose`, `violet`. `shade=` picks `50` (palest) to `950`
-(darkest); a colored node defaults to `500`. Without `layout` lines, `root` uses `flow gap=48`
+(darkest); a colored node defaults to `500`, and a member that inherits its group's family
+draws as a pale card (`50`) on the group's tint. Without `layout` lines, `root` uses `flow gap=48`
 and groups use `column gap=24`.
 
 Themes: `drafting` (the default), `fieldnotes`, `signal` (color-blind-safe), `ink`, `blueprint`
@@ -320,15 +321,17 @@ content area.
   - Say what each color means with one `legend family "meaning"` line per accent color; the
     viewer and exports draw them as a key under the drawing. A key that names some colors and
     not others misleads, so give every accent color a row (`check` warns `legend-missing`). The
-    swatch is shade 500 unless the line sets `shade=`, so match it to the nodes' shade; `check`
-    warns when no node of that family uses it.
+    swatch draws what the family's nodes draw unless the line sets `shade=`: 500 when a node
+    names the family, the pale member card when all of them inherit it. `check` warns when no
+    node of that family uses the swatch's shade.
   - When dashed (`kind=async`) and solid lines both mean something, say what with
     `legend line dashed "meaning"` and `legend line solid "meaning"` (`check` notes
     `legend-lines` when they are missing).
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
-  - Color the outer group and let members inherit (`color=auto`); nested groups of one family
-    are drawn in stepped shades. Never give a member its container's family at a pale shade.
+  - Color the outer group and let members inherit (`color=auto`): members draw as pale cards on
+    the group's tint, and a node that names a color stands out at 500. Nested groups of one
+    family are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - To show a change, write one file with both versions merged and mark only the lines that
   differ: `+` added, `-` removed, `~` changed (`was="old label"`, `was-shape=circle`,
