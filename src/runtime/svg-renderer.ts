@@ -2,7 +2,12 @@
  * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
-import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
+import {
+  bandSwatch,
+  panelSwatch,
+  resolveAppearance,
+  type ResolvedAppearance,
+} from '../model/appearance';
 import { oldDoc, panelDoc, withoutMargins } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
@@ -546,12 +551,12 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
   const seq = doc.layout.sequence;
   if (!seq) return { panel: [], phases: [] };
   const { panel } = seq,
-    band = swatchFor(look, 'slate', 100, 'group'),
+    band = bandSwatch(look),
     tab = seq.phaseX ?? panel.x;
   return {
     panel: [
       panelDrawn(doc) &&
-        `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
+        `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${panelSwatch(look).fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
     ].filter(Boolean) as string[],
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [

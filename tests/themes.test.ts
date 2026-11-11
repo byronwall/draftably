@@ -10,6 +10,8 @@ import {
   BUILT_IN_FAMILIES,
   contrast,
   CONTRAST,
+  linkInk,
+  panelSwatch,
   PRESETS,
   resolveAppearance,
   SHADES,
@@ -208,6 +210,10 @@ describe('palettes', () => {
       expect(contrast(look.canvas, look.connection)).toBeGreaterThanOrEqual(CONTRAST.connection);
       expect(contrast(look.canvas, look.node.stroke)).toBeGreaterThanOrEqual(CONTRAST.outline);
       expect(contrast(look.canvas, look.group.stroke)).toBeGreaterThanOrEqual(CONTRAST.frame);
+      // Notes and sequence panels set the theme's text and links on the quiet panel.
+      const panel = panelSwatch(look).fill;
+      expect(contrast(panel, look.text)).toBeGreaterThanOrEqual(7);
+      expect(contrast(panel, linkInk(look, panel))).toBeGreaterThanOrEqual(CONTRAST.connection);
       for (const family of BUILT_IN_FAMILIES)
         for (const s of SHADES) {
           const c = swatchFor(look, family, s),

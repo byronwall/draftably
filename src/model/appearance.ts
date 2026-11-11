@@ -699,6 +699,21 @@ export function swatchFor(
   );
 }
 
+/**
+ * The quiet panel behind notes and a sequence diagram: slate 50 in light themes, and the theme's
+ * own group surface in dark ones, so the theme's text ink reads on it.
+ */
+export const panelSwatch = (r: ResolvedAppearance) =>
+  r.dark ? r.group : swatchFor(r, 'slate', 50, 'group');
+
+/** Bands and dividers drawn over that panel. */
+export const bandSwatch = (r: ResolvedAppearance) =>
+  r.dark ? r.group : swatchFor(r, 'slate', 100, 'group');
+
+/** Ink for a link in a note or footnote, held to 4.5:1 on `against`. */
+export const linkInk = (r: ResolvedAppearance, against: string) =>
+  ensureContrast(swatchFor(r, 'primary', r.dark ? 300 : 700).fill, against, CONTRAST.connection);
+
 /** Shades a family defines, in numeric order. */
 export const shadesOf = (r: ResolvedAppearance, family: string): Shade[] =>
   SHADES.filter(s => r.families.get(family)?.has(s));
