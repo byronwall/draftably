@@ -29,7 +29,11 @@ export const cycleSource =
 /** Test hooks: editor changes and marked-button clicks. */
 export const proofHooks = () => (globalThis.__proof ??= { changes: [[], []], clicks: 0 });
 
-/** The viewer's options. `detail: 'full'` keeps the body at any zoom. */
+/**
+ * The viewer's options. `detail: 'full'` keeps the body at any zoom.
+ * @param {string | undefined} nonce
+ * @returns {import('@draftably/runtime/viewer').ViewerOptions}
+ */
 export const viewerOptions = nonce => ({
   detail: 'full',
   ...(nonce ? { render: { styleNonce: nonce } } : {}),

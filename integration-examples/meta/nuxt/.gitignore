@@ -1,0 +1,5 @@
+# The proof runner copies these in from integration-examples/frameworks/.
+app/proof/
+node_modules/
+.nuxt/
+.output/
