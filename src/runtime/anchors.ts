@@ -29,6 +29,8 @@ export interface AnchorLayer {
   readonly el: HTMLElement;
   /** The slots the host wants. Returns true when the targets changed. */
   setSlots(slots: readonly string[]): boolean;
+  /** Whether the host wants any slot. */
+  hasSlots(): boolean;
   /** A new committed drawing. Returns true when the targets changed. */
   setGeometry(geometry: Geometry | null): boolean;
   /** The camera: screen = origin + world × zoom. Writes only; reads no layout. */
@@ -186,6 +188,7 @@ export function createAnchorLayer(
       wanted = [...new Set(slots)];
       return reconcile();
     },
+    hasSlots: () => wanted.length > 0,
     setGeometry(next) {
       geometry = next;
       committed = true;

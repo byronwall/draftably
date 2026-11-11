@@ -4,7 +4,7 @@ import { BrushDock } from '../sculpt/BrushDock';
 import { TimelineDeck } from '../sculpt/TimelineDeck';
 import { CrossingView, EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
-import { NodeView } from '../scene/NodeView';
+import { NodeChrome, NodeView } from '../scene/NodeView';
 import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
@@ -29,6 +29,10 @@ export interface CanvasProps {
   onDropFiles?: (files: File[]) => Promise<void> | void;
   /** Shown under the hint on an empty canvas, such as a button that builds from a list. */
   emptyAction?: JSX.Element;
+  /** The host's slot targets, above the drawing and below the chrome layer. */
+  anchorLayer?: HTMLElement;
+  /** Nodes a host body covers: their titles hide, and their ports and handles draw on top. */
+  bodies?: () => ReadonlySet<string>;
 }
 
 /**
@@ -197,6 +201,7 @@ export function Canvas(props: CanvasProps) {
                   editing={s.inlineEditId() === id}
                   interactive
                   zoom={camera().k}
+                  body={props.bodies?.().has(id)}
                 />
               )}
             </For>
@@ -219,6 +224,35 @@ export function Canvas(props: CanvasProps) {
           <Overlay />
         </g>
       </svg>
+      {props.anchorLayer}
+      <Show when={props.bodies?.().size}>
+        {/* Above the host's bodies: the ports and handles of the nodes they cover. A gesture
+            that starts here captures the pointer here, so this layer takes the canvas's
+            handlers too. */}
+        <svg
+          class="canvas-chrome"
+          aria-hidden="true"
+          onPointerDown={s.onPointerDown}
+          onPointerMove={s.onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => s.resetModifiers()}
+          onDblClick={s.onDoubleClick}
+        >
+          <g transform={`translate(${camera().x},${camera().y}) scale(${camera().k})`}>
+            <For each={s.nodeIds().filter(id => props.bodies!().has(id))}>
+              {id => (
+                <NodeChrome
+                  doc={shown()}
+                  id={id}
+                  rect={s.geometry(id)}
+                  selected={isSelected(id)}
+                  zoom={camera().k}
+                />
+              )}
+            </For>
+          </g>
+        </svg>
+      </Show>
 
       <Show when={empty()}>
         <div class="empty-canvas">

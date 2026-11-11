@@ -13,16 +13,26 @@ const pkg = path.join(root, 'packages/editor');
 const out = path.join(pkg, 'dist');
 const APP_CSS = path.join(root, 'src/styles/app.css');
 
-/** `:root`, `html` and `body` become the editor itself; every other rule only applies inside it. */
+/**
+ * Every rule applies inside the editor only. `:root` holds the tokens: it becomes `:host` in the
+ * element's shadow root, where the host page's values win, and the mounted host
+ * (`.draft-editor-root`) elsewhere; `:root[data-theme=x]` follows. `html` and `body` become the
+ * editor itself.
+ */
 function scope(css: string) {
   const ast = postcss.parse(css);
   ast.walkRules((rule: Rule) => {
     if (rule.parent?.type === 'atrule' && /keyframes/.test((rule.parent as { name: string }).name))
       return;
-    rule.selectors = rule.selectors.map(sel => {
-      if (/^(:root|html|body)\b/.test(sel))
-        return sel.replace(/^(:root|html|body)/, '.draft-editor');
-      return `.draft-editor ${sel}`;
+    rule.selectors = rule.selectors.flatMap(sel => {
+      const root = /^:root(\[[^\]]*\])?/.exec(sel);
+      if (root) {
+        const rest = sel.slice(root[0].length),
+          attr = root[1] ?? '';
+        return [`:host${attr ? `(${attr})` : ''}${rest}`, `.draft-editor-root${attr}${rest}`];
+      }
+      if (/^(html|body)\b/.test(sel)) return [sel.replace(/^(html|body)/, '.draft-editor')];
+      return [`.draft-editor ${sel}`];
     });
   });
   return ast.toString();
@@ -43,25 +53,12 @@ const scopedCss: Plugin = {
     const file = `${id.slice('\0draft-css:'.length)}.css`;
     const css =
       (file === APP_CSS
-        ? "draft-editor{height:28rem}draft-editor,.draft-editor{display:flex;flex-direction:column;position:relative}draft-editor[status='error']::before{content:attr(data-error);margin:.35rem;color:#9a3412;font:14px/1.45 system-ui,sans-serif}\n"
+        ? ':host{display:flex;flex-direction:column;position:relative;height:28rem}.draft-editor{display:flex;flex-direction:column;position:relative;flex:1;min-height:0}\n'
         : '') + scope(readFileSync(file, 'utf8'));
     const key = path.relative(root, file);
-    // One constructable sheet per page: it needs no nonce under a strict CSP.
-    return `const css = ${JSON.stringify(css)};
-const pages = (globalThis.__draftEditorCss ??= new WeakMap());
-if (typeof document !== 'undefined' && !(pages.get(document) ?? new Set()).has(${JSON.stringify(key)})) {
-  pages.set(document, (pages.get(document) ?? new Set()).add(${JSON.stringify(key)}));
-  if ('adoptedStyleSheets' in Document.prototype && 'replaceSync' in CSSStyleSheet.prototype) {
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(css);
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
-  } else {
-    const style = document.createElement('style');
-    style.dataset.draftCss = ${JSON.stringify(key)};
-    style.textContent = css;
-    document.head.append(style);
-  }
-}`;
+    // Registered, then adopted where the editor renders: the page, or the element's shadow root.
+    return `import { registerEditorCss } from ${JSON.stringify(path.join(root, 'src/editor/css.ts'))};
+registerEditorCss(${JSON.stringify(key)}, ${JSON.stringify(css)});`;
   },
 };
 
