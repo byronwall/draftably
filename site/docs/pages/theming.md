@@ -1,87 +1,84 @@
 # Theming
 
 A diagram has three layers of color: the drawing, the viewer's frame and controls, and the
-editor's panels. The page's color scheme drives the drawing; CSS properties color the rest.
+editor's panels. The page's `color-scheme` sets all of them, with no JavaScript option. CSS
+properties change the frame and the panels.
 
 ## Dark pages
 
-The drawing follows the page's color scheme, with no option. Each element reads its own computed
-`color-scheme`, which it inherits from the page, and falls back to the system's
-`prefers-color-scheme`. On a dark page, the diagram and the editor's canvas draw dark:
+The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
+has no `theme` line draws dark, in the default theme's dark variant, and the frame goes dark too.
+Each element reads its own computed `color-scheme`, which it inherits from the page. Where the
+page sets none, the system setting decides.
+
+Set the scheme on the page, as most dark modes already do:
 
 ```css
 :root {
   color-scheme: light dark; /* follow the system */
 }
-.app.dark {
-  color-scheme: dark; /* or force it for one part of the page */
+:root.dark {
+  color-scheme: dark; /* or a class your page toggles */
 }
 ```
 
-A change switches the drawing at once, with no new layout: a system change, or a class your page
-toggles.
+A change of scheme switches the drawing at once, with no new layout.
 
 - **Keep one diagram light.** Set its scheme with CSS: `draft-diagram { color-scheme: light; }`.
   The same works on `draft-editor`.
-- **Pick a look in the source.** A `theme` line in the `.draft` source wins over the page, for
-  example `theme blueprint`. See [Themes](#themes).
-- **Static SVG.** `renderSvg` draws the same colors for the same input, whatever the page. See
+- **Pick a look in the source.** A `theme` line in the `.draft` source wins over the page:
+  `theme drafting` stays light, and `theme blueprint` stays dark. See [Themes](#themes).
+- **Server-rendered SVG.** `renderSvg` draws light unless you pass `colorScheme`. For a fallback
+  that a dark page shows before the viewer draws, pass `colorScheme: 'auto'`: the SVG then follows
+  the page's `color-scheme` too, so it does not show light and then switch to dark. See
   [Render SVG](#render-svg).
 
 ## Frame colors
 
-The viewer's frame, toolbar and outline read these properties. Set them on the element or any
-ancestor; your values win over the defaults.
+The viewer's frame, toolbar and outline read these properties. Each default follows the page's
+scheme, so a dark page needs none of them. Set them on the element or any ancestor to use your own
+colors; your values win in both schemes.
 
-| Property              | Default                | Used for                       |
-| --------------------- | ---------------------- | ------------------------------ |
-| `--draft-bg`          | `#fff`                 | Frame, toolbar and outline     |
-| `--draft-ink`         | `#1e293b`              | Text                           |
-| `--draft-border`      | `#cbd5e1`              | Frame and button borders       |
-| `--draft-focus`       | `#2563eb`              | Focus ring                     |
-| `--draft-shadow`      | `rgb(15 23 42 / 0.12)` | The outline's shadow on focus  |
-| `--draft-warning-ink` | `#9a3412`              | Diagnostics text               |
-| `--draft-warning-bg`  | `#fff7ed`              | Diagnostics on a stale drawing |
+| Property              | Light default          | Dark default       | Used for                       |
+| --------------------- | ---------------------- | ------------------ | ------------------------------ |
+| `--draft-bg`          | `#fff`                 | `#16191e`          | Frame, toolbar and outline     |
+| `--draft-ink`         | `#1e293b`              | `#e7eaef`          | Text                           |
+| `--draft-border`      | `#cbd5e1`              | `#3d4450`          | Frame and button borders       |
+| `--draft-focus`       | `#2563eb`              | `#7fa4e6`          | Focus ring                     |
+| `--draft-shadow`      | `rgb(15 23 42 / 0.12)` | `rgb(0 0 0 / 0.4)` | The outline's shadow on focus  |
+| `--draft-warning-ink` | `#9a3412`              | `#fdba74`          | Diagnostics text               |
+| `--draft-warning-bg`  | `#fff7ed`              | `#431407`          | Diagnostics on a stale drawing |
+
+To set your own color for each scheme, use `light-dark()`:
 
 ```css
-@media (prefers-color-scheme: dark) {
-  draft-diagram {
-    --draft-bg: #0f172a;
-    --draft-ink: #e2e8f0;
-    --draft-border: #334155;
-    --draft-warning-ink: #fdba74;
-    --draft-warning-bg: #431407;
-  }
+draft-diagram {
+  --draft-focus: light-dark(#0f766e, #5eead4);
 }
 ```
 
 ## The editor's panels
 
-The editor's panels, toolbar and selection read their own properties, set on `draft-editor`.
-`data-theme="dark"` on the element selects the dark set. A framework component passes the
-attribute through: `<DraftEditor data-theme="dark" />`. [Editor colors](#editor-colors) lists
-every property.
+The editor's canvas, drawing, panels and toolbar follow the page's scheme, as `<draft-diagram>`
+does. To set the panels and toolbar apart from the page, put `data-theme="dark"` or
+`data-theme="light"` on the element; a framework component passes the attribute through:
+`<DraftEditor data-theme="dark" />`. The panels also read their own properties, set on
+`draft-editor`: [Editor colors](#editor-colors) lists them.
 
 ## A dark page, start to finish
 
 ```css
 .app.dark {
-  color-scheme: dark; /* the drawings */
+  color-scheme: dark; /* the drawings, the frames and the whole editor */
   background: #020617;
   color: #e2e8f0;
-  --draft-bg: #0f172a; /* the viewer's frame and controls */
-  --draft-ink: #e2e8f0;
-  --draft-border: #334155;
-  --draft-focus: #38bdf8;
-  --draft-warning-ink: #fdba74;
-  --draft-warning-bg: #431407;
 }
 ```
 
 ```html
 <main class="app dark">
   <draft-diagram source="…"></draft-diagram>
-  <draft-editor data-theme="dark" source="…"></draft-editor>
+  <draft-editor source="…"></draft-editor>
 </main>
 ```
 

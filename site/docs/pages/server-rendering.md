@@ -8,7 +8,9 @@ under a strict Content Security Policy.
 Render the static SVG on the server and pass it as `svg`. The page then shows the diagram before
 JavaScript loads. The viewer replaces it after its first successful draw; if that draw fails, the
 SVG remains visible. The SVG is also available to search engines and link previews. Give each
-inline diagram on a page its own `idPrefix`. Slot content renders on the server too, and
+inline diagram on a page its own `idPrefix`. `renderSvg` draws light unless you pass
+`colorScheme`; on a page that can be dark, pass `colorScheme: 'auto'`, so the SVG follows the
+page's scheme as the viewer does (see [Dark pages](#dark-pages)). Slot content renders on the server too, and
 `host.css` hides it until the element loads, so nothing shifts.
 
 Each framework page shows the call in a Vite app and in its meta-framework:
@@ -23,9 +25,7 @@ Each framework page shows the call in a Vite app and in its meta-framework:
 The editor loads in the browser only, after the component mounts. Its element renders on the
 server as an empty, sized box.
 
-Before each release, `pnpm prove:meta` in Draftably's repository builds an app in each of these
-four frameworks for production. It is not part of CI. It checks server HTML, hydration that keeps the server's nodes, content on a node, a caret across a source update,
-two editors with separate shortcuts, a failed update, the strict CSP below, and 50 mount cycles.
+Each of these four setups is built and checked before every release.
 
 ## Keep an image as a fallback
 
