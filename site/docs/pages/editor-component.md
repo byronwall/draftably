@@ -98,7 +98,10 @@ editor.destroy(); // when the host is removed
 The editor's handle has the viewer's camera, with the same `{ centerX, centerY, zoom }` shape,
 zoom range and rules: see [Steer the camera](#steer-the-camera). It also has the viewer's
 `geometry()` (see [Find where things are](#find-where-things-are)), and `ready`, which resolves
-once the first text is drawn.
+once the first text is drawn. The editor's `revision` counts changes to the drawing, by the user
+or by `update()`. `update()` and `ready` resolve with the revision they drew, so it equals
+`geometry().revision`. The editor builds geometry when you first read it for a revision, so a
+drag costs nothing extra when no host reads it.
 
 ```ts
 editor.select(['api', 'db']); // unknown IDs are dropped; [] clears

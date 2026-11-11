@@ -1,4 +1,4 @@
-import { createEffect, createMemo, on } from 'solid-js';
+import { createEffect, createMemo, on, untrack } from 'solid-js';
 import { render } from 'solid-js/web';
 import { registerFonts } from '../lib/font-data';
 import { resolveAppearance } from '../model/appearance';
@@ -19,6 +19,7 @@ import {
 } from '../runtime/camera';
 import { findEdge, findNode, isGroup, objectRect } from '../model/graph';
 import { placedItems, type Geometry } from '../runtime/geometry';
+import { drawnLegend, usedStatuses } from '../model/status';
 import { Editor } from './Editor';
 import { sessions } from './internal';
 import '../styles/app.css';
@@ -136,7 +137,14 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   let destroyed = false,
     opened = false,
     firstFit = 0;
+  /**
+   * One revision for the drawing: it counts changes to what the editor draws, and an update
+   * resolves with the revision it drew, so `geometry().revision` matches it as in the viewer.
+   */
   let revision = 0;
+  let revisionNow = () => revision;
+  const settle = (status: 'committed' | 'error') => () =>
+    ({ status: destroyed ? 'destroyed' : status, revision: revisionNow() }) as const;
   const ready: Promise<EditorUpdateResult> = session
     .openSource(options.source, options.onChange)
     .then(() => {
@@ -147,14 +155,11 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
         if (pendingMove) whenSized(pendingMove);
       });
     })
-    .then(
-      () => ({ status: destroyed ? 'destroyed' : 'committed', revision: ++revision }) as const,
-      () => ({ status: 'error', revision: ++revision }) as const,
-    );
+    .then(settle('committed'), settle('error'));
   let latest = ready;
 
-  /** Geometry, rebuilt when the drawing's boxes or routes change. */
-  let geometryRevision = 0;
+  /** Geometry for one revision, built when a host first asks for it. */
+  let geometry: Geometry | null = null;
   let selectReason: 'user' | 'api' = 'user';
   const kindOf = (id: string) =>
     findNode(session.doc, id)
@@ -190,7 +195,6 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     });
   });
   let pendingMove: ((view: View) => MoveResult) | undefined;
-  let geometryNow: () => Geometry = () => null as never;
   /** Run now, or once the editor has drawn and the canvas has a size; the latest call wins. */
   const whenSized = (run: (view: View) => MoveResult): MoveResult => {
     if (destroyed) return 'unchanged';
@@ -232,15 +236,19 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     createEffect(() =>
       host.style.setProperty('--diagram-canvas', resolveAppearance(session.doc.appearance).canvas),
     );
-    const drawn = createMemo(() => {
-      const f = session.viewerFrame();
-      return {
-        revision: ++geometryRevision,
-        frame: { x: f.x, y: f.y, width: f.w, height: f.h },
-        ...placedItems(session.doc, session.sceneRects(), session.routes()),
-      };
+    // Reads the drawing's inputs and builds nothing from them, so a drag with no geometry
+    // reader never runs the frame and item placement.
+    const changes = createMemo(() => {
+      session.sceneRects();
+      session.routes();
+      session.visibleScene();
+      JSON.stringify(session.doc.appearance);
+      JSON.stringify(session.doc.layout.sequence ?? null);
+      usedStatuses(session.doc);
+      drawnLegend(session.doc);
+      return ++revision;
     });
-    geometryNow = drawn;
+    revisionNow = changes;
     // Every selection change is reported once, with who made it.
     createEffect(
       on(
@@ -286,13 +294,23 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     },
     source: session.currentSource,
     update(next) {
-      latest = session.receiveSource(next).then(
-        () => ({ status: destroyed ? 'destroyed' : 'committed', revision: ++revision }) as const,
-        () => ({ status: 'error', revision: ++revision }) as const,
-      );
+      latest = session.receiveSource(next).then(settle('committed'), settle('error'));
       return latest;
     },
-    geometry: () => (destroyed || !opened ? null : geometryNow()),
+    geometry() {
+      if (destroyed || !opened) return null;
+      const at = revisionNow();
+      if (geometry?.revision !== at)
+        geometry = untrack(() => {
+          const f = session.viewerFrame();
+          return {
+            revision: at,
+            frame: { x: f.x, y: f.y, width: f.w, height: f.h },
+            ...placedItems(session.doc, session.sceneRects(), session.routes()),
+          };
+        });
+      return geometry;
+    },
     select(ids) {
       if (destroyed) return;
       selectReason = 'api';
