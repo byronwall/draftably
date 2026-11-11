@@ -12,11 +12,16 @@ this element.
 
 ## Add the element
 
-Import the element entry once in your browser application:
+Import the element entry once in your browser application, and `host.css` once per page:
 
 ```ts
 import '@draftably/runtime/element';
+import '@draftably/runtime/host.css';
 ```
+
+`host.css` holds the rules that must work before the element loads: it reserves the element's
+height and hides [slot content](#put-your-content-on-a-node) until the element is defined, so the
+page does not shift or flash.
 
 Then add a diagram in HTML:
 
@@ -93,6 +98,54 @@ in [Keep an image as a fallback](#keep-an-image-as-a-fallback).
 For a page without a bundler, serve the package's full `dist` directory from your origin. Import
 `element.js` with a module script. Keep its neighboring worker and module files in place.
 
+## Put your content on a node
+
+Put your own markup on a node with an ordinary child of the element, marked `data-draft-slot`.
+The element places it; your framework keeps rendering it, and your page CSS styles it.
+
+```html
+<draft-diagram source="…">
+  <div data-draft-slot="body:api" class="card">
+    <strong>API</strong> 12 ms p95
+    <button data-draft-input>Open</button>
+  </div>
+  <span data-draft-slot="overlay:db" class="badge">3</span>
+</draft-diagram>
+```
+
+- **`body:<id>`** fills a node, in diagram units. It scales and clips with the node and
+  takes the place of the drawn title. The title stays the node's accessible name. Nodes only.
+- **`overlay:<id>`** covers a node, group or edge on screen, at screen size, with
+  `overflow: visible`. Position a badge or a menu in or around it with your own CSS.
+
+Rules:
+
+- **Room.** Layout never measures your content. Give the node room in the source, for example
+  `size api width=220 height=auto min-height=110`. Content larger than its node adds a
+  `DRAFT_SLOT_OVERFLOW` warning to `diagnostics`.
+- **Input.** Slot content takes no pointer input, so a click or a drag goes to the node under it.
+  Mark an element `data-draft-input`, at any depth, to give it its own pointer and keys: a
+  button, a field or a menu. Shortcuts never fire there, and Escape returns focus to the drawing.
+  The wheel over marked content scrolls your content; over other slot content it zooms.
+- **Updates.** A target keeps its place in the DOM while its item exists, across source updates and
+  camera changes, so focus and a caret survive an update. When an item with focused content goes
+  away, focus returns to the drawing. Focus that enters a body brings its node into view.
+- **Unknown IDs.** A slot for an ID the drawing does not have shows nothing and adds a
+  `DRAFT_SLOT_UNKNOWN` warning. `compare` and `states` drawings repeat items, so slots are off
+  there, with the same warning.
+- **Zoomed out.** Below a zoom of 0.4, bodies hide and titles show again. Set `detail: 'full'` in
+  `options` to keep bodies at every zoom. The anchor layer carries `data-draft-detail="low | full"`
+  and `--draft-zoom` for your own rules.
+- **Static output.** Exports, the CLI and `renderSvg` never contain your content. A server-rendered
+  fallback draws titles.
+
+The element never changes your elements. It assigns each marked child to its target in its shadow
+root, so your framework stays the only owner of that DOM. The `anchors` event lists the targets
+after each change.
+
+Without the element, `mountViewer` gives the same layer: call `viewer.anchor(['body:api'])`, then
+put content in each target the `anchors` event names.
+
 ## Change the source
 
 Set the property or the attribute. Both update the drawing:
@@ -168,6 +221,7 @@ event's data in `detail`. Listeners on the element survive a new viewer.
 | Event                | `detail`                                                                                                                                |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `draft-update`       | The `UpdateResult` of each update.                                                                                                      |
+| `draft-anchors`      | `{ anchors }` after each drawing and each change in slot content: `{ slot, id, kind, el }` per target; `[]` before the element goes.    |
 | `draft-render`       | `{ revision, value, geometry }` after each drawing.                                                                                     |
 | `draft-diagnostics`  | `{ revision, diagnostics, stale }`.                                                                                                     |
 | `draft-camera`       | `{ camera, reason }` after a pan, zoom or fit.                                                                                          |
@@ -307,6 +361,9 @@ actual size or larger. Set `outline: 'visible'` to keep the list under the drawi
 ```ts
 mountViewer(host, { label: 'Checkout diagram', outline: 'visible' });
 ```
+
+`detail: 'full'` keeps [slot bodies](#put-your-content-on-a-node) at every zoom; the default,
+`'auto'`, hides them below a zoom of 0.4.
 
 ## Static rendering and SSR
 

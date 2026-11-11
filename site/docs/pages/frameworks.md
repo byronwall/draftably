@@ -12,7 +12,9 @@ the component unmounts. Put as many diagrams on one page as you like. Each one o
 | Angular, others | `pnpm add @draftably/runtime` | `<draft-diagram source="…">`, a custom element |
 
 With Vite, add `optimizeDeps: { exclude: ['@draftably/runtime'] }` to `vite.config`, so the
-viewer's worker loads in development.
+viewer's worker loads in development. Import `@draftably/runtime/host.css` once in your client
+entry, in every framework: it holds the element's height and hides slot content until the element
+loads.
 
 ## Props
 
@@ -32,10 +34,11 @@ Every package maps the same element to its own idiom:
 | The element | `ref`                     | `ref`         | `ref` → `.element`      | `bind:element`            |
 | Events      | `onUpdate`, `onCamera`, … | `onUpdate`, … | `@update`, `@camera`, … | `onupdate`, `oncamera`, … |
 | Server SVG  | `renderSvg`, re-exported  | the same      | the same                | the same                  |
+| Slots       | `children`                | `children`    | default slot            | `children`                |
 
 Each package builds its event props from one list, `HOST_EVENTS`, so every element event has a
-prop: `update`, `render`, `diagnostics`, `camera`, `itemactivate`, `link` and, on the editor,
-`change`. A callback receives the event's `detail`. See [Events and status](#events-and-status).
+prop: `update`, `render`, `diagnostics`, `camera`, `itemactivate`, `link`, `contextmenu`,
+`anchors` and, on the editor, `select` and `change`. A callback receives the event's `detail`. See [Events and status](#events-and-status).
 
 `onUpdate` receives an object whose `status` is `committed`, `error` or a cancellation status. On
 an initial error, the component keeps its `svg` fallback visible. A later error keeps the last
@@ -46,6 +49,7 @@ committed drawing.
 ```tsx
 import { useState } from 'react';
 import { DraftDiagram } from '@draftably/react';
+import '@draftably/runtime/host.css';
 
 export function Architecture() {
   const [source, setSource] = useState('node web "Web"\nnode api "API"\nedge e1 web -> api');
@@ -76,6 +80,7 @@ See [Drop in your graph layout](#react-flow).
 ```tsx
 import { createSignal } from 'solid-js';
 import { DraftDiagram } from '@draftably/solid';
+import '@draftably/runtime/host.css';
 
 export function Architecture() {
   const [source, setSource] = createSignal('node web "Web"\nnode api "API"\nedge e1 web -> api');
@@ -103,6 +108,7 @@ compiles it for the browser and for SolidStart's server.
 <script setup>
 import { ref } from 'vue';
 import { DraftDiagram } from '@draftably/vue';
+import '@draftably/runtime/host.css';
 const source = ref('node web "Web"\nnode api "API"\nedge e1 web -> api');
 const record = result => {
   if (result.status === 'error') console.error(result.error.diagnostics);
@@ -121,6 +127,7 @@ No `isCustomElement` compiler setting is needed.
 ```svelte
 <script>
   import { DraftDiagram } from '@draftably/svelte';
+  import '@draftably/runtime/host.css';
   let source = $state('node web "Web"\nnode api "API"\nedge e1 web -> api');
   const record = result => {
     if (result.status === 'error') console.error(result.error.diagnostics);
@@ -139,6 +146,7 @@ Import the element once. Angular needs `CUSTOM_ELEMENTS_SCHEMA` in the component
 
 ```ts
 import '@draftably/runtime/element';
+import '@draftably/runtime/host.css';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -152,6 +160,74 @@ export class ArchitectureComponent {
 ```
 
 Listen for the `draft-update` event for results.
+
+## Put your components on nodes
+
+Pass children marked `data-draft-slot`. `body:<id>` fills a node and scales with the drawing;
+`overlay:<id>` covers an item at screen size. Your framework renders and updates them as usual,
+and your page CSS styles them. Mark buttons and fields `data-draft-input` so they take the pointer
+and keys. [Put your content on a node](#put-your-content-on-a-node) has every rule. Give a body
+room in the source: `size api width=220 height=auto min-height=110`.
+
+React:
+
+```tsx
+<DraftDiagram source={source}>
+  {services.map(s => (
+    <div key={s.id} data-draft-slot={`body:${s.id}`} className="card">
+      {s.name}{' '}
+      <button data-draft-input="" onClick={() => open(s.id)}>
+        Open
+      </button>
+    </div>
+  ))}
+  <span data-draft-slot="overlay:db" className="badge">
+    {alerts}
+  </span>
+</DraftDiagram>
+```
+
+Solid (key the list by ID, so a changed label keeps its element and its focus):
+
+```tsx
+<DraftDiagram source={source()}>
+  <For each={services().map(s => s.id)}>
+    {id => (
+      <div data-draft-slot={`body:${id}`} class="card">
+        {nameOf(id)}{' '}
+        <button data-draft-input onClick={() => open(id)}>
+          Open
+        </button>
+      </div>
+    )}
+  </For>
+</DraftDiagram>
+```
+
+Vue:
+
+```vue
+<DraftDiagram :source="source">
+  <div v-for="s in services" :key="s.id" :data-draft-slot="`body:${s.id}`" class="card">
+    {{ s.name }} <button data-draft-input @click="open(s.id)">Open</button>
+  </div>
+</DraftDiagram>
+```
+
+Svelte:
+
+```svelte
+<DraftDiagram {source}>
+  {#each services as s (s.id)}
+    <div data-draft-slot={`body:${s.id}`} class="card">
+      {s.name} <button data-draft-input onclick={() => open(s.id)}>Open</button>
+    </div>
+  {/each}
+</DraftDiagram>
+```
+
+`DraftEditor` takes the same children. The `anchors` event lists the targets, and `diagnostics`
+reports a slot for an unknown ID or content larger than its node.
 
 ## Edit diagrams
 

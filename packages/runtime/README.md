@@ -27,6 +27,7 @@ const placed = await layout({
 
 ```ts
 import '@draftably/runtime/element';
+import '@draftably/runtime/host.css'; // once per page: heights and slot rules before the element loads
 // <draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
 ```
 

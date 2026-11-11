@@ -4,19 +4,20 @@ Put the Draftably editor in your own page. Users drag boxes and lines, add shape
 labels and undo, and you get the `.draft` source back after every edit.
 
 ```sh
-pnpm add @draftably/editor
+pnpm add @draftably/editor @draftably/runtime
 ```
 
 ```ts
 import '@draftably/editor/element';
+import '@draftably/runtime/host.css';
 ```
 
 ```html
 <draft-editor source='node api "API"'></draft-editor>
 ```
 
-The element is 28rem tall by default; set its height with CSS. Its styles apply only inside the
-editor. Any number of editors can share a page, and each keeps its own selection, undo history and
+The element is 28rem tall by default; set its height with CSS. It renders in a shadow root, so its
+styles apply only inside the editor and page styles do not change it. Any number of editors can share a page, and each keeps its own selection, undo history and
 camera. Keyboard shortcuts go to the editor the user last pointed at.
 
 ## Read and set the source
@@ -44,6 +45,32 @@ the element reflects `status="loading | ready | error"`.
 A shortcut goes to the editor the user last pointed at or focused. A press on the page outside
 every editor ends that, so typing on the page after a click on empty space never edits a diagram.
 A removed editor never takes shortcuts.
+
+## Editor colors
+
+The editor's colors are CSS properties on the element. Your value wins over the default, so set
+one on `draft-editor` or any ancestor:
+
+```css
+draft-editor {
+  --accent: #0f766e; /* selection, ports and handles */
+}
+```
+
+Set `data-theme="dark"` on the element for the dark set. The properties include `--bg`,
+`--surface`, `--surface-2`, `--hover`, `--line`, `--line-strong`, `--text`, `--muted`, `--ink`,
+`--ink-hover`, `--ink-on`, `--accent`, `--accent-hover`, `--accent-soft`, `--accent-ink`,
+`--success`, `--warning`, `--danger`, `--font` and `--mono`. The canvas color follows the
+diagram's own theme in the source.
+
+## Put your content on a node
+
+The editor takes the same slot content as `<draft-diagram>`: children marked
+`data-draft-slot="body:<id>"` or `"overlay:<id>"`. See
+[Put your content on a node](#put-your-content-on-a-node). In the editor, a node with a body keeps
+its ports, resize handles and selection ring above the body, so users still connect, resize and
+select it. A press on body text selects and drags the node. Keys typed in `data-draft-input`
+content never reach the editor's shortcuts, so typing **N** in a field adds no node.
 
 ## In a framework
 
@@ -111,15 +138,17 @@ editor.on('contextmenu', ({ id, clientX, clientY }) => openMyMenu(id, clientX, c
 ```
 
 The editor shows no menu of its own; a right-click selects the item and reports `contextmenu`.
+`anchors` lists the slot targets, and `diagnostics` reports slot warnings, as in the viewer.
 
-| Option       | Effect                                                                     |
-| ------------ | -------------------------------------------------------------------------- |
-| `source`     | The `.draft` text to edit.                                                 |
-| `onChange`   | Receives the new text after every kept edit, undo and redo.                |
-| `storageKey` | Keeps the diagram in browser storage under this key, so a reload keeps it. |
-| `openLink`   | Opens an object's link. Without it, a URL opens in a new tab.              |
-| `confirm`    | Asks before an action that replaces the diagram.                           |
-| `onInteract` | Called when the user starts a gesture, so you can close your own menus.    |
+| Option       | Effect                                                                        |
+| ------------ | ----------------------------------------------------------------------------- |
+| `source`     | The `.draft` text to edit.                                                    |
+| `onChange`   | Receives the new text after every kept edit, undo and redo.                   |
+| `storageKey` | Keeps the diagram in browser storage under this key, so a reload keeps it.    |
+| `openLink`   | Opens an object's link. Without it, a URL opens in a new tab.                 |
+| `confirm`    | Asks before an action that replaces the diagram.                              |
+| `onInteract` | Called when the user starts a gesture, so you can close your own menus.       |
+| `detail`     | `'full'` keeps slot bodies at every zoom. Default `'auto'`: hidden below 0.4. |
 
 [Using the Editor](#editing-in-the-viewer) and [Shortcuts](#shortcuts) describe what your users can
 do in it.
