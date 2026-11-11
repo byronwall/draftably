@@ -38,7 +38,8 @@ Every package maps the same element to its own idiom:
 
 Each package builds its event props from one list, `HOST_EVENTS`, so every element event has a
 prop: `update`, `render`, `diagnostics`, `camera`, `itemactivate`, `link`, `contextmenu`,
-`anchors` and, on the editor, `select` and `change`. A callback receives the event's `detail`. See [Events and status](#events-and-status).
+`anchors` and, on the editor, `select` and `change`. The editor sends no `render` or
+`itemactivate`. A callback receives the event's `detail`. See [Events and status](#events-and-status).
 
 `onUpdate` receives an object whose `status` is `committed`, `error` or a cancellation status. On
 an initial error, the component keeps its `svg` fallback visible. A later error keeps the last

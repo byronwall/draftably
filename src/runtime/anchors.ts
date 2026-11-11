@@ -182,8 +182,15 @@ export function createAnchorLayer(
         part = slot.slice(0, colon),
         id = slot.slice(colon + 1);
       const kind = geometry ? kindIn(geometry, id) : undefined;
-      // Bodies fill nodes only: a group's box holds its members.
-      if (!geometry || !kind || (part === 'body' && kind !== 'node') || keep.has(slot)) {
+      // Bodies fill nodes only: a group's box holds its members. A slot with another prefix,
+      // such as `bdy:`, gets no target, so its content stays hidden.
+      if (
+        !geometry ||
+        !kind ||
+        (part !== 'body' && part !== 'overlay') ||
+        (part === 'body' && kind !== 'node') ||
+        keep.has(slot)
+      ) {
         if (committed && !keep.has(slot)) unknown.push(slot);
         continue;
       }
@@ -291,9 +298,11 @@ export function createAnchorLayer(
       ...unknown.map(slot =>
         warn(
           'DRAFT_SLOT_UNKNOWN',
-          geometry
-            ? `Slot ${slot} names no item that can hold it. A body fills a node; an overlay covers a node, group or edge.`
-            : `Slot ${slot} shows nothing: this drawing repeats items (compare or states), so slots are off.`,
+          !/^(?:body|overlay):/.test(slot)
+            ? `Slot ${slot} shows nothing: a slot name starts with body: or overlay:, such as body:api.`
+            : geometry
+              ? `Slot ${slot} names no item that can hold it. A body fills a node; an overlay covers a node, group or edge.`
+              : `Slot ${slot} shows nothing: this drawing repeats items (compare or states), so slots are off.`,
           slot.slice(slot.indexOf(':') + 1),
         ),
       ),

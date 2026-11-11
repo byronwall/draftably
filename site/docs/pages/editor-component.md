@@ -84,7 +84,10 @@ content never reach the editor's shortcuts, so typing **N** in a field adds no n
 | Svelte    | `DraftEditor` from `@draftably/svelte/editor` | `onchange`      |
 
 Each callback receives `{ source }`. Each component also takes `options`, and the same element
-access and event props as `DraftDiagram` (see [Frameworks](#frameworks)).
+access and event props as `DraftDiagram` (see [Frameworks](#frameworks)). The editor sends
+`update`, `anchors`, `diagnostics`, `camera`, `link`, `contextmenu`, `select` and `change`. It
+sends no `render` or `itemactivate`: a press selects an item, so listen for `select`. See
+[Events and status](#events-and-status).
 
 ```tsx
 import { useState } from 'react';

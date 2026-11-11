@@ -285,6 +285,7 @@ export function createPointer(
     }
     if (link) {
       e.preventDefault();
+      if (s.options.onLink?.({ href: link.openLink!, itemId: objectId })) return;
       if (s.options.openLink) s.options.openLink(link.openLink!);
       else if (/^[a-z][a-z0-9+.-]*:/i.test(link.openLink!))
         window.open(link.openLink!, '_blank', 'noopener');

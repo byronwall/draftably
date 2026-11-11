@@ -152,12 +152,23 @@ if (typeof customElements !== 'undefined') {
             return;
           }
           this.editor = editor;
-          for (const type of ['anchors', 'diagnostics', 'camera', 'select', 'contextmenu'] as const)
+          // Every event the editor has. It sends no `render` (it draws no standalone SVG) and no
+          // `itemactivate` (a press selects: listen for `select`).
+          for (const type of [
+            'update',
+            'anchors',
+            'diagnostics',
+            'camera',
+            'select',
+            'link',
+            'contextmenu',
+          ] as const)
             editor.on(type, event => relay(this, type, event));
           editor.on('anchors', ({ anchors }) => this._slotting.setAnchors(anchors));
           editor.anchor(this._slotting.names() as DraftSlot[]);
           editor.ready.then(
-            () => this.editor === editor && this._setStatus('ready'),
+            r =>
+              this.editor === editor && this._setStatus(r.status === 'error' ? 'error' : 'ready'),
             () => this.editor === editor && this._setStatus('error'),
           );
         }
