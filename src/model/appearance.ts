@@ -374,6 +374,23 @@ function luminance(hex: string) {
   const [r, g, b] = hexToRgb(hex).map(toLinear);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
+/** `a` moved toward `b` by `t` (0–1), in sRGB. */
+export function mixColors(a: string, b: string, t: number) {
+  const x = hexToRgb(a),
+    y = hexToRgb(b);
+  return (
+    '#' +
+    x
+      .map((v, i) =>
+        Math.round((v + (y[i] - v) * t) * 255)
+          .toString(16)
+          .padStart(2, '0'),
+      )
+      .join('')
+      .toUpperCase()
+  );
+}
+
 export function contrast(a: string, b: string) {
   const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
   return (x + 0.05) / (y + 0.05);
@@ -569,6 +586,8 @@ export interface ResolvedAppearance {
   radius: number;
   shadow: boolean;
   title: TypeProfile;
+  /** A node title's detail lines (after its first `\n`): a step smaller and lighter. */
+  detail: TypeProfile;
   groupTitle: TypeProfile;
   annotation: TypeProfile;
   /** Space above a group's content; the group title sits in it. */
@@ -639,6 +658,7 @@ export function resolveAppearance(appearance?: DiagramAppearance): ResolvedAppea
     radius: o.radius ?? p.radius,
     shadow: p.shadow,
     title,
+    detail: typeProfile(titleFont, false, p.titleSize - 1, p.titleLine - 1),
     groupTitle: title,
     annotation: typeProfile(
       annotationFont,

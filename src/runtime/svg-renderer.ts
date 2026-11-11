@@ -11,7 +11,7 @@ import { headingMarkup } from '../model/heading';
 import { legendMarkup, markerMarkup } from '../model/legend';
 import { footnoteMarkup } from '../model/footnote';
 import { noteMarkup, placeNotes } from '../model/note';
-import { drawnSwatch, participantAccent } from '../model/colors';
+import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
@@ -333,8 +333,9 @@ function sceneMarkup(
       p = statusPaint(look, style.status, style.spot),
       radius = isCell(doc, n.id) ? 0 : look.radius,
       label = nodeLabel(doc, n.id, n.title, r),
-      first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
-      ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text,
+      inside = label.mode === 'center' && style.shape !== 'text',
+      ink = inside ? c.ink : look.text,
+      detail = `font-size="${look.detail.size}" font-weight="${look.detail.weight}" fill="${inside ? detailInk(look, c) : look.muted}"`,
       accent = participantAccent(doc, look, n.id),
       paint = `class="shape" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? (accent ? 1.5 : 1.2)}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}`;
     const badge = n.count ? countText(n.count) : '',
@@ -358,11 +359,11 @@ function sceneMarkup(
           accent && style.shape === 'box'
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
-          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
+          `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
             label.lines
               .map(
                 (line, i) =>
-                  `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
+                  `<tspan x="${r.x + label.x}" y="${r.y + label.y + label.offsets[i]}"${line.detail ? ` ${detail}` : ''}>${esc(line.text)}</tspan>`,
               )
               .join('') +
             '</text>',

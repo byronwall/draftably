@@ -93,7 +93,9 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
 ## Syntax
 
 One statement per line. Indentation means nothing. Strings use JSON double quotes; escape an
-inner quote as `\"` (`node n "Says \"hi\""`), a backslash as `\\`, and a line break as `\n`. IDs match
+inner quote as `\"` (`node n "Says \"hi\""`), a backslash as `\\`, and a line break as `\n`. In a node
+title, the text after the first `\n` draws as a smaller, muted detail line under the name
+(`node gh "GitHub\nopen PRs, CI"`), so keep the name first and short. IDs match
 `[A-Za-z_][A-Za-z0-9_.-]*` and are unique across nodes and groups (edges have their own IDs).
 References may point to later lines. Comments start with `#` or `//`.
 
