@@ -1,4 +1,4 @@
-import { renderSvg } from './render';
+import { releaseFace, renderInWorker, retainFace, sharedFace } from './page-shared';
 import { fontMetricsVersion, runtimeVersion } from './version';
 import { FACES } from '../model/font-faces';
 import type {
@@ -77,14 +77,6 @@ export interface ViewerHandle {
 }
 
 type Drawing = Extract<RenderResult, { ok: true }>['value'];
-type WorkerRequest = { id: number; source: string; options: RenderOptions };
-type WorkerReply = { id: number; result: RenderResult };
-type WorkerJob = {
-  id: number;
-  timer: number;
-  finish: (result?: RenderResult, error?: Error) => void;
-  cleanup: () => void;
-};
 type FontSpec = { family: string; weight: string };
 type EmbeddedFace = FontSpec & { data: string };
 type PreparedFace = { key: string; face: FontFace };
@@ -102,8 +94,11 @@ const ATTRS = new Set(
 );
 let instanceCount = 0;
 
-function fontSpecs(doc: Document, svg: string): FontSpec[] {
-  const parsed = new doc.defaultView!.DOMParser().parseFromString(svg, 'image/svg+xml');
+function parseSvg(doc: Document, svg: string): XMLDocument {
+  return new doc.defaultView!.DOMParser().parseFromString(svg, 'image/svg+xml');
+}
+
+function fontSpecs(parsed: XMLDocument): FontSpec[] {
   const specs = new Map<string, FontSpec>();
   for (const text of Array.from(parsed.querySelectorAll('text[font-family]'))) {
     const family = (text.getAttribute('font-family') ?? '')
@@ -121,8 +116,7 @@ function fontSpecs(doc: Document, svg: string): FontSpec[] {
   return [...specs.values()];
 }
 
-function embeddedFaces(doc: Document, svg: string, required: readonly FontSpec[]): EmbeddedFace[] {
-  const parsed = new doc.defaultView!.DOMParser().parseFromString(svg, 'image/svg+xml');
+function embeddedFaces(parsed: XMLDocument, required: readonly FontSpec[]): EmbeddedFace[] {
   const found = new Map<string, EmbeddedFace>();
   for (const style of Array.from(parsed.querySelectorAll('style'))) {
     const css = style.textContent ?? '';
@@ -147,12 +141,11 @@ function embeddedFaces(doc: Document, svg: string, required: readonly FontSpec[]
 
 function safeSvg(
   doc: Document,
-  svg: string,
+  parsed: XMLDocument,
   stripFontRules: boolean,
   maxNodes = 100_000,
 ): SVGSVGElement {
   // The renderer owns this bounded SVG vocabulary; copy it through DOM APIs without parsing host markup.
-  const parsed = new doc.defaultView!.DOMParser().parseFromString(svg, 'image/svg+xml');
   if (parsed.querySelector('parsererror') || parsed.documentElement.localName !== 'svg') {
     throw new Error('Runtime returned invalid SVG.');
   }
@@ -257,10 +250,10 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   let camera: Camera = { centerX: 0, centerY: 0, zoom: 1 };
   let userCamera = false;
   let drawing: Drawing | undefined;
-  let worker: Worker | undefined;
-  let workerJob: WorkerJob | undefined;
-  let nextWorkId = 0;
-  const ownedFonts = new Map<string, FontFace>();
+  /** The viewport's size, from the ResizeObserver: no layout read per camera move. */
+  let size = { width: 0, height: 0 };
+  /** Keys of the page's font faces this viewer holds. */
+  const heldFonts = new Set<string>();
   const listeners = new Map<keyof ViewerEvents, Set<(event: never) => void>>();
   const pending = new Map<number, { resolve: (result: UpdateResult) => void }>();
   const emit = <K extends keyof ViewerEvents>(type: K, event: ViewerEvents[K]) => {
@@ -282,15 +275,14 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   };
   const fitScale = () => {
     if (!drawing) return 1;
-    const rect = viewport.getBoundingClientRect();
     const [, , width, height] = drawing.viewBox;
-    return Math.min(rect.width / width, rect.height / height);
+    return Math.min(size.width / width, size.height / height);
   };
   const applyCamera = () => {
     const svg = viewport.querySelector('svg');
     if (!svg || !drawing) return;
     const [x, y] = drawing.viewBox;
-    const rect = viewport.getBoundingClientRect();
+    const rect = size;
     const scale = camera.zoom;
     const tx = rect.width / 2 - (camera.centerX - x) * scale;
     const ty = rect.height / 2 - (camera.centerY - y) * scale;
@@ -302,8 +294,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   };
   const fit = (reason: 'fit' | 'resize' = 'fit') => {
     if (!drawing) return;
-    const rect = viewport.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
+    if (!size.width || !size.height) return;
     const [x, y, width, height] = drawing.viewBox;
     camera = {
       centerX: x + width / 2,
@@ -332,8 +323,10 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   addButton('Actual size', actualSize);
   toolbar.hidden = options.toolbar === false;
 
-  const resize = new win.ResizeObserver(() => {
-    if (drawing && !viewport.getBoundingClientRect().width) return;
+  const resize = new win.ResizeObserver(entries => {
+    const box = entries.at(-1)?.contentRect;
+    if (box) size = { width: box.width, height: box.height };
+    if (drawing && !size.width) return;
     if (!userCamera) fit('resize');
     else applyCamera();
   });
@@ -344,8 +337,11 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     root.classList.add('draft-viewer--stale');
     emit('diagnostics', { revision: at, diagnostics, stale: !!drawing });
   };
-  const prepareFonts = async (svg: string, mode: 'host' | 'embed'): Promise<PreparedFace[]> => {
-    const required = fontSpecs(doc, svg);
+  const prepareFonts = async (
+    parsed: XMLDocument,
+    mode: 'host' | 'embed',
+  ): Promise<PreparedFace[]> => {
+    const required = fontSpecs(parsed);
     if (!required.length) return [];
     if (!doc.fonts) throw new Error('The host document cannot load diagram fonts.');
     if (mode === 'host') {
@@ -364,15 +360,18 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       return [];
     }
 
-    const fonts = embeddedFaces(doc, svg, required);
+    // Faces the page already holds need no decoding.
+    const keys = required.map(spec => `${spec.family}:${spec.weight}`);
+    if (keys.every(key => sharedFace(doc, key)))
+      return keys.map(key => ({ key, face: sharedFace(doc, key)! }));
+    const fonts = embeddedFaces(parsed, required);
     const FontFaceCtor = (win as Window & typeof globalThis).FontFace;
     if (!FontFaceCtor) throw new Error('The browser cannot load embedded diagram fonts.');
     return Promise.all(
       fonts.map(async font => {
         const key = `${font.family}:${font.weight}`;
-        const existing = ownedFonts.get(key);
-        if (existing?.status === 'loaded' && Array.from(doc.fonts).includes(existing))
-          return { key, face: existing };
+        const existing = sharedFace(doc, key);
+        if (existing) return { key, face: existing };
         const face = new FontFaceCtor(font.family, `url("${font.data}")`, { weight: font.weight });
         await face.load();
         if (face.status !== 'loaded')
@@ -381,80 +380,21 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       }),
     );
   };
-  const stopWorker = (error?: Error) => {
-    const active = workerJob;
-    workerJob = undefined;
-    if (active) {
-      win.clearTimeout(active.timer);
-      active.cleanup();
-      active.finish(undefined, error ?? new Error('Viewer render was cancelled.'));
-    }
-    worker?.terminate();
-    worker = undefined;
-  };
-  const render = (
+  const render = async (
     source: string,
     renderOptions: RenderOptions,
     signal?: AbortSignal,
   ): Promise<RenderResult> => {
-    if ((options.execution ?? { mode: 'worker' }).mode === 'main') {
+    const execution = options.execution ?? { mode: 'worker' };
+    if (execution.mode === 'main') {
+      // The compiler loads only for main-thread rendering, so a worker page never downloads it.
+      const { renderSvg } = await import('./render');
       return renderSvg(source, { ...renderOptions, signal });
     }
-    return new Promise((resolve, reject) => {
-      const id = ++nextWorkId;
-      let completed = false;
-      const cleanup = () => {
-        if (!worker) return;
-        worker.removeEventListener('message', onMessage);
-        worker.removeEventListener('error', onError);
-        worker.removeEventListener('messageerror', onMessageError);
-        signal?.removeEventListener('abort', onAbort);
-      };
-      const finish = (result?: RenderResult, error?: Error) => {
-        if (completed) return;
-        completed = true;
-        const active = workerJob;
-        if (active?.id === id) {
-          workerJob = undefined;
-          win.clearTimeout(active.timer);
-          active.cleanup();
-        }
-        if (error) reject(error);
-        else resolve(result!);
-      };
-      const onMessage = (event: MessageEvent<WorkerReply>) => {
-        if (event.data?.id === id) finish(event.data.result);
-      };
-      const onError = (event: ErrorEvent) => {
-        event.preventDefault();
-        stopWorker(new Error(event.message || 'Viewer render worker failed.'));
-      };
-      const onMessageError = () =>
-        stopWorker(new Error('Viewer render worker returned an unreadable result.'));
-      const onAbort = () => stopWorker(new Error('Viewer render was aborted.'));
-      try {
-        worker ??=
-          options.execution?.mode === 'worker' && options.execution.createWorker
-            ? options.execution.createWorker()
-            : new Worker(new URL('./render.worker.ts', import.meta.url), { type: 'module' });
-        worker.addEventListener('message', onMessage);
-        worker.addEventListener('error', onError);
-        worker.addEventListener('messageerror', onMessageError);
-        signal?.addEventListener('abort', onAbort, { once: true });
-        const timeoutMs =
-          options.execution?.mode === 'worker' ? (options.execution.timeoutMs ?? 5000) : 5000;
-        const timer = win.setTimeout(
-          () => stopWorker(new Error('Viewer render worker timed out.')),
-          timeoutMs,
-        );
-        workerJob = { id, timer, finish, cleanup };
-        worker.postMessage({ id, source, options: renderOptions } satisfies WorkerRequest);
-      } catch (error) {
-        stopWorker(
-          error instanceof Error ? error : new Error('Viewer render worker could not start.'),
-        );
-        reject(error);
-      }
+    return renderInWorker(source, renderOptions, {
+      create: execution.createWorker,
+      timeoutMs: execution.timeoutMs,
+      signal,
     });
   };
 
@@ -537,11 +477,15 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       if (request !== at) work.resolve({ status, revision: request });
     }
   };
+  /** Cancels the render in flight; a newer update or destroy calls it. */
+  let cancelRender = () => {};
   const update = (source: string, updateOptions: UpdateOptions = {}): Promise<UpdateResult> => {
     const id = ++revision;
     if (destroyed) return Promise.resolve({ status: 'destroyed', revision: id });
     finishPending(id, 'superseded');
-    stopWorker(new Error('Viewer update was superseded.'));
+    cancelRender();
+    const job = new AbortController();
+    cancelRender = () => job.abort();
     return new Promise(resolve => {
       let settled = false;
       const finish = (result: UpdateResult) => {
@@ -559,9 +503,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
         resolve(terminal);
       };
       const abort = () => {
-        if (id === revision && (options.execution ?? { mode: 'worker' }).mode === 'worker') {
-          stopWorker(new Error('Viewer render was aborted.'));
-        }
+        job.abort();
         finish({ status: 'aborted', revision: id });
       };
       pending.set(id, { resolve: finish });
@@ -577,7 +519,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
         fonts: options.render?.fonts ?? 'embed',
         ...(updateOptions.state !== undefined ? { state: updateOptions.state } : {}),
       } satisfies RenderOptions;
-      void render(source, renderOptions, updateOptions.signal)
+      void render(source, renderOptions, job.signal)
         .then(async result => {
           if (destroyed || id !== revision || updateOptions.signal?.aborted) {
             finish({ status: 'superseded', revision: id });
@@ -589,8 +531,10 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             return;
           }
           let preparedFonts: PreparedFace[];
+          let parsed: XMLDocument;
           try {
-            preparedFonts = await prepareFonts(result.value.svg, renderOptions.fonts ?? 'embed');
+            parsed = parseSvg(doc, result.value.svg);
+            preparedFonts = await prepareFonts(parsed, renderOptions.fonts ?? 'embed');
           } catch (fontError) {
             if (destroyed || id !== revision || updateOptions.signal?.aborted) {
               finish({
@@ -614,7 +558,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           }
           let svg: SVGSVGElement;
           try {
-            svg = safeSvg(doc, result.value.svg, renderOptions.fonts !== 'host');
+            svg = safeSvg(doc, parsed, renderOptions.fonts !== 'host');
           } catch (error) {
             const message = error instanceof Error ? error.message : 'Could not build safe SVG.';
             const failure = fail('internal', 'DRAFT_VIEWER_DOM', message);
@@ -622,18 +566,18 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             finish({ status: 'error', revision: id, error: failure });
             return;
           }
-          const addedFonts: PreparedFace[] = [];
+          const addedFonts: string[] = [];
           try {
             for (const prepared of preparedFonts) {
-              if (ownedFonts.has(prepared.key)) continue;
-              doc.fonts.add(prepared.face);
-              ownedFonts.set(prepared.key, prepared.face);
-              addedFonts.push(prepared);
+              if (heldFonts.has(prepared.key)) continue;
+              retainFace(doc, prepared.key, prepared.face);
+              heldFonts.add(prepared.key);
+              addedFonts.push(prepared.key);
             }
           } catch (fontError) {
-            for (const { key, face } of addedFonts) {
-              doc.fonts.delete(face);
-              ownedFonts.delete(key);
+            for (const key of addedFonts) {
+              releaseFace(doc, key);
+              heldFonts.delete(key);
             }
             const error = fail(
               'environment',
@@ -695,10 +639,10 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             }),
           );
           const retainedFonts = new Set(preparedFonts.map(font => font.key));
-          for (const [key, face] of ownedFonts) {
+          for (const key of heldFonts) {
             if (retainedFonts.has(key)) continue;
-            doc.fonts.delete(face);
-            ownedFonts.delete(key);
+            releaseFace(doc, key);
+            heldFonts.delete(key);
           }
           root.classList.remove('draft-viewer--stale');
           live.textContent = result.diagnostics.map(diagnostic => diagnostic.message).join(' ');
@@ -783,9 +727,9 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       for (const [request, work] of pending)
         work.resolve({ status: 'destroyed', revision: request });
       pending.clear();
-      stopWorker(new Error('Viewer was destroyed.'));
-      for (const face of ownedFonts.values()) doc.fonts.delete(face);
-      ownedFonts.clear();
+      cancelRender();
+      for (const key of heldFonts) releaseFace(doc, key);
+      heldFonts.clear();
       resize.disconnect();
       listeners.clear();
       host.replaceChildren();

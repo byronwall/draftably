@@ -28,6 +28,37 @@ The element supplies its styles, a 26rem height, a module worker and bundled fon
 added to the page and cleans up when removed. Its shadow root keeps page styles from changing the
 drawing or controls. Override its height with ordinary CSS: `draft-diagram { height: 32rem; }`.
 
+All diagrams on a page share a pool of at most four render workers (one fewer than the device's
+cores), one stylesheet and one copy of each font. A worker stops after 30 seconds with no work.
+
+### Frame colors
+
+The viewer's frame, toolbar and outline read these properties. Set them on the element or any
+ancestor; your values win over the defaults. The diagram's own colors come from its theme in the
+source.
+
+| Property              | Default                | Used for                       |
+| --------------------- | ---------------------- | ------------------------------ |
+| `--draft-bg`          | `#fff`                 | Frame, toolbar and outline     |
+| `--draft-ink`         | `#1e293b`              | Text                           |
+| `--draft-border`      | `#cbd5e1`              | Frame and button borders       |
+| `--draft-focus`       | `#2563eb`              | Focus ring                     |
+| `--draft-shadow`      | `rgb(15 23 42 / 0.12)` | The outline's shadow on focus  |
+| `--draft-warning-ink` | `#9a3412`              | Diagnostics text               |
+| `--draft-warning-bg`  | `#fff7ed`              | Diagnostics on a stale drawing |
+
+```css
+@media (prefers-color-scheme: dark) {
+  draft-diagram {
+    --draft-bg: #0f172a;
+    --draft-ink: #e2e8f0;
+    --draft-border: #334155;
+    --draft-warning-ink: #fdba74;
+    --draft-warning-bg: #431407;
+  }
+}
+```
+
 With Vite, keep the runtime's worker beside its package during development:
 
 ```ts
@@ -209,8 +240,9 @@ export function DraftDiagram({ source }: { source: string }) {
 
 ### Worker and fonts
 
-The viewer compiles in a module worker, served from the same origin as a module-relative asset. A
-restrictive CSP must allow that worker. A worker that does not start or times out returns an
+The viewer compiles in a module worker, served from the same origin as a module-relative asset. All
+viewers on a page share a small pool of them. A restrictive CSP must allow that worker. The element's styles are a
+constructable stylesheet, so a strict `style-src` needs no nonce for them. A worker that does not start or times out returns an
 update error; the viewer does not switch to main-thread compilation by itself. Set
 `execution: { mode: 'main' }` only for known small inputs, or when you pass a host link resolver,
 because worker messages cannot carry functions.

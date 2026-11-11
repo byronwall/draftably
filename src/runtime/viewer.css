@@ -1,7 +1,15 @@
+/*
+ * Public tokens: set any --draft-* property on the element or an ancestor, and it wins.
+ * They inherit through the shadow root; the defaults below apply only when unset.
+ */
 .draft-viewer {
-  --dv-border: #cbd5e1;
-  --dv-ink: #1e293b;
-  --dv-bg: #fff;
+  --dv-border: var(--draft-border, #cbd5e1);
+  --dv-ink: var(--draft-ink, #1e293b);
+  --dv-bg: var(--draft-bg, #fff);
+  --dv-focus: var(--draft-focus, #2563eb);
+  --dv-shadow: var(--draft-shadow, rgb(15 23 42 / 0.12));
+  --dv-warning-ink: var(--draft-warning-ink, #9a3412);
+  --dv-warning-bg: var(--draft-warning-bg, #fff7ed);
   position: relative;
   display: grid;
   grid-template-rows: auto minmax(8rem, 1fr) auto auto;
@@ -39,7 +47,7 @@
 }
 .draft-viewer button:focus-visible,
 .draft-viewer__viewport:focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid var(--dv-focus);
   outline-offset: 2px;
 }
 .draft-viewer__viewport {
@@ -92,11 +100,11 @@
   position: absolute;
   inset: auto 0 0;
   background: var(--dv-bg);
-  box-shadow: 0 -4px 12px rgb(15 23 42 / 0.12);
+  box-shadow: 0 -4px 12px var(--dv-shadow);
 }
 .draft-viewer--stale .draft-viewer__status {
-  color: #9a3412;
-  background: #fff7ed;
+  color: var(--dv-warning-ink);
+  background: var(--dv-warning-bg);
 }
 .draft-viewer__status:empty {
   display: none;

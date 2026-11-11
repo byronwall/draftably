@@ -46,12 +46,21 @@ const scopedCss: Plugin = {
         ? "draft-editor{height:28rem}draft-editor,.draft-editor{display:flex;flex-direction:column;position:relative}draft-editor[status='error']::before{content:attr(data-error);margin:.35rem;color:#9a3412;font:14px/1.45 system-ui,sans-serif}\n"
         : '') + scope(readFileSync(file, 'utf8'));
     const key = path.relative(root, file);
+    // One constructable sheet per page: it needs no nonce under a strict CSP.
     return `const css = ${JSON.stringify(css)};
-if (typeof document !== 'undefined' && !document.querySelector('style[data-draft-css="${key}"]')) {
-  const style = document.createElement('style');
-  style.dataset.draftCss = ${JSON.stringify(key)};
-  style.textContent = css;
-  document.head.append(style);
+const pages = (globalThis.__draftEditorCss ??= new WeakMap());
+if (typeof document !== 'undefined' && !(pages.get(document) ?? new Set()).has(${JSON.stringify(key)})) {
+  pages.set(document, (pages.get(document) ?? new Set()).add(${JSON.stringify(key)}));
+  if ('adoptedStyleSheets' in Document.prototype && 'replaceSync' in CSSStyleSheet.prototype) {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(css);
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+  } else {
+    const style = document.createElement('style');
+    style.dataset.draftCss = ${JSON.stringify(key)};
+    style.textContent = css;
+    document.head.append(style);
+  }
 }`;
   },
 };
