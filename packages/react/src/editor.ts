@@ -31,7 +31,8 @@ export const DraftEditor = forwardRef<DraftEditorElement | null, DraftEditorProp
     const el = useRef<DraftEditorElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
-      if (el.current) el.current.options = options ?? {};
+      // Skip an unset prop, so options a host set through the ref survive.
+      if (el.current && options !== undefined) el.current.options = options;
     }, [options]);
     useHostEvents(el, props);
     // The editor loads in the browser only, so server rendering and viewer-only pages skip it.

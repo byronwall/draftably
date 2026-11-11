@@ -29,7 +29,12 @@ export const DraftEditor = defineComponent({
     return () =>
       h(
         'draft-editor',
-        { ref: el, source: props.source, '.options': props.options ?? {} },
+        {
+          ref: el,
+          source: props.source,
+          // Only when set, so options a host set through the ref survive.
+          ...(props.options === undefined ? {} : { '.options': props.options }),
+        },
         slots.default?.(),
       );
   },

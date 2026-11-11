@@ -46,7 +46,8 @@ export const DraftDiagram = forwardRef<DraftDiagramElement | null, DraftDiagramP
     const el = useRef<DraftDiagramElement>(null);
     useImperativeHandle(ref, () => el.current!, []);
     useBeforeMount(() => {
-      if (el.current) el.current.options = options ?? {};
+      // Skip an unset prop, so options a host set through the ref survive.
+      if (el.current && options !== undefined) el.current.options = options;
     }, [options]);
     useHostEvents(el, props);
     return createElement(
