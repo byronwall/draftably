@@ -157,7 +157,8 @@ const toBox = (r: { x: number; y: number; w: number; h: number }) => ({
  */
 export function mountEditor(host: HTMLElement, options: MountOptions): MountedEditor {
   // The session reads options when it needs them, so getters on `options` stay live. A link
-  // press is offered to the host's `link` listeners before it opens.
+  // press is offered to the host's `link` listeners before it opens. Object.create keeps the
+  // getters: never spread these options, since a spread copies each getter's value once.
   const session = createDiagramSession(
     Object.create(options, {
       onLink: {
