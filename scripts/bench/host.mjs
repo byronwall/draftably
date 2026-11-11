@@ -4,6 +4,7 @@
  * `@draftably/runtime` element on plain pages in Chromium, with no bundler.
  *
  *   pnpm bench:host [--runs 5] [--out tmp/bench/host.json] [--strict]
+ *   node scripts/bench/host.mjs --serve   (prints the page URL; add ?n=2&dark for the dark tokens)
  *
  * Each row prints median and p95 over the runs, the budget, and ✓ or ✗. Cold loads run with a 4×
  * CPU throttle. The exit code is 0 whatever the times, unless `--strict` is passed.
@@ -33,6 +34,9 @@ const nodes = source.match(/^node /gm).length;
 /** A plain page: `n` elements of the 28-box file, each a label of its own. */
 const page = query => `<!doctype html><meta charset="utf-8"><title>host bench</title>
 <style>body{margin:0}draft-diagram{height:240px}</style>
+<style media="${new URLSearchParams(query).has('dark') ? 'all' : 'not all'}">
+body{background:#020617}draft-diagram{--draft-bg:#0f172a;--draft-ink:#e2e8f0;--draft-border:#334155;--draft-focus:#38bdf8}
+</style>
 <script type="module">
 const q = new URLSearchParams(${JSON.stringify(query)});
 const n = Number(q.get('n') ?? 1);

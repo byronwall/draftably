@@ -13,7 +13,8 @@ type Job = {
   resolve: (result: RenderResult) => void;
   reject: (error: Error) => void;
 };
-type Slot = { worker: Worker; job?: Job; timer?: number; idle?: number };
+/** `last`: the viewer this worker drew most recently; its layout cache is warm for it. */
+type Slot = { worker: Worker; job?: Job; timer?: number; idle?: number; last?: string };
 type Pool = { slots: Slot[]; queue: Job[] };
 
 /** Workers per page: diagrams draw in parallel, and the page keeps a core for itself. */
@@ -81,10 +82,15 @@ function start(create: (() => Worker) | undefined, pool: Pool): Slot {
   return slot;
 }
 
-/** Give queued jobs to free workers, starting workers up to `POOL_SIZE`. */
+/**
+ * Give queued jobs to free workers, starting workers up to `POOL_SIZE`. A job goes back to the
+ * worker that last drew its viewer when that one is free, then to a new worker, then to any.
+ */
 function dispatch(create: (() => Worker) | undefined, pool: Pool) {
   while (pool.queue.length) {
-    let slot = pool.slots.find(s => !s.job);
+    const key = pool.queue[0].options.idPrefix;
+    let slot = pool.slots.find(s => !s.job && s.last === key);
+    if (!slot && pool.slots.length >= POOL_SIZE) slot = pool.slots.find(s => !s.job);
     if (!slot && pool.slots.length < POOL_SIZE) {
       try {
         slot = start(create, pool);
@@ -97,6 +103,7 @@ function dispatch(create: (() => Worker) | undefined, pool: Pool) {
     const job = pool.queue.shift()!;
     clearTimeout(slot.idle);
     slot.job = job;
+    slot.last = key;
     // The timeout counts from dispatch, so a job that waited in the queue is not cut short.
     const busy = slot;
     slot.timer = setTimeout(() => {
