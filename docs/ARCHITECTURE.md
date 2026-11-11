@@ -22,7 +22,7 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 | `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                        |
 | `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                  |
 | `rich-text.ts`    | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                        |
-| `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.      |
+| `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.     |
 | `status.ts`       | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.               |
 | `footnote.ts`     | The footnote block between the drawing and the key.                                                               |
 | `appearance.ts`   | Five preset themes, color families with numeric shades, and `resolveAppearance` (preset, then file overrides).    |
