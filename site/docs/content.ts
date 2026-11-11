@@ -66,22 +66,27 @@ const GROUPS: [string, string[]][] = [
     [
       'embed',
       'embed-quick-start',
-      'embed-concepts',
       'react',
       'solid',
       'vue',
       'svelte',
       'plain-html',
       'editor-component',
+    ],
+  ],
+  [
+    'Embedding topics',
+    [
+      'embed-concepts',
       'content-on-nodes',
       'camera-and-geometry',
       'events-and-status',
       'theming',
       'server-rendering',
-      'api-reference',
       'performance',
       'troubleshooting',
       'upgrade',
+      'api-reference',
     ],
   ],
   ['Graph layout', ['your-app-draws', 'layout-api', 'layout-drop-in']],
@@ -220,6 +225,11 @@ export const PAGES = ordered();
 /** The docs home: it only routes to other pages. */
 export const HOME = 'start';
 export const findPage = (slug: string) => PAGES.find(p => p.slug === slug);
+/**
+ * Pages that moved, by old slug. Links from released READMEs still use them, so the router sends
+ * an old path on: to the heading or page its `#anchor` names, or else to the new page.
+ */
+export const MOVED: Record<string, string> = { frameworks: 'embed', element: 'embed-concepts' };
 export const docsPath = (slug: string, hash = '') => `/docs/${slug}${hash ? `#${hash}` : ''}`;
 
 /** Where `#anchor` links in the Markdown point: a page, or a heading on one. */
