@@ -931,17 +931,23 @@ function renamed(doc: Diagram, alias: Map<string, string>): Diagram {
 
 /** Narrowest frame a wrapped group title sets; a narrower group's title wraps to this width. */
 const GROUP_TITLE_WIDTH = 240;
+/**
+ * A one-line title up to this many times the frame's width still takes one line: the frame widens
+ * a little instead of wrapping a word or two onto a line of its own.
+ */
+const GROUP_TITLE_STRETCH = 1.25;
 
 /**
  * Width a group's title asks of a frame whose content needs `inner`, and its line count. A title
- * that fits on one line beside the content keeps one line; a longer one wraps to the content
- * width (at least `GROUP_TITLE_WIDTH`), and the frame widens only as far as it takes to keep the
- * title to `GROUP_TITLE_LINES` lines. The header grows a line for each extra line instead.
+ * that fits on one line beside the content, or nearly does (`GROUP_TITLE_STRETCH`), keeps one
+ * line; a longer one wraps to the content width (at least `GROUP_TITLE_WIDTH`), and the frame
+ * widens only as far as it takes to keep the title to `GROUP_TITLE_LINES` lines. The header grows
+ * a line for each extra line instead.
  */
 function titleFit(title: string, inner: number, look: ResolvedAppearance) {
   const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME;
   let w = Math.max(inner, GROUP_TITLE_WIDTH);
-  if (full <= w) return { w: full, lines: 1 };
+  if (full <= w * GROUP_TITLE_STRETCH) return { w: full, lines: 1 };
   const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle, true).length;
   while (lines() > GROUP_TITLE_LINES && w < full) w += 8;
   return { w: Math.min(w, full), lines: Math.min(lines(), GROUP_TITLE_LINES) };
@@ -2887,7 +2893,11 @@ function layoutPass(
   packFold?: PackFold,
 ): Scene {
   /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
-  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false),
+  const ordering = m.edges.filter(e => e.constraint !== false && e.directed !== false),
+    // A dashed edge into a box that a solid edge already places is a side input, such as "same
+    // shapes" or a progress feed: ranking by it would push the box, and its group, past its callers.
+    placed = new Set(ordering.filter(e => !e.dashed).map(e => e.target)),
+    ranking = ordering.filter(e => !e.dashed || !placed.has(e.target)),
     // Planned routes keep the router's spacing (`planRoutes`).
     spacing: Spacing = {
       port: Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),

@@ -302,6 +302,8 @@ content area.
   and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
+  A dashed edge into a box that a solid edge also reaches does not rank it, so a dashed side
+  input never pushes its target past the boxes that call it.
 - Use `directed=false` on an `edge` for an undirected connection. Keep the `->` endpoint
   separator; no arrowhead is drawn. It does not impose a flow/swim-lane rank, but layout engines
   may use it as adjacency. Omission or `directed=true` means the usual directed edge.
