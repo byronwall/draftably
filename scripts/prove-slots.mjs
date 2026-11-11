@@ -8,7 +8,8 @@
  * content, content follows a source update and a target keeps its identity, a click on body text
  * reaches the drawing, a `data-draft-input` button takes its click, a caret survives an update,
  * `overflow: clip` keeps the element from scrolling, an unknown slot is a `DRAFT_SLOT_UNKNOWN`
- * warning, and low detail hides bodies. For the editor also: its styles in the shadow root, page
+ * warning, content larger than its node is a `DRAFT_SLOT_OVERFLOW` warning, and low detail hides
+ * bodies, also after a commit made zoomed out. For the editor also: its styles in the shadow root, page
  * tokens on `:host`, ports and handles above a body, and no shortcut from a marked input.
  * Screenshots go to tmp/proof-slots/.
  *
@@ -264,12 +265,23 @@ for (const name of only) {
 
       // Pointer: body text lets the pointer through to the drawing; a marked button takes it.
       const text = await ev(s => rect(card(s, 'api').querySelector('.label')), side);
+      // The card has its own data-id, so the hit must also be outside the card.
       const under = await ev(
-        ([s, x, y]) =>
-          H(s).el.shadowRoot.elementFromPoint(x, y)?.closest('[data-id]')?.getAttribute('data-id'),
+        ([s, x, y]) => {
+          const hit = H(s).el.shadowRoot.elementFromPoint(x, y);
+          return {
+            id: hit?.closest('[data-id]')?.getAttribute('data-id'),
+            inCard: !!hit && card(s, 'api').contains(hit),
+            drawn: !!hit && H(s).el.shadowRoot.contains(hit),
+          };
+        },
         [side, text.x + 3, text.y + text.h / 2],
       );
-      check(label('body text passes the pointer to the drawing'), under === 'api', under);
+      check(
+        label('body text passes the pointer to the drawing'),
+        under.id === 'api' && !under.inCard && under.drawn,
+        under,
+      );
       const heard = () =>
         ev(s => (s === 'viewer' ? log.viewer.activate : log.editor.select).join('|'), side);
       const before = await heard();
@@ -427,6 +439,46 @@ for (const name of only) {
           full.title === '0',
         { low, full },
       );
+
+      // A drawing committed while zoomed out still knows its bodies: zoom in, and each title
+      // under a body is hidden.
+      await detail(0.3);
+      await ev(
+        async ([s, src]) => {
+          H(s).el.source = src;
+          await H(s).el.updateComplete;
+          await H(s).handle().ready;
+          await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        },
+        [side, updated.replace('"Database"', '"DB"')],
+      );
+      const zoomedIn = await detail(1);
+      check(
+        label('a commit made below zoom 0.4 still hides titles under bodies at zoom 1'),
+        zoomedIn.detail === 'full' && zoomedIn.title === '0',
+        zoomedIn,
+      );
+
+      // Content larger than its node, assigned after its target exists, is an overflow.
+      await ev(s => {
+        const big = document.createElement('div');
+        big.className = 'big';
+        big.dataset.draftSlot = 'body:db';
+        big.style.height = '900px';
+        big.textContent = 'tall';
+        H(s).el.append(big);
+      }, side);
+      await tab
+        .waitForFunction(s => log[s].diagnostics.at(-1)?.includes('DRAFT_SLOT_OVERFLOW:db'), side, {
+          timeout: 3000,
+        })
+        .catch(() => {});
+      check(
+        label('content larger than its node is a DRAFT_SLOT_OVERFLOW warning'),
+        await ev(s => log[s].diagnostics.at(-1)?.includes('DRAFT_SLOT_OVERFLOW:db'), side),
+        await ev(s => log[s].diagnostics.at(-1), side),
+      );
+      await ev(s => H(s).el.querySelector(':scope > .big').remove(), side);
       await ev(([s, c]) => H(s).handle().setCamera(c), [side, start]);
       await frames();
     }
