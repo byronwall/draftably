@@ -1,4 +1,4 @@
-import { renderSvg as writeSvg, SvgLimitError } from './svg-renderer';
+import { renderSvg as writeSvg, SvgLimitError, type Route } from './svg-renderer';
 import { applyLinks, assertOptions, textLink } from './policy';
 import { runtimeVersion, fontMetricsVersion } from './version';
 import { forScheme, resolveAppearance } from '../model/appearance';
@@ -348,11 +348,15 @@ export async function renderWithScene(
   let svg: string;
   let drawn: { rects: Map<string, Rect>; routes: DrawnRoute[] } | undefined;
   try {
-    const write = (d: typeof doc) =>
+    // Both drawings embed the same fonts. They go in once, after the merge, so neither the second
+    // drawing nor the color scan copies them.
+    const fonts = both ? '/*draft-fonts*/' : fontCss;
+    const write = (d: typeof doc, routes?: Route[]) =>
       writeSvg(d, {
+        routes,
         onDrawn: value => (drawn = value),
         idPrefix: prefix,
-        fontCss,
+        fontCss: fonts,
         title: options.title,
         description: options.description,
         styleNonce: options.styleNonce,
@@ -364,7 +368,11 @@ export async function renderWithScene(
     svg = write(doc);
     if (both) {
       // Should the drawings ever differ in more than color, the page gets the light one.
-      svg = mergeSchemes(svg, write({ ...doc, appearance: darkLook })) ?? svg;
+      // The dark drawing reuses the light one's routes: colors never move a line.
+      const routes = (drawn as { routes: Route[] } | undefined)?.routes;
+      svg = mergeSchemes(svg, write({ ...doc, appearance: darkLook }, routes)) ?? svg;
+      const at = svg.indexOf(fonts);
+      svg = svg.slice(0, at) + fontCss + svg.slice(at + fonts.length);
       if (new TextEncoder().encode(svg).length > limits.maxOutputBytes)
         throw new SvgLimitError(`The SVG is larger than ${limits.maxOutputBytes} bytes.`);
     }
