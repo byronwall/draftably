@@ -3120,6 +3120,32 @@ function layoutPass(
       : { w: total, h: list.length ? header + length + GROUP_INSET : 0 };
   }
 
+  /**
+   * A column's boxes share the widest one's width, so its edges line up. A member with a `size`
+   * line keeps it; one that wraps less at the wider width gets shorter. Diamonds, circles and
+   * groups keep their own shape.
+   */
+  function evenColumn(list: Item[], leaves: Map<string, { look: Size; ref: Size }>) {
+    const boxes = list.filter(o => o.type === 'node' && (o.shape === 'box' || o.shape === 'pill'));
+    if (boxes.length < 2) return;
+    const sized = (o: Item) => m.hints.some(h => h.type === 'size' && h.id === o.id),
+      w = Math.max(...boxes.map(o => o.w)),
+      refW = Math.max(...boxes.map(o => leaves.get(o.id)?.ref.w ?? o.w));
+    for (const o of boxes) {
+      if (sized(o) || o.w === w) continue;
+      const leaf = leafSize(o, { width: w }, look);
+      o.w = round(leaf.w);
+      o.h = round(leaf.h);
+      const l = leaves.get(o.id);
+      if (!l) continue;
+      const r = leafSize(o, { width: refW }, ref);
+      leaves.set(o.id, {
+        look: { w: o.w, h: o.h },
+        ref: { w: round(r.w), h: round(r.h) },
+      });
+    }
+  }
+
   function arrange(scope: string): { w: number; h: number } {
     const layout = layoutFor(m, scope),
       order = m.hints.find(h => h.type === 'order' && h.scope === scope);
@@ -3198,6 +3224,7 @@ function layoutPass(
       items.set(o.id, item);
       return item;
     });
+    if (layout.algorithm === 'column') evenColumn(list, leaves);
     if (scope === 'root' && layout.algorithm === 'lanes') return swimLanes(list, layout);
     const pairs = pairsIn(scope);
     // Every line with an end in this scope, for the room the gaps it runs through need.

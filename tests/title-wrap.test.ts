@@ -122,3 +122,26 @@ describe('diamond size', () => {
     expect(scene.diagnostics.map(d => d.code)).toContain('big-diamond');
   });
 });
+
+describe('column width', () => {
+  it('gives a column’s boxes the widest one’s width, keeping sized nodes and other shapes', () => {
+    const scene = checkSource(
+      [
+        'diagram "Column" version=1',
+        'group g "G"',
+        'node a "A" in=g',
+        'node b "Billing reconciliation\\nand weekly payout reports" in=g',
+        'node c "C" in=g',
+        'node d "Ok?" in=g shape=diamond',
+        'size c width=120 height=40',
+        'layout g column gap=12',
+      ].join('\n'),
+    );
+    const box = (id: string) => scene.byId.get(id)!;
+    expect(box('b').w).toBeGreaterThan(164);
+    expect(box('a').w).toBe(box('b').w);
+    expect(box('a').x + box('a').w).toBe(box('b').x + box('b').w);
+    expect([box('c').w, box('c').h]).toEqual([120, 40]);
+    expect(box('d').w).toBe(box('d').h);
+  });
+});

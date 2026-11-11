@@ -65,6 +65,10 @@ Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color i
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
 use `column gap=24`.
 
+In a `column`, every box and pill takes the widest one's width, so the column's edges line up. A
+node with a `size` line keeps its size, and diamonds, circles and groups keep their own. A title
+that wraps less at the wider width makes its box shorter.
+
 `flow` ranks objects along its direction by their connections. A loop keeps its path in that
 direction, and only the edge that closes it runs backwards. Within its rank, an object lines up
 with what it connects to in the rank before: the first of several branches continues its
