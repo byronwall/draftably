@@ -93,6 +93,7 @@ prints median and p95 per row with ✓ or ✗. Add `--runs N` (default 5) and `-
 | `geometry()` at 200 nodes                    | ≤ 1 ms; the same object for one revision                  |
 | Camera frame, 10 / 100 / 500 slot targets    | ≤ 8 ms p95 at 500; 0 forced layouts                       |
 | Target reconcile per update, 500 targets     | ≤ 10 ms; no target re-created for an unchanged ID         |
+| Editor drag frame, 200 nodes, 400 targets    | ≤ no slots + 5 %; no anchors event, re-observe or assign  |
 | Mount and destroy, 50 cycles                 | heap within 5 %; listeners, workers and fonts at baseline |
 
 Each change from the host contract on must keep every ✓ row ✓ and must not make a ✗ row slower.
@@ -107,6 +108,13 @@ bench wraps every DOM API that reads layout, and a forced layout needs one. Reco
 pass a commit runs over every target. A source update that moves every node must then add and
 remove no target.
 
+The drag rows load one `<draft-editor>` of a 200-node file, with no slots and then with a body and
+an overlay on each node, and drag a node 60 moves. A frame is the `pointermove` dispatch plus the
+style and layout it causes. With slots it must fire no `anchors` event, call no
+`ResizeObserver.observe` and no `slot.assign`, and stay within 5 % of the frame with no slots. The
+frame is slow at 200 nodes either way (about 215 ms on an M3 Pro): each edge view scans every edge
+on each move.
+
 ## Slots
 
 `pnpm prove:slots` loads the built `<draft-diagram>` and `<draft-editor>` on one plain page in
@@ -115,10 +123,13 @@ Chromium, Firefox and WebKit, each with host children marked `data-draft-slot`. 
 both elements it checks: `host.css` hides content before the elements define; each marked child is
 assigned to its target; targets follow drawing order; an unknown slot is a `DRAFT_SLOT_UNKNOWN`
 warning; a body fills its node and scales with the camera; an overlay sits at its item's screen box
-at screen scale; host CSS styles the content; a click on body text reaches the drawing; a
+at screen scale; host CSS styles the content; a click on body text reaches the drawing, not the
+card; a
 `data-draft-input` button takes its click and only it; a caret survives a source update; content
 follows an update and keeps its target; `overflow: clip` never scrolls on focus; focus in a body
-reveals it; low detail hides bodies and shows titles. For the editor also: its styles are adopted in
+reveals it; low detail hides bodies and shows titles; a commit made below zoom 0.4 still hides the
+titles under bodies at zoom 1; content larger than its node, assigned after its target exists, is a
+`DRAFT_SLOT_OVERFLOW` warning. For the editor also: its styles are adopted in
 its shadow root; a page value for a token wins; `data-theme="dark"` switches the tokens; ports and
 resize handles of a body node sit above the body and resize it; typing **N** in a marked input adds
 no node; and both send `anchors` with `[]` on removal. Screenshots go to `tmp/proof-slots/`.

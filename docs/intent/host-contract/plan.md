@@ -339,7 +339,17 @@ A host puts content on an item with an ordinary child of the element, marked wit
   it would drop focus in its content, so an update that reorders items keeps the old order for
   the targets it keeps.
 - `DRAFT_SLOT_OVERFLOW` compares each assigned child's offset size with the node's box, from a
-  `ResizeObserver` on the content.
+  `ResizeObserver` on the content. Content arrives after its target, so the layer observes a
+  target's content again on `slotchange` (the element's `assign()` fires it) and when a host
+  appends to the target itself. A box that changes size is checked again.
+- A node keeps `data-draft-body` at every zoom; CSS on `data-draft-detail` shows its title again
+  below 0.4. So a drawing committed while zoomed out hides the right titles once the user zooms in.
+  In the editor, the drawing's own ports and handles show at low detail, and the top layer hides.
+- A commit that adds or removes no target only moves the targets: no `anchors` event, no slot
+  assignment, no new observing. An editor drag runs a commit each frame. With no slots, a camera
+  frame writes nothing to the layer.
+- Focus that enters content reveals its item only when no pointer press started in the layer, so a
+  press on a marked button never moves the camera under it.
 - The editor's top layer draws only the ports and resize handles of nodes that have a body. Their
   selection ring stays in the drawing: it sits outside the node's box, so a body does not cover
   it. A gesture that starts on the top layer captures the pointer there, so the layer takes the
@@ -352,8 +362,8 @@ A host puts content on an item with an ordinary child of the element, marked wit
   for `mountEditor`, the element's shadow root for `<draft-editor>`. `:root` in the editor's CSS
   maps to `:host` and to `.draft-editor-root`, the class a page mount gets.
 - Host content never acts as a drawing item. The viewer ignores a click or context menu whose
-  target is host content (a host card can carry its own `data-id`), and the wheel over marked
-  content.
+  target is host content (a host card can carry its own `data-id`), or anything in the anchor
+  layer, and the wheel over marked content.
 
 ### Input
 
