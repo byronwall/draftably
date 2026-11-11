@@ -1,4 +1,4 @@
-import { createEffect } from 'solid-js';
+import { createEffect, createMemo, on } from 'solid-js';
 import { render } from 'solid-js/web';
 import { registerFonts } from '../lib/font-data';
 import { resolveAppearance } from '../model/appearance';
@@ -17,7 +17,8 @@ import {
   type FrameOptions,
   type MoveResult,
 } from '../runtime/camera';
-import { isGroup, objectRect } from '../model/graph';
+import { findEdge, findNode, isGroup, objectRect } from '../model/graph';
+import { placedItems, type Geometry } from '../runtime/geometry';
 import { Editor } from './Editor';
 import { sessions } from './internal';
 import '../styles/app.css';
@@ -64,16 +65,34 @@ export interface MountOptions extends EditorOptions {
 /** What `on` reports. `camera` comes at most once per animation frame. */
 export interface EditorEvents {
   camera: { camera: Camera; reason: CameraReason };
+  /** The selection changed, by the user or through `select()`. */
+  select: { ids: readonly string[]; reason: 'user' | 'api' };
+  /** A right-click; `id` is null on the background. The editor shows no menu of its own. */
+  contextmenu: {
+    id: string | null;
+    kind?: 'node' | 'group' | 'edge';
+    clientX: number;
+    clientY: number;
+    preventDefault(): void;
+  };
 }
+
+/** An editor update's outcome. The editor draws in its own session, so it has no SVG value. */
+export type EditorUpdateResult = { status: 'committed' | 'error' | 'destroyed'; revision: number };
 
 /** The editor's handle: the viewer's camera, plus editing. */
 export interface MountedEditor {
   /** Resolves once the first text is drawn. */
-  readonly ready: Promise<void>;
+  readonly ready: Promise<EditorUpdateResult>;
   /** The text as the editor holds it now. */
   source(): string;
   /** Show text the host changed. Resolves once it is drawn. */
-  update(source: string): Promise<void>;
+  update(source: string): Promise<EditorUpdateResult>;
+  /** Where each item is drawn, in world units: the viewer's shapes. The same object for one revision. */
+  geometry(): Geometry | null;
+  /** Select these items (unknown IDs are dropped); `[]` clears the selection. */
+  select(ids: readonly string[]): void;
+  selection(): readonly string[];
   getCamera(): Camera;
   /** Zoom is clamped to `ZOOM_MIN`–`ZOOM_MAX`, as in the viewer. */
   setCamera(camera: Camera): void;
@@ -117,17 +136,46 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   let destroyed = false,
     opened = false,
     firstFit = 0;
-  const ready = session.openSource(options.source, options.onChange).then(() => {
-    opened = true;
-    if (destroyed) return;
-    firstFit = requestAnimationFrame(() => {
-      session.fitView();
-      if (pendingMove) whenSized(pendingMove);
-    });
-  });
+  let revision = 0;
+  const ready: Promise<EditorUpdateResult> = session
+    .openSource(options.source, options.onChange)
+    .then(() => {
+      opened = true;
+      if (destroyed) return;
+      firstFit = requestAnimationFrame(() => {
+        session.fitView();
+        if (pendingMove) whenSized(pendingMove);
+      });
+    })
+    .then(
+      () => ({ status: destroyed ? 'destroyed' : 'committed', revision: ++revision }) as const,
+      () => ({ status: 'error', revision: ++revision }) as const,
+    );
+  let latest = ready;
+
+  /** Geometry, rebuilt when the drawing's boxes or routes change. */
+  let geometryRevision = 0;
+  let selectReason: 'user' | 'api' = 'user';
+  const kindOf = (id: string) =>
+    findNode(session.doc, id)
+      ? ('node' as const)
+      : isGroup(session.doc, id)
+        ? ('group' as const)
+        : findEdge(session.doc, id)
+          ? ('edge' as const)
+          : undefined;
 
   // --- The host's camera: the viewer's shape and rules -----------------------------------------
-  const listeners = new Set<(event: EditorEvents['camera']) => void>();
+  const listeners = new Map<keyof EditorEvents, Set<(event: never) => void>>();
+  const emit = <K extends keyof EditorEvents>(type: K, event: EditorEvents[K]) => {
+    for (const listener of listeners.get(type) ?? []) {
+      try {
+        (listener as (value: EditorEvents[K]) => void)(event);
+      } catch {
+        // One listener's error does not stop the others.
+      }
+    }
+  };
   let cameraReason: CameraReason = 'user',
     cameraFrame = 0;
   const stopCamera = session.onCamera(reason => {
@@ -135,20 +183,14 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     if (cameraFrame) return;
     cameraFrame = requestAnimationFrame(() => {
       cameraFrame = 0;
-      const event = {
+      emit('camera', {
         camera: toCamera(session.doc.camera, session.stageSize()),
         reason: cameraReason,
-      };
-      for (const listener of listeners) {
-        try {
-          listener(event);
-        } catch {
-          // One listener's error does not stop the others.
-        }
-      }
+      });
     });
   });
   let pendingMove: ((view: View) => MoveResult) | undefined;
+  let geometryNow: () => Geometry = () => null as never;
   /** Run now, or once the editor has drawn and the canvas has a size; the latest call wins. */
   const whenSized = (run: (view: View) => MoveResult): MoveResult => {
     if (destroyed) return 'unchanged';
@@ -190,21 +232,75 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     createEffect(() =>
       host.style.setProperty('--diagram-canvas', resolveAppearance(session.doc.appearance).canvas),
     );
+    const drawn = createMemo(() => {
+      const f = session.viewerFrame();
+      return {
+        revision: ++geometryRevision,
+        frame: { x: f.x, y: f.y, width: f.w, height: f.h },
+        ...placedItems(session.doc, session.sceneRects(), session.routes()),
+      };
+    });
+    geometryNow = drawn;
+    // Every selection change is reported once, with who made it.
+    createEffect(
+      on(
+        session.selection,
+        set => {
+          emit('select', { ids: [...set], reason: selectReason });
+          selectReason = 'user';
+        },
+        { defer: true },
+      ),
+    );
     // A fit or reveal asked for before the canvas had a size runs once it has one.
     createEffect(() => {
       const view = session.stageSize();
       if (pendingMove && view.width > 1 && view.height > 1) whenSized(pendingMove);
     });
-    return <Editor session={session} />;
+    return (
+      <Editor
+        session={session}
+        onContextMenu={e => {
+          const id =
+            (eventTarget(e) as Element | null)?.closest?.('[data-id]')?.getAttribute('data-id') ??
+            null;
+          const kind = id ? kindOf(id) : undefined;
+          emit('contextmenu', {
+            id: kind ? id : null,
+            ...(kind ? { kind } : {}),
+            clientX: e.clientX,
+            clientY: e.clientY,
+            preventDefault: () => {},
+          });
+        }}
+      />
+    );
   }, host);
   host.classList.add('draft-editor');
   if (!mounted++)
     for (const [type, fn, capture] of KEYS) document.addEventListener(type, fn, capture);
 
   const handle: MountedEditor = {
-    ready,
+    get ready() {
+      return latest;
+    },
     source: session.currentSource,
-    update: async next => void (await session.receiveSource(next)),
+    update(next) {
+      latest = session.receiveSource(next).then(
+        () => ({ status: destroyed ? 'destroyed' : 'committed', revision: ++revision }) as const,
+        () => ({ status: 'error', revision: ++revision }) as const,
+      );
+      return latest;
+    },
+    geometry: () => (destroyed || !opened ? null : geometryNow()),
+    select(ids) {
+      if (destroyed) return;
+      selectReason = 'api';
+      session.setSelection(ids);
+      // An unchanged selection fires no effect; the next user change must not read as api.
+      queueMicrotask(() => (selectReason = 'user'));
+    },
+    selection: () => session.selectedIds(),
     getCamera: () => toCamera(session.doc.camera, session.stageSize()),
     setCamera(camera) {
       if (
@@ -231,10 +327,12 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
           ? moveTo(revealCamera(handle.getCamera(), box, view, frameOptions), view, 'api')
           : 'missing';
       }),
-    on(_type, listener) {
+    on(type, listener) {
       if (destroyed) return () => {};
-      listeners.add(listener);
-      return () => listeners.delete(listener);
+      const set = listeners.get(type) ?? new Set();
+      set.add(listener as (event: never) => void);
+      listeners.set(type, set);
+      return () => set.delete(listener as (event: never) => void);
     },
     destroy() {
       if (destroyed) return;
@@ -259,4 +357,5 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
 }
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from '../runtime/camera';
+export type { Box, EdgeOut, Geometry, PlacedBox } from '../runtime/geometry';
 export { ZOOM_MAX, ZOOM_MIN } from '../runtime/camera';

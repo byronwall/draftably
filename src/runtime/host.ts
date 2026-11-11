@@ -6,6 +6,7 @@
 import type { UpdateResult, ViewerEvents } from './viewer';
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
+export type { Box, EdgeOut, Geometry, PlacedBox } from './geometry';
 
 export interface HostEvents {
   /** Each update's result: committed, error or a cancellation. */
@@ -16,6 +17,10 @@ export interface HostEvents {
   itemactivate: ViewerEvents['itemactivate'];
   /** Cancelable: `preventDefault()` on the DOM event stops Draftably opening the link. */
   link: Omit<ViewerEvents['link'], 'preventDefault'>;
+  /** Cancelable: `preventDefault()` on the DOM event stops the browser's menu. */
+  contextmenu: Omit<ViewerEvents['contextmenu'], 'preventDefault'>;
+  /** The editor only: the selection changed, by the user or through `select()`. */
+  select: { ids: readonly string[]; reason: 'user' | 'api' };
   /** The editor only: the source after a kept edit, undo or redo. */
   change: { source: string };
 }
@@ -30,11 +35,13 @@ export const HOST_EVENTS = [
   'camera',
   'itemactivate',
   'link',
+  'contextmenu',
+  'select',
   'change',
 ] as const satisfies readonly HostEventName[];
 
 /** Events a host can cancel with `preventDefault()`. */
-export const CANCELABLE_EVENTS: readonly HostEventName[] = ['link'];
+export const CANCELABLE_EVENTS: readonly HostEventName[] = ['link', 'contextmenu'];
 
 export type DraftEventMap = {
   [K in HostEventName as `draft-${K}`]: CustomEvent<HostEvents[K]>;

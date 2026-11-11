@@ -70,6 +70,8 @@ export interface SvgOptions {
   linkTarget?: '_self' | '_blank';
   metadata?: string;
   maxOutputBytes?: number;
+  /** Receives the boxes and routes of a one-panel drawing, as drawn (not for compare or states). */
+  onDrawn?: (drawn: { rects: Map<string, Rect>; routes: Route[] }) => void;
 }
 
 export class SvgLimitError extends Error {}
@@ -645,6 +647,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       : [arrange(true), arrange(false)],
     { stacked, spans, starts, areaH, frame } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a));
   const out = openSvg(doc, look, defs, frame, opts);
+  // One panel draws at the world origin, so its boxes are the drawing's own coordinates.
+  if (!compare) opts.onDrawn?.({ rects: scenes[0].rects, routes: scenes[0].routes });
   scenes.forEach((scene, i) => {
     // Panel i's corner, and the shift that brings its own span to that corner.
     const px = stacked ? x0 : x0 + starts[i],

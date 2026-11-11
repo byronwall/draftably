@@ -96,8 +96,18 @@ editor.destroy(); // when the host is removed
 ```
 
 The editor's handle has the viewer's camera, with the same `{ centerX, centerY, zoom }` shape,
-zoom range and rules: see [Steer the camera](#steer-the-camera). `ready` resolves once the first
-text is drawn.
+zoom range and rules: see [Steer the camera](#steer-the-camera). It also has the viewer's
+`geometry()` (see [Find where things are](#find-where-things-are)), and `ready`, which resolves
+once the first text is drawn.
+
+```ts
+editor.select(['api', 'db']); // unknown IDs are dropped; [] clears
+editor.selection(); // ['api', 'db']
+editor.on('select', ({ ids, reason }) => showInspector(ids)); // reason: 'user' or 'api'
+editor.on('contextmenu', ({ id, clientX, clientY }) => openMyMenu(id, clientX, clientY));
+```
+
+The editor shows no menu of its own; a right-click selects the item and reports `contextmenu`.
 
 | Option       | Effect                                                                     |
 | ------------ | -------------------------------------------------------------------------- |

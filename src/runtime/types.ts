@@ -1,3 +1,4 @@
+import type { Geometry } from './geometry';
 export type Severity = 'error' | 'warning' | 'info';
 
 export interface SourceLocation {
@@ -84,6 +85,11 @@ export interface DiagramSummary {
 
 export interface RenderedDiagram extends DiagramSummary {
   svg: string;
+  /**
+   * Where each node, group and edge is drawn, in the SVG's own units (its `viewBox`), in the graph
+   * API's shapes. `null` for `compare` and `states` drawings, which repeat items across panels.
+   */
+  geometry: Geometry | null;
   provenance: {
     runtimeVersion: string;
     dslVersion: 1;

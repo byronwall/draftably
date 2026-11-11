@@ -30,6 +30,12 @@ if (!fs.existsSync(path.join(dist, 'element.js'))) throw Error('Run pnpm runtime
 
 const source = fs.readFileSync(path.join(root, 'scripts/bench/diagrams/xl-triggers.draft'), 'utf8');
 const nodes = source.match(/^node /gm).length;
+/** 200 nodes in ten rows of twenty, each joined to the next: the geometry() row. */
+const big = [
+  'diagram "Big" version=1',
+  ...Array.from({ length: 200 }, (_, i) => `node n${i} "Node ${i}"`),
+  ...Array.from({ length: 199 }, (_, i) => `edge e${i} n${i} -> n${i + 1}`),
+].join('\n');
 
 /** A plain page: `n` elements of the 28-box file, each a label of its own. */
 const page = query => `<!doctype html><meta charset="utf-8"><title>host bench</title>
@@ -40,7 +46,7 @@ body{background:#020617}draft-diagram{--draft-bg:#0f172a;--draft-ink:#e2e8f0;--d
 <script type="module">
 const q = new URLSearchParams(${JSON.stringify(query)});
 const n = Number(q.get('n') ?? 1);
-const source = ${JSON.stringify(source)};
+const source = q.has('big') ? ${JSON.stringify(big)} : ${JSON.stringify(source)};
 window.__long = 0;
 new PerformanceObserver(list => {
   for (const e of list.getEntries()) window.__long = Math.max(window.__long, e.duration);
@@ -56,6 +62,7 @@ window.committed = el =>
   });
 window.add = () => {
   const el = document.createElement('draft-diagram');
+  if (q.has('big')) el.options = { execution: { mode: 'worker', timeoutMs: 120000 } };
   el.source = source;
   document.body.append(el);
   return el;
@@ -223,6 +230,31 @@ const pool = Math.max(1, Math.min(4, os.cpus().length - 1));
     '1 sheet; 1 font set; no long task over 200 ms',
     `${page.sheets} sheets; ${page.fonts} font faces; longest task ${Math.round(page.long)} ms`,
     page.sheets === 1 && page.long <= 200,
+  );
+  await ctx.close();
+}
+
+// geometry() at 200 nodes: one object per revision, read in well under 1 ms.
+{
+  const { ctx, tab } = await open('n=1&big');
+  await tab.evaluate(() => window.firstUpdates);
+  const g = await tab.evaluate(() => {
+    const viewer = document.querySelector('draft-diagram').viewer;
+    const first = viewer.geometry();
+    const t = performance.now();
+    let same = true;
+    for (let i = 0; i < 1000; i++) same &&= viewer.geometry() === first;
+    return {
+      ms: (performance.now() - t) / 1000,
+      same,
+      nodes: Object.keys(first?.nodes ?? {}).length,
+    };
+  });
+  row(
+    'geometry() at 200 nodes',
+    '≤ 1 ms; the same object for one revision',
+    `${g.ms.toFixed(4)} ms per call; ${g.nodes} nodes; same object: ${g.same ? 'yes' : 'no'}`,
+    g.ms <= 1 && g.same && g.nodes === 200,
   );
   await ctx.close();
 }

@@ -6,6 +6,8 @@ import { compile, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, parseModel, type Model } from '../dsl/syntax';
 import { withState } from '../model/status';
+import type { Rect } from '../model/types';
+import { placedItems, type DrawnRoute, type Geometry } from './geometry';
 import type {
   Diagnostic,
   RenderFailure,
@@ -337,8 +339,10 @@ export async function renderWithScene(
       result: fail('aborted', diagnostic('DRAFT_ABORTED', 'Rendering was aborted.', sourceId)),
     };
   let svg: string;
+  let drawn: { rects: Map<string, Rect>; routes: DrawnRoute[] } | undefined;
   try {
     svg = writeSvg(doc, {
+      onDrawn: value => (drawn = value),
       idPrefix: prefix,
       fontCss,
       title: options.title,
@@ -396,14 +400,23 @@ export async function renderWithScene(
       to: e.target,
     })),
   ];
+  const viewBox = [Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4])] as const;
+  const geometry: Geometry | null = drawn
+    ? {
+        revision: 0,
+        frame: { x: viewBox[0], y: viewBox[1], width: viewBox[2], height: viewBox[3] },
+        ...placedItems(doc, drawn.rects, drawn.routes),
+      }
+    : null;
   const value = {
     svg,
     title: options.title ?? scene.title,
     ...(options.description !== undefined ? { description: options.description } : {}),
     width: Number(match[5]),
     height: Number(match[6]),
-    viewBox: [Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4])] as const,
+    viewBox,
     items,
+    geometry,
     states: (scene.model.appearance.states ?? []).map(s => ({ id: s.id, label: s.label })),
     activeState: options.state ?? null,
     provenance: {

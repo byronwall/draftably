@@ -493,6 +493,14 @@ a pool of at most min(4, cores − 1) workers. Jobs queue on the main thread, a 
 the queue before a worker sees it, and a job's timeout starts when a worker takes it and stops only
 that worker.
 
+**Changed in step 5.** Two details of the types settled in code:
+
+- A handle's cancelable event (`link`, `contextmenu`) carries `preventDefault()` in its payload, as
+  the viewer's `link` did. The element strips it from `detail`, dispatches a `CustomEvent` with
+  `cancelable: true`, and calls it when the host cancels. `HostEvents` describes the `detail`.
+- The editor's `update` and `ready` resolve to `{ status: 'committed' | 'error' | 'destroyed',
+revision }`. The editor draws in its own session, so it has no SVG `value` to return.
+
 ## Breaking changes
 
 The packages are 0.x. The whole stack ships as one minor release, with every break listed and

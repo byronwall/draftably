@@ -98,3 +98,17 @@ export function sharedSheet(doc: Document, key: string, css: string): CSSStyleSh
   }
   return sheet;
 }
+
+/**
+ * Re-dispatch a handle event whose payload may carry `preventDefault()`: the DOM event is
+ * cancelable instead, and a host that cancels it cancels Draftably's default.
+ */
+export function relay<K extends keyof HostEvents>(
+  el: HTMLElement,
+  type: K,
+  event: HostEvents[K] | (HostEvents[K] & { preventDefault(): void }),
+) {
+  if (!('preventDefault' in (event as object))) return void redispatch(el, type, event);
+  const { preventDefault, ...detail } = event as HostEvents[K] & { preventDefault(): void };
+  if (!redispatch(el, type, detail as unknown as HostEvents[K])) preventDefault();
+}
