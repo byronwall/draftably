@@ -256,30 +256,49 @@ export async function proveHost(
 
     await step('editors', async () => {
       const editors = page.locator('#p-editors draft-editor');
-      const press = async (index: number, id: string) => {
+      const select = async (index: number, id: string) => {
         const node = editors.nth(index).locator(`[data-kind="node"][data-id="${id}"]`);
         await node.scrollIntoViewIfNeeded();
         await node.click();
+      };
+      // Each editor holds a selection when Delete is pressed, so a key handler that reached the
+      // other editor would delete its node too.
+      const press = async (other: [number, string], index: number, id: string) => {
+        await select(...other);
+        await select(index, id);
         await page.keyboard.press('Delete');
         await page.waitForTimeout(400);
+        return page.evaluate(
+          ([i, kept]) => {
+            const el = document.querySelectorAll('#p-editors draft-editor')[i] as HTMLElement & {
+              editor: { source(): string; selection(): string[] };
+            };
+            return {
+              changes: (window as unknown as { __proof: { changes: string[][] } }).__proof.changes,
+              kept: el.editor.source().includes(`node ${kept} `),
+              selected: el.editor.selection(),
+            };
+          },
+          [other[0], other[1]] as [number, string],
+        );
       };
-      await press(0, 'a');
-      const first = await hooks();
+      const first = await press([1, 'd'], 0, 'a');
       check(
         first.changes[0].length > 0 &&
           !/node a /.test(first.changes[0].at(-1)!) &&
-          first.changes[1].length === 0,
+          first.changes[1].length === 0 &&
+          first.kept,
         'Delete in the first editor changes only the first editor',
-        first.changes.map(c => c.length),
+        { changes: first.changes.map(c => c.length), kept: first.kept, other: first.selected },
       );
-      await press(1, 'c');
-      const second = await hooks();
+      const second = await press([0, 'b'], 1, 'c');
       check(
         second.changes[1].length > 0 &&
           !/node c /.test(second.changes[1].at(-1)!) &&
-          second.changes[0].length === first.changes[0].length,
+          second.changes[0].length === first.changes[0].length &&
+          second.kept,
         'Delete in the second editor changes only the second editor',
-        second.changes.map(c => c.length),
+        { changes: second.changes.map(c => c.length), kept: second.kept, other: second.selected },
       );
     });
 
