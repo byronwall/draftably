@@ -877,6 +877,12 @@ ranks nor orders the objects it joins, as if it weren't there. Use it for a feed
 sync that refetches, a retry back to the start) that would otherwise pull its target's section
 below its source.
 
+A dashed edge (`kind=async`) ranks its target only when no solid edge goes to that target. A
+solid edge already places the box, so a dashed side input such as "same shapes" or a progress
+feed doesn't push it, or its group, past the boxes that call it. A dashed edge into a box that
+only dashed edges reach, such as a queue's worker, still ranks it. This holds for the built-in
+layouts; `engine=` recipes see every edge except `constraint=false` ones.
+
 Where an engine has no reason from the connections to put one object before another, file order
 decides, and a scope's `order` line overrides file order. Under `layered` without groups, the
 order line holds within each rank unless reordering removes clearly more crossings. Ids never
