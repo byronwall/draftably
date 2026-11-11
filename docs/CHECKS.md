@@ -102,8 +102,8 @@ worker, so the cold row mostly measures the same layout.
 
 The slot rows use a 250-node file with a body and an overlay on the first N / 2 nodes. A camera
 frame is one `setCamera` plus the style and layout it causes; the bench reads layout once after
-the move to include that cost. Forced layouts are the layouts during 100 moves in one task, less
-those of an empty task. Reconcile times `viewer.anchor()` with the same 500 slots, which runs the
+the move to include that cost. Forced layouts are counted as layout reads during 100 moves: the
+bench wraps every DOM API that reads layout, and a forced layout needs one. Reconcile times `viewer.anchor()` with the same 500 slots, which runs the
 pass a commit runs over every target. A source update that moves every node must then add and
 remove no target.
 

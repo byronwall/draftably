@@ -279,12 +279,11 @@ const pool = Math.max(1, Math.min(4, os.cpus().length - 1));
 
 // Camera frames with 10, 100 and 500 slot targets: one transform on the body layer and one
 // position per overlay, with no layout reads. The time includes the style and layout the move
-// causes (read once, in the measurement only). Forced layouts: layouts during 100 moves in one
-// task, less the layouts of an empty task (a frame can land between the CDP calls).
+// causes (read once, in the measurement only). Forced layouts: the layout reads that 100 moves
+// make, counted by wrapping every DOM API that reads layout (a forced layout needs one).
 for (const count of [10, 100, 500]) {
-  const { ctx, tab, cdp } = await open(`n=1&slots=${count}`);
+  const { ctx, tab } = await open(`n=1&slots=${count}`);
   await tab.evaluate(() => window.firstUpdates);
-  await cdp.send('Performance.enable');
   const times = await tab.evaluate(async () => {
     const el = document.querySelector('draft-diagram'),
       v = el.viewer,
@@ -304,25 +303,51 @@ for (const count of [10, 100, 500]) {
     }
     return out;
   });
-  const layouts = async moves => {
-    let least = Infinity;
-    for (let trial = 0; trial < 3; trial++) {
-      await tab.evaluate(() => document.body.getBoundingClientRect());
-      const count = async () =>
-        (await cdp.send('Performance.getMetrics')).metrics.find(m => m.name === 'LayoutCount')
-          .value;
-      const before = await count();
-      await tab.evaluate(moves => {
-        const v = document.querySelector('draft-diagram').viewer,
-          c = v.getCamera();
-        for (let i = 0; i < moves; i++)
-          v.setCamera({ ...c, centerX: c.centerX + i, zoom: c.zoom * (1 + (i % 7) / 50) });
-      }, moves);
-      least = Math.min(least, (await count()) - before);
-    }
-    return least;
-  };
-  const forced = Math.max(0, (await layouts(100)) - (await layouts(0)));
+  // A forced layout needs a layout read after a write: count every read the moves make.
+  const forced = await tab.evaluate(() => {
+    let reads = 0;
+    const undo = [];
+    const watch = (proto, name) => {
+      const d = Object.getOwnPropertyDescriptor(proto, name);
+      const wrapped = d.get
+        ? {
+            get() {
+              reads++;
+              return d.get.call(this);
+            },
+          }
+        : {
+            value(...a) {
+              reads++;
+              return d.value.apply(this, a);
+            },
+          };
+      Object.defineProperty(proto, name, { ...d, ...wrapped });
+      undo.push(() => Object.defineProperty(proto, name, d));
+    };
+    for (const name of [
+      'getBoundingClientRect',
+      'getClientRects',
+      'clientWidth',
+      'clientHeight',
+      'clientTop',
+      'clientLeft',
+      'scrollWidth',
+      'scrollHeight',
+      'scrollTop',
+      'scrollLeft',
+    ])
+      watch(Element.prototype, name);
+    for (const name of ['offsetWidth', 'offsetHeight', 'offsetTop', 'offsetLeft', 'offsetParent'])
+      watch(HTMLElement.prototype, name);
+    watch(window, 'getComputedStyle');
+    const v = document.querySelector('draft-diagram').viewer,
+      c = v.getCamera();
+    for (let i = 0; i < 100; i++)
+      v.setCamera({ ...c, centerX: c.centerX + i, zoom: c.zoom * (1 + (i % 7) / 50) });
+    for (const f of undo) f();
+    return reads;
+  });
   const targets = await tab.evaluate(
     () =>
       document.querySelector('draft-diagram').shadowRoot.querySelectorAll('[data-draft-anchor]')
@@ -331,7 +356,7 @@ for (const count of [10, 100, 500]) {
   row(
     `Camera frame, ${count} targets`,
     count === 500 ? '≤ 8 ms p95; 0 forced layouts' : '0 forced layouts',
-    `${targets} targets; ${median(times).toFixed(2)} ms median, ${p95(times).toFixed(2)} ms p95; ${forced} forced layouts`,
+    `${targets} targets; ${median(times).toFixed(2)} ms median, ${p95(times).toFixed(2)} ms p95; ${forced} layout reads in 100 moves`,
     targets === count && forced === 0 && (count < 500 || p95(times) <= 8),
   );
   await ctx.close();
