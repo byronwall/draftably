@@ -695,12 +695,10 @@ data on the server, and pass the same string to the component when it hydrates:
 The editor loads in the browser only, after the component mounts. Its element renders on the
 server as an empty, sized box.
 
-Each framework has a complete example app with server rendering and a strict CSP:
-[Next.js](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/next), [SolidStart](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/solid-start), [Nuxt](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/nuxt) and
-[SvelteKit](https://github.com/byronwall/draftably/tree/main/integration-examples/meta/sveltekit). Draftably's tests build each one for production and check server
-HTML, hydration, a body that reads the framework's context and page CSS, a marked button, a caret
-across a source update, two editors with separate shortcuts, a failed update, the strict CSP, and
-50 mount cycles.
+Draftably's tests build a small app in each of these four frameworks for production, with server
+rendering and a strict CSP, and check server HTML, hydration, a body that reads the framework's
+context and page CSS, a marked button, a caret across a source update, two editors with separate
+shortcuts, a failed update, the CSP, and 50 mount cycles.
 
 ## Strict CSP
 
