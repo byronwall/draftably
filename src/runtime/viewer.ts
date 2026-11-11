@@ -1,3 +1,14 @@
+import {
+  clampZoom,
+  fitCamera,
+  revealCamera,
+  sameCamera,
+  unionBox,
+  type Camera,
+  type CameraReason,
+  type FrameOptions,
+  type MoveResult,
+} from './camera';
 import { releaseFace, renderInWorker, retainFace, sharedFace } from './page-shared';
 import { fontMetricsVersion, runtimeVersion } from './version';
 import { FACES } from '../model/font-faces';
@@ -12,11 +23,8 @@ import type {
 
 export { fontMetricsVersion, runtimeVersion };
 
-export interface Camera {
-  centerX: number;
-  centerY: number;
-  zoom: number;
-}
+export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
+export { ZOOM_MAX, ZOOM_MIN } from './camera';
 
 export type ViewerExecution =
   { mode: 'worker'; createWorker?: () => Worker; timeoutMs?: number } | { mode: 'main' };
@@ -56,7 +64,8 @@ export type UpdateResult =
 export interface ViewerEvents {
   render: { revision: number; value: Extract<RenderResult, { ok: true }>['value'] };
   diagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean };
-  camera: { camera: Camera; reason: 'user' | 'resize' | 'fit' | 'api' };
+  /** At most once per animation frame, with the latest reason. */
+  camera: { camera: Camera; reason: CameraReason };
   itemactivate: {
     id: string;
     kind: 'node' | 'group' | 'edge';
@@ -70,8 +79,12 @@ export interface ViewerHandle {
   update(source: string, options?: UpdateOptions): Promise<UpdateResult>;
   on<K extends keyof ViewerEvents>(type: K, listener: (event: ViewerEvents[K]) => void): () => void;
   getCamera(): Camera;
+  /** Zoom is clamped to `ZOOM_MIN`–`ZOOM_MAX`. */
   setCamera(camera: Camera): void;
-  fit(): void;
+  /** Frame these items, or the whole drawing without ids. At most actual size by default. */
+  fit(ids?: readonly string[], options?: FrameOptions): MoveResult;
+  /** The least move that shows the item; zooms out only if it does not fit. */
+  reveal(id: string, options?: FrameOptions): MoveResult;
   focusItem(id: string): boolean;
   destroy(): void;
 }
@@ -273,11 +286,6 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     button.addEventListener('click', action);
     toolbar.append(button);
   };
-  const fitScale = () => {
-    if (!drawing) return 1;
-    const [, , width, height] = drawing.viewBox;
-    return Math.min(size.width / width, size.height / height);
-  };
   const applyCamera = () => {
     const svg = viewport.querySelector('svg');
     if (!svg || !drawing) return;
@@ -292,31 +300,74 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     svg.style.height = `${drawing.height}px`;
     svg.style.maxWidth = 'none';
   };
-  const fit = (reason: 'fit' | 'resize' = 'fit') => {
-    if (!drawing) return;
-    if (!size.width || !size.height) return;
-    const [x, y, width, height] = drawing.viewBox;
-    camera = {
-      centerX: x + width / 2,
-      centerY: y + height / 2,
-      zoom: Math.min(1, fitScale() * 0.92),
+  /** Camera events go out at most once per animation frame, with the latest reason. */
+  let cameraReason: CameraReason = 'user',
+    cameraFrame = 0;
+  const frameLater = (fn: () => void) =>
+    win.requestAnimationFrame ? win.requestAnimationFrame(fn) : win.setTimeout(fn, 16);
+  const noteCamera = (reason: CameraReason) => {
+    cameraReason = reason;
+    if (cameraFrame) return;
+    cameraFrame = frameLater(() => {
+      cameraFrame = 0;
+      if (!destroyed) emit('camera', { camera: { ...camera }, reason: cameraReason });
+    });
+  };
+  const move = (next: Camera, reason: CameraReason, user: boolean): MoveResult => {
+    const clamped = { ...next, zoom: clampZoom(next.zoom) };
+    userCamera = user;
+    if (sameCamera(camera, clamped)) return 'unchanged';
+    camera = clamped;
+    applyCamera();
+    noteCamera(reason);
+    return 'moved';
+  };
+  const frameBox = () => {
+    const [x, y, width, height] = drawing!.viewBox;
+    return { x, y, width, height };
+  };
+  /** An item's box in world units, measured from the drawing. */
+  const itemBox = (id: string) => {
+    const svg = viewport.querySelector('svg');
+    const mark = Array.from(viewport.querySelectorAll('[data-id]')).find(
+      element => element.getAttribute('data-id') === id,
+    );
+    if (!svg || !mark || !drawing) return undefined;
+    const r = mark.getBoundingClientRect(),
+      s = svg.getBoundingClientRect(),
+      unit = s.width / drawing.viewBox[2] || camera.zoom;
+    return {
+      x: drawing.viewBox[0] + (r.left - s.left) / unit,
+      y: drawing.viewBox[1] + (r.top - s.top) / unit,
+      width: r.width / unit,
+      height: r.height / unit,
     };
-    userCamera = false;
-    applyCamera();
-    emit('camera', { camera: { ...camera }, reason });
   };
-  const zoomBy = (factor: number) => {
-    camera.zoom = Math.max(0.02, Math.min(8, camera.zoom * factor));
-    userCamera = true;
-    applyCamera();
-    emit('camera', { camera: { ...camera }, reason: 'user' });
+  /** The latest fit or reveal asked for before the viewport had a size or a drawing. */
+  let pendingMove: (() => MoveResult) | undefined;
+  const whenSized = (run: () => MoveResult): MoveResult => {
+    if (destroyed) return 'unchanged';
+    if (!drawing || !size.width || !size.height) {
+      pendingMove = run;
+      return 'pending';
+    }
+    pendingMove = undefined;
+    return run();
   };
-  const actualSize = () => {
-    camera.zoom = 1;
-    userCamera = true;
-    applyCamera();
-    emit('camera', { camera: { ...camera }, reason: 'user' });
-  };
+  const fitTo = (
+    ids: readonly string[] | undefined,
+    frameOptions: FrameOptions | undefined,
+    reason: CameraReason,
+  ): MoveResult =>
+    whenSized(() => {
+      const box = ids ? unionBox(ids.flatMap(id => itemBox(id) ?? [])) : frameBox();
+      if (!box) return 'missing';
+      // A whole-drawing fit follows later resizes; a framed selection stays put.
+      return move(fitCamera(box, size, frameOptions), reason, !!ids);
+    });
+  const fit = (reason: CameraReason = 'fit') => fitTo(undefined, undefined, reason);
+  const zoomBy = (factor: number) => move({ ...camera, zoom: camera.zoom * factor }, 'user', true);
+  const actualSize = () => move({ ...camera, zoom: 1 }, 'user', true);
   addButton('Zoom in', () => zoomBy(1.2));
   addButton('Zoom out', () => zoomBy(1 / 1.2));
   addButton('Fit diagram', () => fit());
@@ -327,7 +378,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     const box = entries.at(-1)?.contentRect;
     if (box) size = { width: box.width, height: box.height };
     if (drawing && !size.width) return;
-    if (!userCamera) fit('resize');
+    if (pendingMove) whenSized(pendingMove);
+    else if (!userCamera) fit('resize');
     else applyCamera();
   });
   resize.observe(viewport);
@@ -428,10 +480,15 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   });
   viewport.addEventListener('pointermove', event => {
     if (!pan) return;
-    camera.centerX = pan.centerX - (event.clientX - pan.x) / pan.scale;
-    camera.centerY = pan.centerY - (event.clientY - pan.y) / pan.scale;
-    userCamera = true;
-    applyCamera();
+    move(
+      {
+        centerX: pan.centerX - (event.clientX - pan.x) / pan.scale,
+        centerY: pan.centerY - (event.clientY - pan.y) / pan.scale,
+        zoom: camera.zoom,
+      },
+      'user',
+      true,
+    );
   });
   const endPan = () => {
     if (!pan) return;
@@ -441,7 +498,6 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       // Pointer capture can already be released by the browser.
     }
     pan = undefined;
-    emit('camera', { camera: { ...camera }, reason: 'user' });
   };
   viewport.addEventListener('pointerup', endPan);
   viewport.addEventListener('pointercancel', endPan);
@@ -617,20 +673,21 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
                   const target = mark.getBoundingClientRect();
                   const frame = viewport.getBoundingClientRect();
                   if ((target.width || target.height) && frame.width && frame.height) {
-                    camera = {
-                      centerX:
-                        camera.centerX +
-                        (target.left + target.width / 2 - (frame.left + frame.width / 2)) /
-                          camera.zoom,
-                      centerY:
-                        camera.centerY +
-                        (target.top + target.height / 2 - (frame.top + frame.height / 2)) /
-                          camera.zoom,
-                      zoom: Math.max(1, camera.zoom),
-                    };
-                    userCamera = true;
-                    applyCamera();
-                    emit('camera', { camera: { ...camera }, reason: 'user' });
+                    move(
+                      {
+                        centerX:
+                          camera.centerX +
+                          (target.left + target.width / 2 - (frame.left + frame.width / 2)) /
+                            camera.zoom,
+                        centerY:
+                          camera.centerY +
+                          (target.top + target.height / 2 - (frame.top + frame.height / 2)) /
+                            camera.zoom,
+                        zoom: Math.max(1, camera.zoom),
+                      },
+                      'user',
+                      true,
+                    );
                   }
                 }
               });
@@ -646,7 +703,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           }
           root.classList.remove('draft-viewer--stale');
           live.textContent = result.diagnostics.map(diagnostic => diagnostic.message).join(' ');
-          if (!hadDrawing || updateOptions.camera === 'fit') fit();
+          if (pendingMove) whenSized(pendingMove);
+          else if (!hadDrawing || updateOptions.camera === 'fit') fit();
           else applyCamera();
           const committed: UpdateResult = {
             status: 'committed',
@@ -696,14 +754,14 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
         value.zoom <= 0
       )
         return;
-      camera = { ...value };
-      userCamera = true;
-      applyCamera();
-      emit('camera', { camera: { ...camera }, reason: 'api' });
+      move({ ...value }, 'api', true);
     },
-    fit: () => {
-      if (!destroyed) fit();
-    },
+    fit: (ids, frameOptions) => fitTo(ids, frameOptions, 'api'),
+    reveal: (id, frameOptions) =>
+      whenSized(() => {
+        const box = itemBox(id);
+        return box ? move(revealCamera(camera, box, size, frameOptions), 'api', true) : 'missing';
+      }),
     focusItem(id) {
       if (!drawing?.items.some(item => item.id === id)) return false;
       const button = Array.from(outline.querySelectorAll<HTMLButtonElement>('button')).find(
@@ -716,6 +774,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       if (destroyed) return;
       destroyed = true;
       revision++;
+      pendingMove = undefined;
+      if (cameraFrame) (win.cancelAnimationFrame ?? win.clearTimeout)(cameraFrame);
       if (pan) {
         try {
           viewport.releasePointerCapture(pan.pointerId);

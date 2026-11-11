@@ -9,6 +9,7 @@ import { emptyDiagram, normalize } from '../../model/document';
 import { findEntity } from '../../model/graph';
 import { DEFAULT_SAMPLE, loadSample } from '../../model/samples';
 import type { Camera, Diagram } from '../../model/types';
+import type { CameraReason } from '../../runtime/camera';
 import { toast } from '../toast';
 import type { CanvasTextPart } from './canvas-text';
 import type { SessionOptions } from '.';
@@ -206,6 +207,9 @@ export function createDocument(s: CanvasTextPart, options: SessionOptions) {
       if (keepCamera) state.setDoc('camera', camera);
       state.setRevision(r => r + 1);
     });
+    // Undo and restored documents bring their own camera back.
+    const c = state.doc.camera;
+    if (c.x !== camera.x || c.y !== camera.y || c.k !== camera.k) tellCamera('restore');
   }
 
   const historyHandlers: Array<(entry: HistoryEntry, direction: 'undo' | 'redo') => void> = [];
@@ -244,9 +248,23 @@ export function createDocument(s: CanvasTextPart, options: SessionOptions) {
 
   // --- Camera ----------------------------------------------------------------------------------
 
-  function setCamera(camera: Camera) {
+  const cameraListeners = new Set<(reason: CameraReason) => void>();
+  const tellCamera = (reason: CameraReason) => {
+    for (const listener of cameraListeners) listener(reason);
+  };
+  /** Hear every camera change, with its reason. */
+  function onCamera(listener: (reason: CameraReason) => void) {
+    cameraListeners.add(listener);
+    return () => cameraListeners.delete(listener);
+  }
+
+  /** Every camera write goes through here. The editor's own moves are `user`. */
+  function setCamera(camera: Camera, reason: CameraReason = 'user') {
+    const c = state.doc.camera;
+    if (c.x === camera.x && c.y === camera.y && c.k === camera.k) return;
     state.setDoc('camera', camera);
     persist();
+    tellCamera(reason);
   }
 
   // --- Persistence -----------------------------------------------------------------------------
@@ -374,6 +392,7 @@ export function createDocument(s: CanvasTextPart, options: SessionOptions) {
     canUndo,
     canRedo,
     setCamera,
+    onCamera,
     disableBrowserStorage,
     setPersistenceBlocked,
     persist,

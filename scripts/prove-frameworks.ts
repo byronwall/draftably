@@ -133,6 +133,14 @@ process.stdout.write(html);`,
           camera: w.__events?.camera ?? 0,
         };
       });
+    // Camera events come on the next animation frame; editors report ready after their first draw.
+    await page
+      .waitForFunction(
+        () => ((window as { __events?: Record<string, number> }).__events?.camera ?? 0) >= 3,
+        undefined,
+        { timeout: 5000 },
+      )
+      .catch(() => {});
     const parity = await contract();
     assert.deepEqual(parity.status, ['ready', 'ready', 'ready'], `${fw}: status="ready"`);
     assert.ok(parity.first, `${fw}: the wrapper gives the element (ref, expose or bind)`);
@@ -196,6 +204,16 @@ process.stdout.write(html);`,
       { timeout: 10000 },
     );
     const changes = await page.evaluate(() => (window as { __changes?: string[][] }).__changes!);
+    await page
+      .waitForFunction(
+        () =>
+          [...document.querySelectorAll('draft-editor')].every(
+            el => el.getAttribute('status') === 'ready',
+          ),
+        undefined,
+        { timeout: 10000 },
+      )
+      .catch(() => {});
     const editorState = await page.evaluate(() => ({
       status: [...document.querySelectorAll('draft-editor')].map(el => el.getAttribute('status')),
       interact: (window as { __events?: Record<string, number> }).__events?.interact ?? 0,
