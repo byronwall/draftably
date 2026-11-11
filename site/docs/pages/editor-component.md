@@ -48,8 +48,9 @@ A removed editor never takes shortcuts.
 
 ## Editor colors
 
-The editor's colors are CSS properties on the element. Your value wins over the default, so set
-one on `draft-editor` or any ancestor:
+The editor's colors are CSS properties on the element. A value you set on `draft-editor` wins
+over the default. The editor sets each property on its own element, so a value on an ancestor
+does not reach it, and a page's own `--bg` or `--text` never changes the editor:
 
 ```css
 draft-editor {

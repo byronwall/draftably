@@ -623,16 +623,64 @@ import { DraftEditor } from '@draftably/react/editor';
 
 Render the static SVG on the server and pass it as `svg`. The page then shows the diagram before
 JavaScript loads. The viewer replaces it after its first successful draw; if that draw fails, the
-SVG remains visible. The SVG is also available to search engines and link previews.
+SVG remains visible. The SVG is also available to search engines and link previews. Give each
+inline diagram on a page its own `idPrefix`. Slot content renders on the server too, and
+`host.css` hides it until the element loads, so nothing shifts.
 
-```ts
-import { renderSvg } from '@draftably/react'; // or /solid, /vue, /svelte: the runtime's renderSvg
+Each recipe's `server` file shows the call. In a meta-framework, run it where the framework loads
+data on the server, and pass the same string to the component when it hydrates:
 
-const result = await renderSvg(source, { target: 'inline', idPrefix: 'architecture' });
-const svg = result.ok ? result.value.svg : undefined;
+| Framework  | Where `renderSvg` runs                                                   | Import from               |
+| ---------- | ------------------------------------------------------------------------ | ------------------------- |
+| Next.js    | a server component (`app/page.tsx`)                                      | `@draftably/react/server` |
+| SolidStart | a `query` with `'use server'`, read with `createAsync`                   | `@draftably/solid`        |
+| Nuxt       | `useAsyncData` in the page, so the payload carries the SVG to the client | `@draftably/vue`          |
+| SvelteKit  | `load` in `+page.server.ts`                                              | `@draftably/svelte`       |
+
+The editor loads in the browser only, after the component mounts. Its element renders on the
+server as an empty, sized box.
+
+`pnpm prove:meta` builds a small app in each of these four frameworks and checks it in Chromium:
+server HTML, hydration that keeps the server's nodes, a body that reads the framework's context
+and page CSS, a marked button, a caret across a source update, two editors with separate
+shortcuts, a failed update, a strict CSP and 50 mount cycles.
+
+## Strict CSP
+
+Draftably works under a strict Content Security Policy with nonces and no `'unsafe-inline'`:
+
+```text
+default-src 'self'; script-src 'self' 'nonce-RANDOM'; style-src 'self' 'nonce-RANDOM';
+font-src 'self' data:; img-src 'self' data:; worker-src 'self'; object-src 'none'; base-uri 'none'
 ```
 
-Give each inline diagram on a page its own `idPrefix`. This works in a Next.js server component, a
-SolidStart route, a Nuxt server route or a SvelteKit server `load` function. Pass the resulting
-string to the framework component's `svg` prop; render the component on the client so its viewer
-can attach after hydration.
+- **Styles.** The elements' styles are constructable stylesheets, which need no nonce. The static
+  SVG from `renderSvg` holds a `<style>`: pass your nonce as `styleNonce`. The viewer adds one to
+  its drawing: pass it as `options={{ render: { styleNonce } }}`.
+- **Fonts.** The viewer embeds its fonts as `data:` URLs, so `font-src` needs `data:`. To serve
+  fonts from your origin instead, import `@draftably/runtime/fonts.css` and set
+  `render: { fonts: 'host' }`; then `font-src 'self'` is enough.
+- **Workers.** The viewer's render worker and the editor's engine worker are module files beside
+  each package, so `worker-src 'self'` is enough.
+- **Your framework.** Its own inline scripts need the nonce: Next.js reads it from the request's
+  CSP header, SolidStart from `createHandler`'s `nonce`, SvelteKit and Nuxt from a server hook
+  that adds it to each tag. SvelteKit's route announcer has an inline `style` attribute; allow
+  it with `style-src-attr 'unsafe-hashes' 'sha256-…'`, as the hash in the browser's error states.
+
+## Debug a diagram
+
+The element is the way in. `el.viewer` and `el.editor` are the handles, and every handle event
+reaches the element as a `draft-<name>` event:
+
+```ts
+const el = document.querySelector('draft-diagram')!;
+el.addEventListener('draft-diagnostics', event => console.table(event.detail.diagnostics));
+el.getAttribute('status'); // 'loading', 'ready' or 'error'
+await el.updateComplete; // the latest update's result
+el.viewer?.geometry(); // every node, group and edge, in world units
+el.viewer?.getCamera();
+```
+
+`diagnostics` lists source errors and warnings with line numbers, and slot problems:
+`DRAFT_SLOT_UNKNOWN` for a body on an ID the drawing lacks, `DRAFT_SLOT_OVERFLOW` for content
+larger than its node. A failed update keeps the last drawing and shows the message under it.
