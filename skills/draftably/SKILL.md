@@ -159,7 +159,8 @@ group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue
 `mint`, `green`, `amber`, `orange`, `red`, `rose`, `violet`. `shade=` picks `50` (palest) to `950`
 (darkest); a colored node defaults to `500`, and a member that inherits its group's family
 draws as a pale card (`50`) on the group's tint. Without `layout` lines, `root` uses `flow gap=48`
-and groups use `column gap=24`.
+and groups use `column gap=24`. A `column` gives its boxes the widest one's width, so you rarely
+need `size` lines to line them up.
 
 Themes: `drafting` (the default), `fieldnotes`, `signal` (color-blind-safe), `ink`, `blueprint`
 (dark). A `theme` line may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
