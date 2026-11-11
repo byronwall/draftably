@@ -4,6 +4,7 @@ import { cpSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'nod
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { relativeWorkerUrls } from './lib/worker-urls.ts';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'packages/runtime/dist');
@@ -41,6 +42,7 @@ await build({
     },
   },
 });
+relativeWorkerUrls(out);
 execFileSync('pnpm', ['exec', 'tsc', '-p', 'tsconfig.runtime.json'], {
   cwd: root,
   stdio: 'inherit',

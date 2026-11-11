@@ -141,6 +141,34 @@ content, pointer pass-through, a marked button, a caret across an update, conten
 framework update with the same target, `overflow: clip`, and in the editor assignment, body
 placement, selection through body text and no shortcut from a marked input.
 
+## Hosts
+
+Every host runs one list of checks, `scripts/lib/host-proof.ts`, against a server-rendered page
+that shows the proof page in `integration-examples/frameworks/proof.js`. With real mouse and
+keyboard input in Chromium it checks: the server HTML holds the diagram's SVG, the slot content
+and both editors; hydration keeps the server's nodes, with no console errors or hydration
+warnings; a body reads the framework's context and page CSS and fills its node; a marked button
+takes its click and the drawing does not; a caret survives a source update; **Delete** in one
+editor changes only that editor; a failed update keeps the drawing and shows its message; the
+page is served with a strict nonce CSP (no `'unsafe-inline'`) and reports no violation; and 50
+mount cycles of a viewer and an editor end with heap within 5 % and listeners, workers and fonts
+at baseline. Screenshots and the server HTML go next to each run's output.
+
+- `pnpm prove:frameworks` (CI) runs it on each Vite app's `proof.html`, after the app's own
+  checks.
+- `pnpm prove:meta [next solid-start nuxt sveltekit]` builds each app in
+  `integration-examples/meta/` for production with the packed packages, starts its server and
+  runs it there. `proof.config.json` in each app names the proof files to copy in and the build
+  and start commands. Installs take minutes (Next.js downloads about 80 MB), so run it in the
+  background. It is not in CI. Output goes to `tmp/meta/`.
+
+`pnpm prove:recipes` (CI) copies every named code block of the recipes in
+`site/docs/pages/frameworks.md` into a fresh Vite app per framework (React, Solid, Vue, Svelte,
+plain HTML) with the packed packages. It type-checks (`tsc`, `vue-tsc` or `svelte-check`),
+builds, calls the recipe's server `render()`, and loads the page: the diagram and the editor must
+reach `status="ready"` with the body assigned, the dark theme applied, and no console errors. A
+recipe that stops compiling fails CI. Screenshots go to `tmp/recipes/`.
+
 ## File-backed editing
 
 `tests/file-session.test.ts` checks the first title entered after a new shape receives its source

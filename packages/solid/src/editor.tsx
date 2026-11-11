@@ -46,9 +46,11 @@ export function DraftEditor(props: DraftEditorProps) {
         props.ref?.(node);
       }}
       source={props.source}
-      prop:options={props.options ?? {}}
       class={props.class}
-      style={props.style}
+      // Only when set: Solid's server HTML writes `style=""` for undefined, which a strict CSP blocks.
+      {...(props.style === undefined ? {} : { style: props.style })}
+      // Only when set, so options a host set through the ref survive.
+      {...(props.options === undefined ? {} : { 'prop:options': props.options })}
     >
       {props.children}
     </draft-editor>

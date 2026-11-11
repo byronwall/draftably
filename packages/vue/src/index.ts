@@ -40,7 +40,8 @@ export const DraftDiagram = defineComponent({
           state: props.state ?? undefined,
           label: props.label,
           outline: props.outline,
-          '.options': props.options ?? {},
+          // Only when set, so options a host set through the ref survive.
+          ...(props.options === undefined ? {} : { '.options': props.options }),
         },
         // The default slot holds slot content: children marked `data-draft-slot`.
         [...(props.svg ? [h('div', { innerHTML: props.svg })] : []), ...(slots.default?.() ?? [])],

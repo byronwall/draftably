@@ -306,6 +306,24 @@ describe('independent viewer lifecycle', () => {
     viewer.destroy();
   });
 
+  it('keeps focus on the same outline item across an update', async () => {
+    const element = host(),
+      viewer = mountViewer(element);
+    await viewer.update(source);
+    const button = (id: string) =>
+      element.querySelector<HTMLButtonElement>(
+        `.draft-viewer__outline button[data-item-id="${id}"]`,
+      );
+    button('b')!.focus();
+    await viewer.update(source.replace('"Store"', '"Orders"'));
+    expect(document.activeElement).toBe(button('b'));
+    expect(document.activeElement?.textContent).toBe('node: Orders');
+    // The focused item is removed: focus moves to the drawing, not to the page.
+    await viewer.update('diagram "viewer" version=1\nnode a "API"\n');
+    expect(document.activeElement).toBe(element.querySelector('.draft-viewer__viewport'));
+    viewer.destroy();
+  });
+
   it('rejects blocked embedded faces and keeps the last committed view', async () => {
     const element = host();
     const viewer = mountViewer(element);

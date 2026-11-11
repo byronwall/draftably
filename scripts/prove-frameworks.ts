@@ -12,6 +12,7 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { proveHost, report, type HostProof } from './lib/host-proof.ts';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'tmp/frameworks');
@@ -33,12 +34,30 @@ cpSync(path.join(root, 'integration-examples/frameworks'), path.join(out, 'apps'
   recursive: true,
 });
 
-const types: Record<string, string> = { '.js': 'text/javascript', '.css': 'text/css' };
+const types: Record<string, string> = {
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.woff2': 'font/woff2',
+  '.svg': 'image/svg+xml',
+};
+/** The strict CSP the proof page is served with: nonces, no unsafe-inline, fonts from data:. */
+const NONCE = 'proof-nonce';
+const CSP = [
+  "default-src 'self'",
+  `script-src 'self' 'nonce-${NONCE}'`,
+  `style-src 'self' 'nonce-${NONCE}'`,
+  "font-src 'self' data:",
+  "img-src 'self' data:",
+  "worker-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+].join('; ');
 function serve(dir: string): Promise<{ url: string; close: () => void }> {
   const server = http.createServer((req, res) => {
     const url = new URL(req.url ?? '/', 'http://x');
     let file = path.join(dir, decodeURIComponent(url.pathname));
     if (!existsSync(file) || file.endsWith('/')) file = path.join(dir, 'index.html');
+    if (file.endsWith('proof.html')) res.setHeader('content-security-policy', CSP);
     res.setHeader('content-type', types[path.extname(file)] ?? 'text/html');
     res.end(readFileSync(file));
   });
@@ -114,6 +133,7 @@ type W = Record<string, never> & {
 
 const browser = await chromium.launch();
 const failures: string[] = [];
+const hostProofs: HostProof[] = [];
 for (const fw of FRAMEWORKS) {
   const app = path.join(out, 'apps', fw);
   const tarball = pack(fw);
@@ -140,12 +160,30 @@ for (const fw of FRAMEWORKS) {
     writeFileSync(
       path.join(app, 'ssr-check.mjs'),
       `import { createServer } from 'vite';
-const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
+const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true } });
 const html = await (await vite.ssrLoadModule(${JSON.stringify(entry)})).render();
 await vite.close();
 process.stdout.write(html);`,
     );
     const html = execFileSync('node', ['ssr-check.mjs'], { cwd: app, encoding: 'utf8' });
+    // The host proof page: server HTML with its hydration props, filled into the built template.
+    writeFileSync(
+      path.join(app, 'proof-ssr.mjs'),
+      `// Production mode, as the client build is: Svelte's dev server HTML has extra markers.
+process.env.NODE_ENV = 'production';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createServer } from 'vite';
+const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error', optimizeDeps: { noDiscovery: true } });
+const { html, props, head } = await (await vite.ssrLoadModule(${JSON.stringify(entry.replace('entry-server', 'proof-server'))})).render(${JSON.stringify(NONCE)});
+await vite.close();
+const json = JSON.stringify(props).replace(/</g, '\\\\u003c');
+const page = readFileSync('dist/proof.html', 'utf8')
+  .replace('<!--ssr-->', () => html)
+  .replace('<!--head-->', () => head)
+  .replace('<!--props-->', () => '<script type="application/json" id="proof-props">' + json + '</script>');
+writeFileSync('dist/proof.html', page);`,
+    );
+    execFileSync('node', ['proof-ssr.mjs'], { cwd: app, encoding: 'utf8' });
     assert.equal(html.match(/<draft-diagram/g)?.length, 3, `${fw}: SSR draws three elements`);
     assert.equal(html.match(/<svg/g)?.length, 3, `${fw}: SSR holds three static SVGs`);
     assert.match(html, /Gamma user/, `${fw}: SSR SVG holds the diagram's text`);
@@ -299,7 +337,10 @@ process.stdout.write(html);`,
     await page.screenshot({ path: path.join(out, `${fw}.png`), fullPage: true });
     assert.deepEqual(errors, [], `${fw}: no console errors`);
     await page.close();
+    const proof = await proveHost(browser, `${server.url}proof.html`, `vite-${fw}`, out);
+    hostProofs.push(proof);
     server.close();
+    assert.deepEqual(proof.failed, [], `${fw}: the host proof passes`);
     console.log(
       `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options, slots in the viewer and the editor`,
     );
@@ -313,6 +354,7 @@ process.stdout.write(html);`,
   }
 }
 await browser.close();
+report(hostProofs);
 if (failures.length) process.exit(1);
 
 /**

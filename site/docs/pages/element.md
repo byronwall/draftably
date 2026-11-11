@@ -64,13 +64,13 @@ source.
 }
 ```
 
-With Vite, keep the runtime's worker beside its package during development:
+With Vite, keep the viewer's and the editor's workers beside their packages during development:
 
 ```ts
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  optimizeDeps: { exclude: ['@draftably/runtime'] },
+  optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] },
 });
 ```
 
@@ -303,9 +303,10 @@ update error; the viewer does not switch to main-thread compilation by itself. S
 `execution: { mode: 'main' }` only for known small inputs, or when you pass a host link resolver,
 because worker messages cannot carry functions.
 
-The viewer embeds the fonts it uses and waits for them to load before it commits a drawing. A
-blocked font returns an error and keeps the previous drawing. To use host fonts, import
-`@draftably/runtime/fonts.css` and set `render: { fonts: 'host' }`.
+The viewer embeds the fonts it uses as `data:` URLs and waits for them to load before it commits
+a drawing, so a CSP needs `font-src data:`. A blocked font returns an error and keeps the
+previous drawing. To serve fonts from your origin instead, import `@draftably/runtime/fonts.css`
+and set `render: { fonts: 'host' }`. [Strict CSP](#strict-csp) has a complete policy.
 
 ### Camera and keyboard
 

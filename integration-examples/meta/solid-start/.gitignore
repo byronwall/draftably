@@ -1,0 +1,7 @@
+node_modules/
+.output/
+.nitro/
+dist/
+# The proof runner copies these in from integration-examples/frameworks/.
+src/proof/
+src/components/Proof.tsx

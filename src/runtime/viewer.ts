@@ -739,6 +739,12 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
           if (old) old.replaceWith(svg);
           else viewport.prepend(svg);
           anchorLayer.setGeometry(geometry);
+          // The rebuild drops a focused outline button: give focus back to the same item's
+          // button, or to the drawing when that item is gone, so a screen reader keeps its place.
+          const focused = (outline.getRootNode() as Document | ShadowRoot).activeElement;
+          const focusedId = outline.contains(focused)
+            ? (focused as HTMLElement).dataset.itemId
+            : undefined;
           outline.replaceChildren(
             ...drawing.items.map(item => {
               const li = doc.createElement('li');
@@ -785,6 +791,12 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
               return li;
             }),
           );
+          if (focusedId !== undefined) {
+            const again = Array.from(outline.querySelectorAll<HTMLButtonElement>('button')).find(
+              button => button.dataset.itemId === focusedId,
+            );
+            (again ?? viewport).focus({ preventScroll: true });
+          }
           const retainedFonts = new Set(preparedFonts.map(font => font.key));
           for (const key of heldFonts) {
             if (retainedFonts.has(key)) continue;

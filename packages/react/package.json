@@ -19,6 +19,11 @@
       "import": "./dist/editor.js",
       "default": "./dist/editor.js"
     },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "default": "./dist/server.js"
+    },
     "./flow": {
       "types": "./dist/flow.d.ts",
       "import": "./dist/flow.js",
