@@ -8,9 +8,14 @@ properties change the frame and the panels.
 
 The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
 has no `theme` line draws dark, in the default theme's dark variant, and the frame goes dark too.
-Each element reads its own computed `color-scheme`, which it inherits from the page. A diagram
-draws dark only when that value allows dark: `color-scheme: dark`, or `light dark` while the
-user's system prefers dark.
+Each element reads its own computed `color-scheme`, which it inherits from the page:
+
+| Computed `color-scheme`     | The diagram draws                  |
+| --------------------------- | ---------------------------------- |
+| `normal` (nothing declared) | Light, also on a dark system       |
+| `light`                     | Light                              |
+| `dark`                      | Dark                               |
+| `light dark`                | Dark while the system prefers dark |
 
 A page that declares no `color-scheme` draws light. To follow the user's setting, add
 `:root { color-scheme: light dark }`; to force dark, `color-scheme: dark`. A page with its own dark
