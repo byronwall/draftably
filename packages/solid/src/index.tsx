@@ -61,7 +61,8 @@ export function DraftDiagram(props: DraftDiagramProps) {
       outline={props.outline}
       prop:options={props.options ?? {}}
       class={props.class}
-      style={props.style}
+      // Only when set: Solid's server HTML writes `style=""` for undefined, which a strict CSP blocks.
+      {...(props.style === undefined ? {} : { style: props.style })}
     >
       <Show when={props.svg}>{svg => <div innerHTML={svg()} />}</Show>
       {props.children}

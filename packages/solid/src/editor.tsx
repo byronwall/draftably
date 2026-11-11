@@ -48,7 +48,8 @@ export function DraftEditor(props: DraftEditorProps) {
       source={props.source}
       prop:options={props.options ?? {}}
       class={props.class}
-      style={props.style}
+      // Only when set: Solid's server HTML writes `style=""` for undefined, which a strict CSP blocks.
+      {...(props.style === undefined ? {} : { style: props.style })}
     >
       {props.children}
     </draft-editor>
