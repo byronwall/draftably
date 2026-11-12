@@ -1,4 +1,5 @@
 ---
+'draftably': patch
 '@draftably/editor': patch
 ---
 
