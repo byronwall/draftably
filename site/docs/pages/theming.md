@@ -7,8 +7,9 @@ properties change the frame and the panels.
 ## Dark pages
 
 The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
-has no `theme` line, or `theme drafting`, draws dark, in the default theme's dark variant, and the
-frame goes dark too.
+is in the default theme draws dark, in that theme's dark variant, and the frame goes dark too. A
+source is in the default theme with no `theme` line or with `theme drafting`, and no `theme-color`
+line or color on the `theme` line.
 Each element reads its own computed `color-scheme`, which it inherits from the page:
 
 | Computed `color-scheme`     | The diagram draws                  |
