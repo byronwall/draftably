@@ -30,16 +30,17 @@ until you turn them on.
 The result also holds a summary: the title, size, viewBox, item IDs, labels, lines, edge endpoints
 and emphasis states. It does not expose the compiled scene.
 
-| Option        | Effect                                                                            |
-| ------------- | --------------------------------------------------------------------------------- |
-| `state`       | Draws a declared [emphasis state](#emphasis-states).                              |
-| `sourceId`    | Names the source in diagnostics, such as `architecture.draft`.                    |
-| `signal`      | Asks to cancel. Compilation runs on the calling thread, so it can finish first.   |
-| `title`       | Accessible title text in the SVG.                                                 |
-| `description` | Accessible description text in the SVG.                                           |
-| `styleNonce`  | A nonce for the generated style element, for your CSP.                            |
-| `links`       | The link policy. See [Links](#links-and-source).                                  |
-| `target`      | `'inline'` for SVG pasted into an HTML page. See [Inline output](#inline-output). |
+| Option        | Effect                                                                                                                                                                  |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `state`       | Draws a declared [emphasis state](#emphasis-states).                                                                                                                    |
+| `sourceId`    | Names the source in diagnostics, such as `architecture.draft`.                                                                                                          |
+| `signal`      | Asks to cancel. Compilation runs on the calling thread, so it can finish first.                                                                                         |
+| `title`       | Accessible title text in the SVG.                                                                                                                                       |
+| `description` | Accessible description text in the SVG.                                                                                                                                 |
+| `styleNonce`  | A nonce for the generated style element, for your CSP.                                                                                                                  |
+| `links`       | The link policy. See [Links](#links-and-source).                                                                                                                        |
+| `target`      | `'inline'` for SVG pasted into an HTML page. See [Inline output](#inline-output).                                                                                       |
+| `colorScheme` | `'light'` (default) or `'dark'`: the colors of a source in the default theme. `'auto'` writes both as `light-dark()` colors, for a page whose `color-scheme` picks one. |
 
 ## Validate
 

@@ -11,7 +11,7 @@ export function Notes() {
   const s = useDiagramSession();
   // Links are written as exports write them, since exports copy these notes.
   const markup = () =>
-    noteMarkup(resolveAppearance(s.doc.appearance), s.viewerFrame().notes, href =>
+    noteMarkup(resolveAppearance(s.drawnAppearance()), s.viewerFrame().notes, href =>
       exportHref(s, href),
     );
   // The markup escapes its text, as in exports.

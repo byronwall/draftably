@@ -10,7 +10,7 @@ import type { Note } from './note';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
 
-export type ThemeId = 'drafting' | 'fieldnotes' | 'signal' | 'ink' | 'blueprint';
+export type ThemeId = 'drafting' | 'fieldnotes' | 'signal' | 'ink' | 'blueprint' | 'drafting-dark';
 export const THEME_IDS: ThemeId[] = ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint'];
 export const DEFAULT_THEME: ThemeId = 'drafting';
 
@@ -287,6 +287,32 @@ export const PRESETS: Record<ThemeId, Preset> = {
     primary: ['#2B3A55', 900],
     secondary: ['#C23B22', 600],
   },
+  // The default theme on a dark page: the same type, spacing and families as drafting, so it
+  // draws every box in the same place. Graphite surfaces, lighter than the canvas the higher
+  // they sit, with drafting blue and marker gold lifted to read on them. Not a file's theme.
+  'drafting-dark': {
+    label: 'Drafting dark',
+    description: 'Drafting on a graphite page, for a dark host',
+    dark: true,
+    canvas: '#16191E',
+    text: '#E7EAEF',
+    muted: '#9BA3B0',
+    connection: '#AEB6C2',
+    node: { fill: '#21252C', stroke: '#3D4450', ink: '#E7EAEF' },
+    group: { fill: '#1B1F25', stroke: '#30363F', ink: '#C8CED8' },
+    paddingX: 12,
+    paddingY: 20,
+    radius: 4,
+    shadow: false,
+    titleFont: 'sans',
+    annotationFont: 'sans',
+    titleSize: 13,
+    titleLine: 16,
+    annotationSize: 11,
+    chroma: 0.9,
+    primary: ['#7FA4E6', 300],
+    secondary: ['#F0B43C', 400],
+  },
   blueprint: {
     label: 'Blueprint',
     description: 'White lines on blueprint blue, cyan and yellow, monospace titles',
@@ -311,6 +337,25 @@ export const PRESETS: Record<ThemeId, Preset> = {
     secondary: ['#F2C14E', 300],
   },
 };
+
+/**
+ * The appearance to draw on a page of this scheme. The default theme follows the page, with or
+ * without a `theme drafting` line and its size and font overrides: dark draws it as
+ * `drafting-dark`. Another named theme, a `theme-color` line or a color override on the `theme`
+ * line keeps the file's colors on every page.
+ */
+export function forScheme(appearance: DiagramAppearance, dark: boolean): DiagramAppearance {
+  const o = appearance.overrides;
+  if (!dark || appearance.theme !== DEFAULT_THEME || appearance.colors.length) return appearance;
+  if (o.canvas !== undefined || o.text !== undefined || o.connection !== undefined)
+    return appearance;
+  // A legend swatch for member cards shows the card shade, which is the other end of the ramp.
+  const light = memberShadeFor(DEFAULT_THEME),
+    legend = appearance.legend?.map(e =>
+      e.shade === light ? { ...e, shade: memberShadeFor('drafting-dark') } : e,
+    );
+  return { ...appearance, theme: 'drafting-dark', ...(legend ? { legend } : {}) };
+}
 
 // --- Color math (OKLCH) ------------------------------------------------------------------------
 

@@ -335,6 +335,54 @@ writeFileSync('dist/proof.html', page);`,
     assert.equal(sources[0], changes[0].at(-1), `${fw}: the editor holds the source it reported`);
     await editorSlots(page, fw);
     await page.screenshot({ path: path.join(out, `${fw}.png`), fullPage: true });
+    // The page sets no color-scheme, so a dark system setting leaves every diagram light. One CSS
+    // line opts the page in, and then the same setting draws every diagram dark.
+    const canvases = () =>
+      page.evaluate(() => [
+        ...[...document.querySelectorAll('draft-diagram')].map(
+          el =>
+            getComputedStyle(el.shadowRoot!.querySelector('.draft-viewer__viewport > svg > rect')!)
+              .fill,
+        ),
+        ...[...document.querySelectorAll('draft-editor')].map(
+          el => getComputedStyle(el.shadowRoot!.querySelector('.stage')!).backgroundColor,
+        ),
+      ]);
+    const frames = () =>
+      page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await frames();
+    const unset = await canvases();
+    assert.ok(
+      unset.every(c => c === 'rgb(247, 247, 244)'),
+      `${fw}: with no color-scheme, a dark system setting leaves every diagram light ${JSON.stringify(unset)}`,
+    );
+    await page.addStyleTag({ content: ':root { color-scheme: light dark }' });
+    await page
+      .waitForFunction(
+        () =>
+          [
+            ...[...document.querySelectorAll('draft-diagram')].map(
+              el =>
+                getComputedStyle(
+                  el.shadowRoot!.querySelector('.draft-viewer__viewport > svg > rect')!,
+                ).fill,
+            ),
+            ...[...document.querySelectorAll('draft-editor')].map(
+              el => getComputedStyle(el.shadowRoot!.querySelector('.stage')!).backgroundColor,
+            ),
+          ].every(c => c === 'rgb(22, 25, 30)'),
+        null,
+        { timeout: 5000 },
+      )
+      .catch(() => {});
+    const dark = await canvases();
+    assert.ok(
+      dark.every(c => c === 'rgb(22, 25, 30)'),
+      `${fw}: color-scheme: light dark on a dark system draws every diagram dark ${JSON.stringify(dark)}`,
+    );
+    await page.screenshot({ path: path.join(out, `${fw}-dark.png`), fullPage: true });
+    await page.emulateMedia({ colorScheme: 'light' });
     assert.deepEqual(errors, [], `${fw}: no console errors`);
     await page.close();
     const proof = await proveHost(browser, `${server.url}proof.html`, `vite-${fw}`, out);
@@ -342,7 +390,7 @@ writeFileSync('dist/proof.html', page);`,
     server.close();
     assert.deepEqual(proof.failed, [], `${fw}: the host proof passes`);
     console.log(
-      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options, slots in the viewer and the editor`,
+      `PASS ${fw}: build, SSR (3 SVGs, 2 editors), 3 live diagrams, status, element access, options without re-mount, camera event prop, update, remove, onUpdate, editor drag and options, slots in the viewer and the editor, dark only on an opted-in page`,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

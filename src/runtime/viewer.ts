@@ -10,6 +10,7 @@ import {
   type MoveResult,
 } from './camera';
 import { createAnchorLayer, type Anchor, type DraftSlot } from './anchors';
+import { watchColorScheme } from './color-scheme';
 import { itemBox, type Geometry } from './geometry';
 import { releaseFace, renderInWorker, retainFace, sharedFace } from './page-shared';
 import { fontMetricsVersion, runtimeVersion } from './version';
@@ -288,6 +289,9 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   outline.className = 'draft-viewer__outline';
   outline.setAttribute('aria-label', 'Diagram outline');
   root.append(toolbar, viewport, live, outline);
+  // The drawing and the frame follow the page's scheme: the SVG holds both in light-dark()
+  // colors, so a change restyles it and draws nothing again.
+  const scheme = watchColorScheme(host, dark => (root.style.colorScheme = dark ? 'dark' : 'light'));
   // The anchor layer sits above the drawing and is never detached while the viewer lives.
   const anchorLayer = createAnchorLayer(doc, {
     detail: options.detail,
@@ -658,6 +662,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
         target: 'inline',
         idPrefix,
         fonts: options.render?.fonts ?? 'embed',
+        colorScheme: 'auto',
         ...(updateOptions.state !== undefined ? { state: updateOptions.state } : {}),
       } satisfies RenderOptions;
       void render(source, renderOptions, job.signal)
@@ -814,6 +819,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             value: drawing,
             diagnostics: result.diagnostics,
           };
+          // A host hidden until now could not see a scheme change; read it again.
+          scheme.check();
           // Listeners hear the commit before `update` and `ready` resolve.
           emit('render', { revision: id, value: drawing, geometry });
           lastDiagnostics = { revision: id, diagnostics: result.diagnostics, stale: false };
@@ -904,6 +911,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      scheme.stop();
       revision++;
       pendingMove = undefined;
       if (cameraFrame) (win.cancelAnimationFrame ?? win.clearTimeout)(cameraFrame);

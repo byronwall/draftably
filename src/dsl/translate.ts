@@ -7,7 +7,7 @@
  * write snaps back when the source is reprojected, so nothing unsaved looks saved. Changes the
  * file cannot express are rejected outright.
  */
-import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
+import { DEFAULT_THEME, type ColorDefinition, type DiagramAppearance } from '../model/appearance';
 import { findNode, isCell, selectionRoots } from '../model/graph';
 import { groupHeaderFor } from '../model/labels';
 import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
@@ -365,26 +365,32 @@ const colorKey = (s: Statement) => `${s.args[0]?.value}:${getAttr(s, 'shade')?.v
  */
 export function writeAppearance(source: SourceDoc, appearance: DiagramAppearance) {
   let theme = statements(source).find(s => s.command === 'theme');
-  if (!theme) {
+  // The default theme with no overrides needs no line, so the editor adds none.
+  const follows =
+    appearance.theme === DEFAULT_THEME &&
+    Object.values(appearance.overrides).every(v => v === undefined);
+  if (!theme && !follows) {
     theme = statement('theme', [bare(appearance.theme)]);
     const diagram = statements(source).find(s => s.command === 'diagram');
     const at = diagram ? source.lines.indexOf(diagram) + 1 : 0;
     source.lines.splice(at, 0, theme, ...(diagram ? [] : [{ kind: 'blank' as const }]));
   }
-  theme.args = [bare(appearance.theme)];
-  for (const [attr, key] of Object.entries(THEME_ATTRS)) {
-    const value = appearance.overrides[key];
-    setAttr(
-      theme,
-      attr,
-      value === undefined
-        ? undefined
-        : typeof value === 'number'
-          ? bare(value)
-          : key === 'titleFont' || key === 'annotationFont'
+  if (theme) {
+    theme.args = [bare(appearance.theme)];
+    for (const [attr, key] of Object.entries(THEME_ATTRS)) {
+      const value = appearance.overrides[key];
+      setAttr(
+        theme,
+        attr,
+        value === undefined
+          ? undefined
+          : typeof value === 'number'
             ? bare(value)
-            : quoted(value),
-    );
+            : key === 'titleFont' || key === 'annotationFont'
+              ? bare(value)
+              : quoted(value),
+      );
+    }
   }
   const wanted = new Map<string, ColorDefinition>(
     appearance.colors.map(c => [`${c.family}:${c.shade}`, c]),

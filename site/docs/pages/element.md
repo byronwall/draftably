@@ -36,33 +36,65 @@ drawing or controls. Override its height with ordinary CSS: `draft-diagram { hei
 All diagrams on a page share a pool of at most four render workers (one fewer than the device's
 cores), one stylesheet and one copy of each font. A worker stops after 30 seconds with no work.
 
+### Dark pages
+
+The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
+is in the default theme draws dark, in that theme's dark variant, and the frame goes dark too. A
+source is in the default theme with no `theme` line or with `theme drafting`, and no `theme-color`
+line or color on the `theme` line.
+The element reads its own computed `color-scheme`, which it inherits from the page:
+
+| Computed `color-scheme`     | The diagram draws                  |
+| --------------------------- | ---------------------------------- |
+| `normal` (nothing declared) | Light, also on a dark system       |
+| `light`                     | Light                              |
+| `dark`                      | Dark                               |
+| `light dark`                | Dark while the system prefers dark |
+
+A page that declares no scheme stays light, so a light-only site never shows a dark diagram. A
+dark-mode site opts in with one line. To follow the system setting:
+
+```css
+:root {
+  color-scheme: light dark;
+}
+```
+
+Or, for a dark-mode class:
+
+```css
+:root.dark {
+  color-scheme: dark;
+}
+```
+
+A change of scheme switches the drawing at once, with nothing drawn again.
+
+To keep one diagram light on a dark page, set its scheme:
+
+```css
+draft-diagram {
+  color-scheme: light;
+}
+```
+
+Another theme in the source keeps its colors on every page: `theme fieldnotes` stays light, and
+`theme blueprint` stays dark. `renderSvg` draws light unless you pass `colorScheme: 'dark'`.
+
 ### Frame colors
 
 The viewer's frame, toolbar and outline read these properties. Set them on the element or any
-ancestor; your values win over the defaults. The diagram's own colors come from its theme in the
-source.
+ancestor; your values win over the defaults, which follow the page's scheme.
 
-| Property              | Default                | Used for                       |
-| --------------------- | ---------------------- | ------------------------------ |
-| `--draft-bg`          | `#fff`                 | Frame, toolbar and outline     |
-| `--draft-ink`         | `#1e293b`              | Text                           |
-| `--draft-border`      | `#cbd5e1`              | Frame and button borders       |
-| `--draft-focus`       | `#2563eb`              | Focus ring                     |
-| `--draft-shadow`      | `rgb(15 23 42 / 0.12)` | The outline's shadow on focus  |
-| `--draft-warning-ink` | `#9a3412`              | Diagnostics text               |
-| `--draft-warning-bg`  | `#fff7ed`              | Diagnostics on a stale drawing |
-
-```css
-@media (prefers-color-scheme: dark) {
-  draft-diagram {
-    --draft-bg: #0f172a;
-    --draft-ink: #e2e8f0;
-    --draft-border: #334155;
-    --draft-warning-ink: #fdba74;
-    --draft-warning-bg: #431407;
-  }
-}
-```
+| Property              | Light default          | Dark default       | Used for                       |
+| --------------------- | ---------------------- | ------------------ | ------------------------------ |
+| `--draft-bg`          | `#fff`                 | `#16191e`          | Frame, toolbar and outline     |
+| `--draft-ink`         | `#1e293b`              | `#e7eaef`          | Text                           |
+| `--draft-border`      | `#cbd5e1`              | `#3d4450`          | Frame and button borders       |
+| `--draft-focus`       | `#2563eb`              | `#7fa4e6`          | Focus ring                     |
+| `--draft-shadow`      | `rgb(15 23 42 / 0.12)` | `rgb(0 0 0 / 0.4)` | The outline's shadow on focus  |
+| `--draft-warning-ink` | `#9a3412`              | `#fdba74`          | Diagnostics text               |
+| `--draft-warning-bg`  | `#fff7ed`              | `#431407`          | Diagnostics on a stale drawing |
 
 With Vite, keep the viewer's and the editor's workers beside their packages during development:
 

@@ -132,9 +132,9 @@ size api width=220 height=auto min-height=120
 
 The `--draft-*` properties color the viewer's frame and controls, and `data-theme="dark"` on
 `<DraftEditor>` darkens the editor's panels and toolbar. Each component passes that attribute to
-its element. The drawing itself keeps the colors of its source's theme, so it stays on light
-paper inside the dark frame. The editor's own properties are listed in
-[Editor colors](#editor-colors).
+its element. `color-scheme: dark` on `.app.dark` draws the diagrams dark too, in the default
+theme's dark variant (see [Dark pages](#dark-pages)); a source in another theme keeps its
+colors. The editor's own properties are listed in [Editor colors](#editor-colors).
 
 ## React
 

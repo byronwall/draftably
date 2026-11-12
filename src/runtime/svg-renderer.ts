@@ -72,6 +72,11 @@ export interface SvgOptions {
   maxOutputBytes?: number;
   /** Receives the boxes and routes of a one-panel drawing, as drawn (not for compare or states). */
   onDrawn?: (drawn: { rects: Map<string, Rect>; routes: Route[] }) => void;
+  /**
+   * The routes `onDrawn` gave for this document, so drawing it again in other colors routes
+   * nothing again (not for compare or states).
+   */
+  routes?: Route[];
 }
 
 export class SvgLimitError extends Error {}
@@ -153,7 +158,7 @@ const haloMarkup = (shape: string, r: Rect, look: ResolvedAppearance) =>
     `fill="none" stroke="${haloInk(look)}" stroke-width="2"`,
   );
 
-type Route = ReturnType<typeof computeRoutes>['routes'][number];
+export type Route = ReturnType<typeof computeRoutes>['routes'][number];
 
 /** A byte or bit layout's unit numbers and the run-on pieces of its fields. */
 function cellsChromeMarkup(doc: Diagram, look: ResolvedAppearance, id: string, g: Rect) {
@@ -598,7 +603,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   const merged = compare ? routesOf(doc) : undefined,
     shared = merged ? [oldRoutes(doc, merged), merged] : [],
     scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map((d, i) =>
-      sceneMarkup(d, look, marker, opts, shared[i]),
+      sceneMarkup(d, look, marker, opts, shared[i] ?? (compare ? undefined : opts.routes)),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),

@@ -49,6 +49,13 @@ export interface CommonRenderOptions {
   sourceId?: string;
   signal?: AbortSignal;
   limits?: Partial<RenderLimits>;
+  /**
+   * `light` (default) draws the file's own colors. `dark` draws a file without a `theme` line in
+   * the default theme's dark variant. `auto` writes both as `light-dark()` colors, so the page's
+   * `color-scheme` picks one; the viewer and `<draft-diagram>` use it. A file's own theme line
+   * always wins.
+   */
+  colorScheme?: 'light' | 'dark' | 'auto';
 }
 
 export type RenderOptions = CommonRenderOptions &

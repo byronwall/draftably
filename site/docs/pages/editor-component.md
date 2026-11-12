@@ -59,11 +59,18 @@ draft-editor {
 }
 ```
 
-Set `data-theme="dark"` on the element for the dark set. The properties include `--bg`,
+The editor's controls follow the page's color scheme, as its drawing does. Set
+`data-theme="dark"` or `data-theme="light"` on the element to choose them yourself. The properties include `--bg`,
 `--surface`, `--surface-2`, `--hover`, `--line`, `--line-strong`, `--text`, `--muted`, `--ink`,
 `--ink-hover`, `--ink-on`, `--accent`, `--accent-hover`, `--accent-soft`, `--accent-ink`,
-`--success`, `--warning`, `--danger`, `--font` and `--mono`. The canvas color follows the
-diagram's own theme in the source.
+`--success`, `--warning`, `--danger`, `--font` and `--mono`.
+
+The canvas and the drawing follow the page's color scheme, as `<draft-diagram>` does (see
+[Dark pages](#dark-pages)). On a page whose `color-scheme` allows dark, a source with no `theme`
+line or with `theme drafting` draws dark, and a page that declares no scheme stays light.
+`draft-editor { color-scheme: light }` keeps one editor light. A padding or font change in the editor
+writes a `theme drafting` line, and the drawing still follows the page. `data-theme` sets the editor's controls, not
+the drawing.
 
 ## Put your content on a node
 

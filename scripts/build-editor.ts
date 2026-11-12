@@ -20,17 +20,53 @@ const APP_CSS = path.join(root, 'src/styles/app.css');
  * (`.draft-editor-root`) elsewhere; `:root[data-theme=x]` follows. `html` and `body` become the
  * editor itself.
  */
+/**
+ * The elements that hold the tokens of `:root<attr>`. The dark set also applies when the page is
+ * dark (the editor sets `data-draft-scheme`) and the element has no `data-theme` of its own, so
+ * the editor's controls follow the page as its drawing does.
+ */
+function hostsFor(attr: string) {
+  const own = [`:host${attr ? `(${attr})` : ''}`, `.draft-editor-root${attr}`];
+  if (!/data-theme=['"]?dark/.test(attr)) return own;
+  return [
+    ...own,
+    `:host([data-draft-scheme='dark']:not([data-theme]))`,
+    `.draft-editor-root[data-draft-scheme='dark']:not([data-theme])`,
+  ];
+}
+
 function scope(css: string) {
-  const ast = postcss.parse(css);
+  const ast = postcss.parse(css),
+    made = new Set<Rule>();
   ast.walkRules((rule: Rule) => {
+    if (made.has(rule)) return;
     if (rule.parent?.type === 'atrule' && /keyframes/.test((rule.parent as { name: string }).name))
       return;
+    // `color-scheme` styles the editor's own controls. On the host it would hide the page's
+    // scheme, which the drawing follows, so it moves inside: to the editor in a shadow root, and
+    // to the mounted host's children, other than the scheme probe, where the host is the editor.
+    const scheme = /^:root(\[[^\]]*\])?$/.exec(rule.selector);
+    if (scheme)
+      rule.walkDecls('color-scheme', decl => {
+        const attr = scheme[1] ?? '';
+        const inside = postcss.rule({
+          selectors: hostsFor(attr).map(host =>
+            host.startsWith(':host')
+              ? `${host} .draft-editor`
+              : `${host} > :not([data-draft-probe])`,
+          ),
+          nodes: [decl.clone()],
+        });
+        made.add(inside);
+        rule.after(inside);
+        decl.remove();
+      });
     rule.selectors = rule.selectors.flatMap(sel => {
       const root = /^:root(\[[^\]]*\])?/.exec(sel);
       if (root) {
         const rest = sel.slice(root[0].length),
           attr = root[1] ?? '';
-        return [`:host${attr ? `(${attr})` : ''}${rest}`, `.draft-editor-root${attr}${rest}`];
+        return hostsFor(attr).map(host => `${host}${rest}`);
       }
       if (/^(html|body)\b/.test(sel)) return [sel.replace(/^(html|body)/, '.draft-editor')];
       return [`.draft-editor ${sel}`];
