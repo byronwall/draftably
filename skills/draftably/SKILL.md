@@ -1,6 +1,6 @@
 ---
 name: draftably
-description: Create, edit, check and render draftably `.draft` diagram files — a readable text DSL for architecture, flow, pipeline, event and container diagrams with automatic layout. Use when the user asks for a diagram, an architecture or system drawing, a flowchart, or mentions a `.draft` file or draftably.
+description: Create, edit, check and render draftably `.draft` diagram files — a readable text DSL for architecture, flow, pipeline, event and container diagrams with automatic layout — and embed them in web apps. Use when the user asks for a diagram, an architecture or system drawing, a flowchart, mentions a `.draft` file or draftably, or wants interactive diagrams or a diagram editor in React, Solid, Vue, Svelte or plain HTML.
 ---
 
 # draftably diagrams
@@ -392,6 +392,75 @@ content area.
 - Always run `check` after editing and fix what it reports before handing the file back.
 - Not supported yet: views, checkpoints, edge bends, label positions and images. `view`,
   `snapshot` and `box` statements are errors.
+
+## Embed diagrams in an app
+
+When the user wants diagrams in a web app, not a file, pick the route by who draws:
+
+- **Draftably draws** (pan, zoom, editing, the user's components on nodes): the
+  `<draft-diagram>` and `<draft-editor>` elements, or the React, Solid, Vue and Svelte components
+  around them.
+- **The app draws with its own components:** `layout()` from `@draftably/runtime/graph` returns
+  boxes and routed lines as data.
+- **No runtime:** `renderSvg()` from `@draftably/runtime`, or `draftably inspect f.draft --svg`.
+
+Install the framework package and the runtime together. The app imports `host.css` itself, and
+pnpm does not let it import a package it does not list:
+
+```sh
+pnpm add @draftably/react @draftably/runtime   # or solid, vue, svelte
+```
+
+```tsx
+import '@draftably/runtime/host.css'; // once per page: heights, slot rules, pointer for marked content
+import { DraftDiagram } from '@draftably/react';
+import { DraftEditor } from '@draftably/react/editor';
+
+<DraftDiagram source={source} label="Checkout" onItemactivate={({ id }) => select(id)} />
+<DraftEditor source={source} onChange={({ source }) => setSource(source)} data-theme="dark" />
+```
+
+Rules that save a debugging round:
+
+- **Vite 5–7** needs `optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] }`, or
+  the workers 404 in development. Vite 8 and production builds need nothing. With React, add
+  `include: ['@draftably/react', '@draftably/react/editor']`.
+- Event props are `on` plus the lowercase event name: `onItemactivate`, `onContextmenu`
+  (`@itemactivate` in Vue, `onitemactivate` in Svelte). Each receives the event's `detail`.
+  `onLink` and `onContextmenu` also get `preventDefault()`. Any other attribute, such as
+  `data-theme`, goes to the element.
+- Diagrams follow the page's `color-scheme`: a page that declares none draws light; add
+  `:root { color-scheme: light dark }` to follow the user's setting, or `color-scheme: light` on
+  the element to keep one light.
+- Content on a node: a child marked `data-draft-slot="body:api"` fills node `api`;
+  `overlay:api` sits over it at screen size. Mark buttons and fields `data-draft-input` so they
+  take the pointer. Layout never measures this content: give the node room in the source with
+  `size api width=220 height=auto min-height=120`.
+- The element mounts in a microtask. `el.viewer` and `el.editor` are `undefined` until then:
+  `await el.updateComplete` first. `status` is `loading`, `ready` or `error`; a later failed
+  update keeps `ready` and the last drawing, so read the `diagnostics` event.
+- Server rendering: `renderSvg(source, { target: 'inline', idPrefix, colorScheme: 'auto' })` and
+  pass its `svg` to the component. `'auto'` writes both schemes as `light-dark()` colors, so a dark
+  page shows the fallback dark. In a Next.js server component, import it from
+  `@draftably/react/server`.
+- Debug in the page with `el.viewer.geometry()`, `el.viewer.getCamera()` and the
+  `draft-diagnostics` event. `window.diagramStudio` exists only on `draftably open` pages.
+
+Without a bundler, serve each package's `dist` folder from the page's own origin and load the
+element with a module script:
+
+```html
+<link rel="stylesheet" href="/draftably/runtime/dist/host.css" />
+<script type="module" src="/draftably/runtime/dist/element.js"></script>
+<draft-diagram source='node web "Web"&#10;node api "API"&#10;edge e1 web -> api'></draft-diagram>
+```
+
+A module worker must come from the page's origin. From a CDN, the element says its render worker
+could not start: set `el.options = { execution: { mode: 'main' } }` in the same task as the import,
+which compiles on the main thread (fine for small diagrams), or serve `dist` yourself.
+
+The embedding docs have a page per framework with a complete app, SSR and strict-CSP code:
+https://draftably.dev/docs/embed.
 
 The full language guide ships with the CLI package as `DSL.md`: `draftably docs` lists its
 sections and `draftably docs legend` prints one. The package's `examples/` folder holds more than
