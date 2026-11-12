@@ -620,4 +620,30 @@ async function editorSlots(page: import('playwright-core').Page, fw: string) {
     changes,
     `${fw}: typing n in a marked input adds no node`,
   );
+  // A press on the editor's drawing takes focus from the viewer's slot field: Backspace deletes
+  // the node, and the field keeps its text.
+  const field = page.locator('draft-diagram').nth(0).locator('.field');
+  await field.click();
+  await page.keyboard.type('z');
+  const typed = await field.inputValue();
+  await editor.scrollIntoViewIfNeeded();
+  const web = (await ev(
+    () => (window as unknown as W).__itemBox(document.querySelector('draft-editor')!, 'web'),
+    0,
+  ))!;
+  await page.mouse.click(web.x + web.w / 2, web.y + web.h / 2);
+  await page.keyboard.press('Backspace');
+  await page.waitForTimeout(300);
+  assert.equal(
+    await field.inputValue(),
+    typed,
+    `${fw}: Backspace after a press on the editor's drawing leaves the viewer's field alone`,
+  );
+  assert.ok(
+    !(await ev(
+      () => (document.querySelector('draft-editor') as { source?: string }).source,
+      0,
+    ))!.includes('node web'),
+    `${fw}: Backspace deletes the node pressed in the editor`,
+  );
 }

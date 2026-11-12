@@ -35,6 +35,9 @@ export interface CanvasProps {
   bodies?: () => ReadonlySet<string>;
 }
 
+/** Host content and form fields that take their own focus and keys. */
+const FIELD = '[data-draft-input], input, textarea, select, [contenteditable]';
+
 /**
  * The canvas for the session in context: drawing, selection, dragging, inline editing, layout
  * previews, the timeline and the brush. Pointing at it or focusing it makes its session active.
@@ -56,12 +59,23 @@ export function Canvas(props: CanvasProps) {
     svg.addEventListener('wheel', s.onWheel, { passive: false });
     // Before any handler inside it runs, so menus, shortcuts and commands act on this session.
     const activate = () => setActiveSession(s);
-    stage.addEventListener('pointerdown', activate, true);
+    // A press on the drawing takes focus from anything outside it, such as a host's field in a
+    // viewer's slot, so the next key reaches this editor. Most presses call preventDefault, so
+    // the browser would leave focus where it was. A press on a field keeps the field's focus.
+    const press = (e: PointerEvent) => {
+      activate();
+      if (e.composedPath().some(n => n instanceof Element && n.matches(FIELD))) return;
+      // The page's focus, through every shadow root: it may sit far outside this editor.
+      let active = stage.ownerDocument.activeElement;
+      while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+      if (active && active !== stage.ownerDocument.body && !stage.contains(active)) s.focusCanvas();
+    };
+    stage.addEventListener('pointerdown', press, true);
     stage.addEventListener('focusin', activate, true);
     onCleanup(() => {
       observer.disconnect();
       svg.removeEventListener('wheel', s.onWheel);
-      stage.removeEventListener('pointerdown', activate, true);
+      stage.removeEventListener('pointerdown', press, true);
       stage.removeEventListener('focusin', activate, true);
     });
   });
