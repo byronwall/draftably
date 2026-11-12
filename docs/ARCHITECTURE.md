@@ -178,7 +178,7 @@ source file is newer than `dist-cli/`.
 
 `src/graph-api/` is `@draftably/runtime/graph`: `layout()` turns plain nodes, groups and edges into the statements a `.draft` file parses to, compiles them, and returns geometry under the caller's IDs with the file it built. `route()` routes lines between boxes the caller placed. `pnpm bench:graph` checks both against `scripts/bench/graph-corpus.mjs`.
 
-The user guides live on the site: [Support](https://draftably.dev/docs/support), [Render SVG](https://draftably.dev/docs/render-svg), [Markdown](https://draftably.dev/docs/markdown), [Element and viewer](https://draftably.dev/docs/element) and [Build an adapter](https://draftably.dev/docs/build-an-adapter). Their source is in `site/docs/pages/`.
+The user guides live on the site: [Support](https://draftably.dev/docs/support), [Render SVG](https://draftably.dev/docs/render-svg), [Markdown](https://draftably.dev/docs/markdown), [How embedding works](https://draftably.dev/docs/embed-concepts) and [Build an adapter](https://draftably.dev/docs/build-an-adapter). Their source is in `site/docs/pages/`.
 
 ## editor/ — the embeddable editor
 

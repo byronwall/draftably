@@ -177,13 +177,16 @@ at baseline. Screenshots and the server HTML go next to each run's output.
   refreshes them. Installs take minutes (Next.js downloads about 80 MB), so run it in the
   background. It is not in CI. Output goes to `tmp/meta/`.
 
-`pnpm prove:recipes` (CI) copies every named code block of the recipes in
-`site/docs/pages/frameworks.md` into a fresh Vite app per framework (React, Solid, Vue, Svelte,
-plain HTML), and installs only the packed packages that the recipe's `pnpm add` line names. It type-checks (`tsc`, `vue-tsc` or `svelte-check`),
+`pnpm prove:recipes` (CI) copies every named code block in the "Build the app" section of each
+framework page (`site/docs/pages/react.md`, `solid.md`, `vue.md`, `svelte.md`, `plain-html.md`)
+into a fresh Vite app, and installs only the packed packages that the recipe's `pnpm add` line names. It type-checks (`tsc`, `vue-tsc` or `svelte-check`),
 builds, calls the recipe's server `render()`, and loads the page: the diagram and the editor must
 reach `status="ready"` with the body assigned, the dark frame applied, and no console errors. Then it
 starts `vite` in development and deletes a node in the editor, which fails on a worker 404. A
 recipe that stops compiling fails CI. Screenshots go to `tmp/recipes/`.
+
+`tests/site-docs.test.ts` keeps the meta-framework CSP and config code on each framework page the
+same as the files in `integration-examples/meta/`, which `pnpm prove:meta` builds and checks.
 
 ## File-backed editing
 

@@ -38,6 +38,6 @@ import '@draftably/runtime/host.css'; // once per page: heights and slot rules b
 - [Layout API](https://draftably.dev/docs/layout-api): lay out and route a graph your app draws
 - [Drop in your graph layout](https://draftably.dev/docs/layout-drop-in): replace the layout in
   React Flow, Svelte Flow, elkjs, dagre or Cytoscape.js with one changed call
-- [Element and viewer](https://draftably.dev/docs/element): the element, `mountViewer`, fallback
+- [How embedding works](https://draftably.dev/docs/embed-concepts) and the [API reference](https://draftably.dev/docs/api-reference): the element, `mountViewer`, fallback
   images and SSR
 - [Embed diagrams](https://draftably.dev/docs/embed): every route, including framework components

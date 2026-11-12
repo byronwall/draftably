@@ -116,5 +116,5 @@ Syntax, compile, limit and cancel failures return structured results, not except
 that are not valid XML return `DRAFT_TEXT_INVALID`. An unexpected failure returns `DRAFT_INTERNAL`
 without a stack trace.
 
-For an interactive diagram on a page, use the [element and viewer](#element) from the same
+For an interactive diagram on a page, use the [element](#embed-concepts) from the same
 package.
