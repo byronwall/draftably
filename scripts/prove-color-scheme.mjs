@@ -12,7 +12,7 @@
  *
  * Usage: pnpm runtime:build && pnpm editor:build && node scripts/prove-color-scheme.mjs [chromium,firefox,webkit]
  */
-/* global viewer, editor, forced, themed -- page globals in evaluate() */
+/* global viewer, editor, forced, themed, drafting -- page globals in evaluate() */
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -30,7 +30,8 @@ for (const pkg of ['runtime/dist/element.js', 'editor/dist/element.js', 'runtime
 
 const source = fs.readFileSync(path.join(root, 'examples/checkout.draft'), 'utf8');
 if (/^\s*theme\s/m.test(source)) throw Error('examples/checkout.draft must have no theme line.');
-const themedSource = `theme drafting\n${source}`;
+const themedSource = `theme fieldnotes\n${source}`,
+  draftingSource = `theme drafting\n${source}`;
 
 const page = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>Color scheme</title>
@@ -38,7 +39,7 @@ const page = `<!doctype html>
 <style>
   body { margin: 0; padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   html.dark { color-scheme: dark; background: #0b0d10; }
-  draft-diagram, draft-editor { height: 360px; }
+  draft-diagram, draft-editor { height: 250px; }
   #forced { color-scheme: light; }
 </style></head>
 <body>
@@ -46,20 +47,23 @@ const page = `<!doctype html>
 <draft-editor id="editor"></draft-editor>
 <draft-diagram id="forced"></draft-diagram>
 <draft-diagram id="themed"></draft-diagram>
+<draft-diagram id="drafting"></draft-diagram>
 <script type="module">
   const link = document.querySelector('link[rel=stylesheet]');
   if (!link.sheet) await new Promise(r => link.addEventListener('load', r, { once: true }));
   window.renders = 0;
   viewer.addEventListener('draft-render', () => window.renders++);
-  for (const el of [viewer, forced, themed]) el.options = { toolbar: false };
+  for (const el of [viewer, forced, themed, drafting]) el.options = { toolbar: false };
   viewer.source = ${JSON.stringify(source)};
   forced.source = ${JSON.stringify(source)};
   themed.source = ${JSON.stringify(themedSource)};
+  drafting.source = ${JSON.stringify(draftingSource)};
   editor.source = ${JSON.stringify(source)};
   await import('/packages/runtime/dist/element.js');
   await import('/packages/editor/dist/element.js');
-  await Promise.all([viewer, editor, forced, themed].map(el => el.updateComplete));
-  await Promise.all([viewer.viewer.ready, forced.viewer.ready, themed.viewer.ready, editor.editor.ready]);
+  const all = [viewer, editor, forced, themed, drafting];
+  await Promise.all(all.map(el => el.updateComplete));
+  await Promise.all(all.map(el => (el.viewer ?? el.editor).ready));
   window.ready = true;
 </script>
 </body></html>`;
@@ -122,6 +126,7 @@ for (const name of only) {
         controls: getComputedStyle(ui).getPropertyValue('--bg').trim(),
         forced: canvas(forced),
         themed: canvas(themed),
+        drafting: canvas(drafting),
         renders: window.renders,
         svg: viewer.shadowRoot.querySelector('.draft-viewer__viewport > svg'),
         boxes: JSON.stringify([viewer.viewer.geometry().nodes, editor.editor.geometry().nodes]),
@@ -137,6 +142,7 @@ for (const name of only) {
       light.viewer === LIGHT &&
         light.editor === LIGHT &&
         light.forced === LIGHT &&
+        light.drafting === LIGHT &&
         light.controls === UI_LIGHT,
       { ...light, boxes: undefined },
     );
@@ -197,7 +203,16 @@ for (const name of only) {
       dark.forced === LIGHT,
       dark.forced,
     );
-    check('a file with its own theme line stays light on a dark page', dark.themed === LIGHT);
+    check(
+      'a file with another theme line (fieldnotes) keeps its colors on a dark page',
+      dark.themed === light.themed,
+      dark.themed,
+    );
+    check(
+      'a file with a theme drafting line follows the page',
+      dark.drafting === DARK,
+      dark.drafting,
+    );
     await tab.screenshot({ path: path.join(out, `${name}-dark.png`) });
 
     // Back to light, live.
@@ -242,6 +257,21 @@ for (const name of only) {
       both.forced === LIGHT,
       both.forced,
     );
+    check(
+      'a fieldnotes file keeps its colors under light dark on a dark system',
+      both.themed === light.themed,
+      both.themed,
+    );
+    await tab.evaluate(() => document.documentElement.classList.add('dark'));
+    await frames();
+    await sleep(200);
+    const darkOnDark = await read();
+    check(
+      'color-scheme: dark on a dark system draws dark',
+      darkOnDark.viewer === DARK && darkOnDark.editor === DARK,
+      { viewer: darkOnDark.viewer, editor: darkOnDark.editor },
+    );
+    await tab.evaluate(() => document.documentElement.classList.remove('dark'));
     await tab.emulateMedia({ colorScheme: 'light' });
     await frames();
     await sleep(200);
@@ -250,6 +280,87 @@ for (const name of only) {
       'color-scheme: light dark draws light again when the system turns light',
       lightSystem.viewer === LIGHT && lightSystem.editor === LIGHT,
       { viewer: lightSystem.viewer, editor: lightSystem.editor },
+    );
+
+    // A hidden host has no box, so its probe cannot transition: the page turns dark while it is
+    // hidden, and it reads the scheme again when it is shown.
+    await tab.evaluate(() => {
+      for (const el of [viewer, editor]) el.style.display = 'none';
+      document.documentElement.classList.add('dark');
+    });
+    await frames();
+    await sleep(200);
+    await tab.evaluate(() => {
+      for (const el of [viewer, editor]) el.style.display = '';
+    });
+    await frames();
+    await sleep(200);
+    const shown = await read();
+    check(
+      'a host hidden while the page turns dark draws dark when shown',
+      shown.viewer === DARK && shown.editor === DARK,
+      { viewer: shown.viewer, editor: shown.editor },
+    );
+
+    // Hosts mounted detached, with no shadow root, then attached to the dark page.
+    const mounted = await tab.evaluate(async () => {
+      const { mountViewer } = await import('/packages/runtime/dist/viewer.js');
+      const { mountEditor } = await import('/packages/editor/dist/index.js');
+      const vh = document.createElement('div'),
+        eh = document.createElement('div');
+      for (const h of [vh, eh]) h.style.height = '200px';
+      const v = mountViewer(vh, { toolbar: false });
+      const done = v.update(viewer.source);
+      const ed = mountEditor(eh, { source: viewer.source });
+      document.body.append(vh, eh);
+      await Promise.all([done, ed.ready]);
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      await new Promise(r => setTimeout(r, 200));
+      const inner = () => [...eh.children].find(c => !c.hasAttribute('data-draft-probe'));
+      const scheme = () => getComputedStyle(inner()).colorScheme;
+      const out = {
+        viewer: getComputedStyle(vh.querySelector('.draft-viewer__viewport > svg > rect')).fill,
+        editor: getComputedStyle(eh.querySelector('.stage')).backgroundColor,
+        controls: scheme(),
+      };
+      eh.dataset.theme = 'light';
+      out.ownLight = scheme();
+      out.drawingUnderOwnLight = getComputedStyle(eh.querySelector('.stage')).backgroundColor;
+      delete eh.dataset.theme;
+      // A page that turns transitions off still switches a light-DOM host.
+      const off = document.createElement('style');
+      off.textContent = '* { transition: none !important }';
+      document.head.append(off);
+      document.documentElement.classList.remove('dark');
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      await new Promise(r => setTimeout(r, 200));
+      out.offEditor = getComputedStyle(eh.querySelector('.stage')).backgroundColor;
+      out.offViewer = getComputedStyle(
+        vh.querySelector('.draft-viewer__viewport > svg > rect'),
+      ).fill;
+      off.remove();
+      v.destroy();
+      ed.destroy();
+      vh.remove();
+      eh.remove();
+      return out;
+    });
+    check(
+      'a detached mount attached to a dark page draws dark',
+      mounted.viewer === DARK && mounted.editor === DARK,
+      { viewer: mounted.viewer, editor: mounted.editor },
+    );
+    check(
+      "a light-DOM editor's controls take the page's scheme, and data-theme overrides it",
+      mounted.controls === 'dark' &&
+        mounted.ownLight === 'light' &&
+        mounted.drawingUnderOwnLight === DARK,
+      { controls: mounted.controls, ownLight: mounted.ownLight },
+    );
+    check(
+      'transition: none !important on the page still switches light-DOM hosts',
+      mounted.offEditor === LIGHT && mounted.offViewer === LIGHT,
+      { editor: mounted.offEditor, viewer: mounted.offViewer },
     );
   } catch (e) {
     check('ran to completion', false, String(e.message).split('\n')[0]);

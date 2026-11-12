@@ -339,8 +339,6 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
       d.appearance = {
         ...d.appearance,
         theme,
-        // A theme the user picks is the file's own, so a dark page no longer changes it.
-        themeSet: true,
         overrides: {},
         colors: d.appearance.colors.filter(c => !isBuiltInFamily(c.family)),
       };

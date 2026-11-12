@@ -43,13 +43,18 @@ function scope(css: string) {
     if (rule.parent?.type === 'atrule' && /keyframes/.test((rule.parent as { name: string }).name))
       return;
     // `color-scheme` styles the editor's own controls. On the host it would hide the page's
-    // scheme, which the drawing follows, so it moves to the editor inside.
+    // scheme, which the drawing follows, so it moves inside: to the editor in a shadow root, and
+    // to the mounted host's children, other than the scheme probe, where the host is the editor.
     const scheme = /^:root(\[[^\]]*\])?$/.exec(rule.selector);
     if (scheme)
       rule.walkDecls('color-scheme', decl => {
         const attr = scheme[1] ?? '';
         const inside = postcss.rule({
-          selectors: hostsFor(attr).map(host => `${host} .draft-editor`),
+          selectors: hostsFor(attr).map(host =>
+            host.startsWith(':host')
+              ? `${host} .draft-editor`
+              : `${host} > :not([data-draft-probe])`,
+          ),
           nodes: [decl.clone()],
         });
         made.add(inside);

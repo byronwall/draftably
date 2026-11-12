@@ -291,10 +291,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
   root.append(toolbar, viewport, live, outline);
   // The drawing and the frame follow the page's scheme: the SVG holds both in light-dark()
   // colors, so a change restyles it and draws nothing again.
-  const stopScheme = watchColorScheme(
-    host,
-    dark => (root.style.colorScheme = dark ? 'dark' : 'light'),
-  );
+  const scheme = watchColorScheme(host, dark => (root.style.colorScheme = dark ? 'dark' : 'light'));
   // The anchor layer sits above the drawing and is never detached while the viewer lives.
   const anchorLayer = createAnchorLayer(doc, {
     detail: options.detail,
@@ -822,6 +819,8 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
             value: drawing,
             diagnostics: result.diagnostics,
           };
+          // A host hidden until now could not see a scheme change; read it again.
+          scheme.check();
           // Listeners hear the commit before `update` and `ready` resolve.
           emit('render', { revision: id, value: drawing, geometry });
           lastDiagnostics = { revision: id, diagnostics: result.diagnostics, stale: false };
@@ -912,7 +911,7 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
     destroy() {
       if (destroyed) return;
       destroyed = true;
-      stopScheme();
+      scheme.stop();
       revision++;
       pendingMove = undefined;
       if (cameraFrame) (win.cancelAnimationFrame ?? win.clearTimeout)(cameraFrame);

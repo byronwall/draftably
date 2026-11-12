@@ -883,7 +883,6 @@ export function parseModel(source: string | SourceDoc): Model {
         const name = args[0].value as ThemeId;
         assert(THEME_IDS.includes(name), `Unknown theme ${name}; use ${THEME_IDS.join(', ')}.`);
         m.appearance.theme = name;
-        m.appearance.themeSet = true;
         m.themeLine = line;
         const o = m.appearance.overrides;
         for (const [attr, key] of Object.entries(THEME_ATTRS)) {

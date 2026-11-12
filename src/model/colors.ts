@@ -35,13 +35,26 @@ import type { Diagram } from './types';
 const GROUP_STEP = 1,
   NODE_STEP = 3;
 
+/**
+ * A sequence lane's default shade: the canvas end of the ramp, paler than a group's usual tint in
+ * a light theme and darker in a dark one, so the bands stay quieter than the headers' accents.
+ */
+const laneShade = (look: ResolvedAppearance): Shade => (look.dark ? 950 : 50);
+
 /** The shade an object is drawn at, or undefined for the theme's neutral surface. */
 export function drawnShade(doc: Diagram, look: ResolvedAppearance, id: string): Shade | undefined {
   const style = styleOf(doc, id),
     group = isGroup(doc, id),
-    family = style.color;
-  if (!family || family === 'auto') return style.shade;
-  const own = style.shade ?? (group ? groupShadeFor(look.theme) : NODE_SHADE);
+    family = style.color,
+    lane = group && !!doc.layout.sequence && style.shade === undefined;
+  if (!family || family === 'auto') return lane ? laneShade(look) : style.shade;
+  const own =
+    style.shade ??
+    nearestShade(
+      look,
+      family,
+      lane ? laneShade(look) : group ? groupShadeFor(look.theme) : NODE_SHADE,
+    );
   const parentId = findObject(doc, id)?.parentId,
     parent = parentId ? findGroup(doc, parentId) : undefined;
   if (!parent || styleOf(doc, parent.id).color !== family) return own;

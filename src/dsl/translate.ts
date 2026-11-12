@@ -365,9 +365,8 @@ const colorKey = (s: Statement) => `${s.args[0]?.value}:${getAttr(s, 'shade')?.v
  */
 export function writeAppearance(source: SourceDoc, appearance: DiagramAppearance) {
   let theme = statements(source).find(s => s.command === 'theme');
-  // Without a theme line the drawing follows the page's scheme; adding one would end that.
+  // The default theme with no overrides needs no line, so the editor adds none.
   const follows =
-    !appearance.themeSet &&
     appearance.theme === DEFAULT_THEME &&
     Object.values(appearance.overrides).every(v => v === undefined);
   if (!theme && !follows) {

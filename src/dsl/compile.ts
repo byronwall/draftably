@@ -402,10 +402,9 @@ function sequenced(scene: Scene): Scene {
       const members = parts.filter(p => p.parent === o.id),
         x = round(Math.min(...members.map(p => placed.get(p.id)!.x)) - SEQ_BAND_PAD),
         w = round(Math.max(...members.map(p => inkRight(p))) + SEQ_BAND_PAD - x);
-      // Paler than a group's usual tint, so the bands stay quieter than the headers' accents.
+      // A lane's default shade depends on the scheme, so the drawing picks it (`drawnShade`).
       return {
         ...o,
-        shade: o.shade ?? 50,
         x,
         y: 0,
         w,

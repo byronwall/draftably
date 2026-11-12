@@ -80,8 +80,6 @@ export interface AppearanceOverrides {
 
 export interface DiagramAppearance {
   theme: ThemeId;
-  /** The file has a `theme` line. Without one, a dark page draws the default theme dark. */
-  themeSet?: true;
   overrides: AppearanceOverrides;
   colors: ColorDefinition[];
   /** What the colors mean, from `legend` statements, drawn as a key beside the diagram. */
@@ -341,11 +339,16 @@ export const PRESETS: Record<ThemeId, Preset> = {
 };
 
 /**
- * The appearance to draw on a page of this scheme. A file without a `theme` line follows the
- * page: dark draws the default theme as `drafting-dark`. A file's own theme always wins.
+ * The appearance to draw on a page of this scheme. The default theme follows the page, with or
+ * without a `theme drafting` line and its size and font overrides: dark draws it as
+ * `drafting-dark`. Another named theme, a `theme-color` line or a color override on the `theme`
+ * line keeps the file's colors on every page.
  */
 export function forScheme(appearance: DiagramAppearance, dark: boolean): DiagramAppearance {
-  if (!dark || appearance.themeSet || appearance.theme !== DEFAULT_THEME) return appearance;
+  const o = appearance.overrides;
+  if (!dark || appearance.theme !== DEFAULT_THEME || appearance.colors.length) return appearance;
+  if (o.canvas !== undefined || o.text !== undefined || o.connection !== undefined)
+    return appearance;
   // A legend swatch for member cards shows the card shade, which is the other end of the ramp.
   const light = memberShadeFor(DEFAULT_THEME),
     legend = appearance.legend?.map(e =>

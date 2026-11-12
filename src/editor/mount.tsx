@@ -172,6 +172,18 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       },
     }) as MountOptions,
   );
+  // The default theme draws dark on a dark page. The canvas redraws its colors only: the dark
+  // theme has the light one's sizes, so nothing moves. The editor's own controls set their
+  // color-scheme inside a shadow root, so there the page's scheme is read at its top. The element
+  // that holds the tokens, `<draft-editor>` or the mounted host, says the page's scheme too: the
+  // editor's controls go dark with the page unless it sets its own `data-theme`. The scheme is
+  // read before the first render, so the canvas never draws light first on a dark page.
+  const shadow = host.getRootNode() instanceof ShadowRoot;
+  const themed = shadow ? (host.getRootNode() as ShadowRoot).host : host;
+  const scheme = watchColorScheme(shadow ? (host.getRootNode() as ShadowRoot) : host, dark => {
+    session.setDark(dark);
+    themed.setAttribute('data-draft-scheme', dark ? 'dark' : 'light');
+  });
   registerFonts();
   let destroyed = false,
     opened = false,
@@ -213,6 +225,8 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
           error: { ok: false, reason: thrown ? 'internal' : 'input', diagnostics: failed },
         }
       : { status: 'committed', revision: at };
+    // A host hidden until now could not see a scheme change; read it again.
+    scheme.check();
     emit('update', result);
     tellSlots();
     return result;
@@ -424,19 +438,9 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   }, host);
   host.classList.add('draft-editor');
   // Tokens live on the mounted host, or on `:host` when the editor is in an element's shadow root.
-  const shadow = host.getRootNode() instanceof ShadowRoot;
   if (!shadow) host.classList.add('draft-editor-root');
-  adoptEditorCss(host.getRootNode() as Document | ShadowRoot);
-  // A file without a theme line draws dark on a dark page. The canvas redraws its colors only:
-  // the dark theme has the light one's sizes, so nothing moves. The editor's own controls set
-  // their color-scheme inside a shadow root, so there the page's scheme is read at its top.
-  // The element that holds the tokens, `<draft-editor>` or the mounted host, says the page's
-  // scheme too: the editor's controls go dark with the page unless it sets its own `data-theme`.
-  const themed = shadow ? (host.getRootNode() as ShadowRoot).host : host;
-  const stopScheme = watchColorScheme(shadow ? (host.getRootNode() as ShadowRoot) : host, dark => {
-    session.setDark(dark);
-    themed.setAttribute('data-draft-scheme', dark ? 'dark' : 'light');
-  });
+  // A host mounted detached has itself as its root; it styles from its document until attached.
+  adoptEditorCss(shadow ? (host.getRootNode() as ShadowRoot) : host.ownerDocument);
   if (!mounted++)
     for (const [type, fn, capture] of KEYS) document.addEventListener(type, fn, capture);
 
@@ -521,7 +525,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
       cancelAnimationFrame(firstFit);
       cancelAnimationFrame(cameraFrame);
       stopCamera();
-      stopScheme();
+      scheme.stop();
       emit('anchors', { anchors: [] });
       anchorLayer.destroy();
       listeners.clear();

@@ -163,9 +163,9 @@ and groups use `column gap=24`. A `column` gives its boxes the widest one's widt
 need `size` lines to line them up.
 
 Themes: `drafting` (the default), `fieldnotes`, `signal` (color-blind-safe), `ink`, `blueprint`
-(dark). Leave the `theme` line out to let an embedded diagram follow a dark page (one whose
-`color-scheme` allows dark; a page that declares none stays light); any `theme`
-line, even `theme drafting`, keeps its colors on every page. A `theme` line may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
+(dark). The default theme, with no `theme` line or with `theme drafting`, follows a dark page
+(one whose `color-scheme` allows dark; a page that declares none stays light). Another theme, a
+`theme-color` line or a color on the `theme` line keeps its colors on every page. A `theme` line may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
 `annotation-font=`. Padding and fonts change node sizes and so the layout; colors never move
 anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a comment.
 

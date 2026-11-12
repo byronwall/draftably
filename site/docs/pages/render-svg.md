@@ -40,7 +40,7 @@ and emphasis states. It does not expose the compiled scene.
 | `styleNonce`  | A nonce for the generated style element, for your CSP.                                                                                                                  |
 | `links`       | The link policy. See [Links](#links-and-source).                                                                                                                        |
 | `target`      | `'inline'` for SVG pasted into an HTML page. See [Inline output](#inline-output).                                                                                       |
-| `colorScheme` | `'light'` (default) or `'dark'`: the colors of a source with no `theme` line. `'auto'` writes both as `light-dark()` colors, for a page whose `color-scheme` picks one. |
+| `colorScheme` | `'light'` (default) or `'dark'`: the colors of a source in the default theme. `'auto'` writes both as `light-dark()` colors, for a page whose `color-scheme` picks one. |
 
 ## Validate
 

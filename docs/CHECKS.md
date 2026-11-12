@@ -136,11 +136,14 @@ no node; and both send `anchors` with `[]` on removal. Screenshots go to `tmp/pr
 
 `pnpm prove:color-scheme` loads the built elements on one plain page in Chromium, Firefox and
 WebKit: a viewer and an editor of a source with no `theme` line, a viewer forced light with
-`color-scheme: light`, and a viewer of a source with `theme drafting`. A light page draws all of
-them light. `color-scheme: dark` on the page draws the first two dark, with no new render and no
-moved box, and the forced and themed ones stay light. With no `color-scheme` on the page, a dark
-system setting leaves all of them light; `color-scheme: light dark` on the page then draws the
-first two dark. Build first, as for slots. Screenshots go to `tmp/proof-color-scheme/`.
+`color-scheme: light`, a viewer of a source with `theme fieldnotes`, and one with
+`theme drafting`. A light page draws all of them light. `color-scheme: dark` on the page draws the
+viewer, the editor and the `theme drafting` one dark, with no new render and no moved box, and the
+forced and fieldnotes ones keep their colors. With no `color-scheme` on the page, a dark system
+setting leaves all of them light; `color-scheme: light dark` or `dark` on the page then draws them
+dark. It also checks a host hidden while the page turns dark, a viewer and an editor mounted
+detached with no shadow root, the light-DOM editor's `data-theme`, and a page with
+`* { transition: none !important }`. Build first, as for slots. Screenshots go to `tmp/proof-color-scheme/`.
 `pnpm prove:frameworks` also checks that each wrapper's diagrams stay light on a dark system
 setting until the page sets `color-scheme: light dark`, then draw dark, and saves `tmp/frameworks/<framework>-dark.png`.
 

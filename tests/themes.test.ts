@@ -119,7 +119,6 @@ describe('appearance in the file', () => {
     );
     expect(m.appearance).toEqual({
       theme: 'signal',
-      themeSet: true,
       overrides: {
         paddingX: 20,
         paddingY: 10,

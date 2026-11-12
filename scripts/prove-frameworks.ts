@@ -348,15 +348,34 @@ writeFileSync('dist/proof.html', page);`,
           el => getComputedStyle(el.shadowRoot!.querySelector('.stage')!).backgroundColor,
         ),
       ]);
+    const frames = () =>
+      page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     await page.emulateMedia({ colorScheme: 'dark' });
-    await page.waitForTimeout(300);
+    await frames();
     const unset = await canvases();
     assert.ok(
       unset.every(c => c === 'rgb(247, 247, 244)'),
       `${fw}: with no color-scheme, a dark system setting leaves every diagram light ${JSON.stringify(unset)}`,
     );
     await page.addStyleTag({ content: ':root { color-scheme: light dark }' });
-    await page.waitForTimeout(300);
+    await page
+      .waitForFunction(
+        () =>
+          [
+            ...[...document.querySelectorAll('draft-diagram')].map(
+              el =>
+                getComputedStyle(
+                  el.shadowRoot!.querySelector('.draft-viewer__viewport > svg > rect')!,
+                ).fill,
+            ),
+            ...[...document.querySelectorAll('draft-editor')].map(
+              el => getComputedStyle(el.shadowRoot!.querySelector('.stage')!).backgroundColor,
+            ),
+          ].every(c => c === 'rgb(22, 25, 30)'),
+        null,
+        { timeout: 5000 },
+      )
+      .catch(() => {});
     const dark = await canvases();
     assert.ok(
       dark.every(c => c === 'rgb(22, 25, 30)'),

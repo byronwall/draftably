@@ -429,7 +429,6 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     if (!THEME_IDS.includes(input.theme)) throw Error('Unknown theme: ' + input.theme);
     out.theme = input.theme;
   }
-  if (input.themeSet === true) out.themeSet = true;
   const o = input.overrides ?? {},
     next: AppearanceOverrides = {};
   for (const key of ['paddingX', 'paddingY', 'radius'] as const)
