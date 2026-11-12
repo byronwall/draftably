@@ -29,7 +29,7 @@ let nextId = 0;
 
 /** Names the worker and the usual fix, so "worker failed" is not a dead end. */
 export const WORKER_HELP =
-  "The worker is the module next to @draftably/runtime's viewer. With Vite, add optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] } to vite.config.";
+  "The worker is the module next to @draftably/runtime's viewer. With Vite 5–7, add optimizeDeps: { exclude: ['@draftably/runtime', '@draftably/editor'] } to vite.config.";
 
 const defaultWorker = () =>
   new Worker(new URL('./render.worker.ts', import.meta.url), { type: 'module' });

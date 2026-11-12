@@ -4,6 +4,8 @@ import { DraftDiagram } from '@draftably/solid';
 import { DraftEditor } from '@draftably/solid/editor';
 import {
   PROOF_OWNER,
+  cancelLink,
+  cancelMenu,
   cycleSource,
   editorSources,
   exposeProof,
@@ -52,7 +54,15 @@ export function Proof(props: { svg?: string; nonce?: string }) {
   return (
     <Owner.Provider value={PROOF_OWNER}>
       <section id="p-viewer">
-        <DraftDiagram source={source()} svg={props.svg} label="Proof" options={options}>
+        <DraftDiagram
+          source={source()}
+          svg={props.svg}
+          label="Proof"
+          options={options}
+          data-proof="viewer"
+          onContextmenu={cancelMenu}
+          onLink={cancelLink}
+        >
           <Card />
         </DraftDiagram>
       </section>
@@ -62,6 +72,7 @@ export function Proof(props: { svg?: string; nonce?: string }) {
             <DraftEditor
               source={s}
               class="proof-editor"
+              data-proof="editor"
               onChange={({ source: next }) => proofHooks().changes[i()].push(next)}
             />
           )}

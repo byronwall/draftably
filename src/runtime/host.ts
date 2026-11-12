@@ -59,7 +59,25 @@ export const HOST_EVENTS = [
 ] as const satisfies readonly HostEventName[];
 
 /** Events a host can cancel with `preventDefault()`. */
-export const CANCELABLE_EVENTS: readonly HostEventName[] = ['link', 'contextmenu'];
+export type CancelableEventName = 'link' | 'contextmenu';
+export const CANCELABLE_EVENTS: readonly HostEventName[] = [
+  'link',
+  'contextmenu',
+] satisfies readonly CancelableEventName[];
+
+/**
+ * What a framework event prop receives: the event's `detail`, and on a cancelable event a
+ * `preventDefault()` that cancels the DOM event, so `onLink={e => e.preventDefault()}` works.
+ */
+export type HostEventDetail<K extends HostEventName> = K extends CancelableEventName
+  ? HostEvents[K] & { preventDefault(): void }
+  : HostEvents[K];
+
+/** The value a framework event prop receives for a `draft-<name>` event. */
+export function hostDetail(event: Event): unknown {
+  const { detail } = event as CustomEvent<object>;
+  return event.cancelable ? { ...detail, preventDefault: () => event.preventDefault() } : detail;
+}
 
 export type DraftEventMap = {
   [K in HostEventName as `draft-${K}`]: CustomEvent<HostEvents[K]>;
