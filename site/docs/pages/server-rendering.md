@@ -8,9 +8,9 @@ under a strict Content Security Policy.
 Render the static SVG on the server and pass it as `svg`. The page then shows the diagram before
 JavaScript loads. The viewer replaces it after its first successful draw; if that draw fails, the
 SVG remains visible. The SVG is also available to search engines and link previews. Give each
-inline diagram on a page its own `idPrefix`. `renderSvg` draws light unless you pass
-`colorScheme`; on a page that can be dark, pass `colorScheme: 'auto'`, so the SVG follows the
-page's scheme as the viewer does (see [Dark pages](#dark-pages)). Slot content renders on the server too, and
+inline diagram on a page its own `idPrefix`. Pass `colorScheme: 'auto'` so the server's SVG holds both schemes as `light-dark()` colors,
+and a dark page shows it dark before the element upgrades (see [Dark pages](#dark-pages)):
+`renderSvg(source, { target: 'inline', idPrefix, colorScheme: 'auto' })`. Slot content renders on the server too, and
 `host.css` hides it until the element loads, so nothing shifts.
 
 Each framework page shows the call in a Vite app and in its meta-framework:

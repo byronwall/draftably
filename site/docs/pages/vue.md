@@ -155,7 +155,11 @@ import { initial } from './diagram';
 
 /** The page's HTML, with the diagram drawn before any script runs. */
 export async function render(): Promise<string> {
-  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  const result = await renderSvg(initial, {
+    target: 'inline',
+    idPrefix: 'checkout',
+    colorScheme: 'auto',
+  });
   return renderToString(createSSRApp(App, { svg: result.ok ? result.value.svg : undefined }));
 }
 ```
@@ -188,6 +192,7 @@ const { data } = await useAsyncData('diagram', async () => {
   const result = await renderSvg(initial, {
     target: 'inline',
     idPrefix: 'checkout',
+    colorScheme: 'auto',
     styleNonce: nonce,
   });
   return { svg: result.ok ? result.value.svg : undefined, nonce };

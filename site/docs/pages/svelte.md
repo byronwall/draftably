@@ -152,7 +152,11 @@ import { initial } from './diagram';
 
 /** The page's HTML, with the diagram drawn before any script runs. */
 export async function render(): Promise<string> {
-  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  const result = await renderSvg(initial, {
+    target: 'inline',
+    idPrefix: 'checkout',
+    colorScheme: 'auto',
+  });
   return renderApp(App, { props: { svg: result.ok ? result.value.svg : undefined } }).body;
 }
 ```
@@ -175,6 +179,7 @@ export async function load({ locals }) {
   const result = await renderSvg(initial, {
     target: 'inline',
     idPrefix: 'checkout',
+    colorScheme: 'auto',
     styleNonce: locals.nonce,
   });
   return { svg: result.ok ? result.value.svg : undefined, nonce: locals.nonce };

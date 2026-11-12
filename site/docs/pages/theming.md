@@ -7,7 +7,8 @@ properties change the frame and the panels.
 ## Dark pages
 
 The drawing and the frame follow the page's color scheme. On a dark page, a diagram whose source
-has no `theme` line draws dark, in the default theme's dark variant, and the frame goes dark too.
+has no `theme` line, or `theme drafting`, draws dark, in the default theme's dark variant, and the
+frame goes dark too.
 Each element reads its own computed `color-scheme`, which it inherits from the page:
 
 | Computed `color-scheme`     | The diagram draws                  |
@@ -34,12 +35,15 @@ A change of scheme switches the drawing at once, with no new layout.
 
 - **Keep one diagram light.** Set `color-scheme: light` on the element:
   `draft-diagram { color-scheme: light; }`. The same works on `draft-editor`.
-- **Pick a look in the source.** A `theme` line in the `.draft` source wins over the page:
-  `theme drafting` stays light, and `theme blueprint` stays dark. See [Themes](#themes).
-- **Server-rendered SVG.** `renderSvg` draws light unless you pass `colorScheme`. For a fallback
-  that a dark page shows before the viewer draws, pass `colorScheme: 'auto'`: the SVG then follows
-  the page's `color-scheme` too, so it does not show light and then switch to dark. See
-  [Render SVG](#render-svg).
+- **Pick a look in the source.** `theme drafting` follows the page, as a source with no `theme`
+  line does, also with padding or font overrides. Another named theme keeps the file's colors on
+  every page: `theme blueprint` stays dark. So does a `theme-color` line, or `canvas=`, `text=` or
+  `connection=` on the `theme` line. To keep one diagram light, use CSS, as above. See
+  [Themes](#themes).
+- **Server-rendered SVG.** Pass `colorScheme: 'auto'` so the server's SVG holds both schemes as
+  `light-dark()` colors, and a dark page shows it dark before the element upgrades:
+  `renderSvg(source, { target: 'inline', idPrefix, colorScheme: 'auto' })`. Without it, the SVG
+  draws light. See [Render SVG](#render-svg).
 
 ## Frame colors
 

@@ -191,7 +191,11 @@ const attr = (text: string) =>
 
 /** The diagram's markup with its static SVG, for a page your server sends. */
 export async function render(): Promise<string> {
-  const result = await renderSvg(initial, { target: 'inline', idPrefix: 'checkout' });
+  const result = await renderSvg(initial, {
+    target: 'inline',
+    idPrefix: 'checkout',
+    colorScheme: 'auto',
+  });
   const svg = result.ok ? result.value.svg : '';
   return `<draft-diagram label="Checkout" source="${attr(initial)}">${svg}</draft-diagram>`;
 }
