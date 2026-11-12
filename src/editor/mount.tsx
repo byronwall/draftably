@@ -22,6 +22,7 @@ import { placedItems, type Geometry } from '../runtime/geometry';
 import { drawnLegend, usedStatuses } from '../model/status';
 import { createAnchorLayer, type Anchor, type DraftSlot } from '../runtime/anchors';
 import type { Diagnostic } from '../runtime/types';
+import type { EditorUpdate } from '../runtime/host';
 import { adoptEditorCss } from './css';
 import { Editor } from './Editor';
 import { sessions } from './internal';
@@ -76,8 +77,17 @@ export interface MountOptions extends EditorOptions {
 export interface EditorEvents {
   /** After each drawing, after `anchor()`, and with `[]` before `destroy` detaches the targets. */
   anchors: { anchors: readonly Anchor[] };
-  /** Slot warnings: an unknown slot, or content larger than its node. */
+  /** A source that does not parse (`DRAFT_PARSE`), then slot warnings: an unknown slot, or content larger than its node. */
   diagnostics: { revision: number; diagnostics: readonly Diagnostic[]; stale: boolean };
+  /** Each update's result, from the first text on. */
+  update: EditorUpdateResult;
+  /** A link mark was pressed. `preventDefault()` stops the editor opening it. */
+  link: {
+    itemId: string;
+    href: string;
+    target: '_blank';
+    preventDefault(): void;
+  };
   camera: { camera: Camera; reason: CameraReason };
   /** The selection changed, by the user or through `select()`. */
   select: { ids: readonly string[]; reason: 'user' | 'api' };
@@ -91,8 +101,8 @@ export interface EditorEvents {
   };
 }
 
-/** An editor update's outcome. The editor draws in its own session, so it has no SVG value. */
-export type EditorUpdateResult = { status: 'committed' | 'error' | 'destroyed'; revision: number };
+/** An editor update's outcome: `EditorUpdate` in `@draftably/runtime/host`. */
+export type EditorUpdateResult = EditorUpdate;
 
 /** The editor's handle: the viewer's camera, plus editing. */
 export interface MountedEditor {
@@ -146,8 +156,21 @@ const toBox = (r: { x: number; y: number; w: number; h: number }) => ({
  * host a size; the canvas fills it.
  */
 export function mountEditor(host: HTMLElement, options: MountOptions): MountedEditor {
-  // The session reads options when it needs them, so getters on `options` stay live.
-  const session = createDiagramSession(options);
+  // The session reads options when it needs them, so getters on `options` stay live. A link
+  // press is offered to the host's `link` listeners before it opens. Object.create keeps the
+  // getters: never spread these options, since a spread copies each getter's value once.
+  const session = createDiagramSession(
+    Object.create(options, {
+      onLink: {
+        value: ({ href, itemId }: { href: string; itemId: string | undefined }) => {
+          if (!itemId) return false;
+          let stopped = false;
+          emit('link', { itemId, href, target: '_blank', preventDefault: () => (stopped = true) });
+          return stopped;
+        },
+      },
+    }) as MountOptions,
+  );
   registerFonts();
   let destroyed = false,
     opened = false,
@@ -158,8 +181,41 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
    */
   let revision = 0;
   let revisionNow = () => revision;
-  const settle = (status: 'committed' | 'error') => () =>
-    ({ status: destroyed ? 'destroyed' : status, revision: revisionNow() }) as const;
+  /** The source's parse error, as the viewer reports one. */
+  const parseDiagnostics = (): Diagnostic[] => {
+    const e = session.sourceError();
+    if (!e) return [];
+    const message = e.message.replace(/^Line \d+(?:, column \d+)?: /, '');
+    return [
+      { code: 'DRAFT_PARSE', severity: 'error', message, location: { line: e.line }, itemIds: [] },
+    ];
+  };
+  /** Every update, the first text's included, ends here: it reports its result and diagnostics. */
+  const settle = (thrown?: { error: unknown }) => (): EditorUpdateResult => {
+    const at = revisionNow();
+    if (destroyed) return { status: 'destroyed', revision: at };
+    const failed = parseDiagnostics();
+    if (thrown && !failed.length)
+      failed.push({
+        code: 'DRAFT_INTERNAL',
+        severity: 'error',
+        message:
+          thrown.error instanceof Error
+            ? thrown.error.message
+            : 'The editor could not show this source.',
+        itemIds: [],
+      });
+    const result: EditorUpdateResult = failed.length
+      ? {
+          status: 'error',
+          revision: at,
+          error: { ok: false, reason: thrown ? 'internal' : 'input', diagnostics: failed },
+        }
+      : { status: 'committed', revision: at };
+    emit('update', result);
+    tellSlots();
+    return result;
+  };
   const ready: Promise<EditorUpdateResult> = session
     .openSource(options.source, options.onChange)
     .then(() => {
@@ -171,7 +227,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
         if (pendingMove) whenSized(pendingMove);
       });
     })
-    .then(settle('committed'), settle('error'));
+    .then(settle(), error => settle({ error })());
   let latest = ready;
 
   /** Geometry for one revision, built when a host first asks for it. */
@@ -255,7 +311,11 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
   });
   const [bodies, setBodies] = createSignal<ReadonlySet<string>>(new Set());
   const tellSlots = () =>
-    emit('diagnostics', { revision, diagnostics: anchorLayer.warnings(), stale: false });
+    emit('diagnostics', {
+      revision,
+      diagnostics: [...parseDiagnostics(), ...anchorLayer.warnings()],
+      stale: false,
+    });
   const tellAnchors = () => {
     const next = anchorLayer.bodyIds();
     if (next.join('\n') !== [...bodies()].join('\n')) setBodies(new Set(next));
@@ -372,7 +432,7 @@ export function mountEditor(host: HTMLElement, options: MountOptions): MountedEd
     },
     source: session.currentSource,
     update(next) {
-      latest = session.receiveSource(next).then(settle('committed'), settle('error'));
+      latest = session.receiveSource(next).then(settle(), error => settle({ error })());
       return latest;
     },
     geometry() {

@@ -7,11 +7,12 @@
  * node and scales with the camera, an overlay covers its item at screen size, host CSS styles the
  * content, content follows a source update and a target keeps its identity, a click on body text
  * reaches the drawing, a `data-draft-input` button takes its click, a caret survives an update,
- * `overflow: clip` keeps the element from scrolling, an unknown slot is a `DRAFT_SLOT_UNKNOWN`
- * warning, content larger than its node is a `DRAFT_SLOT_OVERFLOW` warning, and low detail hides
+ * `overflow: clip` keeps the element from scrolling, an unknown slot or prefix is a
+ * `DRAFT_SLOT_UNKNOWN` warning, content larger than its node is a `DRAFT_SLOT_OVERFLOW` warning, and low detail hides
  * bodies, also after a commit made zoomed out. For the editor also: its styles in the shadow root, page
  * tokens on `:host`, ports and handles above a body, no shortcut from a marked input, and a press
- * on its drawing takes the keys from a focused field in the viewer's slot.
+ * on its drawing takes the keys from a focused field in the viewer's slot. The editor's events:
+ * `update` for each source (an `error` for one that does not parse) and a cancelable `link`.
  * Screenshots go to tmp/proof-slots/.
  *
  * Usage: pnpm runtime:build && pnpm editor:build && node scripts/prove-slots.mjs [chromium,firefox,webkit]
@@ -69,7 +70,7 @@ const page = `<!doctype html>
 <draft-editor id="editor"></draft-editor>
 <script type="module">
   const source = ${JSON.stringify(source)};
-  window.log = { viewer: { activate: [], diagnostics: [], anchors: 0 }, editor: { select: [], diagnostics: [], anchors: 0 }, clicks: 0 };
+  window.log = { viewer: { activate: [], diagnostics: [], anchors: 0, updates: [] }, editor: { select: [], diagnostics: [], anchors: 0, updates: [], links: [] }, clicks: 0 };
   /** Plain-DOM content for one element: a body per listed node, an overlay, an unknown slot. */
   window.fill = (el, ids, suffix = '') => {
     for (const c of [...el.querySelectorAll(':scope > .card')])
@@ -90,7 +91,8 @@ const page = `<!doctype html>
     }
   };
   for (const el of [viewer, editor]) {
-    el.innerHTML = '<div class="badge" data-draft-slot="overlay:db">3</div><div class="ghost" data-draft-slot="body:nope">ghost</div>';
+    // An unknown ID, and a typo in the prefix: both warn and show nothing.
+    el.innerHTML = '<div class="badge" data-draft-slot="overlay:db">3</div><div class="ghost" data-draft-slot="body:nope">ghost</div><div class="typo" data-draft-slot="bdy:web">typo</div>';
     // Host order differs from drawing order (web, api, db): targets follow the drawing.
     fill(el, ['api', 'web']);
   }
@@ -106,7 +108,12 @@ const page = `<!doctype html>
   for (const [side, el] of [['viewer', viewer], ['editor', editor]]) {
     el.addEventListener('draft-diagnostics', e => log[side].diagnostics.push(e.detail.diagnostics.map(d => d.code + ':' + d.itemIds.join())));
     el.addEventListener('draft-anchors', e => { log[side].anchors++; log[side].lastAnchors = e.detail.anchors.length; });
+    el.addEventListener('draft-update', e => log[side].updates.push(e.detail.status + (e.detail.error ? ':' + e.detail.error.diagnostics[0].code : '')));
   }
+  editor.addEventListener('draft-link', e => {
+    log.editor.links.push(e.detail.itemId + '|' + e.detail.href);
+    e.preventDefault();
+  });
   const ports = { viewer: '.draft-viewer__viewport', editor: '.stage' };
   window.H = s => { const el = s === 'viewer' ? viewer : editor; return { el, handle: () => el.viewer ?? el.editor, port: () => el.shadowRoot.querySelector(ports[s]) }; };
   window.rect = e => { if (!e) return null; const b = e.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; };
@@ -209,6 +216,18 @@ for (const name of only) {
       check(
         label('an unknown slot is a DRAFT_SLOT_UNKNOWN warning'),
         await ev(s => log[s].diagnostics.flat().includes('DRAFT_SLOT_UNKNOWN:nope'), side),
+      );
+      const typo = await ev(
+        s => ({
+          warned: log[s].diagnostics.flat().includes('DRAFT_SLOT_UNKNOWN:web'),
+          shown: rect(H(s).el.querySelector('.typo'))?.w ?? 0,
+        }),
+        side,
+      );
+      check(
+        label('a slot with an unknown prefix (bdy:) warns and shows nothing'),
+        typo.warned && typo.shown === 0,
+        typo,
       );
 
       // Geometry: a body fills its node; an overlay covers its item at screen size.
@@ -483,6 +502,69 @@ for (const name of only) {
       await ev(([s, c]) => H(s).handle().setCamera(c), [side, start]);
       await frames();
     }
+
+    // The editor sends update for its first source and each one after, as the viewer does.
+    const updates = await ev(() => [...log.editor.updates]);
+    check(
+      'editor: sends update for its first source and for each source update',
+      updates.length >= 3 && updates.every(u => u === 'committed'),
+      updates,
+    );
+    // A source that does not parse is an update error and a DRAFT_PARSE diagnostic.
+    const good = await ev(() => editor.source);
+    const parse = await ev(async src => {
+      const n = log.editor.updates.length;
+      editor.source = src + '\nnode "broken';
+      await new Promise(r => setTimeout(r, 400));
+      const failed = {
+        update: log.editor.updates.slice(n).join(),
+        diagnostics: log.editor.diagnostics.at(-1).join(),
+        status: editor.getAttribute('status'),
+      };
+      editor.source = src;
+      await new Promise(r => setTimeout(r, 400));
+      return {
+        ...failed,
+        after: log.editor.updates.at(-1),
+        clear: log.editor.diagnostics.at(-1).join(),
+      };
+    }, good);
+    check(
+      'editor: a source that does not parse is an update error and a DRAFT_PARSE diagnostic',
+      parse.update === 'error:DRAFT_PARSE' &&
+        parse.diagnostics.startsWith('DRAFT_PARSE') &&
+        parse.after === 'committed' &&
+        !parse.clear.includes('DRAFT_PARSE'),
+      parse,
+    );
+    // A press on a link mark sends a cancelable link; preventDefault keeps it from opening.
+    let popups = 0;
+    tab.on('popup', () => popups++);
+    await ev(async src => {
+      editor.source = src.replace(
+        'node cache "Cache"',
+        'node cache "Cache" href="https://example.com/cache"',
+      );
+      await editor.editor.ready;
+      await new Promise(r => setTimeout(r, 300));
+      editor.editor.reveal('cache');
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    }, good);
+    const mark = await ev(() =>
+      rect(editor.shadowRoot.querySelector('[data-open-link] .link-hit')),
+    );
+    if (mark) await at(mark);
+    await sleep(300);
+    const links = await ev(() => [...log.editor.links]);
+    check(
+      'editor: a link press sends a cancelable link with the item and href',
+      links.join() === 'cache|https://example.com/cache' && popups === 0,
+      { links, popups },
+    );
+    await ev(async src => {
+      editor.source = src;
+      await new Promise(r => setTimeout(r, 300));
+    }, good);
 
     // A press on the editor's drawing takes focus from a field in the viewer's slot: Backspace
     // then deletes the selected node, and the field keeps its text.

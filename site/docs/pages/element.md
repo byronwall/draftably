@@ -215,20 +215,22 @@ with source.
 
 ## Events and status
 
-The element dispatches every viewer event as a bubbling `draft-<name>` `CustomEvent`, with the
-event's data in `detail`. Listeners on the element survive a new viewer.
+Each element dispatches its events as bubbling `draft-<name>` `CustomEvent`s, with the event's
+data in `detail`. Listeners on the element survive a new viewer or editor. The **Sent by** column
+says which element sends each one.
 
-| Event                | `detail`                                                                                                                                |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `draft-update`       | The `UpdateResult` of each update.                                                                                                      |
-| `draft-anchors`      | `{ anchors }` after each drawing and each change in slot content: `{ slot, id, kind, el }` per target; `[]` before the element goes.    |
-| `draft-render`       | `{ revision, value, geometry }` after each drawing.                                                                                     |
-| `draft-diagnostics`  | `{ revision, diagnostics, stale }`.                                                                                                     |
-| `draft-camera`       | `{ camera, reason }` after a pan, zoom or fit.                                                                                          |
-| `draft-itemactivate` | `{ id, kind, input, revision }` when the user picks an item.                                                                            |
-| `draft-link`         | `{ itemId, href, target }`. Call `preventDefault()` to open it yourself.                                                                |
-| `draft-contextmenu`  | `{ id, kind, clientX, clientY }`; `id` is null on the background. Call `preventDefault()` to stop the browser's menu and show your own. |
-| `draft-select`       | `{ ids, reason }`, on `<draft-editor>` only: the selection changed.                                                                     |
+| Event                | Sent by | `detail`                                                                                                                                                                                                                                             |
+| -------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `draft-update`       | both    | The result of each update, from the first source on. The viewer's is an `UpdateResult`. The editor's is an `EditorUpdate`: a commit has no `value` or `diagnostics`, and a source that does not parse is an `error` with a `DRAFT_PARSE` diagnostic. |
+| `draft-anchors`      | both    | `{ anchors }` after each drawing and each change in slot content: `{ slot, id, kind, el }` per target; `[]` before the element goes.                                                                                                                 |
+| `draft-render`       | diagram | `{ revision, value, geometry }` after each drawing. The editor draws no standalone SVG; read `editor.geometry()` instead.                                                                                                                            |
+| `draft-diagnostics`  | both    | `{ revision, diagnostics, stale }`. The editor's holds a parse error first, then slot warnings.                                                                                                                                                      |
+| `draft-camera`       | both    | `{ camera, reason }` after a pan, zoom or fit.                                                                                                                                                                                                       |
+| `draft-itemactivate` | diagram | `{ id, kind, input, revision }` when the user picks an item. In the editor a press selects the item: listen for `draft-select`.                                                                                                                      |
+| `draft-link`         | both    | `{ itemId, href, target }` when the user opens a link. Call `preventDefault()` to open it yourself. In the editor the link mark opens it, and `target` is `_blank`.                                                                                  |
+| `draft-contextmenu`  | both    | `{ id, kind, clientX, clientY }`; `id` is null on the background. Call `preventDefault()` to stop the browser's menu and show your own.                                                                                                              |
+| `draft-select`       | editor  | `{ ids, reason }`: the selection changed, by the user (`user`) or through `select()` (`api`).                                                                                                                                                        |
+| `draft-change`       | editor  | `{ source }` after each kept edit, undo and redo.                                                                                                                                                                                                    |
 
 ```ts
 diagram.addEventListener('draft-itemactivate', event => console.log(event.detail.id));

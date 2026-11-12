@@ -37,6 +37,8 @@ export interface SessionOptions {
   openLink?: (href: string) => void;
   /** The user started a gesture or a tool on the canvas; a host closes its menus here. */
   onInteract?: () => void;
+  /** A link was pressed, before it opens. Return true to stop it opening. */
+  onLink?: (link: { href: string; itemId: string | undefined }) => boolean;
 }
 
 export function createDiagramSession(options: SessionOptions = {}) {

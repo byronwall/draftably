@@ -3,6 +3,7 @@
  * packages loop over `HOST_EVENTS`, so a new event adds no lines to any of them.
  * This module has no side effects and no runtime imports.
  */
+import type { RenderFailure } from './types';
 import type { UpdateResult, ViewerEvents } from './viewer';
 
 export type { Camera, CameraReason, FrameOptions, MoveResult } from './camera';
@@ -12,8 +13,11 @@ export type { Anchor, DraftSlot } from './anchors';
 export interface HostEvents {
   /** After each commit, after the marked children change, and with `[]` before destroy. */
   anchors: ViewerEvents['anchors'];
-  /** Each update's result: committed, error or a cancellation. */
-  update: UpdateResult;
+  /**
+   * Each update's result, from the first source on: committed, error or a cancellation. The
+   * editor's commit has no `value` or `diagnostics` (see `EditorUpdate`).
+   */
+  update: UpdateResult | EditorUpdate;
   render: ViewerEvents['render'];
   diagnostics: ViewerEvents['diagnostics'];
   camera: ViewerEvents['camera'];
@@ -27,6 +31,16 @@ export interface HostEvents {
   /** The editor only: the source after a kept edit, undo or redo. */
   change: { source: string };
 }
+
+/**
+ * `<draft-editor>`'s update. The editor draws in its own session, not as one SVG, so a commit
+ * has no `value` and no `diagnostics`: the `diagnostics` event has them. A source that does not
+ * parse is an `error` with a `DRAFT_PARSE` diagnostic; the editor keeps the text and shows it.
+ */
+export type EditorUpdate =
+  | { status: 'committed'; revision: number; value?: never; diagnostics?: never }
+  | { status: 'error'; revision: number; error: RenderFailure }
+  | { status: 'destroyed'; revision: number };
 
 export type HostEventName = keyof HostEvents;
 
