@@ -2,17 +2,19 @@
  * Proves the host contract in the meta-frameworks: Next.js, SolidStart, Nuxt and SvelteKit.
  *
  *   pnpm runtime:build && pnpm editor:build && pnpm frameworks:build
- *   pnpm prove:meta [next solid-start nuxt sveltekit]
+ *   pnpm prove:meta [next solid-start nuxt sveltekit] [--write]
  *
  * Each app in `integration-examples/meta/<name>/` is small: a route that renders the framework's
  * proof page (`integration-examples/frameworks/<framework>/src/Proof.*`) with a server SVG and a
- * per-request CSP nonce. `proof.config.json` names the files to copy in, and the build and start
- * commands. The script copies the app to `tmp/meta/<name>`, installs the packed packages, builds
+ * per-request CSP nonce. Each app holds a copy of its proof page, so it runs on its own;
+ * `proof.config.json` names those copies, and the build and start commands. The script fails when
+ * a copy differs from its source; `--write` refreshes the copies instead. It then copies the app
+ * to `tmp/meta/<name>`, installs the packed packages, builds
  * for production, starts the server on a free port and runs `scripts/lib/host-proof.ts` against
  * it. Installs are slow: run it in the background. Screenshots go to `tmp/meta/`.
  */
 import { execFileSync, spawn } from 'node:child_process';
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,7 +38,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'tmp/meta');
 const examples = path.join(root, 'integration-examples');
 const APPS = ['next', 'solid-start', 'nuxt', 'sveltekit'];
-const only = process.argv.slice(2);
+const only = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
+const write = process.argv.includes('--write');
 // Packs per process, so two runs for different apps can share tmp/meta.
 const packs = path.join(out, 'packs', String(process.pid));
 mkdirSync(packs, { recursive: true });
@@ -64,33 +67,69 @@ const freePort = () =>
     });
   });
 
-/** Copies the app and its proof page, and points its dependencies at the packed packages. */
+/** The proof page copies the app holds, by path in the app, as they should read. */
+function proofCopies(config: AppConfig): Map<string, string> {
+  const copies = new Map<string, string>();
+  for (const file of ['proof.js', 'proof.css'])
+    copies.set(
+      path.join(config.shared, file),
+      readFileSync(path.join(examples, 'frameworks', file), 'utf8'),
+    );
+  for (const [from, to] of Object.entries(config.files)) {
+    const text = readFileSync(path.join(examples, 'frameworks', config.framework, from), 'utf8');
+    let rel = path.relative(path.dirname(to), path.join(config.shared, 'proof.js'));
+    if (!rel.startsWith('.')) rel = `./${rel}`;
+    if (!text.includes("'../../proof.js'")) throw new Error(`${from} does not import proof.js`);
+    copies.set(to, text.replaceAll("'../../proof.js'", `'${rel}'`));
+  }
+  return copies;
+}
+
+/** Fails on a stale proof page copy in the example, or with `--write` refreshes it. */
+function checkCopies(name: string, config: AppConfig) {
+  const stale: string[] = [];
+  for (const [file, text] of proofCopies(config)) {
+    const dest = path.join(examples, 'meta', name, file);
+    if (existsSync(dest) && readFileSync(dest, 'utf8') === text) continue;
+    if (!write) {
+      stale.push(file);
+      continue;
+    }
+    mkdirSync(path.dirname(dest), { recursive: true });
+    writeFileSync(dest, text);
+  }
+  if (stale.length)
+    throw new Error(
+      `${name}: stale proof page copies (${stale.join(', ')}); run pnpm prove:meta --write`,
+    );
+}
+
+/** Copies the app, with its proof page, and points its dependencies at the packed packages. */
 function prepare(name: string): { app: string; config: AppConfig } {
+  const config = JSON.parse(
+    readFileSync(path.join(examples, 'meta', name, 'proof.config.json'), 'utf8'),
+  ) as AppConfig;
+  checkCopies(name, config);
   const app = path.join(out, name);
   rmSync(app, { recursive: true, force: true });
   cpSync(path.join(examples, 'meta', name), app, {
     recursive: true,
     filter: src => !/node_modules|\.next|\.nuxt|\.output|\.svelte-kit|\/build$|\/dist$/.test(src),
   });
-  const config = JSON.parse(readFileSync(path.join(app, 'proof.config.json'), 'utf8')) as AppConfig;
-  const shared = path.join(app, config.shared);
-  mkdirSync(shared, { recursive: true });
-  for (const file of ['proof.js', 'proof.css'])
-    cpSync(path.join(examples, 'frameworks', file), path.join(shared, file));
-  for (const [from, to] of Object.entries(config.files)) {
-    const dest = path.join(app, to);
-    mkdirSync(path.dirname(dest), { recursive: true });
-    const text = readFileSync(path.join(examples, 'frameworks', config.framework, from), 'utf8');
-    let rel = path.relative(path.dirname(dest), path.join(shared, 'proof.js'));
-    if (!rel.startsWith('.')) rel = `./${rel}`;
-    if (!text.includes("'../../proof.js'")) throw new Error(`${from} does not import proof.js`);
-    writeFileSync(dest, text.replaceAll("'../../proof.js'", `'${rel}'`));
-  }
   const wrapper = pack(config.framework);
   const manifest = JSON.parse(readFileSync(path.join(app, 'package.json'), 'utf8'));
-  manifest.dependencies[`@draftably/${config.framework}`] = `file:${wrapper}`;
-  manifest.dependencies['@draftably/runtime'] = `file:${runtime}`;
-  manifest.dependencies['@draftably/editor'] = `file:${editor}`;
+  // Point the app's own Draftably dependencies at the packs, and add none: a package the app
+  // imports but does not list fails to install here, as it would for a reader.
+  const packs: Record<string, string> = {
+    [`@draftably/${config.framework}`]: wrapper,
+    '@draftably/runtime': runtime,
+    '@draftably/editor': editor,
+  };
+  for (const name of Object.keys(manifest.dependencies))
+    if (name.startsWith('@draftably/')) {
+      if (!packs[name]) throw new Error(`${name}: no pack for this dependency`);
+      manifest.dependencies[name] = `file:${packs[name]}`;
+    }
   writeFileSync(path.join(app, 'package.json'), JSON.stringify(manifest, null, 2));
   writeFileSync(
     path.join(app, 'pnpm-workspace.yaml'),

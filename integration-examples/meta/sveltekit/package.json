@@ -11,8 +11,8 @@
     "start": "node build"
   },
   "dependencies": {
-    "@draftably/runtime": "^0.3.0",
-    "@draftably/svelte": "^0.2.1",
+    "@draftably/runtime": "^0.4.0",
+    "@draftably/svelte": "^0.4.0",
     "svelte": "5.57.3"
   },
   "devDependencies": {

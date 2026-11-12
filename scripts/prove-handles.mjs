@@ -278,6 +278,37 @@ try {
   );
   await page.screenshot({ path: path.join(proof.out, 'events.png') });
 
+  // Marked content in a mountViewer target takes a real click with only viewer.css on the page.
+  await page.evaluate(
+    () =>
+      new Promise(resolve => {
+        window.viewer.on('anchors', ({ anchors }) => {
+          const target = anchors.find(a => a.slot === 'body:api');
+          if (!target || target.el.querySelector('#marked')) return;
+          const button = document.createElement('button');
+          button.id = 'marked';
+          button.textContent = 'Go';
+          button.setAttribute('data-draft-input', '');
+          button.style.cssText = 'width: 100%; height: 100%';
+          button.onclick = () => (window.markedClicks = (window.markedClicks ?? 0) + 1);
+          target.el.append(button);
+          resolve();
+        });
+        window.viewer.anchor(['body:api']);
+      }),
+  );
+  await page.evaluate(() => window.viewer.fit(['api'], { maxZoom: 1 }));
+  await sleep(400);
+  const mb = await page.locator('#viewer #marked').boundingBox();
+  if (mb) await page.mouse.click(mb.x + mb.width / 2, mb.y + mb.height / 2);
+  await sleep(200);
+  const marked = await page.evaluate(() => window.markedClicks ?? 0);
+  check(
+    'marked content in a mountViewer target takes a click',
+    marked === 1,
+    JSON.stringify({ marked, box: mb }),
+  );
+
   // A viewer inside a hidden box: fit waits for a size, then runs.
   const pending = await page.evaluate(() => window.hidden.fit(['api']));
   check('fit before the viewport has a size returns pending', pending === 'pending', pending);
