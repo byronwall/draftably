@@ -439,8 +439,10 @@ Rules that save a debugging round:
 - The element mounts in a microtask. `el.viewer` and `el.editor` are `undefined` until then:
   `await el.updateComplete` first. `status` is `loading`, `ready` or `error`; a later failed
   update keeps `ready` and the last drawing, so read the `diagnostics` event.
-- Server rendering: `renderSvg(source, { target: 'inline', idPrefix })` and pass its `svg` to the
-  component. In a Next.js server component, import it from `@draftably/react/server`.
+- Server rendering: `renderSvg(source, { target: 'inline', idPrefix, colorScheme: 'auto' })` and
+  pass its `svg` to the component. `'auto'` writes both schemes as `light-dark()` colors, so a dark
+  page shows the fallback dark. In a Next.js server component, import it from
+  `@draftably/react/server`.
 - Debug in the page with `el.viewer.geometry()`, `el.viewer.getCamera()` and the
   `draft-diagnostics` event. `window.diagramStudio` exists only on `draftably open` pages.
 
