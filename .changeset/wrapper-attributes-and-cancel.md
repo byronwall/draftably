@@ -1,4 +1,5 @@
 ---
+'draftably': patch
 '@draftably/runtime': minor
 '@draftably/editor': minor
 '@draftably/react': minor
