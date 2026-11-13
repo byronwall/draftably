@@ -1,6 +1,6 @@
 {
   "name": "@draftably/svelte",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Svelte components for Draftably diagrams.",
   "license": "MIT",
   "type": "module",
