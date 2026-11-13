@@ -1,5 +1,12 @@
 # draftably
 
+## 0.14.1
+
+### Patch Changes
+
+- 1ae7385: The editor works out the frame round the drawing once per change, however many parts of the canvas read it. A glide or a drag placed the notes three times a frame before.
+- 9f233d7: A click activates its canvas even without a pointerdown or focusin before it, so with two editors on a page, Enter on one editor's focused Fit button no longer fits the other.
+
 ## 0.14.0
 
 ### Minor Changes

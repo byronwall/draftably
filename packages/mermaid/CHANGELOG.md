@@ -1,5 +1,11 @@
 # @draftably/mermaid
 
+## 0.2.4
+
+### Patch Changes
+
+- @draftably/runtime@0.5.1
+
 ## 0.2.3
 
 ### Patch Changes
