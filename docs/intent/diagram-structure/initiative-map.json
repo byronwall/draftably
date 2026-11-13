@@ -5,10 +5,10 @@
     "slug": "diagram-structure",
     "scale": "capability",
     "current_phase": "execution",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-11-12",
     "summary": "Let groups say 'belongs together' without driving layout (frame=soft), add a lanes layout over root groups, and hold sequence diagrams for a later yes.",
     "status": "active",
-    "next_action": "Byron reviews the structure/1-5 stack; m6 waits for #124 (vary)."
+    "next_action": "All six milestones are on main. Reconcile and retire when Byron approves."
   },
   "artifacts": {
     "intent_brief": {
@@ -210,7 +210,7 @@
     "open_decisions": []
   },
   "implementation": {
-    "status": "planned",
+    "status": "completed",
     "repository_snapshot": {
       "root": "diagram-studio",
       "revision": "b39be5b",
@@ -256,7 +256,8 @@
         "proof": "#125 repro ranks match the no-group file; area/overlap table over 16 examples.",
         "valid_intermediate_state": "frame=box files draw byte-identical; soft is opt-in.",
         "rollback": "Revert the PR; no file uses frame= yet.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": ["PR #149 (e9a1f931) on main; tests/soft-groups.test.ts passed 2026-11-12"]
       },
       {
         "id": "m2",
@@ -266,7 +267,8 @@
         "proof": "soft-overlap is zero on bundled examples with all groups soft.",
         "valid_intermediate_state": "M1 behavior plus cohesion; box files unchanged.",
         "rollback": "Revert; M1 tint still works with overlap notes.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": ["PR #150 (942f8d52) on main; tests/soft-groups.test.ts passed 2026-11-12"]
       },
       {
         "id": "m3",
@@ -276,7 +278,8 @@
         "proof": "Dragging the monitoring tint writes two stay lines; undo restores.",
         "valid_intermediate_state": "Compiler behavior unchanged; only viewer edits added.",
         "rollback": "Revert; soft groups still draw and select as plain groups.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": ["PR #151 (91675cd8) on main"]
       },
       {
         "id": "m4",
@@ -286,7 +289,8 @@
         "proof": "Lanes example screenshot; rank-column test.",
         "valid_intermediate_state": "New recipe only; other layouts unchanged.",
         "rollback": "Revert; files without lanes are unaffected.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": ["PR #152 (1a861166) on main; tests/lanes.test.ts passed 2026-11-12"]
       },
       {
         "id": "m5",
@@ -296,7 +300,8 @@
         "proof": "Six-message login sequence screenshot; +edge shows in place.",
         "valid_intermediate_state": "New recipe only; other layouts unchanged.",
         "rollback": "Revert; files without sequence are unaffected.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": ["PR #153 (8c8f18e7) on main; tests/sequence.test.ts passed 2026-11-12"]
       },
       {
         "id": "m6",
@@ -306,7 +311,10 @@
         "proof": "vary on kubernetes-cluster lists a smaller softened variant.",
         "valid_intermediate_state": "vary works with or without the variant.",
         "rollback": "Drop the variant from the list.",
-        "status": "planned"
+        "status": "completed",
+        "evidence": [
+          "PR #163 (860ef813) on main after issue #124 closed; tests/vary.test.ts passed; pnpm draftably vary examples/kubernetes-cluster.draft offers v2 'fewer containers: soften groups cart_deploy, ns_ops' at 1564x1095 (-6%) on 2026-11-12"
+        ]
       }
     ],
     "cut_line": [
@@ -333,6 +341,11 @@
       "date": "2026-10-26",
       "event": "Built m1-m5 as a gh stack (structure/1-soft-groups .. structure/5-sequence). First proof: all-soft bounding-box tints overlapped, so m2 cohesion shipped in the same stack. m6 blocked on #124.",
       "evidence": "pnpm check:fast passes on structure/5-sequence; screenshots in the PRs"
+    },
+    {
+      "date": "2026-11-12",
+      "event": "Map caught up with main: m1-m5 merged through the structure stack (PRs 149-153) and m6 in PR 163. Status stays active until Byron approves retirement.",
+      "evidence": "git merge-base checks against origin/main 20835652; soft-groups, lanes, sequence and vary tests pass"
     }
   ],
   "closure": null
