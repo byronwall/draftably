@@ -151,6 +151,26 @@ TypeScript shared by the browser and the command line.
 | `source-edits.ts` | Helpers that add, change and remove single statements.                                       |
 | `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.          |
 
+Groups and the opinionated root layouts follow a few rules:
+
+- **A group's frame decides its layout role.** A boxed group is a layout scope: it pads its
+  members and takes one place, so it takes one rank, in its parent. A `frame=soft` or
+  `frame=none` group is never a scope. `layoutParent` (`syntax.ts`) gives its members the nearest
+  boxed container, so they rank by their own connections. The model parent stays for color,
+  change marks, `in=` and source edits. The router treats only boxed groups as frames.
+- **Soft is an attribute, not a new statement.** A group already has the label, the color for
+  `auto` members and the change marks. Thus `vary` can soften a group with a one-line edit (the
+  "fewer containers" variant in `cli/variants.ts`), and `frame=box` stays the default.
+- **A soft tint follows layout.** `compile.ts` sizes the tint from the members after layout and
+  keeps members side by side in each rank. It joins their padded boxes where one rectangle would
+  cover a non-member, and `check` reports `soft-split` and `soft-overlap` for what remains. In the
+  viewer, a drag on a tint writes one `stay` per member, as Tidy does.
+- **Lanes and sequence are root recipes, not engines.** `layout root lanes` (`swimLanes`) ranks
+  every leaf across the whole drawing, so one rank is one column across every lane. Every node
+  must sit in a top-level group. `layout root sequence` (`sequenced`) puts participants in file
+  order and one message per row in edge order; messages are straight lines (`messageRoute` in `model/routes.ts`) and skip the router. Both
+  reuse `node`, `group`, `edge` and `layout`, with no second syntax.
+
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
 writes saves atomically. A save based on an older revision is refused with 409, and invalid

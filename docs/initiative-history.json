@@ -95,5 +95,18 @@
       "Known palette limits (teal vs green, blue vs violet under protanopia, brown Blueprint 900 for amber and violet) are listed in docs/research/README.md.",
       "Below the cut line, not planned: font uploads, remote fonts, per-node typography or padding, a full theme editor, brand extraction."
     ]
+  },
+  {
+    "title": "Diagram structure: soft groups, swim lanes and sequence",
+    "slug": "diagram-structure",
+    "outcome": "completed",
+    "retired_at": "2026-11-12",
+    "summary": "Soft groups (frame=soft|none, cohesion, soft-split and soft-overlap checks, tint drag in the viewer), swim lanes (layout root lanes) and sequence diagrams (layout root sequence) shipped in the structure stack, PR 149 to PR 153. The fewer-containers variant in draftably vary shipped in PR 163 after issue 124 closed. Reconciled against origin/main 20835652 with no local code changes. The planning files are at 20835652.",
+    "reason": "Byron approved retirement on 2026-11-12. All six milestones are on origin/main.",
+    "documentation": ["docs/ARCHITECTURE.md", "docs/DSL.md", "skills/draftably/SKILL.md"],
+    "revision": "20835652",
+    "follow_ups": [
+      "Below the cut line, not planned: a 'together' statement, viewer editing for lanes, free nested groups and position refinements inside lanes, sequence activations and fragments (loop, alt), other Mermaid types. Start a new initiative if wanted."
+    ]
   }
 ]
