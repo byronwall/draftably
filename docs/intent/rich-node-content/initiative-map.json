@@ -1,0 +1,584 @@
+{
+  "schema_version": "0.5.0",
+  "initiative": {
+    "title": "Rich node content",
+    "slug": "rich-node-content",
+    "scale": "feature",
+    "current_phase": "plan",
+    "last_updated": "2026-10-15",
+    "summary": "Add node image attachments, image nodes, and title icons with DSL and filesystem support.",
+    "status": "planned",
+    "next_action": "Review the planning PR, then start milestone 1 when implementation is requested."
+  },
+  "artifacts": {
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-15"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-15"
+    },
+    "implementation_plan": {
+      "path": "implementation-plan.md",
+      "status": "current",
+      "updated_at": "2026-10-15"
+    }
+  },
+  "sources": [
+    {
+      "id": "request",
+      "type": "user-request",
+      "location": "conversation",
+      "anchor": "2026-10-15 rich content request",
+      "authority": "primary"
+    },
+    {
+      "id": "image-reference",
+      "type": "image",
+      "location": "/var/folders/fs/0v78gpqd1c906fr4nsj8ccfm0000gn/T/codex-clipboard-e8dd1485-acba-403e-91aa-3e291b719f3c.png",
+      "anchor": "Product Grid thumbnail and text example; illustrative only",
+      "authority": "illustrative"
+    },
+    {
+      "id": "repo",
+      "type": "repository",
+      "location": "src/state/files.ts; src/state/keyboard.ts; src/components/scene/NodeView.tsx; src/dsl/translate.ts; docs/DSL.md; src/server/workspace.ts",
+      "anchor": "image insertion, rendering, DSL rejection, and file serving",
+      "authority": "repository"
+    },
+    {
+      "id": "qa-round-1",
+      "type": "question-round",
+      "location": "conversation",
+      "anchor": "Round 1: questions 1–5 and user answers",
+      "authority": "user"
+    },
+    {
+      "id": "shape-repo",
+      "type": "repository",
+      "location": "src/dsl/compile.ts; src/dsl/project.ts; src/dsl/translate.ts; src/model/labels.ts; src/components/scene/NodeView.tsx; src/components/Inspector.tsx; src/lib/svg-export.ts; src/cli/svg.ts; src/state/file-session.ts; src/server/workspace.ts",
+      "anchor": "1e8c7f0a7fc4f746de1e5b073b9e8eb209536c68",
+      "authority": "repository"
+    },
+    {
+      "id": "lucide-primary",
+      "type": "primary-documentation",
+      "location": "https://lucide.dev/guide/; https://lucide.dev/packages",
+      "anchor": "Official SVG library and framework package guidance checked during shaping; catalog metadata/package selection still to prove",
+      "authority": "primary"
+    },
+    {
+      "id": "plan-repo",
+      "type": "repository",
+      "location": "src/model/document.ts:112-145; src/model/edits.ts:775-828; src/state/file-session.ts:315-375; tests/workspace.test.ts; scripts/prove-file-session.mjs; scripts/build-cli.ts; src/cli/main.ts; vite.config.ts",
+      "anchor": "1e8c7f0a7fc4f746de1e5b073b9e8eb209536c68",
+      "authority": "repository"
+    },
+    {
+      "id": "lucide-plan-primary",
+      "type": "primary-documentation",
+      "location": "https://lucide.dev/guide/solid",
+      "anchor": "Official Solid support verified; shared CLI/search catalog metadata not yet established. GitHub metadata page fetch failed, so no metadata claim is made.",
+      "authority": "primary"
+    }
+  ],
+  "intent": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Allow multiple image attachments on a node; show only the first thumbnail and open pan/zoom inspection on click.",
+        "kind": "required behavior",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "request"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C2",
+        "statement": "Pasting an image with no selection creates an image node that supports ordinary graph operations.",
+        "kind": "required behavior",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "request"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C3",
+        "statement": "Provide left-side title icons from a broad library with an easy picker; library choice remains open.",
+        "kind": "desired experience",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "request"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C4",
+        "statement": "Support all rich content in the DSL, pasted assets in an assets folder, and diagram-relative or absolute machine paths.",
+        "kind": "constraint",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "request"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C5",
+        "statement": "The Product Grid screenshot illustrates thumbnails alongside node text; its full layout is not prescribed.",
+        "kind": "example",
+        "commitment": "illustrative",
+        "importance": "supporting",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "image-reference"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C6",
+        "statement": "Existing image insertion downsizes to 2048 pixels and stores data URLs; the DSL rejects images and icons.",
+        "kind": "current repository reality",
+        "commitment": "derived",
+        "importance": "supporting",
+        "status": "active",
+        "time_horizon": "proof",
+        "sources": [
+          "repo"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C7",
+        "statement": "Pasting an image with exactly one ordinary node selected attaches it to that node.",
+        "kind": "decision",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "qa-round-1"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C8",
+        "statement": "Preserve original image detail and use smaller thumbnails on the graph.",
+        "kind": "decision",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "qa-round-1"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C9",
+        "statement": "Keep external image references by default; provide a Make portable action that copies images into assets and updates DSL links.",
+        "kind": "decision",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "qa-round-1"
+        ],
+        "confidence": "high",
+        "notes": "Copying into diagram assets interprets make portable; exact folder arrangement and action placement remain design details."
+      },
+      {
+        "id": "C10",
+        "statement": "First-version attachment management includes removal and choosing the first displayed image.",
+        "kind": "decision",
+        "commitment": "explicit",
+        "importance": "supporting",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "qa-round-1"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "C11",
+        "statement": "The icon picker supports name and related-term search plus a browsable grid.",
+        "kind": "decision",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": [
+          "qa-round-1"
+        ],
+        "confidence": "high"
+      }
+    ],
+    "themes": [],
+    "conflicts": [],
+    "human_questions": []
+  },
+  "brainstorm": {
+    "status": "not-requested",
+    "requested_count": 7,
+    "options": [],
+    "selected_option": null
+  },
+  "shape": {
+    "status": "current",
+    "appetite": "Extend the existing local .draft editor; no separate asset manager or parallel browser asset store. No time estimate is assumed.",
+    "problem": "Visual node content cannot round-trip through the DSL; existing image insertion discards original detail.",
+    "recommended_shape": "DSL-owned ordered attachments, image nodes, and stable icon names; filesystem originals, disposable previews, one inspection viewer, a compact icon picker, and explicit portable conversion.",
+    "success_moves": [
+      {
+        "move": "Keep source dimensions independent of decoded image dimensions.",
+        "risk_reduced": "Image arrival or failure must not change canonical geometry or separate CLI and browser layouts.",
+        "proof": "Compare geometry before/after load and with a missing image using the same source."
+      },
+      {
+        "move": "First prove original file upload, DSL save, and reopen against a real temporary folder.",
+        "risk_reduced": "A working preview can otherwise hide downscaled or unsaved image data.",
+        "proof": "Compare original bytes and reload saved attachments and image-node references."
+      },
+      {
+        "move": "Make portable copies originals before changing source and uses the existing revision check.",
+        "risk_reduced": "A failed copy or external source edit must not leave broken rewritten links.",
+        "proof": "Move the completed folder; inject one missing image and one source conflict; confirm original source is retained."
+      },
+      {
+        "move": "Reuse graph operations and SVG scene rendering; isolate asset resolution from layout.",
+        "risk_reduced": "A new image subsystem could bypass grouping, undo, copied content, and drawing exports.",
+        "proof": "Connect and group an image node, undo insertion, and open browser/CLI exports without the local server."
+      },
+      {
+        "move": "Use one local icon catalog and search index; defer extra picker features.",
+        "risk_reduced": "Multiple libraries or remote search add complexity before icon discovery is proven.",
+        "proof": "Keyboard-select an icon through related-term search and verify its name survives a DSL reload."
+      }
+    ],
+    "first_proof": {
+      "question": "Can file-backed rich images preserve original detail and stable geometry through save/reopen and portable conversion?",
+      "artifact": "Temporary real .draft file, two attachment images including a >2048px original, one image node, and one external image reference; move the portable folder.",
+      "decision_rule": "Proceed to picker/viewer polish only if original bytes, attachment order, fixed geometry, and moved-folder resolution survive; otherwise fix persistence or geometry first."
+    },
+    "rabbit_holes": [
+      "Automatic asset cleanup conflicts with undo and shared references; keep files when unlinking.",
+      "Thumbnail decoding must never participate in compiler geometry.",
+      "Absolute paths need a local serving seam restricted to images actually referenced by an opened diagram; do not add a generic arbitrary-file endpoint.",
+      "Existing NodeView suppresses glyphs on some shapes, nodeLabel reserves icon space on only some shapes, and CLI SVG is a separate renderer; each needs explicit content-fit verification.",
+      "External image URLs cannot simply be copied into SVG exports used for PNG rasterization; materialize visible image bytes before serialization.",
+      "Scratch/static usage lacks filesystem writes; save a local diagram first rather than add another persistence model."
+    ],
+    "open_decisions": [],
+    "provisional_defaults": [
+      "Other paste selections create an image node; text editing retains its native paste behavior.",
+      "Image nodes open through an explicit action or double-click; thumbnail click opens attachments.",
+      "Preview below title, dimensions reserved; verify fit for box, pill, circle, diamond, and text shapes.",
+      "assets/ sits beside each diagram; collision-safe filenames, no mutation of source image files.",
+      "Lucide is proposed, not a user-selected dependency; choose a package only after confirming local SVG catalog and search metadata.",
+      "Portable conversion covers the current diagram; no workspace-wide packaging.",
+      "Without a writable diagram, offer Save as file before paste/import."
+    ],
+    "counterproposal": {
+      "proposal": "Keep data URLs and the existing small icon selector, adding only DSL attributes.",
+      "decision": "Rejected: data URLs do not meet requested filesystem ownership, current downscaling loses detail, and the small selector does not meet icon discovery intent.",
+      "simplification_retained": "Reuse graph behavior and file-session edits; originals in files, generated previews only in memory/cache; no independent asset database."
+    },
+    "source_of_truth": ".draft owns image references, image order, stable icon names, and geometry. Filesystem owns original bytes. Browser image URLs, previews, zoom, and viewer selection are derived session state.",
+    "transition": "First usable intermediate supports DSL-authored image content with save/reopen. Then add clipboard attachment writes, portable conversion, inspection and picker. No automatic legacy data migration or dual-version support.",
+    "rollback": "Keep changes isolated in coherent commits and temporary proof fixtures. Portable conversion never deletes source images; undo restores prior references, leaving copied files available. Failed copies do not change source links. No runtime feature-flag framework.",
+    "plan_refinements": [
+      "Normalizing projected documents currently accepts only data URLs; round-trip support includes that real boundary.",
+      "Add source-base context when copying references between diagrams; no cross-workspace asset copying.",
+      "Until rich exports are complete, explicitly refuse affected exports rather than emit missing content."
+    ]
+  },
+  "implementation": {
+    "status": "planned",
+    "repository_snapshot": {
+      "root": "/Users/byronwall/.codex/worktrees/89e5/diagram-studio",
+      "revision": "1e8c7f0a7fc4f746de1e5b073b9e8eb209536c68",
+      "worktree_status": "Branch codex/rich-node-content-plan; only rich-node-content planning documents changed. No implementation changes.",
+      "subsystems": [
+        "src/model/types.ts, document.ts, edits.ts: file references, normalization and copied fragments",
+        "src/dsl/syntax.ts, compile.ts, project.ts, source-edits.ts, translate.ts: content round-trip and geometry",
+        "src/server/file-session.ts, workspace.ts; vite.config.ts; src/cli/open.ts: local asset HTTP and file revisions",
+        "src/state/files.ts, keyboard.ts, commands.ts, file-session.ts: paste, persistence, history and exports",
+        "src/components/scene/NodeView.tsx, src/model/labels.ts, styles.ts: deterministic content fit",
+        "src/components/Inspector.tsx, Icon.tsx, src/model/icons.ts: title glyphs and picker",
+        "src/lib/svg-export.ts, src/state/comparison-export.ts, src/cli/svg.ts, main.ts: image materialization and metadata",
+        "scripts/prove-file-session.mjs, prove-package.ts, build-cli.ts; packages/cli: browser and installed-package proofs"
+      ],
+      "test_commands": [
+        "pnpm test:unit -- tests/dsl.test.ts tests/translate.test.ts tests/model.test.ts tests/workspace.test.ts",
+        "pnpm build",
+        "pnpm prove:rich (planned new script)",
+        "pnpm check",
+        "pnpm cli:build",
+        "pnpm cli:pack-check"
+      ],
+      "deployment_surfaces": [
+        "Local CLI file server and Vite development server; static examples exist but cannot write assets."
+      ]
+    },
+    "dependencies": [
+      {
+        "id": "local-assets",
+        "name": "Local original image storage and session HTTP",
+        "material": true,
+        "application_seam": "File-session read/upload/copy helpers called through workspace routing; source edits remain revision checked.",
+        "first_proof_role": {
+          "mode": "real",
+          "rationale": "Original bytes, path resolution, and moving folders require real files; Node fs and the existing server already provide the runtime."
+        },
+        "failure_modes": [
+          "missing reference",
+          "invalid image data",
+          "write failure",
+          "filename collision",
+          "partial copy failure",
+          "stale source revision"
+        ],
+        "proof_rungs": [
+          "real-local-files",
+          "real-local-http"
+        ],
+        "local_proof": "Temporary workspace tests and moved-folder browser proof; verify hashes and unchanged source on copy failure.",
+        "live_proof": "No external provider or deployed environment. Real local files, actual browser, and installed package are the final integration environment.",
+        "rollout": "Enable each behavior when it saves correctly; retain original files, use coherent commits, and avoid compatibility layers."
+      },
+      {
+        "id": "browser-images",
+        "name": "Browser image decoding and SVG rasterization",
+        "material": true,
+        "application_seam": "Derived image URL/preview lookup, independent image viewer, awaited export materialization outside compiler geometry.",
+        "first_proof_role": {
+          "mode": "real",
+          "rationale": "Real image decoding is necessary to observe rendering and stable bounds; there is no useful canvas mock for this proof."
+        },
+        "failure_modes": [
+          "decode failure",
+          "late image load",
+          "thumbnail click starts drag",
+          "relative export URL fails without server"
+        ],
+        "proof_rungs": [
+          "real-browser",
+          "standalone-export"
+        ],
+        "local_proof": "Local browser fixture with >2048px original, missing image, pointer and keyboard controls, and server-free export viewing.",
+        "live_proof": "No external provider or deployed environment. Real local files, actual browser, and installed package are the final integration environment.",
+        "rollout": "Enable each behavior when it saves correctly; retain original files, use coherent commits, and avoid compatibility layers."
+      },
+      {
+        "id": "icon-catalog",
+        "name": "Pinned local icon SVG catalog and search metadata",
+        "material": true,
+        "application_seam": "One stable name-to-SVG catalog shared by the scene and CLI; local search index.",
+        "first_proof_role": {
+          "mode": "absent",
+          "rationale": "Image persistence can be proven before a library is installed."
+        },
+        "failure_modes": [
+          "missing search terms",
+          "unknown icon name",
+          "catalog absent from CLI package",
+          "excessive picker DOM"
+        ],
+        "proof_rungs": [
+          "primary-documentation",
+          "real-catalog",
+          "real-browser",
+          "installed-package"
+        ],
+        "local_proof": "Resolve upstream metadata spike, then related-term search, round-trip, shared glyph and package checks.",
+        "live_proof": "No external provider or deployed environment. Real local files, actual browser, and installed package are the final integration environment.",
+        "rollout": "Enable each behavior when it saves correctly; retain original files, use coherent commits, and avoid compatibility layers."
+      }
+    ],
+    "fast_local_loop": {
+      "command": "pnpm test:unit -- tests/dsl.test.ts tests/translate.test.ts tests/model.test.ts tests/workspace.test.ts; DIAGRAM_ROOT=/absolute/temp/folder pnpm dev; after build, pnpm prove:rich (new script planned)",
+      "network_required": false,
+      "shared_infrastructure_required": false,
+      "prerequisites": "Install locked pnpm dependencies and provide Chromium before starting. Current checkout dependencies are not confirmed; prior formatting attempt triggered an install blocked by registry DNS. No runtime proof has run during planning.",
+      "failure_injection": [
+        "missing image file",
+        "assets destination occupied by directory",
+        "source changed before save",
+        "narrow copy throw seam only if deterministic partial-copy failure requires it"
+      ]
+    },
+    "milestones": [
+      {
+        "id": "m1",
+        "title": "File-authored images survive edits and reopening",
+        "outcome": "File-authored attachments and an image node survive ordinary edits and reopening with fixed browser/CLI geometry.",
+        "dependencies_introduced": [],
+        "proof": "Existing DSL, translate, model, and workspace tests plus real browser/CLI geometry before and after image load and reload.",
+        "valid_intermediate_state": "File-authored attachments and an image node survive ordinary edits and reopening with fixed browser/CLI geometry. Rich-content export commands explicitly report unavailable until milestone 5.",
+        "rollback": "Revert content support as a coherent commit; retain proof fixtures and source assets. Do not downgrade new-syntax user files.",
+        "status": "planned",
+        "evidence": []
+      },
+      {
+        "id": "m2",
+        "title": "Paste originals and move a portable diagram folder",
+        "outcome": "Pasting preserves original bytes; Make portable produces a movable diagram folder with valid references.",
+        "dependencies_introduced": [],
+        "proof": "Original image hashes and order, copy/write failure and stale revision checks, and real moved-folder reopen.",
+        "valid_intermediate_state": "Pasting preserves original bytes; Make portable produces a movable diagram folder with valid references. Rich-content export commands explicitly report unavailable until milestone 5.",
+        "rollback": "Undo source changes; leave uploaded and copied files intact. Failed copying never rewrites links.",
+        "status": "planned",
+        "evidence": []
+      },
+      {
+        "id": "m3",
+        "title": "Inspect and manage attached images",
+        "outcome": "Every attached image is inspectable, removable, or selectable as first without graph gesture conflicts.",
+        "dependencies_introduced": [],
+        "proof": "Real pointer and keyboard proof of pan/zoom, click versus drag, focus return, attachment history, and image-node operations.",
+        "valid_intermediate_state": "Every attached image is inspectable, removable, or selectable as first without graph gesture conflicts. Rich-content export commands explicitly report unavailable until milestone 5.",
+        "rollback": "Revert viewer and management controls; DSL-authored image content remains readable.",
+        "status": "planned",
+        "evidence": []
+      },
+      {
+        "id": "m4",
+        "title": "Find and save title icons",
+        "outcome": "A local searchable icon picker saves stable names with consistent scene and CLI glyphs.",
+        "dependencies_introduced": [
+          "icon-catalog"
+        ],
+        "proof": "Related-term search and keyboard selection, source reload, undo/redo, long titles on all supported shapes, and shared glyph output.",
+        "valid_intermediate_state": "A local searchable icon picker saves stable names with consistent scene and CLI glyphs. Rich-content export commands explicitly report unavailable until milestone 5.",
+        "rollback": "Remove picker/catalog integration as a coherent commit; retain explicit saved names and never silently substitute meaningful icons.",
+        "status": "planned",
+        "evidence": []
+      },
+      {
+        "id": "m5",
+        "title": "Export and package the complete rich diagram",
+        "outcome": "Browser/Compare/CLI exports retain visible rich content, and the installed package serves and ships its assets.",
+        "dependencies_introduced": [],
+        "proof": "Standalone SVG/PNG and Compare exports, editable metadata reference preservation, pnpm check, cli build/pack checks, and installed-package rich browser proof.",
+        "valid_intermediate_state": "Browser/Compare/CLI exports retain visible rich content, and the installed package serves and ships its assets.",
+        "rollback": "Revert export/package changes and keep unsupported rich exports explicitly unavailable until fixed; do not delete diagram assets.",
+        "status": "planned",
+        "evidence": []
+      }
+    ],
+    "cut_line": [
+      "No image editor or cloud uploads",
+      "No automatic deletion or reference-counted asset registry",
+      "No workspace-wide packaging",
+      "No second browser asset store or compatibility migration",
+      "No icon favorites/recents or second icon library",
+      "No general attachment reorder/replace UI"
+    ],
+    "open_decisions": [
+      {
+        "id": "icon-metadata",
+        "decision": "Select pinned shared SVG/catalog source and local related-term metadata.",
+        "evidence": "Official library docs and pinned upstream asset metadata; package contents and license.",
+        "fallback": "Generate one local catalog and term index from pinned upstream assets; no remote service.",
+        "due": "before m4"
+      },
+      {
+        "id": "content-fit",
+        "decision": "Set deterministic thumbnail/title/icon content insets and minimum sizes for ordinary shapes.",
+        "evidence": "Representative short and long labels with box, pill, circle, diamond, and text outlines.",
+        "fallback": "Increase deterministic minimum or explicit saved size; do not change shape or depend on image arrival.",
+        "due": "m1"
+      }
+    ],
+    "verification_status": "Planning validator passed with zero warnings; heuristic audit completed. Application tests and browser proofs were not run because this PR changes planning documents only."
+  },
+  "history": [
+    {
+      "date": "2026-10-15",
+      "change": "Created a planned initiative and draft intent brief from the request, screenshot, and repository evidence. No implementation started."
+    },
+    {
+      "date": "2026-10-15",
+      "change": "Recorded all five product answers. Added explicit portability conversion alongside default linked references. Intent is current; implementation has not started."
+    },
+    {
+      "date": "2026-10-15",
+      "change": "Created a current shape with provisional interaction defaults, real filesystem first proof, portability failure behavior, deterministic geometry, export coverage, and bounded local icon discovery. Lifecycle remains planned; implementation not started."
+    },
+    {
+      "date": "2026-10-15",
+      "change": "Created five-outcome implementation plan. Included normalization, cross-diagram path bases, local file proofs, portable failure recovery, image inspection, icon metadata spike, exports and packaged CLI. User requested a PR for all initiative updates. Implementation remains unstarted."
+    }
+  ],
+  "closure": null,
+  "question_rounds": {
+    "focus": "Paste targeting, fidelity, portability, attachment handling, icon discovery",
+    "per_round": 5,
+    "planned_rounds": 1,
+    "status": "complete",
+    "rounds": [
+      {
+        "round": 1,
+        "theme": "behavior and scope",
+        "source": "qa-round-1",
+        "status": "complete",
+        "questions": [
+          {
+            "n": 1,
+            "question": "Should pasting with one ordinary node selected attach the image?",
+            "answer": "Attach to the selected node; no selection creates an image node.",
+            "effect": "Confirmed append-to-selected-ordinary-node behavior; empty selection creates image node."
+          },
+          {
+            "n": 2,
+            "question": "Should saved images preserve original detail?",
+            "answer": "Keep the original; use a smaller thumbnail on the graph.",
+            "effect": "Preserve originals as files; generated thumbnails are derived."
+          },
+          {
+            "n": 3,
+            "question": "Should external path references remain linked, be copied, or offer a choice?",
+            "answer": "Keep the reference; include an option to make portable and update links.",
+            "effect": "Added explicit Make portable copy-and-rewrite flow; linking remains default."
+          },
+          {
+            "n": 4,
+            "question": "Which attachment management actions belong in the first version?",
+            "answer": "Remove images and choose which appears first.",
+            "effect": "Included removal and first-image choice; deferred general reorder/replacement."
+          },
+          {
+            "n": 5,
+            "question": "Which icon discovery workflow matters most?",
+            "answer": "Search by name or related terms, plus a browsable grid.",
+            "effect": "Included local name/related-term search and browse grid; deferred favorites/recents."
+          }
+        ]
+      }
+    ]
+  }
+}
