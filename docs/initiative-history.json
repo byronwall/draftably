@@ -78,7 +78,7 @@
     "slug": "diagram-themes",
     "outcome": "completed",
     "retired_at": "2026-11-12",
-    "summary": "Five themes, numeric shades, custom families, bundled fonts and the Appearance menu shipped in PR 30 (22a53ba4, 9d9a1331) on 2026-10-15. The palette study then renamed graphite, mulberry and midnight to drafting, ink and blueprint (9faadcab), and PR 551 (10e1ade5, draftably 0.14.0) added drafting-dark for dark pages. Reconciled against origin/main 20835652 with no local code changes. The planning files are at 20835652.",
+    "summary": "Five themes, numeric shades, custom families, bundled fonts and the Appearance menu shipped in PR 29 (22a53ba4) and PR 30 (9d9a1331) on 2026-10-15. The palette study then renamed graphite, mulberry and midnight to drafting, ink and blueprint (9faadcab), and PR 551 (10e1ade5, draftably 0.14.0) added drafting-dark for dark pages. Reconciled against origin/main 20835652 with no local code changes. The planning files are at 20835652.",
     "reason": "Byron asked on 2026-11-12 to retire plans that are actually done into durable docs. All three milestones are on origin/main.",
     "documentation": [
       "docs/DSL.md",
