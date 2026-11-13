@@ -72,5 +72,28 @@
       "Optional: show a link's target without hover tooltips (for example in the status bar on selection), since PR 441 removed the hover tooltip that named it.",
       "Below the cut line, not planned: editing states in the viewer, captions and playback, tags, per-state camera, a project-wide config file, rewriting SVG links for any output folder."
     ]
+  },
+  {
+    "title": "Diagram themes and stronger default styles",
+    "slug": "diagram-themes",
+    "outcome": "completed",
+    "retired_at": "2026-11-12",
+    "summary": "Five themes, numeric shades, custom families, bundled fonts and the Appearance menu shipped in PR 29 (22a53ba4) and PR 30 (9d9a1331) on 2026-10-15. The palette study then renamed graphite, mulberry and midnight to drafting, ink and blueprint (9faadcab), and PR 551 (10e1ade5, draftably 0.14.0) added drafting-dark for dark pages. Reconciled against origin/main 20835652 with no local code changes. The planning files are at 20835652.",
+    "reason": "Byron asked on 2026-11-12 to retire plans that are actually done into durable docs. All three milestones are on origin/main.",
+    "documentation": [
+      "docs/DSL.md",
+      "docs/ARCHITECTURE.md",
+      "docs/CHECKS.md",
+      "docs/research/README.md",
+      "site/docs/pages/themes.md",
+      "site/docs/pages/theming.md",
+      "AGENTS.md"
+    ],
+    "revision": "20835652",
+    "follow_ups": [
+      "No textured theme shipped. The texture study's recipe and rules are archived through docs/research/README.md; start a new initiative if wanted.",
+      "Known palette limits (teal vs green, blue vs violet under protanopia, brown Blueprint 900 for amber and violet) are listed in docs/research/README.md.",
+      "Below the cut line, not planned: font uploads, remote fonts, per-node typography or padding, a full theme editor, brand extraction."
+    ]
   }
 ]
