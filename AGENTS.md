@@ -10,6 +10,11 @@ Pointers only. Read the linked doc when the task touches it.
   [docs/CHECKS.md](docs/CHECKS.md) describes.
 - **How diagrams should feel:** [docs/intent/diagram-quality/FEEL.md](docs/intent/diagram-quality/FEEL.md).
   Read it before changing layout, routing, color or viewer interaction.
+- **Themes and colors:** colors and shades must never move a box; only padding and type may.
+  `tests/themes.test.ts` holds every shade to its contrast target, so run it after a palette
+  change. Rules: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#components--the-interface); language:
+  [docs/DSL.md](docs/DSL.md#themes-and-colors); browser proofs `pnpm prove:themes` and
+  `pnpm prove:color-scheme` ([docs/CHECKS.md](docs/CHECKS.md)).
 - **Performance:** `pnpm bench` times the CLI and viewer against the 200 ms / 1 s budgets ([docs/CHECKS.md](docs/CHECKS.md#performance)).
 - **Screenshots:** `pnpm shoot <url|file.draft|file.svg> tmp/out.png`, `--sheet` for a contact
   sheet, or `--crop x,y,w,h` to zoom in. Don't write one-off Playwright or image scripts.

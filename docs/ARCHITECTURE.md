@@ -65,7 +65,7 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 | `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.     |
 | `status.ts`       | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.               |
 | `footnote.ts`     | The footnote block between the drawing and the key.                                                               |
-| `appearance.ts`   | Five preset themes, color families with numeric shades, and `resolveAppearance` (preset, then file overrides).    |
+| `appearance.ts`   | Five preset themes, families with numeric shades, `resolveAppearance` and the dark variant (`forScheme`).         |
 | `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).          |
 | `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                 |
 | `static-scene.ts` | A read-only scene for comparison candidates.                                                                      |
@@ -204,6 +204,25 @@ components, `cli/svg.ts` and the exports all read colors, padding and type from
 in `src/assets/fonts`, registered at startup and embedded in exported SVG by `lib/font-data.ts`.
 Text is wrapped from stored advance widths, never DOM measurement, so geometry never depends on
 which fonts have loaded.
+
+Appearance follows a few rules:
+
+- **Only padding and type move things.** They change node sizes, so they change the layout. Colors
+  and shades never move anything: a shade edit, a theme color or a dark page keeps every box.
+- **A theme switch keeps rows and order.** Nodes sit on slots sized in Drafting with the file's
+  own overrides. Each theme draws its node in the slot, and a slot grows only where the node does
+  not fit (`tests/theme-slots.test.ts`).
+- **The file owns the look.** The `theme` and `theme-color` lines hold every override. The
+  viewer, the CLI, exports and save/reopen all read them; nothing is kept in view state.
+- **Contrast is a test.** `tests/themes.test.ts` holds every shade of every family in every theme
+  to its WCAG target and to light-to-dark order. A palette change must keep it passing.
+- **A dark page changes only colors.** `forScheme` swaps a default-theme file to `drafting-dark`.
+  `runtime/color-scheme.ts` watches the element's computed `color-scheme`, and `renderSvg` with
+  `colorScheme: 'auto'` draws both schemes from one layout as `light-dark()` colors. Any other
+  theme, or a file color, keeps its colors on every page.
+
+The research behind the palettes, and the textured-theme study that did not ship, is in
+[research/README.md](research/README.md#themes-and-palettes).
 
 ## engines/ and workers/
 
