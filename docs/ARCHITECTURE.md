@@ -246,9 +246,37 @@ The research behind the palettes, and the textured-theme study that did not ship
 
 ## engines/ and workers/
 
-The layout, routing, comparison and brush engines are self-contained, deterministic JavaScript
-from the original release, with `.d.ts` files describing their public APIs. `pnpm test:engines`
-compares their output with the original release in `reference/v7/` across all examples.
+The layout, routing, comparison and brush engines are self-contained, deterministic TypeScript,
+ported from the original release's JavaScript. Each has one entry module with the API it always
+had (`LayoutLab`, `RouteLab`, `ExplorerLab`, `SculptLab`) and the types callers import.
+`pnpm test:engines` compares their output with the original release in `reference/v7/` across
+all examples.
+
+- **Node runs them as they are.** The engine suites import the entry modules with no build. So
+  an engine module imports other engine modules with the `.ts` extension, and imports only types
+  from outside `engines/`.
+- **Output is fixed.** A change must not alter a constant, an iteration order or the order of a
+  float sum unless it means to change drawings: parity is byte for byte.
+
+| Module                                                     | Role                                                                                  |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `layout-engine.ts`                                         | `LayoutLab`. Its phases are in `layout/`.                                             |
+| `layout/settings`, `topology`, `intent`                    | Algorithms, defaults and checks; ranks and feedback links; start and end hints.       |
+| `layout/layered`, `trees`, `grid`                          | The targets: ranks with sweeps and folding; trees; the seed and soft grid.            |
+| `layout/scene`, `seed`                                     | One run's view of the document and its guarded moves; a rebuild's first placement.    |
+| `layout/arrange`                                           | The solve of one container's children: target, ticks, best state.                     |
+| `layout/forces`, `separation`, `packing`, `objective`      | Forces per tick; overlap removal; the packing fallback; the energy.                   |
+| `layout/report`, `compute`                                 | Rounding, the pass limit and the report; scope and the walk over containers.          |
+| `routing-engine.ts`                                        | `RouteLab`. Its phases are in `routing/`.                                             |
+| `routing/geometry`, `conflicts`, `cost`, `tuning`          | Segments and obstacles; line against line; path cost; penalties and limits.           |
+| `routing/context`                                          | One run's view of the scene: boxes, edges in order, obstacles per edge.               |
+| `routing/ports`, `sidepairs`                               | Port choice: the slot on a side, and each allowed pair of sides with its stubs.       |
+| `routing/score`                                            | The score of a candidate route.                                                       |
+| `routing/doglegs`, `search`, `heap`, `find`                | Path search: lines of up to two bends, A\* over the grid, the best route of one edge. |
+| `routing/paths`, `planned`                                 | Path validity and staircase removal; a `flow` scope's planned routes.                 |
+| `routing/improve`, `repair`, `nudge`, `tidy`, `tidy-ports` | The passes over the whole drawing.                                                    |
+| `routing/compute`                                          | Each edge in turn, then the passes, then the report.                                  |
+| `explorer-engine.ts`, `sculpt-engine.ts`                   | `ExplorerLab` (comparison candidates) and `SculptLab` (brush dabs, timelines).        |
 
 `lib/engine-tasks.ts` runs layout, comparison candidates and timelines in a single module worker
 (`workers/engine.worker.ts`). Tasks can be cancelled; if the browser blocks workers they run on

@@ -27,7 +27,7 @@ the file could not store what they produce:
   results into source" below the cut line.
 
 Without a file open (plain JSON mode) everything still works. The engines
-(`src/engines/layout-engine.js`, `sculpt-engine.js`, `explorer-engine.js`) are unchanged.
+(`src/engines/layout-engine.ts`, `sculpt-engine.ts`, `explorer-engine.ts`) are unchanged.
 
 The missing piece is that the compiler (`src/dsl/compile.ts`) only knows its own three
 recipes, `flow`, `row` and `column`, and the translator (`src/dsl/translate.ts`) only knows how
