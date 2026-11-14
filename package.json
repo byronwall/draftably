@@ -15,7 +15,7 @@
     "site:preview": "vite preview -c vite.site.config.ts",
     "build": "pnpm typecheck && vite build",
     "typecheck": "pnpm runtime:build && tsc --noEmit",
-    "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.ts",
+    "test:engines": "node scripts/test-engines.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "pnpm test:unit && pnpm test:engines",

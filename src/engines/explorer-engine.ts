@@ -1,12 +1,62 @@
-import { LayoutLab } from './layout-engine.js';
-import { RouteLab } from './routing-engine.js';
-/* Diagram Studio 6 — reproducible experiments, not persisted views.
+/* Reproducible experiments, not persisted views.
  * Every candidate starts from the same frozen document and explicit settings.
  * The engine is DOM-free and runs in a worker or in Node-based tests.
  */
+import type { Diagram, LayoutAlgorithmId, LayoutIntent } from '../model/types.ts';
+import { LayoutLab } from './layout-engine.ts';
+import type { LayoutReport, LayoutScope } from './layout-engine.ts';
+import { RouteLab } from './routing-engine.ts';
+import type { PriorRoute, RouteInput, RoutingResult } from './routing-engine.ts';
 
-const copy = v => JSON.parse(JSON.stringify(v));
-const LAYOUT_PARAMS = {
+export type ParamValue = string | number | boolean;
+
+export interface ParamDefinition {
+  name: string;
+  values: ParamValue[];
+  passOnly?: boolean;
+}
+
+export type ComparisonMode = 'layout' | 'routing';
+export type ComparisonRun = 'rebuild' | 'warm' | 'pass';
+
+export interface ComparisonConfig {
+  mode: ComparisonMode;
+  /** Engines, the suggested routing alternatives, or a grid of parameter values. */
+  kind: 'algorithms' | 'routes' | 'parameters';
+  algorithm: LayoutAlgorithmId;
+  algorithms: LayoutAlgorithmId[];
+  axisA: string;
+  valuesA: string;
+  axisB: string;
+  valuesB: string;
+  run: ComparisonRun;
+  maxIterations: number;
+  scope: LayoutScope;
+  autoPorts: boolean;
+  selected: string[];
+  containerId?: string;
+  fixedIds: string[];
+  intent: LayoutIntent;
+  viewport: { w: number; h: number };
+  priorRoutes: PriorRoute[];
+}
+
+export interface CandidateSpec {
+  key: string;
+  title: string;
+  subtitle: string;
+  patch: Record<string, ParamValue>;
+}
+
+export interface CandidateResult {
+  spec: CandidateSpec;
+  document: Diagram;
+  report: LayoutReport | null;
+  routing: RoutingResult;
+}
+
+const copy = <T>(v: T): T => JSON.parse(JSON.stringify(v));
+const LAYOUT_PARAMS: Record<string, ParamDefinition> = {
   direction: { name: 'Flow direction', values: ['RIGHT', 'DOWN'] },
   nodeGap: { name: 'Shape gap', values: [12, 24, 44] },
   rankGap: { name: 'Rank gap', values: [28, 52, 88] },
@@ -29,7 +79,7 @@ const LAYOUT_PARAMS = {
   stability: { name: 'Pass stability', values: [20, 65, 90], passOnly: true },
   iterations: { name: 'Pass iterations', values: [16, 32, 64], passOnly: true },
 };
-const ROUTE_PARAMS = {
+const ROUTE_PARAMS: Record<string, ParamDefinition> = {
   edgeGap: { name: 'Parallel edge gap', values: [10, 18, 28] },
   bendPenalty: { name: 'Bend cost', values: [16, 64] },
   clearance: { name: 'Shape clearance', values: [6, 12, 22] },
@@ -43,12 +93,12 @@ const ROUTE_PARAMS = {
   cornerRadius: { name: 'Corner radius', values: [0, 6, 12] },
 };
 /* Routing alternatives that together covered every feasible case in the layout-config study. */
-const ROUTE_ALTERNATIVES = [
+const ROUTE_ALTERNATIVES: Array<Omit<CandidateSpec, 'key'>> = [
   { title: 'Tighter clearance', subtitle: 'clearance=4', patch: { clearance: 4 } },
   { title: 'More clearance', subtitle: 'clearance=22', patch: { clearance: 22 } },
   { title: 'Wider endpoints', subtitle: 'port-gap=28', patch: { portGap: 28 } },
 ];
-function parseValues(key, text, mode = 'layout') {
+function parseValues(key: string, text: string, mode: ComparisonMode = 'layout'): ParamValue[] {
   const def = (mode === 'routing' ? ROUTE_PARAMS : LAYOUT_PARAMS)[key];
   if (!def) throw Error('Unknown parameter: ' + key);
   const strings = String(text)
@@ -71,9 +121,12 @@ function parseValues(key, text, mode = 'layout') {
     return v;
   });
 }
-function effectiveParams(algorithm, run) {
+function effectiveParams(
+  algorithm: LayoutAlgorithmId,
+  run: ComparisonRun,
+): Record<string, ParamDefinition> {
   const a = LayoutLab.algorithms.find(a => a.id === algorithm);
-  const keys = new Set([
+  const keys = new Set<string>([
     'direction',
     'nodeGap',
     'rankGap',
@@ -104,9 +157,9 @@ function effectiveParams(algorithm, run) {
     ),
   );
 }
-function specs(config) {
+function specs(config: ComparisonConfig): CandidateSpec[] {
   const mode = config.mode === 'routing' ? 'routing' : 'layout',
-    result = [];
+    result: CandidateSpec[] = [];
   if (mode === 'routing' && config.kind === 'routes') {
     ROUTE_ALTERNATIVES.forEach((spec, i) => result.push({ key: 'route-' + i, ...spec }));
   } else if (mode === 'layout' && config.kind === 'algorithms') {
@@ -128,7 +181,10 @@ function specs(config) {
       b = config.axisB ? parseValues(config.axisB, config.valuesB, mode) : [null];
     for (const bv of b)
       for (const av of a) {
-        const patch = { [config.axisA]: av, ...(config.axisB ? { [config.axisB]: bv } : {}) };
+        const patch = {
+          [config.axisA]: av,
+          ...(config.axisB ? { [config.axisB]: bv as ParamValue } : {}),
+        };
         result.push({
           key: 'cell-' + result.length,
           title: defs[config.axisA].name + ' = ' + av,
@@ -141,14 +197,15 @@ function specs(config) {
     throw Error('This grid has ' + result.length + ' candidates. Keep it to 12 or fewer.');
   return result;
 }
-function sceneInput(doc) {
+/** The scene as the router sees it: collapsed groups stand in for their members. */
+function sceneInput(doc: Diagram): RouteInput {
   const by = new Map([...doc.graph.nodes, ...doc.graph.groups].map(n => [n.id, n]));
-  function ancestors(id) {
-    const list = [];
+  function ancestors(id: string) {
+    const list: string[] = [];
     for (let p = by.get(id)?.parentId; p; p = by.get(p)?.parentId) list.push(p);
     return list;
   }
-  function proxy(id) {
+  function proxy(id: string) {
     let p = id;
     for (const a of ancestors(id)) if (doc.collapsed.includes(a)) p = a;
     return p;
@@ -168,14 +225,18 @@ function sceneInput(doc) {
     .filter(
       e =>
         e.from !== e.to ||
-        doc.graph.edges.find(x => x.id === e.id).from ===
-          doc.graph.edges.find(x => x.id === e.id).to,
+        doc.graph.edges.find(x => x.id === e.id)!.from ===
+          doc.graph.edges.find(x => x.id === e.id)!.to,
     );
   return { nodes, groups, edges };
 }
-async function candidate(baseline, spec, config) {
+async function candidate(
+  baseline: Diagram,
+  spec: CandidateSpec,
+  config: ComparisonConfig,
+): Promise<CandidateResult> {
   let document = copy(baseline),
-    report = null;
+    report: LayoutReport | null = null;
   if (config.mode !== 'routing') {
     document.layout.intent = LayoutLab.normalizeIntent(
       config.intent || document.layout.intent || {},
@@ -184,7 +245,8 @@ async function candidate(baseline, spec, config) {
     const raw = { ...document.settings, ...spec.patch };
     const checked = LayoutLab.settings(raw);
     for (const [key, v] of Object.entries(spec.patch))
-      if (checked[key] !== v) throw Error('Value for ' + key + ' is outside the supported range.');
+      if ((checked as unknown as Record<string, unknown>)[key] !== v)
+        throw Error('Value for ' + key + ' is outside the supported range.');
     const result = await LayoutLab.compute(document, {
       ...checked,
       fixedIds: config.fixedIds || [],
@@ -203,7 +265,8 @@ async function candidate(baseline, spec, config) {
     const raw = { ...document.settings.routing, ...spec.patch },
       checked = RouteLab.settings(raw);
     for (const [key, v] of Object.entries(spec.patch))
-      if (checked[key] !== v) throw Error('Value for ' + key + ' is outside the supported range.');
+      if ((checked as unknown as Record<string, unknown>)[key] !== v)
+        throw Error('Value for ' + key + ' is outside the supported range.');
     document.settings.routing = checked;
     if (config.autoPorts)
       for (const cfg of Object.values(document.layout.edges)) {
@@ -219,7 +282,7 @@ async function candidate(baseline, spec, config) {
   });
   return { spec: copy(spec), document, report, routing };
 }
-const api = {
+export const ExplorerLab = {
   layoutParams: LAYOUT_PARAMS,
   routeParams: ROUTE_PARAMS,
   parseValues,
@@ -228,5 +291,3 @@ const api = {
   sceneInput,
   candidate,
 };
-
-export const ExplorerLab = api;

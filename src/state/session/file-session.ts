@@ -36,7 +36,7 @@ import {
   UnstorableLayout,
   writeArrangement,
 } from '../../dsl/layout-edits';
-import type { RoutingResult } from '../../engines/routing-engine.js';
+import type { RoutingResult } from '../../engines/routing-engine';
 import { runShared } from '../../lib/engine-tasks';
 import { cacheScene, cachedScene } from '../../lib/scene-cache';
 import { normalize, routingFingerprint } from '../../model/document';
