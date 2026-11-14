@@ -220,6 +220,10 @@ Good defaults:
   (`check` warns `message-kind`) or add `head=`/`tail=`. Never guess a kind from a dashed line;
   leave the edge plain when you don't know. State the scope in a `footnote` ("Valid credentials
   only; error paths are left out."). `compare` refuses files with `message=` or `action`.
+  `layout root sequence activations=on` draws a bar on a lifeline from each `message=call` to
+  the reply that `answers=` it (nested calls step right; a call with no reply ends at the
+  callee's next message). Bars are off by default; turn them on when the reader must see who
+  waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
 - One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request

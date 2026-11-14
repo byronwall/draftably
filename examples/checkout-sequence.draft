@@ -1,7 +1,7 @@
 diagram "Checkout: place an order" version=1
 subtitle "The stock is held before the card is charged"
 
-# A sequence with participant bands, phases, a message between distant lanes and a send that expects no reply.
+# A sequence with participant bands, phases, activation bars, a message between distant lanes and a send that expects no reply.
 footnote "Card accepted only; a declined card is left out. Rows show order, not elapsed time."
 
 group client "Client" color=blue
@@ -32,4 +32,5 @@ phase confirm "Confirm to the shopper" m8 m9 m10
 
 note "The hold ends after 10 minutes." near=m4
 
-layout root sequence
+# activations=on draws a bar on a participant while it is at work on a call.
+layout root sequence activations=on
