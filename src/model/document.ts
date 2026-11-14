@@ -17,7 +17,7 @@ import {
 } from './appearance';
 import { FONT_ROLES } from './fonts';
 import { EDITORS, type FileConfig } from './link';
-import { MARKERS } from './markers';
+import { MARKERS, MESSAGE_KINDS } from './markers';
 import type { Footnote } from './footnote';
 import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
@@ -229,6 +229,10 @@ export function normalize(input: unknown): Diagram {
         : {}),
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
+      ...(e.message === 'action' || MESSAGE_KINDS.includes(e.message)
+        ? { message: e.message }
+        : {}),
+      ...(e.message === 'reply' && typeof e.replyTo === 'string' ? { replyTo: e.replyTo } : {}),
       ...(STATUSES.includes(e.status) && e.status !== 'same' ? { status: e.status } : {}),
     });
   }

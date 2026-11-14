@@ -97,6 +97,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
+      ...(e.message ? { message: e.message } : {}),
+      ...(e.replyTo ? { replyTo: e.replyTo } : {}),
       ...(e.status ? { status: e.status } : {}),
     });
     set(doc.layout.edges, e.id, {

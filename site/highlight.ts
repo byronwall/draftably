@@ -13,6 +13,7 @@ export const COMMANDS = [
   'state',
   'phase',
   'was-order',
+  'action',
   'node',
   'group',
   'edge',

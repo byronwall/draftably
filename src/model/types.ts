@@ -6,7 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
-import type { EndMarker } from './markers';
+import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
 
 export type ShapeKind =
@@ -74,6 +74,13 @@ export interface DiagramEdge {
   tail?: EndMarker;
   emphasis: boolean;
   dashed: boolean;
+  /**
+   * A sequence message's meaning, from `message=`, or `action` for work one participant does
+   * (an `action` line; `from` and `to` are that participant). Unset for a plain message.
+   */
+  message?: MessageKind;
+  /** With `message: 'reply'`: the earlier message this one answers, from `reply-to=`. */
+  replyTo?: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;
   /** How the drawn emphasis state treats it; see `withState`. */
