@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, type JSX } from 'solid-js';
+import { createEffect, For, Match, on, Show, Switch, type JSX } from 'solid-js';
 import * as edits from '../model/edits';
 import {
   ancestors,
@@ -33,7 +33,7 @@ import {
   textValue,
 } from '../state/session/canvas-text';
 import { NOTE_SIDES, noteSide, type Note } from '../model/note';
-import { setRightTab } from '../state/ui';
+import { labelFocus, setRightTab } from '../state/ui';
 import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
 import { CommandButton as IconCommand } from './CommandButton';
 import { describeLink } from '../state/links';
@@ -169,10 +169,27 @@ function ShadePicker(props: { family: string; shade?: Shade; group?: boolean }) 
   );
 }
 
-function TextField(props: { label: string; value: string; onCommit: (value: string) => void }) {
+function TextField(props: {
+  label: string;
+  value: string;
+  onCommit: (value: string) => void;
+  ref?: (el: HTMLInputElement) => void;
+  /** Runs after Enter saves the field, to hand the keys on. */
+  onEnter?: () => void;
+}) {
   return (
     <Field label={props.label}>
-      <input value={props.value} onChange={e => props.onCommit(e.currentTarget.value)} />
+      <input
+        ref={props.ref}
+        value={props.value}
+        onChange={e => props.onCommit(e.currentTarget.value)}
+        onKeyDown={e => {
+          if (e.key !== 'Enter' || !props.onEnter) return;
+          // Leaving the field saves it, as Enter does; then the keys go on.
+          e.currentTarget.blur();
+          props.onEnter();
+        }}
+      />
     </Field>
   );
 }
@@ -335,11 +352,33 @@ function EdgeInspector(props: { id: string }) {
   const edge = () => findEdge(s.doc, props.id)!;
   const cfg = () => s.doc.layout.edges[props.id] || {};
   const route = () => s.routesById().get(props.id);
+  // A message just added is named next: the caret goes to its label, with the label selected.
+  // The file draws again a moment later and sets the field once more, so select it then too.
+  let label: HTMLInputElement | undefined;
+  createEffect(
+    on(
+      labelFocus,
+      () => {
+        const select = () => {
+          if (!label) return;
+          const untouched = label.value === edge()?.label;
+          label.focus();
+          if (untouched) label.select();
+        };
+        setTimeout(select, 0);
+        setTimeout(() => document.activeElement === label && select(), 400);
+      },
+      { defer: true },
+    ),
+  );
   return (
     <>
       <Heading title="Connection" />
       <Section>
         <TextField
+          ref={el => (label = el)}
+          // In a sequence, Enter hands the keys back to the canvas, so Tab adds the next message.
+          onEnter={cfg().row !== undefined ? () => s.focusCanvas() : undefined}
           label="Label"
           value={edge().label}
           onCommit={v => s.transact('Edit label', d => edits.setEdgeLabel(d, props.id, v))}

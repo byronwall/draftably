@@ -4,6 +4,7 @@
  */
 import { activeSession } from './active-session';
 import { toast } from './toast';
+import { focusLabelField, propertiesOpen } from './ui';
 
 export interface Command {
   label: string;
@@ -40,6 +41,17 @@ function sequenceFileOnly() {
   return activeSession().fileMode()
     ? null
     : 'Open the diagram as a file to add or move its messages.';
+}
+
+/**
+ * Add a message to a sequence and let the user name it at once: in the Inspector's Label field
+ * when that is showing, or else in place on the canvas.
+ */
+function insertEvent(where: 'before' | 'after') {
+  const id = activeSession().insertEvent(where);
+  if (!id) return;
+  if (propertiesOpen()) focusLabelField();
+  else activeSession().startInlineEdit(id);
 }
 
 export const canvasCommands = {
@@ -81,14 +93,14 @@ export const canvasCommands = {
     label: 'Insert after',
     keys: 'Tab',
     hint: 'Add a message after the selected one in a sequence.',
-    run: () => activeSession().insertEvent('after'),
+    run: () => insertEvent('after'),
     blocked: sequenceFileOnly,
   },
   'insert-event-before': {
     label: 'Insert before',
     keys: 'Shift Tab',
     hint: 'Add a message before the selected one in a sequence.',
-    run: () => activeSession().insertEvent('before'),
+    run: () => insertEvent('before'),
     blocked: sequenceFileOnly,
   },
   'move-event-up': {

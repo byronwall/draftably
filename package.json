@@ -36,6 +36,7 @@
     "prove:file": "node scripts/prove-file-session.mjs",
     "prove:installed": "node scripts/prove-package.ts --browser",
     "prove:layout": "node scripts/prove-layout-tools.mjs",
+    "prove:sequence": "node scripts/prove-sequence.mjs",
     "prove:editors": "node scripts/prove-two-editors.mjs",
     "prove:handles": "node scripts/prove-handles.mjs",
     "prove:slots": "node scripts/prove-slots.mjs",

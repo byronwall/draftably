@@ -138,6 +138,30 @@ export function translateEdit(input: EditInput): EditResult {
     taken.add(id);
     return id;
   };
+  /**
+   * The next id in the file's own numbering, such as `m8` after `m1` to `m7`, for a new event
+   * of a sequence. Undefined when the lines of that kind are not numbered that way.
+   */
+  const nextNumbered = (command: 'edge' | 'action') => {
+    const numbered = (id: string) => /^([A-Za-z_]+)(\d+)$/.exec(id),
+      // An action in a file with no numbered action follows the messages' numbering.
+      own = statements(source).filter(s => s.command === command),
+      lines = own.some(s => numbered(s.args[0].value))
+        ? own
+        : statements(source).filter(s => s.command === 'edge'),
+      prefixes = lines.flatMap(s => numbered(s.args[0].value)?.[1] ?? []),
+      prefix = prefixes
+        .sort((a, b) => prefixes.filter(p => p === b).length - prefixes.filter(p => p === a).length)
+        .at(0);
+    if (prefix === undefined) return undefined;
+    let n = Math.max(
+      0,
+      ...[...taken].map(id => (numbered(id)?.[1] === prefix ? +numbered(id)![2] : 0)),
+    );
+    while (taken.has(`${prefix}${++n}`));
+    taken.add(`${prefix}${n}`);
+    return `${prefix}${n}`;
+  };
   /** Source id for an editor id. */
   const sid = (id: string) => ids.get(id) ?? id;
   const parentOf = (d: Diagram, id: string) =>
@@ -334,7 +358,9 @@ export function translateEdit(input: EditInput): EditResult {
   for (const e of after.graph.edges) {
     const old = beforeEdges.get(e.id);
     if (!old) {
-      const id = fresh(`${sid(e.from)}-${sid(e.to)}`, 'edge');
+      const id =
+        (after.layout.sequence && nextNumbered(e.message === 'action' ? 'action' : 'edge')) ||
+        fresh(`${sid(e.from)}-${sid(e.to)}`, 'edge');
       ids.set(e.id, id);
       const s = statement('edge', [bare(id)]);
       writeEdge(e, s);

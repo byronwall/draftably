@@ -327,17 +327,36 @@ describe('edits to kinds of message', () => {
     // After m3, inside the phase: the new message joins the phase and keeps m3's ends.
     const after = edit(d => void insertEvent(d, 'm3', 'after'));
     expect(after).toContain(
-      'edge m3 auth -> db "load user" message=call\nedge auth-db auth -> db "message"\nedge m4',
+      'edge m3 auth -> db "load user" message=call\nedge m8 auth -> db "message"\nedge m4',
     );
-    expect(after).toContain('phase verify "Verify" m3 auth-db m4 m5\n');
+    // The new id follows the file's own numbering, past its highest number.
+    expect(after).toContain('phase verify "Verify" m3 m8 m4 m5\n');
     expect(() => checkSource(after)).not.toThrow();
     // Before the first event: nothing is above it, so it goes before the event below.
     const first = edit(d => void insertEvent(d, 'm1', 'before'));
-    expect(first).toContain('edge user-app user -> app "message"\nedge m1 user -> app');
+    expect(first).toContain('edge m8 user -> app "message"\nedge m1 user -> app');
     // Beside an action, the new event is an action on the same participant.
     const action = edit(d => void insertEvent(d, 'm5', 'before'));
-    expect(action).toContain('action auth-auth auth "action"\n# The auth service');
-    expect(action).toContain('phase verify "Verify" m3 m4 auth-auth m5\n');
+    expect(action).toContain('action m8 auth "action"\n# The auth service');
+    expect(action).toContain('phase verify "Verify" m3 m4 m8 m5\n');
+    // A file whose ids are not numbered gets an id from the two ends, as any new edge does.
+    const named = signIn.replace(/\bm(\d)\b/g, (_, n) => 'step_' + 'abcdefg'[n - 1]);
+    const scene = checkSource(named),
+      before = projectScene(scene),
+      next = clone(before);
+    insertEvent(next, 'step_a', 'after');
+    expect(
+      printSource(
+        translateEdit({
+          source: readSource(named),
+          scene,
+          before,
+          after: next,
+          label: 'Edit',
+          selection: [],
+        }).source,
+      ),
+    ).toContain('edge user-app user -> app "message"\n');
     expect(() => checkSource(action)).not.toThrow();
   });
 

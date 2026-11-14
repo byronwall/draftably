@@ -435,17 +435,21 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     s.transact('Insert message', d => {
       next = edits.insertEvent(d, id, where);
     });
+    // The new message is the one to name next, so it takes the selection.
+    if (next) s.setSelection([next]);
     return next;
   }
 
   /** Move the selected event one place up or down. The file refuses a move it can't keep. */
   function moveEvent(by: -1 | 1) {
     const id = selectedEvent();
-    if (id)
-      s.transact(
-        by < 0 ? 'Move message up' : 'Move message down',
-        d => void edits.moveEvent(d, id, by),
-      );
+    if (!id) return;
+    s.transact(
+      by < 0 ? 'Move message up' : 'Move message down',
+      d => void edits.moveEvent(d, id, by),
+    );
+    // The message is drawn again, so the canvas takes the keys for the next move.
+    s.focusCanvas();
   }
 
   function resetSelectedBends() {

@@ -450,7 +450,9 @@ renames the ID in each `answers=`, `phase` and `state` that uses it. In the edit
 Inspector's Kind field sets a message's kind and turns a self-message into an action.
 
 In the editor, with a message selected, Tab adds a message after it and Shift Tab adds one
-before it. Alt with the up or down arrow moves it one place. A new message joins the phase of
+before it. The new message is selected with the caret in its label, and Enter gives the keys
+back to the drawing. Its ID follows the file's numbering (`m8` after `m7`). Alt with the up or
+down arrow moves a message one place, and it stays selected. A new message joins the phase of
 the message above it. The editor refuses a move that puts a reply above the message it answers,
 or that splits a phase, and says why. A selected call shows its replies in the accent color,
 and a selected reply shows its call, with their activation bar.
