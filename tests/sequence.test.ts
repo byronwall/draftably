@@ -38,7 +38,8 @@ describe('sequence diagrams', () => {
       { x: mid('app'), y: doc.layout.edges.m2.row },
       { x: mid('auth'), y: doc.layout.edges.m2.row },
     ]);
-    expect(routes.find(r => r.id === 'm5')!.points).toHaveLength(4);
+    // A local action is a box round its lifeline: six points, back to where it starts.
+    expect(routes.find(r => r.id === 'm5')!.points).toHaveLength(6);
   });
 
   it('takes only top-level groups, as bands of participants', () => {
