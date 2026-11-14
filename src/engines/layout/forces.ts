@@ -23,10 +23,10 @@ export function tickForces(scene: Scene, batch: Batch) {
     } = batch;
   const forces = new Map(items.map(p => [p.id, { x: 0, y: 0, degree: 0 }]));
   const add = (id: string, x: number, y: number, w = 1) => {
-    const f = forces.get(id);
-    f!.x += x;
-    f!.y += y;
-    f!.degree += w;
+    const f = forces.get(id)!;
+    f.x += x;
+    f.y += y;
+    f.degree += w;
   };
   if (s.algorithm === 'stress') {
     for (let i = 0; i < items.length; i++)
@@ -54,10 +54,10 @@ export function tickForces(scene: Scene, batch: Batch) {
       }
   } else if (['tidy', 'flow', 'force'].includes(s.algorithm)) {
     for (const e of t.edges) {
-      const a = byId.get(e.from),
-        b = byId.get(e.to),
-        ca = midpoint(a!),
-        cb = midpoint(b!);
+      const a = byId.get(e.from)!,
+        b = byId.get(e.to)!,
+        ca = midpoint(a),
+        cb = midpoint(b);
       let dx = cb.x - ca.x,
         dy = cb.y - ca.y,
         d = magnitude(dx, dy);
@@ -66,30 +66,30 @@ export function tickForces(scene: Scene, batch: Batch) {
         dy = 0.1;
         d = 1.005;
       }
-      const extent = (Math.hypot(a!.w, a!.h) + Math.hypot(b!.w, b!.h)) / 4,
+      const extent = (Math.hypot(a.w, a.h) + Math.hypot(b.w, b.h)) / 4,
         L = extent + s.edgeLength;
       const f = s.algorithm === 'force' ? ((d * d) / L) * 0.022 : (d - L) * 0.09;
-      add(a!.id, (dx / d) * f, (dy / d) * f);
-      add(b!.id, (-dx / d) * f, (-dy / d) * f);
+      add(a.id, (dx / d) * f, (dy / d) * f);
+      add(b.id, (-dx / d) * f, (-dy / d) * f);
       if (s.algorithm === 'tidy') {
         const vertical = Math.abs(dx) < Math.abs(dy),
           err = vertical ? dx : dy,
           limit = Math.max(s.nodeGap * 2, 24);
         if (Math.abs(err) < limit) {
           const q = ((err * s.alignment) / 100) * 0.14;
-          add(a!.id, vertical ? q : 0, vertical ? 0 : q, 0);
-          add(b!.id, vertical ? -q : 0, vertical ? 0 : -q, 0);
+          add(a.id, vertical ? q : 0, vertical ? 0 : q, 0);
+          add(b.id, vertical ? -q : 0, vertical ? 0 : -q, 0);
         }
       }
       if (s.algorithm === 'flow' && e.directed !== false && !t.feedback.has(e.from + '\0' + e.to)) {
         const sign = forwardSign(t, e),
           down = direction === 'DOWN',
-          gap = (down ? a!.h + b!.h : a!.w + b!.w) / 2 + s.rankGap,
+          gap = (down ? a.h + b.h : a.w + b.w) / 2 + s.rankGap,
           error = gap - (down ? dy : dx) * sign,
           push = ((sign * Math.max(0, error) * s.flowStrength) / 100) * 0.32,
           cross = (((down ? dx : dy) * s.alignment) / 100) * 0.035;
-        add(a!.id, down ? cross : -push, down ? -push : cross, 0);
-        add(b!.id, down ? -cross : push, down ? push : -cross, 0);
+        add(a.id, down ? cross : -push, down ? -push : cross, 0);
+        add(b.id, down ? -cross : push, down ? push : -cross, 0);
       }
     }
     if (s.algorithm === 'force')
@@ -156,24 +156,24 @@ export function tickForces(scene: Scene, batch: Batch) {
   // are excluded deterministically rather than silently reversing arrows.
   if (s.respectDirection && s.algorithm !== 'separate')
     for (const e of t.forward) {
-      const a = byId.get(e.from),
-        b = byId.get(e.to),
+      const a = byId.get(e.from)!,
+        b = byId.get(e.to)!,
         v = direction === 'DOWN',
-        ca = midpoint(a!),
-        cb = midpoint(b!);
-      const gap = (v ? a!.h + b!.h : a!.w + b!.w) / 2 + s.rankGap,
+        ca = midpoint(a),
+        cb = midpoint(b);
+      const gap = (v ? a.h + b.h : a.w + b.w) / 2 + s.rankGap,
         error = gap - (v ? cb.y - ca.y : cb.x - ca.x);
       if (error <= 0) continue;
       const force = error * (0.12 + (s.flowStrength / 100) * 0.65);
-      add(a!.id, v ? 0 : -force, v ? -force : 0, 0);
-      add(b!.id, v ? 0 : force, v ? force : 0, 0);
+      add(a.id, v ? 0 : -force, v ? -force : 0, 0);
+      add(b.id, v ? 0 : force, v ? force : 0, 0);
     }
   if (target)
     for (const p of items) {
       const c = midpoint(p),
-        q = target.get(p.id),
+        q = target.get(p.id)!,
         strength = s.algorithm === 'grid' ? 0.018 + (s.gridStrength / 100) * 0.16 : 0.18;
-      add(p.id, (q!.x - c.x) * strength, (q!.y - c.y) * strength);
+      add(p.id, (q.x - c.x) * strength, (q.y - c.y) * strength);
     }
   if (s.algorithm !== 'separate') {
     const b = bounds(items),
@@ -182,28 +182,28 @@ export function tickForces(scene: Scene, batch: Batch) {
       aspectError = clamp(Math.log(ratio / availableAspect), -2, 2);
     for (const p of items) {
       const pc = midpoint(p),
-        a = origin.get(p.id),
-        f = forces.get(p.id),
-        norm = Math.max(1, Math.sqrt(f!.degree));
-      f!.x /= norm;
-      f!.y /= norm;
-      f!.x += (a!.x - pc.x) * anchor;
-      f!.y += (a!.y - pc.y) * anchor;
+        a = origin.get(p.id)!,
+        f = forces.get(p.id)!,
+        norm = Math.max(1, Math.sqrt(f.degree));
+      f.x /= norm;
+      f.y /= norm;
+      f.x += (a.x - pc.x) * anchor;
+      f.y += (a.y - pc.y) * anchor;
       if (
         !['flow', 'tree', 'radial', 'layered', 'compound-flow', 'boundary-align'].includes(
           s.algorithm,
         )
       ) {
         const k = (s.compactness / 100) * 0.016;
-        f!.x += (baseCenter.x - pc.x) * k - (pc.x - c.x) * aspectError * k;
-        f!.y += (baseCenter.y - pc.y) * k + (pc.y - c.y) * aspectError * k;
+        f.x += (baseCenter.x - pc.x) * k - (pc.x - c.x) * aspectError * k;
+        f.y += (baseCenter.y - pc.y) * k + (pc.y - c.y) * aspectError * k;
         // Break an exactly collinear network only in the organic engines.
         if (
           ['stress', 'force'].includes(s.algorithm) &&
           Math.abs(pc.y - c.y) < 0.01 &&
           aspectError > 0.8
         )
-          f!.y += (hash(p.id) - 0.5) * s.nodeGap * 0.025;
+          f.y += (hash(p.id) - 0.5) * s.nodeGap * 0.025;
       }
     }
   }

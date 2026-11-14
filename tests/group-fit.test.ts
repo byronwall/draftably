@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LayoutLab } from '../src/engines/layout-engine.js';
+import { LayoutLab } from '../src/engines/layout-engine';
 import { compile, type Scene } from '../src/dsl/compile';
 import { GROUP_INSET, GROUP_TITLE_CHROME } from '../src/dsl/frame';
 import { writeArrangement } from '../src/dsl/layout-edits';

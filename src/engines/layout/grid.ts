@@ -29,8 +29,8 @@ export function gridTarget(items: Item[], s: Settings, aspect: number): Centres 
     c = midpoint(b),
     sb = bounds(
       items.map(p => {
-        const a = seed.get(p.id);
-        return { ...p, x: a!.x - p.w / 2, y: a!.y - p.h / 2 };
+        const a = seed.get(p.id)!;
+        return { ...p, x: a.x - p.w / 2, y: a.y - p.h / 2 };
       }),
     ),
     sc = midpoint(sb);
@@ -75,8 +75,8 @@ export function alignTarget(
   const source = bounds(items),
     target = bounds(
       items.map(p => {
-        const at = map.get(p.id);
-        return { ...p, x: at!.x - p.w / 2, y: at!.y - p.h / 2 };
+        const at = map.get(p.id)!;
+        return { ...p, x: at.x - p.w / 2, y: at.y - p.h / 2 };
       }),
     );
   const locked = items.filter(p => p.fixed),

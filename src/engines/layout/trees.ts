@@ -12,10 +12,10 @@ export function treeTarget(items: Item[], t: Topology, s: Settings): Centres {
     span = new Map<string, number>();
   const minor = (id: string) => (vertical ? byId.get(id)!.w : byId.get(id)!.h);
   function width(id: string): number {
-    const cs = f.kids.get(id),
+    const cs = f.kids.get(id)!,
       w = Math.max(
         minor(id),
-        cs!.reduce((a, c) => a + width(c), 0) + Math.max(0, cs!.length - 1) * s.nodeGap,
+        cs.reduce((a, c) => a + width(c), 0) + Math.max(0, cs.length - 1) * s.nodeGap,
       );
     span.set(id, w);
     return w;
@@ -35,10 +35,10 @@ export function treeTarget(items: Item[], t: Topology, s: Settings): Centres {
     const cross = lo + span.get(id)! / 2,
       along = levels[f.depth.get(id)!];
     map.set(id, vertical ? { x: cross, y: along } : { x: along, y: cross });
-    const cs = f.kids.get(id),
-      total = cs!.reduce((a, c) => a + span.get(c)!, 0) + Math.max(0, cs!.length - 1) * s.nodeGap;
+    const cs = f.kids.get(id)!,
+      total = cs.reduce((a, c) => a + span.get(c)!, 0) + Math.max(0, cs.length - 1) * s.nodeGap;
     let x = lo + (span.get(id)! - total) / 2;
-    for (const c of cs!) {
+    for (const c of cs) {
       place(c, x);
       x += span.get(c)! + s.nodeGap;
     }
@@ -83,9 +83,9 @@ export function radialTarget(items: Item[], t: Topology, s: Settings): Centres {
       const angle = (start + end) / 2 + (s.direction === 'RIGHT' ? 0 : Math.PI / 2),
         radius = radii[f.depth.get(id)!];
       map.set(id, { x: ox + Math.cos(angle) * radius, y: Math.sin(angle) * radius });
-      const cs = f.kids.get(id);
+      const cs = f.kids.get(id)!;
       let a = start;
-      for (const c of cs!) {
+      for (const c of cs) {
         const b = a + ((end - start) * mass.get(c)!) / mass.get(id)!;
         place(c, a, b);
         a = b;
@@ -108,10 +108,10 @@ export function bilateralTarget(items: Item[], t: Topology, s: Settings): Centre
     major = (id: string) => (vertical ? by.get(id)!.h : by.get(id)!.w);
   const spans = new Map<string, number>();
   function span(id: string): number {
-    const cs = f.kids.get(id);
+    const cs = f.kids.get(id)!;
     const w = Math.max(
       minor(id),
-      cs!.reduce((n, c) => n + span(c), 0) + Math.max(0, cs!.length - 1) * s.nodeGap,
+      cs.reduce((n, c) => n + span(c), 0) + Math.max(0, cs.length - 1) * s.nodeGap,
     );
     spans.set(id, w);
     return w;
@@ -133,8 +133,8 @@ export function bilateralTarget(items: Item[], t: Topology, s: Settings): Centre
   const map: Centres = new Map([[start, { x: 0, y: 0 }]]),
     maxes: number[] = [];
   for (const id of sides.keys()) {
-    const d = f.depth.get(id);
-    maxes[d!] = Math.max(maxes[d!] || 0, major(id));
+    const d = f.depth.get(id)!;
+    maxes[d] = Math.max(maxes[d] || 0, major(id));
   }
   const levels = [0];
   for (let d = 1; d < maxes.length; d++)
@@ -143,10 +143,10 @@ export function bilateralTarget(items: Item[], t: Topology, s: Settings): Centre
     const a = sign * levels[f.depth.get(id)!],
       b = lo + spans.get(id)! / 2;
     map.set(id, vertical ? { x: b, y: a } : { x: a, y: b });
-    const cs = f.kids.get(id),
-      total = cs!.reduce((n, c) => n + spans.get(c)!, 0) + Math.max(0, cs!.length - 1) * s.nodeGap;
+    const cs = f.kids.get(id)!,
+      total = cs.reduce((n, c) => n + spans.get(c)!, 0) + Math.max(0, cs.length - 1) * s.nodeGap;
     let next = lo + (spans.get(id)! - total) / 2;
-    for (const c of cs!) {
+    for (const c of cs) {
       place(c, next, sign);
       next += spans.get(c)! + s.nodeGap;
     }
@@ -167,8 +167,8 @@ export function bilateralTarget(items: Item[], t: Topology, s: Settings): Centre
           .map(p => ({ ...p, x: map.get(p.id)!.x - p.w / 2, y: map.get(p.id)!.y - p.h / 2 })),
       );
     for (const p of extra) {
-      const q = fallback.get(p.id);
-      map.set(p.id, { x: q!.x, y: q!.y + b.y + b.h + s.rankGap });
+      const q = fallback.get(p.id)!;
+      map.set(p.id, { x: q.x, y: q.y + b.y + b.h + s.rankGap });
     }
   }
   t.branchSides = sides;

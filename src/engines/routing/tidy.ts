@@ -70,14 +70,14 @@ export function tidy(ctx: Context) {
     );
     for (const i of changes.keys()) {
       const r = next[i],
-        e = byId.get(r.id),
-        waypoints = e!.cfg.waypoints || [];
+        e = byId.get(r.id)!,
+        waypoints = e.cfg.waypoints || [];
       // Planned state.routes keep their ports and tracks.
       if (state.fixedPlans.has(r.id)) return false;
       // Waypoint state.routes stay as authored, as in the nudge pass.
       if (waypoints.length && !(throughWaypoints && waypoints.every(p => onPath(p, r.points))))
         return false;
-      if (!validPath(r.points, e!, r.fromSide, r.toSide, obsOf(e!))) return false;
+      if (!validPath(r.points, e, r.fromSide, r.toSide, obsOf(e))) return false;
       if (steps(r.points) > steps(state.routes[i].points)) return false;
     }
     const m0 = metrics(state.routes),

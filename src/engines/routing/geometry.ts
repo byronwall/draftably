@@ -63,13 +63,13 @@ export function compress(ps: Point[]) {
     const p = { x: round(raw.x), y: round(raw.y) };
     if (out.length && same(out.at(-1)!, p)) continue;
     while (out.length >= 2) {
-      const a = out.at(-2),
-        b = out.at(-1);
+      const a = out.at(-2)!,
+        b = out.at(-1)!;
       const collinear =
-        (Math.abs(a!.x - b!.x) < EPS && Math.abs(b!.x - p.x) < EPS) ||
-        (Math.abs(a!.y - b!.y) < EPS && Math.abs(b!.y - p.y) < EPS);
+        (Math.abs(a.x - b.x) < EPS && Math.abs(b.x - p.x) < EPS) ||
+        (Math.abs(a.y - b.y) < EPS && Math.abs(b.y - p.y) < EPS);
       // Never erase a reversal: it would hide a backtracking stub.
-      if (collinear && (b!.x - a!.x) * (p.x - b!.x) + (b!.y - a!.y) * (p.y - b!.y) >= 0) out.pop();
+      if (collinear && (b.x - a.x) * (p.x - b.x) + (b.y - a.y) * (p.y - b.y) >= 0) out.pop();
       else break;
     }
     out.push(p);

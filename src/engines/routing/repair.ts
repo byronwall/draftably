@@ -154,32 +154,32 @@ export function repair(ctx: Context) {
             [i, j],
             [j, i],
           ]) {
-            const em = byId.get(state.routes[m].id),
-              ek = byId.get(state.routes[k].id);
-            if (fixed(em!)) continue;
+            const em = byId.get(state.routes[m].id)!,
+              ek = byId.get(state.routes[k].id)!;
+            if (fixed(em)) continue;
             const rest = state.routes.filter((_, q) => q !== m && q !== k),
               tries = [],
               moved = find(
                 ctx,
-                em!,
+                em,
                 [...rest, state.routes[k]],
                 state.routes[m],
-                wallOf(state.routes[k], em!),
+                wallOf(state.routes[k], em),
               );
             if (!moved.blocked) {
               const one = [...state.routes];
               one[m] = moved;
               tries.push(one);
-              if (!fixed(ek!)) {
+              if (!fixed(ek)) {
                 const two = [...one];
-                two[k] = find(ctx, ek!, [...rest, moved], state.routes[k]);
+                two[k] = find(ctx, ek, [...rest, moved], state.routes[k]);
                 tries.push(two);
               }
             }
             // Or in the other order: `k` first, as if `m` were not there, then `m` round it.
-            if (!fixed(ek!)) {
-              const first = find(ctx, ek!, rest, state.routes[k]),
-                then = find(ctx, em!, [...rest, first], state.routes[m], wallOf(first, em!));
+            if (!fixed(ek)) {
+              const first = find(ctx, ek, rest, state.routes[k]),
+                then = find(ctx, em, [...rest, first], state.routes[m], wallOf(first, em));
               if (!then.blocked) {
                 const swap = [...state.routes];
                 swap[k] = first;

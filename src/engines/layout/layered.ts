@@ -94,11 +94,11 @@ export function layeredTarget(items: Item[], t: Topology, s: Settings, aspect: n
       for (let j = start; j < stop; j++) {
         let y = cross + (band - heights[j]) / 2;
         for (const id of layers[j]) {
-          const p = byId.get(id),
+          const p = byId.get(id)!,
             a = along + widths[j] / 2,
-            b = y + minor(p!) / 2;
+            b = y + minor(p) / 2;
           map.set(id, vertical ? { x: b, y: a } : { x: a, y: b });
-          y += minor(p!) + s.nodeGap;
+          y += minor(p) + s.nodeGap;
         }
         along += widths[j] + s.rankGap;
       }
@@ -106,8 +106,8 @@ export function layeredTarget(items: Item[], t: Topology, s: Settings, aspect: n
     }
     const b = bounds(
       items.map(p => {
-        const a = map.get(p.id);
-        return { ...p, x: a!.x - p.w / 2, y: a!.y - p.h / 2 };
+        const a = map.get(p.id)!;
+        return { ...p, x: a.x - p.w / 2, y: a.y - p.h / 2 };
       }),
     );
     // Penalise aspect mismatch in log space, not by merely scaling to fit a thin row.

@@ -17,10 +17,10 @@ export function nudge(ctx: Context) {
       let changed = false;
       for (let ri = 0; ri < state.routes.length; ri++) {
         const route = state.routes[ri],
-          e = edges.find(e => e.id === route.id);
-        if (route.blocked || e!.cfg.waypoints?.length || state.fixedPlans.has(e!.id)) continue;
+          e = edges.find(e => e.id === route.id)!;
+        if (route.blocked || e.cfg.waypoints?.length || state.fixedPlans.has(e.id)) continue;
         const used = state.routes.filter((_, j) => j !== ri),
-          obs = obsFor(e!);
+          obs = obsFor(e);
         if (!parallelConflicts(route.points, used, s.edgeGap).lanePairs) continue;
         let best = route.points,
           bestValue = cost(best, used, s, near);
@@ -45,7 +45,7 @@ export function nudge(ctx: Context) {
             p[i + 1][axis] = value;
             const clean = compress(p);
             if (
-              !validPath(clean, e!, route.fromSide, route.toSide, obs) ||
+              !validPath(clean, e, route.fromSide, route.toSide, obs) ||
               conflicts(clean, used).crossings > before.crossings
             )
               continue;
@@ -59,7 +59,7 @@ export function nudge(ctx: Context) {
         if (best !== route.points) {
           state.routes[ri] = {
             ...route,
-            points: simplify(ctx, best, e!, route.fromSide, route.toSide, obs, used),
+            points: simplify(ctx, best, e, route.fromSide, route.toSide, obs, used),
           };
           changed = true;
           nudged++;

@@ -33,11 +33,11 @@ export function improve(ctx: Context) {
         ]),
       );
       const order = [...edges].sort((a, b) => {
-        const ra = state.routes.find(r => r.id === a.id),
-          rb = state.routes.find(r => r.id === b.id);
+        const ra = state.routes.find(r => r.id === a.id)!,
+          rb = state.routes.find(r => r.id === b.id)!;
         return (
-          Number(rb!.blocked) - Number(ra!.blocked) ||
-          crossed.get(rb!.id)! - crossed.get(ra!.id)! ||
+          Number(rb.blocked) - Number(ra.blocked) ||
+          crossed.get(rb.id)! - crossed.get(ra.id)! ||
           cmp(a.id, b.id)
         );
       });

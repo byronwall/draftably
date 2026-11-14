@@ -15,14 +15,14 @@ export function planned(ctx: Context, e: RouteEdge): Route | null {
   const ps = plan.points,
     level = Math.abs(ps[0].y - ps[1].y) < EPS,
     fs = level ? (ps[1].x > ps[0].x ? 'right' : 'left') : ps[1].y > ps[0].y ? 'bottom' : 'top',
-    last = ps.at(-2),
-    end = ps.at(-1),
+    last = ps.at(-2)!,
+    end = ps.at(-1)!,
     ts =
-      Math.abs(last!.y - end!.y) < EPS
-        ? end!.x > last!.x
+      Math.abs(last.y - end.y) < EPS
+        ? end.x > last.x
           ? 'left'
           : 'right'
-        : end!.y > last!.y
+        : end.y > last.y
           ? 'top'
           : 'bottom',
     startPort = port(rects.get(e.from)!, fs, plan.fromOffset),
@@ -33,7 +33,7 @@ export function planned(ctx: Context, e: RouteEdge): Route | null {
     (e.cfg.toSide && e.cfg.toSide !== 'auto' && e.cfg.toSide !== ts) ||
     (typeof e.cfg.toOffset === 'number' && e.cfg.toOffset !== plan.toOffset) ||
     distance(ps[0], startPort) > 0.02 ||
-    distance(end!, endPort) > 0.02 ||
+    distance(end, endPort) > 0.02 ||
     !validPath(ps, e, fs, ts, obsFor(e))
   )
     return null;

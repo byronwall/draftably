@@ -90,15 +90,15 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
   const facingCount = new Map<string, number>(),
     // Whether `other`'s centre lies past side `side` of box `id`, mostly in that direction.
     beyond = (id: string, other: string, side: Side) => {
-      const r = rects.get(id),
+      const r = rects.get(id)!,
         o = center(rects.get(other)!),
-        c = center(r!),
+        c = center(r),
         level = Math.abs(o.x - c.x) >= Math.abs(o.y - c.y);
       return {
-        left: level && o.x < r!.x,
-        right: level && o.x > r!.x + r!.w,
-        top: !level && o.y < r!.y,
-        bottom: !level && o.y > r!.y + r!.h,
+        left: level && o.x < r.x,
+        right: level && o.x > r.x + r.w,
+        top: !level && o.y < r.y,
+        bottom: !level && o.y > r.y + r.h,
       }[side];
     };
   // Only unlabelled fans out of a box: arrowheads into one side, and labels, need the full gap.
@@ -108,8 +108,8 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
         if (beyond(e.from, e.to, side))
           facingCount.set(e.from + '|' + side, (facingCount.get(e.from + '|' + side) ?? 0) + 1);
   const crowdedSide = (id: string, side: Side) => {
-    const r = rects.get(id),
-      span = (side === 'left' || side === 'right' ? r!.h : r!.w) - 24,
+    const r = rects.get(id)!,
+      span = (side === 'left' || side === 'right' ? r.h : r.w) - 24,
       gap = Math.max(s.portGap, s.edgeGap),
       slots = (pitch: number) => 1 + 2 * Math.floor(span / 2 / pitch + EPS),
       full = slots(gap);
@@ -164,8 +164,8 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
           });
       }
     }
-    const common = ancestors(e.from).find(id => ancestors(e.to).includes(id));
-    const g = groups.get(common!);
+    const common = ancestors(e.from).find(id => ancestors(e.to).includes(id))!;
+    const g = groups.get(common);
     if (g) {
       const wall = 2000000;
       obstacles.push(

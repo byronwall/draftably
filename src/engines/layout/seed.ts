@@ -25,9 +25,9 @@ export function seedHierarchy(scene: Scene, pid: string | null, direction: Direc
   const seed = alignTarget(seedGrid(items, local, ratio), items, box, true);
   for (const p of items) {
     if (p.fixed) continue;
-    const q = seed.get(p.id);
-    let x = q!.x - p.w / 2,
-      y = q!.y - p.h / 2;
+    const q = seed.get(p.id)!;
+    let x = q.x - p.w / 2,
+      y = q.y - p.h / 2;
     if (box && !s.growContainers) {
       if (p.w <= box.w) x = clamp(x, box.x, box.x + box.w - p.w);
       if (p.h <= box.h) y = clamp(y, box.y, box.y + box.h - p.h);

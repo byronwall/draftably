@@ -2,7 +2,7 @@
  * Document edits. Every function mutates the diagram it is given, so callers run them inside
  * a store transaction (see `state/document.ts`), which records a single undo step.
  */
-import { LayoutLab } from '../engines/layout-engine.js';
+import { LayoutLab } from '../engines/layout-engine';
 import { clamp, clone, center, inside, overlaps, rectUnion, rounded } from './geometry';
 import { emptyDiagram, normalize, uid } from './document';
 import {

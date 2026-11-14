@@ -216,9 +216,9 @@ export async function arrange(
       );
     for (const p of items)
       if (!p.fixed) {
-        const q = seed.get(p.id);
-        let x = q!.x - p.w / 2,
-          y = q!.y - p.h / 2;
+        const q = seed.get(p.id)!;
+        let x = q.x - p.w / 2,
+          y = q.y - p.h / 2;
         if (container && !s.growContainers) {
           if (p.w <= container.w) x = clamp(x, container.x, container.x + container.w - p.w);
           if (p.h <= container.h) y = clamp(y, container.y, container.y + container.h - p.h);
@@ -279,15 +279,15 @@ export async function arrange(
     const forces = tickForces(scene, batch);
     for (const p of items) {
       if (p.fixed) continue;
-      const f = forces.get(p.id),
-        v = velocity.get(p.id),
+      const f = forces.get(p.id)!,
+        v = velocity.get(p.id)!,
         limit =
           s.mode === 'pass' ? Math.max(1, s.maxMove * 0.13) : Math.max(2, 32 * (1 - tick / steps));
-      v!.x = v!.x * 0.28 + f!.x * 0.72;
-      v!.y = v!.y * 0.28 + f!.y * 0.72;
-      const n = magnitude(v!.x, v!.y),
+      v.x = v.x * 0.28 + f.x * 0.72;
+      v.y = v.y * 0.28 + f.y * 0.72;
+      const n = magnitude(v.x, v.y),
         k = n > limit ? limit / n : 1;
-      constrainedMove(p, v!.x * k, v!.y * k);
+      constrainedMove(p, v.x * k, v.y * k);
     }
     separate(s.algorithm === 'separate' ? 6 : 3);
     // Project feasible forward inequalities, using the same boundary/pin/
@@ -297,22 +297,22 @@ export async function arrange(
       for (let sweep = 0; sweep < 2; sweep++) {
         const seq = sweep ? t.forward.slice().reverse() : t.forward;
         for (const e of seq) {
-          const a = byId.get(e.from),
-            b = byId.get(e.to),
+          const a = byId.get(e.from)!,
+            b = byId.get(e.to)!,
             v = direction === 'DOWN',
             axis = v ? 'y' : 'x';
-          const gap = (v ? a!.h + b!.h : a!.w + b!.w) / 2 + s.rankGap;
+          const gap = (v ? a.h + b.h : a.w + b.w) / 2 + s.rankGap;
           const sign = forwardSign(t, e);
           if (!sign) continue;
-          const error = gap - (midpoint(b!)[axis] - midpoint(a!)[axis]) * sign;
+          const error = gap - (midpoint(b)[axis] - midpoint(a)[axis]) * sign;
           if (error <= 0.01) continue;
-          const ac = axisCapacity(a!, axis, -sign),
-            bc = axisCapacity(b!, axis, sign),
+          const ac = axisCapacity(a, axis, -sign),
+            bc = axisCapacity(b, axis, sign),
             need = error * (s.mode === 'pass' ? 0.4 : 0.95);
           const da = Math.min(ac, bc < need / 2 ? need - bc : need / 2),
             db = Math.min(bc, need - da);
-          constrainedMove(a!, v ? 0 : -da * sign, v ? -da * sign : 0);
-          constrainedMove(b!, v ? 0 : db * sign, v ? db * sign : 0);
+          constrainedMove(a, v ? 0 : -da * sign, v ? -da * sign : 0);
+          constrainedMove(b, v ? 0 : db * sign, v ? db * sign : 0);
         }
       }
     separate(2);
@@ -350,8 +350,8 @@ export async function arrange(
   }
   stops.push({ parentId, iterations: ran, reason: stop });
   for (const p of items) {
-    const bestPos = best.coords.get(p.id);
-    move(p.id, bestPos!.x - pos[p.id].x, bestPos!.y - pos[p.id].y);
+    const bestPos = best.coords.get(p.id)!;
+    move(p.id, bestPos.x - pos[p.id].x, bestPos.y - pos[p.id].y);
   }
   sync();
   // Prefer the requested region after optimization, but never spend more

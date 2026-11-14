@@ -1,11 +1,12 @@
 /** A binary min-heap on `f`, in typed arrays. `pop` leaves the entry in `key` and `g`. */
 export class Heap {
-  keys: Int32Array;
-  gs: Float64Array;
-  fs: Float64Array;
-  length: number;
-  key: number;
-  g: number;
+  // `declare` keeps these out of the emitted class, so the constructor alone shapes the object.
+  declare keys: Int32Array;
+  declare gs: Float64Array;
+  declare fs: Float64Array;
+  declare length: number;
+  declare key: number;
+  declare g: number;
   constructor() {
     this.keys = new Int32Array(256);
     this.gs = new Float64Array(256);
@@ -66,8 +67,8 @@ export class Heap {
 }
 /** A binary min-heap of objects ordered by `before`. */
 export class Queue<T> {
-  items: T[];
-  before: (a: T, b: T) => boolean;
+  declare items: T[];
+  declare before: (a: T, b: T) => boolean;
   constructor(before: (a: T, b: T) => boolean) {
     this.items = [];
     this.before = before;

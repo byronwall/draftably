@@ -5,8 +5,8 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { LayoutLab } from '../src/engines/layout-engine.ts';
 import { RouteLab } from '../src/engines/routing-engine.ts';
-import { ExplorerLab } from '../src/engines/explorer-engine.js';
-import { SculptLab } from '../src/engines/sculpt-engine.js';
+import { ExplorerLab } from '../src/engines/explorer-engine.ts';
+import { SculptLab } from '../src/engines/sculpt-engine.ts';
 import type { NodeGeometry } from '../src/model/types';
 
 const here = path.dirname(fileURLToPath(import.meta.url));

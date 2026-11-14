@@ -27,8 +27,8 @@ export function objective(
   if (target)
     for (const p of items) {
       const c = midpoint(p),
-        q = target.get(p.id);
-      energy += ((c.x - q!.x) ** 2 + (c.y - q!.y) ** 2) * 0.01;
+        q = target.get(p.id)!;
+      energy += ((c.x - q.x) ** 2 + (c.y - q.y) ** 2) * 0.01;
     }
   else if (compoundEnergy) {
     // Its links are in `compoundEnergy`.
@@ -48,12 +48,12 @@ export function objective(
   else if (s.algorithm === 'force') {
     // Potential consistent with the explicit attractive / repulsive forces.
     for (const e of t.edges) {
-      const a = byId.get(e.from),
-        b = byId.get(e.to),
-        ca = midpoint(a!),
-        cb = midpoint(b!),
+      const a = byId.get(e.from)!,
+        b = byId.get(e.to)!,
+        ca = midpoint(a),
+        cb = midpoint(b),
         d = magnitude(cb.x - ca.x, cb.y - ca.y),
-        ideal = L + (Math.hypot(a!.w, a!.h) + Math.hypot(b!.w, b!.h)) / 4;
+        ideal = L + (Math.hypot(a.w, a.h) + Math.hypot(b.w, b.h)) / 4;
       energy += (0.022 * d * d * d) / (3 * ideal);
     }
     for (let i = 0; i < items.length; i++)
@@ -67,11 +67,11 @@ export function objective(
       }
   } else
     for (const e of t.edges) {
-      const a = byId.get(e.from),
-        b = byId.get(e.to),
-        ca = midpoint(a!),
-        cb = midpoint(b!),
-        ideal = L + (Math.hypot(a!.w, a!.h) + Math.hypot(b!.w, b!.h)) / 4,
+      const a = byId.get(e.from)!,
+        b = byId.get(e.to)!,
+        ca = midpoint(a),
+        cb = midpoint(b),
+        ideal = L + (Math.hypot(a.w, a.h) + Math.hypot(b.w, b.h)) / 4,
         d = magnitude(cb.x - ca.x, cb.y - ca.y);
       energy += (d - ideal) ** 2 * 0.006;
     }
@@ -83,11 +83,11 @@ export function objective(
     }
   if (s.respectDirection && s.algorithm !== 'separate')
     for (const e of t.forward) {
-      const a = byId.get(e.from),
-        b = byId.get(e.to),
+      const a = byId.get(e.from)!,
+        b = byId.get(e.to)!,
         v = s.direction === 'DOWN',
-        gap = (v ? a!.h : a!.w) / 2 + (v ? b!.h : b!.w) / 2 + s.rankGap,
-        d = v ? midpoint(b!).y - midpoint(a!).y : midpoint(b!).x - midpoint(a!).x;
+        gap = (v ? a.h : a.w) / 2 + (v ? b.h : b.w) / 2 + s.rankGap,
+        d = v ? midpoint(b).y - midpoint(a).y : midpoint(b).x - midpoint(a).x;
       energy += forwardSign(t, e)
         ? Math.max(0, gap - d * forwardSign(t, e)) ** 2 * 0.45 * (s.flowStrength / 100)
         : 0;

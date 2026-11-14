@@ -1,14 +1,78 @@
-import { LayoutLab } from './layout-engine.ts';
-/* Diagram Studio 7 — spatial editing and recorded layout journeys.
+/* Spatial editing and recorded layout journeys.
  * DOM-free. No random starts. Every operation returns new geometry.
  * A brush changes a local goal, not the definition of global graph quality.
  */
+import type { Diagram, LayoutSettings, NodeGeometry, Point, Rect } from '../model/types.ts';
+import { LayoutLab } from './layout-engine.ts';
+import type { LayoutMetrics, LayoutOptions, LayoutReport, TraceFrame } from './layout-engine.ts';
 
-const copy = v => JSON.parse(JSON.stringify(v));
-const clamp = (x, a, b) => Math.max(a, Math.min(b, Number.isFinite(+x) ? +x : a));
-const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-const center = p => ({ x: p.x + p.w / 2, y: p.y + p.h / 2 });
-const defaults = {
+export type BrushMode = 'tidy' | 'flow' | 'space' | 'restore' | 'protect';
+
+export interface BrushSettings {
+  radius: number;
+  strength: number;
+  softness: number;
+  step: number;
+  mode: BrushMode;
+  holdRestored: boolean;
+}
+
+export interface DabOptions extends Partial<BrushSettings> {
+  point?: Point;
+  worldRadius?: number;
+  reference?: NodeGeometry | null;
+  protectedIds?: string[];
+}
+
+export interface DabResult {
+  document: Diagram;
+  weights: Record<string, number>;
+  locked: string[];
+  moved: string[];
+  maxDisplacement: number;
+  blocked: boolean;
+  attenuation?: number;
+  mode: BrushMode;
+}
+
+export interface TimelineFrame {
+  nodes: NodeGeometry;
+  iteration: number;
+  phase: string;
+  metrics: LayoutMetrics;
+  index: number;
+  moved: number;
+  travel: number;
+  cumulative: number;
+  maxMove: number;
+}
+
+export interface TimelineBookmark {
+  index: number;
+  title: string;
+}
+
+export interface Timeline {
+  schemaVersion: 1;
+  kind: 'diagram-studio-journey';
+  baseline: Diagram;
+  settings: LayoutSettings;
+  execution: Record<string, unknown>;
+  report: LayoutReport;
+  frames: TimelineFrame[];
+  finalDocument: Diagram;
+  bookmarks: TimelineBookmark[];
+  createdAt: string;
+  /** Added by the app: routes in effect when the timeline was recorded. */
+  routePrior?: unknown[];
+}
+
+const copy = <T>(v: T): T => JSON.parse(JSON.stringify(v));
+const clamp = (x: number, a: number, b: number) =>
+  Math.max(a, Math.min(b, Number.isFinite(+x) ? +x : a));
+const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
+const center = (p: Rect) => ({ x: p.x + p.w / 2, y: p.y + p.h / 2 });
+const defaults: BrushSettings = {
   radius: 190,
   strength: 35,
   softness: 75,
@@ -16,36 +80,37 @@ const defaults = {
   mode: 'tidy',
   holdRestored: true,
 };
-function settings(input = {}) {
+function settings(input: Partial<BrushSettings> = {}): BrushSettings {
   return {
     radius: clamp(input.radius ?? 190, 40, 600),
     strength: clamp(input.strength ?? 35, 1, 100),
     softness: clamp(input.softness ?? 75, 0, 100),
     step: clamp(input.step ?? 18, 1, 64),
-    mode: ['tidy', 'flow', 'space', 'restore', 'protect'].includes(input.mode)
-      ? input.mode
+    mode: ['tidy', 'flow', 'space', 'restore', 'protect'].includes(input.mode as string)
+      ? (input.mode as BrushMode)
       : 'tidy',
     holdRestored: input.holdRestored !== false,
   };
 }
-function weight(d, r, softness = 0.75) {
+/** How strongly a brush of radius `r` acts at distance `d`: 1 in the core, eased to 0 at the rim. */
+function weight(d: number, r: number, softness = 0.75) {
   if (d >= r) return 0;
   const core = r * (1 - softness);
   if (d <= core) return 1;
   const t = (d - core) / Math.max(0.00001, r - core);
   return 1 - t * t * (3 - 2 * t);
 }
-function rectDistance(p, r) {
+function rectDistance(p: Point, r: Rect) {
   return Math.hypot(
     Math.max(r.x - p.x, 0, p.x - r.x - r.w),
     Math.max(r.y - p.y, 0, p.y - r.y - r.h),
   );
 }
-function index(doc) {
+function index(doc: Diagram) {
   const by = new Map([...doc.graph.nodes, ...doc.graph.groups].map(n => [n.id, n])),
     groups = new Set(doc.graph.groups.map(n => n.id)),
-    parents = id => {
-      const a = [];
+    parents = (id: string) => {
+      const a: string[] = [];
       for (let p = by.get(id)?.parentId; p; p = by.get(p)?.parentId) a.push(p);
       return a;
     };
@@ -53,8 +118,8 @@ function index(doc) {
     by,
     groups,
     parents,
-    visible: id => !parents(id).some(id => doc.collapsed.includes(id)),
-    locked: id =>
+    visible: (id: string) => !parents(id).some(id => doc.collapsed.includes(id)),
+    locked: (id: string) =>
       [id, ...parents(id)].some(
         id =>
           doc.layout.nodes[id]?.pinned ||
@@ -62,11 +127,18 @@ function index(doc) {
       ),
   };
 }
-function field(doc, point, radius, softness = 0.75, protectedIds = []) {
+/** The brush weight of each visible shape it reaches, and the shapes it reaches but may not move. */
+function field(
+  doc: Diagram,
+  point: Point,
+  radius: number,
+  softness = 0.75,
+  protectedIds: string[] = [],
+) {
   const idx = index(doc),
     protectedSet = new Set(protectedIds),
-    weights = {},
-    locked = [];
+    weights: Record<string, number> = {},
+    locked: string[] = [];
   for (const n of doc.graph.nodes) {
     if (!idx.visible(n.id)) continue;
     const value = weight(rectDistance(point, doc.layout.nodes[n.id]), radius, softness);
@@ -83,15 +155,15 @@ function field(doc, point, radius, softness = 0.75, protectedIds = []) {
   }
   return { weights, locked };
 }
-function intersection(a, b) {
+function intersection(a: Rect, b: Rect) {
   const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x),
     h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
   return w > 0.005 && h > 0.005 ? w * h : 0;
 }
-function violationPairs(doc, nodes) {
+function violationPairs(doc: Diagram, nodes: NodeGeometry) {
   const idx = index(doc),
     visible = [...doc.graph.nodes, ...doc.graph.groups].filter(n => idx.visible(n.id)),
-    violations = new Map();
+    violations = new Map<string, number>();
   for (let i = 0; i < visible.length; i++)
     for (let j = i + 1; j < visible.length; j++) {
       const a = visible[i],
@@ -102,13 +174,13 @@ function violationPairs(doc, nodes) {
     }
   return violations;
 }
-function noWorse(doc, before, after) {
+function noWorse(doc: Diagram, before: NodeGeometry, after: NodeGeometry) {
   const base = violationPairs(doc, before),
     next = violationPairs(doc, after);
   for (const [id, area] of next) if (area > (base.get(id) || 0) + 0.01) return false;
   return true;
 }
-function constrainedTarget(doc, nodes, id, q) {
+function constrainedTarget(doc: Diagram, nodes: NodeGeometry, id: string, q: Point) {
   const n = [...doc.graph.nodes, ...doc.graph.groups].find(n => n.id === id),
     old = doc.layout.nodes[id];
   if (!n?.parentId) return q;
@@ -120,7 +192,8 @@ function constrainedTarget(doc, nodes, id, q) {
     maxY = Math.max(old.y, f.y + f.h - pad - old.h);
   return { x: clamp(q.x, minX, maxX), y: clamp(q.y, minY, maxY) };
 }
-function dab(input, options = {}) {
+/** One brush dab at `options.point`: moves the shapes under it a step toward the brush's goal. */
+function dab(input: Diagram, options: DabOptions = {}): DabResult {
   const s = settings(options),
     doc = copy(input),
     nodes = doc.layout.nodes,
@@ -161,7 +234,7 @@ function dab(input, options = {}) {
     visible = doc.graph.nodes.filter(n => idx.visible(n.id));
   const forward = LayoutLab.topology(visible, doc.graph.edges, doc.layout.intent || {}).forward;
   const forces = new Map(Object.keys(weights).map(id => [id, { x: 0, y: 0, n: 0 }]));
-  const push = (id, x, y, amount = 1) => {
+  const push = (id: string, x: number, y: number, amount = 1) => {
     const f = forces.get(id);
     if (!f) return;
     f.x += x * amount;
@@ -212,7 +285,7 @@ function dab(input, options = {}) {
           common = aps.find(id => bps.includes(id));
         let direction = doc.settings.direction;
         for (const id of [common, ...(common ? idx.parents(common) : [])]) {
-          const d = doc.layout.containers[id]?.direction;
+          const d = doc.layout.containers[id!]?.direction;
           if (d && d !== 'inherit') {
             direction = d;
             break;
@@ -270,12 +343,12 @@ function dab(input, options = {}) {
   const movers = new Set(Object.keys(weights)),
     obstacles = [...doc.graph.nodes, ...doc.graph.groups].filter(n => idx.visible(n.id)),
     ancestry = new Map(obstacles.map(n => [n.id, new Set(idx.parents(n.id))])),
-    pairs = [];
+    pairs: Array<[string, string, number]> = [];
   for (let i = 0; i < obstacles.length; i++)
     for (let j = i + 1; j < obstacles.length; j++) {
       const a = obstacles[i].id,
         b = obstacles[j].id;
-      if ((!movers.has(a) && !movers.has(b)) || ancestry.get(a).has(b) || ancestry.get(b).has(a))
+      if ((!movers.has(a) && !movers.has(b)) || ancestry.get(a)!.has(b) || ancestry.get(b)!.has(a))
         continue;
       pairs.push([a, b, intersection(old[a], old[b])]);
     }
@@ -308,7 +381,7 @@ function dab(input, options = {}) {
     mode: s.mode,
   };
 }
-function summarizeFrames(frames) {
+function summarizeFrames(frames: TraceFrame[]): TimelineFrame[] {
   let cumulative = 0;
   return frames.map((frame, i) => {
     const prev = frames[i - 1]?.nodes,
@@ -331,7 +404,8 @@ function summarizeFrames(frames) {
     return { ...frame, index: i, moved, travel, cumulative, maxMove: max };
   });
 }
-async function journey(input, options = {}) {
+/** A rebuild recorded as frames, from the given arrangement to the computed finish. */
+async function journey(input: Diagram, options: LayoutOptions = {}): Promise<Timeline> {
   const result = await LayoutLab.compute(input, {
     ...input.settings,
     ...options,
@@ -341,7 +415,7 @@ async function journey(input, options = {}) {
     maxIterations: options.maxIterations || 640,
     trace: true,
   });
-  const frames = [
+  const frames: TraceFrame[] = [
     {
       nodes: copy(input.layout.nodes),
       iteration: 0,
@@ -350,7 +424,7 @@ async function journey(input, options = {}) {
     },
   ];
   for (const f of result.trace || []) {
-    const prev = frames.at(-1);
+    const prev = frames.at(-1)!;
     if (JSON.stringify(f.nodes) !== JSON.stringify(prev.nodes)) frames.push(f);
   }
   const end = {
@@ -359,14 +433,17 @@ async function journey(input, options = {}) {
     phase: 'Computed finish',
     metrics: result.report.after,
   };
-  if (JSON.stringify(frames.at(-1).nodes) !== JSON.stringify(end.nodes)) frames.push(end);
-  else frames.at(-1).phase = frames.length === 1 ? 'Already settled' : 'Computed finish';
+  if (JSON.stringify(frames.at(-1)!.nodes) !== JSON.stringify(end.nodes)) frames.push(end);
+  else frames.at(-1)!.phase = frames.length === 1 ? 'Already settled' : 'Computed finish';
   const checked = LayoutLab.settings({ ...input.settings, ...options });
   // Invocation-only constraints must never become persisted diagram settings.
   // Keep them in the optional history's provenance, not in the graph save.
   const persistent = Object.fromEntries(
-    Object.keys(LayoutLab.defaults).map(key => [key, checked[key]]),
-  );
+    Object.keys(LayoutLab.defaults).map(key => [
+      key,
+      (checked as unknown as Record<string, unknown>)[key],
+    ]),
+  ) as unknown as LayoutSettings;
   const execution = {
     scope: options.scope || 'all',
     selected: copy(options.selected || []),
@@ -388,7 +465,7 @@ async function journey(input, options = {}) {
     createdAt: new Date().toISOString(),
   };
 }
-function lookahead(frames, index, pixels = 48, scale = 1) {
+function lookahead(frames: TimelineFrame[], index: number, pixels = 48, scale = 1) {
   const a = frames[index];
   if (!a) return index;
   for (let i = index + 1; i < frames.length; i++) {
@@ -399,7 +476,7 @@ function lookahead(frames, index, pixels = 48, scale = 1) {
   }
   return frames.length - 1;
 }
-const api = {
+export const SculptLab = {
   defaults,
   settings,
   weight,
@@ -412,5 +489,3 @@ const api = {
   violationPairs,
   noWorse,
 };
-
-export const SculptLab = api;

@@ -63,14 +63,14 @@ export function find(
   const { rects, titleBands, obsFor, scores, opened } = ctx;
   const gated = findIn(ctx, e, used, old, false, wall);
   if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
-  const a = rects.get(e.from),
-    b = rects.get(e.to),
-    ca = center(a!),
-    cb = center(b!),
+  const a = rects.get(e.from)!,
+    b = rects.get(e.to)!,
+    ca = center(a),
+    cb = center(b),
     // No route between the boxes is shorter than the gap between them.
     floor =
-      Math.max(0, Math.abs(ca.x - cb.x) - (a!.w + b!.w) / 2) +
-      Math.max(0, Math.abs(ca.y - cb.y) - (a!.h + b!.h) / 2),
+      Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
+      Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2),
     gatedLength = gated.blocked ? Infinity : pathLength(gated.points),
     long = gatedLength > DETOUR_RATIO * floor,
     pinned = [e.cfg.fromSide, e.cfg.toSide].some(x => x && x !== 'auto'),
