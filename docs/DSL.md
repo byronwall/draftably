@@ -485,6 +485,8 @@ layout root sequence activations=on
   itself open none.
 - The key gets a row for the bar. With `activations=off`, or without the word, the file draws
   exactly as it did before.
+- In the editor, with nothing selected, the Inspector's Activation bars switch writes the word
+  to the layout line.
 
 `note "text" near=m1` anchors a note to a message. Like every note, it moves no lane and no row.
 
