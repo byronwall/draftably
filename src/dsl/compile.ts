@@ -9,7 +9,7 @@
  * starting positions, so it is as repeatable as the built-in recipes. Refinements then apply on
  * top of the engine's arrangement exactly as they do on top of `flow`.
  */
-import { LayoutLab } from '../engines/layout-engine.js';
+import { LayoutLab } from '../engines/layout-engine';
 import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../model/appearance';
 import { measureText, widestPiece, wrapLines } from '../model/fonts';
 import { rectUnion } from '../model/geometry';
