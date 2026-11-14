@@ -18,7 +18,7 @@
       "Decide whether docs/research/diagram-library-gaps-2026-10-27/run.md stays public.",
       "Keep one CSV set: docs/research or assets/pro-results.",
       "Close PR 116 if its semantic signature idea is covered.",
-      "PR 331's plan moved to docs/intent/sequence-explanations with PR 560, which ships M2 to M4. PR 331 can close.",
+      "PR 331 is closed. PR 560 shipped M2 to M4 of its plan and retired it; see the sequence-explanations record.",
       "A crossing halo can cut a short marked line.",
       "An old label taller than its new one can crowd its row in a Before panel.",
       "The Inspector still shows pin and position fields for sequence participants.",
@@ -57,7 +57,7 @@
     "slug": "diagram-emphasis",
     "outcome": "completed",
     "retired_at": "2026-11-10",
-    "summary": "Links (a ↗ mark that opens URLs as written, .draft files in the viewer and file paths in the editor from the git root), the config line with link-base and editor, check suggestions for missing files, static SVG links, and emphasis states (state lines, --state, --states panels and the viewer's state chips) shipped in PR 140 to PR 145 on 2026-10-27, with PR 189 and PR 198 after. The hover chip became the mark as the open button, and PR 441 later removed hover tooltips. Reconciled against f1c6a981; the planning files are at 51269c20.",
+    "summary": "Links (a \u2197 mark that opens URLs as written, .draft files in the viewer and file paths in the editor from the git root), the config line with link-base and editor, check suggestions for missing files, static SVG links, and emphasis states (state lines, --state, --states panels and the viewer's state chips) shipped in PR 140 to PR 145 on 2026-10-27, with PR 189 and PR 198 after. The hover chip became the mark as the open button, and PR 441 later removed hover tooltips. Reconciled against f1c6a981; the planning files are at 51269c20.",
     "reason": "Byron approved retirement on 2026-11-10 after a check found the work already shipped while the map still said planned.",
     "documentation": [
       "docs/DSL.md",
@@ -107,6 +107,36 @@
     "revision": "20835652",
     "follow_ups": [
       "Below the cut line, not planned: a 'together' statement, viewer editing for lanes, free nested groups and position refinements inside lanes, sequence activations and fragments (loop, alt), other Mermaid types. Start a new initiative if wanted."
+    ]
+  },
+  {
+    "title": "Sequence diagrams as explanations",
+    "slug": "sequence-explanations",
+    "outcome": "completed",
+    "retired_at": "2026-11-14",
+    "summary": "A sequence holds to its source (M1: PR 386, PR 397, PR 398), measures what it draws (M2), says what each message is with message= kinds, answers= and action lines (M3), and explains itself with a key, a fixed order line, pair focus and an SVG description (M4). Activation bars (layout root sequence activations=on), insert and move in the editor, and typed Mermaid import were added in the same PR. M2 to M4 and the retirement are in PR 560. Reconciled against dac2b76e: tests/sequence.test.ts, tests/sequence-meaning.test.ts, tests/import-mermaid.test.ts and pnpm prove:sequence pass. The plan came from a Pro research run (PR 331, closed as superseded); its files are at dac2b76e under docs/intent/sequence-explanations.",
+    "reason": "Byron asked on 2026-11-14 to retire the plan in the PR that ships its last milestone. Every committed milestone is shipped.",
+    "documentation": [
+      "docs/DSL.md",
+      "docs/ARCHITECTURE.md",
+      "docs/intent/diagram-quality/FEEL.md",
+      "docs/CHECKS.md",
+      "skills/draftably/SKILL.md",
+      "site/docs/pages/import.md"
+    ],
+    "revision": "dac2b76e",
+    "follow_ups": [
+      "Decisions that differ from the plan: answers= replaces reply-to= (no dash in new words) and alone makes a reply; an action is an edge from a participant to itself, not a separate record; activation bars were deferred by the plan and added by Byron behind a switch.",
+      "Not built, no scope statement: a footnote states the scope, and a second way to say it adds nothing.",
+      "Not built, fragments (alt, opt, loop, par): Byron decided that they stay out. A phase is a narrative band; the Mermaid import turns each top-level branch into a phase and warns.",
+      "Not built, the plan's Explore list: phase collapse, navigation on a phone, one local alternative, parallel operands, order suggestions. None had a build commitment.",
+      "Not built, deferred by the plan: the full UML notation and measured time.",
+      "Not run: the reader study (SEQ-16). Tests cover geometry and meaning, not comprehension.",
+      "Not built: a draftably command for layout settings such as activations=on; set edits declarations only.",
+      "Not built: a before and after view of a change of kind; compare refuses such files.",
+      "Not changed: named emphasis states keep their rule (they list what is in focus). Pair focus is for a selection in the editor.",
+      "Activation import limits: a Mermaid bar from a bare activate line stays off with a warning, and a dotted line with a cross, no arrowhead or two arrowheads becomes a reply with a plain arrowhead.",
+      "Editor limits: insert and move work on a file only, and the Inspector still shows port fields for a message."
     ]
   }
 ]

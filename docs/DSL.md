@@ -298,6 +298,8 @@ The set stays small on purpose. Crow's feet and cardinality are not part of it.
 ## Sequence diagrams
 
 A sequence diagram shows the messages between participants in time order, from top to bottom.
+Use one to explain a single exchange: who asks, who answers and who does the work. It shows
+order, not time, and it says so in a line under the drawing.
 
 ```draft
 node user "User"
@@ -391,8 +393,12 @@ A phase is a run of consecutive messages. A listed run can't skip a message, so 
 messages outside every phase are fine. Deleting a message takes it out of its phase, and deleting
 a phase's last message removes the phase. A phase's label wraps at about 96px, so a long label
 moves no participant far. The band grows to hold its label, and bands stand 16 apart. Change marks
-work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`)
-are not supported yet.
+work as anywhere else: a `+edge` line shows a new message in place.
+
+The language has no fragments (`alt`, `opt`, `loop`, `par`). A phase names a run of messages; it
+makes no claim that the run repeats or that only one branch runs. To show another path, draw a
+second diagram with the same participants in the same order, and say in a `footnote` what each
+one leaves out. A sequence also has no clock: the space between rows means nothing.
 
 ### Kinds of message
 

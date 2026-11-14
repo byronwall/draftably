@@ -180,6 +180,30 @@ Groups and the opinionated root layouts follow a few rules:
   compiler stores their boxes in `layout.sequence.activations`, and `messageRoute` ends each
   message on a bar's side. No style field holds a
   kind, so a source edit never writes one as `kind=` or `head=`.
+- **A sequence never guesses.** It explains one exchange, so each meaning comes from a word in
+  the file. A dashed line is not a reply until the file says `answers=` or `message=reply`, and
+  `kind=async` stays a style. A reply pairs with a message only through `answers=`, never by
+  direction or nearness. The editor moves a message one place at a time and refuses a move that
+  puts a reply above its message or splits a phase; it never edits a phase to follow a move
+  (`moveEvents` in `dsl/translate.ts`). `draftably compare` refuses a file with kinds, because a
+  change mark cannot show a change of kind.
+- **Rows are order, not time.** Every sequence draws `SEQUENCE_CAPTION` (`model/status.ts`) in
+  its key, and an author cannot remove it. Row spacing comes only from what each row draws.
+  This is why the language has no measured time, and why it has no fragments (`alt`, `opt`,
+  `loop`, `par`) or other UML operators: each needs order and join rules that a row band cannot
+  state. A phase is a narrative band and nothing more.
+- **Sequence measures.** A one-line header is 32 high and headers stand on one line. A label
+  sits in one gap between two lifelines, with 8 clear at each end; between distant lanes it
+  takes one gap, inside one band when it can (`labelSlot`). A phase label wraps at 96; its band
+  holds its label and the margin notes on its messages; bands stand 16 apart (`eventRows`). A
+  self-message or an action keeps 8 clear of the next lifeline and the next row. The panel has
+  20 of padding. The numbers are the `SEQ_*` constants in `dsl/compile.ts` and `PHASE_WRAP`,
+  `ACTIVATION` and `ACTION_PAD` in `model/labels.ts`.
+- **Activation bars follow calls.** A bar opens where a participant receives a `call` and
+  closes at the last reply that answers it. With no reply it closes at that participant's next
+  message to another participant, or it is a 16-high stub. A second call on an open bar steps 4
+  to the right. A send, a plain message and a call to itself open no bar. The Mermaid import
+  turns bars on only when the source's bars match these rules.
 
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
