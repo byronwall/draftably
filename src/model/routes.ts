@@ -7,7 +7,14 @@ import {
 import { clamp, contains, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { edgeLabelLines, edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
+import {
+  ACTION_PAD,
+  actionSize,
+  edgeLabelLines,
+  edgeLabelSize,
+  groupTitleLines,
+  SELF_LOOP,
+} from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
   ancestors,
@@ -774,7 +781,9 @@ export function drawRoutes(
         }),
       ...vg.edges.flatMap(e => {
         const row = doc.layout.edges[e.id]?.row;
-        return row === undefined ? [] : [messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!)];
+        return row === undefined
+          ? []
+          : [messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!, look)];
       }),
     ],
   };
@@ -846,14 +855,27 @@ export function drawRoutes(
       [a, b] = [route.points[0], route.points[route.points.length - 1]];
     labels.set(
       route,
-      route.from === route.to
-        ? {
-            x: route.points[1].x + SELF_LOOP.label + w / 2,
-            y: (route.points[1].y + route.points[2].y) / 2,
-            w,
-            h,
+      byEdge.get(route.id)!.message === 'action'
+        ? // A local action's label fills its box, less the border.
+          {
+            x: route.points[0].x,
+            y: route.points[0].y + (h + 2 * ACTION_PAD) / 2,
+            w: w + 2 * ACTION_PAD - 2,
+            h: h + 2 * ACTION_PAD - 2,
           }
-        : { x: doc.layout.edges[route.id]?.labelX ?? (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
+        : route.from === route.to
+          ? {
+              x: route.points[1].x + SELF_LOOP.label + w / 2,
+              y: (route.points[1].y + route.points[2].y) / 2,
+              w,
+              h,
+            }
+          : {
+              x: doc.layout.edges[route.id]?.labelX ?? (a.x + b.x) / 2,
+              y: a.y - h / 2 - 1,
+              w,
+              h,
+            },
     );
   }
   const frames = vg.groups.flatMap(g =>
@@ -989,12 +1011,28 @@ export function haloPath(points: Point[], others: Point[][], frames: Rect[]): st
  * A sequence message: a straight line at its row from the source's lifeline (the middle of the
  * box) to the target's, or, sent to itself, a short loop out to the right and back.
  */
-function messageRoute(e: VisibleEdge, row: number, a: Rect, b: Rect): Route {
+function messageRoute(
+  e: VisibleEdge,
+  row: number,
+  a: Rect,
+  b: Rect,
+  look: ResolvedAppearance,
+): Route {
   const from = a.x + a.w / 2,
     to = b.x + b.w / 2,
-    right = to >= from;
-  const points =
-    e.a === e.b
+    right = to >= from,
+    box = e.message === 'action' ? actionSize(e.label, look) : undefined;
+  const points = box
+    ? // A local action: a box round its label, centred on the lifeline at its row.
+      [
+        { x: from, y: row - box.h / 2 },
+        { x: from + box.w / 2, y: row - box.h / 2 },
+        { x: from + box.w / 2, y: row + box.h / 2 },
+        { x: from - box.w / 2, y: row + box.h / 2 },
+        { x: from - box.w / 2, y: row - box.h / 2 },
+        { x: from, y: row - box.h / 2 },
+      ]
+    : e.a === e.b
       ? [
           { x: from, y: row },
           { x: from + SELF_LOOP.out, y: row },

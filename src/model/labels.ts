@@ -237,6 +237,15 @@ export function edgeLabelSize(
   };
 }
 
+/** Room between a local action's label and its box, on each side. */
+export const ACTION_PAD = 5;
+
+/** The box of a local action: its label and `ACTION_PAD` round it, centred on the lifeline. */
+export function actionSize(label: string, r: ResolvedAppearance) {
+  const { w, h } = edgeLabelSize(label, r, true);
+  return { w: w + 2 * ACTION_PAD, h: h + 2 * ACTION_PAD };
+}
+
 /**
  * What a self-message draws, measured from where its row meets the lifeline: how far right, how
  * far above the row and how far below it.

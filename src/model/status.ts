@@ -17,6 +17,7 @@ import {
   type Swatch,
 } from './appearance';
 import { descendants, styleOf } from './graph';
+import type { MessageKind } from './markers';
 import type { Diagram, DiagramEdge } from './types';
 
 export type Status = 'same' | 'added' | 'removed' | 'changed' | 'context';
@@ -228,4 +229,33 @@ export function usedStatuses(doc: Diagram): StatusCount[] {
 
 /** The color key's rows: a diff draws no family colors, so it lists only its statuses. */
 export const drawnLegend = (doc: Diagram): LegendEntry[] =>
-  isDiff(doc) ? [] : (doc.appearance.legend ?? []);
+  isDiff(doc) ? [] : [...(doc.appearance.legend ?? []), ...messageKey(doc)];
+
+/** What each kind of message means, as its row of the key says it. */
+const MESSAGE_LABELS: Record<MessageKind, string> = {
+  interaction: 'message',
+  call: 'call: the sender waits',
+  send: 'send: the sender does not wait',
+  reply: 'reply',
+  outcome: 'result shown',
+  action: 'local action',
+};
+
+/**
+ * The key a sequence draws for its kinds of message: one row for each mark in use, so a reader
+ * never has to guess what a solid head or a box means. Nothing unless a message has a kind. A
+ * plain message and a shown result draw the same arrow, so they share a row.
+ */
+export function messageKey(doc: Diagram): LegendEntry[] {
+  const used = new Set(doc.graph.edges.flatMap(e => (e.message ? [e.message] : [])));
+  if (!used.size) return [];
+  const plain = (['interaction', 'outcome'] as const).filter(k => used.has(k));
+  return [
+    ...(plain.length
+      ? [{ message: plain[0], label: plain.map(k => MESSAGE_LABELS[k]).join(' / ') }]
+      : []),
+    ...(['call', 'send', 'reply', 'action'] as const)
+      .filter(k => used.has(k))
+      .map(k => ({ message: k, label: MESSAGE_LABELS[k] })),
+  ];
+}

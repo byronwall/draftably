@@ -14,6 +14,7 @@ import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../mo
 import { measureText, widestPiece, wrapLines } from '../model/fonts';
 import { rectUnion } from '../model/geometry';
 import {
+  actionSize,
   edgeLabelSize,
   GROUP_TITLE_LINES,
   groupHeaderFor,
@@ -372,13 +373,17 @@ function sequenced(scene: Scene): Scene {
   const gaps = parts
       .slice(1)
       .map((o, i) => parts[i].w / 2 + SEQ_GAP + (across(i + 1) ? 2 * SEQ_BAND_PAD : 0) + o.w / 2),
-    first = tab + SEQ_BAND_PAD + parts[0].w / 2,
+    /** A local action is a box centred on its lifeline; half of it reaches each way. */
+    actionBox = (e: SceneEdge) => (e.message === 'action' ? actionSize(e.label, look) : undefined),
+    onFirst = scene.edges.filter(e => at.get(e.source) === 0).map(e => actionBox(e)?.w ?? 0),
+    first = tab + SEQ_BAND_PAD + Math.max(parts[0].w, ...onFirst) / 2,
     base = laneCentres(
       first,
       gaps,
       parts.map(() => []),
     );
   const reach = new Map<string, number>(),
+    reachLeft = new Map<string, number>(),
     holds: Hold[][] = parts.map(() => []),
     /** The left lane of the gap that holds each label of a message between distant lanes. */
     labelGaps = new Map<string, number>();
@@ -391,6 +396,18 @@ function sequenced(scene: Scene): Scene {
       const slot = b - a > 1 ? labelSlot(base, a, b, w + SEQ_LABEL_RUN, across) : a;
       if (b - a > 1) labelGaps.set(e.id, slot);
       holds[slot + 1].push({ from: slot, room: w + SEQ_LABEL_RUN });
+      continue;
+    }
+    const box = actionBox(e);
+    if (box) {
+      // The box clears the lifeline on each side, and a band's edge and header past it.
+      const half = box.w / 2,
+        room = (lane: number, other: number) =>
+          half + SEQ_SELF_CLEAR + (across(lane) ? 2 * SEQ_BAND_PAD + parts[other].w / 2 : 0);
+      reach.set(e.source, Math.max(reach.get(e.source) ?? 0, half));
+      reachLeft.set(e.source, Math.max(reachLeft.get(e.source) ?? 0, half));
+      if (a) holds[a].push({ from: a - 1, room: room(a, a - 1) });
+      if (a + 1 < parts.length) holds[a + 1].push({ from: a, room: room(a + 1, a + 1) });
       continue;
     }
     const { right } = selfInk(e);
@@ -413,7 +430,12 @@ function sequenced(scene: Scene): Scene {
     } = eventRows(
       scene.edges.map(e => {
         const label = labelBox(e).h,
-          self = e.source === e.target ? selfInk(e) : undefined;
+          box = actionBox(e),
+          self = box
+            ? { above: box.h / 2, below: box.h / 2 }
+            : e.source === e.target
+              ? selfInk(e)
+              : undefined;
         return {
           id: e.id,
           phase: phaseOf.get(e.id),
@@ -421,7 +443,7 @@ function sequenced(scene: Scene): Scene {
           above: self ? self.above : label && label + 1,
           below: self ? self.below : 0,
           tall: !!self,
-          drop: self ? SELF_LOOP.down : 0,
+          drop: self && !box ? SELF_LOOP.down : 0,
         };
       }),
       foot - SEQ_LIFT,
@@ -438,11 +460,13 @@ function sequenced(scene: Scene): Scene {
   /** The right edge of a participant, or of a self-message drawn past it. */
   const inkRight = (o: SceneObject) =>
     Math.max(placed.get(o.id)!.x + o.w, centre[at.get(o.id)!] + (reach.get(o.id) ?? 0));
+  const inkLeft = (o: SceneObject) =>
+    Math.min(placed.get(o.id)!.x, centre[at.get(o.id)!] - (reachLeft.get(o.id) ?? 0));
   const objects = scene.objects.map(o => {
     if (o.type === 'group') {
       // A group is a column band behind its participants' lifelines, its title above them.
       const members = parts.filter(p => p.parent === o.id),
-        x = round(Math.min(...members.map(p => placed.get(p.id)!.x)) - SEQ_BAND_PAD),
+        x = round(Math.min(...members.map(p => inkLeft(p))) - SEQ_BAND_PAD),
         w = round(Math.max(...members.map(p => inkRight(p))) + SEQ_BAND_PAD - x);
       // A lane's default shade depends on the scheme, so the drawing picks it (`drawnShade`).
       return {

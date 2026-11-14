@@ -30,8 +30,11 @@ export const declaration = (doc: SourceDoc, id: string) =>
     s => (s.command === 'node' || s.command === 'group') && s.args[0]?.value === id,
   );
 
+/** A statement that makes a connection: an `edge`, or a sequence's `action`. */
+export const isEdge = (s: Statement) => s.command === 'edge' || s.command === 'action';
+
 export const edgeStatement = (doc: SourceDoc, id: string) =>
-  statements(doc).find(s => s.command === 'edge' && s.args[0]?.value === id);
+  statements(doc).find(s => isEdge(s) && s.args[0]?.value === id);
 
 export const layoutStatement = (doc: SourceDoc, scope: string) =>
   statements(doc).find(s => s.command === 'layout' && s.args[0]?.value === scope);
@@ -85,7 +88,11 @@ export const clearPosition = (doc: SourceDoc, id: string) =>
  */
 export function removeReferences(doc: SourceDoc, id: string) {
   statements(doc)
-    .filter(s => s.command === 'edge' && (s.args[1]?.value === id || s.args[3]?.value === id))
+    .filter(
+      s =>
+        (s.command === 'edge' && (s.args[1]?.value === id || s.args[3]?.value === id)) ||
+        (s.command === 'action' && s.args[1]?.value === id),
+    )
     .forEach(s => removeEdge(doc, s.args[0].value));
   removeWhere(doc, s => {
     if (s.command === 'near') return s.args[0]?.value === id || s.args[1]?.value === id;
@@ -129,7 +136,10 @@ function unanchorNotes(doc: SourceDoc, id: string) {
  * own.
  */
 export function removeEdge(doc: SourceDoc, id: string) {
-  removeWhere(doc, s => s.command === 'edge' && s.args[0]?.value === id);
+  removeWhere(doc, s => isEdge(s) && s.args[0]?.value === id);
+  // A reply to it stays, and no longer names what it answers.
+  for (const s of statements(doc))
+    if (getAttr(s, 'reply-to')?.value === id) setAttr(s, 'reply-to', undefined);
   removeFromStates(doc, id);
   unanchorNotes(doc, id);
   for (const s of statements(doc))

@@ -22,7 +22,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
-import { MARKERS, type EndMarker } from '../model/markers';
+import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
@@ -285,6 +285,10 @@ export interface ModelEdge {
   tail?: EndMarker;
   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
   constraint?: false;
+  /** Sequence diagrams: `message=`, or `action` for an `action` line. */
+  message?: MessageKind;
+  /** `reply-to=`: the earlier message a reply answers. */
+  replyTo?: string;
   line: number;
 }
 
@@ -757,7 +761,18 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed', 'head', 'tail']);
+        allow([
+          'kind',
+          'from',
+          'to',
+          'was',
+          'constraint',
+          'directed',
+          'head',
+          'tail',
+          'message',
+          'reply-to',
+        ]);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -772,12 +787,27 @@ export function parseModel(source: string | SourceDoc): Model {
           !undirected || !(attrs.has('head') || attrs.has('tail')),
           `Edge ${eid} has directed=false, so it has no ends to mark. Remove head= and tail=, or remove directed=false.`,
         );
+        // A kind of message draws its own line and ends, so it takes no style beside it.
+        const message = attrs.has('message')
+          ? choice('message', 'interaction', MESSAGE_KINDS)
+          : undefined;
+        for (const key of ['kind', 'head', 'tail', 'directed'])
+          assert(
+            !message || !attrs.has(key),
+            `Edge ${eid} has message=${message}, which sets how it is drawn. Remove ${key}=.`,
+          );
+        assert(
+          !attrs.has('reply-to') || message === 'reply',
+          `reply-to= names the message a reply answers. Give ${eid} message=reply, or remove reply-to=.`,
+        );
         m.edges.push({
           id: eid,
           source: id(args[1]),
           target: id(args[3]),
           label: text(args[4]),
-          dashed: choice('kind', 'sync', ['sync', 'async']) === 'async',
+          dashed: choice('kind', 'sync', ['sync', 'async']) === 'async' || message === 'reply',
+          ...(message ? { message } : {}),
+          ...(attrs.has('reply-to') ? { replyTo: id(attrs.get('reply-to')) } : {}),
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
           ...(undirected ? { directed: false as const } : {}),
@@ -788,6 +818,30 @@ export function parseModel(source: string | SourceDoc): Model {
             : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
+          line,
+        });
+        break;
+      }
+      case 'action': {
+        // `action id participant "label"`: work one participant does, in its place among the messages.
+        assert(
+          args.length === 3 && args[2].quoted && args[2].value.trim(),
+          'An action needs an ID, its participant and a label: action check auth "check hash".',
+        );
+        allow([]);
+        const aid = id(args[0]),
+          who = id(args[1]);
+        assert(!edgeIds.has(aid), `Duplicate edge id ${aid}.`);
+        edgeIds.add(aid);
+        m.edges.push({
+          id: aid,
+          source: who,
+          target: who,
+          label: args[2].value,
+          dashed: false,
+          from: 'auto',
+          to: 'auto',
+          message: 'action',
           line,
         });
         break;
@@ -1208,6 +1262,43 @@ function validateReferences(m: Model) {
       p.line,
     );
   }
+  // Kinds of message: only a sequence has them, and a reply names an earlier message it answers.
+  m.edges.forEach((e, i) => {
+    if (!e.message) return;
+    assert(
+      sequence,
+      e.message === 'action'
+        ? 'An action is work one participant does in a sequence diagram; use layout root sequence.'
+        : `message= gives the kind of a sequence message; use layout root sequence, or remove it from ${e.id}.`,
+      e.line,
+    );
+    assert(
+      !by.has(e.id),
+      `${e.id} names both a participant and ${e.message === 'action' ? 'an action' : 'a message'}; give one another ID.`,
+      e.line,
+    );
+    if (!e.replyTo) return;
+    const at = m.edges.findIndex(x => x.id === e.replyTo),
+      asked = m.edges[at];
+    assert(asked, `Unknown message ${e.replyTo} in reply-to= on ${e.id}.`, e.line);
+    assert(
+      at < i,
+      `${e.id} replies to ${e.replyTo}, which comes after it. A reply follows the message it answers.`,
+      e.line,
+    );
+    assert(
+      asked.message && ['interaction', 'call', 'send'].includes(asked.message),
+      asked.message
+        ? `${e.id} replies to ${e.replyTo}, which is ${asked.message === 'action' ? 'an action' : `a${asked.message === 'outcome' ? 'n' : ''} ${asked.message}`}. A reply answers an interaction, a call or a send.`
+        : `${e.id} replies to ${e.replyTo}, which has no kind. Give ${e.replyTo} message=interaction, call or send.`,
+      e.line,
+    );
+    assert(
+      asked.source === e.target && asked.target === e.source,
+      `${e.id} replies to ${e.replyTo}, so it runs back from ${asked.target} to ${asked.source}.`,
+      e.line,
+    );
+  });
   if (m.wasOrder) {
     const { ids, line } = m.wasOrder,
       edge = (id: string) => m.edges.find(e => e.id === id),

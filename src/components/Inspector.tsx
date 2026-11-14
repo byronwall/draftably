@@ -308,6 +308,17 @@ const SIDE_OPTIONS = (['auto', 'left', 'right', 'top', 'bottom'] as PortSide[]).
 
 const MARKER_OPTIONS = MARKERS.map(m => [m, capitalize(m.replace('-', ' '))] as const);
 
+/** What a sequence message can be. An action is work one participant does, so it has one end. */
+const KIND_OPTIONS = [
+  ['', 'Not set'],
+  ['interaction', 'Message'],
+  ['call', 'Call: the sender waits'],
+  ['send', 'Send: the sender does not wait'],
+  ['reply', 'Reply'],
+  ['outcome', 'Result shown'],
+] as const;
+const SELF_KIND_OPTIONS = [...KIND_OPTIONS, ['action', 'Local action']] as const;
+
 function EdgeInspector(props: { id: string }) {
   const s = useDiagramSession();
   const edge = () => findEdge(s.doc, props.id)!;
@@ -322,18 +333,47 @@ function EdgeInspector(props: { id: string }) {
           value={edge().label}
           onCommit={v => s.transact('Edit label', d => edits.setEdgeLabel(d, props.id, v))}
         />
-        <Checkbox
-          label="Directed"
-          checked={edge().directed}
-          onChange={v =>
-            s.transact('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))
-          }
-        />
-        <Checkbox
-          label="Dashed"
-          checked={edge().dashed}
-          onChange={v => s.transact('Edit dashed', d => edits.setEdge(d, props.id, { dashed: v }))}
-        />
+        <Show when={cfg().row !== undefined}>
+          <SelectField
+            label="Kind"
+            value={edge().message ?? ''}
+            options={edge().from === edge().to ? SELF_KIND_OPTIONS : KIND_OPTIONS}
+            onChange={v =>
+              s.transact('Edit kind', d => edits.setMessage(d, props.id, v || undefined))
+            }
+          />
+          <Show when={edge().message === 'reply'}>
+            <SelectField
+              label="Reply to"
+              value={edge().replyTo ?? ''}
+              options={[
+                ['', 'Not set'] as const,
+                ...edits
+                  .replyTargets(s.doc, props.id)
+                  .map(e => [e.id, e.label ? `${e.id}: ${e.label}` : e.id] as const),
+              ]}
+              onChange={v =>
+                s.transact('Edit reply', d => edits.setReplyTo(d, props.id, v || undefined))
+              }
+            />
+          </Show>
+        </Show>
+        <Show when={!edge().message}>
+          <Checkbox
+            label="Directed"
+            checked={edge().directed}
+            onChange={v =>
+              s.transact('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))
+            }
+          />
+          <Checkbox
+            label="Dashed"
+            checked={edge().dashed}
+            onChange={v =>
+              s.transact('Edit dashed', d => edits.setEdge(d, props.id, { dashed: v }))
+            }
+          />
+        </Show>
         <Show when={!s.fileMode()}>
           <Checkbox
             label="Emphasis"
@@ -344,24 +384,26 @@ function EdgeInspector(props: { id: string }) {
           />
         </Show>
       </Section>
-      <Section title="Ends">
-        <div class="fields-2">
-          <SelectField
-            label="Tail"
-            value={tailOf(edge())}
-            options={MARKER_OPTIONS}
-            disabled={!edge().directed}
-            onChange={v => s.transact('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
-          />
-          <SelectField
-            label="Head"
-            value={headOf(edge())}
-            options={MARKER_OPTIONS}
-            disabled={!edge().directed}
-            onChange={v => s.transact('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
-          />
-        </div>
-      </Section>
+      <Show when={!edge().message}>
+        <Section title="Ends">
+          <div class="fields-2">
+            <SelectField
+              label="Tail"
+              value={tailOf(edge())}
+              options={MARKER_OPTIONS}
+              disabled={!edge().directed}
+              onChange={v => s.transact('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
+            />
+            <SelectField
+              label="Head"
+              value={headOf(edge())}
+              options={MARKER_OPTIONS}
+              disabled={!edge().directed}
+              onChange={v => s.transact('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
+            />
+          </div>
+        </Section>
+      </Show>
       <Section title="Ports">
         <div class="fields-2">
           <SelectField
