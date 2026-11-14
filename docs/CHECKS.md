@@ -88,8 +88,8 @@ Performance PRs paste a before → after table.
 
 `pnpm bench:host` (also the last part of `pnpm bench`, or `pnpm bench --only host`) builds the
 runtime and loads the built `<draft-diagram>` on plain pages in Chromium, with no bundler. It
-measures the budgets in [the host contract plan](intent/host-contract/plan.md#performance) and
-prints median and p95 per row with ✓ or ✗. Add `--runs N` (default 5) and `--strict` to fail on ✗.
+measures the budgets below and prints median and p95 per row with ✓ or ✗. Add `--runs N`
+(default 5) and `--strict` to fail on ✗.
 
 | Area                                         | Budget                                                    |
 | -------------------------------------------- | --------------------------------------------------------- |

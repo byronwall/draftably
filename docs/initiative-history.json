@@ -172,5 +172,30 @@
       "Not built: a named arrangement statement. Plain stay lines were enough.",
       "Still unavailable in file mode, by choice: layout checkpoints (undo walks the file's versions), reset-route, start and end marks, fit-container and images (FILE_UNSUPPORTED in src/state/commands.ts)."
     ]
+  },
+  {
+    "title": "One host contract for every framework",
+    "slug": "host-contract",
+    "outcome": "completed",
+    "retired_at": "2026-11-14",
+    "summary": "The plan (PR 526) and all seven steps merged on 2026-11-11: small fixes and size min-height (PR 527), element parity with HOST_EVENTS props in every wrapper (PR 531), the worker pool, one sheet and one font set (PR 535), one camera (PR 537), geometry, selection and context menus (PR 538), slots in both elements (PR 539), and recipes, host proofs and docs for every framework (PR 541). PR 498 and PR 499 landed on main as 9f233d73 and 1ae73851; PR 500 to PR 502 were closed and rebuilt on the contract. PR 546 then passed other attributes, such as data-theme, through every wrapper. Reconciled against origin/main 1ae73851 with no local code changes. The planning files are at 1ae73851.",
+    "reason": "Byron asked on 2026-11-14 to retire plans that shipped. The plan said status: implemented, and every step is on origin/main.",
+    "documentation": [
+      "docs/ARCHITECTURE.md",
+      "docs/CHECKS.md",
+      "site/docs/pages/support.md",
+      "site/docs/pages/content-on-nodes.md",
+      "site/docs/pages/events-and-status.md",
+      "site/docs/pages/camera-and-geometry.md"
+    ],
+    "revision": "1ae73851",
+    "follow_ups": [
+      "Not built: touch in the viewer. There is no pinch zoom, and the viewport is still touch-action: none (site/docs/pages/support.md lists it).",
+      "Not met: the warm first-diagram budget (300 ms). A fresh layout of the 28-box file takes about 600 ms in the router (docs/CHECKS.md).",
+      "pnpm prove:meta is not in CI; run it before a release.",
+      "Deferred until a host asks: a hover event, layout({ draft }) from .draft text, and Svelte Flow and Vue Flow edge components.",
+      "Not chosen: named regions inside an item, worldToClient and clientToWorld helpers, and occurrence keys for compare and states panels. Add them when a host needs them.",
+      "The Callsheet questions (published editor or source, input in bodies, selection sync, theme, page counts, print) had no recorded answers."
+    ]
   }
 ]
