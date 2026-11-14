@@ -52,7 +52,7 @@ and groups. References may point to later lines.
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; in a sequence `message=` and `answers=` say what it is (see [Kinds of message](#kinds-of-message)); `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                                                                                                                                                                                    |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. `activations=on` draws activation bars. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                        |
 | `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                                                                                                                        |
@@ -391,7 +391,7 @@ messages outside every phase are fine. Deleting a message takes it out of its ph
 a phase's last message removes the phase. A phase's label wraps at about 96px, so a long label
 moves no participant far. The band grows to hold its label, and bands stand 16 apart. Change marks
 work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`)
-and activations are not supported yet.
+are not supported yet.
 
 ### Kinds of message
 
@@ -442,6 +442,37 @@ The drawing never reads a kind from a line's style. Write the kind you mean:
 that a message changed kind. `draftably rm action.m3` removes an action, and `draftably mv`
 renames the ID in each `answers=`, `phase` and `state` that uses it. In the editor, the
 Inspector's Kind field sets a message's kind and turns a self-message into an action.
+
+### Activation bars
+
+`layout root sequence activations=on` draws a bar on a participant's lifeline while it is at
+work on a call. Bars are off by default. They need no line of their own: the drawing reads them
+from each `message=call` and the reply that names it with `answers=`.
+
+```draft
+node app "Web app"
+node api "Orders API"
+node db "Database"
+edge m1 app -> api "create order" message=call
+edge m2 api -> db "insert order" message=call
+edge m3 db -> api "order row" message=reply answers=m2
+action m4 api "build the receipt"
+edge m5 api -> app "order number" message=reply answers=m1
+layout root sequence activations=on
+```
+
+- A bar opens on the participant that receives a call, at the call's row. It closes at the row
+  of the reply that answers the call. With more than one such reply, it closes at the last.
+- A call with no reply closes at the next message its participant sends to another
+  participant. If it sends none, the bar is a short stub under the call.
+- A participant that receives a call while one of its bars is open gets a second bar, a step
+  to the right of the first.
+- A message ends on the side of a bar, not on the lifeline. An action sits on its participant's
+  bar. Labels and self-message loops keep clear of bars, so a file with bars can be a little wider.
+- Only `message=call` opens a bar. A plain message, a send, and a call a participant sends to
+  itself open none.
+- The key gets a row for the bar. With `activations=off`, or without the word, the file draws
+  exactly as it did before.
 
 `note "text" near=m1` anchors a note to a message. Like every note, it moves no lane and no row.
 

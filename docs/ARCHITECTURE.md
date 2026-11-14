@@ -175,7 +175,10 @@ Groups and the opinionated root layouts follow a few rules:
   record, and an `action` line is an edge from a participant to itself with `message: 'action'`,
   so order, phases, states, notes, deletion and renaming work for it as for any message.
   `headOf` and `tailOf` (`model/markers.ts`) draw each kind's ends, `messageRoute` draws an
-  action's box, and `messageKey` (`model/status.ts`) adds the key rows. No style field holds a
+  action's box, and `messageKey` (`model/status.ts`) adds the key rows. With `activations=on`,
+  `activationSpans` (`dsl/sequence-layout.ts`) reads the bars from call and reply pairs, the
+  compiler stores their boxes in `layout.sequence.activations`, and `messageRoute` ends each
+  message on a bar's side. No style field holds a
   kind, so a source edit never writes one as `kind=` or `head=`.
 
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
