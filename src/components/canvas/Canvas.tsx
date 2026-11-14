@@ -6,6 +6,7 @@ import { CrossingView, EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
 import { NodeChrome, NodeView } from '../scene/NodeView';
 import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
+import { replyPair } from '../../model/status';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Frame } from './Frame';
@@ -87,6 +88,13 @@ export function Canvas(props: CanvasProps) {
   // The drawing in the chosen emphasis state; edits still go to `doc`.
   const shown = createMemo(s.drawnDoc);
   const isSelected = (id: string) => s.selection().has(id);
+  // In a sequence, one selected message brings its call or its replies with it, and their bar.
+  const paired = createMemo(() => {
+    const only = s.singleSelection();
+    return new Set(only ? replyPair(shown(), only) : []);
+  });
+  const pairedBars = () =>
+    (shown().layout.sequence?.activations ?? []).filter(b => paired().has(b.call));
   const empty = () => !s.nodeIds().length && !s.groupIds().length;
 
   const onPointerUp = (e: PointerEvent) => {
@@ -190,6 +198,12 @@ export function Canvas(props: CanvasProps) {
           </g>
           <SequenceBackdrop doc={shown()} part="phases" />
           <Lifelines doc={s.doc} ids={s.nodeIds()} rect={id => s.sceneRects().get(id)} />
+          <SequenceBackdrop doc={shown()} part="bars" />
+          <For each={pairedBars()}>
+            {b => (
+              <rect class="activation-paired" x={b.x} y={b.y} width={b.w} height={b.h} rx="1.5" />
+            )}
+          </For>
           <g>
             <For each={s.routeIds()}>
               {id => (
@@ -199,6 +213,7 @@ export function Canvas(props: CanvasProps) {
                       doc={shown()}
                       route={route()}
                       selected={isSelected(id)}
+                      paired={!isSelected(id) && paired().has(id)}
                       editing={s.inlineEditId() === id}
                       interactive
                     />

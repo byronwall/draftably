@@ -226,6 +226,12 @@ installed Playwright Chromium) against a temporary copy of `examples/checkout.dr
 redoes, appends a connected node from outside, restarts the server, writes invalid source, and
 races an outside write against a viewer save. At each step it compares the browser's geometry
 with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`. It takes about 10 seconds.
+
+`pnpm build && pnpm prove:sequence` drives the editor on a copy of
+`examples/checkout-sequence.draft` with one click and then keys only. It checks that Tab and
+Shift Tab add a message, select it and put the caret in its label, that Alt with an arrow moves a
+message and keeps the selection and the keys, and that a move the file cannot keep changes
+nothing. Screenshots go to `tmp/proof-sequence/`.
 It launches full Chromium rather than the headless shell the other proofs use, so on a new
 machine run `pnpm exec playwright-core install chromium` once; without it the proof stops at
 once and prints that command.

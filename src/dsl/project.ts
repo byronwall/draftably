@@ -97,6 +97,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
+      ...(e.message ? { message: e.message } : {}),
+      ...(e.replyTo ? { replyTo: e.replyTo } : {}),
       ...(e.status ? { status: e.status } : {}),
     });
     set(doc.layout.edges, e.id, {
@@ -106,6 +108,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.lane ? { lane: e.lane } : {}),
       ...(e.plan ? { plan: e.plan } : {}),
       ...(e.row !== undefined ? { row: e.row } : {}),
+      ...(e.labelX !== undefined ? { labelX: e.labelX } : {}),
     });
   }
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
