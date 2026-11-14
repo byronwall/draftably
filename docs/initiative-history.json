@@ -4,7 +4,7 @@
     "slug": "diagram-library-coverage",
     "outcome": "completed",
     "retired_at": "2026-11-02",
-    "summary": "The comparison, sequence, marker, note, Mermaid sequence and Before panel slices shipped in stack #376. Inspected at c607e0e with no uncommitted changes.",
+    "summary": "The comparison, sequence, marker, note, Mermaid sequence and Before panel slices shipped in stack #376. Inspected at c607e0e with no uncommitted changes. On 2026-11-14 the folder's leftover README and four original Pro result files were removed; they are at 1ae73851, the research pages link them there, and docs/research keeps the only CSV set in the tree.",
     "reason": "Byron chose diagram quality as the lead job, then asked for all the work and a merge when CI passed.",
     "documentation": [
       "docs/DSL.md",
