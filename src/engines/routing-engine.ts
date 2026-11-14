@@ -5,6 +5,10 @@
  * The phases live in `routing/`: port choice (ports, sidepairs), path search (doglegs, search,
  * find), scoring (conflicts, cost, score), and the passes over the whole drawing (improve,
  * repair, nudge, tidy).
+ *
+ * Node runs the engines with no build (the engine suites do). So an engine module imports other
+ * engine modules with the `.ts` extension, and only types from outside `engines/`. A change here
+ * must keep the output byte for byte: `pnpm test:engines` compares it with `reference/v7/`.
  */
 import { compute } from './routing/compute.ts';
 import { conflicts, parallelConflicts, type Line } from './routing/conflicts.ts';

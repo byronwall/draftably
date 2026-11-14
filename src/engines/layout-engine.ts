@@ -5,6 +5,10 @@
  *
  * The phases live in `layout/`: settings, topology, the targets (layered, trees, grid), the
  * solve of one container (arrange, forces, separation, packing) and the report.
+ *
+ * Node runs the engines with no build (the engine suites do). So an engine module imports other
+ * engine modules with the `.ts` extension, and only types from outside `engines/`. A change here
+ * must keep the output byte for byte: `pnpm test:engines` compares it with `reference/v7/`.
  */
 import { compute } from './layout/compute.ts';
 import { normalizeIntent, placements } from './layout/intent.ts';
