@@ -440,7 +440,15 @@ function EdgeInspector(props: { id: string }) {
         <div class="fields-2">
           <CommandButton command="reverse-edge">Reverse</CommandButton>
           <CommandButton command="auto-ports">Use auto ports</CommandButton>
-          <CommandButton command="insert-step">Insert step · Tab</CommandButton>
+          <Show
+            when={cfg().row !== undefined}
+            fallback={<CommandButton command="insert-step">Insert step · Tab</CommandButton>}
+          >
+            <CommandButton command="insert-event-before">Insert before · Shift Tab</CommandButton>
+            <CommandButton command="insert-event-after">Insert after · Tab</CommandButton>
+            <CommandButton command="move-event-up">Move up · Alt ↑</CommandButton>
+            <CommandButton command="move-event-down">Move down · Alt ↓</CommandButton>
+          </Show>
           <Show when={!s.fileMode()}>
             <CommandButton command="reset-route">Reset bends</CommandButton>
           </Show>

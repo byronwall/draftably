@@ -35,6 +35,13 @@ function redoCommand() {
 
 export const hasSelection = () => activeSession().selectedIds().length > 0;
 
+/** A sequence draws from its file, so its messages are added and moved in a file only. */
+function sequenceFileOnly() {
+  return activeSession().fileMode()
+    ? null
+    : 'Open the diagram as a file to add or move its messages.';
+}
+
 export const canvasCommands = {
   undo: {
     hint: 'Step back through your last edit.',
@@ -69,6 +76,34 @@ export const canvasCommands = {
     keys: '⇧ Enter',
     icon: 'connect',
     run: () => activeSession().quickExtend(),
+  },
+  'insert-event-after': {
+    label: 'Insert after',
+    keys: 'Tab',
+    hint: 'Add a message after the selected one in a sequence.',
+    run: () => activeSession().insertEvent('after'),
+    blocked: sequenceFileOnly,
+  },
+  'insert-event-before': {
+    label: 'Insert before',
+    keys: 'Shift Tab',
+    hint: 'Add a message before the selected one in a sequence.',
+    run: () => activeSession().insertEvent('before'),
+    blocked: sequenceFileOnly,
+  },
+  'move-event-up': {
+    label: 'Move up',
+    keys: 'Alt ↑',
+    hint: 'Move the selected message one place up in a sequence.',
+    run: () => activeSession().moveEvent(-1),
+    blocked: sequenceFileOnly,
+  },
+  'move-event-down': {
+    label: 'Move down',
+    keys: 'Alt ↓',
+    hint: 'Move the selected message one place down in a sequence.',
+    run: () => activeSession().moveEvent(1),
+    blocked: sequenceFileOnly,
   },
   duplicate: {
     hint: 'Copy the selection beside itself.',

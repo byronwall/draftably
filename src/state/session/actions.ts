@@ -421,6 +421,33 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     if (id) s.transact('Reverse connection', d => edits.reverseEdge(d, id));
   }
 
+  /** The selected event of a sequence: a message or an action. */
+  function selectedEvent() {
+    const id = s.selectedIds().find(id => isEdge(s.doc, id));
+    return id && s.doc.layout.edges[id]?.row !== undefined ? id : undefined;
+  }
+
+  /** Add a message, or an action beside an action, before or after the selected event. */
+  function insertEvent(where: 'before' | 'after') {
+    const id = selectedEvent();
+    if (!id) return;
+    let next: string | undefined;
+    s.transact('Insert message', d => {
+      next = edits.insertEvent(d, id, where);
+    });
+    return next;
+  }
+
+  /** Move the selected event one place up or down. The file refuses a move it can't keep. */
+  function moveEvent(by: -1 | 1) {
+    const id = selectedEvent();
+    if (id)
+      s.transact(
+        by < 0 ? 'Move message up' : 'Move message down',
+        d => void edits.moveEvent(d, id, by),
+      );
+  }
+
   function resetSelectedBends() {
     const id = s.selectedIds().find(id => isEdge(s.doc, id));
     if (id)
@@ -610,6 +637,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     fitSelectedContainer,
     toggleCollapse,
     reverseSelectedEdge,
+    insertEvent,
+    moveEvent,
     resetSelectedBends,
     setLayoutIntent,
     markSelectedAs,

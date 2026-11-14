@@ -691,6 +691,43 @@ export function setMessage(doc: Diagram, id: string, kind: MessageKind | undefin
     for (const other of doc.graph.edges) if (other.replyTo === id) delete other.replyTo;
 }
 
+/**
+ * Add an event to a sequence before or after another: a plain message between the same two
+ * participants, or an action beside an action. The file gives it its row when it draws again.
+ */
+export function insertEvent(doc: Diagram, id: string, where: 'before' | 'after') {
+  const edges = doc.graph.edges,
+    at = edges.findIndex(e => e.id === id),
+    by = edges[at],
+    row = doc.layout.edges[id]?.row;
+  if (!by || row === undefined) return undefined;
+  const action = by.from === by.to,
+    next = uid('e');
+  edges.splice(where === 'before' ? at : at + 1, 0, {
+    id: next,
+    from: by.from,
+    to: by.to,
+    label: action ? 'action' : 'message',
+    directed: true,
+    emphasis: false,
+    dashed: false,
+    ...(action ? { message: 'action' as const } : {}),
+  });
+  doc.layout.edges[next] = { row };
+  return next;
+}
+
+/** Move a sequence event one place up or down among the events. False at either end. */
+export function moveEvent(doc: Diagram, id: string, by: -1 | 1) {
+  const edges = doc.graph.edges,
+    at = edges.findIndex(e => e.id === id),
+    to = at + by;
+  if (at < 0 || to < 0 || to >= edges.length || doc.layout.edges[id]?.row === undefined)
+    return false;
+  [edges[at], edges[to]] = [edges[to], edges[at]];
+  return true;
+}
+
 /** Turn a sequence's activation bars on or off. The file's layout line holds the switch. */
 export function setActivations(doc: Diagram, on: boolean) {
   const seq = doc.layout.sequence;

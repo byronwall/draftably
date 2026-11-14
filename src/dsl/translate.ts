@@ -338,7 +338,26 @@ export function translateEdit(input: EditInput): EditResult {
       ids.set(e.id, id);
       const s = statement('edge', [bare(id)]);
       writeEdge(e, s);
-      if (statements(source).some(x => x.command === 'edge'))
+      // A sequence reads its events in file order, so a new one goes where it was put: after
+      // the event above it, in that event's phase, or before the one below it.
+      const order = after.graph.edges,
+        at = order.indexOf(e),
+        above =
+          after.layout.sequence && at > 0
+            ? edgeStatement(source, sid(order[at - 1].id))
+            : undefined,
+        below = after.layout.sequence
+          ? edgeStatement(source, sid(order[at + 1]?.id ?? ''))
+          : undefined;
+      if (above) {
+        source.lines.splice(source.lines.indexOf(above) + 1, 0, s);
+        for (const p of statements(source))
+          if (p.command === 'phase') {
+            const i = p.args.findIndex((w, k) => k > 1 && w.value === above.args[0].value);
+            if (i > 0) p.args.splice(i + 1, 0, bare(id));
+          }
+      } else if (below) source.lines.splice(source.lines.indexOf(below), 0, s);
+      else if (statements(source).some(x => x.command === 'edge'))
         insertAfter(source, s, x => x.command === 'edge');
       else insertAfter(source, s, isDeclaration);
     } else if (!same(old, e) || !same(before.layout.edges[e.id], after.layout.edges[e.id])) {
@@ -347,9 +366,54 @@ export function translateEdit(input: EditInput): EditResult {
     }
   }
 
+  moveEvents(source, scene, before, after);
   const drops: Drop[] = [];
   placeSelection(input, sid, notes, drops);
   return { source, ids, notes, drops };
+}
+
+/**
+ * A sequence's events in a new order: their lines trade places, each with its own comment. A
+ * move that would put a reply above the message it answers, or split a phase, is refused with
+ * the reason, since neither the reply nor the phase can follow without the author's word.
+ */
+function moveEvents(source: SourceDoc, scene: Scene, before: Diagram, after: Diagram) {
+  if (!after.layout.sequence) return;
+  const kept = new Set(after.graph.edges.map(e => e.id)),
+    was = before.graph.edges.filter(e => kept.has(e.id)).map(e => e.id),
+    now = after.graph.edges.filter(e => was.includes(e.id)).map(e => e.id);
+  if (was.join('\0') === now.join('\0')) return;
+  const all = after.graph.edges.map(e => e.id);
+  for (const e of after.graph.edges)
+    if (e.replyTo && all.indexOf(e.replyTo) > all.indexOf(e.id))
+      throw new UnsupportedEdit(
+        `${e.id} answers ${e.replyTo}, so it stays below it. Move ${e.replyTo} first, or clear the reply's "Reply to".`,
+      );
+  for (const p of scene.model.phases) {
+    const at = p.ids.map(id => all.indexOf(id)).filter(i => i >= 0);
+    if (at.length && Math.max(...at) - Math.min(...at) + 1 !== at.length)
+      throw new UnsupportedEdit(
+        `That move would split the phase "${p.label}". Change the phase's messages in the source first.`,
+      );
+  }
+  // An event's line and the comment lines right above it move as one block.
+  const blockOf = (id: string) => {
+    const end = source.lines.indexOf(edgeStatement(source, id)!);
+    let start = end;
+    while (start > 0 && source.lines[start - 1].kind === 'comment') start--;
+    return { start, end };
+  };
+  const blocks = was.map(blockOf),
+    text = new Map(
+      was.map((id, i) => [id, source.lines.slice(blocks[i].start, blocks[i].end + 1)]),
+    ),
+    out: typeof source.lines = [];
+  let at = 0;
+  blocks.forEach((b, i) => {
+    out.push(...source.lines.slice(at, b.start), ...text.get(now[i])!);
+    at = b.end + 1;
+  });
+  source.lines = [...out, ...source.lines.slice(at)];
 }
 
 function writeShade(s: Statement, shade: number | undefined) {

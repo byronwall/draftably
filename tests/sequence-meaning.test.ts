@@ -7,7 +7,14 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { translateEdit } from '../src/dsl/translate';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
-import { replyTargets, setActivations, setMessage, setReplyTo } from '../src/model/edits';
+import {
+  insertEvent,
+  moveEvent,
+  replyTargets,
+  setActivations,
+  setMessage,
+  setReplyTo,
+} from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
@@ -287,6 +294,52 @@ describe('edits to kinds of message', () => {
     expect(setFields(signIn, 'm4', ['answers='])).toContain(
       'edge m4 db -> auth "user record" message=reply\n',
     );
+  });
+
+  it('inserts an event where it was put, in the phase of the event above it', () => {
+    // After m3, inside the phase: the new message joins the phase and keeps m3's ends.
+    const after = edit(d => void insertEvent(d, 'm3', 'after'));
+    expect(after).toContain(
+      'edge m3 auth -> db "load user" message=call\nedge auth-db auth -> db "message"\nedge m4',
+    );
+    expect(after).toContain('phase verify "Verify" m3 auth-db m4 m5\n');
+    expect(() => checkSource(after)).not.toThrow();
+    // Before the first event: nothing is above it, so it goes before the event below.
+    const first = edit(d => void insertEvent(d, 'm1', 'before'));
+    expect(first).toContain('edge user-app user -> app "message"\nedge m1 user -> app');
+    // Beside an action, the new event is an action on the same participant.
+    const action = edit(d => void insertEvent(d, 'm5', 'before'));
+    expect(action).toContain('action auth-auth auth "action"\n# The auth service');
+    expect(action).toContain('phase verify "Verify" m3 m4 auth-auth m5\n');
+    expect(() => checkSource(action)).not.toThrow();
+  });
+
+  it('moves an event by moving its line, and keeps each comment with its line', () => {
+    const moved = edit(d => void moveEvent(d, 'm5', -1));
+    expect(moved).toContain(
+      '# The auth service does this itself.\naction m5 auth "check password hash"\nedge m4 db -> auth "user record" answers=m3\n',
+    );
+    expect(checkSource(moved).edges.map(e => e.id)).toEqual([
+      'm1',
+      'm2',
+      'm3',
+      'm5',
+      'm4',
+      'm6',
+      'm7',
+    ]);
+  });
+
+  it('refuses a move that puts a reply above its message, or splits a phase', () => {
+    expect(() => edit(d => void moveEvent(d, 'm4', -1))).toThrow(
+      /m4 answers m3, so it stays below it/,
+    );
+    expect(() => edit(d => void moveEvent(d, 'm5', 1))).toThrow(/would split the phase "Verify"/);
+    expect(() => edit(d => void moveEvent(d, 'm2', 1))).toThrow(/would split the phase "Verify"/);
+    // The ends of the list do not move.
+    const doc = projectScene(checkSource(signIn));
+    expect(moveEvent(doc, 'm1', -1)).toBe(false);
+    expect(moveEvent(doc, 'm7', 1)).toBe(false);
   });
 
   it('edits actions and replies from the command line', () => {
