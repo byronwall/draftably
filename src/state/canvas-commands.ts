@@ -4,7 +4,6 @@
  */
 import { activeSession } from './active-session';
 import { toast } from './toast';
-import { focusLabelField, propertiesOpen } from './ui';
 
 export interface Command {
   label: string;
@@ -43,15 +42,21 @@ function sequenceFileOnly() {
     : 'Open the diagram as a file to add or move its messages.';
 }
 
+let nameInPanel: (() => boolean) | null = null;
+/**
+ * Set by the app shell, which owns the Inspector: put the caret in its Label field and return
+ * true, or return false when the Inspector is not showing. The embedded editor has no
+ * Inspector and sets nothing, so it names a new message in place.
+ */
+export const setLabelNamer = (fn: typeof nameInPanel) => (nameInPanel = fn);
+
 /**
  * Add a message to a sequence and let the user name it at once: in the Inspector's Label field
- * when that is showing, or else in place on the canvas.
+ * when the shell shows one, or else in place on the canvas.
  */
 function insertEvent(where: 'before' | 'after') {
   const id = activeSession().insertEvent(where);
-  if (!id) return;
-  if (propertiesOpen()) focusLabelField();
-  else activeSession().startInlineEdit(id);
+  if (id && !nameInPanel?.()) activeSession().startInlineEdit(id);
 }
 
 export const canvasCommands = {

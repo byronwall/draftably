@@ -27,7 +27,9 @@ import {
 import { toast } from './toast';
 import {
   filesShown,
+  focusLabelField,
   objectsOpen,
+  propertiesOpen,
   confirmAction,
   openDialog,
   openQuickBuild,
@@ -46,10 +48,14 @@ import {
   checkedEnabled,
   hasSelection,
   runChecked,
+  setLabelNamer,
   type Command,
 } from './canvas-commands';
 
 export type { Command };
+
+// The Inspector belongs to the app shell, so the shell says how a new message gets its name.
+setLabelNamer(() => propertiesOpen() && (focusLabelField(), true));
 
 let fileInput:
   ((replaceImageId: string | null, accept: 'diagram' | 'image' | 'foreign') => void) | null = null;
