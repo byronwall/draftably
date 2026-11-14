@@ -287,7 +287,7 @@ export interface ModelEdge {
   constraint?: false;
   /** Sequence diagrams: `message=`, or `action` for an `action` line. */
   message?: MessageKind;
-  /** `reply-to=`: the earlier message a reply answers. */
+  /** `answers=`: the earlier message a reply answers. */
   replyTo?: string;
   line: number;
 }
@@ -771,7 +771,7 @@ export function parseModel(source: string | SourceDoc): Model {
           'head',
           'tail',
           'message',
-          'reply-to',
+          'answers',
         ]);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
@@ -797,8 +797,8 @@ export function parseModel(source: string | SourceDoc): Model {
             `Edge ${eid} has message=${message}, which sets how it is drawn. Remove ${key}=.`,
           );
         assert(
-          !attrs.has('reply-to') || message === 'reply',
-          `reply-to= names the message a reply answers. Give ${eid} message=reply, or remove reply-to=.`,
+          !attrs.has('answers') || message === 'reply',
+          `answers= names the message a reply answers. Give ${eid} message=reply, or remove answers=.`,
         );
         m.edges.push({
           id: eid,
@@ -807,7 +807,7 @@ export function parseModel(source: string | SourceDoc): Model {
           label: text(args[4]),
           dashed: choice('kind', 'sync', ['sync', 'async']) === 'async' || message === 'reply',
           ...(message ? { message } : {}),
-          ...(attrs.has('reply-to') ? { replyTo: id(attrs.get('reply-to')) } : {}),
+          ...(attrs.has('answers') ? { replyTo: id(attrs.get('answers')) } : {}),
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
           ...(undirected ? { directed: false as const } : {}),
@@ -1280,7 +1280,7 @@ function validateReferences(m: Model) {
     if (!e.replyTo) return;
     const at = m.edges.findIndex(x => x.id === e.replyTo),
       asked = m.edges[at];
-    assert(asked, `Unknown message ${e.replyTo} in reply-to= on ${e.id}.`, e.line);
+    assert(asked, `Unknown message ${e.replyTo} in answers= on ${e.id}.`, e.line);
     assert(
       at < i,
       `${e.id} replies to ${e.replyTo}, which comes after it. A reply follows the message it answers.`,

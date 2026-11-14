@@ -171,7 +171,7 @@ Groups and the opinionated root layouts follow a few rules:
   order and one message per row in edge order; messages are straight lines (`messageRoute` in `model/routes.ts`) and skip the router. Both
   reuse `node`, `group`, `edge` and `layout`, with no second syntax. The arithmetic of lanes,
   label gaps and phase blocks is in `dsl/sequence-layout.ts`.
-- **A kind of message is a field on its edge.** `message=` and `reply-to=` stay on the edge
+- **A kind of message is a field on its edge.** `message=` and `answers=` stay on the edge
   record, and an `action` line is an edge from a participant to itself with `message: 'action'`,
   so order, phases, states, notes, deletion and renaming work for it as for any message.
   `headOf` and `tailOf` (`model/markers.ts`) draw each kind's ends, `messageRoute` draws an
