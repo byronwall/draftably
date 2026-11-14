@@ -315,7 +315,12 @@ export function translateEdit(input: EditInput): EditResult {
     if (e.message) setAttr(s, 'kind', undefined);
     else if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);
-    setAttr(s, 'message', e.message ? bare(e.message) : undefined);
+    // A reply that names its message needs only `answers=`.
+    setAttr(
+      s,
+      'message',
+      e.message && !(e.message === 'reply' && e.replyTo) ? bare(e.message) : undefined,
+    );
     setAttr(s, 'answers', e.replyTo ? bare(sid(e.replyTo)) : undefined);
     ports(after.layout.edges[e.id], s);
   };

@@ -53,12 +53,16 @@ export function setFields(source: string, target: string, fields: string[]) {
       const i = labelAt(s);
       while (s.args.length < i) s.args.push(quoted(''));
       s.args[i] = quoted(value);
-    } else
+    } else {
+      // `answers=` alone made a reply, so the line keeps that word when its target goes.
+      if (key === 'answers' && value === '' && getAttr(s, 'answers') && !getAttr(s, 'message'))
+        setAttr(s, 'message', bare('reply'));
       setAttr(
         s,
         key,
         value === '' ? undefined : /^[\w.-]+$/.test(value) ? bare(value) : quoted(value),
       );
+    }
   }
   return check(printSource(doc));
 }
