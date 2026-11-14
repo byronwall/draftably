@@ -268,7 +268,8 @@ const journeys = {
     await wait(page, () => location.search.includes('example='), 'the selected example');
     await wait(
       page,
-      () => document.querySelector('.cm-content')?.textContent.includes('Successful password sign-in'),
+      () =>
+        document.querySelector('.cm-content')?.textContent.includes('Successful password sign-in'),
       'the example source',
     );
     const example = await sourceText(page);
@@ -282,7 +283,8 @@ const journeys = {
     await page.goForward();
     await wait(
       page,
-      () => document.querySelector('.cm-content')?.textContent.includes('Successful password sign-in'),
+      () =>
+        document.querySelector('.cm-content')?.textContent.includes('Successful password sign-in'),
       'the example again',
     );
     check('Forward restores the selected example', (await sourceText(page)) === example);
