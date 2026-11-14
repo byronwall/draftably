@@ -22,7 +22,14 @@ import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
-import { edgeLabelLines, edgeLabelType, groupTitleLines, nodeLabel } from '../model/labels';
+import {
+  edgeLabelLines,
+  edgeLabelType,
+  groupTitleLines,
+  nodeLabel,
+  PHASE_TAB,
+  phaseLabelLines,
+} from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
 import {
   headOf,
@@ -569,7 +576,10 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
     phases: seq.phases.flatMap((ph, i) => [
       `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,
       `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
-      `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
+      ...phaseLabelLines(ph.label, look).map(
+        (line, k) =>
+          `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB + (k + 0.5) * look.annotation.lineHeight}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}">${esc(line)}</text>`,
+      ),
     ]),
   };
 }
@@ -583,8 +593,7 @@ function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 
   ];
 }
 
-/** Inset of a phase label from its band's top left corner. */
-export const PHASE_TAB = 8;
+export { PHASE_TAB };
 
 /** A thin stripe across the top of a box, inside its rounded corners. */
 export function accentPath(r: Rect, radius: number) {

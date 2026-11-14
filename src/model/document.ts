@@ -344,6 +344,7 @@ export function normalize(input: unknown): Diagram {
     if (cfg.row !== undefined) {
       if (!finite(cfg.row)) throw Error(e.id + ': invalid message row.');
       next.row = cfg.row;
+      if (finite(cfg.labelX)) next.labelX = cfg.labelX;
     }
     if (cfg.waypoints) {
       if (
