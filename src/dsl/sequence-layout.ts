@@ -9,9 +9,9 @@ export type Hold = { from: number; room: number };
 
 /**
  * The gap a distant message's label sits in, so it crosses no lifeline between its two ends.
- * `base` holds the lane centres that the headers alone give. The choice prefers a gap that
- * already has room, then a gap inside one band, then the gap nearest the middle of the message,
- * then the left one. Returns the left lane of the gap.
+ * `base` holds the lane centres that the headers alone give. The choice prefers a gap inside one
+ * band, so the label covers no band's border, then a gap that already has room, then the gap
+ * nearest the middle of the message, then the left one. Returns the left lane of the gap.
  */
 export function labelSlot(
   base: number[],
@@ -23,8 +23,8 @@ export function labelSlot(
   const mid = (base[a] + base[b]) / 2,
     slots = Array.from({ length: b - a }, (_, i) => a + i),
     cost = (i: number) => [
-      base[i + 1] - base[i] >= room ? 0 : 1,
       across(i + 1) ? 1 : 0,
+      base[i + 1] - base[i] >= room ? 0 : 1,
       Math.abs((base[i] + base[i + 1]) / 2 - mid),
       i,
     ];
