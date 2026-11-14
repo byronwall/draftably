@@ -1,5 +1,5 @@
-import { LayoutLab } from '../engines/layout-engine.js';
-import { RouteLab } from '../engines/routing-engine.js';
+import { LayoutLab } from '../engines/layout-engine';
+import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
 import {

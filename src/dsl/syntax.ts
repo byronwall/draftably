@@ -288,7 +288,7 @@ export interface ModelEdge {
   line: number;
 }
 
-/** A layout engine run cold over a scope's subtree; see `src/engines/layout-engine.js`. */
+/** A layout engine run cold over a scope's subtree; see `src/engines/layout-engine.ts`. */
 export interface EngineRecipe {
   algorithm: LayoutAlgorithmId;
   params: Partial<LayoutSettings>;

@@ -3,7 +3,7 @@ import {
   type PriorRoute,
   type Route,
   type RoutingResult,
-} from '../engines/routing-engine.js';
+} from '../engines/routing-engine';
 import { clamp, contains, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';

@@ -3,15 +3,15 @@ import {
   type CandidateResult,
   type CandidateSpec,
   type ComparisonConfig,
-} from '../engines/explorer-engine.js';
-import { LayoutLab, type LayoutOptions, type LayoutResult } from '../engines/layout-engine.js';
-import { SculptLab, type Timeline } from '../engines/sculpt-engine.js';
+} from '../engines/explorer-engine';
+import { LayoutLab, type LayoutOptions, type LayoutResult } from '../engines/layout-engine';
+import { SculptLab, type Timeline } from '../engines/sculpt-engine';
 import {
   RouteLab,
   type RouteInput,
   type RoutingOptions,
   type RoutingResult,
-} from '../engines/routing-engine.js';
+} from '../engines/routing-engine';
 import { compile, type Scene } from '../dsl/compile';
 import { projectScene, type ViewState } from '../dsl/project';
 import { routingFingerprint } from '../model/document';
