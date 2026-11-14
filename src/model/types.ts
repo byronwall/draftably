@@ -306,6 +306,8 @@ export interface SequenceLayout {
   };
   /** With `activations=on`: the bars on the lifelines of participants at work on a call. */
   activations?: Activation[];
+  /** The `activations=on` switch itself, which the Inspector turns on and off. */
+  bars?: true;
 }
 
 /** One activation bar: its participant, the call that opened it, and its box. */

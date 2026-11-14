@@ -191,6 +191,12 @@ export function translateEdit(input: EditInput): EditResult {
   writeRows(source, 'legend', before.appearance.legend, after.appearance.legend, (st, e) => {
     st.args[st.args.length - 1] = quoted(e.label);
   });
+  // A sequence's activation bars are a word on its layout line.
+  const bars = !!after.layout.sequence?.bars;
+  if (bars !== !!before.layout.sequence?.bars) {
+    const line = layoutStatement(source, 'root');
+    if (line) setAttr(line, 'activations', bars ? bare('on') : undefined);
+  }
   // A phase's label is in its `phase` line; its messages never change on the canvas.
   const phases = new Map(before.layout.sequence?.phases.map(p => [p.id, p.label]));
   for (const p of after.layout.sequence?.phases ?? []) {

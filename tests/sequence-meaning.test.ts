@@ -7,7 +7,7 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { translateEdit } from '../src/dsl/translate';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
-import { replyTargets, setMessage, setReplyTo } from '../src/model/edits';
+import { replyTargets, setActivations, setMessage, setReplyTo } from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
@@ -431,6 +431,42 @@ ${layout}
     expect(routes.get('x')!.label!.x).toBe(mid('b'));
     expect(drawnLegend(doc).map(e => e.label)).toContain('at work on a call');
     expect(normalize(JSON.parse(JSON.stringify(doc))).layout.sequence!.activations).toEqual(bars);
+  });
+
+  it('writes the switch to the layout line from the editor, and takes it off again', () => {
+    const file = source('layout root sequence'),
+      scene = checkSource(file),
+      before = projectScene(scene),
+      after = clone(before);
+    setActivations(after, true);
+    const on = printSource(
+      translateEdit({
+        source: readSource(file),
+        scene,
+        before,
+        after,
+        label: 'Edit',
+        selection: [],
+      }).source,
+    );
+    expect(on).toBe(file.replace('layout root sequence', 'layout root sequence activations=on'));
+    const onScene = checkSource(on),
+      onDoc = projectScene(onScene),
+      off = clone(onDoc);
+    expect(onDoc.layout.sequence!.bars).toBe(true);
+    setActivations(off, false);
+    expect(
+      printSource(
+        translateEdit({
+          source: readSource(on),
+          scene: onScene,
+          before: onDoc,
+          after: off,
+          label: 'Edit',
+          selection: [],
+        }).source,
+      ),
+    ).toBe(file);
   });
 
   it('refuses the switch on another recipe with a warning, not an error', () => {

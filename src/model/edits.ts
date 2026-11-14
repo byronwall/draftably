@@ -691,6 +691,14 @@ export function setMessage(doc: Diagram, id: string, kind: MessageKind | undefin
     for (const other of doc.graph.edges) if (other.replyTo === id) delete other.replyTo;
 }
 
+/** Turn a sequence's activation bars on or off. The file's layout line holds the switch. */
+export function setActivations(doc: Diagram, on: boolean) {
+  const seq = doc.layout.sequence;
+  if (!seq) return;
+  if (on) seq.bars = true;
+  else delete seq.bars;
+}
+
 /** The earlier messages a reply can answer: those with a kind that run the other way. */
 export function replyTargets(doc: Diagram, id: string) {
   const edges = doc.graph.edges,

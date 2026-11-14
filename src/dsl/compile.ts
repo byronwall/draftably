@@ -560,6 +560,9 @@ function sequenced(scene: Scene): Scene {
       ...(phaseX !== undefined ? { phaseX } : {}),
       ...(drawn.length ? { notes: margins, inner: panel } : {}),
       ...(activations.length ? { activations } : {}),
+      ...(scene.model.layouts.some(l => l.algorithm === 'sequence' && l.activations)
+        ? { bars: true as const }
+        : {}),
     },
   };
 }

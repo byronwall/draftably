@@ -417,6 +417,7 @@ export function normalize(input: unknown): Diagram {
           }
         : {}),
       ...(bars(seq.activations).length ? { activations: bars(seq.activations) } : {}),
+      ...(seq.bars ? { bars: true as const } : {}),
     };
   }
   out.collapsed = Array.isArray(data.collapsed)

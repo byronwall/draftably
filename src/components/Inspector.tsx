@@ -243,6 +243,17 @@ function NothingSelected() {
       <Show when={s.doc.layout.intent.start || s.doc.layout.intent.end}>
         <IntentSummary />
       </Show>
+      {/* The file's layout line holds the switch, so only a file can change it. */}
+      <Show when={s.doc.layout.sequence && s.fileMode()}>
+        <Section title="Sequence">
+          <Checkbox
+            label="Activation bars"
+            checked={!!s.doc.layout.sequence?.bars}
+            onChange={v => s.transact('Edit activation bars', d => edits.setActivations(d, v))}
+          />
+          <p class="hint">A bar runs from each call to the reply that answers it.</p>
+        </Section>
+      </Show>
       <Section>
         {/* Editor preferences, which belong to the session and not to the drawing. */}
         <Checkbox
