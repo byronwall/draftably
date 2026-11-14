@@ -30,7 +30,7 @@ import {
   wrapTitle,
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
-import { marginNotes } from '../model/note';
+import { marginNoteRoom, marginNotes } from '../model/note';
 import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
 import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
@@ -462,7 +462,16 @@ function sequenced(scene: Scene): Scene {
         };
       }),
       foot - SEQ_LIFT,
-      id => titles.get(id)!.length * lineHeight + 2 * PHASE_TAB,
+      // A band holds its title, and the margin notes on its messages.
+      id =>
+        Math.max(
+          titles.get(id)!.length * lineHeight + 2 * PHASE_TAB,
+          marginNoteRoom(
+            look,
+            scene.model.appearance.notes ?? [],
+            scene.model.phases.find(p => p.id === id)!.ids.filter(x => !scene.byId.has(x)),
+          ),
+        ),
       { row: SEQ_ROW, clear: SEQ_SELF_CLEAR, pad: 8, gap: SEQ_PHASE_GAP },
     );
   const end = last + SEQ_TOP;
@@ -515,11 +524,14 @@ function sequenced(scene: Scene): Scene {
   // nothing inside it moves. A left note also stays clear of the phase labels.
   const notes = scene.model.appearance.notes ?? [],
     anchors = new Map([...rows].filter(([id]) => !scene.byId.has(id))),
-    margins = marginNotes(look, notes, anchors, {
-      left: left - (tab ? SEQ_PANEL_PAD : SEQ_NOTE_PAD),
-      right: right + SEQ_NOTE_PAD,
-      top: 0,
-    }),
+    margins = marginNotes(
+      look,
+      notes,
+      anchors,
+      { left: left - (tab ? SEQ_PANEL_PAD : SEQ_NOTE_PAD), right: right + SEQ_NOTE_PAD, top: 0 },
+      // A note on a message in a phase sits inside that phase's band.
+      new Map(scene.model.phases.flatMap(p => p.ids.map(id => [id, bands.get(p.id)!] as const))),
+    ),
     drawn = margins.filter(r => r !== null),
     framed = drawn.length ? rectUnion([panel, rectUnion(drawn, SEQ_PANEL_PAD)]) : panel,
     phaseX = framed.x < panel.x ? panel.x : undefined;

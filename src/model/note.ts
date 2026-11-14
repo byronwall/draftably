@@ -67,29 +67,67 @@ export function noteBox(look: ResolvedAppearance, note: Note): PlacedNote {
  * Spots in a sequence's side margins, by index in `notes`, for notes on the messages in `rows`.
  * `left` and `right` are the margins' inner edges and `top` the highest a note goes. A note is
  * level with its row, or pushed down clear of the note above it. The panel grows round these, so
- * no note here can cover the drawing.
+ * no note here can cover the drawing. A note on a message in a phase stays inside that phase's
+ * band (`bands`, by message), which `marginNoteRoom` makes tall enough for its notes.
  */
 export function marginNotes(
   look: ResolvedAppearance,
   notes: readonly Note[],
   rows: ReadonlyMap<string, number>,
   { left, right, top }: { left: number; right: number; top: number },
+  bands: ReadonlyMap<string, { y: number; h: number }> = new Map(),
 ) {
   const spots: Array<Rect | null> = notes.map(() => null);
   for (const side of ['left', 'right'] as const) {
     let free = top;
+    const placed: Array<{ i: number; band?: { y: number; h: number } }> = [];
     notes
       .map((note, i) => ({ note, i, row: rows.get(note.near ?? '') }))
       .filter(n => n.row !== undefined && (n.note.side ?? 'right') === side)
       .sort((a, b) => a.row! - b.row!)
       .forEach(({ note, i, row }) => {
         const { w, h } = noteBox(look, note).rect,
-          y = Math.max(free, Math.round(row! - h / 2));
+          band = bands.get(note.near!),
+          level = Math.round(row! - h / 2),
+          // Inside its band, as near its row as the band's edges allow.
+          held = band
+            ? Math.max(band.y + BAND_PAD, Math.min(level, band.y + band.h - BAND_PAD - h))
+            : level,
+          y = Math.max(free, held);
         spots[i] = { x: side === 'right' ? right : left - w, y, w, h };
-        free = y + h + ROW_GAP;
+        placed.push({ i, band });
+        // A note pushed past its band's foot moves back up, and those above it in the band too.
+        for (
+          let k = placed.length - 1, foot = band ? band.y + band.h - BAND_PAD : Infinity;
+          k >= 0;
+          k--
+        ) {
+          const spot = spots[placed[k].i]!;
+          if (placed[k].band !== band || spot.y + spot.h <= foot) break;
+          spot.y = foot - spot.h;
+          foot = spot.y - ROW_GAP;
+        }
+        free = spots[i]!.y + h + ROW_GAP;
       });
   }
   return spots;
+}
+
+/** Room between a phase band's edge and a note inside it. */
+const BAND_PAD = 4;
+
+/**
+ * The height a phase band needs for the margin notes on its messages (`ids`): the taller of its
+ * two sides, each a stack of its notes.
+ */
+export function marginNoteRoom(look: ResolvedAppearance, notes: readonly Note[], ids: string[]) {
+  const stack = (side: 'left' | 'right') => {
+    const hs = notes
+      .filter(n => n.near && ids.includes(n.near) && (n.side ?? 'right') === side)
+      .map(n => noteBox(look, n).rect.h);
+    return hs.length ? hs.reduce((a, b) => a + b) + (hs.length - 1) * ROW_GAP + 2 * BAND_PAD : 0;
+  };
+  return Math.max(stack('left'), stack('right'));
 }
 
 /** A route label's box; a label's `x` and `y` are its center. */

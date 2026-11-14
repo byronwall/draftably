@@ -500,7 +500,8 @@ layout root sequence
 
 - `side=right` (the default) and `side=left` put the note in the margin past the outer lanes,
   level with the row. The panel grows round the note. Two notes that would touch stack down the
-  margin in row order.
+  margin in row order. A note on a message in a phase stays inside that phase's band, and
+  the band grows to hold its notes.
 - `side=above` and `side=below` put the note next to the row, at the first clear spot along it.
   Rows are close together, so a clear spot often does not exist. `check` then warns
   (`note-overlap`); use a side margin.

@@ -254,6 +254,36 @@ describe('sequence spacing', () => {
     expect(a.y + a.h + a.lifeline!).toBe(b.y + b.h + b.lifeline!);
   });
 
+  it("keeps a message's margin note inside the band of its phase", () => {
+    const scene = checkSource(
+        [
+          'node a "A"',
+          'node b "B"',
+          'edge m1 a -> b',
+          'edge m2 b -> a',
+          'edge m3 a -> b',
+          'phase one "One" m1 m2',
+          'phase two "Two" m3',
+          // On the last row of its band, where a note level with the row would cross the edge.
+          'note "A note that wraps to more than one line of text in the margin." near=m2 width=160',
+          'note "Second." near=m2',
+          'note "Tall note in a short band, which grows to hold it, line after line." near=m3 width=120',
+          'layout root sequence',
+        ].join('\n'),
+      ),
+      [one, two] = scene.sequence!.phases,
+      [n1, n2, n3] = scene.sequence!.notes!.map(r => r!);
+    for (const [note, band] of [
+      [n1, one],
+      [n2, one],
+      [n3, two],
+    ] as const) {
+      expect(note.y).toBeGreaterThanOrEqual(band.y);
+      expect(note.y + note.h).toBeLessThanOrEqual(band.y + band.h);
+    }
+    expect(n2.y).toBeGreaterThanOrEqual(n1.y + n1.h);
+  });
+
   it('wraps a long phase label, grows its band for it and leaves a gap to the next', () => {
     const scene = checkSource(
         [
