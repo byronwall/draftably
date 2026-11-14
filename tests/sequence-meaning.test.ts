@@ -22,10 +22,10 @@ node db "User store"
 edge m1 user -> app "submit" message=interaction
 edge m2 app -> auth "verify" message=call
 edge m3 auth -> db "load user" message=call
-edge m4 db -> auth "user record" message=reply reply-to=m3
+edge m4 db -> auth "user record" message=reply answers=m3
 # The auth service does this itself.
 action m5 auth "check password hash"
-edge m6 auth -> app "session token" message=reply reply-to=m2
+edge m6 auth -> app "session token" message=reply answers=m2
 edge m7 app -> user "signed in" message=outcome
 phase verify "Verify" m3 m4 m5
 layout root sequence
@@ -119,16 +119,16 @@ describe('kinds of sequence message', () => {
   it.each([
     [lines('edge m a -> b message=reply kind=async'), /Remove kind=/],
     [lines('edge m a -> b message=call head=diamond'), /Remove head=/],
-    [lines('edge m a -> b reply-to=n'), /Give m message=reply/],
-    [lines('edge m a -> b message=reply reply-to=n'), /Unknown message n/],
+    [lines('edge m a -> b answers=n'), /Give m message=reply/],
+    [lines('edge m a -> b message=reply answers=n'), /Unknown message n/],
     [
-      lines('edge m b -> a message=reply reply-to=n', 'edge n a -> b message=call'),
+      lines('edge m b -> a message=reply answers=n', 'edge n a -> b message=call'),
       /comes after it/,
     ],
-    [lines('edge n a -> b', 'edge m b -> a message=reply reply-to=n'), /has no kind/],
-    [lines('action n a "work"', 'edge m b -> a message=reply reply-to=n'), /which is an action/],
+    [lines('edge n a -> b', 'edge m b -> a message=reply answers=n'), /has no kind/],
+    [lines('action n a "work"', 'edge m b -> a message=reply answers=n'), /which is an action/],
     [
-      lines('edge n a -> b message=call', 'edge m a -> b message=reply reply-to=n'),
+      lines('edge n a -> b message=call', 'edge m a -> b message=reply answers=n'),
       /runs back from b to a/,
     ],
     ['node a "A"\naction x a "work"', /use layout root sequence/],
@@ -143,8 +143,8 @@ describe('kinds of sequence message', () => {
     const scene = checkSource(
       lines(
         'edge n a -> b message=send',
-        'edge r1 b -> a message=reply reply-to=n',
-        'edge r2 b -> a message=reply reply-to=n',
+        'edge r1 b -> a message=reply answers=n',
+        'edge r2 b -> a message=reply answers=n',
         'edge r3 b -> a message=reply',
       ),
     );
@@ -241,7 +241,7 @@ describe('edits to kinds of message', () => {
       'action m5 auth "compare hashes"\n',
     );
     const renamed = renameId(signIn, 'm3', 'load');
-    expect(renamed).toContain('reply-to=load');
+    expect(renamed).toContain('answers=load');
     expect(renamed).toContain('phase verify "Verify" load m4 m5');
     expect(removeIds(signIn, ['action.m5'])).toContain('phase verify "Verify" m3 m4\n');
     // A participant takes its actions and messages with it.

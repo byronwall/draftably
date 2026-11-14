@@ -93,7 +93,7 @@ export function renameId(source: string, from: string, to: string) {
   for (const s of statements(doc)) {
     // Labels and other text are quoted; ids never are.
     s.args = s.args.map(w => (!w.quoted && w.value === from ? bare(to) : w));
-    for (const key of ['in', 'root', 'reply-to', 'near'])
+    for (const key of ['in', 'root', 'answers', 'near'])
       if (getAttr(s, key)?.value === from) setAttr(s, key, bare(to));
   }
   return check(printSource(doc));

@@ -213,7 +213,7 @@ Good defaults:
   message; include it or split the phase. Rows show order, not elapsed time.
   Say what each message is when you know: `message=interaction` (a message, no claim about
   waiting), `message=call` (the sender waits), `message=send` (the sender does not wait),
-  `message=reply` with `reply-to=id` (the earlier `interaction`, `call` or `send` it answers,
+  `message=reply` with `answers=id` (the earlier `interaction`, `call` or `send` it answers,
   which runs the other way) and `message=outcome` (a result shown to a person). Write
   `action id participant "label"` for work one participant does, not an edge to itself; a
   `phase` can list it. A file with kinds gets a key for its marks, so don't mix in `kind=async`

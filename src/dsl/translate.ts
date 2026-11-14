@@ -316,7 +316,7 @@ export function translateEdit(input: EditInput): EditResult {
     else if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);
     setAttr(s, 'message', e.message ? bare(e.message) : undefined);
-    setAttr(s, 'reply-to', e.replyTo ? bare(sid(e.replyTo)) : undefined);
+    setAttr(s, 'answers', e.replyTo ? bare(sid(e.replyTo)) : undefined);
     ports(after.layout.edges[e.id], s);
   };
   const beforeEdges = new Map(before.graph.edges.map(e => [e.id, e]));

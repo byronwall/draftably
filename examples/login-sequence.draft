@@ -13,10 +13,10 @@ node db "User store" color=amber
 edge m1 user -> app "submit email + password" message=interaction
 edge m2 app -> auth "verify credentials" message=call
 edge m3 auth -> db "load user" message=call
-edge m4 db -> auth "user record" message=reply reply-to=m3
+edge m4 db -> auth "user record" message=reply answers=m3
 # An action is work one participant does. It is not a message to itself.
 action m5 auth "check password hash"
-edge m6 auth -> app "session token" message=reply reply-to=m2
+edge m6 auth -> app "session token" message=reply answers=m2
 edge m7 app -> user "signed in" message=outcome
 
 # A phase is a run of messages, drawn as a row band.

@@ -79,7 +79,7 @@ export interface DiagramEdge {
    * (an `action` line; `from` and `to` are that participant). Unset for a plain message.
    */
   message?: MessageKind;
-  /** With `message: 'reply'`: the earlier message this one answers, from `reply-to=`. */
+  /** With `message: 'reply'`: the earlier message this one answers, from `answers=`. */
   replyTo?: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;
