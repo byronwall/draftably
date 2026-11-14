@@ -444,15 +444,18 @@ function EdgeInspector(props: { id: string }) {
             when={cfg().row !== undefined}
             fallback={<CommandButton command="insert-step">Insert step · Tab</CommandButton>}
           >
-            <CommandButton command="insert-event-before">Insert before · Shift Tab</CommandButton>
-            <CommandButton command="insert-event-after">Insert after · Tab</CommandButton>
-            <CommandButton command="move-event-up">Move up · Alt ↑</CommandButton>
-            <CommandButton command="move-event-down">Move down · Alt ↓</CommandButton>
+            <CommandButton command="insert-event-before">Insert before</CommandButton>
+            <CommandButton command="insert-event-after">Insert after</CommandButton>
+            <CommandButton command="move-event-up">Move up</CommandButton>
+            <CommandButton command="move-event-down">Move down</CommandButton>
           </Show>
           <Show when={!s.fileMode()}>
             <CommandButton command="reset-route">Reset bends</CommandButton>
           </Show>
         </div>
+        <Show when={cfg().row !== undefined}>
+          <p class="hint">Tab and Shift Tab insert a message. Alt with ↑ or ↓ moves this one.</p>
+        </Show>
         <Show when={!s.fileMode()}>
           <p class="hint">
             Double-click a line to add a bend. Double-click a bend to remove it. Alt-drag a label to
