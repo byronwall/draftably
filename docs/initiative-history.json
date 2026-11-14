@@ -18,7 +18,7 @@
       "Decide whether docs/research/diagram-library-gaps-2026-10-27/run.md stays public.",
       "Keep one CSV set: docs/research or assets/pro-results.",
       "Close PR 116 if its semantic signature idea is covered.",
-      "Close or rebase PR 331; M2 to M4 stay open there.",
+      "PR 331's plan moved to docs/intent/sequence-explanations with PR 560, which ships M2 to M4. PR 331 can close.",
       "A crossing halo can cut a short marked line.",
       "An old label taller than its new one can crowd its row in a Before panel.",
       "The Inspector still shows pin and position fields for sequence participants.",

@@ -1,0 +1,846 @@
+{
+  "status": "Manual design-study geometry, not a production renderer golden",
+  "nativeWidth": 1000,
+  "messageFontPx": 17,
+  "participantCenters": {
+    "user": 230,
+    "app": 450,
+    "auth": 670,
+    "db": 880
+  },
+  "sharedHeader": {
+    "y": 160,
+    "height": 40,
+    "width": 152
+  },
+  "engineeringRows": {
+    "m1": 260,
+    "m2": 306,
+    "m3": 378,
+    "m4": 426,
+    "m5": {
+      "x": 568,
+      "y": 454,
+      "w": 204,
+      "h": 54
+    },
+    "m6": 570,
+    "m7": 622
+  },
+  "originalFacts": {
+    "m1": [
+      "user",
+      "app",
+      "submit email + password"
+    ],
+    "m2": [
+      "app",
+      "auth",
+      "verify credentials"
+    ],
+    "m3": [
+      "auth",
+      "db",
+      "load user"
+    ],
+    "m4": [
+      "db",
+      "auth",
+      "user record"
+    ],
+    "m5": [
+      "auth",
+      "auth",
+      "check password hash"
+    ],
+    "m6": [
+      "auth",
+      "app",
+      "session token"
+    ],
+    "m7": [
+      "app",
+      "user",
+      "signed in"
+    ]
+  },
+  "files": [
+    {
+      "file": "sign-in-engineering-proposal.svg",
+      "width": 1000,
+      "height": 766,
+      "textBoxes": [
+        {
+          "text": "DESIGN PROPOSAL \u00b7 not a baseline render",
+          "x": 32,
+          "y": 18,
+          "w": 224.851,
+          "h": 14
+        },
+        {
+          "text": "Successful password sign-in",
+          "x": 32,
+          "y": 36,
+          "w": 421.08,
+          "h": 33
+        },
+        {
+          "text": "The web app delegates credential verification to the auth service.",
+          "x": 32,
+          "y": 79,
+          "w": 532.406,
+          "h": 20
+        },
+        {
+          "text": "Scope: valid credentials; error paths omitted. User is an abstract human-facing role.",
+          "x": 32,
+          "y": 110,
+          "w": 561.652,
+          "h": 17
+        },
+        {
+          "text": "User",
+          "x": 210.679,
+          "y": 169,
+          "w": 38.641,
+          "h": 20
+        },
+        {
+          "text": "Web app",
+          "x": 413.373,
+          "y": 169,
+          "w": 73.253,
+          "h": 20
+        },
+        {
+          "text": "Auth service",
+          "x": 618.005,
+          "y": 169,
+          "w": 103.989,
+          "h": 20
+        },
+        {
+          "text": "User store",
+          "x": 837.296,
+          "y": 169,
+          "w": 85.408,
+          "h": 20
+        },
+        {
+          "text": "01",
+          "x": 42,
+          "y": 225,
+          "w": 12.996,
+          "h": 15
+        },
+        {
+          "text": "Submit",
+          "x": 42,
+          "y": 243,
+          "w": 54.416,
+          "h": 19
+        },
+        {
+          "text": "02",
+          "x": 42,
+          "y": 351,
+          "w": 15.396,
+          "h": 15
+        },
+        {
+          "text": "Verify",
+          "x": 42,
+          "y": 369,
+          "w": 47.28,
+          "h": 19
+        },
+        {
+          "text": "03",
+          "x": 42,
+          "y": 545,
+          "w": 15.552,
+          "h": 15
+        },
+        {
+          "text": "Return",
+          "x": 42,
+          "y": 563,
+          "w": 51.472,
+          "h": 19
+        },
+        {
+          "text": "1  submit email +",
+          "x": 272.544,
+          "y": 207,
+          "w": 134.912,
+          "h": 20
+        },
+        {
+          "text": "password",
+          "x": 300.033,
+          "y": 229,
+          "w": 79.934,
+          "h": 20
+        },
+        {
+          "text": "2  verify credentials",
+          "x": 479.411,
+          "y": 275,
+          "w": 161.177,
+          "h": 20
+        },
+        {
+          "text": "3  load user",
+          "x": 727.528,
+          "y": 347,
+          "w": 94.945,
+          "h": 20
+        },
+        {
+          "text": "4  user record",
+          "x": 717.778,
+          "y": 395,
+          "w": 114.444,
+          "h": 20
+        },
+        {
+          "text": "5 \u00b7 LOCAL ACTION",
+          "x": 580,
+          "y": 463,
+          "w": 89.81,
+          "h": 13
+        },
+        {
+          "text": "check password hash",
+          "x": 580,
+          "y": 480,
+          "w": 167.184,
+          "h": 19
+        },
+        {
+          "text": "6  session token",
+          "x": 493.827,
+          "y": 539,
+          "w": 132.345,
+          "h": 20
+        },
+        {
+          "text": "7  signed in",
+          "x": 293.726,
+          "y": 591,
+          "w": 92.548,
+          "h": 20
+        },
+        {
+          "text": "interaction / presented result",
+          "x": 72,
+          "y": 673,
+          "w": 180.102,
+          "h": 16
+        },
+        {
+          "text": "returned value",
+          "x": 370,
+          "y": 673,
+          "w": 90.493,
+          "h": 16
+        },
+        {
+          "text": "local action",
+          "x": 606,
+          "y": 673,
+          "w": 71.019,
+          "h": 16
+        },
+        {
+          "text": "Read top to bottom. Vertical spacing shows order, not elapsed time.",
+          "x": 32,
+          "y": 703,
+          "w": 491.46,
+          "h": 18
+        },
+        {
+          "text": "No claim about token storage, cookies, session issuance, blocking, or durable persistence.",
+          "x": 32,
+          "y": 731,
+          "w": 564.07,
+          "h": 16
+        }
+      ]
+    },
+    {
+      "file": "sign-in-overview-proposal.svg",
+      "width": 1000,
+      "height": 650,
+      "textBoxes": [
+        {
+          "text": "DESIGN PROPOSAL \u00b7 not a baseline render",
+          "x": 32,
+          "y": 18,
+          "w": 224.851,
+          "h": 14
+        },
+        {
+          "text": "Successful sign-in: three things to understand",
+          "x": 32,
+          "y": 36,
+          "w": 672.39,
+          "h": 33
+        },
+        {
+          "text": "Submit the request, check the credentials, return the result.",
+          "x": 32,
+          "y": 79,
+          "w": 483.837,
+          "h": 20
+        },
+        {
+          "text": "Scope: valid credentials; error paths omitted. This is an overview, not a protocol specification.",
+          "x": 32,
+          "y": 110,
+          "w": 628.628,
+          "h": 17
+        },
+        {
+          "text": "User",
+          "x": 127.816,
+          "y": 160,
+          "w": 36.368,
+          "h": 19
+        },
+        {
+          "text": "Web app",
+          "x": 355.528,
+          "y": 160,
+          "w": 68.944,
+          "h": 19
+        },
+        {
+          "text": "Auth service",
+          "x": 585.064,
+          "y": 160,
+          "w": 97.872,
+          "h": 19
+        },
+        {
+          "text": "User store",
+          "x": 837.808,
+          "y": 160,
+          "w": 80.384,
+          "h": 19
+        },
+        {
+          "text": "01",
+          "x": 50,
+          "y": 234,
+          "w": 12.996,
+          "h": 15
+        },
+        {
+          "text": "Submit",
+          "x": 50,
+          "y": 256,
+          "w": 78.223,
+          "h": 26
+        },
+        {
+          "text": "User sends email + password to",
+          "x": 50,
+          "y": 299,
+          "w": 245.328,
+          "h": 19
+        },
+        {
+          "text": "Web app.",
+          "x": 50,
+          "y": 322,
+          "w": 73.312,
+          "h": 19
+        },
+        {
+          "text": "Web app asks Auth service to",
+          "x": 50,
+          "y": 360,
+          "w": 228.048,
+          "h": 19
+        },
+        {
+          "text": "verify credentials.",
+          "x": 50,
+          "y": 383,
+          "w": 138.144,
+          "h": 19
+        },
+        {
+          "text": "02",
+          "x": 374,
+          "y": 234,
+          "w": 15.396,
+          "h": 15
+        },
+        {
+          "text": "Verify",
+          "x": 374,
+          "y": 256,
+          "w": 67.965,
+          "h": 26
+        },
+        {
+          "text": "Auth service asks User store to",
+          "x": 374,
+          "y": 299,
+          "w": 239.216,
+          "h": 19
+        },
+        {
+          "text": "load the user.",
+          "x": 374,
+          "y": 322,
+          "w": 104.368,
+          "h": 19
+        },
+        {
+          "text": "User store returns the user record.",
+          "x": 374,
+          "y": 360,
+          "w": 265.536,
+          "h": 19
+        },
+        {
+          "text": "Auth service checks the password",
+          "x": 374,
+          "y": 398,
+          "w": 263.952,
+          "h": 19
+        },
+        {
+          "text": "hash.",
+          "x": 374,
+          "y": 421,
+          "w": 41.824,
+          "h": 19
+        },
+        {
+          "text": "03",
+          "x": 698,
+          "y": 234,
+          "w": 15.552,
+          "h": 15
+        },
+        {
+          "text": "Return",
+          "x": 698,
+          "y": 256,
+          "w": 73.991,
+          "h": 26
+        },
+        {
+          "text": "Auth service returns a session",
+          "x": 698,
+          "y": 299,
+          "w": 231.984,
+          "h": 19
+        },
+        {
+          "text": "token to Web app.",
+          "x": 698,
+          "y": 322,
+          "w": 140.032,
+          "h": 19
+        },
+        {
+          "text": "Web app presents the signed-in",
+          "x": 698,
+          "y": 360,
+          "w": 245.472,
+          "h": 19
+        },
+        {
+          "text": "result to User.",
+          "x": 698,
+          "y": 383,
+          "w": 107.856,
+          "h": 19
+        },
+        {
+          "text": "All seven original facts are retained; arrows and protocol detail are intentionally omitted.",
+          "x": 32,
+          "y": 557,
+          "w": 588.728,
+          "h": 17
+        },
+        {
+          "text": "Section order is narrative order. Card size does not represent duration.",
+          "x": 32,
+          "y": 585,
+          "w": 513.105,
+          "h": 18
+        },
+        {
+          "text": "Use the engineering view to trace the sender, receiver, and returned values.",
+          "x": 32,
+          "y": 614,
+          "w": 509.516,
+          "h": 17
+        }
+      ]
+    },
+    {
+      "file": "sign-in-failure-companion-proposal.svg",
+      "width": 1000,
+      "height": 790,
+      "textBoxes": [
+        {
+          "text": "HYPOTHETICAL PROPOSAL \u00b7 not a baseline render",
+          "x": 32,
+          "y": 18,
+          "w": 269.83,
+          "h": 14
+        },
+        {
+          "text": "Password check fails \u2014 companion sketch",
+          "x": 32,
+          "y": 36,
+          "w": 619.86,
+          "h": 33
+        },
+        {
+          "text": "Same participants and order; the source does not establish a failure path.",
+          "x": 32,
+          "y": 79,
+          "w": 595.255,
+          "h": 20
+        },
+        {
+          "text": "Illustrative prefix reused from success. *Failure at the hash check is a scenario assumption.",
+          "x": 32,
+          "y": 110,
+          "w": 613.144,
+          "h": 17
+        },
+        {
+          "text": "User",
+          "x": 210.679,
+          "y": 169,
+          "w": 38.641,
+          "h": 20
+        },
+        {
+          "text": "Web app",
+          "x": 413.373,
+          "y": 169,
+          "w": 73.253,
+          "h": 20
+        },
+        {
+          "text": "Auth service",
+          "x": 618.005,
+          "y": 169,
+          "w": 103.989,
+          "h": 20
+        },
+        {
+          "text": "User store",
+          "x": 837.296,
+          "y": 169,
+          "w": 85.408,
+          "h": 20
+        },
+        {
+          "text": "01",
+          "x": 42,
+          "y": 225,
+          "w": 12.996,
+          "h": 15
+        },
+        {
+          "text": "Submit",
+          "x": 42,
+          "y": 243,
+          "w": 54.416,
+          "h": 19
+        },
+        {
+          "text": "02",
+          "x": 42,
+          "y": 351,
+          "w": 15.396,
+          "h": 15
+        },
+        {
+          "text": "Verify",
+          "x": 42,
+          "y": 369,
+          "w": 47.28,
+          "h": 19
+        },
+        {
+          "text": "03",
+          "x": 42,
+          "y": 545,
+          "w": 15.552,
+          "h": 15
+        },
+        {
+          "text": "Return",
+          "x": 42,
+          "y": 563,
+          "w": 51.472,
+          "h": 19
+        },
+        {
+          "text": "1  submit email +",
+          "x": 272.544,
+          "y": 207,
+          "w": 134.912,
+          "h": 20
+        },
+        {
+          "text": "password",
+          "x": 300.033,
+          "y": 229,
+          "w": 79.934,
+          "h": 20
+        },
+        {
+          "text": "2  verify credentials",
+          "x": 479.411,
+          "y": 275,
+          "w": 161.177,
+          "h": 20
+        },
+        {
+          "text": "3  load user",
+          "x": 727.528,
+          "y": 347,
+          "w": 94.945,
+          "h": 20
+        },
+        {
+          "text": "4  user record",
+          "x": 717.778,
+          "y": 395,
+          "w": 114.444,
+          "h": 20
+        },
+        {
+          "text": "5 \u00b7 LOCAL ACTION",
+          "x": 580,
+          "y": 463,
+          "w": 89.81,
+          "h": 13
+        },
+        {
+          "text": "check password hash",
+          "x": 580,
+          "y": 480,
+          "w": 167.184,
+          "h": 19
+        },
+        {
+          "text": "fails*",
+          "x": 776,
+          "y": 484,
+          "w": 33.488,
+          "h": 16
+        },
+        {
+          "text": "UNKNOWN CONTINUATION",
+          "x": 182,
+          "y": 554,
+          "w": 150.117,
+          "h": 14
+        },
+        {
+          "text": "What Auth service returns to Web app: not specified by the supplied source.",
+          "x": 182,
+          "y": 575,
+          "w": 548.085,
+          "h": 18
+        },
+        {
+          "text": "What Web app presents to User: not specified by the supplied source.",
+          "x": 182,
+          "y": 599,
+          "w": 502.845,
+          "h": 18
+        },
+        {
+          "text": "No failure arrows are fabricated. This is a review scaffold, not a verified failure trace.",
+          "x": 32,
+          "y": 673,
+          "w": 614.82,
+          "h": 18
+        },
+        {
+          "text": "Before publishing a real failure view, verify its returned value and user-visible behavior.",
+          "x": 32,
+          "y": 704,
+          "w": 585.382,
+          "h": 17
+        },
+        {
+          "text": "Lane centers remain 230, 450, 670, 880 in both engineering companions.",
+          "x": 32,
+          "y": 731,
+          "w": 493.108,
+          "h": 17
+        },
+        {
+          "text": "Vertical spacing shows narrative order, not elapsed time; no retry or token-handling claim.",
+          "x": 32,
+          "y": 759,
+          "w": 604.758,
+          "h": 17
+        }
+      ]
+    },
+    {
+      "file": "sequence-collapse-proposal.svg",
+      "width": 1000,
+      "height": 736,
+      "textBoxes": [
+        {
+          "text": "DESIGN PROPOSAL \u00b7 not a baseline render",
+          "x": 32,
+          "y": 18,
+          "w": 224.851,
+          "h": 14
+        },
+        {
+          "text": "Collapse a phase without pretending it disappeared",
+          "x": 32,
+          "y": 36,
+          "w": 744.72,
+          "h": 33
+        },
+        {
+          "text": "A compact continuation must make its missing detail visible.",
+          "x": 32,
+          "y": 79,
+          "w": 488.767,
+          "h": 20
+        },
+        {
+          "text": "Exploration proposal: collapse is a view operation; it does not delete or complete events.",
+          "x": 32,
+          "y": 110,
+          "w": 591.654,
+          "h": 17
+        },
+        {
+          "text": "User",
+          "x": 210.679,
+          "y": 169,
+          "w": 38.641,
+          "h": 20
+        },
+        {
+          "text": "Web app",
+          "x": 413.373,
+          "y": 169,
+          "w": 73.253,
+          "h": 20
+        },
+        {
+          "text": "Auth service",
+          "x": 618.005,
+          "y": 169,
+          "w": 103.989,
+          "h": 20
+        },
+        {
+          "text": "User store",
+          "x": 837.296,
+          "y": 169,
+          "w": 85.408,
+          "h": 20
+        },
+        {
+          "text": "1  submit email +",
+          "x": 272.544,
+          "y": 207,
+          "w": 134.912,
+          "h": 20
+        },
+        {
+          "text": "password",
+          "x": 300.033,
+          "y": 229,
+          "w": 79.934,
+          "h": 20
+        },
+        {
+          "text": "2  verify credentials",
+          "x": 479.411,
+          "y": 275,
+          "w": 161.177,
+          "h": 20
+        },
+        {
+          "text": "VERIFY \u00b7 3 EVENTS HIDDEN (m3\u2013m5)",
+          "x": 182,
+          "y": 351,
+          "w": 250.74,
+          "h": 17
+        },
+        {
+          "text": "Auth service and User store participate.",
+          "x": 182,
+          "y": 379,
+          "w": 304.0,
+          "h": 19
+        },
+        {
+          "text": "Hidden facts: load user; user record; check password hash.",
+          "x": 182,
+          "y": 406,
+          "w": 456.704,
+          "h": 19
+        },
+        {
+          "text": "Summary only \u2014 this box is not another message or a synchronization barrier.",
+          "x": 182,
+          "y": 435,
+          "w": 485.823,
+          "h": 16
+        },
+        {
+          "text": "6  session token",
+          "x": 493.827,
+          "y": 491,
+          "w": 132.345,
+          "h": 20
+        },
+        {
+          "text": "7  signed in",
+          "x": 293.726,
+          "y": 551,
+          "w": 92.548,
+          "h": 20
+        },
+        {
+          "text": "Original event labels 1, 2, 6, 7 stay visible; three hidden events are counted explicitly.",
+          "x": 32,
+          "y": 636,
+          "w": 574.126,
+          "h": 17
+        },
+        {
+          "text": "Success-only scope and the hidden-event marker must remain in SVG and PNG exports.",
+          "x": 32,
+          "y": 665,
+          "w": 592.13,
+          "h": 17
+        },
+        {
+          "text": "Same horizontal coordinates as the expanded view. Spacing does not measure time.",
+          "x": 32,
+          "y": 694,
+          "w": 564.424,
+          "h": 17
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+diagram "Distant message label constraint counterexample" version=1
+theme drafting padding-y=4
+node a "A"
+node b "B"
+node c "C"
+size a width=40 height=32
+size b width=40 height=32
+size c width=40 height=32
+edge e a -> c "MMMMMMMMMMMMMMMMMMM"
+order root a b c
+layout root sequence

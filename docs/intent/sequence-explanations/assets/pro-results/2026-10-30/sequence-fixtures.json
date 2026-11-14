@@ -1,0 +1,974 @@
+{
+  "title": "Sequence design evidence and implementation fixture corpus",
+  "baselineCommit": "2f210ce4aa92593d7cafa9c514bb4ab3808dd2a4",
+  "schemaPurpose": "Reviewable analysis/test specifications, not implemented tests or product schema.",
+  "units": "Native logical units unless explicitly labeled mockup or display pixels.",
+  "statusLegend": {
+    "executed_baseline": "Actually run against the supplied commit.",
+    "proposed": "Future contract; not implemented or passed.",
+    "analytical": "Derived from source formulas or fixed synthetic metrics.",
+    "manual_visual_study": "Hand-authored explanatory SVG, not an implemented renderer output."
+  },
+  "rounding": "Round outward at the final geometry boundary; numeric fixture rows use ceiling when positive.",
+  "fixtures": [
+    {
+      "id": "F01",
+      "title": "Supplied sign-in baseline",
+      "status": "executed_baseline",
+      "source": {
+        "repositoryPath": "examples/login-sequence.draft"
+      },
+      "observed": {
+        "laneOrder": [
+          "user",
+          "app",
+          "auth",
+          "db"
+        ],
+        "laneCenters": [
+          68,
+          249,
+          393,
+          537
+        ],
+        "headerSize": [
+          104,
+          56
+        ],
+        "eventRows": {
+          "m1": 92,
+          "m2": 128,
+          "m3": 164,
+          "m4": 200,
+          "m5": 236,
+          "m6": 294,
+          "m7": 330
+        },
+        "selfLoopPoints": [
+          [
+            393,
+            236
+          ],
+          [
+            429,
+            236
+          ],
+          [
+            429,
+            258
+          ],
+          [
+            393,
+            258
+          ]
+        ],
+        "panel": {
+          "x": -36,
+          "y": -20,
+          "width": 661,
+          "height": 410
+        },
+        "m5Label": {
+          "x": 433,
+          "y": 235.5,
+          "width": 147,
+          "height": 23
+        },
+        "logicalSvgSize": [
+          741,
+          554
+        ],
+        "suppliedPngSize": [
+          1482,
+          1108
+        ]
+      },
+      "interpretation": "The local-work label crosses the store lifeline at x=537 but stays within panel right=625. This is an ownership/clearance defect, not clipping.",
+      "acceptance": [
+        "Retain all four participants and all seven facts.",
+        "Compare visual changes at the same displayed width; do not confuse raster pixels with logical units."
+      ]
+    },
+    {
+      "id": "F02",
+      "title": "Adjacent message label dominates header clearance",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M1",
+      "input": {
+        "headerWidths": [
+          40,
+          40
+        ],
+        "firstCenter": 36,
+        "headerGap": 40,
+        "labelBoxWidth": 200,
+        "endpointClearance": 16
+      },
+      "expected": {
+        "minimumCenterDistance": 216,
+        "laneCenters": [
+          36,
+          252
+        ],
+        "labelBoundsX": [
+          44,
+          244
+        ],
+        "endpointToLabelClearance": [
+          8,
+          8
+        ]
+      },
+      "acceptance": [
+        "Use the padded label box, not raw glyph width, as L.",
+        "Honor a valid explicit size; do not rely on 104-unit defaults masking the defect."
+      ]
+    },
+    {
+      "id": "F03",
+      "title": "Distant long-label interval defect",
+      "status": "executed_baseline_with_proposed_corrections",
+      "source": {
+        "download": "distant-label-current-language.draft"
+      },
+      "observed": {
+        "centers": {
+          "a": 36.0,
+          "b": 116.0,
+          "c": 212.0
+        },
+        "gap_ab": 80.0,
+        "gap_bc": 96.0,
+        "label_box": {
+          "x": "36",
+          "y": "39",
+          "width": "176",
+          "height": "40",
+          "rx": "4",
+          "fill": "#F7F7F4"
+        },
+        "required_with_arrow_run": 192.0,
+        "actual_span": 176.0,
+        "shortfall": 16.0,
+        "text_lines": [
+          "MMMMMMMMMMMMMM",
+          "MMMMM"
+        ]
+      },
+      "expectedM1": {
+        "laneCenters": [
+          36,
+          116,
+          228
+        ],
+        "span": 192,
+        "lastGap": 112,
+        "labelBoundsX": [
+          44,
+          220
+        ]
+      },
+      "expectedM2": {
+        "baseHeaderCenters": [
+          36,
+          116,
+          196
+        ],
+        "chosenSlotIndices": [
+          0,
+          1
+        ],
+        "laneCenters": [
+          36,
+          228,
+          308
+        ],
+        "labelCenterX": 132,
+        "labelBoundsX": [
+          44,
+          220
+        ]
+      },
+      "acceptance": [
+        "M1 enforces the actual total interval.",
+        "M2 intentionally uses a stronger clear-slot policy; its geometry is a different milestone contract, not an alternative expected result for M1."
+      ]
+    },
+    {
+      "id": "F04",
+      "title": "Interior self-message clearance",
+      "status": "observed_baseline_with_proposed_constraint",
+      "milestone": "M1",
+      "input": {
+        "ownerCenter": 393,
+        "nextCenterBefore": 537,
+        "loopWidth": 36,
+        "labelInsetAfterLoop": 4,
+        "labelBoxWidth": 147,
+        "nextLifelineClearance": 8
+      },
+      "observed": {
+        "labelRight": 580,
+        "nextLaneAt": 537
+      },
+      "expected": {
+        "minimumNextCenter": 588,
+        "minimumCenterDistance": 195
+      },
+      "acceptance": [
+        "Reserve the complete self-loop/label envelope before the next lifeline.",
+        "An arbitrary self-call remains a loop; conversion to local action requires author intent."
+      ]
+    },
+    {
+      "id": "F05",
+      "title": "Rightmost self-message expands panel",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M1",
+      "input": {
+        "ownerCenter": 500,
+        "loopWidth": 36,
+        "labelInsetAfterLoop": 4,
+        "labelBoxWidth": 147,
+        "innerPanelPadding": 20
+      },
+      "expected": {
+        "labelLeft": 540,
+        "labelRight": 687,
+        "minimumPanelRight": 707
+      },
+      "acceptance": [
+        "Include label extent in the inner panel.",
+        "Keep full outer frame bounds as well; the baseline already unions labels into drawingBounds."
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "Tall self-label before a labeled message",
+      "status": "analytical_baseline_and_proposed_unit_fixture",
+      "input": {
+        "selfRow": 100,
+        "selfLabelHeight": 57,
+        "selfLoopDrop": 22,
+        "nextLabelHeight": 23
+      },
+      "baselineAnalytical": {
+        "nextRow": 158,
+        "selfLabelTop": 82.5,
+        "selfLabelBottom": 139.5,
+        "nextLabelTop": 134,
+        "overlap": 5.5
+      },
+      "expectedM1": {
+        "retainedLabelShaftGap": 1,
+        "interEventInkClearance": 8,
+        "minimumNextRowBeforeRounding": 171.5,
+        "roundedNextRow": 172
+      },
+      "expectedM2": {
+        "labelShaftGap": 4,
+        "interEventInkClearance": 5,
+        "minimumRowPitch": 28,
+        "selfUpperExtent": 17.5,
+        "selfLowerExtent": 39.5,
+        "nextUpperExtent": 27,
+        "minimumNextRowBeforeRounding": 171.5,
+        "roundedNextRow": 172
+      },
+      "acceptance": [
+        "This fixture was derived from baseline formulas, not claimed as an executed browser screenshot.",
+        "The measured event envelope, not a fixed 36+22 increment, controls clearance."
+      ]
+    },
+    {
+      "id": "F07",
+      "title": "Reject noncontiguous phase membership",
+      "status": "executed_baseline_with_proposed_validation",
+      "source": {
+        "currentLanguage": "node a \"A\"\nnode b \"B\"\nnode c \"C\"\nedge e1 a -> b \"first\"\nedge e2 b -> c \"second\"\nedge e3 c -> a \"third\"\nphase p \"Outer narrative\" e1 e3\nphase q \"Interleaved narrative\" e2\nlayout root sequence\n"
+      },
+      "observed": {
+        "source": "node a \"A\"\nnode b \"B\"\nnode c \"C\"\nedge e1 a -> b \"first\"\nedge e2 b -> c \"second\"\nedge e3 c -> a \"third\"\nphase p \"Outer narrative\" e1 e3\nphase q \"Interleaved narrative\" e2\nlayout root sequence\n",
+        "accepted": true,
+        "phases": [
+          {
+            "id": "p",
+            "label": "Outer narrative",
+            "y": 65,
+            "h": 107
+          },
+          {
+            "id": "q",
+            "label": "Interleaved narrative",
+            "y": 101,
+            "h": 35
+          }
+        ],
+        "rows": [
+          {
+            "id": "e1",
+            "row": 92
+          },
+          {
+            "id": "e2",
+            "row": 128
+          },
+          {
+            "id": "e3",
+            "row": 164
+          }
+        ],
+        "diagnostics": []
+      },
+      "expectedM1": {
+        "accepted": false,
+        "errorAt": "phase p",
+        "errorIncludes": [
+          "e2",
+          "Include it or split the phase."
+        ]
+      },
+      "acceptance": [
+        "A phase is a contiguous editorial interval.",
+        "Do not silently turn overlapping bands into nested/parallel semantics."
+      ]
+    },
+    {
+      "id": "F08",
+      "title": "Delete phased event or participant atomically",
+      "status": "executed_baseline_failure_and_proposed_transaction_cases",
+      "observed": {
+        "deleted": "e1",
+        "translatedSource": "node a \"A\"\nnode b \"B\"\nnode c \"C\"\nedge e2 b -> c \"second\"\nedge e3 c -> a \"third\"\nphase p \"Outer narrative\" e1 e3\nphase q \"Interleaved narrative\" e2\nlayout root sequence\n",
+        "check": {
+          "accepted": false,
+          "error": "DslError: Line 6: Unknown message e1 in phase p; a phase lists edge IDs."
+        }
+      },
+      "observedCaveat": "The executed deletion began with baseline-accepted interleaved phases from F07. M1 transaction regression tests should also use an initially contiguous source.",
+      "proposedCases": [
+        {
+          "initialEvents": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "initialPhaseMembers": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "operation": "delete m2",
+          "expectedEvents": [
+            "m1",
+            "m3"
+          ],
+          "expectedPhaseMembers": [
+            "m1",
+            "m3"
+          ],
+          "expectedCompile": true
+        },
+        {
+          "initialEvents": [
+            "m1"
+          ],
+          "initialPhaseMembers": [
+            "m1"
+          ],
+          "operation": "delete m1",
+          "expectedEvents": [],
+          "expectedPhaseDeclarationRemoved": true,
+          "commentPolicy": "Preserve an inline phase comment as a standalone comment in place."
+        },
+        {
+          "operation": "delete participant",
+          "expected": "Collect removed incident message IDs before deletion; remove them from phases/states; delete empty phases."
+        },
+        {
+          "milestone": "M3",
+          "operation": "delete a request with a surviving paired reply",
+          "expected": "Remove dangling reply-to; preserve the reply as an explicitly unpaired reply with a review diagnostic; one transaction and one undo."
+        }
+      ],
+      "acceptance": [
+        "Editor translation and src/cli/edit.ts share the narrow cleanup helper.",
+        "Undo restores the exact before-source; no invalid partial source is saved."
+      ]
+    },
+    {
+      "id": "F09",
+      "title": "Hierarchical participant order",
+      "status": "executed_baseline_with_proposed_correction",
+      "source": {
+        "currentLanguage": "group g \"Related\"\nnode a \"A\" in=g\nnode b \"B\"\nnode c \"C\" in=g\norder root g b\nlayout root sequence\nedge e1 a -> b \"message\"\n"
+      },
+      "observed": {
+        "source": "group g \"Related\"\nnode a \"A\" in=g\nnode b \"B\"\nnode c \"C\" in=g\norder root g b\nlayout root sequence\nedge e1 a -> b \"message\"\n",
+        "requestedTopLevel": [
+          "g",
+          "b"
+        ],
+        "expectedLaneOrder": [
+          "a",
+          "c",
+          "b"
+        ],
+        "actual": [
+          "b",
+          "a",
+          "c"
+        ],
+        "diagnostics": []
+      },
+      "expectedM1": {
+        "laneOrder": [
+          "a",
+          "c",
+          "b"
+        ]
+      },
+      "companionCase": {
+        "additionalStatement": "order g c a",
+        "expectedLaneOrder": [
+          "c",
+          "a",
+          "b"
+        ]
+      },
+      "invalidControl": {
+        "accepted": false,
+        "error": "DslError: Line 5: a is not a direct child of root."
+      },
+      "acceptance": [
+        "Root order references direct children, including group IDs.",
+        "Expand members using group order, otherwise declaration order; preserve hierarchy validation."
+      ]
+    },
+    {
+      "id": "F10",
+      "title": "Multiline headers share the lifeline start",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M2",
+      "input": {
+        "lineCounts": [
+          1,
+          3
+        ],
+        "lineHeight": 16,
+        "verticalPaddingEachSide": 8
+      },
+      "expected": {
+        "headerHeights": [
+          32,
+          64
+        ],
+        "headerTopY": [
+          32,
+          0
+        ],
+        "sharedBottomY": 64
+      },
+      "acceptance": [
+        "Bottom-align measured headers.",
+        "Do not globally change generic graph node padding.",
+        "Honor explicit sizes and diagnose actual overflow instead of truncating titles."
+      ]
+    },
+    {
+      "id": "F11",
+      "title": "Bounded long phase title can determine phase height",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M2",
+      "input": {
+        "phaseStartY": 200,
+        "textWidthCap": 96,
+        "sideInset": 12,
+        "measuredTitleLineCount": 3,
+        "titleLineHeight": 17,
+        "eventInkHeight": 27,
+        "contentPaddingEachSide": 8,
+        "betweenPhaseGap": 16
+      },
+      "expected": {
+        "totalGutterWidth": 120,
+        "titleHeight": 51,
+        "phaseHeight": 67,
+        "phaseEndY": 267,
+        "nextPhaseStartY": 283
+      },
+      "acceptance": [
+        "Wrap at stored metrics with hard-token fallback.",
+        "No ellipsis.",
+        "Phase height is max(event ink + 16, title height + 16), so an oversized title never overlaps the next phase."
+      ]
+    },
+    {
+      "id": "F12",
+      "title": "Prefer an off-center slot that already fits",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M2",
+      "input": {
+        "baseCenters": [
+          0,
+          250,
+          330,
+          460
+        ],
+        "messageEndpoints": [
+          0,
+          3
+        ],
+        "labelBoxWidth": 204,
+        "endpointClearance": 16,
+        "headerWidths": [
+          380,
+          40,
+          40,
+          140
+        ],
+        "headerEdgeGap": 40,
+        "coordinateNote": "Centers use a translated origin; these exact differences follow from half-width sums plus a40-unit header edge gap."
+      },
+      "expected": {
+        "messageSpanMidpoint": 230,
+        "slotCenters": [
+          125,
+          290,
+          395
+        ],
+        "slotWidths": [
+          250,
+          80,
+          130
+        ],
+        "requiredSlotWidth": 220,
+        "chosenSlotIndices": [
+          0,
+          1
+        ],
+        "labelCenterX": 125,
+        "labelBoundsX": [
+          23,
+          227
+        ],
+        "finalCenters": [
+          0,
+          250,
+          330,
+          460
+        ]
+      },
+      "acceptance": [
+        "Fitting slots take priority over a closer non-fitting slot.",
+        "Choose on header-only geometry once; freeze the slot before solving.",
+        "The continuous shaft still reaches the original endpoints."
+      ]
+    },
+    {
+      "id": "F13",
+      "title": "Explicit send does not imply completion",
+      "status": "proposed_future_semantics_fixture",
+      "milestone": "M3",
+      "source": {
+        "futureLanguage": "node a \"A\"\nnode b \"B\"\nnode c \"C\"\nedge e1 a -> b \"enqueue work\" message=send\nedge e2 a -> c \"continue local workflow\" message=interaction\nlayout root sequence\n"
+      },
+      "expected": {
+        "eventOrder": [
+          "e1",
+          "e2"
+        ],
+        "messageKinds": {
+          "e1": "send",
+          "e2": "interaction"
+        },
+        "sendPaint": "Solid open arrow plus visible async qualifier.",
+        "replyGenerated": false
+      },
+      "acceptance": [
+        "Read rows as authored narrative order.",
+        "Do not assert B finished, persisted or even began processing before e2.",
+        "No concurrency operand is inferred from send kind."
+      ]
+    },
+    {
+      "id": "F14",
+      "title": "Explicit response pairing without stack inference",
+      "status": "proposed_future_semantics_fixture",
+      "milestone": "M3",
+      "source": {
+        "futureLanguage": "node a \"A\"\nnode b \"B\"\nedge q1 a -> b \"first exchange\" message=interaction\nedge q2 a -> b \"second exchange\" message=send\nedge r1 b -> a \"first result\" message=reply reply-to=q1\nedge r2 b -> a \"second result\" message=reply reply-to=q2\nedge r3 b -> a \"additional first result\" message=reply reply-to=q1\nlayout root sequence\n"
+      },
+      "expected": {
+        "accepted": true,
+        "pairs": {
+          "r1": "q1",
+          "r2": "q2",
+          "r3": "q1"
+        },
+        "terminalStateInferred": false
+      },
+      "invalidCases": [
+        {
+          "case": "Forward reference",
+          "expected": "Error naming reply and later request."
+        },
+        {
+          "case": "Target is action, reply, outcome, phase or unclassified legacy edge",
+          "expected": "Error; target must be a reviewed earlier interaction/call/send."
+        },
+        {
+          "case": "Endpoints are not reversed",
+          "expected": "Error with both message IDs."
+        },
+        {
+          "case": "Missing target ID",
+          "expected": "Error, no nearest-edge inference."
+        }
+      ],
+      "unpairedCase": {
+        "source": "message=reply without reply-to",
+        "expected": "Legal with informational review diagnostic; no automatic pair focus."
+      }
+    },
+    {
+      "id": "F15",
+      "title": "Preserve meaning through theme and source undo",
+      "status": "proposed_transaction_fixture_with_source_verified_risk",
+      "milestone": "M1_then_M3",
+      "input": {
+        "appearanceFields": [
+          "heading",
+          "notes",
+          "legend",
+          "states",
+          "config",
+          "comparison metadata"
+        ],
+        "futureFields": [
+          "sequence.scope",
+          "sequence.messages",
+          "sequence.actions",
+          "sequence.phases",
+          "sequence.eventOrder"
+        ]
+      },
+      "observedSourceRisk": {
+        "browserDocument": "chooseTheme replaces appearance, so other appearance fields are dropped.",
+        "fileMode": "Translation removes subtitle and explicit heading width; unchanged notes/legend/states may return when source is projected."
+      },
+      "expected": [
+        "Theme choice retains all unrelated fields.",
+        "File save/reload retains source-owned meaning.",
+        "One source undo restores exact before-source; redo restores the after-source.",
+        "Use file-session source/canUndo for file proof; browser-document undoDepth is not a file-history proof."
+      ],
+      "executionStatus": "Not exercised through a live editor in this mission."
+    },
+    {
+      "id": "F16",
+      "title": "Honest phase collapse",
+      "status": "proposed_explore_fixture",
+      "milestone": "M5",
+      "input": {
+        "collapsedPhase": "verify",
+        "hiddenEventIds": [
+          "m3",
+          "m4",
+          "m5"
+        ],
+        "originalEventOrder": [
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6",
+          "m7"
+        ]
+      },
+      "expected": {
+        "visibleEventIds": [
+          "m1",
+          "m2",
+          "m6",
+          "m7"
+        ],
+        "visibleNumbers": [
+          1,
+          2,
+          6,
+          7
+        ],
+        "hiddenCount": 3,
+        "participantOrder": [
+          "user",
+          "app",
+          "auth",
+          "db"
+        ],
+        "sharedMockupCenters": [
+          230,
+          450,
+          670,
+          880
+        ],
+        "marker": "Verify · 3 events hidden (m3–m5)",
+        "syntheticMessageCreated": false
+      },
+      "acceptance": [
+        "Visible marker names omitted facts and involved participants.",
+        "Scope and order-not-time caption remain in static exports.",
+        "Summary is not a message, barrier or completion guarantee.",
+        "Collapse preserves horizontal geometry and uses derived y geometry only."
+      ]
+    },
+    {
+      "id": "F17",
+      "title": "Current-language companion actually compiles",
+      "status": "executed_baseline",
+      "source": {
+        "download": "sign-in-current-language.draft"
+      },
+      "observed": {
+        "svgSize": [
+          834,
+          581
+        ],
+        "pngSize": [
+          1668,
+          1162
+        ],
+        "messageFontLogical": 12.5,
+        "effectiveMessagePx": {
+          "at900": 13.49,
+          "at1000": 14.99,
+          "at1100": 16.49
+        },
+        "supported": true
+      },
+      "acceptance": [
+        "Seven facts retained; self-loop retained.",
+        "Dashed kind=async is explicitly described as legacy styling.",
+        "Visible scope/timing/notation note; store width=144 and self-label line break are declared authoring workarounds."
+      ]
+    },
+    {
+      "id": "F18",
+      "title": "Future sign-in semantic record",
+      "status": "proposed_future_semantics_fixture",
+      "milestone": "M3",
+      "source": {
+        "download": "sign-in-proposed-language.draft",
+        "supportedAtBaseline": false
+      },
+      "expectedSequenceSpec": {
+        "eventOrder": [
+          "m1",
+          "m2",
+          "m3",
+          "m4",
+          "m5",
+          "m6",
+          "m7"
+        ],
+        "messages": {
+          "m1": {
+            "kind": "interaction"
+          },
+          "m2": {
+            "kind": "interaction"
+          },
+          "m3": {
+            "kind": "interaction"
+          },
+          "m4": {
+            "kind": "reply",
+            "replyTo": "m3"
+          },
+          "m6": {
+            "kind": "reply",
+            "replyTo": "m2"
+          },
+          "m7": {
+            "kind": "outcome"
+          }
+        },
+        "actions": [
+          {
+            "id": "m5",
+            "participantId": "auth",
+            "label": "check password hash"
+          }
+        ],
+        "phases": [
+          {
+            "id": "submit",
+            "label": "Submit",
+            "eventIds": [
+              "m1",
+              "m2"
+            ]
+          },
+          {
+            "id": "verify",
+            "label": "Verify",
+            "eventIds": [
+              "m3",
+              "m4",
+              "m5"
+            ]
+          },
+          {
+            "id": "result",
+            "label": "Return",
+            "eventIds": [
+              "m6",
+              "m7"
+            ]
+          }
+        ],
+        "scope": "Valid credentials; error paths omitted."
+      },
+      "acceptance": [
+        "Node/edge payloads remain on existing graph records.",
+        "eventOrder is the only mixed-event ordering authority.",
+        "An unclassified legacy edge is absent from messages but present in eventOrder.",
+        "Typed paint applies only after explicit classification; no automatic legacy conversion."
+      ]
+    },
+    {
+      "id": "F19",
+      "title": "Local action reserves both neighboring lanes",
+      "status": "proposed_fixed_metric_unit_fixture",
+      "milestone": "M3",
+      "input": {
+        "actionCenter": 300,
+        "actionWidth": 240,
+        "neighborClearance": 8,
+        "nominalPreviousCenter": 200,
+        "nominalNextCenter": 400,
+        "geometryMeaning": "Owner center300 is fixed only for evaluating envelope inequalities, not a claimed result of the forward solver."
+      },
+      "expected": {
+        "actionBoundsX": [
+          180,
+          420
+        ],
+        "maximumPreviousCenter": 172,
+        "minimumNextCenter": 428,
+        "forwardSolverCase": {
+          "anchoredFirstCenter": 200,
+          "baseAdjacentMinimum": 100,
+          "finalCenters": [
+            200,
+            328,
+            456
+          ],
+          "actionBoundsX": [
+            208,
+            448
+          ]
+        }
+      },
+      "acceptance": [
+        "Convert these inequalities into forward constraints without reversing authored lane order.",
+        "A leftmost/rightmost action expands the panel to contain its full box plus20 padding.",
+        "Interrupt only the owner lifeline, with top/bottom attachment."
+      ]
+    },
+    {
+      "id": "F20",
+      "title": "Unsupported semantic or scope comparison fails honestly",
+      "status": "proposed_future_comparison_guard",
+      "milestone": "M3",
+      "input": {
+        "before": "A sequence with only an explicitly typed message-kind change",
+        "after": "Same edge endpoints/label but new explicit message semantics",
+        "additionalCase": "Before/after inputs differing only in new authored scope, including scope removal."
+      },
+      "expected": {
+        "beforeAfterDiff": "Explicit unsupported-comparison diagnostic before rendering a misleading unchanged result.",
+        "legacyGraphDiff": "Retains existing behavior.",
+        "ordinaryStaticExport": "Supported and includes all typed messages/actions/scope."
+      },
+      "acceptance": [
+        "Guard either input containing typed messages, local actions or new authored scope initially; never show the newer scope silently on both comparison panels.",
+        "Do not conflate StaticScene rendering with before/after semantic comparison."
+      ]
+    },
+    {
+      "id": "F21",
+      "title": "Failure companion retains positions without invented response",
+      "status": "manual_visual_study",
+      "source": {
+        "download": "sign-in-failure-companion-proposal.svg"
+      },
+      "expected": {
+        "participantCenters": [
+          230,
+          450,
+          670,
+          880
+        ],
+        "headerTopY": 160,
+        "scenario": "Hypothetical hash check failure after an assumed common prefix.",
+        "unknownContinuation": [
+          "Auth response",
+          "User-facing result"
+        ],
+        "inventedFailureArrows": 0
+      },
+      "acceptance": [
+        "The assumed prefix and failing check are visibly labeled hypothetical.",
+        "No status code, retry, error message, cookie or token-handling behavior is fabricated.",
+        "Replace unknown continuation only with supplied implementation evidence."
+      ]
+    },
+    {
+      "id": "F22",
+      "title": "Full-frame export and paint parity",
+      "status": "proposed_integration_fixture",
+      "milestone": "M2_through_M4",
+      "input": {
+        "surfaces": [
+          "CLI SVG",
+          "CLI PNG browser path",
+          "SolidJS editor",
+          "StaticScene"
+        ],
+        "content": [
+          "title",
+          "subtitle",
+          "scope",
+          "phase titles",
+          "all participant text",
+          "message labels",
+          "actions",
+          "arrowheads",
+          "notation key",
+          "timing caption"
+        ]
+      },
+      "expected": [
+        "All persistent geometry/paint values agree; editor hit targets are allowed UI-only differences.",
+        "All ink is inside export bounds.",
+        "No DOM measurement determines layout.",
+        "Focused exports keep the same geometry and visible scope/key.",
+        "Use native browser rendering to prove browser/PNG parity; Sharp rasterization alone is insufficient."
+      ],
+      "executionStatus": "Future integration acceptance, not passed in this mission.",
+      "emptySequenceCase": {
+        "input": "layout root sequence, no nodes, no groups, no events",
+        "proposed": "Retain authored layout intent; return without derived sequence geometry and use the existing empty-document bounds.",
+        "existingRectUnionEmptyFallback": {
+          "x": 70,
+          "y": 160,
+          "w": 240,
+          "h": 160
+        },
+        "emptyDeclaredGroup": "Reject with actionable diagnostic; do not fabricate a participant."
+      }
+    }
+  ]
+}

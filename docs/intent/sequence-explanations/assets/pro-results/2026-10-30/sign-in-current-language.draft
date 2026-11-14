@@ -1,0 +1,30 @@
+# AUTHORED ALTERNATIVE using syntax supported by supplied commit 2f210ce4.
+# This is not the supplied baseline and not the future local-action mockup.
+# kind=async is the baseline's legacy spelling for a dashed stroke, not evidence of async execution.
+diagram "Successful password sign-in" version=1
+subtitle "The app delegates credential verification."
+note "Valid credentials; error paths omitted. Spacing shows order, not elapsed time. Dashed arrows show results." width=640
+theme drafting padding-y=8
+
+node user "User" color=slate
+node app "Web app" color=slate
+node auth "Auth service" color=slate
+node db "User store" color=slate
+
+# Baseline-only workaround: the self-label needs 10px clear of the next lifeline.
+# This enlarges one header because baseline has no separate self-label gap constraint.
+size db width=144 height=32
+
+edge m1 user -> app "submit email + password"
+edge m2 app -> auth "verify credentials"
+edge m3 auth -> db "load user"
+edge m4 db -> auth "user record" kind=async
+edge m5 auth -> auth "check password\nhash"
+edge m6 auth -> app "session token" kind=async
+edge m7 app -> user "signed in" kind=async
+
+phase submit "Submit" m1 m2
+phase verify "Verify" m3 m4 m5
+phase result "Return" m6 m7
+order root user app auth db
+layout root sequence
