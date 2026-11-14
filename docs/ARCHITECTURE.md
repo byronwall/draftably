@@ -42,12 +42,48 @@ children. The packages differ only in that idiom.
   in its source or its types. Each wrapper loops over one exported list of events. If a feature
   needs wrapper lines, the neutral layer is missing a piece.
 - **The first hour has no stall.** Each framework has one complete, typed recipe that CI compiles
-  from the packed packages. The performance budgets in the plan hold for every change.
+  from the packed packages. The [host contract budgets](CHECKS.md#host-contract-budgets) hold for
+  every change.
 
 A framework-native entry, such as a Solid scene in the host's own tree, is an exception. Add one only
 when a host shows a need that slots, events and JSON geometry cannot meet, and build it on the
-neutral layer. The review that set this goal is in
-[intent/host-contract/plan.md](intent/host-contract/plan.md).
+neutral layer.
+
+The contract keeps these invariants:
+
+1. One world coordinate space: layout units equal viewBox units equal geometry units, in the
+   viewer, the editor and `renderSvg`.
+2. One camera shape, zoom range (0.02–8) and reason union for both handles. The editor converts
+   to its internal `{ x, y, k }` at its edge.
+3. A slot target keeps its identity while its item exists. The anchor layer is a sibling of the
+   SVG and is never detached, so an update that replaces the SVG keeps host content and focus.
+4. Layout never measures host content. Without a host, every diagram draws correctly.
+5. No public type names `Diagram`, `DiagramSession`, `VisibleGraph`, Solid or font internals.
+6. Draftably never writes to the host's DOM nodes.
+7. One commit installs geometry, camera and anchors, then notifies listeners, then resolves
+   `update` and `ready`. A superseded update installs nothing. Handle calls are synchronous, a
+   listener that throws does not stop the others, and `destroy` is idempotent.
+
+The editor renders in a shadow root. A document-level listener there sees events retargeted to
+the host, and `document` lookups cannot see the editor. So code in the editor bundle reads
+`composedPath()[0]` and its own root node, never `document.elementFromPoint`,
+`document.activeElement` or `document.querySelector`. `tests/editor-root-lookups.test.ts` fails on
+those lookups. App-shell files may use `document` on purpose.
+
+Considered and not chosen, with the reason:
+
+- **Callbacks in the renderer.** The viewer's sanitizer strips `foreignObject`, and every update
+  would destroy and re-mount host content.
+- **A portal helper per framework.** Host CSS does not reach into the viewer's shadow root, and
+  Svelte has no portal.
+- **The `slot` attribute.** Svelte 5 rejects a dynamic `slot` through a wrapper component.
+  `data-draft-slot` with manual assignment works in every framework.
+- **Geometry per panel for `compare` and `states`.** Panels can hold different items and routes,
+  so offsets cannot describe them. `geometry()` returns `null` there, and slots stay off.
+- **A display list that each framework draws.** It is a third renderer that could drift from the
+  other two. A host that wants to draw uses the graph API.
+- **`options.theme`.** A dark host sets the `--draft-*` tokens. The diagram's theme stays the
+  author's choice in the source.
 
 ## model/ — pure data and operations
 
@@ -212,6 +248,30 @@ source with 422. `state/session/file-session.ts` is the browser side: it detects
 startup, switches browser storage off, and projects each valid revision into the document. While a
 file is open, `commit` in `state/session/document.ts` hands every edit to the session, which translates it, shows
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
+
+A file-backed session follows a few rules:
+
+- **The file holds intent, not a picture.** The editor writes statements (declarations, `near`,
+  `nudge`, `stay`, `pin`, `size`), never the positions that layout computed. A drag writes a
+  relative preference by default, so the layout can still adapt when an agent adds content. The
+  same source gives the same geometry in Node and in the browser; `pnpm prove:file` compares them.
+- **The disk is the authority.** Browser storage is off while a file is open, and a camera move
+  never writes the file. Invalid source keeps the last valid drawing, and the viewer writes
+  nothing until the source is valid again.
+- **An edit the file cannot hold is refused.** `translate.ts` throws `UnsupportedEdit` (for
+  example for bends, label positions and images), and the session puts the drawing back with a
+  toast. The viewer never shows an edit as saved when the file did not get it.
+- **A layout result is a recipe or an arrangement.** A result that the source can compute again
+  (Rebuild, an Apply in Compare, connection settings) is saved as a recipe: `layout scope engine=…`
+  or the `routing` line. The compiler runs the engine cold for that scope each time, so an added
+  object lays the scope out again. A result that depends on the earlier drawing (Tidy, a timeline
+  step, a brush stroke) is saved as soft `stay` lines for the objects that moved. Those tools
+  commit with kind `'arrangement'`, so the session writes positions and does not infer `near`
+  lines from the diff. A file never stores an engine step to replay, because the first edit would
+  change what that step means.
+- **An engine change moves every recipe diagram.** Files depend on engine output, so
+  `pnpm test:engines` holds that output fixed. `pnpm prove:layout` checks that the saved file and
+  the browser agree after each tool.
 
 `server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
 overwriting, never outside the folder), draws SVG thumbnails cached until a file changes, and routes
