@@ -1,4 +1,11 @@
-import type { EdgeLayout, Point, Rect, RoutingSettings, ShapeKind, Side } from '../model/types';
+import type {
+  EdgeLayout,
+  Point,
+  Rect,
+  RoutingSettings,
+  ShapeKind,
+  Side,
+} from '../../model/types.ts';
 
 export interface RouteNodeInput extends Rect {
   id: string;
@@ -23,6 +30,8 @@ export interface RouteEdgeInput {
   from: string;
   to: string;
   directed?: boolean;
+  /** The edge's text. A labelled edge keeps the full port gap in a fan. */
+  label?: string;
   cfg: EdgeLayout;
 }
 
@@ -51,7 +60,8 @@ export interface PriorRoute {
   toSide: Side;
 }
 
-export interface RoutingReport {
+/** What a set of routes costs: the counts the passes compare and the report shows. */
+export interface RouteMetrics {
   crossings: number;
   shared: number;
   lanePairs: number;
@@ -61,8 +71,13 @@ export interface RoutingReport {
   blocked: number;
   bends: number;
   length: number;
-  initial: unknown;
+}
+
+export interface RoutingReport extends RouteMetrics {
+  initial: RouteMetrics;
   accepted: number;
+  /** Crossing pairs the repair pass rerouted. Absent with `quick` or `facing: false`. */
+  repaired?: number;
   nudged: number;
   tidied?: number;
   edges: number;
@@ -101,8 +116,67 @@ export interface RoutingOptions extends Partial<RoutingSettings> {
   jogs?: boolean;
 }
 
-export const RouteLab: {
-  compute(input: RouteInput, options?: RoutingOptions): RoutingResult;
-  settings(raw?: Partial<RoutingSettings>): RoutingSettings;
-  defaults: RoutingSettings;
+export type Axis = 'x' | 'y';
+/** Which end of an edge: its source or its target. */
+export type End = 'from' | 'to';
+export type Flow = 'right' | 'down';
+
+/** A shape the router ends lines on: a node, or a collapsed group drawn as a box. */
+export type Box = Rect & {
+  id: string;
+  parentId?: string;
+  shape?: ShapeKind;
+  frame?: boolean;
 };
+
+/**
+ * A rectangle no line may enter. `across` lets an upright line cross it but none run along it;
+ * with `gates`, only at those x coordinates.
+ */
+export type Obstacle = Rect & {
+  id?: string;
+  across?: boolean;
+  gates?: number[];
+};
+
+/** A box or group border that lines should keep `band` away from, at a cost instead of a wall. */
+export type NearBox = Rect & {
+  id: string;
+  band: number;
+  /** A group border: it counts from both sides. */
+  border?: boolean;
+  weight?: number;
+};
+
+/** A side and offset the repair pass fixes at one end of an edge. */
+export interface Pin {
+  side: Side;
+  offset: number;
+}
+
+/** An edge as routed: the input edge with a config, and the repair pass's pins. */
+export type RouteEdge = RouteEdgeInput & {
+  pin?: Partial<Record<End, Pin>>;
+};
+
+/** One choice of sides and ports for an edge, with its stubs and the obstacles it sees. */
+export interface Candidate {
+  /** Source and target sides. */
+  fs: Side;
+  ts: Side;
+  /** Port offsets along those sides. */
+  fo: number;
+  toff: number;
+  start: Point;
+  end: Point;
+  /** Where the stubs out of each port end. */
+  as: Point;
+  bs: Point;
+  obs: Obstacle[];
+  /** A lower bound on the route's score, to order the grid searches. */
+  lower: number;
+  /** The fan-out cost of the side pair, worked out once. */
+  fanout?: number;
+}
+
+export type { EdgeLayout, Point, Rect, RoutingSettings, ShapeKind, Side };

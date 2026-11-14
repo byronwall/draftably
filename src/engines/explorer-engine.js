@@ -1,5 +1,5 @@
 import { LayoutLab } from './layout-engine.ts';
-import { RouteLab } from './routing-engine.js';
+import { RouteLab } from './routing-engine.ts';
 /* Diagram Studio 6 — reproducible experiments, not persisted views.
  * Every candidate starts from the same frozen document and explicit settings.
  * The engine is DOM-free and runs in a worker or in Node-based tests.

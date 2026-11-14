@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LayoutLab as L } from '../src/engines/layout-engine.ts';
-import { RouteLab as R } from '../src/engines/routing-engine.js';
+import { RouteLab as R } from '../src/engines/routing-engine.ts';
 import { ExplorerLab as E } from '../src/engines/explorer-engine.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');

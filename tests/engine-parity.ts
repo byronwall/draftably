@@ -4,7 +4,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { LayoutLab } from '../src/engines/layout-engine.ts';
-import { RouteLab } from '../src/engines/routing-engine.js';
+import { RouteLab } from '../src/engines/routing-engine.ts';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { SculptLab } from '../src/engines/sculpt-engine.js';
 import type { NodeGeometry } from '../src/model/types';
