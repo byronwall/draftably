@@ -7,6 +7,7 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { translateEdit } from '../src/dsl/translate';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
+import { panelDoc } from '../src/model/panels';
 import {
   insertEvent,
   moveEvent,
@@ -555,6 +556,35 @@ ${layout}
       svg = renderSvg(withState(doc, 'ask'));
     expect(svg).toMatch(/data-call="m1"[^>]*stroke-width="1.2"\/>/);
     expect(svg).toMatch(/data-call="m2"[^>]*opacity="0.45"\/>/);
+  });
+
+  it('draws the older order with its own bars in a Before panel', () => {
+    const doc = projectScene(
+        checkSource(`node a "A"
+node b "B"
+node c "C"
+edge m1 a -> b "ask" message=call
+edge m2 b -> c "look" message=call
+edge m3 c -> b "found" answers=m2
+edge m4 b -> a "tell" answers=m1
+was-order m2 m3 m1 m4
+layout root sequence activations=on
+`),
+      ),
+      old = panelDoc(doc, 'before'),
+      bar = (d: Diagram, call: string) =>
+        d.layout.sequence!.activations!.find(b => b.call === call)!,
+      row = (d: Diagram, id: string) => d.layout.edges[id].row!;
+    // Each panel's bar runs from its own call row to its own reply row.
+    for (const d of [old, panelDoc(doc, 'after')]) {
+      expect(bar(d, 'm1').y).toBe(row(d, 'm1') - 4);
+      expect(bar(d, 'm1').y + bar(d, 'm1').h).toBe(row(d, 'm4') + 4);
+    }
+    // In the older order the look-up came first, so the two bars are not nested there.
+    expect(bar(old, 'm2').y + bar(old, 'm2').h).toBeLessThan(bar(old, 'm1').y);
+    const { vg, rects } = visibleRects(old),
+      m1 = computeRoutes(old, vg, rects).routes.find(r => r.id === 'm1')!;
+    expect(m1.points[1].x).toBe(bar(old, 'm1').x);
   });
 
   it('refuses the switch on another recipe with a warning, not an error', () => {
