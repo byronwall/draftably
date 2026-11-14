@@ -837,7 +837,7 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
-  // A sequence message's label sits just above its line, centred between the two lifelines, or
+  // A sequence message's label sits just above its line, centred between two lifelines, or
   // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
   for (const route of result.routes) {
     const label = byEdge.get(route.id)!.label;
@@ -853,7 +853,7 @@ export function drawRoutes(
             w,
             h,
           }
-        : { x: (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
+        : { x: doc.layout.edges[route.id]?.labelX ?? (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
     );
   }
   const frames = vg.groups.flatMap(g =>

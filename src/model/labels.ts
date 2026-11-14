@@ -182,6 +182,15 @@ export function visualBounds(doc: Diagram, id: string, title: string, r: Rect): 
   ]);
 }
 
+/** Text width a sequence phase's label wraps to, so a long one does not push the lanes right. */
+export const PHASE_WRAP = 96;
+/** Inset of a phase label from its band's top left corner. */
+export const PHASE_TAB = 8;
+
+/** A phase label's lines, in the annotation type. */
+export const phaseLabelLines = (label: string, r: ResolvedAppearance) =>
+  wrapLines(label, PHASE_WRAP, r.annotation);
+
 /** Text width a sequence message's label wraps to; the gap between participants follows it. */
 export const MESSAGE_WRAP = 168;
 
