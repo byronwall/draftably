@@ -101,7 +101,12 @@ export function legendMarkup(look: ResolvedAppearance, key: LegendLayout, x: num
         top = y + 12 + e.y,
         mid = top + row / 2;
       let swatch: string;
-      if (e.legend?.message) swatch = messageSwatch(e.legend, left, mid, look);
+      if (e.legend?.activation)
+        // A short lifeline with a bar on it.
+        swatch =
+          `<line x1="${left + 8}" y1="${mid - 9}" x2="${left + 8}" y2="${mid + 9}" stroke="${look.muted}" stroke-width="1" stroke-dasharray="3 3"/>` +
+          `<rect x="${left + 4}" y="${mid - 6}" width="8" height="12" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"/>`;
+      else if (e.legend?.message) swatch = messageSwatch(e.legend, left, mid, look);
       else if (e.legend?.line) {
         // A line row draws a short connection in the style it explains.
         swatch = `<line x1="${left}" y1="${mid}" x2="${left + 16}" y2="${mid}" stroke="${look.connection}" stroke-width="1.4"${e.legend.line === 'dashed' ? ' stroke-dasharray="5 5"' : ''}/>`;

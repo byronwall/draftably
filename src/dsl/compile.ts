@@ -14,6 +14,7 @@ import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../mo
 import { measureText, widestPiece, wrapLines } from '../model/fonts';
 import { rectUnion } from '../model/geometry';
 import {
+  ACTIVATION,
   actionSize,
   edgeLabelSize,
   GROUP_TITLE_LINES,
@@ -30,7 +31,7 @@ import {
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { marginNotes } from '../model/note';
-import { eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
+import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
 import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
@@ -382,6 +383,20 @@ function sequenced(scene: Scene): Scene {
       gaps,
       parts.map(() => []),
     );
+  // Activation bars, with `activations=on`: a message ends on a bar's edge, so a label needs
+  // that much more room between its lifelines, and a self-message starts that much further out.
+  const spans = scene.model.layouts.some(l => l.algorithm === 'sequence' && l.activations)
+      ? activationSpans(scene.edges)
+      : [],
+    barRight = (lane: number) =>
+      Math.max(
+        0,
+        ...spans
+          .filter(s => at.get(s.lane) === lane)
+          .map(s => ACTIVATION.w / 2 + s.level * ACTIVATION.step),
+      ),
+    barRoom = (lane: number) =>
+      2 * Math.max(barRight(lane), barRight(lane + 1) && ACTIVATION.w / 2);
   const reach = new Map<string, number>(),
     reachLeft = new Map<string, number>(),
     holds: Hold[][] = parts.map(() => []),
@@ -395,7 +410,7 @@ function sequenced(scene: Scene): Scene {
       // A label over one gap crosses no lifeline. Between distant lanes it takes one gap too.
       const slot = b - a > 1 ? labelSlot(base, a, b, w + SEQ_LABEL_RUN, across) : a;
       if (b - a > 1) labelGaps.set(e.id, slot);
-      holds[slot + 1].push({ from: slot, room: w + SEQ_LABEL_RUN });
+      holds[slot + 1].push({ from: slot, room: w + SEQ_LABEL_RUN + barRoom(slot) });
       continue;
     }
     const box = actionBox(e);
@@ -410,7 +425,7 @@ function sequenced(scene: Scene): Scene {
       if (a + 1 < parts.length) holds[a + 1].push({ from: a, room: room(a + 1, a + 1) });
       continue;
     }
-    const { right } = selfInk(e);
+    const right = selfInk(e).right + barRight(a);
     reach.set(e.source, Math.max(reach.get(e.source) ?? 0, right));
     if (a + 1 < parts.length)
       holds[a + 1].push({
@@ -508,6 +523,20 @@ function sequenced(scene: Scene): Scene {
     drawn = margins.filter(r => r !== null),
     framed = drawn.length ? rectUnion([panel, rectUnion(drawn, SEQ_PANEL_PAD)]) : panel,
     phaseX = framed.x < panel.x ? panel.x : undefined;
+  // A bar runs a little past its first and last rows, so an arrow meets its side, not a corner.
+  const rowAt = scene.edges.map(e => rows.get(e.id)!),
+    activations = spans.map(s => {
+      const from = rowAt[s.start],
+        to = s.end !== undefined && s.end > s.start ? rowAt[s.end] : from + ACTIVATION.stub;
+      return {
+        node: s.lane,
+        call: s.call,
+        x: round(centre[at.get(s.lane)!] - ACTIVATION.w / 2 + s.level * ACTIVATION.step),
+        y: from - ACTIVATION.over,
+        w: ACTIVATION.w,
+        h: to - from + 2 * ACTIVATION.over,
+      };
+    });
   // Phases top to bottom, so tinting alternates down the drawing.
   const phases = scene.model.phases
     .map(p => ({ id: p.id, label: p.label, ...bands.get(p.id)! }))
@@ -530,6 +559,7 @@ function sequenced(scene: Scene): Scene {
       phases,
       ...(phaseX !== undefined ? { phaseX } : {}),
       ...(drawn.length ? { notes: margins, inner: panel } : {}),
+      ...(activations.length ? { activations } : {}),
     },
   };
 }
@@ -556,6 +586,7 @@ function withOldOrder(scene: Scene): Scene {
         rows: Object.fromEntries(old.edges.map(e => [e.id, e.row!])),
         phases: old.sequence!.phases,
         grow: Math.max(0, lifeline(old) - lifeline(scene)),
+        ...(old.sequence!.activations ? { activations: old.sequence!.activations } : {}),
       },
     },
   };

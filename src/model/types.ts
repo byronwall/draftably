@@ -298,8 +298,18 @@ export interface SequenceLayout {
    * From `was-order`: each message's row and the phase bands in the older message order, and how
    * much further that order runs down the panel.
    */
-  before?: { rows: Record<string, number>; phases: SequencePhase[]; grow: number };
+  before?: {
+    rows: Record<string, number>;
+    phases: SequencePhase[];
+    grow: number;
+    activations?: Activation[];
+  };
+  /** With `activations=on`: the bars on the lifelines of participants at work on a call. */
+  activations?: Activation[];
 }
+
+/** One activation bar: its participant, the call that opened it, and its box. */
+export type Activation = Rect & { node: string; call: string };
 
 export type SequencePhase = { id: string; label: string; y: number; h: number };
 

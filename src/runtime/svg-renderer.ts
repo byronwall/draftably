@@ -312,6 +312,7 @@ function sceneMarkup(
       `<line x1="${x}" y1="${r.y + r.h}" x2="${x}" y2="${r.y + r.h + n.lifeline}" stroke="${look.muted}" stroke-width="${LIFELINE.width}" stroke-dasharray="${LIFELINE.dash}"/>`,
     );
   }
+  out.push(...backdrop.bars);
   const under = surfaces(doc, look);
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!,
@@ -566,7 +567,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
  */
 export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
   const seq = doc.layout.sequence;
-  if (!seq) return { panel: [], phases: [] };
+  if (!seq) return { panel: [], phases: [], bars: [] };
   const { panel } = seq,
     band = bandSwatch(look),
     tab = seq.phaseX ?? panel.x;
@@ -575,6 +576,11 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
       panelDrawn(doc) &&
         `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${panelSwatch(look).fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
     ].filter(Boolean) as string[],
+    // Activation bars go over the lifelines and under the messages, which end on their sides.
+    bars: (seq.activations ?? []).map(
+      b =>
+        `<rect class="sequence-activation" data-call="${esc(b.call)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"/>`,
+    ),
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [
       `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,

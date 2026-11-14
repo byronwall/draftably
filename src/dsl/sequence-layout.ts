@@ -134,3 +134,50 @@ export function eventRows(
   close();
   return { rows, bands, end: ink };
 }
+
+/** An event as activation bars read it: who sends to whom, its kind, and what it answers. */
+export type SequenceEvent = {
+  id: string;
+  source: string;
+  target: string;
+  message?: string;
+  replyTo?: string;
+};
+
+/**
+ * A stretch in which a participant is at work on a call: from the event at index `start` to
+ * the one at `end`, or a short stub when `end` is unset. `level` is 0, or more when the
+ * participant took the call while another of its bars was open.
+ */
+export type ActivationSpan = {
+  lane: string;
+  call: string;
+  start: number;
+  end?: number;
+  level: number;
+};
+
+/**
+ * The activation bars of a sequence, read from its calls and their replies. A bar opens where a
+ * participant receives a `call` from another and closes at the last reply that answers that
+ * call. A call with no reply closes at the participant's next message to another, and without
+ * one it is a stub. A call a participant sends to itself opens no bar.
+ */
+export function activationSpans(events: SequenceEvent[]): ActivationSpan[] {
+  const spans: ActivationSpan[] = [];
+  events.forEach((e, start) => {
+    if (e.message !== 'call' || e.source === e.target) return;
+    const later = events.map((x, i) => ({ x, i })).slice(start + 1),
+      replies = later.filter(({ x }) => x.message === 'reply' && x.replyTo === e.id),
+      next = later.find(({ x }) => x.source === e.target && x.target !== e.target),
+      end = replies.length ? replies[replies.length - 1].i : next?.i,
+      // Bars on one lane that are open at this row each take a level; this one takes the next free.
+      taken = spans
+        .filter(s => s.lane === e.target && (s.end ?? s.start) >= start)
+        .map(s => s.level);
+    let level = 0;
+    while (taken.includes(level)) level++;
+    spans.push({ lane: e.target, call: e.id, start, ...(end !== undefined ? { end } : {}), level });
+  });
+  return spans;
+}

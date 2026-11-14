@@ -237,6 +237,12 @@ export function edgeLabelSize(
   };
 }
 
+/**
+ * An activation bar: its width, how far a nested bar steps to the right, how far it runs past
+ * its first and last rows, and the length of a bar whose call gets no reply.
+ */
+export const ACTIVATION = { w: 8, step: 4, over: 4, stub: 16 };
+
 /** Room between a local action's label and its box, on each side. */
 export const ACTION_PAD = 5;
 

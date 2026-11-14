@@ -137,6 +137,8 @@ export interface LegendEntry {
   family?: string;
   line?: LegendLine;
   message?: MessageKind;
+  /** An activation bar, which a sequence with `activations=on` adds a row for. */
+  activation?: true;
   /** Shade of the swatch; nodes' default when omitted. */
   shade?: Shade;
   label: string;
