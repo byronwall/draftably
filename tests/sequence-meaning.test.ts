@@ -10,7 +10,8 @@ import { replyTargets, setMessage } from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
-import { messageKey } from '../src/model/status';
+import { messageKey, sequenceDescription } from '../src/model/status';
+import { renderSvg } from '../src/runtime/svg-renderer';
 import type { Diagram } from '../src/model/types';
 
 const signIn = `diagram "Sign-in" version=1
@@ -96,6 +97,23 @@ describe('kinds of sequence message', () => {
       'local action',
     ]);
     expect(messageKey(projectScene(checkSource(lines('edge m a -> b kind=async'))))).toEqual([]);
+  });
+
+  it('describes the exchange in words, in order, in the exported SVG', () => {
+    const doc = projectScene(checkSource(signIn));
+    expect(sequenceDescription(doc)).toBe(
+      'Sequence between User, Web app, Auth service, User store, in order from top to bottom. ' +
+        '1. User to Web app: submit. ' +
+        '2. Web app to Auth service: verify (call: the sender waits). ' +
+        '3. Auth service to User store: load user (call: the sender waits). ' +
+        '4. User store to Auth service: user record (reply to step 3). ' +
+        '5. Auth service does: check password hash. ' +
+        '6. Auth service to Web app: session token (reply to step 2). ' +
+        '7. Web app to User: signed in (result shown).',
+    );
+    expect(renderSvg(doc)).toContain('<desc id="draft-description">Sequence between User,');
+    expect(renderSvg(doc, { description: 'Mine' })).toContain('>Mine</desc>');
+    expect(sequenceDescription(projectScene(checkSource('node a "A"')))).toBeUndefined();
   });
 
   it.each([

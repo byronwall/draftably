@@ -231,6 +231,38 @@ export function usedStatuses(doc: Diagram): StatusCount[] {
 export const drawnLegend = (doc: Diagram): LegendEntry[] =>
   isDiff(doc) ? [] : [...(doc.appearance.legend ?? []), ...messageKey(doc)];
 
+/**
+ * A sequence in words, for a reader who cannot see it: the participants, then each event in
+ * order with its kind. An exported SVG carries it as its description unless the host gives one.
+ */
+export function sequenceDescription(doc: Diagram): string | undefined {
+  if (!doc.layout.sequence) return undefined;
+  const name = new Map(doc.graph.nodes.map(n => [n.id, n.title.split('\n')[0]])),
+    step = new Map(doc.graph.edges.map((e, i) => [e.id, i + 1])),
+    kind = (e: DiagramEdge) =>
+      e.message === 'reply'
+        ? e.replyTo && step.has(e.replyTo)
+          ? `reply to step ${step.get(e.replyTo)}`
+          : 'reply'
+        : e.message && e.message !== 'interaction' && e.message !== 'action'
+          ? MESSAGE_LABELS[e.message]
+          : '';
+  const events = doc.graph.edges.map((e, i) => {
+    const text = e.label.replace(/\s+/g, ' ').trim(),
+      who =
+        e.message === 'action'
+          ? `${name.get(e.from)} does`
+          : e.from === e.to
+            ? `${name.get(e.from)} to itself`
+            : `${name.get(e.from)} to ${name.get(e.to)}`;
+    return `${i + 1}. ${who}${text ? `: ${text}` : ''}${kind(e) ? ` (${kind(e)})` : ''}.`;
+  });
+  return [
+    `Sequence between ${[...name.values()].join(', ')}, in order from top to bottom.`,
+    ...events,
+  ].join(' ');
+}
+
 /** What each kind of message means, as its row of the key says it. */
 const MESSAGE_LABELS: Record<MessageKind, string> = {
   interaction: 'message',
@@ -249,6 +281,8 @@ const MESSAGE_LABELS: Record<MessageKind, string> = {
 export function messageKey(doc: Diagram): LegendEntry[] {
   const used = new Set(doc.graph.edges.flatMap(e => (e.message ? [e.message] : [])));
   if (!used.size) return [];
+  // A message with no kind draws the plain arrow too, so it reads as a message.
+  if (doc.graph.edges.some(e => !e.message && !e.dashed && e.directed)) used.add('interaction');
   const plain = (['interaction', 'outcome'] as const).filter(k => used.has(k));
   return [
     ...(plain.length
