@@ -157,5 +157,20 @@
       "Not built, still refused as UnsupportedEdit: custom connection bends, label positions, images and icons in files.",
       "Below the cut line, not planned: views, static summaries and checkpoints (DSL.md says views and checkpoints are not supported), inset and multi-instance diagrams, multi-user merge."
     ]
+  },
+  {
+    "title": "Automatic layout in diagram files",
+    "slug": "layout-in-files",
+    "outcome": "completed",
+    "retired_at": "2026-11-14",
+    "summary": "The .draft rename (PR 10), engine recipes and the routing line (PR 11), Rebuild, Compare and routing saved as recipes (PR 12), and Improve, timeline steps and brush strokes saved as stay lines (PR 14) merged on 2026-10-15. pnpm prove:layout covers the tools in file mode. Changed from the plan: Compare candidates in file mode are compiled source variants, so previews are exact, and arrangements carry no provenance comment, because stay lines are updated in place. Reconciled against origin/main 1ae73851 with no local code changes. The planning file is at 1ae73851.",
+    "reason": "Byron asked on 2026-11-14 to retire plans that shipped. The plan said status: implemented, and all four PRs are on origin/main.",
+    "documentation": ["docs/DSL.md", "docs/ARCHITECTURE.md", "docs/CHECKS.md"],
+    "revision": "1ae73851",
+    "follow_ups": [
+      "Not built: an engine version in the layout line (engine=layered@7). Fixed engine output and pnpm test:engines stand in for it.",
+      "Not built: a named arrangement statement. Plain stay lines were enough.",
+      "Still unavailable in file mode, by choice: layout checkpoints (undo walks the file's versions), reset-route, start and end marks, fit-container and images (FILE_UNSUPPORTED in src/state/commands.ts)."
+    ]
   }
 ]

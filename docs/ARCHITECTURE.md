@@ -225,6 +225,17 @@ A file-backed session follows a few rules:
 - **An edit the file cannot hold is refused.** `translate.ts` throws `UnsupportedEdit` (for
   example for bends, label positions and images), and the session puts the drawing back with a
   toast. The viewer never shows an edit as saved when the file did not get it.
+- **A layout result is a recipe or an arrangement.** A result that the source can compute again
+  (Rebuild, an Apply in Compare, connection settings) is saved as a recipe: `layout scope engine=…`
+  or the `routing` line. The compiler runs the engine cold for that scope each time, so an added
+  object lays the scope out again. A result that depends on the earlier drawing (Tidy, a timeline
+  step, a brush stroke) is saved as soft `stay` lines for the objects that moved. Those tools
+  commit with kind `'arrangement'`, so the session writes positions and does not infer `near`
+  lines from the diff. A file never stores an engine step to replay, because the first edit would
+  change what that step means.
+- **An engine change moves every recipe diagram.** Files depend on engine output, so
+  `pnpm test:engines` holds that output fixed. `pnpm prove:layout` checks that the saved file and
+  the browser agree after each tool.
 
 `server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
 overwriting, never outside the folder), draws SVG thumbnails cached until a file changes, and routes
