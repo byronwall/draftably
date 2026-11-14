@@ -432,7 +432,8 @@ The drawing never reads a kind from a line's style. Write the kind you mean:
 - `message=` sets the line and its ends, so it takes no `kind=`, `head=`, `tail=` or
   `directed=` beside it.
 - A file that uses kinds gets a key under the drawing, with one row for each mark in use. A
-  plain sequence gets none. `check` warns `message-kind` when a `kind=async` message sits beside
+  plain sequence gets none. An exported SVG of a sequence also carries the exchange in words,
+  in order, as its description for a screen reader. `check` warns `message-kind` when a `kind=async` message sits beside
   messages that have a kind, because the key cannot say what its dashes mean.
 - A kind says nothing about time, delivery or storage. Say what the drawing leaves out in a
   `footnote`, such as `footnote "Valid credentials only. Rows show order, not elapsed time."`.

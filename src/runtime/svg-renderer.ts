@@ -43,6 +43,7 @@ import {
 import { computeRoutes, HALO_WIDTH } from '../model/routes';
 import {
   drawnLegend,
+  sequenceDescription,
   edgeInk,
   HALO_GAP,
   haloInk,
@@ -471,12 +472,14 @@ function openSvg(
   opts: SvgOptions,
 ) {
   const prefix = opts.idPrefix ?? 'draft',
+    // A sequence says itself in words when the host gives no description.
+    description = opts.description ?? sequenceDescription(doc),
     css = LINK_CSS.replace(/a\.link/g, `#${prefix}-svg a.link`),
     out = new SvgChunks(opts.maxOutputBytes);
   out.push(
-    `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${opts.description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title id="${prefix}-title">${esc(opts.title ?? doc.title)}</title>`,
-    opts.description ? `<desc id="${prefix}-description">${esc(opts.description)}</desc>` : '',
+    description ? `<desc id="${prefix}-description">${esc(description)}</desc>` : '',
     opts.metadata ?? '',
     `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}</style>` +
       markers +
