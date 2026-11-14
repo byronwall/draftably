@@ -789,19 +789,21 @@ export function parseModel(source: string | SourceDoc): Model {
           !undirected || !(attrs.has('head') || attrs.has('tail')),
           `Edge ${eid} has directed=false, so it has no ends to mark. Remove head= and tail=, or remove directed=false.`,
         );
+        // `answers=` alone makes a reply: only a reply answers a message.
+        const named = attrs.has('message')
+            ? choice('message', 'interaction', MESSAGE_KINDS)
+            : undefined,
+          message = named ?? (attrs.has('answers') ? ('reply' as const) : undefined);
+        assert(
+          !attrs.has('answers') || message === 'reply',
+          `Edge ${eid} has message=${named} and answers=, which disagree: answers= makes a reply. Remove answers=, or use message=reply.`,
+        );
         // A kind of message draws its own line and ends, so it takes no style beside it.
-        const message = attrs.has('message')
-          ? choice('message', 'interaction', MESSAGE_KINDS)
-          : undefined;
         for (const key of ['kind', 'head', 'tail', 'directed'])
           assert(
             !message || !attrs.has(key),
-            `Edge ${eid} has message=${message}, which sets how it is drawn. Remove ${key}=.`,
+            `Edge ${eid} has ${named ? `message=${named}` : 'answers='}, which sets how it is drawn. Remove ${key}=.`,
           );
-        assert(
-          !attrs.has('answers') || message === 'reply',
-          `answers= names the message a reply answers. Give ${eid} message=reply, or remove answers=.`,
-        );
         m.edges.push({
           id: eid,
           source: id(args[1]),

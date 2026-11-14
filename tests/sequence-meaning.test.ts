@@ -7,7 +7,7 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { translateEdit } from '../src/dsl/translate';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
-import { replyTargets, setMessage } from '../src/model/edits';
+import { replyTargets, setMessage, setReplyTo } from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
@@ -23,10 +23,10 @@ node db "User store"
 edge m1 user -> app "submit" message=interaction
 edge m2 app -> auth "verify" message=call
 edge m3 auth -> db "load user" message=call
-edge m4 db -> auth "user record" message=reply answers=m3
+edge m4 db -> auth "user record" answers=m3
 # The auth service does this itself.
 action m5 auth "check password hash"
-edge m6 auth -> app "session token" message=reply answers=m2
+edge m6 auth -> app "session token" answers=m2
 edge m7 app -> user "signed in" message=outcome
 phase verify "Verify" m3 m4 m5
 layout root sequence
@@ -120,7 +120,12 @@ describe('kinds of sequence message', () => {
   it.each([
     [lines('edge m a -> b message=reply kind=async'), /Remove kind=/],
     [lines('edge m a -> b message=call head=diamond'), /Remove head=/],
-    [lines('edge m a -> b answers=n'), /Give m message=reply/],
+    [lines('edge m a -> b answers=n'), /Unknown message n/],
+    [
+      lines('edge n a -> b message=call', 'edge m b -> a message=send answers=n'),
+      /message=send and answers=, which disagree/,
+    ],
+    [lines('edge n a -> b message=call', 'edge m b -> a answers=n kind=async'), /Remove kind=/],
     [lines('edge m a -> b message=reply answers=n'), /Unknown message n/],
     [
       lines('edge m b -> a message=reply answers=n', 'edge n a -> b message=call'),
@@ -138,6 +143,15 @@ describe('kinds of sequence message', () => {
     [lines('+action x a "work"'), /Only node, group and edge lines/],
   ])('refuses %s', (source, message) => {
     expect(() => checkSource(source)).toThrow(message);
+  });
+
+  it('reads answers= alone as a reply, the same as the long form', () => {
+    const short = lines('edge n a -> b "ask" message=call', 'edge m b -> a "tell" answers=n'),
+      long = short.replace('answers=n', 'message=reply answers=n'),
+      [a, b] = [short, long].map(src => projectScene(checkSource(src)));
+    expect(a.graph.edges[1]).toMatchObject({ message: 'reply', replyTo: 'n', dashed: true });
+    expect(a.graph.edges).toEqual(b.graph.edges);
+    expect(renderSvg(a)).toBe(renderSvg(b));
   });
 
   it('takes two replies to one message, and a reply that names none', () => {
@@ -237,6 +251,44 @@ describe('edits to kinds of message', () => {
     expect(replyTargets(doc, 'm7').map(e => e.id)).toEqual(['m1']);
   });
 
+  it('writes a reply that names its message in the short form, and keeps one that names none', () => {
+    const long = signIn.replace(
+      '"user record" answers=m3',
+      '"user record" message=reply answers=m3',
+    );
+    const scene = checkSource(long),
+      before = projectScene(scene),
+      run = (fn: (d: Diagram) => void) => {
+        const after = clone(before);
+        fn(after);
+        return printSource(
+          translateEdit({
+            source: readSource(long),
+            scene,
+            before,
+            after,
+            label: 'Edit',
+            selection: [],
+          }).source,
+        );
+      };
+    // An edit to the long form writes the short one.
+    expect(run(d => void (edge(d, 'm4').label = 'the record'))).toContain(
+      'edge m4 db -> auth "the record" answers=m3\n',
+    );
+    // Clearing Reply to keeps the reply; a new target drops message= again.
+    expect(run(d => setReplyTo(d, 'm6', undefined))).toContain(
+      'edge m6 auth -> app "session token" message=reply\n',
+    );
+    // Another kind takes answers= away.
+    expect(run(d => setMessage(d, 'm6', 'outcome'))).toContain(
+      'edge m6 auth -> app "session token" message=outcome\n',
+    );
+    expect(setFields(signIn, 'm4', ['answers='])).toContain(
+      'edge m4 db -> auth "user record" message=reply\n',
+    );
+  });
+
   it('edits actions and replies from the command line', () => {
     expect(setFields(signIn, 'action.m5', ['label=compare hashes'])).toContain(
       'action m5 auth "compare hashes"\n',
@@ -324,7 +376,7 @@ edge m1 a -> b "ask" message=call
 action x b "work"
 edge m2 b -> c "ask again" message=call
 edge m3 c -> c "think"
-edge m4 c -> b "answer" message=reply answers=m2
+edge m4 c -> b "answer" answers=m2
 edge m5 b -> a "answer" message=reply answers=m1
 ${layout}
 `;

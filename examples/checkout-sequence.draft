@@ -18,12 +18,12 @@ node mail "Email queue" in=outside
 edge m1 shopper -> web "place order" message=interaction
 edge m2 web -> orders "create order" message=call
 edge m3 orders -> stock "hold stock for each line" message=call
-edge m4 stock -> orders "hold reference" message=reply answers=m3
+edge m4 stock -> orders "hold reference" answers=m3
 edge m5 orders -> pay "charge card" message=call
-edge m6 pay -> orders "charge accepted" message=reply answers=m5
+edge m6 pay -> orders "charge accepted" answers=m5
 action m7 orders "mark the order paid"
 edge m8 orders -> mail "queue the receipt email" message=send
-edge m9 orders -> web "order number" message=reply answers=m2
+edge m9 orders -> web "order number" answers=m2
 edge m10 web -> shopper "order confirmed" message=outcome
 
 phase hold "Hold the stock" m1 m2 m3 m4

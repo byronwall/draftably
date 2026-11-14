@@ -139,7 +139,11 @@ export function removeEdge(doc: SourceDoc, id: string) {
   removeWhere(doc, s => isEdge(s) && s.args[0]?.value === id);
   // A reply to it stays, and no longer names what it answers.
   for (const s of statements(doc))
-    if (getAttr(s, 'answers')?.value === id) setAttr(s, 'answers', undefined);
+    if (getAttr(s, 'answers')?.value === id) {
+      // `answers=` alone made it a reply, so without it the line says so itself.
+      setAttr(s, 'message', bare('reply'));
+      setAttr(s, 'answers', undefined);
+    }
   removeFromStates(doc, id);
   unanchorNotes(doc, id);
   for (const s of statements(doc))

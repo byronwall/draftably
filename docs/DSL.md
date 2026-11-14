@@ -398,14 +398,14 @@ are not supported yet.
 A plain `edge` says only that one participant sends something to another. `message=` says what
 the message is, and the drawing gives each kind its own mark:
 
-| Kind                  | Meaning                                              | Drawn as                  |
-| --------------------- | ---------------------------------------------------- | ------------------------- |
-| `message=interaction` | A message, with no claim about waiting               | Solid line, open arrow    |
-| `message=call`        | The sender waits for the answer                      | Solid line, solid arrow   |
-| `message=send`        | The sender does not wait                             | Solid line, dot at sender |
-| `message=reply`       | An answer. `answers=id` names the message it answers | Dashed line, open arrow   |
-| `message=outcome`     | A result shown to a participant, such as a person    | Solid line, open arrow    |
-| `action` line         | Work one participant does                            | A box on its lifeline     |
+| Kind                  | Meaning                                                                       | Drawn as                  |
+| --------------------- | ----------------------------------------------------------------------------- | ------------------------- |
+| `message=interaction` | A message, with no claim about waiting                                        | Solid line, open arrow    |
+| `message=call`        | The sender waits for the answer                                               | Solid line, solid arrow   |
+| `message=send`        | The sender does not wait                                                      | Solid line, dot at sender |
+| `answers=id`          | A reply to the message `id`. `message=reply` is a reply that names no message | Dashed line, open arrow   |
+| `message=outcome`     | A result shown to a participant, such as a person                             | Solid line, open arrow    |
+| `action` line         | Work one participant does                                                     | A box on its lifeline     |
 
 ```draft
 node user "User"
@@ -414,7 +414,7 @@ node auth "Auth service"
 edge m1 user -> app "submit password" message=interaction
 edge m2 app -> auth "verify" message=call
 action m3 auth "check password hash"
-edge m4 auth -> app "session token" message=reply answers=m2
+edge m4 auth -> app "session token" answers=m2
 edge m5 app -> user "signed in" message=outcome
 phase check "Check" m2 m3 m4
 layout root sequence
@@ -426,9 +426,13 @@ itself, so it draws no arrow. An action takes no change mark.
 
 The drawing never reads a kind from a line's style. Write the kind you mean:
 
-- `answers=` belongs on `message=reply`. It names an earlier message that runs the other way
-  and has the kind `interaction`, `call` or `send`. Two replies can answer one message, and a
-  reply can name none.
+- `answers=id` makes the edge a reply, so it needs no `message=` beside it. It names an earlier
+  message that runs the other way and has the kind `interaction`, `call` or `send`. Two replies
+  can answer one message.
+- `message=reply` alone is a reply that names no message. `message=reply answers=id` is the
+  long form of `answers=id` and draws the same. `answers=` with another kind, such as
+  `message=call answers=m1`, is an error: the two disagree.
+- The editor and `draftably` write a reply that names its message in the short form.
 - `message=` sets the line and its ends, so it takes no `kind=`, `head=`, `tail=` or
   `directed=` beside it.
 - A file that uses kinds gets a key under the drawing, with one row for each mark in use. A
@@ -455,9 +459,9 @@ node api "Orders API"
 node db "Database"
 edge m1 app -> api "create order" message=call
 edge m2 api -> db "insert order" message=call
-edge m3 db -> api "order row" message=reply answers=m2
+edge m3 db -> api "order row" answers=m2
 action m4 api "build the receipt"
-edge m5 api -> app "order number" message=reply answers=m1
+edge m5 api -> app "order number" answers=m1
 layout root sequence activations=on
 ```
 
