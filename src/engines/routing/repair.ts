@@ -3,8 +3,7 @@ import type { Context } from './context.ts';
 import { standoffCost } from './cost.ts';
 import { find } from './find.ts';
 import { center, inflate, segments } from './geometry.ts';
-import { port } from './ports.ts';
-import { offsetKey, sideKey } from './score.ts';
+import { offsetKey, port, sideKey } from './ports.ts';
 import { FAN_GROUP, MAX_REPAIRS, REPAIR_EDGES } from './tuning.ts';
 import type { End, Obstacle, Pin, Route, RouteEdge } from './types.ts';
 

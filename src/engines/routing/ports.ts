@@ -1,5 +1,9 @@
 import { center, clamp, EPS, round } from './geometry.ts';
-import type { Point, Rect, Route, RoutingSettings, ShapeKind, Side } from './types.ts';
+import type { End, Point, Rect, Route, RoutingSettings, ShapeKind, Side } from './types.ts';
+
+/** The fields of a route that hold the side and the offset of one end. */
+export const sideKey = (end: End) => (end + 'Side') as `${End}Side`;
+export const offsetKey = (end: End) => (end + 'Offset') as `${End}Offset`;
 
 /** The point on `side` of a shape, `offset` along it from the middle, on the shape's outline. */
 export function port(rect: Rect & { shape?: ShapeKind }, side: Side, offset = 0): Point {

@@ -2,7 +2,7 @@ import { conflicts, parallelConflicts, siblingDeficit } from './conflicts.ts';
 import type { Context } from './context.ts';
 import { costOf, ownCost, standoffCost } from './cost.ts';
 import { center, EPS, insideLength, pathLength, SIDES, vector } from './geometry.ts';
-import { TIGHT_PITCH } from './ports.ts';
+import { sideKey, TIGHT_PITCH } from './ports.ts';
 import {
   ARRIVE_BELOW,
   ARRIVE_RIGHT,
@@ -22,9 +22,6 @@ import {
   TRAILING,
 } from './tuning.ts';
 import type { Candidate, End, Point, PriorRoute, Rect, Route, RouteEdge, Side } from './types.ts';
-
-export const sideKey = (end: End) => (end + 'Side') as `${End}Side`;
-export const offsetKey = (end: End) => (end + 'Offset') as `${End}Offset`;
 
 /**
  * The score of a candidate route of edge `e` against the routed lines `used`: length, bends,

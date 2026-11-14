@@ -1,7 +1,6 @@
 import type { Context } from './context.ts';
 import { center, clone, EPS, round } from './geometry.ts';
-import { port } from './ports.ts';
-import { offsetKey, sideKey } from './score.ts';
+import { offsetKey, port, sideKey } from './ports.ts';
 import { PORT_SLACK } from './tuning.ts';
 import type { Box, End, Point, Route, Side } from './types.ts';
 
