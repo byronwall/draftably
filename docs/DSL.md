@@ -317,7 +317,8 @@ their `edge` lines.
 drawn in a row across the top in file order (or the order an `order root` line gives), with a
 dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
 lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file
-reads top to bottom as the exchange does. Rows show order, not elapsed time. A message's label sits just above its arrow, a step
+reads top to bottom as the exchange does. Rows show order, not elapsed time, and the drawing
+says so in a line under it. A message's label sits just above its arrow, a step
 larger than other labels, and wraps to about 170px; a self-message's label sits beside its loop.
 Participants are spaced for the wrapped labels, and a short participant title gets a box only as
 wide as it needs.
@@ -440,12 +441,19 @@ The drawing never reads a kind from a line's style. Write the kind you mean:
   in order, as its description for a screen reader. `check` warns `message-kind` when a `kind=async` message sits beside
   messages that have a kind, because the key cannot say what its dashes mean.
 - A kind says nothing about time, delivery or storage. Say what the drawing leaves out in a
-  `footnote`, such as `footnote "Valid credentials only. Rows show order, not elapsed time."`.
+  `footnote`, such as `footnote "Valid credentials only; error paths are left out."`. The
+  drawing itself adds the line "Rows show order, not elapsed time."
 
 `draftably compare` refuses a file that uses `message=` or `action`: change marks cannot show
 that a message changed kind. `draftably rm action.m3` removes an action, and `draftably mv`
 renames the ID in each `answers=`, `phase` and `state` that uses it. In the editor, the
 Inspector's Kind field sets a message's kind and turns a self-message into an action.
+
+In the editor, with a message selected, Tab adds a message after it and Shift Tab adds one
+before it. Alt with the up or down arrow moves it one place. A new message joins the phase of
+the message above it. The editor refuses a move that puts a reply above the message it answers,
+or that splits a phase, and says why. A selected call shows its replies in the accent color,
+and a selected reply shows its call, with their activation bar.
 
 ### Activation bars
 

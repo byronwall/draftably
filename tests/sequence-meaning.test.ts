@@ -18,7 +18,13 @@ import {
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
-import { drawnLegend, messageKey, sequenceDescription } from '../src/model/status';
+import {
+  drawnLegend,
+  messageKey,
+  replyPair,
+  sequenceDescription,
+  withState,
+} from '../src/model/status';
 import { renderSvg } from '../src/runtime/svg-renderer';
 import type { Diagram } from '../src/model/types';
 
@@ -105,6 +111,26 @@ describe('kinds of sequence message', () => {
       'local action',
     ]);
     expect(messageKey(projectScene(checkSource(lines('edge m a -> b kind=async'))))).toEqual([]);
+  });
+
+  it('says under every sequence that rows show order, and under no other diagram', () => {
+    const plain = projectScene(checkSource(lines('edge m a -> b'))),
+      flow = projectScene(checkSource('node a "A"\nnode b "B"\nedge m a -> b'));
+    expect(drawnLegend(plain)).toEqual([
+      { caption: true, label: 'Rows show order, not elapsed time.' },
+    ]);
+    expect(renderSvg(plain)).toContain('>Rows show order, not elapsed time.</text>');
+    expect(drawnLegend(flow)).toEqual([]);
+  });
+
+  it('pairs a message with the replies that answer it, and with nothing else', () => {
+    const doc = projectScene(checkSource(signIn));
+    expect(replyPair(doc, 'm3')).toEqual(['m3', 'm4']);
+    expect(replyPair(doc, 'm4')).toEqual(['m4', 'm3']);
+    // An action and a message with no reply stand alone, whatever shares their participant.
+    expect(replyPair(doc, 'm5')).toEqual(['m5']);
+    expect(replyPair(doc, 'm1')).toEqual(['m1']);
+    expect(replyPair(doc, 'auth')).toEqual([]);
   });
 
   it('describes the exchange in words, in order, in the exported SVG', () => {
@@ -520,6 +546,15 @@ ${layout}
         }).source,
       ),
     ).toBe(file);
+  });
+
+  it('fades a bar with its call when an emphasis state leaves the call out', () => {
+    const doc = projectScene(
+        checkSource(source('state ask "Ask" a b m1 m5\nlayout root sequence activations=on')),
+      ),
+      svg = renderSvg(withState(doc, 'ask'));
+    expect(svg).toMatch(/data-call="m1"[^>]*stroke-width="1.2"\/>/);
+    expect(svg).toMatch(/data-call="m2"[^>]*opacity="0.45"\/>/);
   });
 
   it('refuses the switch on another recipe with a warning, not an error', () => {

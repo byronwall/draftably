@@ -238,7 +238,26 @@ export const drawnLegend = (doc: Diagram): LegendEntry[] =>
         ...(doc.layout.sequence?.activations?.length
           ? [{ activation: true as const, label: 'at work on a call' }]
           : []),
+        // A sequence's rows stand at even steps, so every one says that they are not a clock.
+        ...(doc.layout.sequence ? [{ caption: true as const, label: SEQUENCE_CAPTION }] : []),
       ];
+
+/** What every sequence says under its drawing. */
+export const SEQUENCE_CAPTION = 'Rows show order, not elapsed time.';
+
+/**
+ * The events that belong with one event of a sequence: a message, the reply that answers it,
+ * and the message a reply answers. Only pairs the file states, never a guess from direction.
+ */
+export function replyPair(doc: Diagram, id: string): string[] {
+  const edge = doc.graph.edges.find(e => e.id === id);
+  if (!edge || doc.layout.edges[id]?.row === undefined) return [];
+  return [
+    id,
+    ...(edge.replyTo ? [edge.replyTo] : []),
+    ...doc.graph.edges.filter(e => e.replyTo === id).map(e => e.id),
+  ];
+}
 
 /**
  * A sequence in words, for a reader who cannot see it: the participants, then each event in

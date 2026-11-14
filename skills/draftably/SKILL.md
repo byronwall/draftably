@@ -210,7 +210,8 @@ Good defaults:
   a message ends on a participant, not a group. `order root` places bands and ungrouped
   participants, and `order group` places a band's members. `phase id "label" m1 m2 ...` draws a
   run of consecutive messages as a labelled row band (preview, apply). A phase can't skip a
-  message; include it or split the phase. Rows show order, not elapsed time.
+  message; include it or split the phase. Rows show order, not elapsed time; the drawing adds
+  that line itself, so do not write it.
   Say what each message is when you know: `message=interaction` (a message, no claim about
   waiting), `message=call` (the sender waits), `message=send` (the sender does not wait),
   `answers=id` for a reply (alone it makes the edge a reply to the earlier `interaction`,

@@ -2,7 +2,7 @@ diagram "Checkout: place an order" version=1
 subtitle "The stock is held before the card is charged"
 
 # A sequence with participant bands, phases, activation bars, a message between distant lanes and a send that expects no reply.
-footnote "Card accepted only; a declined card is left out. Rows show order, not elapsed time."
+footnote "Card accepted only; a declined card is left out."
 
 group client "Client" color=blue
 group server "Server" color=teal

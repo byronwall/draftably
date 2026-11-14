@@ -577,10 +577,11 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
         `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${panelSwatch(look).fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
     ].filter(Boolean) as string[],
     // Activation bars go over the lifelines and under the messages, which end on their sides.
-    bars: (seq.activations ?? []).map(
-      b =>
-        `<rect class="sequence-activation" data-call="${esc(b.call)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"/>`,
-    ),
+    bars: (seq.activations ?? []).map(b => {
+      // A bar fades with its call when an emphasis state leaves the call out.
+      const dim = doc.graph.edges.find(e => e.id === b.call)?.spot === 'dim';
+      return `<rect class="sequence-activation" data-call="${esc(b.call)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"${dim ? fade(statusPaint(look, undefined, 'dim')) : ''}/>`;
+    }),
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [
       `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,

@@ -23,7 +23,8 @@ export const markerMarkup = (x: number, y: number, ink: string, canvas: string, 
 const GAP = 24;
 
 /** Width of a row's swatch: a message's line is longer, for the marks at its ends. */
-const swatchW = (e?: LegendEntry) => (e?.message && e.message !== 'action' ? 28 : 16);
+const swatchW = (e?: LegendEntry) =>
+  e?.caption ? -8 : e?.message && e.message !== 'action' ? 28 : 16;
 
 /** Width of one entry: its swatch, the gap after it, and its label. */
 const entryW = (look: ResolvedAppearance, label: string, e?: LegendEntry) =>
@@ -101,6 +102,8 @@ export function legendMarkup(look: ResolvedAppearance, key: LegendLayout, x: num
         top = y + 12 + e.y,
         mid = top + row / 2;
       let swatch: string;
+      if (e.legend?.caption)
+        return `<text x="${left}" y="${mid}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.muted}">${esc(e.label)}</text>`;
       if (e.legend?.activation)
         // A short lifeline with a bar on it.
         swatch =

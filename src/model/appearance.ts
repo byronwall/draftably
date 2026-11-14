@@ -139,6 +139,8 @@ export interface LegendEntry {
   message?: MessageKind;
   /** An activation bar, which a sequence with `activations=on` adds a row for. */
   activation?: true;
+  /** Words with no swatch: a sequence's line that its rows show order, not time. */
+  caption?: true;
   /** Shade of the swatch; nodes' default when omitted. */
   shade?: Shade;
   label: string;

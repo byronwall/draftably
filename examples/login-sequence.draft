@@ -2,7 +2,7 @@ diagram "Successful password sign-in" version=1
 subtitle "The web app hands the password check to the auth service"
 
 # A sequence diagram: each message says what it is, phases name the steps, and the key explains each mark.
-footnote "Valid credentials only; error paths are left out. Rows show order, not elapsed time."
+footnote "Valid credentials only; error paths are left out."
 
 node user "User" shape=pill color=sky
 node app "Web app"

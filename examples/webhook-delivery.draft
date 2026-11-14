@@ -2,7 +2,7 @@ diagram "Webhook delivery with one retry" version=1
 subtitle "The sender does not wait, so the receiver answers twice"
 
 # A sequence of sends: no sender waits, one message gets two replies, and actions show each side's own work.
-footnote "One failed attempt, then success. Rows show order, not elapsed time."
+footnote "One failed attempt, then success."
 
 node app "Billing app"
 node hooks "Webhook worker" color=violet
