@@ -7,7 +7,14 @@ import {
 import { clamp, contains, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { edgeLabelLines, edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
+import {
+  ACTION_PAD,
+  actionSize,
+  edgeLabelLines,
+  edgeLabelSize,
+  groupTitleLines,
+  SELF_LOOP,
+} from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
   ancestors,
@@ -19,7 +26,7 @@ import {
   type VisibleEdge,
   type VisibleGraph,
 } from './graph';
-import type { Diagram, EdgeLayout, Lane, Point, Rect, ShapeKind, Side } from './types';
+import type { Activation, Diagram, EdgeLayout, Lane, Point, Rect, ShapeKind, Side } from './types';
 
 export const SIDE_VECTORS: Record<Side, Point> = {
   left: { x: -1, y: 0 },
@@ -774,7 +781,13 @@ export function drawRoutes(
         }),
       ...vg.edges.flatMap(e => {
         const row = doc.layout.edges[e.id]?.row;
-        return row === undefined ? [] : [messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!)];
+        return row === undefined
+          ? []
+          : [
+              messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!, look, (id, y, right) =>
+                barEdge(doc.layout.sequence?.activations, id, y, right),
+              ),
+            ];
       }),
     ],
   };
@@ -837,7 +850,7 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
-  // A sequence message's label sits just above its line, centred between the two lifelines, or
+  // A sequence message's label sits just above its line, centred between two lifelines, or
   // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
   for (const route of result.routes) {
     const label = byEdge.get(route.id)!.label;
@@ -846,14 +859,27 @@ export function drawRoutes(
       [a, b] = [route.points[0], route.points[route.points.length - 1]];
     labels.set(
       route,
-      route.from === route.to
-        ? {
-            x: route.points[1].x + SELF_LOOP.label + w / 2,
-            y: (route.points[1].y + route.points[2].y) / 2,
-            w,
-            h,
+      byEdge.get(route.id)!.message === 'action'
+        ? // A local action's label fills its box, less the border.
+          {
+            x: route.points[0].x,
+            y: route.points[0].y + (h + 2 * ACTION_PAD) / 2,
+            w: w + 2 * ACTION_PAD - 2,
+            h: h + 2 * ACTION_PAD - 2,
           }
-        : { x: (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
+        : route.from === route.to
+          ? {
+              x: route.points[1].x + SELF_LOOP.label + w / 2,
+              y: (route.points[1].y + route.points[2].y) / 2,
+              w,
+              h,
+            }
+          : {
+              x: doc.layout.edges[route.id]?.labelX ?? (a.x + b.x) / 2,
+              y: a.y - h / 2 - 1,
+              w,
+              h,
+            },
     );
   }
   const frames = vg.groups.flatMap(g =>
@@ -986,20 +1012,52 @@ export function haloPath(points: Point[], others: Point[][], frames: Rect[]): st
 }
 
 /**
+ * The side of the activation bars a participant has at height `y`: the right side of the
+ * outermost bar, or the left side of the first. Undefined where no bar is open.
+ */
+function barEdge(bars: Activation[] | undefined, id: string, y: number, right: boolean) {
+  const open = (bars ?? []).filter(b => b.node === id && y >= b.y && y <= b.y + b.h);
+  if (!open.length) return undefined;
+  return right ? Math.max(...open.map(b => b.x + b.w)) : Math.min(...open.map(b => b.x));
+}
+
+/**
  * A sequence message: a straight line at its row from the source's lifeline (the middle of the
  * box) to the target's, or, sent to itself, a short loop out to the right and back.
  */
-function messageRoute(e: VisibleEdge, row: number, a: Rect, b: Rect): Route {
-  const from = a.x + a.w / 2,
-    to = b.x + b.w / 2,
-    right = to >= from;
-  const points =
-    e.a === e.b
+function messageRoute(
+  e: VisibleEdge,
+  row: number,
+  a: Rect,
+  b: Rect,
+  look: ResolvedAppearance,
+  edge: (id: string, y: number, right: boolean) => number | undefined,
+): Route {
+  const mid = a.x + a.w / 2,
+    right = b.x + b.w / 2 >= mid,
+    box = e.message === 'action' ? actionSize(e.label, look) : undefined,
+    self = e.a === e.b;
+  // A message ends on the side of an activation bar, where its participant has one at this row.
+  const from = box ? mid : (edge(e.a, row, self || right) ?? mid),
+    to = edge(e.b, row, !right) ?? b.x + b.w / 2,
+    back = self ? (edge(e.a, row + SELF_LOOP.down, true) ?? mid) : mid,
+    out = Math.max(from, back) + SELF_LOOP.out;
+  const points = box
+    ? // A local action: a box round its label, centred on the lifeline at its row.
+      [
+        { x: from, y: row - box.h / 2 },
+        { x: from + box.w / 2, y: row - box.h / 2 },
+        { x: from + box.w / 2, y: row + box.h / 2 },
+        { x: from - box.w / 2, y: row + box.h / 2 },
+        { x: from - box.w / 2, y: row - box.h / 2 },
+        { x: from, y: row - box.h / 2 },
+      ]
+    : self
       ? [
           { x: from, y: row },
-          { x: from + SELF_LOOP.out, y: row },
-          { x: from + SELF_LOOP.out, y: row + SELF_LOOP.down },
-          { x: from, y: row + SELF_LOOP.down },
+          { x: out, y: row },
+          { x: out, y: row + SELF_LOOP.down },
+          { x: back, y: row + SELF_LOOP.down },
         ]
       : [
           { x: from, y: row },

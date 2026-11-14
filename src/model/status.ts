@@ -17,6 +17,7 @@ import {
   type Swatch,
 } from './appearance';
 import { descendants, styleOf } from './graph';
+import type { MessageKind } from './markers';
 import type { Diagram, DiagramEdge } from './types';
 
 export type Status = 'same' | 'added' | 'removed' | 'changed' | 'context';
@@ -228,4 +229,76 @@ export function usedStatuses(doc: Diagram): StatusCount[] {
 
 /** The color key's rows: a diff draws no family colors, so it lists only its statuses. */
 export const drawnLegend = (doc: Diagram): LegendEntry[] =>
-  isDiff(doc) ? [] : (doc.appearance.legend ?? []);
+  isDiff(doc)
+    ? []
+    : [
+        ...(doc.appearance.legend ?? []),
+        ...messageKey(doc),
+        // Bars are drawn only with `activations=on`, and only then need a row.
+        ...(doc.layout.sequence?.activations?.length
+          ? [{ activation: true as const, label: 'at work on a call' }]
+          : []),
+      ];
+
+/**
+ * A sequence in words, for a reader who cannot see it: the participants, then each event in
+ * order with its kind. An exported SVG carries it as its description unless the host gives one.
+ */
+export function sequenceDescription(doc: Diagram): string | undefined {
+  if (!doc.layout.sequence) return undefined;
+  const name = new Map(doc.graph.nodes.map(n => [n.id, n.title.split('\n')[0]])),
+    step = new Map(doc.graph.edges.map((e, i) => [e.id, i + 1])),
+    kind = (e: DiagramEdge) =>
+      e.message === 'reply'
+        ? e.replyTo && step.has(e.replyTo)
+          ? `reply to step ${step.get(e.replyTo)}`
+          : 'reply'
+        : e.message && e.message !== 'interaction' && e.message !== 'action'
+          ? MESSAGE_LABELS[e.message]
+          : '';
+  const events = doc.graph.edges.map((e, i) => {
+    const text = e.label.replace(/\s+/g, ' ').trim(),
+      who =
+        e.message === 'action'
+          ? `${name.get(e.from)} does`
+          : e.from === e.to
+            ? `${name.get(e.from)} to itself`
+            : `${name.get(e.from)} to ${name.get(e.to)}`;
+    return `${i + 1}. ${who}${text ? `: ${text}` : ''}${kind(e) ? ` (${kind(e)})` : ''}.`;
+  });
+  return [
+    `Sequence between ${[...name.values()].join(', ')}, in order from top to bottom.`,
+    ...events,
+  ].join(' ');
+}
+
+/** What each kind of message means, as its row of the key says it. */
+const MESSAGE_LABELS: Record<MessageKind, string> = {
+  interaction: 'message',
+  call: 'call: the sender waits',
+  send: 'send: the sender does not wait',
+  reply: 'reply',
+  outcome: 'result shown',
+  action: 'local action',
+};
+
+/**
+ * The key a sequence draws for its kinds of message: one row for each mark in use, so a reader
+ * never has to guess what a solid head or a box means. Nothing unless a message has a kind. A
+ * plain message and a shown result draw the same arrow, so they share a row.
+ */
+export function messageKey(doc: Diagram): LegendEntry[] {
+  const used = new Set(doc.graph.edges.flatMap(e => (e.message ? [e.message] : [])));
+  if (!used.size) return [];
+  // A message with no kind draws the plain arrow too, so it reads as a message.
+  if (doc.graph.edges.some(e => !e.message && !e.dashed && e.directed)) used.add('interaction');
+  const plain = (['interaction', 'outcome'] as const).filter(k => used.has(k));
+  return [
+    ...(plain.length
+      ? [{ message: plain[0], label: plain.map(k => MESSAGE_LABELS[k]).join(' / ') }]
+      : []),
+    ...(['call', 'send', 'reply', 'action'] as const)
+      .filter(k => used.has(k))
+      .map(k => ({ message: k, label: MESSAGE_LABELS[k] })),
+  ];
+}

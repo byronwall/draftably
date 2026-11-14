@@ -36,30 +36,31 @@ a line break: `node n "Says \"hi\""`. A bare quote inside a string is an error t
 column. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
-| Statement                          | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one. Exports and the Editor draw it above the drawing. `width=` (160–8000) sets the frame's width. See [Title and subtitle](#title-and-subtitle).                                                                                                                                                                                                                                                             |
-| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                       |
-| `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                        |
-| `subtitle "text"`                  | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                      |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                                                                                                                                                                         |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                  |
-| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                          |
-| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                             |
-| `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                            |
-| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                   |
-| `footnote 1 "text"`                | An entry in the block under the drawing, above the legend. The marker (`1`, `a`, `*`) is optional; a label points at it as `[1]`. Text takes `[label](href)` links. See [Footnotes](#footnotes).                                                                                                                                                                                                                                      |
-| `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
-| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                                                                                |
-| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                                                                            |
-| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                            |
-| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                              |
-| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                          |
-| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                    |
-| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                                                                                                                                                                        |
-| `config key=value`                 | File settings. See [Links and counts](#links-and-counts).                                                                                                                                                                                                                                                                                                                                                                             |
-| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                                                                                                                                                                                                      |
-| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                |
+| Statement                          | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `diagram "title" version=1`        | Optional title. At most one. Exports and the Editor draw it above the drawing. `width=` (160–8000) sets the frame's width. See [Title and subtitle](#title-and-subtitle).                                                                                                                                                                                                                                                                                                                                                                 |
+| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
+| `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `subtitle "text"`                  | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `legend family "meaning"`          | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                                                                                                |
+| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                                                                                                                       |
+| `footnote 1 "text"`                | An entry in the block under the drawing, above the legend. The marker (`1`, `a`, `*`) is optional; a label points at it as `[1]`. Text takes `[label](href)` links. See [Footnotes](#footnotes).                                                                                                                                                                                                                                                                                                                                          |
+| `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; in a sequence `message=` and `answers=` say what it is (see [Kinds of message](#kinds-of-message)); `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). A long label wraps to about 140px; `\n` starts a new line. |
+| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                                                                                                                                                                                    |
+| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. `activations=on` draws activation bars. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                        |
+| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                                                                                                                        |
+| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `config key=value`                 | File settings. See [Links and counts](#links-and-counts).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `action id participant "label"`    | Sequence diagrams: work one participant does, drawn as a box on its lifeline. See [Kinds of message](#kinds-of-message).                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -333,9 +334,13 @@ layout root sequence
 ```
 
 `kind=async` draws a dashed message, the usual mark of a reply. A message from a participant to
-itself draws a short loop. Participants are spaced so each message's label fits between its two
-lifelines, however far apart they are. A self-message's loop and label keep clear of the next
+itself draws a short loop. A label sits in one gap between two lifelines, and that gap is wide
+enough for it. A message between distant participants puts its label in one of the gaps it
+crosses, so the label covers no lifeline. A self-message's loop and label keep clear of the next
 lifeline and the next row, and a self-message on the last participant widens the panel.
+
+A participant's header is only as tall as its title: 32 for one line. The headers stand on one
+line, so a taller header rises above the others.
 
 Position refinements do not apply. In the editor, drag a participant or a band past a neighbor
 to change the order; the drop saves an `order` line, and a drag that keeps the order saves
@@ -383,9 +388,95 @@ layout root sequence
 A phase is a run of consecutive messages. A listed run can't skip a message, so `check` reports
 `m1 m3` around `m2`: include `m2` or split the phase. A message belongs to at most one phase, and
 messages outside every phase are fine. Deleting a message takes it out of its phase, and deleting
-a phase's last message removes the phase. Change marks
+a phase's last message removes the phase. A phase's label wraps at about 96px, so a long label
+moves no participant far. The band grows to hold its label, and bands stand 16 apart. Change marks
 work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`)
-and activations are not supported yet.
+are not supported yet.
+
+### Kinds of message
+
+A plain `edge` says only that one participant sends something to another. `message=` says what
+the message is, and the drawing gives each kind its own mark:
+
+| Kind                  | Meaning                                                                       | Drawn as                  |
+| --------------------- | ----------------------------------------------------------------------------- | ------------------------- |
+| `message=interaction` | A message, with no claim about waiting                                        | Solid line, open arrow    |
+| `message=call`        | The sender waits for the answer                                               | Solid line, solid arrow   |
+| `message=send`        | The sender does not wait                                                      | Solid line, dot at sender |
+| `answers=id`          | A reply to the message `id`. `message=reply` is a reply that names no message | Dashed line, open arrow   |
+| `message=outcome`     | A result shown to a participant, such as a person                             | Solid line, open arrow    |
+| `action` line         | Work one participant does                                                     | A box on its lifeline     |
+
+```draft
+node user "User"
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "submit password" message=interaction
+edge m2 app -> auth "verify" message=call
+action m3 auth "check password hash"
+edge m4 auth -> app "session token" answers=m2
+edge m5 app -> user "signed in" message=outcome
+phase check "Check" m2 m3 m4
+layout root sequence
+```
+
+`action id participant "label"` takes its place among the messages in file order. It is an event
+like a message: a `phase`, a `state` and a note's `near=` can name it. It is not a message to
+itself, so it draws no arrow. An action takes no change mark.
+
+The drawing never reads a kind from a line's style. Write the kind you mean:
+
+- `answers=id` makes the edge a reply, so it needs no `message=` beside it. It names an earlier
+  message that runs the other way and has the kind `interaction`, `call` or `send`. Two replies
+  can answer one message.
+- `message=reply` alone is a reply that names no message. `message=reply answers=id` is the
+  long form of `answers=id` and draws the same. `answers=` with another kind, such as
+  `message=call answers=m1`, is an error: the two disagree.
+- The editor and `draftably` write a reply that names its message in the short form.
+- `message=` sets the line and its ends, so it takes no `kind=`, `head=`, `tail=` or
+  `directed=` beside it.
+- A file that uses kinds gets a key under the drawing, with one row for each mark in use. A
+  plain sequence gets none. An exported SVG of a sequence also carries the exchange in words,
+  in order, as its description for a screen reader. `check` warns `message-kind` when a `kind=async` message sits beside
+  messages that have a kind, because the key cannot say what its dashes mean.
+- A kind says nothing about time, delivery or storage. Say what the drawing leaves out in a
+  `footnote`, such as `footnote "Valid credentials only. Rows show order, not elapsed time."`.
+
+`draftably compare` refuses a file that uses `message=` or `action`: change marks cannot show
+that a message changed kind. `draftably rm action.m3` removes an action, and `draftably mv`
+renames the ID in each `answers=`, `phase` and `state` that uses it. In the editor, the
+Inspector's Kind field sets a message's kind and turns a self-message into an action.
+
+### Activation bars
+
+`layout root sequence activations=on` draws a bar on a participant's lifeline while it is at
+work on a call. Bars are off by default. They need no line of their own: the drawing reads them
+from each `message=call` and the reply that names it with `answers=`.
+
+```draft
+node app "Web app"
+node api "Orders API"
+node db "Database"
+edge m1 app -> api "create order" message=call
+edge m2 api -> db "insert order" message=call
+edge m3 db -> api "order row" answers=m2
+action m4 api "build the receipt"
+edge m5 api -> app "order number" answers=m1
+layout root sequence activations=on
+```
+
+- A bar opens on the participant that receives a call, at the call's row. It closes at the row
+  of the reply that answers the call. With more than one such reply, it closes at the last.
+- A call with no reply closes at the next message its participant sends to another
+  participant. If it sends none, the bar is a short stub under the call.
+- A participant that receives a call while one of its bars is open gets a second bar, a step
+  to the right of the first.
+- A message ends on the side of a bar, not on the lifeline. An action sits on its participant's
+  bar. Labels and self-message loops keep clear of bars, so a file with bars can be a little wider.
+- Only `message=call` opens a bar. A plain message, a send, and a call a participant sends to
+  itself open none.
+- The key gets a row for the bar. With `activations=off`, or without the word, the file draws
+  exactly as it did before.
 
 `note "text" near=m1` anchors a note to a message. Like every note, it moves no lane and no row.
 
@@ -1318,7 +1409,10 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 
 - [Support ticket lanes](https://draftably.dev/app/?example=support-lanes): Swim lanes: each top-level group is a role. Steps take their place in order across all lanes.
 - [Incident response](https://draftably.dev/app/?example=incident-response): One container per role, with hand-offs crossing between lanes.
-- [Sign-in sequence](https://draftably.dev/app/?example=login-sequence): A sequence diagram: participants across the top, one message per edge line, read top to bottom.
+- [Successful password sign-in](https://draftably.dev/app/?example=login-sequence): A sequence diagram: each message says what it is, phases name the steps, and the key explains each mark.
+- [Sign-in, in brief](https://draftably.dev/app/?example=sign-in-overview): The short companion of the sign-in sequence: the same participants in the same order, fewer messages.
+- [Checkout: place an order](https://draftably.dev/app/?example=checkout-sequence): A sequence with participant bands, phases, a message between distant lanes and a send that expects no reply.
+- [Webhook delivery with one retry](https://draftably.dev/app/?example=webhook-delivery): A sequence of sends: no sender waits, one message gets two replies, and actions show each side's own work.
 - [How a label reaches the page](https://draftably.dev/app/?example=label-history): A sequence whose labels point at footnotes; each footnote links its PR.
 - [How a request is built](https://draftably.dev/app/?example=prompt-request): The request is one group of touching cells, and a marker shows the cache point.
 

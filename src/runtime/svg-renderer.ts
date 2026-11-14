@@ -22,7 +22,14 @@ import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
-import { edgeLabelLines, edgeLabelType, groupTitleLines, nodeLabel } from '../model/labels';
+import {
+  edgeLabelLines,
+  edgeLabelType,
+  groupTitleLines,
+  nodeLabel,
+  PHASE_TAB,
+  phaseLabelLines,
+} from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
 import {
   headOf,
@@ -36,6 +43,7 @@ import {
 import { computeRoutes, HALO_WIDTH } from '../model/routes';
 import {
   drawnLegend,
+  sequenceDescription,
   edgeInk,
   HALO_GAP,
   haloInk,
@@ -304,6 +312,7 @@ function sceneMarkup(
       `<line x1="${x}" y1="${r.y + r.h}" x2="${x}" y2="${r.y + r.h + n.lifeline}" stroke="${look.muted}" stroke-width="${LIFELINE.width}" stroke-dasharray="${LIFELINE.dash}"/>`,
     );
   }
+  out.push(...backdrop.bars);
   const under = surfaces(doc, look);
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!,
@@ -464,12 +473,14 @@ function openSvg(
   opts: SvgOptions,
 ) {
   const prefix = opts.idPrefix ?? 'draft',
+    // A sequence says itself in words when the host gives no description.
+    description = opts.description ?? sequenceDescription(doc),
     css = LINK_CSS.replace(/a\.link/g, `#${prefix}-svg a.link`),
     out = new SvgChunks(opts.maxOutputBytes);
   out.push(
-    `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${opts.description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title id="${prefix}-title">${esc(opts.title ?? doc.title)}</title>`,
-    opts.description ? `<desc id="${prefix}-description">${esc(opts.description)}</desc>` : '',
+    description ? `<desc id="${prefix}-description">${esc(description)}</desc>` : '',
     opts.metadata ?? '',
     `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}</style>` +
       markers +
@@ -556,7 +567,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
  */
 export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
   const seq = doc.layout.sequence;
-  if (!seq) return { panel: [], phases: [] };
+  if (!seq) return { panel: [], phases: [], bars: [] };
   const { panel } = seq,
     band = bandSwatch(look),
     tab = seq.phaseX ?? panel.x;
@@ -565,11 +576,19 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
       panelDrawn(doc) &&
         `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${panelSwatch(look).fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
     ].filter(Boolean) as string[],
+    // Activation bars go over the lifelines and under the messages, which end on their sides.
+    bars: (seq.activations ?? []).map(
+      b =>
+        `<rect class="sequence-activation" data-call="${esc(b.call)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"/>`,
+    ),
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [
       `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,
       `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
-      `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
+      ...phaseLabelLines(ph.label, look).map(
+        (line, k) =>
+          `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB + (k + 0.5) * look.annotation.lineHeight}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}">${esc(line)}</text>`,
+      ),
     ]),
   };
 }
@@ -583,8 +602,7 @@ function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 
   ];
 }
 
-/** Inset of a phase label from its band's top left corner. */
-export const PHASE_TAB = 8;
+export { PHASE_TAB };
 
 /** A thin stripe across the top of a box, inside its rounded corners. */
 export function accentPath(r: Rect, radius: number) {

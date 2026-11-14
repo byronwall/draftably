@@ -169,7 +169,17 @@ Groups and the opinionated root layouts follow a few rules:
   every leaf across the whole drawing, so one rank is one column across every lane. Every node
   must sit in a top-level group. `layout root sequence` (`sequenced`) puts participants in file
   order and one message per row in edge order; messages are straight lines (`messageRoute` in `model/routes.ts`) and skip the router. Both
-  reuse `node`, `group`, `edge` and `layout`, with no second syntax.
+  reuse `node`, `group`, `edge` and `layout`, with no second syntax. The arithmetic of lanes,
+  label gaps and phase blocks is in `dsl/sequence-layout.ts`.
+- **A kind of message is a field on its edge.** `message=` and `answers=` stay on the edge
+  record, and an `action` line is an edge from a participant to itself with `message: 'action'`,
+  so order, phases, states, notes, deletion and renaming work for it as for any message.
+  `headOf` and `tailOf` (`model/markers.ts`) draw each kind's ends, `messageRoute` draws an
+  action's box, and `messageKey` (`model/status.ts`) adds the key rows. With `activations=on`,
+  `activationSpans` (`dsl/sequence-layout.ts`) reads the bars from call and reply pairs, the
+  compiler stores their boxes in `layout.sequence.activations`, and `messageRoute` ends each
+  message on a bar's side. No style field holds a
+  kind, so a source edit never writes one as `kind=` or `head=`.
 
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and

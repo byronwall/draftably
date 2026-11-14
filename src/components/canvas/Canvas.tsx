@@ -190,6 +190,7 @@ export function Canvas(props: CanvasProps) {
           </g>
           <SequenceBackdrop doc={shown()} part="phases" />
           <Lifelines doc={s.doc} ids={s.nodeIds()} rect={id => s.sceneRects().get(id)} />
+          <SequenceBackdrop doc={shown()} part="bars" />
           <g>
             <For each={s.routeIds()}>
               {id => (

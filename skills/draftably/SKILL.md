@@ -151,6 +151,7 @@ layout services row gap=56
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below). Spacing is `node-gap=` and `rank-gap=`, not `gap=`                                                                                                                                                                                                                                                                                                                      |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`. Defaults (range): `clearance` 10 (4–30), `standoff` 20 (0–40), `port-gap` 16 (6–28), `edge-gap` 16 (4–48), `bend-penalty` 32 (0–100), `crossing-penalty` 360 (0–1200), `shared-penalty` 8 (0–20), `parallel-penalty` 18 (0–60), `port-stability` 20 (0–150), `fanout-penalty` 50 (0–160), `passes` 3 (1–5), `corner-radius` 6 (0–16) |
 | `phase id "label" ids...`          | Sequence diagrams: listed messages drawn as a labelled row band                                                                                                                                                                                                                                                                                                                                                                |
+| `action id participant "label"`    | Sequence diagrams: work one participant does, a box on its lifeline, in its place among the messages                                                                                                                                                                                                                                                                                                                           |
 | `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                                                                                                                                                                                                                                                                                                           |
 | `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...`, `strike-removed=on` (strike removed titles through in a diff)                                                                                                                                                                                            |
 
@@ -210,6 +211,20 @@ Good defaults:
   participants, and `order group` places a band's members. `phase id "label" m1 m2 ...` draws a
   run of consecutive messages as a labelled row band (preview, apply). A phase can't skip a
   message; include it or split the phase. Rows show order, not elapsed time.
+  Say what each message is when you know: `message=interaction` (a message, no claim about
+  waiting), `message=call` (the sender waits), `message=send` (the sender does not wait),
+  `answers=id` for a reply (alone it makes the edge a reply to the earlier `interaction`,
+  `call` or `send` named `id`, which runs the other way; `message=reply` is a reply that names
+  no message) and `message=outcome` (a result shown to a person). Write
+  `action id participant "label"` for work one participant does, not an edge to itself; a
+  `phase` can list it. A file with kinds gets a key for its marks, so don't mix in `kind=async`
+  (`check` warns `message-kind`) or add `head=`/`tail=`. Never guess a kind from a dashed line;
+  leave the edge plain when you don't know. State the scope in a `footnote` ("Valid credentials
+  only; error paths are left out."). `compare` refuses files with `message=` or `action`.
+  `layout root sequence activations=on` draws a bar on a lifeline from each `message=call` to
+  the reply that `answers=` it (nested calls step right; a call with no reply ends at the
+  callee's next message). Bars are off by default; turn them on when the reader must see who
+  waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
 - One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request

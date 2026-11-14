@@ -295,14 +295,33 @@ export function translateEdit(input: EditInput): EditResult {
     setAttr(s, 'to', cfg?.toSide && cfg.toSide !== 'auto' ? bare(cfg.toSide) : undefined);
   };
   const writeEdge = (e: DiagramEdge, s: Statement) => {
+    // An action has its own line: its participant and its label. A self-message turns into one,
+    // and back, when its kind changes.
+    if (e.message === 'action') {
+      const label = e.label || s.args.find(w => w.quoted)?.value || e.id;
+      s.command = 'action';
+      s.attrs = [];
+      s.args = [s.args[0], bare(sid(e.from)), quoted(label)];
+      return;
+    }
+    s.command = 'edge';
     s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
     if (e.label) s.args.push(quoted(e.label));
     setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
     setAttr(s, 'head', e.head ? bare(e.head) : undefined);
     setAttr(s, 'tail', e.tail ? bare(e.tail) : undefined);
     const kind = getAttr(s, 'kind')?.value;
-    if (e.dashed) setAttr(s, 'kind', bare('async'));
+    // A kind of message draws its own dashes, so it never takes `kind=` beside it.
+    if (e.message) setAttr(s, 'kind', undefined);
+    else if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);
+    // A reply that names its message needs only `answers=`.
+    setAttr(
+      s,
+      'message',
+      e.message && !(e.message === 'reply' && e.replyTo) ? bare(e.message) : undefined,
+    );
+    setAttr(s, 'answers', e.replyTo ? bare(sid(e.replyTo)) : undefined);
     ports(after.layout.edges[e.id], s);
   };
   const beforeEdges = new Map(before.graph.edges.map(e => [e.id, e]));

@@ -9,6 +9,7 @@ import type { Footnote } from './footnote';
 import type { Note } from './note';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
+import type { MessageKind } from './markers';
 
 export type ThemeId = 'drafting' | 'fieldnotes' | 'signal' | 'ink' | 'blueprint' | 'drafting-dark';
 export const THEME_IDS: ThemeId[] = ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint'];
@@ -128,10 +129,16 @@ export interface Heading {
 export const LEGEND_LINES = ['dashed', 'solid'] as const;
 export type LegendLine = (typeof LEGEND_LINES)[number];
 
-/** One row of the key: a color swatch (`family`), or a short connection (`line`). */
+/**
+ * One row of the key: a color swatch (`family`), a short connection (`line`), or the mark of a
+ * kind of sequence message (`message`), which the drawing adds for each kind it uses.
+ */
 export interface LegendEntry {
   family?: string;
   line?: LegendLine;
+  message?: MessageKind;
+  /** An activation bar, which a sequence with `activations=on` adds a row for. */
+  activation?: true;
   /** Shade of the swatch; nodes' default when omitted. */
   shade?: Shade;
   label: string;

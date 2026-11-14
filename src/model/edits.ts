@@ -25,6 +25,7 @@ import {
 } from './graph';
 import { nodeLabel, visualBounds } from './labels';
 import { defaultShapeSize } from './styles';
+import type { MessageKind } from './markers';
 import type {
   ContainerLayout,
   Diagram,
@@ -670,6 +671,49 @@ export function setEdge(
   // Only a directed edge has marks to write, and a default end stays unwritten.
   if (!e.directed || e.head === 'arrow') delete e.head;
   if (!e.directed || e.tail === 'none') delete e.tail;
+}
+
+/**
+ * Give a sequence message a kind, or take it away. The kind draws the line and its ends, so the
+ * message keeps no style of its own. A reply to a message that can no longer take one is unpaired.
+ */
+export function setMessage(doc: Diagram, id: string, kind: MessageKind | undefined) {
+  const e = findEdge(doc, id);
+  if (!e || (kind === 'action' && e.from !== e.to)) return;
+  if (kind) e.message = kind;
+  else delete e.message;
+  e.directed = true;
+  e.dashed = kind === 'reply';
+  delete e.head;
+  delete e.tail;
+  if (kind !== 'reply') delete e.replyTo;
+  if (!kind || !['interaction', 'call', 'send'].includes(kind))
+    for (const other of doc.graph.edges) if (other.replyTo === id) delete other.replyTo;
+}
+
+/** The earlier messages a reply can answer: those with a kind that run the other way. */
+export function replyTargets(doc: Diagram, id: string) {
+  const edges = doc.graph.edges,
+    at = edges.findIndex(e => e.id === id),
+    reply = edges[at];
+  return reply
+    ? edges
+        .slice(0, at)
+        .filter(
+          e =>
+            e.from === reply.to &&
+            e.to === reply.from &&
+            ['interaction', 'call', 'send'].includes(e.message ?? ''),
+        )
+    : [];
+}
+
+/** Say which message a reply answers, or that it names none. */
+export function setReplyTo(doc: Diagram, id: string, target: string | undefined) {
+  const e = findEdge(doc, id);
+  if (!e || e.message !== 'reply') return;
+  if (target) e.replyTo = target;
+  else delete e.replyTo;
 }
 
 export function setEdgeLayout(doc: Diagram, id: string, patch: Partial<EdgeLayout>) {
