@@ -315,6 +315,8 @@ export interface ModelLayout {
   /** With `unit`: the width of one unit, and whether unit numbers run above the first row. */
   unitWidth?: number;
   ruler?: boolean;
+  /** `sequence` only: draw a bar on a participant's lifeline while it is at work on a call. */
+  activations?: true;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
   /** Root only: the image shape to aim for; compile tries direction and folding to get closest. */
@@ -892,7 +894,12 @@ export function parseModel(source: string | SourceDoc): Model {
           allow(
             recipe === 'cells'
               ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
-              : ['gap', ...(recipe === 'flow' ? ['fold'] : []), ...common],
+              : [
+                  'gap',
+                  ...(recipe === 'flow' ? ['fold'] : []),
+                  ...(recipe === 'sequence' ? ['activations'] : []),
+                  ...common,
+                ],
           );
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
@@ -915,6 +922,9 @@ export function parseModel(source: string | SourceDoc): Model {
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
           ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
+          ...(choice('activations', 'off', ['on', 'off'] as const) === 'on'
+            ? { activations: true as const }
+            : {}),
           ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
           ...(attrs.has('unit')
             ? {

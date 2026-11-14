@@ -229,7 +229,16 @@ export function usedStatuses(doc: Diagram): StatusCount[] {
 
 /** The color key's rows: a diff draws no family colors, so it lists only its statuses. */
 export const drawnLegend = (doc: Diagram): LegendEntry[] =>
-  isDiff(doc) ? [] : [...(doc.appearance.legend ?? []), ...messageKey(doc)];
+  isDiff(doc)
+    ? []
+    : [
+        ...(doc.appearance.legend ?? []),
+        ...messageKey(doc),
+        // Bars are drawn only with `activations=on`, and only then need a row.
+        ...(doc.layout.sequence?.activations?.length
+          ? [{ activation: true as const, label: 'at work on a call' }]
+          : []),
+      ];
 
 /**
  * A sequence in words, for a reader who cannot see it: the participants, then each event in

@@ -28,6 +28,7 @@ import type {
   DiagramSettings,
   EdgeLayout,
   NodeLayout,
+  Activation,
   SequenceLayout,
   SequencePhase,
   ShapeKind,
@@ -386,6 +387,17 @@ export function normalize(input: unknown): Diagram {
       list
         .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
         .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h }));
+    const bars = (list: unknown) =>
+      Array.isArray(list)
+        ? (list as Activation[])
+            .filter(
+              b =>
+                typeof b?.node === 'string' &&
+                [b.x, b.y, b.w, b.h].every(finite) &&
+                nodes.has(b.node),
+            )
+            .map(b => ({ node: b.node, call: String(b.call), x: b.x, y: b.y, w: b.w, h: b.h }))
+        : [];
     out.layout.sequence = {
       panel: { ...seq.panel },
       phases: phases(seq.phases),
@@ -398,9 +410,13 @@ export function normalize(input: unknown): Diagram {
               rows: { ...seq.before.rows },
               phases: phases(seq.before.phases),
               grow: finite(seq.before.grow) ? seq.before.grow : 0,
+              ...(bars(seq.before.activations).length
+                ? { activations: bars(seq.before.activations) }
+                : {}),
             },
           }
         : {}),
+      ...(bars(seq.activations).length ? { activations: bars(seq.activations) } : {}),
     };
   }
   out.collapsed = Array.isArray(data.collapsed)

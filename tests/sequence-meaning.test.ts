@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { removeIds, renameId, setFields } from '../src/cli/edit';
 import { compareDetailed } from '../src/dsl/compare';
 import { checkSource } from '../src/dsl/compile';
+import { activationSpans } from '../src/dsl/sequence-layout';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { translateEdit } from '../src/dsl/translate';
 import { printSource, readSource } from '../src/dsl/syntax';
@@ -10,7 +11,7 @@ import { replyTargets, setMessage } from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import { headOf, tailOf } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
-import { messageKey, sequenceDescription } from '../src/model/status';
+import { drawnLegend, messageKey, sequenceDescription } from '../src/model/status';
 import { renderSvg } from '../src/runtime/svg-renderer';
 import type { Diagram } from '../src/model/types';
 
@@ -257,5 +258,131 @@ describe('edits to kinds of message', () => {
     );
     expect(() => compareDetailed(lines('action x a "work"'), plain)).toThrow(/actions yet/);
     expect(() => compareDetailed(plain, lines('edge m a -> b "went"'))).not.toThrow();
+  });
+});
+
+describe('activation bars', () => {
+  const ev = (id: string, source: string, target: string, message?: string, replyTo?: string) => ({
+    id,
+    source,
+    target,
+    ...(message ? { message } : {}),
+    ...(replyTo ? { replyTo } : {}),
+  });
+
+  it('opens a bar at a call and closes it at the last reply that answers the call', () => {
+    expect(
+      activationSpans([
+        ev('m1', 'a', 'b', 'call'),
+        ev('m2', 'b', 'a', 'reply', 'm1'),
+        ev('m3', 'b', 'a', 'reply', 'm1'),
+        ev('m4', 'a', 'b', 'send'),
+        ev('m5', 'a', 'b'),
+      ]),
+    ).toEqual([{ lane: 'b', call: 'm1', start: 0, end: 2, level: 0 }]);
+  });
+
+  it('steps a bar out when its participant takes a call while another bar is open', () => {
+    const spans = activationSpans([
+      ev('m1', 'a', 'b', 'call'),
+      ev('m2', 'b', 'c', 'call'),
+      ev('m3', 'c', 'b', 'call'),
+      ev('m4', 'b', 'c', 'reply', 'm3'),
+      ev('m5', 'c', 'b', 'reply', 'm2'),
+      ev('m6', 'c', 'b', 'call'),
+      ev('m7', 'b', 'c', 'reply', 'm6'),
+      ev('m8', 'b', 'a', 'reply', 'm1'),
+    ]);
+    expect(spans.map(s => [s.call, s.lane, s.start, s.end, s.level])).toEqual([
+      ['m1', 'b', 0, 7, 0],
+      ['m2', 'c', 1, 4, 0],
+      ['m3', 'b', 2, 3, 1],
+      // The first nested bar closed at m4, so the next one takes its level again.
+      ['m6', 'b', 5, 6, 1],
+    ]);
+  });
+
+  it("ends a call with no reply at its participant's next message, or as a stub", () => {
+    expect(
+      activationSpans([
+        ev('m1', 'a', 'b', 'call'),
+        ev('x', 'b', 'b', 'action'),
+        ev('m2', 'b', 'c', 'call'),
+        ev('m3', 'a', 'a', 'call'),
+      ]),
+    ).toEqual([
+      { lane: 'b', call: 'm1', start: 0, end: 2, level: 0 },
+      // Nothing answers m2 and c sends nothing, so its bar is a stub. A call to itself has none.
+      { lane: 'c', call: 'm2', start: 2, level: 0 },
+    ]);
+  });
+
+  const source = (layout: string) => `node a "A"
+node b "B"
+node c "C"
+edge m1 a -> b "ask" message=call
+action x b "work"
+edge m2 b -> c "ask again" message=call
+edge m3 c -> c "think"
+edge m4 c -> b "answer" message=reply answers=m2
+edge m5 b -> a "answer" message=reply answers=m1
+${layout}
+`;
+
+  it('draws no bar, and moves nothing, until the layout line turns bars on', () => {
+    const off = checkSource(source('layout root sequence')),
+      explicit = checkSource(source('layout root sequence activations=off'));
+    expect(off.sequence!.activations).toBeUndefined();
+    expect(renderSvg(projectScene(explicit))).toBe(renderSvg(projectScene(off)));
+    expect(drawnLegend(projectScene(off)).map(e => e.label)).not.toContain('at work on a call');
+  });
+
+  it('ends each message on the side of a bar, and keeps labels and loops clear of it', () => {
+    const scene = checkSource(source('layout root sequence activations=on')),
+      doc = projectScene(scene),
+      { vg, rects } = visibleRects(doc),
+      routes = new Map(computeRoutes(doc, vg, rects).routes.map(r => [r.id, r])),
+      mid = (id: string) => rects.get(id)!.x + rects.get(id)!.w / 2,
+      row = (id: string) => doc.layout.edges[id].row!,
+      bars = doc.layout.sequence!.activations!;
+    expect(bars.map(b => [b.node, b.call])).toEqual([
+      ['b', 'm1'],
+      ['c', 'm2'],
+    ]);
+    const [b, c] = bars;
+    // Each bar is centred on its lifeline and runs a little past its call and its reply.
+    expect([b.x + b.w / 2, c.x + c.w / 2]).toEqual([mid('b'), mid('c')]);
+    expect([b.y, b.y + b.h]).toEqual([row('m1') - 4, row('m5') + 4]);
+    expect([c.y, c.y + c.h]).toEqual([row('m2') - 4, row('m4') + 4]);
+    // The call arrives on the bar's left side; the reply leaves from it.
+    expect(routes.get('m1')!.points).toEqual([
+      { x: mid('a'), y: row('m1') },
+      { x: b.x, y: row('m1') },
+    ]);
+    expect(routes.get('m2')!.points[0].x).toBe(b.x + b.w);
+    expect(routes.get('m5')!.points[0].x).toBe(b.x);
+    // A self-message inside a bar starts on the bar's right side.
+    expect(routes.get('m3')!.points[0].x).toBe(c.x + c.w);
+    // No label touches a bar.
+    for (const r of routes.values())
+      if (r.label && r.id !== 'x')
+        for (const bar of bars) {
+          const l = r.label,
+            apart =
+              l.x + l.w / 2 <= bar.x ||
+              l.x - l.w / 2 >= bar.x + bar.w ||
+              l.y + l.h / 2 <= bar.y ||
+              l.y - l.h / 2 >= bar.y + bar.h;
+          expect(apart, `${r.id} label and the bar of ${bar.call}`).toBe(true);
+        }
+    // An action sits on its participant's bar, and the key names the bar.
+    expect(routes.get('x')!.label!.x).toBe(mid('b'));
+    expect(drawnLegend(doc).map(e => e.label)).toContain('at work on a call');
+    expect(normalize(JSON.parse(JSON.stringify(doc))).layout.sequence!.activations).toEqual(bars);
+  });
+
+  it('refuses the switch on another recipe with a warning, not an error', () => {
+    const scene = checkSource('node a "A"\nlayout root flow activations=on');
+    expect(scene.model.warnings.map(w => w.code)).toContain('layout-attribute');
   });
 });
