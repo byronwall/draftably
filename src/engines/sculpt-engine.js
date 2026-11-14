@@ -1,4 +1,4 @@
-import { LayoutLab } from './layout-engine.js';
+import { LayoutLab } from './layout-engine.ts';
 /* Diagram Studio 7 — spatial editing and recorded layout journeys.
  * DOM-free. No random starts. Every operation returns new geometry.
  * A brush changes a local goal, not the definition of global graph quality.

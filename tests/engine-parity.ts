@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
-import { LayoutLab } from '../src/engines/layout-engine.js';
+import { LayoutLab } from '../src/engines/layout-engine.ts';
 import { RouteLab } from '../src/engines/routing-engine.js';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { SculptLab } from '../src/engines/sculpt-engine.js';
