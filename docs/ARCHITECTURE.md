@@ -213,6 +213,19 @@ startup, switches browser storage off, and projects each valid revision into the
 file is open, `commit` in `state/session/document.ts` hands every edit to the session, which translates it, shows
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
 
+A file-backed session follows a few rules:
+
+- **The file holds intent, not a picture.** The editor writes statements (declarations, `near`,
+  `nudge`, `stay`, `pin`, `size`), never the positions that layout computed. A drag writes a
+  relative preference by default, so the layout can still adapt when an agent adds content. The
+  same source gives the same geometry in Node and in the browser; `pnpm prove:file` compares them.
+- **The disk is the authority.** Browser storage is off while a file is open, and a camera move
+  never writes the file. Invalid source keeps the last valid drawing, and the viewer writes
+  nothing until the source is valid again.
+- **An edit the file cannot hold is refused.** `translate.ts` throws `UnsupportedEdit` (for
+  example for bends, label positions and images), and the session puts the drawing back with a
+  toast. The viewer never shows an edit as saved when the file did not get it.
+
 `server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
 overwriting, never outside the folder), draws SVG thumbnails cached until a file changes, and routes
 `?file=` requests to one file session per path. The dev server loads it through Vite

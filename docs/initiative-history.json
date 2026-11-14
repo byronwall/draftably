@@ -138,5 +138,24 @@
       "Activation import limits: a Mermaid bar from a bare activate line stays off with a warning, and a dotted line with a cross, no arrowhead or two arrowheads becomes a reply with a plain arrowhead.",
       "Editor limits: insert and move work on a file only, and the Inspector still shows port fields for a message."
     ]
+  },
+  {
+    "title": "Diagram DSL and shared file editing",
+    "slug": "diagram-dsl",
+    "outcome": "completed",
+    "retired_at": "2026-11-14",
+    "summary": "All four milestones shipped in PR 4 to PR 7 (on top of PR 3), merged on 2026-10-15: the .meld language, compiler and headless CLI (check, format, inspect), a watched file in the editor with revision-checked atomic saves, viewer edits written as source (a drag writes near, then pin, size, declarations), and stay anchors, layout notes, Reflow group and pnpm prove:file. The language became .draft in PR 10. Changed from the plan: the root scope does not clamp to nonnegative coordinates, new objects default to color=auto, and a resize writes no move preference. The layout tools that the plan disabled in file mode came back in the layout-in-files work. Reconciled against origin/main 1ae73851 with no local code changes. The planning files are at 1ae73851.",
+    "reason": "Byron asked on 2026-11-14 to retire plans that shipped. All four milestones are on origin/main, and the map's next action (merge PR 3 to PR 7) is done.",
+    "documentation": [
+      "docs/DSL.md",
+      "docs/ARCHITECTURE.md",
+      "docs/CHECKS.md",
+      "skills/draftably/SKILL.md"
+    ],
+    "revision": "1ae73851",
+    "follow_ups": [
+      "Not built, still refused as UnsupportedEdit: custom connection bends, label positions, images and icons in files.",
+      "Below the cut line, not planned: views, static summaries and checkpoints (DSL.md says views and checkpoints are not supported), inset and multi-instance diagrams, multi-user merge."
+    ]
   }
 ]
