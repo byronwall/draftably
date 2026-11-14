@@ -13,7 +13,7 @@ action a1 hooks "sign the payload"
 edge m2 hooks -> shop "POST /webhooks, first try" message=send
 edge m3 shop -> hooks "503 Service Unavailable" message=reply reply-to=m2
 action a2 hooks "wait 30 seconds"
-edge m4 hooks -> shop "POST /webhooks, second try" message=send
+edge m4 hooks -> shop "POST /webhooks again" message=send
 action a3 shop "check the signature\nand store the event"
 edge m5 shop -> hooks "200 OK" message=reply reply-to=m4
 edge m6 hooks -> app "delivered" message=reply reply-to=m1

@@ -50,6 +50,9 @@ export function laneCentres(first: number, gaps: number[], holds: Hold[][]) {
   return centre;
 }
 
+/** Half the height of an arrowhead, which a plain message draws below its row. */
+const ARROW = 4;
+
 /** What one event draws round its row: how far above it and how far below. */
 export type EventInk = {
   id: string;
@@ -115,7 +118,13 @@ export function eventRows(
         y = open.y + Math.max(rules.row - 4, e.above + rules.pad);
       } else if (i) y = ink + Math.max(rules.row - 4, e.above + rules.pad);
       else y += Math.max(rules.row, lift);
-    } else y = Math.max(y + Math.max(rules.row, lift), tall ? tall + rules.clear + e.above : 0);
+    } else
+      y = Math.max(
+        y + Math.max(rules.row, lift),
+        tall ? tall + rules.clear + e.above : 0,
+        // A box or a loop keeps clear of the arrowhead on the row above it.
+        e.tall ? ink + ARROW + rules.clear + e.above : 0,
+      );
     y = Math.ceil(y);
     rows.set(e.id, y);
     tall = e.tall ? y + e.below : 0;
