@@ -281,7 +281,8 @@ edge e1 cost -> sql.copy1 "scan 1"
   the node sets one. `lines=7` is one line.
 - `match="pattern"` takes the first body line that matches the regular expression, and `span=n`
   (default 1) extends the range over `n` lines. A range found by `match=` survives edits that
-  shift line numbers. A pattern is a quoted string, so write a backslash twice: `\\(`.
+  shift line numbers. A pattern is a quoted string, so write a backslash twice: `\\(`. A group
+  that repeats a repeat, such as `(a+)+`, is an error, because it can take minutes to run.
 - `color=` names the family (default `amber`). The range draws a band behind its lines in shade
   100 (900 in a dark theme), a bar in the left margin in shade 500, and the label as a tag in the
   right margin. The tag takes the first row of the range that the code leaves room on.

@@ -1176,6 +1176,10 @@ export function parseModel(source: string | SourceDoc): Model {
           } catch {
             fail(`match="${w.value}" is not a valid regular expression.`);
           }
+          assert(
+            !nestedQuantifier(w.value),
+            `match="${w.value}" repeats a group that repeats inside, such as (a+)+, which can take minutes to run. Repeat only the inside or only the group.`,
+          );
         }
         const color = attrs.get('color')?.value ?? 'amber';
         assert(
@@ -1338,6 +1342,37 @@ export function layoutParent(by: Map<string, ModelObject>, id: string): string {
   let p = by.get(id)?.parent ?? 'root';
   while (p !== 'root' && by.get(p)?.frame) p = by.get(p)!.parent;
   return p;
+}
+
+/**
+ * A quantified group that holds a quantifier, such as `(a+)+`, `(a*)*` or `((ab)+){2,}`. These
+ * can backtrack for minutes on one line, so `match=` refuses them.
+ */
+export function nestedQuantifier(pattern: string): boolean {
+  const stack: boolean[] = [];
+  let inner = false,
+    inClass = false;
+  for (let i = 0; i < pattern.length; i++) {
+    const c = pattern[i];
+    if (c === '\\') {
+      i++;
+      continue;
+    }
+    if (inClass) {
+      if (c === ']') inClass = false;
+      continue;
+    }
+    if (c === '[') inClass = true;
+    else if (c === '(') {
+      stack.push(inner);
+      inner = false;
+    } else if (c === ')') {
+      const quantified = /[+*{]/.test(pattern[i + 1] ?? '');
+      if (quantified && inner) return true;
+      inner = (stack.pop() ?? false) || inner || quantified;
+    } else if (c === '+' || c === '*' || c === '{') inner = true;
+  }
+  return false;
 }
 
 /**

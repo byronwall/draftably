@@ -10,7 +10,7 @@ import { placeNotes } from '../src/model/note';
 import { rangeBand, rangeRect } from '../src/model/ranges';
 import { withState } from '../src/model/status';
 import { visibleRects } from '../src/dsl/project';
-import { printSource, readSource } from '../src/dsl/syntax';
+import { nestedQuantifier, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit } from '../src/dsl/translate';
 import * as edits from '../src/model/edits';
 import { clone } from '../src/model/geometry';
@@ -124,6 +124,8 @@ describe('code ranges', () => {
     ['state s "S" sql.y', /Unknown range sql\.y.*in state s/],
     ['range sql.x lines=10-10\nedge e a -> sql.x to=top', /left or right side/],
     ['range sql.x lines=10-10 color=nope', /Unknown color nope/],
+    ['range sql.x match="^(a+)+$"', /repeats a group that repeats inside/],
+    ['range sql.x match="(x*)*"', /repeats a group that repeats inside/],
   ])('check reports %s', (line, message) => {
     expect(() => checkSource(code(line))).toThrow(message);
   });
@@ -175,6 +177,19 @@ describe('code ranges', () => {
       [undefined, undefined],
       [undefined, 'copy1'],
     ]);
+  });
+
+  it('refuse only nested quantifiers in match=', () => {
+    expect(['(a+)+', '(a*)*', '((ab)+)+', '(a+){2,}', '(?:x+y)*'].map(nestedQuantifier)).toEqual([
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
+    expect(
+      ['COUNT\\(\\*\\)', '(ab)+', 'a+b*', '[(+)]+', 'SUM\\(I\\.QTY\\) AS Q'].map(nestedQuantifier),
+    ).toEqual([false, false, false, false, false]);
   });
 
   it('take a change mark', () => {
