@@ -138,7 +138,7 @@ layout services row gap=56
 | `compare "before" "after"`          | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                                                                                                                                                                                                                                      |
 | `subtitle "text"`                   | Optional, at most one. One short line under the title in exports: the takeaway in about 10 words, not a second title or a paragraph                                                                                                                                                                                                                                                                                            |
 | `+node`, `-node`, `~node`, `.node`  | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`; `~node` also takes `was-shape=` and `was-count=`                                                                                                                                                                                                                                                           |
-| `node id "label"`                   | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=N`, cells: `span=N`; code: `<<TAG` body, `lang=`, `wrap=on\|off`, `numbers=on`, `start=`, `max-width=`, `tab=` (see Code)                                                                                                                                                                                              |
+| `node id "label"`                   | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=N`, cells: `span=N`; code: `<<TAG` body or `src="file#La-Lb"`, `lang=`, `wrap=on\|off`, `numbers=on`, `start=`, `max-width=`, `tab=` (see Code)                                                                                                                                                                        |
 | `group id "label"`                  | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                        | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
 | `legend family "meaning"`           | `shade=`. One entry of the key drawn under the diagram; one per accent color you use. `legend line dashed\|solid "meaning"` explains a line style                                                                                                                                                                                                                                                                              |
@@ -301,6 +301,27 @@ edge e1 cost -> sql.copy1 "scan"
   `note near=` and `state`. `+range`/`~range`/`-range` take change marks.
 - `check` errors on a range past the body, a `match=` with no hit, a range on a non-code node and
   an unknown range ID; it warns when `match=` hits several lines.
+
+Read a long or shared listing from its file with `src=` instead of pasting a copy:
+
+```text
+diagram "Where the orders query reads"
+
+node api "orders API"
+node sql "orders.sql" shape=code src="queries/orders.sql#L10-L24" numbers=on
+range sql.join lines=14-16 color=red "the slow join"
+edge e1 api -> sql.join "runs"
+```
+
+- The path is relative to the `.draft` file; `#L10-L24` picks lines (`#L10` is one line). A node
+  has `src=` or a body, never both.
+- `lang=` comes from the extension, and `start=` from the range, so `numbers=on` and `range
+lines=` use the file's own line numbers.
+- The CLI and `draftably open` read the file, and the viewer redraws when it changes. Paths
+  outside the served folder (or the git root, for the CLI) are refused.
+- Exports inline the code, so an exported PNG, SVG or PDF opens and checks on its own. The static
+  app and playground cannot read files and draw a placeholder that names the file.
+- `check` errors on a missing file, a range past the end of the file and a path outside the folder.
 
 ### Cells
 
