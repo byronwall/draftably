@@ -32,6 +32,12 @@ export interface WorkspaceInfo {
   files: WorkspaceFile[];
 }
 
+/**
+ * A Host header naming this machine. A page on another site that rebinds its DNS name to
+ * 127.0.0.1 still sends its own name, so its requests for files are refused.
+ */
+const LOCAL_HOST = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i;
+
 const SKIP = new Set(['node_modules', 'dist', 'dist-cli', 'build', 'coverage', 'tmp', 'target']);
 const MAX_FILES = 400;
 
@@ -193,6 +199,10 @@ export function createWorkspace(root: string): Workspace {
     root,
     handle(req, res) {
       const [url, query = ''] = (req.url ?? '').split('?');
+      if (url.startsWith('/api/') && !LOCAL_HOST.test(req.headers.host ?? '')) {
+        json(res, 403, { error: 'The draftably viewer answers localhost only.' });
+        return true;
+      }
       if (url === '/api/workspace' && req.method === 'GET') {
         json(res, 200, {
           name: path.basename(root),
