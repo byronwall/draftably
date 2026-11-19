@@ -19,6 +19,16 @@ import { noteMarkup, placeNotes } from '../model/note';
 import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
+import {
+  CODE_ADVANCE,
+  CODE_TYPE,
+  codeLayout,
+  codeRuns,
+  columnX,
+  moreText,
+  rowNumber,
+  wrapMarkPath,
+} from '../model/code';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
@@ -155,6 +165,58 @@ function outline(shape: string, r: Rect, radius: number, paint: string, ink = ''
     return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" fill="${ink}"/>`;
   const rx = shape === 'pill' ? r.h / 2 : radius;
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
+}
+
+/**
+ * A code node's caption band, line numbers and listing. Each run of characters is a `tspan` at
+ * its own column, so no renderer has to keep spaces.
+ */
+function codeMarkup(
+  n: Diagram['graph']['nodes'][number],
+  r: Rect,
+  look: ResolvedAppearance,
+  c: { fill: string; stroke: string; ink: string },
+  p: StatusPaint,
+) {
+  const code = n.code!,
+    laid = codeLayout(code, n.title, look, { width: r.w, height: r.h }),
+    muted = detailInk(look, c),
+    mid = CODE_TYPE.lineHeight / 2,
+    out: string[] = [];
+  if (laid.caption)
+    out.push(
+      `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
+      `<text x="${r.x + laid.gutter}" y="${r.y + laid.caption / 2}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(n.title, r.w - 2 * laid.gutter, look.annotation))}</text>`,
+    );
+  const spans: string[] = [],
+    numbers: string[] = [];
+  laid.rows.forEach((row, i) => {
+    const y = r.y + row.y + mid,
+      number = rowNumber(code, laid, row, i);
+    if (number)
+      numbers.push(
+        `<tspan x="${r.x + laid.gutter + (laid.numberCols - number.length) * CODE_ADVANCE}" y="${y}">${number}</tspan>`,
+      );
+    for (const run of codeRuns(row, code.lines[row.line]))
+      spans.push(`<tspan x="${r.x + columnX(laid, run.col)}" y="${y}">${esc(run.text)}</tspan>`);
+    if (row.wraps)
+      out.push(
+        `<path d="${wrapMarkPath(r.x + r.w - laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
+      );
+  });
+  if (laid.more)
+    spans.push(
+      `<tspan x="${r.x + columnX(laid, 0)}" y="${r.y + laid.moreY + mid}" fill="${muted}">${esc(moreText(laid.more))}</tspan>`,
+    );
+  if (numbers.length)
+    out.push(
+      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${muted}">${numbers.join('')}</text>`,
+    );
+  if (spans.length)
+    out.push(
+      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
+    );
+  return out.join('');
 }
 
 /** The accent ring around an object a `rest=plain` state focuses. */
@@ -380,14 +442,16 @@ function sceneMarkup(
           accent && style.shape === 'box'
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
-          `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
-            label.lines
-              .map(
-                (line, i) =>
-                  `<tspan x="${r.x + label.x}" y="${r.y + label.y + label.offsets[i]}"${line.detail ? ` ${detail}` : ''}>${esc(line.text)}</tspan>`,
-              )
-              .join('') +
-            '</text>',
+          n.code
+            ? codeMarkup(n, r, look, c, p)
+            : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
+              label.lines
+                .map(
+                  (line, i) =>
+                    `<tspan x="${r.x + label.x}" y="${r.y + label.y + label.offsets[i]}"${line.detail ? ` ${detail}` : ''}>${esc(line.text)}</tspan>`,
+                )
+                .join('') +
+              '</text>',
           badge
             ? `<rect x="${r.x + r.w - bw + 6}" y="${r.y - bh / 2}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="${c.stroke}"/>` +
               `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`

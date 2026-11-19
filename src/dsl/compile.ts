@@ -33,6 +33,7 @@ import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { marginNoteRoom, marginNotes } from '../model/note';
 import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
 import { defaultShapeSize } from '../model/styles';
+import { CODE_LANGS, codeLayout } from '../model/code';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
@@ -1134,6 +1135,14 @@ export function leafSize(
   size: { width: number; height?: number; minHeight?: number } | undefined,
   look: ResolvedAppearance,
 ) {
+  // A code node fits its listing: no growth cap, and a given size wraps and clips it.
+  if (o.code) {
+    const c = codeLayout(o.code, o.label, look, {
+      width: size?.width,
+      height: size?.height,
+    });
+    return { w: c.w, h: Math.max(c.h, size?.minHeight ?? 0), overflow: false };
+  }
   const base = defaultShapeSize(o.shape);
   if (o.shape === 'diamond') return diamondSize(o, size, base, look);
   const w = size?.width ?? fitWidth(o, base, look);
@@ -3896,6 +3905,7 @@ function layoutPass(
         ids: [g.id],
       });
   }
+  for (const o of objects) if (o.code) diagnostics.push(...codeNotes(o, m, look));
   settleLegendShades(m);
   diagnostics.push(...paletteNotes(m), ...legendNotes(m));
   for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
@@ -3918,6 +3928,44 @@ function layoutPass(
   };
   packFolds.set(scene, { groups: foldGroups, wrap: wrapRoot });
   return scene;
+}
+
+/** What `check` says about a code node: an unknown language, long lines and a clipped body. */
+function codeNotes(o: SceneObject, m: Model, look: ResolvedAppearance): Diagnostic[] {
+  const code = o.code!,
+    out: Diagnostic[] = [],
+    size = m.hints.find(h => h.type === 'size' && h.id === o.id),
+    laid = codeLayout(code, o.label, look, { width: o.w, height: o.h });
+  if (code.lang && !(CODE_LANGS as readonly string[]).includes(code.lang))
+    out.push({
+      level: 'info',
+      code: 'code-lang',
+      message: `${o.id}: lang=${code.lang} has no highlighting, so it draws as plain text. Known languages: ${CODE_LANGS.join(', ')}.`,
+      line: o.line,
+      ids: [o.id],
+    });
+  if (laid.long.length) {
+    const longest = laid.long.reduce((a, b) =>
+        code.lines[b].length > code.lines[a].length ? b : a,
+      ),
+      lines = laid.long.length === 1 ? 'line' : 'lines';
+    out.push({
+      level: 'warning',
+      code: code.wrap ? 'code-wrap' : 'code-clip',
+      message: `${o.id}: ${laid.long.length} ${lines} ${code.wrap ? 'wrap' : 'are cut off'} at ${laid.cols} columns; the longest is body line ${longest + 1} (${code.lines[longest].length} columns). Break ${laid.long.length === 1 ? 'it' : 'them'}, or raise max-width=.`,
+      line: code.sourceLine + longest,
+      ids: [o.id],
+    });
+  }
+  if (laid.more)
+    out.push({
+      level: 'warning',
+      code: 'code-clipped',
+      message: `${o.id}'s size cuts off the last ${laid.more} ${laid.more === 1 ? 'line' : 'lines'} of its body. Make it taller, or remove the size line.`,
+      line: size?.line ?? o.line,
+      ids: [o.id],
+    });
+  return out;
 }
 
 /**

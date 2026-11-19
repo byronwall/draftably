@@ -11,6 +11,7 @@ export const SHAPE_LABELS: Record<ShapeKind, string> = {
   icon: 'Icon',
   image: 'Image',
   marker: 'Marker',
+  code: 'Code',
 };
 
 /** Icons offered in the inspector for a shape. */

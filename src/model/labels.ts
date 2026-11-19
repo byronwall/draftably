@@ -148,7 +148,8 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
       (style.shape === 'diamond' && diamondMeasure(title, Math.min(r.w, r.h), look)) ||
       titleArea(style.shape, r.w, r.h, look, iconInside).width;
   if (mode !== 'center') width = cfg.width || Math.max(142, r.w);
-  const lines = wrapTitle(title, width, look),
+  // A code node draws its caption itself, in its own band.
+  const lines = style.shape === 'code' ? [] : wrapTitle(title, width, look),
     height = textHeight(lines, look);
   if (mode === 'top') y = -16 - height / 2;
   if (mode === 'bottom') y = r.h + 15 + height / 2;
