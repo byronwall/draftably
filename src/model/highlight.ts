@@ -70,7 +70,9 @@ interface Span {
   cls: Cls;
 }
 
-/** Run `rules` over `text`; the first rule that matches wins, and an unmatched character is plain. */
+const word = /[\w$]+/y;
+
+/** Run `rules` over `text`; the first rule that matches wins, and an unmatched word is plain. */
 function lex(text: string, rules: Rule[]): Span[] {
   const out: Span[] = [],
     st: State = { newline: true };
@@ -86,7 +88,11 @@ function lex(text: string, rules: Rule[]): Span[] {
     }
     let pieces: Array<{ end: number; cls: Cls }> | undefined;
     for (const rule of rules) if ((pieces = rule(text, pos, st))) break;
-    pieces ??= [{ end: pos + 1, cls: null }];
+    // Nothing matched: a word is plain as a whole, so no rule retries inside it.
+    if (!pieces) {
+      word.lastIndex = pos;
+      pieces = [{ end: pos + (word.exec(text)?.[0].length ?? 1), cls: null }];
+    }
     for (const p of pieces) {
       out.push({ from: pos, to: p.end, cls: p.cls });
       st.prev = { text: text.slice(pos, p.end), cls: p.cls };
@@ -141,7 +147,7 @@ const SQL: Rule[] = [
   re(/\/\*[\s\S]*?(?:\*\/|$)/, 'comment'),
   re(/[eE]?'(?:[^']|'')*'?/, 'string'),
   re(/"(?:[^"]|"")*"?|`[^`]*`?/, null),
-  re(/(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?(?![\w$])/, 'number'),
+  re(/(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?(?![\w$])/, 'number'),
   re(/[:@$]\w+/, null),
   re(IDENT, (m, st, text, end) =>
     st.prev?.text === '.'
@@ -169,7 +175,7 @@ const PYTHON: Rule[] = [
   re(/(?:[rRbBuUfF]{1,2})?(?:'(?:[^'\\\n]|\\.)*'?|"(?:[^"\\\n]|\\.)*"?)/, 'string'),
   re(/@[A-Za-z_][\w.]*/, (_m, st) => (st.newline || !st.prev ? 'function' : null)),
   re(
-    /(?:0[xXbBoO][\da-fA-F_]+|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:[eE][+-]?\d+)?[jJ]?)(?![\w$])/,
+    /(?:0[xXbBoO][\da-fA-F_]+|(?:\d[\d_]*(?:\.[\d_]*)?|\.\d[\d_]*)(?:[eE][+-]?\d+)?[jJ]?)(?![\w$])/,
     'number',
   ),
   re(IDENT, (m, st, text, end) =>
@@ -244,7 +250,7 @@ const TS: Rule[] = [
     return hit ? [{ end: pos + hit[0].length, cls: null }] : undefined;
   },
   re(
-    /(?:0[xXbBoO][\da-fA-F_]+n?|(?:\d[\d_]*\.?[\d_]*|\.\d[\d_]*)(?:[eE][+-]?\d+)?n?)(?![\w$])/,
+    /(?:0[xXbBoO][\da-fA-F_]+n?|(?:\d[\d_]*(?:\.[\d_]*)?|\.\d[\d_]*)(?:[eE][+-]?\d+)?n?)(?![\w$])/,
     'number',
   ),
   re(/[A-Za-z_$][\w$]*/, (m, st, text, end) =>

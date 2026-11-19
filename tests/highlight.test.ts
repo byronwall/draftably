@@ -100,6 +100,13 @@ describe('lexers', () => {
     ]);
   });
 
+  it('lexes a long run of digits in linear time', () => {
+    const line = ['1'.repeat(5000) + 'x'],
+      start = performance.now();
+    for (const lang of ['sql', 'python', 'ts']) expect(tokenize(lang, line)![0].tokens).toEqual([]);
+    expect(performance.now() - start).toBeLessThan(200);
+  });
+
   it('draws plain text for an unknown language', () => {
     expect(tokenize('cobol', ['MOVE A TO B'])).toBeUndefined();
   });
