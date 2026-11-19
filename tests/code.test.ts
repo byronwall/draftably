@@ -99,6 +99,13 @@ describe('code layout', () => {
     expect(clipped.rows[0]).toMatchObject({ clipped: true, to: clipped.cols - 1 });
   });
 
+  it('never breaks a line inside its leading indent', () => {
+    const line = ' '.repeat(20) + 'x'.repeat(40),
+      laid = codeLayout(block([line]), '', look, { width: 200 });
+    expect(laid.rows.length).toBeGreaterThan(1);
+    for (const r of laid.rows) expect(line.slice(r.from, r.to).trim()).not.toBe('');
+  });
+
   it('clips a fixed height to whole lines and counts the rest', () => {
     const lines = Array.from({ length: 30 }, (_, i) => `line ${i}`),
       laid = codeLayout(block(lines, { numbers: true, start: 98 }), 'f.sql', look, {

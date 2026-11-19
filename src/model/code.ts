@@ -109,11 +109,13 @@ const indentOf = (s: string) => s.length - s.trimStart().length;
 
 /**
  * Split a line into rows `cols` wide. A continuation starts at its line's indent plus two, and a
- * break falls after the last space of the window when one sits in its second half.
+ * break falls after the last space of the window when one sits in its second half, past the
+ * line's indent.
  */
 function wrapLine(text: string, cols: number): Array<{ from: number; to: number; col: number }> {
   if (columns(text) <= cols) return [{ from: 0, to: text.length, col: 0 }];
-  const hang = Math.min(indentOf(text) + HANG, Math.floor(cols / 2)),
+  const indent = indentOf(text),
+    hang = Math.min(indent + HANG, Math.floor(cols / 2)),
     out: Array<{ from: number; to: number; col: number }> = [];
   let from = 0,
     col = 0;
@@ -125,7 +127,8 @@ function wrapLine(text: string, cols: number): Array<{ from: number; to: number;
     }
     let to = from + room;
     const space = text.lastIndexOf(' ', to - 1);
-    if (space >= from + Math.ceil(room / 2)) to = space + 1;
+    // A space in the line's own indent is no break: it would leave a row of nothing.
+    if (space >= Math.max(from + Math.ceil(room / 2), indent)) to = space + 1;
     out.push({ from, to, col });
     from = to;
     // A continuation never starts on spaces: they sit at the end of the row before.
