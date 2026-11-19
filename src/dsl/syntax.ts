@@ -653,6 +653,11 @@ export function parseModel(source: string | SourceDoc): Model {
       assert(!unique.has(key), `Duplicate declaration: ${key}. Edit the existing line instead.`);
       unique.add(key);
     };
+    // Only a code node takes a body; the node and group case says so for those two.
+    assert(
+      !s.body || command === 'node' || command === 'group',
+      `The ${command} line takes no body. Only a code node (node id shape=code <<TAG) does.`,
+    );
     const status: Status | undefined = s.mark && MARKS[s.mark];
     assert(
       !s.mark || ['node', 'group', 'edge'].includes(command),

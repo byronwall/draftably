@@ -69,6 +69,10 @@ describe('code node source', () => {
     expect(() => parseModel('node c "C" shape=code')).toThrow(/A code node needs a body/);
     expect(() => parseModel('node c "C" <<X\nx\nX')).toThrow(/Only a code node takes a body/);
     expect(() => parseModel('node c "C" lang=sql')).toThrow(/lang= belongs on a code node/);
+    // A body on any other statement would swallow the lines after it.
+    expect(() =>
+      parseModel('node a "A"\nnode b "B"\nedge e a -> b "x" <<T\nnode c "C"\nT'),
+    ).toThrow(/^Line 3: The edge line takes no body/);
   });
 });
 
