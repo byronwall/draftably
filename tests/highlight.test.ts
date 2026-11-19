@@ -63,7 +63,7 @@ describe('lexers', () => {
   it('reads YAML keys, scalars, comments and block scalars', () => {
     const lines = [
       'env:',
-      '  - name: LOG # c',
+      '  - name: LOG # see |',
       '    on: true',
       '    run: |',
       '      echo "x: y"',
@@ -71,7 +71,7 @@ describe('lexers', () => {
     ];
     expect(show(lines, tokenize('yaml', lines))).toEqual([
       'keyword[env] punctuation[:]',
-      'punctuation[-] keyword[name] punctuation[:] comment[# c]',
+      'punctuation[-] keyword[name] punctuation[:] comment[# see |]',
       'keyword[on] punctuation[:] keyword[true]',
       'keyword[run] punctuation[:] operator[|]',
       'string[echo "x: y"]',

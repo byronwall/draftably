@@ -378,7 +378,8 @@ function yamlLines(lines: string[]): LineTokens[] {
     const after = yamlKey(line, i, tokens);
     const flow = /^[\s:]*[[{]/.test(line.slice(after));
     yamlValue(line, after, tokens, flow);
-    if (/(?:^|\s)[|>][-+0-9]*\s*(?:#.*)?$/.test(line)) block = indent;
+    // Only `yamlValue`'s block indicator opens a block scalar, never text in a comment.
+    if (tokens.some(t => t.cls === 'operator')) block = indent;
     return { tokens };
   });
 }
