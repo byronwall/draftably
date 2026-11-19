@@ -82,6 +82,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     }
     const entity = findNode(s.doc, id) ?? findGroup(s.doc, id) ?? findEdge(s.doc, id);
     if (!entity) return;
+    // A code node's body is edited in the source, not on the canvas.
+    if ('code' in entity && entity.code) return;
     finishInlineEdit(true);
     batch(() => {
       s.setConnectFrom(null);
