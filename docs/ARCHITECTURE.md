@@ -89,23 +89,27 @@ Considered and not chosen, with the reason:
 
 Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directly.
 
-| File              | Responsibility                                                                                                    |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `types.ts`        | The `Diagram` document and everything in it.                                                                      |
-| `document.ts`     | `normalize` validates any input (files, storage, clipboard) and migrates v1 files.                                |
-| `graph.ts`        | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                |
-| `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given. |
-| `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                        |
-| `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                  |
-| `rich-text.ts`    | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                        |
-| `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.     |
-| `status.ts`       | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.               |
-| `footnote.ts`     | The footnote block between the drawing and the key.                                                               |
-| `appearance.ts`   | Five preset themes, families with numeric shades, `resolveAppearance` and the dark variant (`forScheme`).         |
-| `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).          |
-| `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                 |
-| `static-scene.ts` | A read-only scene for comparison candidates.                                                                      |
-| `samples.ts`      | The example catalog backed by `src/samples/*.json`.                                                               |
+| File              | Responsibility                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `types.ts`        | The `Diagram` document and everything in it.                                                                        |
+| `document.ts`     | `normalize` validates any input (files, storage, clipboard) and migrates v1 files.                                  |
+| `graph.ts`        | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                  |
+| `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given.   |
+| `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                          |
+| `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                    |
+| `rich-text.ts`    | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                          |
+| `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.       |
+| `status.ts`       | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.                 |
+| `footnote.ts`     | The footnote block between the drawing and the key.                                                                 |
+| `code.ts`         | Code nodes: `codeLayout` sizes, wraps and clips a listing by mono columns. Each row points back to its source line. |
+| `highlight.ts`    | Syntax colors for code nodes: a regex lexer per `lang=`, mapped to each theme's families at 4.5:1 contrast.         |
+| `ranges.ts`       | Named line ranges on a code node: the band, margin bar and label tag (`rangeMarks`), drawn under the text.          |
+| `code-src.ts`     | `src=` on a code node: the path and `#La-Lb` range, `lang=` from the extension, and the placeholder body.           |
+| `appearance.ts`   | Five preset themes, families with numeric shades, `resolveAppearance` and the dark variant (`forScheme`).           |
+| `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).            |
+| `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                   |
+| `static-scene.ts` | A read-only scene for comparison candidates.                                                                        |
+| `samples.ts`      | The example catalog backed by `src/samples/*.json`.                                                                 |
 
 ## state/ — reactive application state
 
@@ -176,16 +180,17 @@ command writes a new `.draft` file. Viewer entry points are planned separately.
 `dsl/` reads, formats and compiles `.draft` files (see [Diagram files](DSL.md)). It is pure
 TypeScript shared by the browser and the command line.
 
-| File              | Responsibility                                                                               |
-| ----------------- | -------------------------------------------------------------------------------------------- |
-| `syntax.ts`       | Source lines with comments, the formatter, and the validated model.                          |
-| `compile.ts`      | Layout recipes and refinements for one fixed render context; diagnostics with lines.         |
-| `channels.ts`     | Routing channels: extra room inside a group where lines must travel; compile lays out twice. |
-| `lanes.ts`        | Lanes outside a flow's band for returns and skips; fold wraps keep theirs (compile.ts).      |
-| `cells.ts`        | The `cells` recipe: a group's nodes edge to edge under a title band.                         |
-| `translate.ts`    | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements.  |
-| `source-edits.ts` | Helpers that add, change and remove single statements.                                       |
-| `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.          |
+| File                | Responsibility                                                                                  |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| `syntax.ts`         | Source lines with comments, the formatter, and the validated model.                             |
+| `compile.ts`        | Layout recipes and refinements for one fixed render context; diagnostics with lines.            |
+| `channels.ts`       | Routing channels: extra room inside a group where lines must travel; compile lays out twice.    |
+| `lanes.ts`          | Lanes outside a flow's band for returns and skips; fold wraps keep theirs (compile.ts).         |
+| `cells.ts`          | The `cells` recipe: a group's nodes edge to edge under a title band.                            |
+| `translate.ts`      | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements.     |
+| `source-edits.ts`   | Helpers that add, change and remove single statements.                                          |
+| `project.ts`        | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.             |
+| `inline-sources.ts` | Exports: each `src=` on a code node becomes an inline `<<TAG` body, so the export stands alone. |
 
 Groups and the opinionated root layouts follow a few rules:
 
@@ -263,6 +268,25 @@ source with 422. `state/session/file-session.ts` is the browser side: it detects
 startup, switches browser storage off, and projects each valid revision into the document. While a
 file is open, `commit` in `state/session/document.ts` hands every edit to the session, which translates it, shows
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
+
+Code nodes with `src=` read other files, so they follow a few rules of their own:
+
+- **The host reads the files, not the compiler.** `server/code-files.ts` reads each file a
+  `.draft` names and gives the compiler its text as `CodeFiles`. The compiler stays pure. The
+  static app has no files, so a `src=` node there draws a placeholder.
+- **Files stay inside one root.** For the viewer, the root is the folder `draftably open`
+  serves. For the CLI, it is the `.draft` file's git root, or its folder outside a repository. A
+  path or link that leaves the root is refused, and so is a file that is not a regular file or
+  is over 200 KB.
+- **Only a `.draft` file reads files.** The CLI never reads `src=` for a source embedded in a
+  PNG, SVG or PDF, because that source can come from anyone. An export already carries its code
+  inline (`dsl/inline-sources.ts`).
+- **The viewer follows the files.** `server/file-session.ts` watches each `src=` file's folder
+  and sends a `files` event when one changes, so the page redraws without a reload. A folder
+  that cannot be watched stays unwatched, and the server keeps running.
+- **The API answers localhost only.** `/api` requests need a `localhost`, `127.0.0.1` or
+  `[::1]` Host header (`server/workspace.ts`), so a page that rebinds its DNS name cannot read
+  the served folder.
 
 A file-backed session follows a few rules:
 

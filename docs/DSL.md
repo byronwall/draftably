@@ -42,7 +42,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`          | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `was-order m2 m1`                   | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                   | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                                  |
+| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                        |
 | `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `theme name`                        | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`                | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -188,159 +188,162 @@ letter or short word instead: `count=N` draws `×N`, and `count=many` draws `×m
 
 ## Code
 
-`shape=code` draws a code listing: a SQL query, a function, a config file, a shell pipeline or a
-diff. The code goes in a body under the statement:
+`shape=code` draws real code in the diagram: a query, a function, a config file or a diff. Put
+the code in a body under the node, then point edges and notes at the lines that matter:
 
 ```draft
-node gen "builder.py" shape=code lang=python numbers=on <<PY
-  def body_for(aggregate, domain):
-      for column in aggregate.columns:
-          if column.needs_domain:
-              # each aggregate gets its own copy of the domain
-              yield Subquery(select=[*domain.keys, column.expr])
-PY
+diagram "Why the orders report is slow"
+
+node report "Orders report" color=blue
+node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
+  SELECT c.name, totals.amount, counts.n
+  FROM customers AS c
+    JOIN (SELECT customer_id, SUM(total) AS amount
+          FROM orders GROUP BY customer_id) AS totals
+      ON totals.customer_id = c.id
+    JOIN (SELECT customer_id, COUNT(*) AS n
+          FROM orders GROUP BY customer_id) AS counts
+      ON counts.customer_id = c.id
+SQL
+
+range sql.scan1 lines=3-5 color=red "scan 1"
+range sql.scan2 lines=6-8 color=red "scan 2"
+edge runs report -> sql.scan1 "runs"
+note "Each scan reads every order row." near=sql.scan2
 ```
 
-The body:
+The body is a heredoc. It starts after `<<TAG`, the last word of the line, and ends at a line
+that holds only `TAG`:
 
-- starts after `<<TAG`, the last word of the statement, and ends at a line holding only `TAG`
-  (spaces around it are allowed). `TAG` is any identifier. Choose one the body never holds alone
-  on a line: a shell sample that uses `EOF` takes `<<SH`.
-- is verbatim. `"`, `#`, `//` and `\` are text, so JSON and shell paste in with no escapes.
-- loses the indent that all its lines share, so it can sit indented under its statement. A diff
-  keeps its first column, because the shared indent counts the `+` and `-` lines too.
-- expands tabs to `tab=` columns (default 4, 1–16) and drops trailing spaces and blank lines at
-  either end.
-- is kept exactly by `draftably format`. A diagnostic about a body line names its line in the file.
+- Paste code in as it is. `"`, `#`, `//` and `\` are text, so JSON and shell need no escapes.
+- Indent the body as you like. The indent that all its lines share is removed. A diff keeps its
+  `+`, `-` and space column.
+- Pick a tag that the body never holds alone on a line. A shell sample that uses `EOF` takes
+  `<<SH`.
+- `draftably format` keeps the body byte for byte. `check` gives a body line's line number in the
+  file.
 
-How it draws:
+The box fits the code, so a code node needs no `size` line. Every character sits in its own
+JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 
-- In JetBrains Mono at 12 px on 17 px lines, whatever `title-font` says. Every character sits in
-  its own column, so indentation lands exactly in the viewer, SVG, PNG and PDF.
-- On a quiet surface: the theme's node fill, or shade 50 of `color=` (950 in a dark theme).
-- The quoted label is optional. When given, it is a caption band above the code, like a file tab.
-- The box fits its longest line and its line count, with no `size` line. It grows up to
-  `max-width=` (default 960, about 130 columns). Past that, `wrap=on` (default) continues a line
-  on the next row, indented two columns past the line's own indent, with a ↩ in the right margin.
-  `wrap=off` cuts the line and ends it with `…`.
-- `numbers=on` adds a line-number gutter, and `start=` sets the first number (default 1).
-- `size id width=… height=…` sets the box. A width wraps or cuts lines at that width. A fixed
-  height keeps the rows that fit and ends with "… N more lines".
-- `lang=` names the language: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. The
-  code is colored by token: keywords, strings, numbers, comments, function names, operators and
-  punctuation. Each theme takes these colors from its own families, and every color keeps 4.5:1
-  contrast with the code fill. Color never changes a character's position.
-- In `lang=diff`, a line that starts with `+` gets a green band and a line that starts with `-`
-  gets a red band (shade 100, or 900 in a dark theme). The band covers the line's wrapped rows.
-  `@@` lines are colored like keywords, and `---`/`+++` file headers like comments.
-- SQL, JSON, YAML and diff are colored exactly. Python, TS/JS and shell are close: a regex literal,
-  `${…}` inside a template literal, and shell quoting nested in `$(…)` stay uncolored.
-- Another `lang=` draws plain text, and `check` adds an info note.
+| Option       | Default       | Effect                                                                                                        |
+| ------------ | ------------- | ------------------------------------------------------------------------------------------------------------- |
+| `"label"`    | none          | A caption band above the code, like a file tab.                                                               |
+| `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
+| `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
+| `start=`     | `1`           | The first line number. Ranges count from it too.                                                              |
+| `max-width=` | `960`         | The widest the box grows (120–8000 px; 960 is about 130 columns).                                             |
+| `wrap=`      | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
+| `tab=`       | `4`           | Columns per tab (1–16).                                                                                       |
+| `color=`     | the node fill | Fills the box with shade 50 of the family (950 in a dark theme).                                              |
+| `src=`       | none          | Reads the code from a file instead of a body. See [Code from a file](#code-from-a-file).                      |
 
-`check` reports:
+A `size id width=… height=…` line still sets the box. A width wraps or cuts lines at that width.
+A height keeps the rows that fit and ends with "… N more lines".
 
-| Code           | Level   | When                                                                                                                                                 |
-| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| (error)        | error   | A body with no closing line (at its `<<TAG` line), a body on any other shape, `shape=code` with no body or `src=`, or a code option on another shape |
-| `code-wrap`    | warning | Lines wrap. It names the longest, so you can break it                                                                                                |
-| `code-clip`    | warning | Lines are cut by `wrap=off`                                                                                                                          |
-| `code-clipped` | warning | A fixed `size` height leaves lines out                                                                                                               |
-| `code-lang`    | info    | `lang=` names a language with no highlighting                                                                                                        |
+Syntax highlighting: with `lang=`, keywords, strings, numbers, comments, function names, operators and punctuation
+take the theme's own colors, each at 4.5:1 contrast or more. In `lang=diff`, `+` lines get a
+green band and `-` lines a red band. SQL, JSON, YAML and diff color exactly. Python, TS/JS and
+shell are close: regex literals, `${…}` in template literals and quoting nested in `$(…)` stay
+uncolored.
 
-In the viewer, a code node moves, sizes, groups and connects like any node. Its body and caption
-are edited in the file, not on the canvas.
+In the viewer, a code node moves, sizes, groups and connects like any node. Edit its code and
+caption in the file.
 
 ### Line ranges
 
-A listing explains itself when you point at parts of it. `range` names lines of a code node:
+`range` names lines of a code node. The range draws a band behind the lines, a bar in the left
+margin and its label in the right margin. It never changes the node's size or the layout.
 
 ```draft
-diagram "Six copies of one join"
-
-node cost "Query plan: 6 scans"
-node sql "generated query" shape=code lang=sql numbers=on <<SQL
-  SELECT C.NAME, A1.AGG AS ORDERS
-  FROM CUSTOMERS AS C
-    JOIN (SELECT ORDER_ID, CUSTOMER_ID FROM ONLINE_ORDERS
-          UNION SELECT ORDER_ID, CUSTOMER_ID FROM STORE_ORDERS) AS O
-      ON O.CUSTOMER_ID = C.ID
-    JOIN (SELECT C.ID AS G0, COUNT(*) AS AGG
-          FROM CUSTOMERS AS C JOIN (SELECT ORDER_ID, CUSTOMER_ID FROM ONLINE_ORDERS
-            UNION SELECT ORDER_ID, CUSTOMER_ID FROM STORE_ORDERS) AS O
-          GROUP BY C.ID) AS A1 ON A1.G0 = C.ID
+node report "Orders report" color=blue
+node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
+  SELECT c.name, totals.amount, counts.n
+  FROM customers AS c
+    JOIN (SELECT customer_id, SUM(total) AS amount
+          FROM orders GROUP BY customer_id) AS totals
+      ON totals.customer_id = c.id
+    JOIN (SELECT customer_id, COUNT(*) AS n
+          FROM orders GROUP BY customer_id) AS counts
+      ON counts.customer_id = c.id
 SQL
 
-range sql.copy1 lines=3-4 color=red "copy 1 · outer rows"
-range sql.copy2 match="COUNT\\(\\*\\)" span=3 color=red "copy 2 · count"
-note "Each copy re-joins every order row." near=sql.copy2
-edge e1 cost -> sql.copy1 "scan 1"
+range sql.totals lines=3-5 "totals"
+range sql.counts match="COUNT\\(\\*\\)" span=3 color=red "counts"
+edge runs report -> sql.counts "slow part"
 ```
 
-- The ID is `<node>.<name>`. The node must be a code node.
-- `lines=a-b` counts body lines after the shared indent is removed, from 1, or from `start=` when
-  the node sets one. `lines=7` is one line.
-- `match="pattern"` takes the first body line that matches the regular expression, and `span=n`
-  (default 1) extends the range over `n` lines. A range found by `match=` survives edits that
-  shift line numbers. A pattern is a quoted string, so write a backslash twice: `\\(`. A group
-  that repeats a repeat, such as `(a+)+`, is an error, because it can take minutes to run.
-- `color=` names the family (default `amber`). The range draws a band behind its lines in shade
-  100 (900 in a dark theme), a bar in the left margin in shade 500, and the label as a tag in the
-  right margin. The tag takes the first row of the range that the code leaves room on.
-- Ranges may nest or overlap. Overlapping bands blend, their bars stand side by side, and their
-  labels stack on separate rows.
-- A range never changes the node's size or the layout. Every mark sits inside the box.
-- `sql.copy1` is an ID like any other: an `edge` may start or end on it, a `note near=` sits
-  beside its lines (on the right by default), and a `state` may list it.
-- An edge to a range ends on the node's left or right side, at the range's middle line. `to=` or
-  `from=` may pick `left` or `right`, but not `top` or `bottom`.
-- In a state, a listed range stays in focus and the node's other ranges fade.
-- A change mark (`+range`, `-range`, `~range`, `.range`) draws the range in the mark's color:
-  green, red or amber. A removed range has a dashed bar.
+Pick the lines one of two ways:
 
-`check` reports:
+- `lines=3-5` counts body lines from 1, or from `start=`. `lines=7` is one line.
+- `match="pattern"` takes the first line that matches a regular expression, and `span=3` extends
+  the range over three lines. The range follows its line when lines above it change. The pattern
+  is a quoted string, so write each backslash twice: `\\(`.
 
-| Code          | Level   | When                                                                                                                                                                                                         |
-| ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| (error)       | error   | A range before the first line or past the last, a `match=` with no hit, a `span=` that runs past the last line, a range on a node that is not a code node, or an unknown range in `edge`, `near=` or `state` |
-| `range-match` | warning | `match=` matches more than one line. The range starts at the first; the message lists every hit                                                                                                              |
+Then use it:
+
+- The ID is `<node>.<name>`, and it works like any ID. An `edge` may start or end on it, a
+  `note near=` sits beside its lines, and a `state` may list it.
+- An edge to a range meets the node's left or right side at the range's middle line. `to=` and
+  `from=` take `left` or `right` only.
+- `color=` picks the family (default `amber`). The label is optional.
+- Ranges may nest or overlap: bands blend, bars stand side by side and labels stack.
+- In a state, the listed ranges stay in focus and the node's other ranges fade. A change mark
+  (`+range`, `-range`, `~range`) draws the range in green, red or amber.
+- When you delete a code node in the viewer, its ranges go too, with every line that names them.
 
 ### Code from a file
 
-`src=` reads a code node's body from a file, so the listing follows the real source instead of a
-copy that goes stale:
+`src=` reads the code from a file, so the diagram shows the real source, not a copy that goes
+stale:
 
-```draft
+```text
 node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
+range sql.join lines=14-16 color=red "the slow join"
 ```
 
-- The path is relative to the `.draft` file. `#L10-L40` takes lines 10 to 40, and `#L10` takes
-  line 10 alone. Without it, the node shows the whole file.
+- The path is relative to the `.draft` file. `#L10-L40` takes lines 10 to 40, `#L10` takes one
+  line, and no `#L` takes the whole file.
+- `lang=` comes from the extension: `.sql`; `.py`; `.ts`, `.tsx`, `.mts`, `.cts`; `.js`, `.jsx`,
+  `.mjs`, `.cjs`; `.json`; `.yaml`, `.yml`; `.sh`, `.bash`, `.zsh`; `.diff`, `.patch`. Set
+  `lang=` to override it.
+- `start=` comes from the first line of the range. So `numbers=on` and `range … lines=` use the
+  file's own line numbers: `lines=14-16` above means lines 14 to 16 of `orders.sql`.
 - A node has `src=` or a body, never both.
-- `lang=` defaults from the extension: `.sql`, `.py`, `.ts`/`.tsx`, `.js`/`.mjs`, `.json`,
-  `.yaml`/`.yml`, `.sh`/`.bash` and `.diff`/`.patch`. `start=` defaults to the range's first line,
-  so `numbers=on` shows the file's own line numbers and `range … lines=` counts them too.
-- The lines are prepared like a body: tabs expand, trailing spaces go and the shared indent is
-  removed.
-- The CLI and `draftably open` read the file. The viewer watches it and redraws when it changes,
-  as it does for the `.draft` itself.
-- The file must be inside the folder `draftably open` serves, or inside the `.draft` file's git
-  root (its folder outside a repository) for the CLI. A path that leaves it, or a link that points
-  out of it, is refused. Files over 200 KB are refused.
-- The static app, the playground and the bundled examples cannot read files. There a `src=` node
-  draws a placeholder that names the file it needs, and its ranges mark the placeholder's first
-  line.
-- Every export is self-contained. PNG, SVG and PDF embed the source with each `src=` replaced by
-  an inline body (with `lang=` and `start=` written out), so `check` and `open` on an exported
-  image need no other file. An export whose inlined source would pass the 300,000-character
-  limit of a `.draft` fails with an error: narrow the line ranges, or export without the source.
 
-`check` reports:
+Where it works:
 
-| Code       | Level   | When                                                                                                  |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| (error)    | error   | `src=` and a body on one node                                                                         |
-| `code-src` | error   | The file is missing, the range starts or ends past the end of the file, or the path leaves the folder |
-| `code-src` | warning | The host cannot read files (the static app), so the node draws a placeholder                          |
+- `draftably open` and the CLI read the file. The open viewer redraws when you save the file.
+- The Playground, the static Editor and the bundled examples cannot read files. There the node
+  draws a placeholder that names the file. That is why this page shows the line as text.
+  `examples/code-from-file/` in the repository has a complete example to open.
+- Exports are self-contained. PNG, SVG and PDF embed the source with the code inline, so an
+  exported image opens and checks with no other file.
+
+Limits:
+
+- The file must be inside the folder `draftably open` serves. For the CLI, it must be inside the
+  `.draft` file's git root, or its folder outside a repository. A symbolic link that points out of it is refused too.
+- The file must be a regular file of 200 KB or less.
+- The CLI reads `src=` only for a `.draft` input. A source embedded in an image can come from
+  anyone, so there `src=` draws the placeholder.
+- An export fails when the inlined source passes the 300,000-character limit of a `.draft`.
+  Narrow the line ranges, or export with `--no-source`.
+
+### Code check messages
+
+| Code           | Level   | When                                                                                                                                                                   |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (error)        | error   | A body with no closing line, a body or code option on another shape, a code node with no body or `src=`, or both                                                       |
+| (error)        | error   | A range on a node that is not code or outside its body, a `match=` with no hit, a `span=` past the last line, an unknown range ID, or `to=top`/`bottom` on a range end |
+| (error)        | error   | A `match=` pattern that repeats a repeated group, such as `(a+)+`, which can take minutes to run                                                                       |
+| `code-src`     | error   | The file is missing, not a regular file, over 200 KB or outside the folder; or the `#L` range is `#L0`, backwards or past its end                                      |
+| `code-src`     | warning | The host cannot read files, so the node draws a placeholder                                                                                                            |
+| `range-match`  | warning | `match=` hits more than one line. The range takes the first, and the message lists them all                                                                            |
+| `code-wrap`    | warning | Lines wrap. The message names the longest, so you can break it or raise `max-width=`                                                                                   |
+| `code-clip`    | warning | `wrap=off` cuts lines                                                                                                                                                  |
+| `code-clipped` | warning | A `size` height leaves lines out                                                                                                                                       |
+| `code-lang`    | info    | `lang=` names a language with no colors                                                                                                                                |
 
 ## Soft groups
 
@@ -1606,6 +1609,12 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Order intake: check cards first](https://draftably.dev/app/?example=worker-pool-change): Before and After panels that draw the old shape and count from `was-shape=` and `was-count=`.
 - [Order service paths](https://draftably.dev/app/?example=emphasis): Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
 - [Field service intake](https://draftably.dev/app/?example=theme-proof): The `fieldnotes` theme: serif titles, wrapped labels, a diamond and nested groups.
+
+### Code
+
+- [Why the orders report is slow](https://draftably.dev/app/?example=code-review): Code nodes: SQL and a diff colored by `lang=`, named line ranges, and edges that end on a range.
+
+The repository's `examples/code-from-file/` folder holds a `src=` example with its SQL file. Open it with `draftably open`, because the Editor's bundled examples cannot read files.
 
 ### Where else to find them
 

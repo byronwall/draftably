@@ -3962,7 +3962,7 @@ function codeNotes(o: SceneObject, m: Model, look: ResolvedAppearance): Diagnost
     out.push({
       level: 'warning',
       code: code.wrap ? 'code-wrap' : 'code-clip',
-      message: `${o.id}: ${laid.long.length} ${lines} ${code.wrap ? 'wrap' : 'are cut off'} at ${laid.cols} columns; the longest is body line ${longest + 1} (${code.lines[longest].length} columns). Break ${laid.long.length === 1 ? 'it' : 'them'}, or raise max-width=.`,
+      message: `${o.id}: ${laid.long.length} ${lines} ${code.wrap ? (laid.long.length === 1 ? 'wraps' : 'wrap') : laid.long.length === 1 ? 'is cut off' : 'are cut off'} at ${laid.cols} columns; the longest is body line ${longest + 1} (${code.lines[longest].length} columns). Break ${laid.long.length === 1 ? 'it' : 'them'}, or raise max-width=.`,
       line: code.src ? o.line : code.sourceLine + longest,
       ids: [o.id],
     });
