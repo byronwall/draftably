@@ -91,12 +91,22 @@ describe('lexers', () => {
     expect(show(ts, tokenize('ts', ts))).toEqual([
       'keyword[if] punctuation[(] operator[||] punctuation[.] function[test] punctuation[(] punctuation[)] punctuation[)] function[f] punctuation[(] string[`x] string[`] punctuation[)] punctuation[;]',
     ]);
-    const sh = ['out="$(date "+%F")" # c', 'cat <<EOF | sort', "it's", 'EOF'];
+    const sh = [
+      'out="$(date "+%F")" # c',
+      'cat <<EOF | sort',
+      "it's",
+      'EOF',
+      // Not heredocs: arithmetic, quoted text, and an operator with no closing line.
+      'echo $((1<<n)) "<<END" <<NEVER',
+      'ls',
+    ];
     expect(show(sh, tokenize('sh', sh))).toEqual([
       'operator[=] comment[# c]',
       'function[cat] operator[<<] operator[|] function[sort]',
       "string[it's]",
       'punctuation[EOF]',
+      'function[echo] punctuation[$((] operator[1<<] punctuation[)] punctuation[)] string["<<END"] operator[<<]',
+      'function[ls]',
     ]);
   });
 

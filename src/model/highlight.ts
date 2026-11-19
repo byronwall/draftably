@@ -459,6 +459,40 @@ function shellRules(): Rule[] {
 }
 
 /**
+ * The heredocs a shell line opens, as `[dash, tag]`: `<<` as an operator, not inside quotes, a
+ * comment or arithmetic `$((…))`, and not part of `<<<`.
+ */
+function heredocTags(line: string): Array<[boolean, string]> {
+  const out: Array<[boolean, string]> = [],
+    op = /<<(-?)[ \t]*(['"]?)([A-Za-z_]\w*)\2/y;
+  let quote = '',
+    arith = 0;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '\\') i++;
+    else if (quote) {
+      if (c === quote) quote = '';
+    } else if (arith) {
+      if (c === '(') arith++;
+      else if (c === ')') arith--;
+    } else if (c === "'" || c === '"') quote = c;
+    else if (c === '#' && (i === 0 || /\s/.test(line[i - 1]))) break;
+    else if (line.startsWith('((', i)) {
+      arith = 2;
+      i++;
+    } else if (line.startsWith('<<', i) && line[i + 2] !== '<' && line[i - 1] !== '<') {
+      op.lastIndex = i;
+      const m = op.exec(line);
+      if (m) {
+        out.push([!!m[1], m[3]]);
+        i += m[0].length - 1;
+      }
+    }
+  }
+  return out;
+}
+
+/**
  * Shell lines. A heredoc body (`<<EOF` up to a line holding `EOF`) is a string, and its lines are
  * blanked before lexing so quotes inside it never pair with code outside.
  */
@@ -466,18 +500,18 @@ function shellLines(lines: string[]): LineTokens[] {
   const body = new Map<number, 'body' | 'end'>();
   for (let i = 0; i < lines.length; i++) {
     if (body.has(i)) continue;
-    const tags = [...lines[i].matchAll(/<<(-?)[ \t]*(['"]?)([A-Za-z_]\w*)\2/g)].filter(
-      m => lines[i][m.index! - 1] !== '<' && lines[i][m.index! + 2] !== '<',
-    );
     let j = i + 1;
-    for (const m of tags) {
-      for (; j < lines.length; j++) {
-        if ((m[1] ? lines[j].replace(/^\t+/, '') : lines[j]).trim() === m[3]) {
-          body.set(j++, 'end');
-          break;
-        }
-        body.set(j, 'body');
-      }
+    for (const [dash, tag] of heredocTags(lines[i])) {
+      // A heredoc with no closing line is likely a misread: leave the lines after it as code.
+      let end = j;
+      while (
+        end < lines.length &&
+        (dash ? lines[end].replace(/^\t+/, '') : lines[end]).trim() !== tag
+      )
+        end++;
+      if (end === lines.length) continue;
+      for (; j < end; j++) body.set(j, 'body');
+      body.set(j++, 'end');
     }
   }
   const code = lines.map((l, i) => (body.has(i) ? ' '.repeat(l.length) : l));
