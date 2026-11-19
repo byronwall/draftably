@@ -57,7 +57,7 @@
     "slug": "diagram-emphasis",
     "outcome": "completed",
     "retired_at": "2026-11-10",
-    "summary": "Links (a \u2197 mark that opens URLs as written, .draft files in the viewer and file paths in the editor from the git root), the config line with link-base and editor, check suggestions for missing files, static SVG links, and emphasis states (state lines, --state, --states panels and the viewer's state chips) shipped in PR 140 to PR 145 on 2026-10-27, with PR 189 and PR 198 after. The hover chip became the mark as the open button, and PR 441 later removed hover tooltips. Reconciled against f1c6a981; the planning files are at 51269c20.",
+    "summary": "Links (a ↗ mark that opens URLs as written, .draft files in the viewer and file paths in the editor from the git root), the config line with link-base and editor, check suggestions for missing files, static SVG links, and emphasis states (state lines, --state, --states panels and the viewer's state chips) shipped in PR 140 to PR 145 on 2026-10-27, with PR 189 and PR 198 after. The hover chip became the mark as the open button, and PR 441 later removed hover tooltips. Reconciled against f1c6a981; the planning files are at 51269c20.",
     "reason": "Byron approved retirement on 2026-11-10 after a check found the work already shipped while the map still said planned.",
     "documentation": [
       "docs/DSL.md",
@@ -196,6 +196,21 @@
       "Deferred until a host asks: a hover event, layout({ draft }) from .draft text, and Svelte Flow and Vue Flow edge components.",
       "Not chosen: named regions inside an item, worldToClient and clientToWorld helpers, and occurrence keys for compare and states panels. Add them when a host needs them.",
       "The Callsheet questions (published editor or source, input in bodies, selection sync, theme, page counts, print) had no recorded answers."
+    ]
+  },
+  {
+    "title": "Viewer feedback, 2 November 2026",
+    "slug": "viewer-feedback-2026-11-02",
+    "outcome": "completed",
+    "retired_at": "2026-11-19",
+    "summary": "Seven fixes from Byron's 2 November review of agent-written diagrams, all merged on 2026-11-02: the version in the status bar (PR 404); a subtitle that wraps to the drawing, the heading-prose warning and shorter skill guidance (PR 405); legend line rows, a one-row key and the legend-missing warning (PR 411); readable removed items in a diff, the variant Byron picked (PR 410); lane-colored line breaks and label cards with no redundant sequence border (PR 409); flow labels that wrap at 140px (PR 402) and a bend that slides for a long label (PR 413); and straight lines between two packed columns (PR 407). Version Packages (PR 322) shipped the sidebar resize. The long-row spike found that long chains already fold on main. The flow label wrap is 140px, not the planned 180px, from a measurement of the corpus. Reconciled against main 43dd8ff1 with no local code changes. The planning files are at 43dd8ff1; tests/fixtures/sequence-cruft.draft is the one repro kept, because tests/color-scheme.test.ts reads it.",
+    "reason": "Byron asked on 2026-11-19 to retire the plan (TASK-0044). Every milestone is on main.",
+    "documentation": ["docs/ARCHITECTURE.md", "docs/DSL.md", "skills/draftably/SKILL.md"],
+    "revision": "43dd8ff1",
+    "follow_ups": [
+      "Not built: a dotted legend line row; no line draws dotted yet.",
+      "The title stays one line, so a long title still sets the frame width.",
+      "Below the cut line and not built: removing note from the language, and an editor control to pick a diff style."
     ]
   }
 ]
