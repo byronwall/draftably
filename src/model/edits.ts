@@ -367,10 +367,13 @@ export function insertStep(
     },
     target,
   );
+  // The new step is a plain node: the first line leaves its range end behind, and the second
+  // line starts at the step, so only its far end keeps the original target's range.
   const to = edge.to,
-    { head, tail: _tail, ...ends } = clone(edge);
+    { head, tail: _tail, fromRange: _from, ...ends } = clone(edge);
   edge.to = id;
   delete edge.head;
+  delete edge.toRange;
   doc.layout.edges[edge.id] = { fromSide: cfg.fromSide || 'auto', toSide: 'auto' };
   const second = uid('e');
   // The tail stays at the source and the head stays at the target.

@@ -162,6 +162,21 @@ describe('code ranges', () => {
     expect(text).toMatch(/^state s2 "T" sql\.x$/m);
   });
 
+  it('stay on the original target when a step is inserted on a line to a range', () => {
+    const source = code('range sql.copy1 lines=10-11 "c"\nedge e1 a -> sql.copy1');
+    const { text, scene } = edit(source, d => {
+      edits.insertStep(d, 'e1', undefined, { x: 0, y: 0 });
+    });
+    const lines = text.split('\n').filter(l => l.startsWith('edge '));
+    expect(lines).toHaveLength(2);
+    expect(lines.find(l => l.startsWith('edge e1 '))).toMatch(/^edge e1 a -> new-step$/);
+    expect(lines.find(l => !l.startsWith('edge e1 '))).toMatch(/ new-step -> sql\.copy1$/);
+    expect(scene.edges.map(e => [e.fromRange, e.toRange])).toEqual([
+      [undefined, undefined],
+      [undefined, 'copy1'],
+    ]);
+  });
+
   it('take a change mark', () => {
     const doc = projectScene(checkSource(code('~range sql.a lines=11-11 "changed"')));
     expect(doc.graph.nodes.find(n => n.id === 'sql')!.code!.ranges![0].status).toBe('changed');
