@@ -47,6 +47,9 @@ export function readCodeFiles(source: string, draft: string, root: string): Code
         files[src] = {
           error: `src="${src}" links outside ${root}; draftably reads files inside it only.`,
         };
+      else if (!fs.statSync(at.full).isFile())
+        // A folder, a pipe or a device: a pipe would block the read.
+        files[src] = { error: `src="${src}" is not a regular file.` };
       else if (fs.statSync(at.full).size > MAX_BYTES)
         files[src] = { error: `src="${src}" is over 200 KB. Point it at a smaller file.` };
       else files[src] = { text: fs.readFileSync(at.full, 'utf8') };
