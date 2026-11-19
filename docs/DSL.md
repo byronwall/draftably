@@ -42,7 +42,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`          | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `was-order m2 m1`                   | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                   | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                                  |
+| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                        |
 | `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `theme name`                        | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`                | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -294,6 +294,8 @@ edge e1 cost -> sql.copy1 "scan 1"
 - An edge to a range ends on the node's left or right side, at the range's middle line. `to=` or
   `from=` may pick `left` or `right`, but not `top` or `bottom`.
 - In a state, a listed range stays in focus and the node's other ranges fade.
+- When you delete a code node in the viewer, its `range` lines go too, with each edge, note and
+  state entry that names one of them.
 - A change mark (`+range`, `-range`, `~range`, `.range`) draws the range in the mark's color:
   green, red or amber. A removed range has a dashed bar.
 
@@ -309,15 +311,20 @@ edge e1 cost -> sql.copy1 "scan 1"
 `src=` reads a code node's body from a file, so the listing follows the real source instead of a
 copy that goes stale:
 
-```draft
+```text
 node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
 ```
+
+This page shows the line as text: the docs site cannot read files, so it would draw a placeholder.
+To see it drawn, open the repository's `examples/code-from-file/orders-report.draft` with
+`draftably open`.
 
 - The path is relative to the `.draft` file. `#L10-L40` takes lines 10 to 40, and `#L10` takes
   line 10 alone. Without it, the node shows the whole file.
 - A node has `src=` or a body, never both.
-- `lang=` defaults from the extension: `.sql`, `.py`, `.ts`/`.tsx`, `.js`/`.mjs`, `.json`,
-  `.yaml`/`.yml`, `.sh`/`.bash` and `.diff`/`.patch`. `start=` defaults to the range's first line,
+- `lang=` defaults from the extension: `.sql`, `.py`, `.ts`/`.tsx`/`.mts`/`.cts`,
+  `.js`/`.jsx`/`.mjs`/`.cjs`, `.json`, `.yaml`/`.yml`, `.sh`/`.bash`/`.zsh` and `.diff`/`.patch`.
+  Set `lang=` on the node to override it. `start=` defaults to the range's first line,
   so `numbers=on` shows the file's own line numbers and `range … lines=` counts them too.
 - The lines are prepared like a body: tabs expand, trailing spaces go and the shared indent is
   removed.
@@ -325,7 +332,13 @@ node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
   as it does for the `.draft` itself.
 - The file must be inside the folder `draftably open` serves, or inside the `.draft` file's git
   root (its folder outside a repository) for the CLI. A path that leaves it, or a link that points
-  out of it, is refused. Files over 200 KB are refused.
+  out of it, is refused. So is a path that is not a regular file (such as a named pipe), and a
+  file over 200 KB.
+- The CLI reads `src=` files only when its input is a `.draft` file. A source embedded in a PNG,
+  SVG or PDF can come from anyone, so its `src=` nodes draw placeholders. An export from
+  draftably has no `src=` left, so this changes nothing for it.
+- `draftably open` answers only requests to `localhost`, `127.0.0.1` or `[::1]`, so another web
+  page cannot read the served folder through it.
 - The static app, the playground and the bundled examples cannot read files. There a `src=` node
   draws a placeholder that names the file it needs, and its ranges mark the placeholder's first
   line.
@@ -336,11 +349,11 @@ node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
 
 `check` reports:
 
-| Code       | Level   | When                                                                                                  |
-| ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| (error)    | error   | `src=` and a body on one node                                                                         |
-| `code-src` | error   | The file is missing, the range starts or ends past the end of the file, or the path leaves the folder |
-| `code-src` | warning | The host cannot read files (the static app), so the node draws a placeholder                          |
+| Code       | Level   | When                                                                                                                                                                                   |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (error)    | error   | `src=` and a body on one node                                                                                                                                                          |
+| `code-src` | error   | The file is missing, is not a regular file, or is over 200 KB; the path leaves the folder; the range is `#L0`, runs backwards (`#L40-L10`), or starts or ends past the end of the file |
+| `code-src` | warning | The host cannot read files (the static app), so the node draws a placeholder                                                                                                           |
 
 ## Soft groups
 
@@ -1606,6 +1619,12 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Order intake: check cards first](https://draftably.dev/app/?example=worker-pool-change): Before and After panels that draw the old shape and count from `was-shape=` and `was-count=`.
 - [Order service paths](https://draftably.dev/app/?example=emphasis): Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
 - [Field service intake](https://draftably.dev/app/?example=theme-proof): The `fieldnotes` theme: serif titles, wrapped labels, a diamond and nested groups.
+
+### Code
+
+- [Why the orders report is slow](https://draftably.dev/app/?example=code-review): Code nodes: SQL and a diff colored by `lang=`, named line ranges, and edges that end on a range.
+
+The repository's `examples/code-from-file/` folder holds a `src=` example with its SQL file. Open it with `draftably open`, because the Editor's bundled examples cannot read files.
 
 ### Where else to find them
 

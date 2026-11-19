@@ -318,10 +318,12 @@ edge e1 api -> sql.join "runs"
 - `lang=` comes from the extension, and `start=` from the range, so `numbers=on` and `range
 lines=` use the file's own line numbers.
 - The CLI and `draftably open` read the file, and the viewer redraws when it changes. Paths
-  outside the served folder (or the git root, for the CLI) are refused.
+  outside the served folder (or the git root, for the CLI) are refused, and so are files over
+  200 KB. The CLI reads `src=` only for a `.draft` input, never for a source inside an image.
 - Exports inline the code, so an exported PNG, SVG or PDF opens and checks on its own. The static
   app and playground cannot read files and draw a placeholder that names the file.
-- `check` errors on a missing file, a range past the end of the file and a path outside the folder.
+- `check` errors (`code-src`) on a missing file, a file over 200 KB, a path outside the folder,
+  `#L0`, a backwards range (`#L40-L10`) and a range past the end of the file.
 
 ### Cells
 
