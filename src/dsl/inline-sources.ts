@@ -4,7 +4,7 @@
  */
 import { CODE_TAB } from '../model/code';
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
-import { formatSource, printSource, readSource } from './syntax';
+import { printSource, readSource } from './syntax';
 
 /** The paths every `src=` in `source` names, once each. */
 export function srcPaths(source: string): string[] {
@@ -27,14 +27,15 @@ function tagFor(lines: string[]) {
 }
 
 /**
- * `source` with each readable `src=` replaced by an inline body, formatted: what an export
+ * `source` with each readable `src=` replaced by an inline body: what an export
  * embeds, so the image opens again without the original files. `lang=` and `start=` are written
  * when the file implied them, so the colors, line numbers and `range lines=` stay the same.
  * A `src=` whose file is missing stays as written.
  */
 export function inlineSources(source: string, files: CodeFiles | undefined): string {
-  if (!files || !Object.keys(files).length) return formatSource(source);
+  if (!files || !Object.keys(files).length) return source;
   const doc = readSource(source);
+  let changed = false;
   for (const s of doc.lines) {
     if (s.kind !== 'statement' || s.command !== 'node') continue;
     const at = s.attrs.findIndex(([k]) => k === 'src');
@@ -53,6 +54,7 @@ export function inlineSources(source: string, files: CodeFiles | undefined): str
     if (!has('lang') && lang) attrs.push(['lang', plain(lang)]);
     if (!has('start') && body.start !== 1) attrs.push(['start', plain(String(body.start))]);
     const tag = tagFor(body.lines);
+    changed = true;
     s.attrs = attrs;
     s.body = {
       tag,
@@ -60,5 +62,5 @@ export function inlineSources(source: string, files: CodeFiles | undefined): str
       close: tag,
     };
   }
-  return formatSource(printSource(doc));
+  return changed ? printSource(doc) : source;
 }

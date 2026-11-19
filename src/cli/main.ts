@@ -320,7 +320,7 @@ export async function main(argv: string[]): Promise<number> {
    * code node's file inlined so the image opens again on its own.
    */
   const embed = (source: string) =>
-    flag('--no-source') ? undefined : inlineSources(source, codeFiles(file!, source));
+    flag('--no-source') ? undefined : formatSource(inlineSources(source, codeFiles(file!, source)));
   const withSource = (svg: string, source: string) => {
     const kept = embed(source);
     return kept === undefined ? svg : embedSvgSource(svg, kept);

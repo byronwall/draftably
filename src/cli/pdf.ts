@@ -23,6 +23,7 @@ import {
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { inlineSources } from '../dsl/inline-sources';
+import { formatSource } from '../dsl/syntax';
 import type { CodeFiles } from '../model/code-src';
 import { readCodeFiles } from '../server/code-files';
 import { gitRoot } from '../server/file-session';
@@ -295,10 +296,14 @@ export async function buildPdf(inputs: PdfInput[], opts: PdfOptions = {}) {
       for (let n = 2; used.has(name); n++)
         name = path.basename(input.name, '.draft') + `-${n}.draft`;
       used.add(name);
-      await pdf.attach(new TextEncoder().encode(inlineSources(input.source, input.files)), name, {
-        mimeType: 'text/plain',
-        description: title,
-      });
+      await pdf.attach(
+        new TextEncoder().encode(formatSource(inlineSources(input.source, input.files))),
+        name,
+        {
+          mimeType: 'text/plain',
+          description: title,
+        },
+      );
     }
   }
   return { bytes: await pdf.save(), pages: pdf.getPageCount() };

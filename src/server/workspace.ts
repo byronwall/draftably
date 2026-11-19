@@ -225,7 +225,7 @@ export function createWorkspace(root: string): Workspace {
       }
       let session = sessions.get(full);
       if (!session) {
-        session = createFileSession(full);
+        session = createFileSession(full, root);
         sessions.set(full, session);
       }
       return session.handle(req, res);

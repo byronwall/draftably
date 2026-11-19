@@ -21,6 +21,7 @@ import {
   fileName,
 } from '../lib/svg-export';
 import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
+import { inlineSources } from '../dsl/inline-sources';
 import { exportHref } from './links';
 import { drawingBounds } from '../model/bounds';
 import { FRAME_PAD } from '../model/frame';
@@ -69,8 +70,11 @@ export function setExportLook(patch: Partial<ExportLook>) {
 }
 
 /** The `.draft` source to put in an export, or undefined when there is none to carry. */
+/** The source an export carries, with each `src=` code node's file inlined. */
 const exportSource = (look = exportLook()) =>
-  activeSession().fileMode() && look.source ? activeSession().currentSource() : undefined;
+  activeSession().fileMode() && look.source
+    ? inlineSources(activeSession().currentSource(), activeSession().codeFiles())
+    : undefined;
 
 /** Space round the selected objects when only they are exported. */
 const SELECTION_MARGIN = 24;

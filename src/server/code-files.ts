@@ -17,7 +17,9 @@ const inside = (root: string, full: string) => full === root || full.startsWith(
 export function srcFile(draft: string, root: string, src: string) {
   const full = path.resolve(path.dirname(draft), src);
   if (!inside(root, full))
-    return { error: `src="${src}" is outside ${root}, the folder draftably serves; it reads files inside it only.` };
+    return {
+      error: `src="${src}" is outside ${root}, the folder draftably serves; it reads files inside it only.`,
+    };
   return { full };
 }
 
@@ -39,7 +41,9 @@ export function readCodeFiles(source: string, draft: string, root: string): Code
     try {
       // A link inside the folder may point out of it.
       if (!inside(fs.realpathSync(root), fs.realpathSync(at.full)))
-        files[src] = { error: `src="${src}" links outside ${root}; draftably reads files inside it only.` };
+        files[src] = {
+          error: `src="${src}" links outside ${root}; draftably reads files inside it only.`,
+        };
       else if (fs.statSync(at.full).size > MAX_BYTES)
         files[src] = { error: `src="${src}" is over 1 MB. Point it at a smaller file.` };
       else files[src] = { text: fs.readFileSync(at.full, 'utf8') };
