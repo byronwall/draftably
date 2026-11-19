@@ -223,6 +223,7 @@ export function CodeBody(props: {
           font-size={String(props.look.annotation.size)}
           font-weight={String(props.look.annotation.weight)}
           fill={props.swatch.ink}
+          fill-opacity={props.fade}
           text-decoration={props.strike ? 'line-through' : undefined}
         >
           {truncateText(props.caption, props.w - 2 * laid().gutter, props.look.annotation)}
