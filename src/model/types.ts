@@ -6,6 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
+import type { CodeBlock } from './code';
 import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
 
@@ -18,7 +19,9 @@ export type ShapeKind =
   | 'icon'
   | 'image'
   /** A seam between two cells of a `cells` group. */
-  | 'marker';
+  | 'marker'
+  /** A code listing; the node carries its body in `code`. */
+  | 'code';
 /** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
 export type ColorKey = string;
 export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detached';
@@ -42,6 +45,8 @@ export interface DiagramNode {
   image?: string;
   /** A sequence participant: length of the dashed lifeline below the box. */
   lifeline?: number;
+  /** A code node's body and options; its title, when set, is a caption above the code. */
+  code?: CodeBlock;
 }
 
 export interface DiagramGroup {

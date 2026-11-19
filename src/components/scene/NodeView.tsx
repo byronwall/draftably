@@ -13,7 +13,7 @@ import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { NodeTitle, pinSpot, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
+import { CodeBody, NodeTitle, pinSpot, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
 
@@ -219,6 +219,20 @@ export function NodeView(props: NodeViewProps) {
       <Show when={glyph()}>
         {g => (
           <SceneGlyph name={style().icon} x={g().x} y={g().y} size={g().size} color={color().ink} />
+        )}
+      </Show>
+      <Show when={node().code}>
+        {code => (
+          <CodeBody
+            code={code()}
+            caption={node().title}
+            w={props.rect.w}
+            h={props.rect.h}
+            look={look()}
+            swatch={color()}
+            strike={paint().strike}
+            fade={paint().inkFade}
+          />
         )}
       </Show>
       <NodeTitle

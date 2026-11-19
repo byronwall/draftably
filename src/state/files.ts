@@ -322,7 +322,10 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     // The drawing's own canvas and fonts, so the file renders the same without the app.
     const defs = createSvgElement('defs'),
       style = createSvgElement('style');
-    style.textContent = fontFaceCss(theme);
+    style.textContent = fontFaceCss(
+      theme,
+      activeSession().doc.graph.nodes.some(n => n.code),
+    );
     defs.append(style);
     svg.append(title, meta, defs);
     if (!look.transparent)

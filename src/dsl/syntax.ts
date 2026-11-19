@@ -24,6 +24,7 @@ import {
 import { FONT_ROLES, type FontRole } from '../model/fonts';
 import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
+import { CODE_MAX_WIDTH, CODE_TAB, codeLines, type CodeBlock } from '../model/code';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
 import type {
@@ -67,7 +68,23 @@ export interface Statement {
   comment?: string;
   /** 1-based line in the source this statement was parsed from; 0 when added by an edit. */
   line: number;
+  /**
+   * A heredoc body: `<<TAG` ends the statement's line, and the lines after it, up to a line
+   * holding only `TAG`, are kept verbatim. The statement spans all of them.
+   */
+  body?: HereBody;
 }
+
+export interface HereBody {
+  tag: string;
+  /** The body's lines exactly as written. */
+  lines: string[];
+  /** The closing line exactly as written (`TAG`, maybe with spaces around it). */
+  close: string;
+}
+
+/** `<<TAG` as the last word of a statement opens a body. */
+const HEREDOC = /^<<([A-Za-z_][A-Za-z0-9_]*)$/;
 
 export type SourceLine = { kind: 'blank' } | { kind: 'comment'; text: string } | Statement;
 
@@ -163,27 +180,64 @@ function word(raw: string, line: number, column: number): Word {
 export function readSource(source: string): SourceDoc {
   if (typeof source !== 'string') throw new DslError('Source must be text.');
   if (source.length > 300_000) throw new DslError('Limit: 300,000 source characters.');
-  const lines: SourceLine[] = source.split(/\r?\n/).map((text, i) => {
+  const texts = source.split(/\r?\n/),
+    lines: SourceLine[] = [];
+  for (let i = 0; i < texts.length; i++) {
     const line = i + 1,
-      { tokens, columns, comment } = tokenize(text, line);
-    if (!tokens.length) return comment ? { kind: 'comment', text: comment } : { kind: 'blank' };
-    const [first, ...rest] = tokens,
-      mark = MARKS[first[0] as Mark] && first.length > 1 ? (first[0] as Mark) : undefined,
-      command = mark ? first.slice(1) : first,
-      args: Word[] = [],
-      attrs: Array<[string, Word]> = [];
-    rest.forEach((raw, i) => {
-      const eq = raw.indexOf('='),
-        col = columns[i + 1];
-      if (eq > 0 && !raw.startsWith('"')) {
-        const key = raw.slice(0, eq);
-        if (attrs.some(([k]) => k === key)) throw new DslError(`Duplicate attribute ${key}.`, line);
-        attrs.push([key, word(raw.slice(eq + 1), line, col + eq + 1)]);
-      } else args.push(word(raw, line, col));
-    });
-    return { kind: 'statement', command, ...(mark ? { mark } : {}), args, attrs, comment, line };
-  });
+      { tokens, columns, comment } = tokenize(texts[i], line);
+    // A body is read before anything else, so its lines are never tokenized.
+    const open = HEREDOC.exec(tokens[tokens.length - 1] ?? '');
+    let body: HereBody | undefined;
+    if (open && tokens.length > 1) {
+      tokens.pop();
+      columns.pop();
+      const tag = open[1],
+        end = texts.findIndex((t, j) => j > i && t.trim() === tag);
+      if (end < 0)
+        throw new DslError(
+          `The body opened by <<${tag} has no closing line. End it with a line holding only ${tag}.`,
+          line,
+        );
+      body = { tag, lines: texts.slice(i + 1, end), close: texts[end] };
+      i = end;
+    }
+    lines.push(statementOf(tokens, columns, comment, line, body));
+  }
   return { lines };
+}
+
+function statementOf(
+  tokens: string[],
+  columns: number[],
+  comment: string | undefined,
+  line: number,
+  body: HereBody | undefined,
+): SourceLine {
+  if (!tokens.length) return comment ? { kind: 'comment', text: comment } : { kind: 'blank' };
+  const [first, ...rest] = tokens,
+    mark = MARKS[first[0] as Mark] && first.length > 1 ? (first[0] as Mark) : undefined,
+    command = mark ? first.slice(1) : first,
+    args: Word[] = [],
+    attrs: Array<[string, Word]> = [];
+  rest.forEach((raw, i) => {
+    const eq = raw.indexOf('='),
+      col = columns[i + 1];
+    if (eq > 0 && !raw.startsWith('"')) {
+      const key = raw.slice(0, eq);
+      if (attrs.some(([k]) => k === key)) throw new DslError(`Duplicate attribute ${key}.`, line);
+      attrs.push([key, word(raw.slice(eq + 1), line, col + eq + 1)]);
+    } else args.push(word(raw, line, col));
+  });
+  return {
+    kind: 'statement',
+    command,
+    ...(mark ? { mark } : {}),
+    args,
+    attrs,
+    comment,
+    line,
+    ...(body ? { body } : {}),
+  };
 }
 
 // --- Formatting --------------------------------------------------------------------------------
@@ -197,8 +251,11 @@ export function printStatement(s: Statement): string {
     (s.mark ?? '') + s.command,
     ...s.args.map(printWord),
     ...s.attrs.map(([k, v]) => k + '=' + printWord(v)),
+    ...(s.body ? ['<<' + s.body.tag] : []),
   ];
-  return parts.join(' ') + (s.comment ? ' ' + s.comment : '');
+  const head = parts.join(' ') + (s.comment ? ' ' + s.comment : '');
+  // The body and its closing line print exactly as written.
+  return s.body ? [head, ...s.body.lines, s.body.close].join('\n') : head;
 }
 
 /**
@@ -257,6 +314,8 @@ export interface ModelObject {
   frame?: 'soft' | 'none';
   /** Groups only: `fold=never` keeps the group's chain in one column even when it is much the tallest. */
   fold?: 'never';
+  /** Code nodes only: the body and its options. */
+  code?: CodeBlock;
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
   /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
@@ -486,9 +545,19 @@ export const isIdentifier = (s: string) => ID.test(s);
 
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
-export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
+export const DSL_SHAPES: DslShape[] = [
+  'box',
+  'pill',
+  'circle',
+  'diamond',
+  'text',
+  'marker',
+  'code',
+];
+/** Attributes only a code node takes. */
+const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'start', 'max-width'];
 /** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
-export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker');
+export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker' && s !== 'code');
 const FRAMES = ['box', 'soft', 'none'] as const;
 /** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
@@ -584,6 +653,11 @@ export function parseModel(source: string | SourceDoc): Model {
       assert(!unique.has(key), `Duplicate declaration: ${key}. Edit the existing line instead.`);
       unique.add(key);
     };
+    // Only a code node takes a body; the node and group case says so for those two.
+    assert(
+      !s.body || command === 'node' || command === 'group',
+      `The ${command} line takes no body. Only a code node (node id shape=code <<TAG) does.`,
+    );
     const status: Status | undefined = s.mark && MARKS[s.mark];
     assert(
       !s.mark || ['node', 'group', 'edge'].includes(command),
@@ -706,10 +780,26 @@ export function parseModel(source: string | SourceDoc): Model {
         break;
       case 'node':
       case 'group': {
-        count(2);
+        const code = command === 'node' && attrs.get('shape')?.value === 'code';
+        // A code node's quoted label is an optional caption.
+        if (code) count(1, 2);
+        else count(2);
+        assert(
+          !s.body || code,
+          command === 'node'
+            ? 'Only a code node takes a body. Add shape=code, or remove the <<TAG body.'
+            : 'A group takes no body. Remove the <<TAG body.',
+        );
+        assert(
+          !code || s.body,
+          'A code node needs a body: end the line with <<TAG, then the code, then a line holding only TAG.',
+        );
+        for (const key of CODE_ATTRS)
+          assert(code || !attrs.has(key), `${key}= belongs on a code node (shape=code).`);
         allow(
           command === 'node'
             ? [
+                ...CODE_ATTRS,
                 'in',
                 'color',
                 'shade',
@@ -741,6 +831,25 @@ export function parseModel(source: string | SourceDoc): Model {
           color,
           ...(shade !== undefined ? { shade } : {}),
           shape: command === 'node' ? choice('shape', 'box', DSL_SHAPES) : 'box',
+          ...(code
+            ? {
+                code: {
+                  lines: codeLines(s.body!.lines, num('tab', CODE_TAB, 1, 16)),
+                  ...(attrs.has('lang') ? { lang: text(attrs.get('lang')) } : {}),
+                  wrap: choice('wrap', 'on', ['on', 'off'] as const) === 'on',
+                  numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',
+                  start: num('start', 1, 0, 1_000_000),
+                  maxWidth: num('max-width', CODE_MAX_WIDTH, 120, 8000),
+                  sourceLine:
+                    line +
+                    1 +
+                    Math.max(
+                      0,
+                      s.body!.lines.findIndex(l => l.trim()),
+                    ),
+                },
+              }
+            : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),

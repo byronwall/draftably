@@ -10,6 +10,7 @@
 import { DEFAULT_THEME, type ColorDefinition, type DiagramAppearance } from '../model/appearance';
 import { findNode, isCell, selectionRoots } from '../model/graph';
 import { groupHeaderFor } from '../model/labels';
+import { CODE_MAX_WIDTH, type CodeBlock } from '../model/code';
 import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
 import { contentOrigin, layoutView, type Scene } from './compile';
 import {
@@ -41,6 +42,18 @@ import {
 } from './syntax';
 
 export class UnsupportedEdit extends Error {}
+
+/** A pasted or duplicated code node's options and body, as a new statement writes them. */
+function writeCode(s: Statement, code: CodeBlock) {
+  if (code.lang) setAttr(s, 'lang', bare(code.lang));
+  if (!code.wrap) setAttr(s, 'wrap', bare('off'));
+  if (code.numbers) setAttr(s, 'numbers', bare('on'));
+  if (code.start !== 1) setAttr(s, 'start', bare(code.start));
+  if (code.maxWidth !== CODE_MAX_WIDTH) setAttr(s, 'max-width', bare(code.maxWidth));
+  let tag = 'CODE';
+  for (let n = 2; code.lines.some(l => l.trim() === tag); n++) tag = `CODE${n}`;
+  s.body = { tag, lines: code.lines, close: tag };
+}
 
 export interface EditInput {
   source: SourceDoc;
@@ -280,10 +293,12 @@ export function translateEdit(input: EditInput): EditResult {
     const type = after.graph.groups.includes(o as never) ? 'group' : 'node';
     const id = fresh(o.title, type);
     ids.set(o.id, id);
-    const s = statement(type, [bare(id), quoted(o.title)]);
+    const code = (o as DiagramNode).code;
+    const s = statement(type, [bare(id), ...(code && !o.title ? [] : [quoted(o.title)])]);
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
+    if (code) writeCode(s, code);
     writeColor(s, o.id, o.parentId ?? null);
     writeShade(s, after.styles[o.id]?.shade);
     insertAfter(source, s, isDeclaration);
@@ -312,6 +327,12 @@ export function translateEdit(input: EditInput): EditResult {
       b = after.styles[o.id];
     if (a?.color !== b?.color) writeColor(s, o.id, o.parentId ?? null);
     if (a?.shade !== b?.shade) writeShade(s, b?.shade);
+    if (
+      s.command === 'node' &&
+      a?.shape !== b?.shape &&
+      (a?.shape === 'code' || b?.shape === 'code')
+    )
+      throw new UnsupportedEdit('A code node keeps its shape; edit its body in the source.');
     if (s.command === 'node' && a?.shape !== b?.shape)
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
     const span = (o as DiagramNode).span;

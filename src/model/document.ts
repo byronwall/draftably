@@ -179,6 +179,7 @@ export function normalize(input: unknown): Diagram {
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
       ...(finite(n.lifeline) && n.lifeline > 0 ? { lifeline: n.lifeline } : {}),
+      ...(n.code && Array.isArray(n.code.lines) ? { code: n.code } : {}),
     });
   }
   for (const g of data.graph.groups || []) {
@@ -265,7 +266,12 @@ export function normalize(input: unknown): Diagram {
       };
     }
     const style = data.styles?.[n.id] || {};
-    if (style.shape !== undefined && !SHAPES.includes(style.shape) && style.shape !== 'marker')
+    if (
+      style.shape !== undefined &&
+      !SHAPES.includes(style.shape) &&
+      style.shape !== 'marker' &&
+      style.shape !== 'code'
+    )
       throw Error(n.id + ': unknown shape.');
     if (
       style.color !== undefined &&

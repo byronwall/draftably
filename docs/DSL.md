@@ -42,7 +42,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                  | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                                  |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -184,6 +184,62 @@ same way. It never changes the link.
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds. When there is no real number to show, give a
 letter or short word instead: `count=N` draws `×N`, and `count=many` draws `×many`.
+
+## Code
+
+`shape=code` draws a code listing: a SQL query, a function, a config file, a shell pipeline or a
+diff. The code goes in a body under the statement:
+
+```draft
+node gen "builder.py" shape=code lang=python numbers=on <<PY
+  def body_for(aggregate, domain):
+      for column in aggregate.columns:
+          if column.needs_domain:
+              # each aggregate gets its own copy of the domain
+              yield Subquery(select=[*domain.keys, column.expr])
+PY
+```
+
+The body:
+
+- starts after `<<TAG`, the last word of the statement, and ends at a line holding only `TAG`
+  (spaces around it are allowed). `TAG` is any identifier. Choose one the body never holds alone
+  on a line: a shell sample that uses `EOF` takes `<<SH`.
+- is verbatim. `"`, `#`, `//` and `\` are text, so JSON and shell paste in with no escapes.
+- loses the indent that all its lines share, so it can sit indented under its statement. A diff
+  keeps its first column, because the shared indent counts the `+` and `-` lines too.
+- expands tabs to `tab=` columns (default 4, 1–16) and drops trailing spaces and blank lines at
+  either end.
+- is kept exactly by `draftably format`. A diagnostic about a body line names its line in the file.
+
+How it draws:
+
+- In JetBrains Mono at 12 px on 17 px lines, whatever `title-font` says. Every character sits in
+  its own column, so indentation lands exactly in the viewer, SVG, PNG and PDF.
+- On a quiet surface: the theme's node fill, or shade 50 of `color=` (950 in a dark theme).
+- The quoted label is optional. When given, it is a caption band above the code, like a file tab.
+- The box fits its longest line and its line count, with no `size` line. It grows up to
+  `max-width=` (default 960, about 130 columns). Past that, `wrap=on` (default) continues a line
+  on the next row, indented two columns past the line's own indent, with a ↩ in the right margin.
+  `wrap=off` cuts the line and ends it with `…`.
+- `numbers=on` adds a line-number gutter, and `start=` sets the first number (default 1).
+- `size id width=… height=…` sets the box. A width wraps or cuts lines at that width. A fixed
+  height keeps the rows that fit and ends with "… N more lines".
+- `lang=` names the language: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. It
+  does not color the code yet.
+
+`check` reports:
+
+| Code           | Level   | When                                                                                                                                       |
+| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| (error)        | error   | A body with no closing line (at its `<<TAG` line), a body on any other shape, `shape=code` with no body, or a code option on another shape |
+| `code-wrap`    | warning | Lines wrap. It names the longest, so you can break it                                                                                      |
+| `code-clip`    | warning | Lines are cut by `wrap=off`                                                                                                                |
+| `code-clipped` | warning | A fixed `size` height leaves lines out                                                                                                     |
+| `code-lang`    | info    | `lang=` names a language with no highlighting                                                                                              |
+
+In the viewer, a code node moves, sizes, groups and connects like any node. Its body and caption
+are edited in the file, not on the canvas.
 
 ## Soft groups
 

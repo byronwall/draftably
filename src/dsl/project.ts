@@ -52,6 +52,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.hull ? { hull: o.hull } : {}),
       ...(o.titleLines ? { titleLines: o.titleLines } : {}),
       ...(o.lifeline ? { lifeline: o.lifeline } : {}),
+      ...(o.code ? { code: clone(o.code) } : {}),
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);
