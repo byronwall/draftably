@@ -14,7 +14,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { inlineSources } from '../dsl/inline-sources';
-import { readCodeFiles } from '../server/code-files';
+import { cliRootName, readCodeFiles } from '../server/code-files';
 import { gitRoot } from '../server/file-session';
 import { renderSvg } from './svg';
 import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
@@ -191,7 +191,8 @@ class UsageError extends Error {}
 function codeFiles(file: string, source: string) {
   if (!/\.draft$/i.test(file)) return undefined;
   const draft = path.resolve(file);
-  return readCodeFiles(source, draft, gitRoot(path.dirname(draft)));
+  const root = gitRoot(path.dirname(draft));
+  return readCodeFiles(source, draft, root, cliRootName(root));
 }
 
 /** The sources attached to a PDF export; throws when it has none. */

@@ -25,7 +25,7 @@ import { projectScene } from '../dsl/project';
 import { inlineSources } from '../dsl/inline-sources';
 import { formatSource } from '../dsl/syntax';
 import type { CodeFiles } from '../model/code-src';
-import { readCodeFiles } from '../server/code-files';
+import { cliRootName, readCodeFiles } from '../server/code-files';
 import { gitRoot } from '../server/file-session';
 import { FACES, type FaceId } from '../model/fonts';
 import { withState } from '../model/status';
@@ -95,11 +95,12 @@ export function pdfInputs(args: string[]): PdfInput[] {
   );
   return files.map(f => {
     const full = path.resolve(f),
-      source = fs.readFileSync(full, 'utf8');
+      source = fs.readFileSync(full, 'utf8'),
+      root = gitRoot(path.dirname(full));
     return {
       name: f,
       source,
-      files: readCodeFiles(source, full, gitRoot(path.dirname(full))),
+      files: readCodeFiles(source, full, root, cliRootName(root)),
     };
   });
 }
