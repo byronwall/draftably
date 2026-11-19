@@ -1,11 +1,13 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { inlineSources } from '../src/dsl/inline-sources';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { readCodeFiles } from '../src/server/code-files';
+import { main } from '../src/cli/main';
+import { embedSvgSource } from '../src/model/embed';
 
 const SQL = ['SELECT 1;', '', '-- orders', 'SELECT id,', '       total', 'FROM orders', ''].join(
   '\n',
@@ -71,6 +73,26 @@ describe('code src=', () => {
     expect(() => checkSource('node q shape=code src="a.sql" <<X\n  SELECT 1\nX')).toThrow(
       /src= or a body, never both/,
     );
+  });
+
+  it('never reads files for a source embedded in an image', async () => {
+    const { root } = folder();
+    fs.writeFileSync(path.join(root, 'secret.env'), 'TOKEN=hunter2');
+    const svg = path.join(root, 'evil.svg');
+    fs.writeFileSync(
+      svg,
+      embedSvgSource('<svg xmlns="http://www.w3.org/2000/svg"></svg>', draft('secret.env')),
+    );
+    let out = '';
+    vi.spyOn(process.stdout, 'write').mockImplementation(chunk => ((out += chunk), true));
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      expect(await main(['inspect', svg, '--svg'])).toBe(0);
+    } finally {
+      vi.restoreAllMocks();
+    }
+    expect(out).toContain('src=');
+    expect(out).not.toContain('hunter2');
   });
 
   it('refuses an export whose inlined source could not be read back', () => {

@@ -184,10 +184,13 @@ class UsageError extends Error {}
 
 /**
  * The files `source`'s `src=` code nodes name, read from beside `file`. They must stay inside the
- * file's git root, or its folder outside a repository, as the viewer requires.
+ * file's git root, or its folder outside a repository, as the viewer requires. Only a `.draft`
+ * file reads them: a source embedded in a PNG, SVG or PDF may come from anyone, and an export
+ * already carries its code inline.
  */
 function codeFiles(file: string, source: string) {
-  const draft = path.resolve(file.replace(/#[^/]*$/, ''));
+  if (!/\.draft$/i.test(file)) return undefined;
+  const draft = path.resolve(file);
   return readCodeFiles(source, draft, gitRoot(path.dirname(draft)));
 }
 
