@@ -241,6 +241,21 @@ Groups and the opinionated root layouts follow a few rules:
   to the right. A send, a plain message and a call to itself open no bar. The Mermaid import
   turns bars on only when the source's bars match these rules.
 
+Flow lines and their labels follow a few rules:
+
+- **A flow label wraps at 140.** `LABEL_WRAP` in `model/labels.ts` is about 24 characters of the
+  annotation type, so a short phrase stays on one line. Across the repository's 566 flow labels the
+  median is 44 and the 95th percentile is 109. Sequence messages wrap at `MESSAGE_WRAP` (168),
+  about the same character count in their larger type.
+- **A long label gets a straight run.** A label on a bend reads as part of neither run. When no
+  run of a route holds the label, `roomForLabel` (`model/routes.ts`) slides one bend. The slide
+  stands only when the route stays clear of every box, crosses no more lines and runs beside no
+  more. A route with no room keeps its label where it was.
+- **Lines between two columns run straight.** When each member of one packed column connects to
+  one member of the next, the group packing pass in `dsl/compile.ts` moves each target down to
+  its source's centre line. Targets only move down, and the added height has a cap, so a tall
+  column can still bend a line.
+
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
 writes saves atomically. A save based on an older revision is refused with 409, and invalid
@@ -334,6 +349,15 @@ Appearance follows a few rules:
   `runtime/color-scheme.ts` watches the element's computed `color-scheme`, and `renderSvg` with
   `colorScheme: 'auto'` draws both schemes from one layout as `light-dark()` colors. Any other
   theme, or a file color, keeps its colors on every page.
+- **A gap takes the color under it.** Line breaks (halos) and label cards fill with the surface
+  under them, such as a lane or a phase band, not the canvas color (`surfaces` and `haloPieces` in
+  `model/surface.ts`). A canvas-colored card on a tinted lane reads as a patch. For the same
+  reason a sequence draws no panel border when its lanes hold every participant (`panelDrawn`).
+
+The status bar shows the running version and, for a build from a checkout, its commit
+(`__DRAFTABLY_BUILD__`, set by `define` in `vite.config.ts`). A review screenshot then says which
+build it saw. The commit is read at build time, so a dev server started before a commit shows
+the older one.
 
 The research behind the palettes, and the textured-theme study that did not ship, is in
 [research/README.md](research/README.md#themes-and-palettes).
