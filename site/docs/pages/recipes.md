@@ -141,13 +141,13 @@ Read [Change marks](#change-marks) for attributes that a Before panel cannot rec
 
 ## Code behind a step
 
-Use a code node when the code itself is the explanation. Name the lines that matter with `range`,
-and point lines and notes at them. Here, a report runs a query that reads the orders table twice.
+Use a code node when the code itself is the explanation. Here, a query reads the orders table
+twice, and a diff shows the fix. Each `range` names the lines that matter, and the edge joins
+the problem to its fix.
 
 ```draft
-diagram "Why the orders report is slow" version=1
-subtitle "The query reads the orders table twice"
-node report "Orders report" color=blue
+diagram "Read orders once" version=1
+subtitle "Merge the count into the totals scan"
 node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
   SELECT c.name, totals.amount, counts.n
   FROM customers AS c
@@ -157,30 +157,29 @@ node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
     JOIN (SELECT customer_id, COUNT(*) AS n
           FROM orders GROUP BY customer_id) AS counts
       ON counts.customer_id = c.id
-  WHERE c.active;
 SQL
-range sql.scan1 lines=3-5 color=red "scan 1"
-range sql.scan2 match="COUNT\\(\\*\\)" span=3 color=red "scan 2"
-edge runs report -> sql.scan1 "runs"
-note "Each scan reads every order row." near=sql side=below
+node fix "the fix" shape=code lang=diff <<DIFF
+  -  JOIN (SELECT customer_id, SUM(total) AS amount
+  +  JOIN (SELECT customer_id, SUM(total) AS amount, COUNT(*) AS n
+           FROM orders GROUP BY customer_id) AS totals
+  -  JOIN (SELECT customer_id, COUNT(*) AS n
+  -        FROM orders GROUP BY customer_id) AS counts
+  -    ON counts.customer_id = c.id
+DIFF
+range sql.extra lines=6-8 color=red "second scan"
+range fix.merged lines=2-3 color=green "one scan"
+edge merge sql.extra -> fix.merged "merge"
 ```
 
-**Try it:** change `lines=3-5` to `lines=6-8`. The band, its label and the end of the line move to
-the second scan. The box and the layout stay the same.
+**Try it:** change `lines=6-8` to `match="COUNT" span=3`, then add a line at the top of the query. The range
+finds its line by pattern, so it stays on the second scan. The box and the layout do not move.
 
-The body between `<<SQL` and `SQL` is verbatim, so paste code in with no escapes. `lang=` colors it
-in the theme's colors. A `match=` range finds its line by pattern, so it stays on the right lines
-when the code above it changes.
+To show the real file instead of a copy, replace the body with `src=`:
+`node sql "orders_report.sql" shape=code src="queries/orders_report.sql#L12-L20" numbers=on`.
+`draftably open` and the CLI read the file, and exports carry the code inline.
 
-To keep the code in its own file, replace the body with `src=` and a line range. The CLI and
-`draftably open` read the file, and every export carries the code inline:
-
-```text
-node sql "orders_report.sql" shape=code src="queries/orders_report.sql#L12-L20" numbers=on
-```
-
-For a larger example, open [Why the orders report is slow](/play?example=code-review). Read
-[Code](#code) for every option.
+For a larger example, open [Why the orders report is slow](/play?example=code-review). [Code](#code)
+lists every option.
 
 ## Refine and share a recipe
 

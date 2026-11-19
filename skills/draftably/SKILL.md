@@ -237,72 +237,51 @@ Good defaults:
 
 ### Code
 
-`shape=code` draws a code listing: JetBrains Mono, left-aligned, every space kept. The body
-follows the line, from `<<TAG` to a line holding only `TAG`. Body lines are verbatim: write
-quotes, `#`, `//` and `\` as they are, with no escapes. The common indent is removed, tabs expand
-(`tab=`, default 4), and trailing spaces go. Pick a tag the body never holds alone on a line
-(`<<SH` for a shell sample that uses `EOF`).
+`shape=code` draws real code: JetBrains Mono, every space kept, colored by `lang=`. Use it when
+the code is the explanation, and point at lines with `range` instead of cutting the code into
+boxes:
 
 ```text
-diagram "Where the copies come from"
+diagram "Why the orders report is slow"
 
-node gen "builder.py" shape=code lang=python numbers=on start=40 <<PY
-  def body_for(aggregate, domain):
-      for column in aggregate.columns:
-          # each aggregate gets its own copy
-          yield Subquery(source=domain.join_all())
-PY
-node sql "query.sql" shape=code lang=sql <<SQL
-  SELECT DISTINCT S1.NAME, S7.AGG
-  FROM CUSTOMERS AS S1
-    JOIN (SELECT G0, COUNT(*) AS AGG FROM ORDERS GROUP BY G0) AS S7
-      ON S7.G0 = S1.ID
+node report "Orders report" color=blue
+node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
+  SELECT c.name, totals.amount, counts.n
+  FROM customers AS c
+    JOIN (SELECT customer_id, SUM(total) AS amount
+          FROM orders GROUP BY customer_id) AS totals
+      ON totals.customer_id = c.id
+    JOIN (SELECT customer_id, COUNT(*) AS n
+          FROM orders GROUP BY customer_id) AS counts
+      ON counts.customer_id = c.id
 SQL
-edge emits gen -> sql "emits"
+range sql.scan1 lines=3-5 color=red "scan 1"
+range sql.scan2 match="COUNT\\(\\*\\)" span=3 color=red "scan 2"
+edge runs report -> sql.scan1 "runs"
+note "Each scan reads every order row." near=sql.scan2
 ```
 
-- The quoted label is optional; when given, it is a caption band above the code (a file name).
-- The box fits its longest line, up to `max-width=` (960 by default, about 130 columns). A longer
-  line wraps with a hanging indent and a ↩ mark; `wrap=off` cuts it with `…` instead. `check`
-  warns about both and names the longest line, so break long lines in the body.
-- `numbers=on` adds line numbers; `start=` sets the first one.
-- `lang=` names the language (`sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh`, `diff`) and
-  colors the code in the theme's colors. Any other value draws plain text, with a `check` note.
-- `lang=diff` puts a green band behind `+` lines and a red band behind `-` lines. Keep the first
-  column (`+`, `-`, space) in the body.
-- `size id width=… height=…` still works; a fixed height ends with "… N more lines", and `check`
-  warns.
-- The viewer moves a code node like any node, but its body is edited only in the file.
+Body:
 
-Point at parts of a listing with `range`, instead of cutting the code into boxes:
+- It runs from `<<TAG` (last word of the line) to a line holding only `TAG`. Pick a tag the body
+  never holds alone (`<<SH` for shell that uses `EOF`).
+- It is verbatim: no escapes for quotes, `#`, `//` or `\`. The shared indent is removed; a diff
+  keeps its `+`/`-` column. Tabs expand to `tab=` (4).
 
-```text
-diagram "Two copies of one join"
+Options: the quoted label is an optional caption (a file name). `lang=sql|python|ts|js|json|yaml|sh|diff`
+colors tokens; `diff` adds green and red line bands. `numbers=on` adds line numbers and `start=`
+sets the first. The box fits the code up to `max-width=` (960, about 130 columns); longer lines
+wrap with ↩ (`wrap=off` cuts them with `…`) and `check` warns, so break long lines. Never add a
+`size` line to fit code.
 
-node cost "Query plan"
-node sql "query.sql" shape=code lang=sql <<SQL
-  SELECT C.NAME, A1.AGG
-  FROM CUSTOMERS AS C
-    JOIN (SELECT ORDER_ID, CUSTOMER_ID FROM ORDERS) AS O ON O.CUSTOMER_ID = C.ID
-    JOIN (SELECT C.ID AS G0, COUNT(*) AS AGG
-          FROM CUSTOMERS AS C JOIN (SELECT ORDER_ID, CUSTOMER_ID FROM ORDERS) AS O
-          GROUP BY C.ID) AS A1 ON A1.G0 = C.ID
-SQL
-range sql.copy1 lines=3 color=red "copy 1"
-range sql.copy2 match="COUNT\\(\\*\\)" span=3 color=red "copy 2"
-note "Each copy re-joins every order row." near=sql.copy2
-edge e1 cost -> sql.copy1 "scan"
-```
+Ranges:
 
-- `lines=a-b` counts body lines from 1 (or `start=`). `match="regex" span=n` finds the first
-  matching line instead and survives edits; double each backslash in the pattern.
-- A range draws a band, a left-margin bar and its label; it never moves anything. Ranges may nest.
-- `sql.copy1` works in `edge` (the line meets the node's left or right side at the range),
-  `note near=` and `state`. `+range`/`~range`/`-range` take change marks.
-- `check` errors on a range past the body, a `match=` with no hit, a range on a non-code node and
-  an unknown range ID; it warns when `match=` hits several lines.
+- `lines=3-5` counts body lines from 1 (or `start=`). `match="regex" span=n` finds the first
+  matching line and survives edits; write each backslash twice in the pattern.
+- `sql.scan1` works in `edge` (it meets the node's left or right side), `note near=` and `state`,
+  and takes change marks (`+range`). A range never moves anything.
 
-Read a long or shared listing from its file with `src=` instead of pasting a copy:
+Read code from its file with `src=` instead of pasting a copy:
 
 ```text
 diagram "Where the orders query reads"
@@ -313,17 +292,15 @@ range sql.join lines=14-16 color=red "the slow join"
 edge e1 api -> sql.join "runs"
 ```
 
-- The path is relative to the `.draft` file; `#L10-L24` picks lines (`#L10` is one line). A node
-  has `src=` or a body, never both.
-- `lang=` comes from the extension, and `start=` from the range, so `numbers=on` and `range
-lines=` use the file's own line numbers.
-- The CLI and `draftably open` read the file, and the viewer redraws when it changes. Paths
-  outside the served folder (or the git root, for the CLI) are refused, and so are files over
-  200 KB. The CLI reads `src=` only for a `.draft` input, never for a source inside an image.
-- Exports inline the code, so an exported PNG, SVG or PDF opens and checks on its own. The static
-  app and playground cannot read files and draw a placeholder that names the file.
-- `check` errors (`code-src`) on a missing file, a file over 200 KB, a path outside the folder,
-  `#L0`, a backwards range (`#L40-L10`) and a range past the end of the file.
+- The path is relative to the `.draft`. `#L10-L24` picks lines; `#L10` is one line. Use `src=`
+  or a body, never both.
+- `lang=` comes from the extension and `start=` from the range, so `range … lines=` uses the
+  file's own line numbers.
+- `draftably open` and the CLI read the file; exports inline the code. The Playground and static
+  app draw a placeholder. Files must sit inside the served folder (the git root for the CLI) and
+  be 200 KB or less. The CLI never reads `src=` from a source embedded in an image.
+- `check` reports `code-src` for a missing or refused file and for `#L0`, backwards or
+  past-the-end ranges.
 
 ### Cells
 
