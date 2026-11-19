@@ -138,7 +138,7 @@ layout services row gap=56
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                                                                                                                                                                                                                                      |
 | `subtitle "text"`                  | Optional, at most one. One short line under the title in exports: the takeaway in about 10 words, not a second title or a paragraph                                                                                                                                                                                                                                                                                            |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`; `~node` also takes `was-shape=` and `was-count=`                                                                                                                                                                                                                                                           |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                                                                                                                                                                                                                                          |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=N`, cells: `span=N`; code: `<<TAG` body, `lang=`, `wrap=on\|off`, `numbers=on`, `start=`, `max-width=`, `tab=` (see Code)                                                                                                                                                                                              |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
 | `legend family "meaning"`          | `shade=`. One entry of the key drawn under the diagram; one per accent color you use. `legend line dashed\|solid "meaning"` explains a line style                                                                                                                                                                                                                                                                              |
@@ -233,6 +233,43 @@ Good defaults:
 - Several readings of one diagram (a write path, a read path): `state` lines, not separate
   files. **Fits** paths through the same boxes. **Doesn't fit** different structure; that is a
   second diagram. States are interactive; for a document use `inspect --states` or `--state`.
+
+### Code
+
+`shape=code` draws a code listing: JetBrains Mono, left-aligned, every space kept. The body
+follows the line, from `<<TAG` to a line holding only `TAG`. Body lines are verbatim: write
+quotes, `#`, `//` and `\` as they are, with no escapes. The common indent is removed, tabs expand
+(`tab=`, default 4), and trailing spaces go. Pick a tag the body never holds alone on a line
+(`<<SH` for a shell sample that uses `EOF`).
+
+```text
+diagram "Where the copies come from"
+
+node gen "builder.py" shape=code lang=python numbers=on start=40 <<PY
+  def body_for(aggregate, domain):
+      for column in aggregate.columns:
+          # each aggregate gets its own copy
+          yield Subquery(source=domain.join_all())
+PY
+node sql "query.sql" shape=code lang=sql <<SQL
+  SELECT DISTINCT S1.NAME, S7.AGG
+  FROM CUSTOMERS AS S1
+    JOIN (SELECT G0, COUNT(*) AS AGG FROM ORDERS GROUP BY G0) AS S7
+      ON S7.G0 = S1.ID
+SQL
+edge emits gen -> sql "emits"
+```
+
+- The quoted label is optional; when given, it is a caption band above the code (a file name).
+- The box fits its longest line, up to `max-width=` (960 by default, about 130 columns). A longer
+  line wraps with a hanging indent and a ↩ mark; `wrap=off` cuts it with `…` instead. `check`
+  warns about both and names the longest line, so break long lines in the body.
+- `numbers=on` adds line numbers; `start=` sets the first one.
+- `lang=` names the language (`sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh`, `diff`). It is
+  not colored yet.
+- `size id width=… height=…` still works; a fixed height ends with "… N more lines", and `check`
+  warns.
+- The viewer moves a code node like any node, but its body is edited only in the file.
 
 ### Cells
 
