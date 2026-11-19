@@ -22,7 +22,10 @@ import {
 } from 'pdf-lib';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
-import { formatSource } from '../dsl/syntax';
+import { inlineSources } from '../dsl/inline-sources';
+import type { CodeFiles } from '../model/code-src';
+import { readCodeFiles } from '../server/code-files';
+import { gitRoot } from '../server/file-session';
 import { FACES, type FaceId } from '../model/fonts';
 import { withState } from '../model/status';
 import { svgHref } from './links';
@@ -49,6 +52,8 @@ export interface PdfOptions {
 export interface PdfInput {
   name: string;
   source: string;
+  /** The files its `src=` code nodes name; see `readCodeFiles`. */
+  files?: CodeFiles;
 }
 
 /** Fixed page sizes in CSS pixels (96 per inch), portrait; slide is 16:9 and always landscape. */
@@ -87,7 +92,15 @@ export function pdfInputs(args: string[]): PdfInput[] {
           .map(n => path.join(f, n))
       : [f],
   );
-  return files.map(f => ({ name: f, source: fs.readFileSync(path.resolve(f), 'utf8') }));
+  return files.map(f => {
+    const full = path.resolve(f),
+      source = fs.readFileSync(full, 'utf8');
+    return {
+      name: f,
+      source,
+      files: readCodeFiles(source, full, gitRoot(path.dirname(full))),
+    };
+  });
 }
 
 interface Sheet {
@@ -105,7 +118,7 @@ async function sheets(inputs: PdfInput[], opts: PdfOptions) {
     const fail = (lines: string[]) => {
       throw Error(`${input.name} has errors; fix them or leave it out. ${lines.join(' ')}`);
     };
-    const scene = await compile(input.source).catch((e: Error) => fail([e.message]));
+    const scene = await compile(input.source, input.files).catch((e: Error) => fail([e.message]));
     const errors = scene.diagnostics.filter(d => d.level === 'error');
     if (errors.length) fail(errors.map(d => `${d.line ? `Line ${d.line}: ` : ''}${d.message}`));
     const doc = projectScene(scene),
@@ -282,7 +295,7 @@ export async function buildPdf(inputs: PdfInput[], opts: PdfOptions = {}) {
       for (let n = 2; used.has(name); n++)
         name = path.basename(input.name, '.draft') + `-${n}.draft`;
       used.add(name);
-      await pdf.attach(new TextEncoder().encode(formatSource(input.source)), name, {
+      await pdf.attach(new TextEncoder().encode(inlineSources(input.source, input.files)), name, {
         mimeType: 'text/plain',
         description: title,
       });

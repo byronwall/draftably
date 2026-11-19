@@ -14,6 +14,7 @@ import { checkSource, compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError } from '../dsl/syntax';
 import type { PdfOptions } from '../cli/pdf';
+import { readCodeFiles } from './code-files';
 import { createFileSession, type FileSession } from './file-session';
 
 export interface WorkspaceFile {
@@ -109,7 +110,8 @@ export function createWorkspace(root: string): Workspace {
   const thumbnail = (full: string, modified: number) => {
     const cached = thumbnails.get(full);
     if (cached?.modified === modified) return cached.svg;
-    const svg = compile(fs.readFileSync(full, 'utf8'))
+    const source = fs.readFileSync(full, 'utf8');
+    const svg = compile(source, readCodeFiles(source, full, root))
       .then(scene => renderSvg(projectScene(scene)).replace(/<style>[\s\S]*?<\/style>/, ''))
       .catch(() => null);
     thumbnails.set(full, { modified, svg });
@@ -170,10 +172,14 @@ export function createWorkspace(root: string): Workspace {
     try {
       const { buildPdf } = await import('../cli/pdf');
       const { bytes } = await buildPdf(
-        files.map(f => ({
-          name: path.relative(root, f!).split(path.sep).join('/'),
-          source: fs.readFileSync(f!, 'utf8'),
-        })),
+        files.map(f => {
+          const source = fs.readFileSync(f!, 'utf8');
+          return {
+            name: path.relative(root, f!).split(path.sep).join('/'),
+            source,
+            files: readCodeFiles(source, f!, root),
+          };
+        }),
         request,
       );
       res.writeHead(200, { 'content-type': 'application/pdf', 'cache-control': 'no-store' });
