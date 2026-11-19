@@ -10,6 +10,29 @@ import { placeNotes } from '../src/model/note';
 import { rangeBand, rangeRect } from '../src/model/ranges';
 import { withState } from '../src/model/status';
 import { visibleRects } from '../src/dsl/project';
+import { printSource, readSource } from '../src/dsl/syntax';
+import { translateEdit } from '../src/dsl/translate';
+import * as edits from '../src/model/edits';
+import { clone } from '../src/model/geometry';
+import type { Diagram } from '../src/model/types';
+
+/** Apply an editor edit and return the source it writes, compiled again to prove it parses. */
+function edit(source: string, fn: (d: Diagram) => void) {
+  const scene = checkSource(source),
+    before = projectScene(scene),
+    after = clone(before);
+  fn(after);
+  const result = translateEdit({
+    source: readSource(source),
+    scene,
+    before,
+    after,
+    label: 'edit',
+    selection: [],
+  });
+  const text = printSource(result.source);
+  return { text, scene: checkSource(text) };
+}
 
 const fixture = readFileSync(path.join(__dirname, 'fixtures/code/ranges.draft'), 'utf8');
 
@@ -117,6 +140,26 @@ describe('code ranges', () => {
     const svg = renderSvg(drawn);
     expect(svg.match(/class="code-range"/g)).toHaveLength(2);
     expect(svg).toContain('class="code-range" opacity="0.35"');
+  });
+
+  it('go with their node when it is deleted, with every line that names them', () => {
+    const source = code(
+      [
+        'node sql.x "Not a range"',
+        'range sql.copy1 lines=10-11 "c"',
+        'note "n" near=sql.copy1',
+        'state s1 "S" sql.copy1 a',
+        'state s2 "T" sql.x',
+        'edge e1 a -> sql.copy1',
+      ].join('\n'),
+    );
+    const { text } = edit(source, d => edits.deleteObjects(d, ['sql']));
+    expect(text).not.toMatch(/sql\.copy1|^range|^edge/m);
+    expect(text).toMatch(/^note "n"$/m);
+    expect(text).toMatch(/^state s1 "S" a$/m);
+    // A node whose ID only starts with `sql.` stays, and so does its state.
+    expect(text).toMatch(/^node sql\.x "Not a range"$/m);
+    expect(text).toMatch(/^state s2 "T" sql\.x$/m);
   });
 
   it('take a change mark', () => {

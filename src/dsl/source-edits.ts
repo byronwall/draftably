@@ -84,16 +84,28 @@ export const clearPosition = (doc: SourceDoc, id: string) =>
 
 /**
  * Every statement that mentions `id` as an object: refinements, edges and alignment lists. Its
- * messages go with it, and they leave the phases and states that list them.
+ * messages go with it, and they leave the phases and states that list them. A code node's
+ * `range` lines go too, and so does each mention of those ranges.
  */
 export function removeReferences(doc: SourceDoc, id: string) {
+  const ranges = statements(doc)
+    .filter(s => s.command === 'range' && s.args[0]?.value.startsWith(id + '.'))
+    .map(s => s.args[0].value);
+  // `sql` or one of its ranges, `sql.copy1`; never another node whose ID only starts with `sql.`.
+  const named = new Set([id, ...ranges]),
+    names = (w: { value: string } | undefined) => !!w && named.has(w.value);
+  removeWhere(doc, s => s.command === 'range' && names(s.args[0]));
   statements(doc)
     .filter(
       s =>
-        (s.command === 'edge' && (s.args[1]?.value === id || s.args[3]?.value === id)) ||
+        (s.command === 'edge' && (names(s.args[1]) || names(s.args[3]))) ||
         (s.command === 'action' && s.args[1]?.value === id),
     )
     .forEach(s => removeEdge(doc, s.args[0].value));
+  for (const r of ranges) {
+    removeFromStates(doc, r);
+    unanchorNotes(doc, r);
+  }
   removeWhere(doc, s => {
     if (s.command === 'near') return s.args[0]?.value === id || s.args[1]?.value === id;
     if (['nudge', 'stay', 'pin', 'size'].includes(s.command)) return s.args[0]?.value === id;
