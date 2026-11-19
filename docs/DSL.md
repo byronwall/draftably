@@ -225,8 +225,16 @@ How it draws:
 - `numbers=on` adds a line-number gutter, and `start=` sets the first number (default 1).
 - `size id width=… height=…` sets the box. A width wraps or cuts lines at that width. A fixed
   height keeps the rows that fit and ends with "… N more lines".
-- `lang=` names the language: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. It
-  does not color the code yet.
+- `lang=` names the language: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. The
+  code is colored by token: keywords, strings, numbers, comments, function names, operators and
+  punctuation. Each theme takes these colors from its own families, and every color keeps 4.5:1
+  contrast with the code fill. Color never changes a character's position.
+- In `lang=diff`, a line that starts with `+` gets a green band and a line that starts with `-`
+  gets a red band (shade 100, or 900 in a dark theme). The band covers the line's wrapped rows.
+  `@@` lines are colored like keywords, and `---`/`+++` file headers like comments.
+- SQL, JSON, YAML and diff are colored exactly. Python, TS/JS and shell are close: a regex literal,
+  `${…}` inside a template literal, and shell quoting nested in `$(…)` stay uncolored.
+- Another `lang=` draws plain text, and `check` adds an info note.
 
 `check` reports:
 
