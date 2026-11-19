@@ -82,15 +82,23 @@ export function createFileSession(file: string, served?: string): FileSession {
         w.close();
         codeWatchers.delete(d);
       }
-    for (const d of folders)
-      if (!codeWatchers.has(d) && fs.existsSync(d))
-        codeWatchers.set(
-          d,
-          fs.watch(d, () => {
-            clearTimeout(codeTimer);
-            codeTimer = setTimeout(checkFiles, 40);
-          }),
-        );
+    for (const d of folders) {
+      if (codeWatchers.has(d) || !fs.existsSync(d)) continue;
+      // A folder that cannot be watched (EACCES, ENOSPC) only loses live redraws.
+      try {
+        const w = fs.watch(d, () => {
+          clearTimeout(codeTimer);
+          codeTimer = setTimeout(checkFiles, 40);
+        });
+        w.on('error', () => {
+          w.close();
+          codeWatchers.delete(d);
+        });
+        codeWatchers.set(d, w);
+      } catch {
+        // Not watched; the file is still read on each change to the .draft.
+      }
+    }
     const key = JSON.stringify(files),
       changed = key !== filesKey;
     filesKey = key;
