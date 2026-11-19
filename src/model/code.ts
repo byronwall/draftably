@@ -100,6 +100,8 @@ export interface CodeLayout {
   more: number;
   /** y of the "… N more lines" row, when `more` > 0. */
   moreY: number;
+  /** The "… N more lines" row fits inside the box; a very short box draws no row for it. */
+  moreShown: boolean;
   /** Source lines that wrapped or were clipped. */
   long: number[];
 }
@@ -188,7 +190,8 @@ export function codeLayout(
   });
   const auto = band + 2 * CODE_PAD.y + rows.length * lh;
   let more = 0,
-    moreY = 0;
+    moreY = 0,
+    moreShown = false;
   if (size.height !== undefined && auto > size.height + 0.5) {
     // Keep the rows that fit with one row to spare for "… N more lines".
     const fit = Math.max(0, Math.floor((size.height - band - 2 * CODE_PAD.y) / lh) - 1);
@@ -201,6 +204,7 @@ export function codeLayout(
     rows.length = 0;
     rows.push(...kept);
     moreY = top + kept.length * lh;
+    moreShown = moreY + lh <= size.height + 0.5;
   }
   return {
     w,
@@ -213,6 +217,7 @@ export function codeLayout(
     rows,
     more,
     moreY,
+    moreShown,
     long,
   };
 }

@@ -204,7 +204,7 @@ function codeMarkup(
         `<path d="${wrapMarkPath(r.x + r.w - laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
       );
   });
-  if (laid.more)
+  if (laid.moreShown)
     spans.push(
       `<tspan x="${r.x + columnX(laid, 0)}" y="${r.y + laid.moreY + mid}" fill="${muted}">${esc(moreText(laid.more))}</tspan>`,
     );

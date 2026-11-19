@@ -257,7 +257,7 @@ export function CodeBody(props: {
             </For>
           )}
         </For>
-        <Show when={laid().more}>
+        <Show when={laid().moreShown}>
           <tspan x={columnX(laid(), 0)} y={laid().moreY + mid} fill={muted()}>
             {moreText(laid().more)}
           </tspan>

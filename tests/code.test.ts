@@ -99,6 +99,14 @@ describe('code layout', () => {
     expect(clipped.rows[0]).toMatchObject({ clipped: true, to: clipped.cols - 1 });
   });
 
+  it('draws no "more lines" row outside a box too short to hold it', () => {
+    const laid = codeLayout(block(['a', 'b', 'c']), 'f.sql', look, { height: 20 });
+    expect(laid).toMatchObject({ h: 20, rows: [], more: 3, moreShown: false });
+    const roomy = codeLayout(block(['a', 'b', 'c']), 'f.sql', look, { height: 80 });
+    expect(roomy.moreShown).toBe(true);
+    expect(roomy.moreY + 17).toBeLessThanOrEqual(80);
+  });
+
   it('never breaks a line inside its leading indent', () => {
     const line = ' '.repeat(20) + 'x'.repeat(40),
       laid = codeLayout(block([line]), '', look, { width: 200 });
