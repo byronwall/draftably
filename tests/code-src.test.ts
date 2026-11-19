@@ -61,6 +61,10 @@ describe('code src=', () => {
       ['error', expect.stringContaining('past the end of queries/orders.sql (6 lines)')],
     ]);
     expect(errors('../outside.sql')).toEqual([['error', expect.stringContaining('is outside')]]);
+    expect(errors('queries/orders.sql#L0')).toEqual([['error', expect.stringContaining('from 1')]]);
+    expect(errors('queries/orders.sql#L5-L3')).toEqual([
+      ['error', expect.stringContaining('runs backwards')],
+    ]);
   });
 
   it('refuses src= and a body together', () => {

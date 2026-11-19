@@ -24,9 +24,9 @@ const REF = /^([^#]+?)(?:#L(\d+)(?:-L?(\d+))?)?$/;
 export function parseSrc(value: string): SrcRef | null {
   const m = REF.exec(value.trim());
   if (!m) return null;
-  const from = m[2] ? Number(m[2]) : undefined,
-    to = m[3] ? Number(m[3]) : from;
-  return { path: m[1], ...(from ? { from, to } : {}) };
+  if (!m[2]) return { path: m[1] };
+  const from = Number(m[2]);
+  return { path: m[1], from, to: m[3] ? Number(m[3]) : from };
 }
 
 const LANGS: Record<string, string> = {
@@ -81,6 +81,18 @@ export function srcBody(value: string, ref: SrcRef, file: CodeFile | undefined, 
   if (all.length > 1 && all[all.length - 1] === '') all.pop();
   const from = ref.from ?? 1,
     last = ref.to ?? all.length;
+  if (from < 1)
+    return stand(
+      'error',
+      `src="${value}": lines count from 1, so #L0 names no line.`,
+      `Lines of ${ref.path} count from 1.`,
+    );
+  if (last < from)
+    return stand(
+      'error',
+      `src="${value}" runs backwards: line ${last} comes before line ${from}. Write #L${last}-L${from}.`,
+      `The range of ${ref.path} runs backwards.`,
+    );
   if (from > all.length)
     return stand(
       'error',
