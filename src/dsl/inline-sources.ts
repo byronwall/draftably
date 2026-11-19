@@ -4,7 +4,7 @@
  */
 import { CODE_TAB } from '../model/code';
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
-import { printSource, readSource } from './syntax';
+import { printSource, readSource, SOURCE_LIMIT } from './syntax';
 
 /** The paths every `src=` in `source` names, once each. */
 export function srcPaths(source: string): string[] {
@@ -30,7 +30,8 @@ function tagFor(lines: string[]) {
  * `source` with each readable `src=` replaced by an inline body: what an export
  * embeds, so the image opens again without the original files. `lang=` and `start=` are written
  * when the file implied them, so the colors, line numbers and `range lines=` stay the same.
- * A `src=` whose file is missing stays as written.
+ * A `src=` whose file is missing stays as written. Throws when the result is too long to read
+ * back.
  */
 export function inlineSources(source: string, files: CodeFiles | undefined): string {
   if (!files || !Object.keys(files).length) return source;
@@ -62,5 +63,12 @@ export function inlineSources(source: string, files: CodeFiles | undefined): str
       close: tag,
     };
   }
-  return changed ? printSource(doc) : source;
+  if (!changed) return source;
+  const out = printSource(doc);
+  // An export must open again: refuse one whose source `readSource` would not read back.
+  if (out.length > SOURCE_LIMIT)
+    throw Error(
+      `With its src= files inlined, the source is ${out.length.toLocaleString('en-US')} characters, over the ${SOURCE_LIMIT.toLocaleString('en-US')} a .draft may hold. Narrow the src= line ranges, or export with --no-source.`,
+    );
+  return out;
 }

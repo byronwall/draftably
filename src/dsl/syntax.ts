@@ -84,6 +84,9 @@ export interface HereBody {
   close: string;
 }
 
+/** The most characters a `.draft` source may hold. */
+export const SOURCE_LIMIT = 300_000;
+
 /** `<<TAG` as the last word of a statement opens a body. */
 const HEREDOC = /^<<([A-Za-z_][A-Za-z0-9_]*)$/;
 
@@ -180,7 +183,7 @@ function word(raw: string, line: number, column: number): Word {
 /** Read source text into lines. Only lexical errors are reported here. */
 export function readSource(source: string): SourceDoc {
   if (typeof source !== 'string') throw new DslError('Source must be text.');
-  if (source.length > 300_000) throw new DslError('Limit: 300,000 source characters.');
+  if (source.length > SOURCE_LIMIT) throw new DslError('Limit: 300,000 source characters.');
   const texts = source.split(/\r?\n/),
     lines: SourceLine[] = [];
   for (let i = 0; i < texts.length; i++) {

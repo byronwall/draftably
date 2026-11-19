@@ -325,13 +325,14 @@ node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
   as it does for the `.draft` itself.
 - The file must be inside the folder `draftably open` serves, or inside the `.draft` file's git
   root (its folder outside a repository) for the CLI. A path that leaves it, or a link that points
-  out of it, is refused. Files over 1 MB are refused.
+  out of it, is refused. Files over 200 KB are refused.
 - The static app, the playground and the bundled examples cannot read files. There a `src=` node
   draws a placeholder that names the file it needs, and its ranges mark the placeholder's first
   line.
 - Every export is self-contained. PNG, SVG and PDF embed the source with each `src=` replaced by
   an inline body (with `lang=` and `start=` written out), so `check` and `open` on an exported
-  image need no other file.
+  image need no other file. An export whose inlined source would pass the 300,000-character
+  limit of a `.draft` fails with an error: narrow the line ranges, or export without the source.
 
 `check` reports:
 

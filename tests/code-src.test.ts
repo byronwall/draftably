@@ -69,6 +69,11 @@ describe('code src=', () => {
     );
   });
 
+  it('refuses an export whose inlined source could not be read back', () => {
+    const big = { 'a.sql': { text: 'SELECT 1;\n'.repeat(31_000) } };
+    expect(() => inlineSources(draft('a.sql'), big)).toThrow(/over the 300,000/);
+  });
+
   it('exports a self-contained source that draws the same', () => {
     const { root, file } = folder(),
       source = draft('queries/orders.sql#L3-L5', 'range q.cols lines=4-5'),

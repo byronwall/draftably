@@ -8,8 +8,11 @@ import path from 'node:path';
 import type { CodeFiles } from '../model/code-src';
 import { srcPaths } from '../dsl/inline-sources';
 
-/** Larger files are refused: a code node shows an excerpt, not a whole bundle. */
-const MAX_BYTES = 1_000_000;
+/**
+ * Larger files are refused: a code node shows an excerpt, and an export inlines it into a source
+ * that must stay under `SOURCE_LIMIT` characters.
+ */
+const MAX_BYTES = 200_000;
 
 const inside = (root: string, full: string) => full === root || full.startsWith(root + path.sep);
 
@@ -45,7 +48,7 @@ export function readCodeFiles(source: string, draft: string, root: string): Code
           error: `src="${src}" links outside ${root}; draftably reads files inside it only.`,
         };
       else if (fs.statSync(at.full).size > MAX_BYTES)
-        files[src] = { error: `src="${src}" is over 1 MB. Point it at a smaller file.` };
+        files[src] = { error: `src="${src}" is over 200 KB. Point it at a smaller file.` };
       else files[src] = { text: fs.readFileSync(at.full, 'utf8') };
     } catch {
       files[src] = { error: `src="${src}": no such file next to the .draft.` };
