@@ -214,20 +214,24 @@ export function codeLayout(
   };
 }
 
-/** A run of characters with no spaces, at its column; a row draws as its runs. */
+/**
+ * A run of text at its column; a row draws as its runs. A run holds single spaces, which every
+ * renderer keeps and which take one mono column. Leading spaces and runs of two or more are
+ * never drawn: the next run starts at its own column instead.
+ */
 export interface CodeRun {
   col: number;
   text: string;
 }
 
 /**
- * A row's text as runs that each start at their own column, so spaces never have to be drawn.
- * Slice 2 splits these runs again at token edges to color them.
+ * A row's text as runs that each start at their own column, so no renderer has to keep a run of
+ * spaces. Token colors split these runs again at token edges.
  */
 export function codeRuns(row: CodeRow, text: string): CodeRun[] {
   const out: CodeRun[] = [],
     part = text.slice(row.from, row.to);
-  for (const m of part.matchAll(/\S+/g)) out.push({ col: row.col + m.index!, text: m[0] });
+  for (const m of part.matchAll(/\S+(?: \S+)*/g)) out.push({ col: row.col + m.index!, text: m[0] });
   if (row.clipped) out.push({ col: row.col + part.length, text: '…' });
   return out;
 }
