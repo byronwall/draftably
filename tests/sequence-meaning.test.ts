@@ -174,7 +174,7 @@ describe('kinds of sequence message', () => {
     ['node a "A"\naction x a "work"', /use layout root sequence/],
     ['node a "A"\nnode b "B"\nedge m a -> b message=call', /use layout root sequence/],
     [lines('action x c "work"'), /c/],
-    [lines('+action x a "work"'), /Only node, group and edge lines/],
+    [lines('+action x a "work"'), /Only node, group, edge and range lines/],
   ])('refuses %s', (source, message) => {
     expect(() => checkSource(source)).toThrow(message);
   });

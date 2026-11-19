@@ -14,6 +14,7 @@ import {
 } from '../../model/code';
 import { detailInk } from '../../model/colors';
 import { codeColors, codeTokens, coloredRuns } from '../../model/highlight';
+import { BAND_OPACITY, rangeMarks } from '../../model/ranges';
 import { truncateText } from '../../model/fonts';
 import type { NodeLabel } from '../../model/labels';
 import { markerMarkup } from '../../model/legend';
@@ -206,6 +207,9 @@ export function CodeBody(props: {
       return band ? [{ ...band, fill: colors()[t.line as 'added'].fill }] : [];
     }),
   );
+  const ranges = createMemo(() =>
+    rangeMarks(props.code, laid(), props.look, props.w, props.swatch.fill),
+  );
   const bandInk = (line: number) => {
     const t = tokens()?.[line]?.line;
     return t === 'added' || t === 'removed' ? colors()[t].ink : undefined;
@@ -221,6 +225,29 @@ export function CodeBody(props: {
     <g class="code-body" pointer-events="none">
       <For each={bands()}>
         {b => <rect x={1} y={b.y} width={props.w - 2} height={b.h} fill={b.fill} />}
+      </For>
+      <For each={ranges()}>
+        {m => (
+          <g class="code-range" opacity={m.opacity < 1 ? m.opacity : undefined}>
+            <rect
+              x={1}
+              y={m.y}
+              width={props.w - 2}
+              height={m.h}
+              fill={m.band}
+              fill-opacity={BAND_OPACITY}
+            />
+            <line
+              x1={m.barX}
+              y1={m.y}
+              x2={m.barX}
+              y2={m.y + m.h}
+              stroke={m.bar}
+              stroke-width={m.barW}
+              stroke-dasharray={m.dash}
+            />
+          </g>
+        )}
       </For>
       <Show when={laid().caption}>
         <line
@@ -291,6 +318,32 @@ export function CodeBody(props: {
           </tspan>
         </Show>
       </text>
+      <For each={ranges().filter(m => m.tag)}>
+        {m => (
+          <g class="code-range-tag" opacity={m.opacity < 1 ? m.opacity : undefined}>
+            <rect
+              x={m.tag!.x}
+              y={m.tag!.y}
+              width={m.tag!.w}
+              height={m.tag!.h}
+              rx={3}
+              fill={m.band}
+            />
+            <text
+              x={m.tag!.x + m.tag!.w / 2}
+              y={m.tag!.y + m.tag!.h / 2}
+              text-anchor="middle"
+              dominant-baseline="central"
+              font-family={props.look.annotation.family}
+              font-size={String(props.look.annotation.size)}
+              font-weight={String(props.look.annotation.weight)}
+              fill={m.tag!.ink}
+            >
+              {m.tag!.text}
+            </text>
+          </g>
+        )}
+      </For>
       <For each={laid().rows.filter(r => r.wraps)}>
         {row => (
           <path

@@ -356,7 +356,9 @@ export function translateEdit(input: EditInput): EditResult {
       return;
     }
     s.command = 'edge';
-    s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
+    // An end on a code range keeps its range name.
+    const end = (id: string, range?: string) => bare(sid(id) + (range ? '.' + range : ''));
+    s.args = [s.args[0], end(e.from, e.fromRange), bare('->'), end(e.to, e.toRange)];
     if (e.label) s.args.push(quoted(e.label));
     setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
     setAttr(s, 'head', e.head ? bare(e.head) : undefined);

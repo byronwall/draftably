@@ -348,6 +348,9 @@ export interface ModelEdge {
   message?: MessageKind;
   /** `answers=`: the earlier message a reply answers. */
   replyTo?: string;
+  /** Set by `validateReferences` for an end written as a code range, `sql.copy2`. */
+  fromRange?: string;
+  toRange?: string;
   line: number;
 }
 
@@ -447,8 +450,23 @@ export interface Model {
   phases: Array<{ id: string; label: string; ids: string[]; line: number }>;
   /** Sequence diagrams: the `was-order` statement, the older version's message order. */
   wasOrder?: { ids: string[]; line: number };
+  /** `range` statements, resolved onto their code nodes by `validateReferences`. */
+  ranges: ModelRange[];
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
+}
+
+/** A `range` statement as written: its lines by number (`lines=`) or by pattern (`match=`). */
+export interface ModelRange {
+  node: string;
+  name: string;
+  lines?: [number, number];
+  match?: string;
+  span: number;
+  color: string;
+  label?: string;
+  status?: Status;
+  line: number;
 }
 
 /** `config` keys and the setting each sets. */
@@ -581,6 +599,7 @@ export function parseModel(source: string | SourceDoc): Model {
     footnoteLines: [],
     stateLines: new Map(),
     phases: [],
+    ranges: [],
     warnings: [],
   };
   const configLines = new Map<string, number>();
@@ -660,8 +679,8 @@ export function parseModel(source: string | SourceDoc): Model {
     );
     const status: Status | undefined = s.mark && MARKS[s.mark];
     assert(
-      !s.mark || ['node', 'group', 'edge'].includes(command),
-      `Only node, group and edge lines take a ${s.mark} mark.`,
+      !s.mark || ['node', 'group', 'edge', 'range'].includes(command),
+      `Only node, group, edge and range lines take a ${s.mark} mark.`,
     );
     const was = () => {
       for (const key of ['was', 'was-shape', 'was-count'])
@@ -1126,6 +1145,57 @@ export function parseModel(source: string | SourceDoc): Model {
         m.legendLines.push(line);
         break;
       }
+      case 'range': {
+        count(1, 2);
+        allow(['lines', 'match', 'span', 'color']);
+        const rid = id(args[0]),
+          dot = rid.lastIndexOf('.');
+        assert(
+          dot > 0 && dot < rid.length - 1,
+          'A range is named after its code node: range sql.copy1 lines=3-6.',
+        );
+        assert(!objectIds.has(rid), `Duplicate id ${rid}: a node or group already has it.`);
+        assert(!m.ranges.some(r => `${r.node}.${r.name}` === rid), `Duplicate range ${rid}.`);
+        assert(
+          attrs.has('lines') !== attrs.has('match'),
+          'A range needs lines=a-b or match="pattern", not both.',
+        );
+        assert(!attrs.has('span') || attrs.has('match'), 'span= extends a match="pattern" range.');
+        let lines: [number, number] | undefined;
+        if (attrs.has('lines')) {
+          const span = /^(\d+)(?:-(\d+))?$/.exec(attrs.get('lines')!.value);
+          assert(span, `Expected lines=a-b, such as lines=3-6; got ${attrs.get('lines')!.value}.`);
+          lines = [Number(span![1]), Number(span![2] ?? span![1])];
+          assert(lines[0] <= lines[1], `lines=${lines[0]}-${lines[1]} runs backwards.`);
+        }
+        if (attrs.has('match')) {
+          const w = attrs.get('match')!;
+          assert(w.quoted && w.value, 'Expected match="pattern" in double quotes.');
+          try {
+            new RegExp(w.value);
+          } catch {
+            fail(`match="${w.value}" is not a valid regular expression.`);
+          }
+        }
+        const color = attrs.get('color')?.value ?? 'amber';
+        assert(
+          !attrs.get('color')?.quoted && FAMILY.test(color) && color !== 'auto',
+          `Expected color= a built-in color (${BUILT_IN_FAMILIES.join(', ')}) or a theme-color name; got ${color}.`,
+        );
+        if (args[1]) assert(args[1].quoted, 'A range label goes in quotes.');
+        m.ranges.push({
+          node: rid.slice(0, dot),
+          name: rid.slice(dot + 1),
+          ...(lines ? { lines } : {}),
+          ...(attrs.has('match') ? { match: attrs.get('match')!.value } : {}),
+          span: num('span', 1, 1, 10_000),
+          color,
+          ...(args[1]?.value.trim() ? { label: args[1].value } : {}),
+          ...(status ? { status } : {}),
+          line,
+        });
+        break;
+      }
       case 'note': {
         count(1);
         allow(['near', 'side', 'width']);
@@ -1270,6 +1340,80 @@ export function layoutParent(by: Map<string, ModelObject>, id: string): string {
   return p;
 }
 
+/**
+ * Put each `range` onto its code node as body line indexes. `lines=` counts from the node's
+ * `start=` (1 by default); `match=` takes the first line that matches, and `span=` lines from it.
+ * Returns the ranges by ID, `node.name`.
+ */
+function resolveRanges(
+  m: Model,
+  by: Map<string, ModelObject>,
+  defined: Map<string, Set<number>>,
+): Map<string, ModelRange> {
+  const out = new Map<string, ModelRange>(),
+    assert = (ok: unknown, message: string, line: number) => {
+      if (!ok) throw new DslError(message, line);
+    };
+  for (const r of m.ranges) {
+    const rid = `${r.node}.${r.name}`,
+      o = by.get(r.node);
+    assert(!by.has(rid), `Duplicate id ${rid}: a node or group already has it.`, r.line);
+    assert(o, `Unknown node ${r.node} in range ${rid}.`, r.line);
+    assert(
+      o!.code,
+      `${r.node} is not a code node, so it has no lines to name. Give it shape=code and a body, or remove range ${rid}.`,
+      r.line,
+    );
+    assert(
+      isBuiltInFamily(r.color) || defined.has(r.color),
+      `Unknown color ${r.color}. Define it with theme-color ${r.color} shade=… fill= stroke= ink=.`,
+      r.line,
+    );
+    const code = o!.code!,
+      last = code.start + code.lines.length - 1;
+    let from: number, to: number;
+    if (r.lines) {
+      assert(
+        r.lines[0] >= code.start,
+        `range ${rid} starts at line ${r.lines[0]}, before ${r.node}'s first line, ${code.start}.`,
+        r.line,
+      );
+      assert(
+        r.lines[1] <= last,
+        `range ${rid} runs to line ${r.lines[1]}, past ${r.node}'s last line, ${last}.`,
+        r.line,
+      );
+      [from, to] = [r.lines[0] - code.start, r.lines[1] - code.start];
+    } else {
+      const re = new RegExp(r.match!),
+        hits = code.lines.flatMap((l, i) => (re.test(l) ? [i] : []));
+      assert(hits.length, `range ${rid}: match="${r.match}" matches no line of ${r.node}.`, r.line);
+      if (hits.length > 1)
+        m.warnings.push({
+          code: 'range-match',
+          message: `range ${rid}: match="${r.match}" matches ${hits.length} lines of ${r.node} (${hits.map(i => i + code.start).join(', ')}), so it starts at the first. Make the pattern match one line.`,
+          line: r.line,
+        });
+      [from, to] = [hits[0], hits[0] + r.span - 1];
+      assert(
+        to < code.lines.length,
+        `range ${rid}: span=${r.span} from line ${from + code.start} runs past ${r.node}'s last line, ${last}.`,
+        r.line,
+      );
+    }
+    (code.ranges ??= []).push({
+      name: r.name,
+      from,
+      to,
+      color: r.color,
+      ...(r.label ? { label: r.label } : {}),
+      ...(r.status ? { status: r.status } : {}),
+    });
+    out.set(rid, r);
+  }
+  return out;
+}
+
 function validateReferences(m: Model) {
   const by = new Map(m.objects.map(o => [o.id, o]));
   const framed = (id: string, line: number, what: string) =>
@@ -1282,14 +1426,38 @@ function validateReferences(m: Model) {
   const assert = (ok: unknown, message: string, line: number) => {
     if (!ok) throw new DslError(message, line);
   };
-  const exists = (id: string, line: number) =>
-    assert(by.has(id), `Unknown node/group ${id}.`, line);
+  // `sql.copy9` where `sql` is a code node names a range, so the message says which it has.
+  const missing = (id: string) => {
+    const dot = id.lastIndexOf('.'),
+      o = dot > 0 ? by.get(id.slice(0, dot)) : undefined;
+    if (!o?.code) return `Unknown node/group ${id}.`;
+    const names = o.code.ranges?.map(r => r.name) ?? [];
+    return `Unknown range ${id}: ${o.id} ${names.length ? `has ${names.join(', ')}` : 'has no ranges'}. Name it with range ${id} lines=a-b.`;
+  };
+  const exists = (id: string, line: number) => assert(by.has(id), missing(id), line);
   const scope = (id: string, line: number) =>
     assert(id === 'root' || by.get(id)?.type === 'group', `Unknown container ${id}.`, line);
   const defined = new Map<string, Set<number>>();
   for (const c of m.appearance.colors) {
     if (!defined.has(c.family)) defined.set(c.family, new Set());
     defined.get(c.family)!.add(c.shade);
+  }
+  const ranges = resolveRanges(m, by, defined);
+  // An edge end written as a range ends on its code node, at the range's lines.
+  for (const e of m.edges) {
+    const a = ranges.get(e.source),
+      b = ranges.get(e.target);
+    for (const [r, side] of [
+      [a, e.from],
+      [b, e.to],
+    ] as const)
+      assert(
+        !r || side === 'auto' || side === 'left' || side === 'right',
+        `${e.id} ends on range ${r?.node}.${r?.name}, which it meets on the left or right side. Use from=/to= left or right, or remove it.`,
+        e.line,
+      );
+    if (a) Object.assign(e, { source: a.node, fromRange: a.name });
+    if (b) Object.assign(e, { target: b.node, toRange: b.name });
   }
   (m.appearance.legend ?? []).forEach((e, i) => {
     if (!e.family || isBuiltInFamily(e.family)) return;
@@ -1464,7 +1632,7 @@ function validateReferences(m: Model) {
       );
     }
   (m.appearance.notes ?? []).forEach((n, i) => {
-    if (!n.near || by.has(n.near)) return;
+    if (!n.near || by.has(n.near) || ranges.has(n.near)) return;
     if (!messageIds.has(n.near)) return exists(n.near, m.noteLines[i]);
     assert(
       sequence,
@@ -1477,8 +1645,10 @@ function validateReferences(m: Model) {
     for (const x of s.ids) {
       const line = m.stateLines.get(`${s.id}:${x}`)!;
       assert(
-        by.has(x) || edgeIds.has(x),
-        `Unknown node, group or edge ${x} in state ${s.id}.`,
+        by.has(x) || edgeIds.has(x) || ranges.has(x),
+        missing(x).startsWith('Unknown range')
+          ? `${missing(x)} (in state ${s.id})`
+          : `Unknown node, group, edge or range ${x} in state ${s.id}.`,
         line,
       );
     }

@@ -101,6 +101,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.message ? { message: e.message } : {}),
       ...(e.replyTo ? { replyTo: e.replyTo } : {}),
       ...(e.status ? { status: e.status } : {}),
+      ...(e.fromRange ? { fromRange: e.fromRange } : {}),
+      ...(e.toRange ? { toRange: e.toRange } : {}),
     });
     set(doc.layout.edges, e.id, {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),

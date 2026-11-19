@@ -88,6 +88,10 @@ export function sidePairs(
       // A lane may say where along the target's side the edge arrives.
       if (typeof cfg.toOffset === 'number' && cfg.toSide === ts && !vertices(b))
         toff = cfg.toOffset;
+      // An end at a code range sits at the range's middle line, on a left or right side.
+      const level = (x: Side) => x === 'left' || x === 'right';
+      if (typeof cfg.fromAt === 'number' && level(fs)) fo = cfg.fromAt;
+      if (typeof cfg.toAt === 'number' && level(ts)) toff = cfg.toAt;
       if (pin.from) fo = pin.from.offset;
       if (pin.to) toff = pin.to.offset;
       const start = port(a, fs, fo),

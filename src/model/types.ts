@@ -90,6 +90,9 @@ export interface DiagramEdge {
   status?: Status;
   /** How the drawn emphasis state treats it; see `withState`. */
   spot?: Spot;
+  /** A code node's range the line leaves from or ends at (`edge e1 a -> sql.copy2`). */
+  fromRange?: string;
+  toRange?: string;
 }
 
 export interface NodeLayout extends Rect {
@@ -109,6 +112,12 @@ export interface EdgeLayout {
   lane?: Lane;
   /** From a lane, at route time: where along its target's side the edge arrives, off centre. */
   toOffset?: number;
+  /**
+   * At route time, for an end on a code node's range: the end sits on the left or right side,
+   * this far below the side's middle, at the range's middle line.
+   */
+  fromAt?: number;
+  toAt?: number;
   /** A sequence message: drawn straight between the two lifelines at this height, not routed. */
   row?: number;
   /** A message between distant lanes: the middle of the gap between lifelines its label sits in. */

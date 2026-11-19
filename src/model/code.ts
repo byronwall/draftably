@@ -10,6 +10,7 @@
  */
 import { measureText, typeProfile, type TypeProfile } from './fonts';
 import type { ResolvedAppearance } from './appearance';
+import type { Spot, Status } from './status';
 
 /** A code node's body and its options, as the file states them. */
 export interface CodeBlock {
@@ -27,6 +28,27 @@ export interface CodeBlock {
   maxWidth: number;
   /** Source line of `lines[0]`, so a note about a body line names the line in the file. */
   sourceLine: number;
+  /** Named line ranges from `range` statements, in file order. */
+  ranges?: CodeRange[];
+}
+
+/**
+ * A named run of body lines (`range sql.copy1 lines=3-6`): a tinted band behind them, a bar in
+ * the left margin and an optional label. Its ID is `<node>.<name>`, which edges, notes and states
+ * name like any object. A range never changes the node's size.
+ */
+export interface CodeRange {
+  name: string;
+  /** First and last body line, as indexes into `CodeBlock.lines`. */
+  from: number;
+  to: number;
+  /** Color family of the band and bar. */
+  color: string;
+  label?: string;
+  /** From a change mark on the `range` line. */
+  status?: Status;
+  /** How the drawn emphasis state treats it; see `withState`. */
+  spot?: Spot;
 }
 
 /** The languages `model/highlight.ts` colors; any other `lang=` draws plain text. */
