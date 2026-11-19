@@ -239,13 +239,13 @@ How it draws:
 
 `check` reports:
 
-| Code           | Level   | When                                                                                                                                       |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| (error)        | error   | A body with no closing line (at its `<<TAG` line), a body on any other shape, `shape=code` with no body, or a code option on another shape |
-| `code-wrap`    | warning | Lines wrap. It names the longest, so you can break it                                                                                      |
-| `code-clip`    | warning | Lines are cut by `wrap=off`                                                                                                                |
-| `code-clipped` | warning | A fixed `size` height leaves lines out                                                                                                     |
-| `code-lang`    | info    | `lang=` names a language with no highlighting                                                                                              |
+| Code           | Level   | When                                                                                                                                                 |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| (error)        | error   | A body with no closing line (at its `<<TAG` line), a body on any other shape, `shape=code` with no body or `src=`, or a code option on another shape |
+| `code-wrap`    | warning | Lines wrap. It names the longest, so you can break it                                                                                                |
+| `code-clip`    | warning | Lines are cut by `wrap=off`                                                                                                                          |
+| `code-clipped` | warning | A fixed `size` height leaves lines out                                                                                                               |
+| `code-lang`    | info    | `lang=` names a language with no highlighting                                                                                                        |
 
 In the viewer, a code node moves, sizes, groups and connects like any node. Its body and caption
 are edited in the file, not on the canvas.
@@ -303,6 +303,44 @@ edge e1 cost -> sql.copy1 "scan 1"
 | ------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | (error)       | error   | A range before the first line or past the last, a `match=` with no hit, a `span=` that runs past the last line, a range on a node that is not a code node, or an unknown range in `edge`, `near=` or `state` |
 | `range-match` | warning | `match=` matches more than one line. The range starts at the first; the message lists every hit                                                                                                              |
+
+### Code from a file
+
+`src=` reads a code node's body from a file, so the listing follows the real source instead of a
+copy that goes stale:
+
+```draft
+node sql "orders.sql" shape=code src="queries/orders.sql#L10-L40" numbers=on
+```
+
+- The path is relative to the `.draft` file. `#L10-L40` takes lines 10 to 40, and `#L10` takes
+  line 10 alone. Without it, the node shows the whole file.
+- A node has `src=` or a body, never both.
+- `lang=` defaults from the extension: `.sql`, `.py`, `.ts`/`.tsx`, `.js`/`.mjs`, `.json`,
+  `.yaml`/`.yml`, `.sh`/`.bash` and `.diff`/`.patch`. `start=` defaults to the range's first line,
+  so `numbers=on` shows the file's own line numbers and `range … lines=` counts them too.
+- The lines are prepared like a body: tabs expand, trailing spaces go and the shared indent is
+  removed.
+- The CLI and `draftably open` read the file. The viewer watches it and redraws when it changes,
+  as it does for the `.draft` itself.
+- The file must be inside the folder `draftably open` serves, or inside the `.draft` file's git
+  root (its folder outside a repository) for the CLI. A path that leaves it, or a link that points
+  out of it, is refused. Files over 200 KB are refused.
+- The static app, the playground and the bundled examples cannot read files. There a `src=` node
+  draws a placeholder that names the file it needs, and its ranges mark the placeholder's first
+  line.
+- Every export is self-contained. PNG, SVG and PDF embed the source with each `src=` replaced by
+  an inline body (with `lang=` and `start=` written out), so `check` and `open` on an exported
+  image need no other file. An export whose inlined source would pass the 300,000-character
+  limit of a `.draft` fails with an error: narrow the line ranges, or export without the source.
+
+`check` reports:
+
+| Code       | Level   | When                                                                                                  |
+| ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
+| (error)    | error   | `src=` and a body on one node                                                                         |
+| `code-src` | error   | The file is missing, the range starts or ends past the end of the file, or the path leaves the folder |
+| `code-src` | warning | The host cannot read files (the static app), so the node draws a placeholder                          |
 
 ## Soft groups
 
@@ -1379,7 +1417,8 @@ teaches coding agents to write and check `.draft` files. `--global` installs it 
 ### Source in exported images
 
 `inspect --png`, `inspect --svg`, `compare --png` and `compare --svg` embed the formatted source,
-and the Editor's PNG and SVG exports embed the open file's source. A `compare` export embeds the
+and the Editor's PNG and SVG exports embed the open file's source. Each `src=` code node's file is
+inlined as a body, so the embedded source draws on its own. A `compare` export embeds the
 marked file, so both versions come back. `--no-source`, or the checkbox in the Editor's export
 dialog, leaves it out. Dropping or pasting an image with source into the Editor opens it as a new
 scratch diagram. The format is stable, so other tools can read it:

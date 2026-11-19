@@ -25,6 +25,7 @@ import { FONT_ROLES, type FontRole } from '../model/fonts';
 import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
 import { CODE_MAX_WIDTH, CODE_TAB, codeLines, type CodeBlock } from '../model/code';
+import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
 import type {
@@ -82,6 +83,9 @@ export interface HereBody {
   /** The closing line exactly as written (`TAG`, maybe with spaces around it). */
   close: string;
 }
+
+/** The most characters a `.draft` source may hold. */
+export const SOURCE_LIMIT = 300_000;
 
 /** `<<TAG` as the last word of a statement opens a body. */
 const HEREDOC = /^<<([A-Za-z_][A-Za-z0-9_]*)$/;
@@ -179,7 +183,7 @@ function word(raw: string, line: number, column: number): Word {
 /** Read source text into lines. Only lexical errors are reported here. */
 export function readSource(source: string): SourceDoc {
   if (typeof source !== 'string') throw new DslError('Source must be text.');
-  if (source.length > 300_000) throw new DslError('Limit: 300,000 source characters.');
+  if (source.length > SOURCE_LIMIT) throw new DslError('Limit: 300,000 source characters.');
   const texts = source.split(/\r?\n/),
     lines: SourceLine[] = [];
   for (let i = 0; i < texts.length; i++) {
@@ -573,7 +577,7 @@ export const DSL_SHAPES: DslShape[] = [
   'code',
 ];
 /** Attributes only a code node takes. */
-const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'start', 'max-width'];
+const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'start', 'max-width', 'src'];
 /** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
 export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker' && s !== 'code');
 const FRAMES = ['box', 'soft', 'none'] as const;
@@ -581,8 +585,12 @@ const FRAMES = ['box', 'soft', 'none'] as const;
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 
-/** Parse and validate source. Throws `DslError` with a line number for the first problem. */
-export function parseModel(source: string | SourceDoc): Model {
+/**
+ * Parse and validate source. Throws `DslError` with a line number for the first problem. `files`
+ * holds the text of the files `src=` names, read by the host; without it a `src=` node draws a
+ * placeholder.
+ */
+export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model {
   const doc = typeof source === 'string' ? readSource(source) : source;
   const m: Model = {
     title: 'Untitled diagram',
@@ -810,8 +818,12 @@ export function parseModel(source: string | SourceDoc): Model {
             : 'A group takes no body. Remove the <<TAG body.',
         );
         assert(
-          !code || s.body,
-          'A code node needs a body: end the line with <<TAG, then the code, then a line holding only TAG.',
+          !(s.body && attrs.has('src')),
+          'A code node has src= or a body, never both. Remove the <<TAG body or src=.',
+        );
+        assert(
+          !code || s.body || attrs.has('src'),
+          'A code node needs a body: end the line with <<TAG, then the code, then a line holding only TAG. Or read it from a file with src="path".',
         );
         for (const key of CODE_ATTRS)
           assert(code || !attrs.has(key), `${key}= belongs on a code node (shape=code).`);
@@ -842,6 +854,42 @@ export function parseModel(source: string | SourceDoc): Model {
           `Expected color=auto, a built-in color (${BUILT_IN_FAMILIES.join(', ')}) or a theme-color name; got ${color}.`,
         );
         const shade = attrs.has('shade') ? shadeOf(attrs.get('shade')!) : undefined;
+        const codeBlock = (): CodeBlock => {
+          const tab = num('tab', CODE_TAB, 1, 16),
+            src = attrs.get('src'),
+            ref = src && parseSrc(src.value);
+          assert(
+            !src || (src.value && ref),
+            `Expected src="path" or src="path#L10-L40"; got ${src?.value}.`,
+          );
+          const read = ref ? srcBody(src!.value, ref, files?.[ref.path], tab) : undefined,
+            lang = attrs.has('lang') ? text(attrs.get('lang')) : ref && langOf(ref.path);
+          return {
+            lines: read ? read.lines : codeLines(s.body!.lines, tab),
+            ...(lang && !read?.placeholder ? { lang } : {}),
+            wrap: choice('wrap', 'on', ['on', 'off'] as const) === 'on',
+            numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',
+            start: num('start', read?.start ?? 1, 0, 1_000_000),
+            maxWidth: num('max-width', CODE_MAX_WIDTH, 120, 8000),
+            sourceLine: read
+              ? line
+              : line +
+                1 +
+                Math.max(
+                  0,
+                  s.body!.lines.findIndex(l => l.trim()),
+                ),
+            ...(read
+              ? {
+                  src: {
+                    path: ref!.path,
+                    ...(read.placeholder ? { placeholder: true } : {}),
+                    ...(read.problem ? { problem: read.problem } : {}),
+                  },
+                }
+              : {}),
+          };
+        };
         m.objects.push({
           id: oid,
           type: command,
@@ -850,25 +898,7 @@ export function parseModel(source: string | SourceDoc): Model {
           color,
           ...(shade !== undefined ? { shade } : {}),
           shape: command === 'node' ? choice('shape', 'box', DSL_SHAPES) : 'box',
-          ...(code
-            ? {
-                code: {
-                  lines: codeLines(s.body!.lines, num('tab', CODE_TAB, 1, 16)),
-                  ...(attrs.has('lang') ? { lang: text(attrs.get('lang')) } : {}),
-                  wrap: choice('wrap', 'on', ['on', 'off'] as const) === 'on',
-                  numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',
-                  start: num('start', 1, 0, 1_000_000),
-                  maxWidth: num('max-width', CODE_MAX_WIDTH, 120, 8000),
-                  sourceLine:
-                    line +
-                    1 +
-                    Math.max(
-                      0,
-                      s.body!.lines.findIndex(l => l.trim()),
-                    ),
-                },
-              }
-            : {}),
+          ...(code ? { code: codeBlock() } : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
@@ -1407,7 +1437,10 @@ function resolveRanges(
     const code = o!.code!,
       last = code.start + code.lines.length - 1;
     let from: number, to: number;
-    if (r.lines) {
+    // A placeholder for an unread src= file has no real lines: the range marks its first line,
+    // so edges and notes still find it.
+    if (code.src?.placeholder) [from, to] = [0, 0];
+    else if (r.lines) {
       assert(
         r.lines[0] >= code.start,
         `range ${rid} starts at line ${r.lines[0]}, before ${r.node}'s first line, ${code.start}.`,

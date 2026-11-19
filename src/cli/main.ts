@@ -13,6 +13,9 @@ import type { Diagram } from '../model/types';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
+import { inlineSources } from '../dsl/inline-sources';
+import { readCodeFiles } from '../server/code-files';
+import { gitRoot } from '../server/file-session';
 import { renderSvg } from './svg';
 import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
 import { cliVersion, staleSkills } from './skill';
@@ -179,6 +182,18 @@ async function read(file: string | undefined) {
 
 class UsageError extends Error {}
 
+/**
+ * The files `source`'s `src=` code nodes name, read from beside `file`. They must stay inside the
+ * file's git root, or its folder outside a repository, as the viewer requires. Only a `.draft`
+ * file reads them: a source embedded in a PNG, SVG or PDF may come from anyone, and an export
+ * already carries its code inline.
+ */
+function codeFiles(file: string, source: string) {
+  if (!/\.draft$/i.test(file)) return undefined;
+  const draft = path.resolve(file);
+  return readCodeFiles(source, draft, gitRoot(path.dirname(draft)));
+}
+
 /** The sources attached to a PDF export; throws when it has none. */
 async function pdfSources(file: string) {
   const { readPdfSources } = await import('./pdf');
@@ -273,7 +288,7 @@ async function checkFile(
   metrics?: MetricsOption,
 ) {
   const source = await read(file),
-    scene = await compile(source);
+    scene = await compile(source, codeFiles(file, source));
   const diagnostics = [...scene.diagnostics, ...linkNotes(scene, file), ...sceneConflicts(scene)];
   // Measure only a file that compiles cleanly; errors come first.
   const drawn =
@@ -303,8 +318,12 @@ export async function main(argv: string[]): Promise<number> {
     return 0;
   }
   const flag = (name: string) => rest.includes(name);
-  /** The source to embed in an exported image, unless `--no-source` is given. */
-  const embed = (source: string) => (flag('--no-source') ? undefined : formatSource(source));
+  /**
+   * The source to embed in an exported image, unless `--no-source` is given, with each `src=`
+   * code node's file inlined so the image opens again on its own.
+   */
+  const embed = (source: string) =>
+    flag('--no-source') ? undefined : formatSource(inlineSources(source, codeFiles(file!, source)));
   const withSource = (svg: string, source: string) => {
     const kept = embed(source);
     return kept === undefined ? svg : embedSvgSource(svg, kept);
@@ -430,7 +449,7 @@ export async function main(argv: string[]): Promise<number> {
       }
       case 'inspect': {
         const source = await read(file),
-          scene = await compile(source),
+          scene = await compile(source, codeFiles(file!, source)),
           doc = drawnState(projectScene(scene), option(rest, '--state')),
           opts = { href: svgHref(scene, file), states: flag('--states') };
         if (opts.states) {

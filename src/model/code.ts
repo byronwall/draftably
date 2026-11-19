@@ -30,6 +30,13 @@ export interface CodeBlock {
   sourceLine: number;
   /** Named line ranges from `range` statements, in file order. */
   ranges?: CodeRange[];
+  /** `src=`: the body was read from this file, relative to the `.draft`. */
+  src?: {
+    path: string;
+    /** The host could not read it, so `lines` is a placeholder that names it. */
+    placeholder?: boolean;
+    problem?: { level: 'error' | 'warning'; message: string };
+  };
 }
 
 /**

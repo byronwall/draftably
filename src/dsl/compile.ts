@@ -34,6 +34,7 @@ import { marginNoteRoom, marginNotes } from '../model/note';
 import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
 import { defaultShapeSize } from '../model/styles';
 import { CODE_LANGS, codeLayout } from '../model/code';
+import type { CodeFiles } from '../model/code-src';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
@@ -142,8 +143,9 @@ type Pos = { x: number; y: number };
 
 const round = (n: number) => Math.round(n);
 
-export async function compile(source: string): Promise<Scene> {
-  const m = parseModel(source),
+/** `files` holds the text of the files `src=` names; see `CodeFiles`. */
+export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
+  const m = parseModel(source, files),
     root = m.layouts.find(l => l.scope === 'root' && l.fit);
   if (!root?.fit) return compileModel(m);
   // `fit=`: lay the drawing out each way it can read and fold, and keep the one whose shape is
@@ -247,8 +249,8 @@ function fitVariants(root: ModelLayout) {
  * Check source synchronously: every error `compile` can report, without running layout engines
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
-export function checkSource(source: string): Scene {
-  const m = parseModel(source);
+export function checkSource(source: string, files?: CodeFiles): Scene {
+  const m = parseModel(source, files);
   const flat = dissolved(m);
   return withOldOrder(
     sequenced(withSoftGroups(ownLabels(layoutModel(widestLabels(flat)), flat), m)),
@@ -3936,6 +3938,14 @@ function codeNotes(o: SceneObject, m: Model, look: ResolvedAppearance): Diagnost
     out: Diagnostic[] = [],
     size = m.hints.find(h => h.type === 'size' && h.id === o.id),
     laid = codeLayout(code, o.label, look, { width: o.w, height: o.h });
+  if (code.src?.problem)
+    out.push({
+      level: code.src.problem.level,
+      code: 'code-src',
+      message: `${o.id}: ${code.src.problem.message}`,
+      line: o.line,
+      ids: [o.id],
+    });
   if (code.lang && !(CODE_LANGS as readonly string[]).includes(code.lang))
     out.push({
       level: 'info',
@@ -3944,7 +3954,7 @@ function codeNotes(o: SceneObject, m: Model, look: ResolvedAppearance): Diagnost
       line: o.line,
       ids: [o.id],
     });
-  if (laid.long.length) {
+  if (laid.long.length && !code.src?.placeholder) {
     const longest = laid.long.reduce((a, b) =>
         code.lines[b].length > code.lines[a].length ? b : a,
       ),
@@ -3953,7 +3963,7 @@ function codeNotes(o: SceneObject, m: Model, look: ResolvedAppearance): Diagnost
       level: 'warning',
       code: code.wrap ? 'code-wrap' : 'code-clip',
       message: `${o.id}: ${laid.long.length} ${lines} ${code.wrap ? 'wrap' : 'are cut off'} at ${laid.cols} columns; the longest is body line ${longest + 1} (${code.lines[longest].length} columns). Break ${laid.long.length === 1 ? 'it' : 'them'}, or raise max-width=.`,
-      line: code.sourceLine + longest,
+      line: code.src ? o.line : code.sourceLine + longest,
       ids: [o.id],
     });
   }
