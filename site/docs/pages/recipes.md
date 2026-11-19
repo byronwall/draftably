@@ -174,9 +174,12 @@ edge merge sql.extra -> fix.merged "merge"
 **Try it:** change `lines=6-8` to `match="COUNT" span=3`, then add a line at the top of the query. The range
 finds its line by pattern, so it stays on the second scan. The box and the layout do not move.
 
-To show the real file instead of a copy, replace the body with `src=`:
-`node sql "orders_report.sql" shape=code src="queries/orders_report.sql#L12-L20" numbers=on`.
-`draftably open` and the CLI read the file, and exports carry the code inline.
+To show the real file instead of a copy, replace the body with `src=`. `draftably open` and the
+CLI read the file, and exports carry the code inline:
+
+```text
+node sql "orders_report.sql" shape=code src="queries/orders_report.sql#L12-L20" numbers=on
+```
 
 For a larger example, open [Why the orders report is slow](/play?example=code-review). [Code](#code)
 lists every option.

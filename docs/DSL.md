@@ -212,16 +212,16 @@ edge runs report -> sql.scan1 "runs"
 note "Each scan reads every order row." near=sql.scan2
 ```
 
-The body starts after `<<TAG`, the last word of the line, and ends at a line that holds only
-`TAG`:
+The body is a heredoc. It starts after `<<TAG`, the last word of the line, and ends at a line
+that holds only `TAG`:
 
 - Paste code in as it is. `"`, `#`, `//` and `\` are text, so JSON and shell need no escapes.
 - Indent the body as you like. The indent that all its lines share is removed. A diff keeps its
   `+`, `-` and space column.
 - Pick a tag that the body never holds alone on a line. A shell sample that uses `EOF` takes
   `<<SH`.
-- `draftably format` keeps the body byte for byte, and `check` names body lines by their line in
-  the file.
+- `draftably format` keeps the body byte for byte. `check` gives a body line's line number in the
+  file.
 
 The box fits the code, so a code node needs no `size` line. Every character sits in its own
 JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
@@ -230,10 +230,10 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 | ------------ | ------------- | ------------------------------------------------------------------------------------------------------------- |
 | `"label"`    | none          | A caption band above the code, like a file tab.                                                               |
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
-| `numbers=on` | `off`         | Adds line numbers.                                                                                            |
+| `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
 | `start=`     | `1`           | The first line number. Ranges count from it too.                                                              |
 | `max-width=` | `960`         | The widest the box grows (120–8000 px; 960 is about 130 columns).                                             |
-| `wrap=off`   | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
+| `wrap=`      | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
 | `tab=`       | `4`           | Columns per tab (1–16).                                                                                       |
 | `color=`     | the node fill | Fills the box with shade 50 of the family (950 in a dark theme).                                              |
 | `src=`       | none          | Reads the code from a file instead of a body. See [Code from a file](#code-from-a-file).                      |
@@ -241,7 +241,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 A `size id width=… height=…` line still sets the box. A width wraps or cuts lines at that width.
 A height keeps the rows that fit and ends with "… N more lines".
 
-With `lang=`, keywords, strings, numbers, comments, function names, operators and punctuation
+Syntax highlighting: with `lang=`, keywords, strings, numbers, comments, function names, operators and punctuation
 take the theme's own colors, each at 4.5:1 contrast or more. In `lang=diff`, `+` lines get a
 green band and `-` lines a red band. SQL, JSON, YAML and diff color exactly. Python, TS/JS and
 shell are close: regex literals, `${…}` in template literals and quoting nested in `$(…)` stay
@@ -304,9 +304,9 @@ range sql.join lines=14-16 color=red "the slow join"
 
 - The path is relative to the `.draft` file. `#L10-L40` takes lines 10 to 40, `#L10` takes one
   line, and no `#L` takes the whole file.
-- `lang=` comes from the extension (`.sql`, `.py`, `.ts`, `.tsx`, `.js`, `.jsx`, `.json`,
-  `.yaml`, `.yml`, `.sh`, `.bash`, `.zsh`, `.diff`, `.patch` and their variants). Set `lang=` to
-  override it.
+- `lang=` comes from the extension: `.sql`; `.py`; `.ts`, `.tsx`, `.mts`, `.cts`; `.js`, `.jsx`,
+  `.mjs`, `.cjs`; `.json`; `.yaml`, `.yml`; `.sh`, `.bash`, `.zsh`; `.diff`, `.patch`. Set
+  `lang=` to override it.
 - `start=` comes from the first line of the range. So `numbers=on` and `range … lines=` use the
   file's own line numbers: `lines=14-16` above means lines 14 to 16 of `orders.sql`.
 - A node has `src=` or a body, never both.
@@ -323,7 +323,7 @@ Where it works:
 Limits:
 
 - The file must be inside the folder `draftably open` serves. For the CLI, it must be inside the
-  `.draft` file's git root, or its folder outside a repository. Links out of it are refused.
+  `.draft` file's git root, or its folder outside a repository. A symbolic link that points out of it is refused too.
 - The file must be a regular file of 200 KB or less.
 - The CLI reads `src=` only for a `.draft` input. A source embedded in an image can come from
   anyone, so there `src=` draws the placeholder.
@@ -337,7 +337,7 @@ Limits:
 | (error)        | error   | A body with no closing line, a body or code option on another shape, a code node with no body or `src=`, or both                                                       |
 | (error)        | error   | A range on a node that is not code or outside its body, a `match=` with no hit, a `span=` past the last line, an unknown range ID, or `to=top`/`bottom` on a range end |
 | (error)        | error   | A `match=` pattern that repeats a repeated group, such as `(a+)+`, which can take minutes to run                                                                       |
-| `code-src`     | error   | The file is missing, too large or outside the folder, or the `#L` range is `#L0`, backwards or past its end                                                            |
+| `code-src`     | error   | The file is missing, not a regular file, over 200 KB or outside the folder; or the `#L` range is `#L0`, backwards or past its end                                      |
 | `code-src`     | warning | The host cannot read files, so the node draws a placeholder                                                                                                            |
 | `range-match`  | warning | `match=` hits more than one line. The range takes the first, and the message lists them all                                                                            |
 | `code-wrap`    | warning | Lines wrap. The message names the longest, so you can break it or raise `max-width=`                                                                                   |
