@@ -6,12 +6,14 @@ import {
   codeLayout,
   codeRuns,
   columnX,
+  lineBand,
   moreText,
   rowNumber,
   wrapMarkPath,
   type CodeBlock,
 } from '../../model/code';
 import { detailInk } from '../../model/colors';
+import { codeColors, codeTokens, coloredRuns } from '../../model/highlight';
 import { truncateText } from '../../model/fonts';
 import type { NodeLabel } from '../../model/labels';
 import { markerMarkup } from '../../model/legend';
@@ -196,6 +198,18 @@ export function CodeBody(props: {
       return text ? [{ text, y: row.y + CODE_TYPE.lineHeight / 2 }] : [];
     }),
   );
+  const tokens = createMemo(() => codeTokens(props.code));
+  const colors = createMemo(() => codeColors(props.look, props.swatch.fill, props.swatch.ink));
+  const bands = createMemo(() =>
+    (tokens() ?? []).flatMap((t, line) => {
+      const band = (t.line === 'added' || t.line === 'removed') && lineBand(laid(), line);
+      return band ? [{ ...band, fill: colors()[t.line as 'added'].fill }] : [];
+    }),
+  );
+  const bandInk = (line: number) => {
+    const t = tokens()?.[line]?.line;
+    return t === 'added' || t === 'removed' ? colors()[t].ink : undefined;
+  };
   const muted = () => detailInk(props.look, props.swatch),
     mid = CODE_TYPE.lineHeight / 2,
     font = {
@@ -205,6 +219,9 @@ export function CodeBody(props: {
     };
   return (
     <g class="code-body" pointer-events="none">
+      <For each={bands()}>
+        {b => <rect x={1} y={b.y} width={props.w - 2} height={b.h} fill={b.fill} />}
+      </For>
       <Show when={laid().caption}>
         <line
           x1={0}
@@ -249,9 +266,19 @@ export function CodeBody(props: {
       >
         <For each={laid().rows}>
           {row => (
-            <For each={codeRuns(row, props.code.lines[row.line])}>
+            <For
+              each={coloredRuns(
+                row,
+                codeRuns(row, props.code.lines[row.line]),
+                tokens()?.[row.line],
+              )}
+            >
               {run => (
-                <tspan x={columnX(laid(), run.col)} y={row.y + mid}>
+                <tspan
+                  x={columnX(laid(), run.col)}
+                  y={row.y + mid}
+                  fill={run.cls ? colors().tokens[run.cls] : bandInk(row.line)}
+                >
                   {run.text}
                 </tspan>
               )}

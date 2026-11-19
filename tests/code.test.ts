@@ -158,7 +158,7 @@ describe('code nodes in a diagram', () => {
         svg = renderSvg(doc);
       expect(svg).not.toContain('xml:space');
       expect(svg).toContain(`font-family:'${FACES['mono-500'].family}'`);
-      expect(svg).toMatch(/<tspan x="[\d.]+" y="[\d.]+">/);
+      expect(svg).toMatch(/<tspan x="[\d.]+" y="[\d.]+"(?: fill="#\w+")?>/);
     }
     const doc = projectScene(checkSource(fixture('diff'))),
       r = doc.layout.nodes.fix,

@@ -29,7 +29,7 @@ export interface CodeBlock {
   sourceLine: number;
 }
 
-/** The languages slice 2 colors; any other `lang=` draws plain text. */
+/** The languages `model/highlight.ts` colors; any other `lang=` draws plain text. */
 export const CODE_LANGS = ['sql', 'python', 'ts', 'js', 'json', 'yaml', 'sh', 'diff'] as const;
 export const CODE_MAX_WIDTH = 960;
 export const CODE_TAB = 4;

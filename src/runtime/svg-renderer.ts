@@ -25,10 +25,12 @@ import {
   codeLayout,
   codeRuns,
   columnX,
+  lineBand,
   moreText,
   rowNumber,
   wrapMarkPath,
 } from '../model/code';
+import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
@@ -182,7 +184,17 @@ function codeMarkup(
     laid = codeLayout(code, n.title, look, { width: r.w, height: r.h }),
     muted = detailInk(look, c),
     mid = CODE_TYPE.lineHeight / 2,
+    tokens = codeTokens(code),
+    colors = codeColors(look, c.fill, c.ink),
     out: string[] = [];
+  // Added and removed diff lines: a band behind every row of the line.
+  tokens?.forEach((t, line) => {
+    const band = (t.line === 'added' || t.line === 'removed') && lineBand(laid, line);
+    if (band)
+      out.push(
+        `<rect x="${r.x + 1}" y="${r.y + band.y}" width="${r.w - 2}" height="${band.h}" fill="${colors[t.line as 'added'].fill}"/>`,
+      );
+  });
   if (laid.caption)
     out.push(
       `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
@@ -197,8 +209,14 @@ function codeMarkup(
       numbers.push(
         `<tspan x="${r.x + laid.gutter + (laid.numberCols - number.length) * CODE_ADVANCE}" y="${y}">${number}</tspan>`,
       );
-    for (const run of codeRuns(row, code.lines[row.line]))
-      spans.push(`<tspan x="${r.x + columnX(laid, run.col)}" y="${y}">${esc(run.text)}</tspan>`);
+    const t = tokens?.[row.line],
+      bandInk = t?.line === 'added' || t?.line === 'removed' ? colors[t.line].ink : undefined;
+    for (const run of coloredRuns(row, codeRuns(row, code.lines[row.line]), t)) {
+      const ink = run.cls ? colors.tokens[run.cls] : bandInk;
+      spans.push(
+        `<tspan x="${r.x + columnX(laid, run.col)}" y="${y}"${ink ? ` fill="${ink}"` : ''}>${esc(run.text)}</tspan>`,
+      );
+    }
     if (row.wraps)
       out.push(
         `<path d="${wrapMarkPath(r.x + r.w - laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,

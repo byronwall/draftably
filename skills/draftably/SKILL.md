@@ -265,8 +265,10 @@ edge emits gen -> sql "emits"
   line wraps with a hanging indent and a ↩ mark; `wrap=off` cuts it with `…` instead. `check`
   warns about both and names the longest line, so break long lines in the body.
 - `numbers=on` adds line numbers; `start=` sets the first one.
-- `lang=` names the language (`sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh`, `diff`). It is
-  not colored yet.
+- `lang=` names the language (`sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh`, `diff`) and
+  colors the code in the theme's colors. Any other value draws plain text, with a `check` note.
+- `lang=diff` puts a green band behind `+` lines and a red band behind `-` lines. Keep the first
+  column (`+`, `-`, space) in the body.
 - `size id width=… height=…` still works; a fixed height ends with "… N more lines", and `check`
   warns.
 - The viewer moves a code node like any node, but its body is edited only in the file.
