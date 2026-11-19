@@ -268,11 +268,12 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * which reports the error with its line.
    */
   async function compileOffThread(source: string, key: string): Promise<Compiled> {
+    // The files `key` was made from: a files event during the await below must not mix in.
+    const files = codeFiles;
     // Opened before, by this build: the routes stand if this view projects the same document.
     const kept = await cachedScene<{ scene: Scene; routes: Routes }>(key);
     if (kept) return kept;
-    const view = viewState(),
-      files = codeFiles;
+    const view = viewState();
     let scene: Scene;
     try {
       scene = await runShared({ kind: 'compile', source, files });
