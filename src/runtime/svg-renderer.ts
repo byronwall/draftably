@@ -31,6 +31,7 @@ import {
   wrapMarkPath,
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
+import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
@@ -195,6 +196,9 @@ function codeMarkup(
         `<rect x="${r.x + 1}" y="${r.y + band.y}" width="${r.w - 2}" height="${band.h}" fill="${colors[t.line as 'added'].fill}"/>`,
       );
   });
+  // Named ranges: bands under the text and bars in the left margin; their tags go on top.
+  const marks = rangeMarks(code, laid, look, r.w, c.fill);
+  for (const m of marks) out.push(rangeMarkup(m, r));
   if (laid.caption)
     out.push(
       `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
@@ -234,7 +238,31 @@ function codeMarkup(
     out.push(
       `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
     );
+  for (const m of marks) if (m.tag) out.push(tagMarkup(m, r, look));
   return out.join('');
+}
+
+/** A range's band and its bar in the left margin. */
+function rangeMarkup(m: RangeMark, r: Rect) {
+  const fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';
+  return (
+    `<g class="code-range"${fade}>` +
+    `<rect x="${r.x + 1}" y="${r.y + m.y}" width="${r.w - 2}" height="${m.h}" fill="${m.band}" fill-opacity="${BAND_OPACITY}"/>` +
+    `<line x1="${r.x + m.barX}" y1="${r.y + m.y}" x2="${r.x + m.barX}" y2="${r.y + m.y + m.h}" stroke="${m.bar}" stroke-width="${m.barW}"${m.dash ? ` stroke-dasharray="${m.dash}"` : ''}/>` +
+    '</g>'
+  );
+}
+
+/** A range's label: a tag in its band's color at the right margin. */
+function tagMarkup(m: RangeMark, r: Rect, look: ResolvedAppearance) {
+  const t = m.tag!,
+    fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';
+  return (
+    `<g class="code-range-tag"${fade}>` +
+    `<rect x="${r.x + t.x}" y="${r.y + t.y}" width="${t.w}" height="${t.h}" rx="3" fill="${m.band}"/>` +
+    `<text x="${r.x + t.x + t.w / 2}" y="${r.y + t.y + t.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${t.ink}">${esc(t.text)}</text>` +
+    '</g>'
+  );
 }
 
 /** The accent ring around an object a `rest=plain` state focuses. */

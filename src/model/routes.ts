@@ -16,6 +16,8 @@ import {
   SELF_LOOP,
 } from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
+import { codeLayout } from './code';
+import { rangeBand } from './ranges';
 import {
   ancestors,
   findEdge,
@@ -565,6 +567,25 @@ function cellEnds(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
   return { sides, crosses };
 }
 
+/**
+ * How far below the middle of its node's side a line to a code range ends: at the range's middle
+ * line. Undefined when the node is hidden in a collapsed group or the range is cut off.
+ */
+function rangeOffset(
+  doc: Diagram,
+  look: ResolvedAppearance,
+  r: Rect | undefined,
+  node: string,
+  shown: string,
+  name: string | undefined,
+) {
+  const n = name && node === shown ? findNode(doc, node) : undefined,
+    range = n?.code?.ranges?.find(x => x.name === name);
+  if (!range || !r) return undefined;
+  const band = rangeBand(codeLayout(n!.code!, n!.title, look, { width: r.w, height: r.h }), range);
+  return band && Math.round(band.y + band.h / 2 - r.h / 2);
+}
+
 export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect>) {
   const look = resolveAppearance(doc.appearance),
     { sides, crosses } = cellEnds(doc, vg, all);
@@ -632,7 +653,15 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
             stubs.has(key) ? key : stubs.has(`${id}:frame`) ? `${id}:frame` : id,
           from = end(`${e.id}:from`, e.a),
           to = end(`${e.id}:to`, e.b),
-          side = sides.get(e.id);
+          side = sides.get(e.id),
+          // An end on a code range meets the node's left or right side at the range's lines.
+          fromAt =
+            from === e.from
+              ? rangeOffset(doc, look, rects.get(from), e.from, e.a, e.fromRange)
+              : undefined,
+          toAt =
+            to === e.to ? rangeOffset(doc, look, rects.get(to), e.to, e.b, e.toRange) : undefined,
+          ranged = fromAt !== undefined || toAt !== undefined;
         return {
           ...e,
           from,
@@ -642,6 +671,10 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
               ...doc.layout.edges[e.id],
               ...(side?.from ? { fromSide: side.from } : {}),
               ...(side?.to ? { toSide: side.to } : {}),
+              ...(fromAt !== undefined ? { fromAt } : {}),
+              ...(toAt !== undefined ? { toAt } : {}),
+              // A planned route meets the middle of a side; a range's port is elsewhere.
+              ...(ranged ? { plan: undefined } : {}),
             },
             stubs.get(from) ?? rects.get(e.a)!,
             stubs.get(to) ?? rects.get(e.b)!,

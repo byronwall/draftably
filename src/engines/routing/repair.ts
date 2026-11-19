@@ -69,7 +69,10 @@ export function repair(ctx: Context) {
           ? [q]
           : [],
       );
-      if (group.length > FAN_GROUP || group.some(q => fixed(byId.get(state.routes[q].id)!)))
+      // A line to a code range keeps its port at the range, so its fan is not reordered.
+      const held = (e: RouteEdge) =>
+        fixed(e) || e.cfg.fromAt !== undefined || e.cfg.toAt !== undefined;
+      if (group.length > FAN_GROUP || group.some(q => held(byId.get(state.routes[q].id)!)))
         return [];
       const at = new Map<string, Fanned[]>();
       for (const q of group)

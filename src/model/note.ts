@@ -9,6 +9,7 @@ import type { BoundedRoute } from './bounds';
 import { richLines, runsMarkup, type Run } from './rich-text';
 import { contains, overlaps, rectUnion } from './geometry';
 import type { Diagram, Point, Rect } from './types';
+import { findRange, rangeRect } from './ranges';
 
 export const NOTE_SIDES = ['below', 'above', 'left', 'right'] as const;
 export type NoteSide = (typeof NOTE_SIDES)[number];
@@ -36,9 +37,15 @@ export interface PlacedNote {
   overlaps?: boolean;
 }
 
-/** The side a note sits on: its `side`, or by default right of a message and below anything else. */
+/**
+ * The side a note sits on: its `side`, or by default right of a message or a code range (below
+ * one would cover the rest of the listing) and below anything else.
+ */
 export const noteSide = (doc: Diagram, note: Note): NoteSide =>
-  note.side ?? (doc.graph.edges.some(e => e.id === note.near) ? 'right' : 'below');
+  note.side ??
+  (doc.graph.edges.some(e => e.id === note.near) || (note.near && findRange(doc, note.near))
+    ? 'right'
+    : 'below');
 
 /** Default wrap width, and the room between a note and its object. */
 export const NOTE_WIDTH = 280;
@@ -189,7 +196,8 @@ export function placeNotes(
     frames.every(g => !overlaps(g, r) || contains(g, r));
   return (doc.appearance.notes ?? []).map((note, i) => {
     const box = noteBox(look, note),
-      at = note.near ? rects.get(note.near) : undefined,
+      // A note near a code range sits beside the range's lines.
+      at = note.near ? (rects.get(note.near) ?? rangeRect(doc, look, rects, note.near)) : undefined,
       message = at ? undefined : routes.find(r => r.id === note.near);
     if (message) {
       const margin = seq?.notes?.[i];
@@ -205,7 +213,7 @@ export function placeNotes(
     }
     if (!at) return { ...box, inFrame: true };
     const { w, h } = box.rect,
-      side = note.side ?? 'below',
+      side = noteSide(doc, note),
       across = side === 'below' || side === 'above';
     // Along the side: start-aligned, centered, end-aligned; then the same a little further out.
     const spots = [GAP, GAP + 24, GAP + 56].flatMap(d =>

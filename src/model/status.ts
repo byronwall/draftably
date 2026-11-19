@@ -138,7 +138,8 @@ function changePaint(look: ResolvedAppearance, status?: Status): StatusPaint {
 export const isDiff = (doc: Diagram) =>
   !!doc.appearance.compare ||
   Object.values(doc.styles).some(s => s.status) ||
-  doc.graph.edges.some(e => e.status);
+  doc.graph.edges.some(e => e.status) ||
+  doc.graph.nodes.some(n => n.code?.ranges?.some(r => r.status));
 
 /**
  * In a diff, the swatch a status draws a shape with: a pale tint of its hue with a strong border
@@ -184,9 +185,19 @@ export const edgeInk = (look: ResolvedAppearance, edge: DiagramEdge, diff: boole
 export function withState(doc: Diagram, id: string): Diagram {
   const state = doc.appearance.states?.find(s => s.id === id);
   if (!state) return doc;
-  const focus = new Set<string>();
+  const focus = new Set<string>(),
+    // A listed code range puts its node in focus; the node's other ranges then fade with the rest.
+    viaRange = new Set<string>(),
+    rangeIds = new Map(
+      doc.graph.nodes.flatMap(n => n.code?.ranges?.map(r => [`${n.id}.${r.name}`, n.id]) ?? []),
+    );
   for (const x of state.ids) {
     focus.add(x);
+    const node = rangeIds.get(x);
+    if (node && !state.ids.includes(node)) {
+      focus.add(node);
+      viaRange.add(node);
+    }
     if (doc.graph.groups.some(g => g.id === x)) for (const d of descendants(doc, x)) focus.add(d);
   }
   const parent = new Map(
@@ -206,7 +217,15 @@ export function withState(doc: Diagram, id: string): Diagram {
     const spot = focus.has(e.id) || (focus.has(e.from) && focus.has(e.to)) ? on : rest;
     return spot ? { ...e, spot } : e;
   });
-  return { ...doc, styles, graph: { ...doc.graph, edges } };
+  const nodes = doc.graph.nodes.map(n => {
+    if (!n.code?.ranges || !focus.has(n.id)) return n;
+    const ranges = n.code.ranges.map(r => {
+      const spot = focus.has(`${n.id}.${r.name}`) ? on : viaRange.has(n.id) ? rest : undefined;
+      return spot ? { ...r, spot } : r;
+    });
+    return { ...n, code: { ...n.code, ranges } };
+  });
+  return { ...doc, styles, graph: { ...doc.graph, nodes, edges } };
 }
 
 /**
@@ -221,7 +240,12 @@ export function usedStatuses(doc: Diagram): StatusCount[] {
   return (Object.keys(STATUS_LABELS) as Status[])
     .map(status => ({
       status,
-      count: marks.filter(m => m === status).length,
+      count:
+        marks.filter(m => m === status).length +
+        doc.graph.nodes.reduce(
+          (n, o) => n + (o.code?.ranges?.filter(r => r.status === status).length ?? 0),
+          0,
+        ),
       lines: doc.graph.edges.filter(e => e.status === status).length,
     }))
     .filter(c => c.count || c.lines);

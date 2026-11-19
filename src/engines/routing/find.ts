@@ -15,6 +15,9 @@ import {
   SIDES,
 } from './geometry.ts';
 import { Queue } from './heap.ts';
+
+/** The sides a line to a code range may meet: the listing's left and right. */
+const LEVEL_SIDES: Side[] = ['right', 'left'];
 import { simplify } from './paths.ts';
 import { port } from './ports.ts';
 import { createScorer } from './score.ts';
@@ -131,20 +134,25 @@ function findAmong(
     edgeObs = wall.length ? [...obsFor(e, open), ...wall] : obsFor(e, open);
   // `e.pin`: the repair pass's port order for a fan, a side and offset at either end.
   const pin = e.pin || {};
+  // An end at a code range (`fromAt`, `toAt`) meets its node's left or right side.
   const from: Side[] = pin.from
       ? [pin.from.side]
       : cfg.fromSide && cfg.fromSide !== 'auto'
         ? [cfg.fromSide]
-        : rawOptions.quick && old
-          ? [old.fromSide]
-          : SIDES,
+        : cfg.fromAt !== undefined
+          ? LEVEL_SIDES
+          : rawOptions.quick && old
+            ? [old.fromSide]
+            : SIDES,
     to: Side[] = pin.to
       ? [pin.to.side]
       : cfg.toSide && cfg.toSide !== 'auto'
         ? [cfg.toSide]
-        : rawOptions.quick && old
-          ? [old.toSide]
-          : SIDES;
+        : cfg.toAt !== undefined
+          ? LEVEL_SIDES
+          : rawOptions.quick && old
+            ? [old.toSide]
+            : SIDES;
   const { axis, score, sideFloor } = createScorer(ctx, e, used, old, from, to);
   const candidates: Candidate[] = [];
   let best = null as Best | null;

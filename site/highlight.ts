@@ -22,6 +22,7 @@ export const COMMANDS = [
   'theme-color',
   'legend',
   'note',
+  'range',
   'footnote',
   'routing',
   'order',
