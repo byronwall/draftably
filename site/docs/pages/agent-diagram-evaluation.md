@@ -15,7 +15,9 @@ is shown as the error it produced.
 
 [Download all comparison sources](/evaluations/agent-diagrams/sources.zip) to inspect the 45 responses together.
 The ZIP preserves each format's file extension and includes the prompts, study setup and report.
-Individual source links remain beside each drawing below.
+Each task below shows its 15 drawings as one grid: the arms run down and the formats across.
+Click a drawing to see it at full size with its source, turns and cost. Use the arrow keys to move
+to the next format or arm.
 
 ## Results
 
@@ -98,205 +100,25 @@ wrote the longest sources.
 
 **Reads best: Graphviz DOT and raw SVG**, in every arm. Both keep large text and clear yes/no branches. With the CLI, Draftably is close: a clean top-down flow with colored decisions and a legend, but taller, so its text is smaller. Draftably's reference drawing runs a line through two decision boxes. Mermaid is clear but tall, and D2 shrinks the text the most.
 
-### Bare prompt
-
-**Mermaid** · 14 lines · [source](/evaluations/agent-diagrams/source/bare/workflow/mermaid.mmd.txt)
-
-![Mermaid, bare prompt: Order approval workflow](/evaluations/agent-diagrams/bare-workflow-mermaid.svg)
-
-**Draftably** · [source](/evaluations/agent-diagrams/source/bare/workflow/draftably.draft.txt) · did not render: `Line 1: Unknown statement I'm.`
-
-**D2** · 26 lines · [source](/evaluations/agent-diagrams/source/bare/workflow/d2.d2.txt)
-
-![D2, bare prompt: Order approval workflow](/evaluations/agent-diagrams/bare-workflow-d2.svg)
-
-**Graphviz DOT** · 29 lines · [source](/evaluations/agent-diagrams/source/bare/workflow/dot.dot.txt)
-
-![Graphviz DOT, bare prompt: Order approval workflow](/evaluations/agent-diagrams/bare-workflow-dot.svg)
-
-**Raw SVG** · 52 lines · [source](/evaluations/agent-diagrams/source/bare/workflow/svg.svg.txt)
-
-![Raw SVG, bare prompt: Order approval workflow](/evaluations/agent-diagrams/bare-workflow-svg.svg)
-
-### With reference
-
-**Mermaid** · 14 lines · [source](/evaluations/agent-diagrams/source/reference/workflow/mermaid.mmd.txt)
-
-![Mermaid, with reference: Order approval workflow](/evaluations/agent-diagrams/reference-workflow-mermaid.svg)
-
-**Draftably** · 24 lines · [source](/evaluations/agent-diagrams/source/reference/workflow/draftably.draft.txt)
-
-![Draftably, with reference: Order approval workflow](/evaluations/agent-diagrams/reference-workflow-draftably.svg)
-
-**D2** · 23 lines · [source](/evaluations/agent-diagrams/source/reference/workflow/d2.d2.txt)
-
-![D2, with reference: Order approval workflow](/evaluations/agent-diagrams/reference-workflow-d2.svg)
-
-**Graphviz DOT** · 26 lines · [source](/evaluations/agent-diagrams/source/reference/workflow/dot.dot.txt)
-
-![Graphviz DOT, with reference: Order approval workflow](/evaluations/agent-diagrams/reference-workflow-dot.svg)
-
-**Raw SVG** · 42 lines · [source](/evaluations/agent-diagrams/source/reference/workflow/svg.svg.txt)
-
-![Raw SVG, with reference: Order approval workflow](/evaluations/agent-diagrams/reference-workflow-svg.svg)
-
-### With CLI and docs
-
-**Mermaid** · 14 lines · 4 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/workflow/mermaid.mmd.txt)
-
-![Mermaid, with cli and docs: Order approval workflow](/evaluations/agent-diagrams/tooled-workflow-mermaid.svg)
-
-**Draftably** · 28 lines · 12 turns, 5 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/workflow/draftably.draft.txt)
-
-![Draftably, with cli and docs: Order approval workflow](/evaluations/agent-diagrams/tooled-workflow-draftably.svg)
-
-**D2** · 29 lines · 5 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/workflow/d2.d2.txt)
-
-![D2, with cli and docs: Order approval workflow](/evaluations/agent-diagrams/tooled-workflow-d2.svg)
-
-**Graphviz DOT** · 28 lines · 9 turns, 3 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/workflow/dot.dot.txt)
-
-![Graphviz DOT, with cli and docs: Order approval workflow](/evaluations/agent-diagrams/tooled-workflow-dot.svg)
-
-**Raw SVG** · 75 lines · 5 turns, 2 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/workflow/svg.svg.txt)
-
-![Raw SVG, with cli and docs: Order approval workflow](/evaluations/agent-diagrams/tooled-workflow-svg.svg)
+```agent-eval
+workflow best=dot,svg
+```
 
 ## Architecture task
 
 **Reads best: Draftably and raw SVG.** With the reference and with the CLI, Draftably draws the three groups as stacked bands with large text and no extra nodes. Raw SVG lays them out as columns. DOT is compact and grouped, but small. Mermaid, D2 and DOT add a "Customer" node, and Mermaid and D2 come out as wide strips with tiny text in this run.
 
-### Bare prompt
-
-**Mermaid** · 33 lines · [source](/evaluations/agent-diagrams/source/bare/architecture/mermaid.mmd.txt)
-
-![Mermaid, bare prompt: Checkout service architecture](/evaluations/agent-diagrams/bare-architecture-mermaid.svg)
-
-**Draftably** · [source](/evaluations/agent-diagrams/source/bare/architecture/draftably.draft.txt) · did not render: `Line 1: Unknown statement I'm.`
-
-**D2** · 39 lines · [source](/evaluations/agent-diagrams/source/bare/architecture/d2.d2.txt)
-
-![D2, bare prompt: Checkout service architecture](/evaluations/agent-diagrams/bare-architecture-d2.svg)
-
-**Graphviz DOT** · 51 lines · [source](/evaluations/agent-diagrams/source/bare/architecture/dot.dot.txt)
-
-![Graphviz DOT, bare prompt: Checkout service architecture](/evaluations/agent-diagrams/bare-architecture-dot.svg)
-
-**Raw SVG** · 72 lines · [source](/evaluations/agent-diagrams/source/bare/architecture/svg.svg.txt)
-
-![Raw SVG, bare prompt: Checkout service architecture](/evaluations/agent-diagrams/bare-architecture-svg.svg)
-
-### With reference
-
-**Mermaid** · 36 lines · [source](/evaluations/agent-diagrams/source/reference/architecture/mermaid.mmd.txt)
-
-![Mermaid, with reference: Checkout service architecture](/evaluations/agent-diagrams/reference-architecture-mermaid.svg)
-
-**Draftably** · 26 lines · [source](/evaluations/agent-diagrams/source/reference/architecture/draftably.draft.txt)
-
-![Draftably, with reference: Checkout service architecture](/evaluations/agent-diagrams/reference-architecture-draftably.svg)
-
-**D2** · 36 lines · [source](/evaluations/agent-diagrams/source/reference/architecture/d2.d2.txt)
-
-![D2, with reference: Checkout service architecture](/evaluations/agent-diagrams/reference-architecture-d2.svg)
-
-**Graphviz DOT** · 45 lines · [source](/evaluations/agent-diagrams/source/reference/architecture/dot.dot.txt)
-
-![Graphviz DOT, with reference: Checkout service architecture](/evaluations/agent-diagrams/reference-architecture-dot.svg)
-
-**Raw SVG** · 47 lines · [source](/evaluations/agent-diagrams/source/reference/architecture/svg.svg.txt)
-
-![Raw SVG, with reference: Checkout service architecture](/evaluations/agent-diagrams/reference-architecture-svg.svg)
-
-### With CLI and docs
-
-**Mermaid** · 33 lines · 4 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/architecture/mermaid.mmd.txt)
-
-![Mermaid, with cli and docs: Checkout service architecture](/evaluations/agent-diagrams/tooled-architecture-mermaid.svg)
-
-**Draftably** · 33 lines · 8 turns, 4 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/architecture/draftably.draft.txt)
-
-![Draftably, with cli and docs: Checkout service architecture](/evaluations/agent-diagrams/tooled-architecture-draftably.svg)
-
-**D2** · 53 lines · 12 turns, 5 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/architecture/d2.d2.txt)
-
-![D2, with cli and docs: Checkout service architecture](/evaluations/agent-diagrams/tooled-architecture-d2.svg)
-
-**Graphviz DOT** · 43 lines · 4 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/architecture/dot.dot.txt)
-
-![Graphviz DOT, with cli and docs: Checkout service architecture](/evaluations/agent-diagrams/tooled-architecture-dot.svg)
-
-**Raw SVG** · 86 lines · 10 turns, 4 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/architecture/svg.svg.txt)
-
-![Raw SVG, with cli and docs: Checkout service architecture](/evaluations/agent-diagrams/tooled-architecture-svg.svg)
+```agent-eval
+architecture best=draftably,svg
+```
 
 ## State-machine task
 
 **Reads best: Mermaid and Draftably with the CLI.** Both draw top-down with large text and keep every return path apart. Raw SVG is next, and it is the clearest drawing in the reference arm, where Mermaid and Draftably both came out wide. DOT crowds its labels, and D2 tangles the return edges.
 
-### Bare prompt
-
-**Mermaid** · 16 lines · [source](/evaluations/agent-diagrams/source/bare/state/mermaid.mmd.txt)
-
-![Mermaid, bare prompt: Publishing state machine](/evaluations/agent-diagrams/bare-state-mermaid.svg)
-
-**Draftably** · [source](/evaluations/agent-diagrams/source/bare/state/draftably.draft.txt) · did not render: `Line 1: Unknown statement I'm.`
-
-**D2** · 29 lines · [source](/evaluations/agent-diagrams/source/bare/state/d2.d2.txt)
-
-![D2, bare prompt: Publishing state machine](/evaluations/agent-diagrams/bare-state-d2.svg)
-
-**Graphviz DOT** · 26 lines · [source](/evaluations/agent-diagrams/source/bare/state/dot.dot.txt)
-
-![Graphviz DOT, bare prompt: Publishing state machine](/evaluations/agent-diagrams/bare-state-dot.svg)
-
-**Raw SVG** · 47 lines · [source](/evaluations/agent-diagrams/source/bare/state/svg.svg.txt)
-
-![Raw SVG, bare prompt: Publishing state machine](/evaluations/agent-diagrams/bare-state-svg.svg)
-
-### With reference
-
-**Mermaid** · 21 lines · [source](/evaluations/agent-diagrams/source/reference/state/mermaid.mmd.txt)
-
-![Mermaid, with reference: Publishing state machine](/evaluations/agent-diagrams/reference-state-mermaid.svg)
-
-**Draftably** · 19 lines · [source](/evaluations/agent-diagrams/source/reference/state/draftably.draft.txt)
-
-![Draftably, with reference: Publishing state machine](/evaluations/agent-diagrams/reference-state-draftably.svg)
-
-**D2** · 21 lines · [source](/evaluations/agent-diagrams/source/reference/state/d2.d2.txt)
-
-![D2, with reference: Publishing state machine](/evaluations/agent-diagrams/reference-state-d2.svg)
-
-**Graphviz DOT** · 24 lines · [source](/evaluations/agent-diagrams/source/reference/state/dot.dot.txt)
-
-![Graphviz DOT, with reference: Publishing state machine](/evaluations/agent-diagrams/reference-state-dot.svg)
-
-**Raw SVG** · 52 lines · [source](/evaluations/agent-diagrams/source/reference/state/svg.svg.txt)
-
-![Raw SVG, with reference: Publishing state machine](/evaluations/agent-diagrams/reference-state-svg.svg)
-
-### With CLI and docs
-
-**Mermaid** · 20 lines · 4 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/state/mermaid.mmd.txt)
-
-![Mermaid, with cli and docs: Publishing state machine](/evaluations/agent-diagrams/tooled-state-mermaid.svg)
-
-**Draftably** · 20 lines · 10 turns, 4 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/state/draftably.draft.txt)
-
-![Draftably, with cli and docs: Publishing state machine](/evaluations/agent-diagrams/tooled-state-draftably.svg)
-
-**D2** · 33 lines · 5 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/state/d2.d2.txt)
-
-![D2, with cli and docs: Publishing state machine](/evaluations/agent-diagrams/tooled-state-d2.svg)
-
-**Graphviz DOT** · 28 lines · 4 turns, 1 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/state/dot.dot.txt)
-
-![Graphviz DOT, with cli and docs: Publishing state machine](/evaluations/agent-diagrams/tooled-state-dot.svg)
-
-**Raw SVG** · 68 lines · 8 turns, 3 CLI calls · [source](/evaluations/agent-diagrams/source/tooled/state/svg.svg.txt)
-
-![Raw SVG, with cli and docs: Publishing state machine](/evaluations/agent-diagrams/tooled-state-svg.svg)
+```agent-eval
+state best=mermaid,draftably
+```
 
 ## Limits
 
@@ -309,7 +131,7 @@ Read the [full report](/evaluations/agent-diagrams/report.txt),
 [study setup](/evaluations/agent-diagrams/study-setup.txt),
 [initial prompt](/evaluations/agent-diagrams/prompt.txt) and
 [CLI prompt](/evaluations/agent-diagrams/prompt-tooled.txt) on this site.
-The source links above contain the 45 responses shown here. For the task requirements and render
+Each drawing's inspector links to its source, and the archive holds all 45 responses. For the task requirements and render
 records, see [tasks.json](/evaluations/agent-diagrams/tasks.json) and
 [results.json](/evaluations/agent-diagrams/results.json). The source archive also includes the
 reference material used in the reference arm.

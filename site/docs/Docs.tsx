@@ -16,6 +16,7 @@ import {
 } from './content';
 import { Example, prepare, warm } from './Example';
 import { MermaidCompare } from './MermaidCompare';
+import { AgentEval } from './AgentEval';
 import { SearchDialog, SearchIcon } from './Search';
 import { words } from './find';
 import './docs-nav.css';
@@ -268,11 +269,19 @@ function Article(props: { page: Page; query: string }) {
 
   // Plain HTML runs, with each ```draft block as a live example between them.
   const parts = () => {
-    const out: ({ html: string } | { draft: string; themes: boolean } | { mermaid: string })[] = [];
+    const out: (
+      | { html: string }
+      | { draft: string; themes: boolean }
+      | { mermaid: string }
+      | { agentEval: string }
+    )[] = [];
     let run: Page['tokens'] = [];
     const flush = () => run.length && (out.push({ html: html(run) }), (run = []));
     for (const t of props.page.tokens) {
-      if (t.type === 'code' && t.lang === 'mermaid compare') {
+      if (t.type === 'code' && t.lang === 'agent-eval') {
+        flush();
+        out.push({ agentEval: t.text });
+      } else if (t.type === 'code' && t.lang === 'mermaid compare') {
         flush();
         out.push({ mermaid: t.text });
       } else if (isDraft(t)) {
@@ -363,6 +372,8 @@ function Article(props: { page: Page; query: string }) {
           'html' in part ? (
             // eslint-disable-next-line solid/no-innerhtml -- our own Markdown
             <div class="doc-md" innerHTML={part.html} />
+          ) : 'agentEval' in part ? (
+            <AgentEval spec={part.agentEval} />
           ) : 'mermaid' in part ? (
             <MermaidCompare source={part.mermaid} />
           ) : (
