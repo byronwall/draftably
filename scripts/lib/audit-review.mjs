@@ -41,7 +41,7 @@ export async function writeReview(o) {
       .filter(k => k.d)
       .sort((a, b) => b.d - a.d);
     const bucket = o.bucketOf(p.set, p.head);
-    const weight = o.weights.get(p.key) ?? 0;
+    const weight = o.weightOf(p.set, p.key);
     items.push({
       ...p,
       id,
@@ -71,15 +71,15 @@ export async function writeReview(o) {
   const net = list => list.reduce((s, it) => s + it.impact, 0);
   const maxShare = Math.max(...Object.values(o.population.buckets)) / o.population.total;
 
-  const gateBlock = (name, g) => `
+  const gateBlock = ([name, flag], g) => `
     <section class="gate">
-      <h3>${esc(name)} <span class="verdict ${g.verdict === 'FAIL' ? 'worse' : 'better'}">${g.verdict}</span></h3>
+      <h3>${esc(name)} <code>${esc(flag)}</code> <span class="verdict ${g.verdict === 'FAIL' ? 'worse' : 'better'}">${g.verdict}</span></h3>
       <div class="rules">${g.rows
         .map(([rule, result, evidence]) => {
           const parts = (evidence || '').split('; ').filter(Boolean);
           const shown =
             parts.slice(0, 3).join('; ') + (parts.length > 3 ? `; +${parts.length - 3} more` : '');
-          return `<div class="rule"><span class="result r-${result}">${result}</span><span class="rule-name">${esc(rule)}</span><span class="evidence">${esc(shown || '–')}</span></div>`;
+          return `<div class="rule"><span class="result r-${result}">${result}</span><span class="rule-name">${esc(rule)}</span>${shown ? `<span class="evidence">${esc(shown)}</span>` : ''}</div>`;
         })
         .join('')}</div>
     </section>`;
@@ -88,18 +88,7 @@ export async function writeReview(o) {
     .map(([set, { base, head }]) => {
       const ok = l => l.filter(r => !r.error);
       const m = l => ok(l).reduce((s, r) => s + r.defectIndex, 0) / Math.max(1, ok(l).length);
-      const w = new Map(head.map(r => [r, o.weights.get(`${set}/${r.slug} ${r.file}`) ?? 0]));
-      const wm = side => {
-        let s = 0,
-          t = 0;
-        for (const r of head) {
-          const b = base.find(x => x.slug === r.slug && x.file === r.file);
-          if (r.error || !b || b.error) continue;
-          s += w.get(r) * (side === 'head' ? r.defectIndex : b.defectIndex);
-          t += w.get(r);
-        }
-        return s / Math.max(1e-9, t);
-      };
+      const wm = side => o.setMean(set, side);
       const moved = items.filter(it => it.set === set).length;
       return `<tr><td>${esc(set)}</td><td class="num">${ok(head).length}</td><td class="num">${moved}</td>
         <td class="num">${m(base).toFixed(2)} → ${m(head).toFixed(2)}</td><td class="num ${tone(+(m(head) - m(base)).toFixed(2))}">${signed(m(head) - m(base), 2)}</td>
@@ -114,7 +103,7 @@ export async function writeReview(o) {
       const n = net(list);
       return `<a class="bucket-row" href="#b-${esc(b)}"><span class="bucket-name">${esc(b)}</span>
         <span class="bar"><span style="width:${((100 * share) / maxShare).toFixed(1)}%"></span></span>
-        <span class="num">${pct(b)}</span><span class="num">${list.length}</span>
+        <span class="num">${pct(b)}</span><span class="num">${list.filter(it => it.d).length}</span><span class="num">${list.filter(it => !it.d).length}</span>
         <span class="num ${tone(+n.toFixed(2))}">${signed(n, 2)}</span></a>`;
     })
     .join('');
@@ -148,6 +137,17 @@ export async function writeReview(o) {
       }
     </article>`;
 
+  const moved = list => list.filter(it => it.d);
+  const redrawn = list => list.filter(it => !it.d);
+  const small = it => `
+    <article class="small" id="${esc(it.id)}">
+      <div class="name">${esc(it.set)}/${esc(it.head.slug)} <span class="file">${esc(it.head.file.replace('.draft', ''))}</span> <span class="num same">DI ${it.to}</span></div>
+      ${
+        it.hasSvg
+          ? `<figure><img src="review/${esc(it.id)}.base.svg" alt="Before"></figure><figure><img src="review/${esc(it.id)}.head.svg" alt="After"></figure>`
+          : ''
+      }
+    </article>`;
   const sections = order
     .map(b => {
       const list = buckets.get(b);
@@ -155,10 +155,14 @@ export async function writeReview(o) {
       return `<section class="bucket" id="b-${esc(b)}">
         <header>
           <h2>${esc(b)}</h2>
-          <p>${seen ? `${pct(b)} of docs diagrams (${seen} of ${o.population.total})` : 'No docs diagram has this shape'} · ${list.length} moved · net weighted <span class="${tone(+net(list).toFixed(2))}">${signed(net(list), 2)}</span> · limit ${o.limitOf(b).toFixed(1)} DI</p>
+          <p>${seen ? `${pct(b)} of docs diagrams (${seen} of ${o.population.total})` : 'No docs diagram has this shape'} · ${moved(list).length} moved DI · ${redrawn(list).length} redrawn · net weighted <span class="${tone(+net(list).toFixed(2))}">${signed(net(list), 2)}</span> · limit ${o.limitOf(b).toFixed(1)} DI</p>
         </header>
-        <div class="cols"><span></span><span>Before</span><span>After</span></div>
-        ${list.map(card).join('')}
+        ${moved(list).length ? `<div class="cols"><span></span><span>Before</span><span>After</span></div>${moved(list).map(card).join('')}` : ''}
+        ${
+          redrawn(list).length
+            ? `<h4>Redrawn with the same DI (${redrawn(list).length}) · before, after</h4><div class="redrawn">${redrawn(list).map(small).join('')}</div>`
+            : ''
+        }
       </section>`;
     })
     .join('');
@@ -184,17 +188,19 @@ h3 { font-size: 13px; margin: 0 0 6px; display: flex; gap: 8px; align-items: bas
 .better { color: var(--better); } .worse { color: var(--worse); } .same { color: var(--faint); }
 a { color: var(--link); text-decoration: none; }
 .top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 420px; gap: 28px; align-items: start; }
+.gate h3 code { font: 11px var(--mono); color: var(--faint); font-weight: 400; }
 .gate .verdict { font-size: 12px; font-weight: 700; letter-spacing: .02em; }
 .rules { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 8px; row-gap: 3px; }
 .rule { display: contents; }
 .rule .result { font-weight: 600; font-size: 11px; padding-top: 1px; }
 .r-PASS { color: var(--faint); } .r-FAIL { color: var(--worse); } .r-WARN { color: var(--warn); }
+.rule .rule-name { overflow-wrap: anywhere; }
 .rule .evidence { grid-column: 2; color: var(--muted); font-size: 12px; margin-bottom: 3px; overflow-wrap: anywhere; }
-table { border-collapse: collapse; width: 100%; margin-top: 18px; }
-th, td { text-align: left; padding: 3px 10px 3px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table { border-collapse: collapse; margin-top: 18px; }
+th, td { text-align: left; padding: 3px 18px 3px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--muted); font-weight: 500; font-size: 12px; }
 .buckets h3 { color: var(--muted); font-weight: 500; }
-.bucket-row { display: grid; grid-template-columns: 150px 1fr 38px 30px 52px; gap: 8px; align-items: center; color: var(--ink); padding: 1px 4px; border-radius: 4px; transition: background-color 140ms ease; }
+.bucket-row { display: grid; grid-template-columns: 116px minmax(40px, 1fr) 34px 56px 56px 50px; gap: 8px; align-items: center; color: var(--ink); padding: 1px 4px; border-radius: 4px; transition: background-color 140ms ease; }
 .bucket-row .num { text-align: right; }
 .bucket-row .bucket-name { font-family: var(--mono); font-size: 12px; }
 @media (hover: hover) { .bucket-row:hover { background: var(--panel); } }
@@ -219,7 +225,7 @@ figure { margin: 0; height: 340px; background: var(--panel); border-radius: 6px;
 figure img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .missing { grid-column: 2 / 4; color: var(--faint); }
 .empty { color: var(--muted); margin-top: 30px; }
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
   .top { grid-template-columns: 1fr; }
   .cols { display: none; }
   .pair { grid-template-columns: 1fr; }
@@ -227,19 +233,27 @@ figure img { max-width: 100%; max-height: 100%; object-fit: contain; }
   table { display: block; overflow-x: auto; }
 }
 @page { size: 17in 11in; margin: 0.35in; }
-@media print { main { max-width: none; padding: 0; } .bucket { break-before: page; } figure { height: 300px; } }
+h4 { margin: 14px 0 6px; font-size: 12px; font-weight: 500; color: var(--muted); }
+.redrawn { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: 10px 18px; }
+.small { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; break-inside: avoid; }
+.small .name { grid-column: 1 / 3; font-size: 12px; overflow-wrap: anywhere; }
+.small figure { height: 150px; padding: 4px; }
+@media print { main { max-width: none; padding: 0; } figure { height: 300px; } .small figure { height: 140px; } }
 </style></head><body><main>
 <h1>Audit review</h1>
-<p class="sub">${esc(o.title)} · ${items.length} renders changed · weights from ${o.population.total} docs diagrams measured ${esc(o.population.measured)}</p>
+<p class="sub">${esc(o.title)} · ${items.filter(it => it.d).length} renders moved DI, ${items.filter(it => !it.d).length} redrawn with the same DI · weights from ${o.population.total} docs diagrams measured ${esc(o.population.measured)}</p>
 <div class="top">
   ${Object.entries(o.gates)
     .map(([name, g]) =>
-      gateBlock(name === 'flat' ? 'Flat gate (--gate)' : 'Weighted gate (--gate=weighted)', g),
+      gateBlock(
+        name === 'flat' ? ['Flat gate', '--gate'] : ['Weighted gate', '--gate=weighted'],
+        g,
+      ),
     )
     .join('')}
   <section class="buckets">
     <h3>Buckets by share of docs diagrams</h3>
-    <div class="bucket-row bucket-head"><span>Bucket</span><span>Share</span><span class="num">%</span><span class="num">Moved</span><span class="num">Net w.</span></div>
+    <div class="bucket-row bucket-head"><span>Bucket</span><span>Share</span><span class="num">%</span><span class="num">DI moved</span><span class="num">Redrawn</span><span class="num">Net w.</span></div>
     ${bucketNav}
   </section>
 </div>

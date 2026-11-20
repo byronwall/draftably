@@ -1,1085 +1,1085 @@
 {
- "note": "Written by scripts/audit-population.mjs. Bucket counts of the docs diagrams in Byron's repos; see docs/CHECKS.md (\"Frequency weights\").",
- "measured": "2026-11-20",
- "total": 118,
- "buckets": {
-  "S·flat·flow": 42,
-  "M·flat·flow": 39,
-  "S·groups·flow": 11,
-  "M·groups·flow": 11,
-  "S·groups·stack": 3,
-  "S·flat·sequence": 2,
-  "L·groups·flow": 2,
-  "M·groups·stack": 2,
-  "XL·flat·flow": 1,
-  "S·nested·flow": 1,
-  "S·groups·lanes": 1,
-  "S·groups·sequence": 1,
-  "S·groups·organic": 1,
-  "L·groups·stack": 1
- },
- "diagrams": [
-  {
-   "slug": "comic-books-850d0f8e18",
-   "bucket": "M·flat·flow",
-   "leaves": 14,
-   "edges": 18,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "comic-books-b032af60e1",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 10,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "comic-books-c6c21a918e",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "context-recorder-9c374e3acd",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "diagram-studio-016d0fd4b9",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-0250c58633",
-   "bucket": "S·groups·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-06712bf51b",
-   "bucket": "S·groups·flow",
-   "leaves": 7,
-   "edges": 6,
-   "depth": 1,
-   "recipe": "compound-flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-0ce1b1b0bf",
-   "bucket": "S·groups·flow",
-   "leaves": 8,
-   "edges": 5,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-0dcde2a6b9",
-   "bucket": "S·flat·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-114cfdf878",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 1,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-13cca5012c",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 1,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-240e4e6002",
-   "bucket": "S·groups·stack",
-   "leaves": 4,
-   "edges": 2,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-38bd7dacd7",
-   "bucket": "M·groups·flow",
-   "leaves": 9,
-   "edges": 10,
-   "depth": 1,
-   "recipe": "layered",
-   "direction": "right"
-  },
-  {
-   "slug": "diagram-studio-540bd8aa26",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 1,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-6167d5cfaa",
-   "bucket": "S·groups·flow",
-   "leaves": 3,
-   "edges": 0,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-6a372628a3",
-   "bucket": "S·flat·sequence",
-   "leaves": 3,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "sequence",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-6dbae14c7e",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 0,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-6e09a6ea89",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-751f28eca3",
-   "bucket": "S·groups·flow",
-   "leaves": 7,
-   "edges": 2,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-796947f9f9",
-   "bucket": "S·groups·sequence",
-   "leaves": 3,
-   "edges": 4,
-   "depth": 1,
-   "recipe": "sequence",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-93210a8d05",
-   "bucket": "S·groups·lanes",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 1,
-   "recipe": "lanes",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-983cef1ec4",
-   "bucket": "S·groups·flow",
-   "leaves": 4,
-   "edges": 0,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-a8f42fa004",
-   "bucket": "S·groups·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-be224e8292",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 0,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-d1d7b89ddf",
-   "bucket": "S·nested·flow",
-   "leaves": 4,
-   "edges": 2,
-   "depth": 2,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-d28020b66e",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 0,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-d703c21321",
-   "bucket": "S·flat·flow",
-   "leaves": 5,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-daaebab0dd",
-   "bucket": "S·groups·flow",
-   "leaves": 6,
-   "edges": 1,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-dd5ffc609e",
-   "bucket": "S·groups·flow",
-   "leaves": 2,
-   "edges": 0,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-e2100fd54a",
-   "bucket": "S·flat·sequence",
-   "leaves": 2,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "sequence",
-   "direction": "default"
-  },
-  {
-   "slug": "diagram-studio-f63911d797",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "exploreda-18a2cd0ec6",
-   "bucket": "M·flat·flow",
-   "leaves": 14,
-   "edges": 18,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "exploreda-28543e9d94",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 10,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "exploreda-30655f1acf",
-   "bucket": "M·flat·flow",
-   "leaves": 12,
-   "edges": 14,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "exploreda-7beb6926e0",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 11,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "exploreda-9228be3936",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "exploreda-9c5c3daeaf",
-   "bucket": "M·flat·flow",
-   "leaves": 16,
-   "edges": 22,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "exploreda-adadd401f7",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "flower-power-16687f34bf",
-   "bucket": "M·groups·flow",
-   "leaves": 11,
-   "edges": 10,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "flower-power-2526b06822",
-   "bucket": "M·groups·flow",
-   "leaves": 15,
-   "edges": 4,
-   "depth": 1,
-   "recipe": "layered",
-   "direction": "down"
-  },
-  {
-   "slug": "flower-power-e72c790e49",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "right"
-  },
-  {
-   "slug": "plan-viewer-3a1abec440",
-   "bucket": "S·flat·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-7594c88295",
-   "bucket": "S·flat·flow",
-   "leaves": 5,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-828866a5c2",
-   "bucket": "S·groups·organic",
-   "leaves": 7,
-   "edges": 7,
-   "depth": 1,
-   "recipe": "compound-spring",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-84530f0dcc",
-   "bucket": "S·flat·flow",
-   "leaves": 6,
-   "edges": 6,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-8d5219e262",
-   "bucket": "S·flat·flow",
-   "leaves": 2,
-   "edges": 1,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-afc151b422",
-   "bucket": "S·flat·flow",
-   "leaves": 6,
-   "edges": 5,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "default"
-  },
-  {
-   "slug": "plan-viewer-d99418145b",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "layered",
-   "direction": "default"
-  },
-  {
-   "slug": "private-03b80c645d",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-03e9cb651a",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-0aa6149371",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-2348e1386a",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-26bc4ae438",
-   "bucket": "M·groups·flow",
-   "leaves": 16,
-   "edges": 9,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-2a6fa46856",
-   "bucket": "S·flat·flow",
-   "leaves": 7,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-2f3db2af88",
-   "bucket": "M·flat·flow",
-   "leaves": 12,
-   "edges": 15,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-3013d9960d",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-3149311142",
-   "bucket": "M·groups·flow",
-   "leaves": 16,
-   "edges": 9,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-43eea03502",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-51f64997de",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 6,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-53848aeda1",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-58bf0e9ee8",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-59dac10082",
-   "bucket": "L·groups·flow",
-   "leaves": 19,
-   "edges": 4,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "private-5f71fc2592",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-60d4a77aa1",
-   "bucket": "XL·flat·flow",
-   "leaves": 41,
-   "edges": 40,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-62ac857b15",
-   "bucket": "S·flat·flow",
-   "leaves": 7,
-   "edges": 6,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-662be958cd",
-   "bucket": "M·groups·flow",
-   "leaves": 14,
-   "edges": 13,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-68a721ba69",
-   "bucket": "S·flat·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-691bee3057",
-   "bucket": "S·flat·flow",
-   "leaves": 7,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-74a2cce276",
-   "bucket": "M·flat·flow",
-   "leaves": 14,
-   "edges": 14,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-7f8fa63230",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 14,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-80390eb842",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 10,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-82f33f4b7f",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 12,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-86db9d7c9b",
-   "bucket": "S·flat·flow",
-   "leaves": 5,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-8807767669",
-   "bucket": "M·groups·flow",
-   "leaves": 16,
-   "edges": 9,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-894f5bb8d3",
-   "bucket": "S·flat·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-899b21347f",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-8c65b153fd",
-   "bucket": "M·groups·flow",
-   "leaves": 16,
-   "edges": 15,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-9071d30d55",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 14,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-95d8884151",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-9a9d78860b",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-a25c251593",
-   "bucket": "M·groups·flow",
-   "leaves": 13,
-   "edges": 11,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-a57be2b52e",
-   "bucket": "S·flat·flow",
-   "leaves": 5,
-   "edges": 4,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-aae15d3ebd",
-   "bucket": "M·flat·flow",
-   "leaves": 16,
-   "edges": 12,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-acb85883b6",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-b36f39cfd6",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 10,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "private-b64ff29fd2",
-   "bucket": "S·flat·flow",
-   "leaves": 8,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-bf19cda99d",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "private-c105acc466",
-   "bucket": "S·flat·flow",
-   "leaves": 5,
-   "edges": 5,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-c67e7eed48",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-c7ac04aaa7",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-c84222c797",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 12,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-caf88b236f",
-   "bucket": "M·flat·flow",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-cd2cff9bec",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 11,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-d6c166a817",
-   "bucket": "M·groups·flow",
-   "leaves": 16,
-   "edges": 9,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-dc20cf4d73",
-   "bucket": "S·flat·flow",
-   "leaves": 7,
-   "edges": 6,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-dc332e7974",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-dce1d7dd11",
-   "bucket": "S·flat·flow",
-   "leaves": 6,
-   "edges": 5,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-e19239d417",
-   "bucket": "S·groups·flow",
-   "leaves": 8,
-   "edges": 9,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "private-e26693bd7b",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-eef997558d",
-   "bucket": "S·flat·flow",
-   "leaves": 3,
-   "edges": 2,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "private-f222a4ef73",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 9,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-f5671eb086",
-   "bucket": "M·flat·flow",
-   "leaves": 12,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "private-f9b42ec47e",
-   "bucket": "L·groups·flow",
-   "leaves": 17,
-   "edges": 16,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "private-fb250f69fe",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "skills-2e7fa54883",
-   "bucket": "S·groups·flow",
-   "leaves": 7,
-   "edges": 6,
-   "depth": 1,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "srcly-a6d0f0b386",
-   "bucket": "S·flat·flow",
-   "leaves": 6,
-   "edges": 6,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "right"
-  },
-  {
-   "slug": "tsx-data-flow-1978b13006",
-   "bucket": "M·flat·flow",
-   "leaves": 11,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "tsx-data-flow-2ae506b088",
-   "bucket": "M·flat·flow",
-   "leaves": 14,
-   "edges": 13,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "tsx-data-flow-51f761998c",
-   "bucket": "M·flat·flow",
-   "leaves": 13,
-   "edges": 12,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "tsx-data-flow-93ec615ae9",
-   "bucket": "M·flat·flow",
-   "leaves": 10,
-   "edges": 15,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "down"
-  },
-  {
-   "slug": "wall-portfolio-0599308386",
-   "bucket": "S·flat·flow",
-   "leaves": 7,
-   "edges": 7,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-11819618f2",
-   "bucket": "M·groups·stack",
-   "leaves": 12,
-   "edges": 8,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-2a0bcedd8e",
-   "bucket": "L·groups·stack",
-   "leaves": 31,
-   "edges": 2,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-2a3617c372",
-   "bucket": "S·groups·stack",
-   "leaves": 8,
-   "edges": 7,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-7ce8b0e02b",
-   "bucket": "M·groups·flow",
-   "leaves": 11,
-   "edges": 11,
-   "depth": 1,
-   "recipe": "layered",
-   "direction": "right"
-  },
-  {
-   "slug": "wall-portfolio-9d9f73da5c",
-   "bucket": "S·flat·flow",
-   "leaves": 4,
-   "edges": 3,
-   "depth": 0,
-   "recipe": "flow",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-dbf21160bf",
-   "bucket": "S·groups·stack",
-   "leaves": 7,
-   "edges": 4,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  },
-  {
-   "slug": "wall-portfolio-dec7f697a1",
-   "bucket": "M·groups·stack",
-   "leaves": 9,
-   "edges": 8,
-   "depth": 1,
-   "recipe": "row",
-   "direction": "default"
-  }
- ]
+  "note": "Written by scripts/audit-population.mjs. Bucket counts of the docs diagrams in Byron's repos; see docs/CHECKS.md (\"Frequency weights\").",
+  "measured": "2026-11-20",
+  "total": 118,
+  "buckets": {
+    "S·flat·flow": 42,
+    "M·flat·flow": 39,
+    "S·groups·flow": 11,
+    "M·groups·flow": 11,
+    "S·groups·stack": 3,
+    "S·flat·sequence": 2,
+    "L·groups·flow": 2,
+    "M·groups·stack": 2,
+    "XL·flat·flow": 1,
+    "S·nested·flow": 1,
+    "S·groups·lanes": 1,
+    "S·groups·sequence": 1,
+    "S·groups·organic": 1,
+    "L·groups·stack": 1
+  },
+  "diagrams": [
+    {
+      "slug": "comic-books-850d0f8e18",
+      "bucket": "M·flat·flow",
+      "leaves": 14,
+      "edges": 18,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "comic-books-b032af60e1",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 10,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "comic-books-c6c21a918e",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "context-recorder-9c374e3acd",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "diagram-studio-016d0fd4b9",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-0250c58633",
+      "bucket": "S·groups·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-06712bf51b",
+      "bucket": "S·groups·flow",
+      "leaves": 7,
+      "edges": 6,
+      "depth": 1,
+      "recipe": "compound-flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-0ce1b1b0bf",
+      "bucket": "S·groups·flow",
+      "leaves": 8,
+      "edges": 5,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-0dcde2a6b9",
+      "bucket": "S·flat·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-114cfdf878",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 1,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-13cca5012c",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 1,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-240e4e6002",
+      "bucket": "S·groups·stack",
+      "leaves": 4,
+      "edges": 2,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-38bd7dacd7",
+      "bucket": "M·groups·flow",
+      "leaves": 9,
+      "edges": 10,
+      "depth": 1,
+      "recipe": "layered",
+      "direction": "right"
+    },
+    {
+      "slug": "diagram-studio-540bd8aa26",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 1,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-6167d5cfaa",
+      "bucket": "S·groups·flow",
+      "leaves": 3,
+      "edges": 0,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-6a372628a3",
+      "bucket": "S·flat·sequence",
+      "leaves": 3,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "sequence",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-6dbae14c7e",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 0,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-6e09a6ea89",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-751f28eca3",
+      "bucket": "S·groups·flow",
+      "leaves": 7,
+      "edges": 2,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-796947f9f9",
+      "bucket": "S·groups·sequence",
+      "leaves": 3,
+      "edges": 4,
+      "depth": 1,
+      "recipe": "sequence",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-93210a8d05",
+      "bucket": "S·groups·lanes",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 1,
+      "recipe": "lanes",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-983cef1ec4",
+      "bucket": "S·groups·flow",
+      "leaves": 4,
+      "edges": 0,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-a8f42fa004",
+      "bucket": "S·groups·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-be224e8292",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 0,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-d1d7b89ddf",
+      "bucket": "S·nested·flow",
+      "leaves": 4,
+      "edges": 2,
+      "depth": 2,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-d28020b66e",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 0,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-d703c21321",
+      "bucket": "S·flat·flow",
+      "leaves": 5,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-daaebab0dd",
+      "bucket": "S·groups·flow",
+      "leaves": 6,
+      "edges": 1,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-dd5ffc609e",
+      "bucket": "S·groups·flow",
+      "leaves": 2,
+      "edges": 0,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-e2100fd54a",
+      "bucket": "S·flat·sequence",
+      "leaves": 2,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "sequence",
+      "direction": "default"
+    },
+    {
+      "slug": "diagram-studio-f63911d797",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "exploreda-18a2cd0ec6",
+      "bucket": "M·flat·flow",
+      "leaves": 14,
+      "edges": 18,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "exploreda-28543e9d94",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 10,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "exploreda-30655f1acf",
+      "bucket": "M·flat·flow",
+      "leaves": 12,
+      "edges": 14,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "exploreda-7beb6926e0",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 11,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "exploreda-9228be3936",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "exploreda-9c5c3daeaf",
+      "bucket": "M·flat·flow",
+      "leaves": 16,
+      "edges": 22,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "exploreda-adadd401f7",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "flower-power-16687f34bf",
+      "bucket": "M·groups·flow",
+      "leaves": 11,
+      "edges": 10,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "flower-power-2526b06822",
+      "bucket": "M·groups·flow",
+      "leaves": 15,
+      "edges": 4,
+      "depth": 1,
+      "recipe": "layered",
+      "direction": "down"
+    },
+    {
+      "slug": "flower-power-e72c790e49",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "right"
+    },
+    {
+      "slug": "plan-viewer-3a1abec440",
+      "bucket": "S·flat·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-7594c88295",
+      "bucket": "S·flat·flow",
+      "leaves": 5,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-828866a5c2",
+      "bucket": "S·groups·organic",
+      "leaves": 7,
+      "edges": 7,
+      "depth": 1,
+      "recipe": "compound-spring",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-84530f0dcc",
+      "bucket": "S·flat·flow",
+      "leaves": 6,
+      "edges": 6,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-8d5219e262",
+      "bucket": "S·flat·flow",
+      "leaves": 2,
+      "edges": 1,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-afc151b422",
+      "bucket": "S·flat·flow",
+      "leaves": 6,
+      "edges": 5,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "default"
+    },
+    {
+      "slug": "plan-viewer-d99418145b",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "layered",
+      "direction": "default"
+    },
+    {
+      "slug": "private-03b80c645d",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-03e9cb651a",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-0aa6149371",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-2348e1386a",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-26bc4ae438",
+      "bucket": "M·groups·flow",
+      "leaves": 16,
+      "edges": 9,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-2a6fa46856",
+      "bucket": "S·flat·flow",
+      "leaves": 7,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-2f3db2af88",
+      "bucket": "M·flat·flow",
+      "leaves": 12,
+      "edges": 15,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-3013d9960d",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-3149311142",
+      "bucket": "M·groups·flow",
+      "leaves": 16,
+      "edges": 9,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-43eea03502",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-51f64997de",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 6,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-53848aeda1",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-58bf0e9ee8",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-59dac10082",
+      "bucket": "L·groups·flow",
+      "leaves": 19,
+      "edges": 4,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "private-5f71fc2592",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-60d4a77aa1",
+      "bucket": "XL·flat·flow",
+      "leaves": 41,
+      "edges": 40,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-62ac857b15",
+      "bucket": "S·flat·flow",
+      "leaves": 7,
+      "edges": 6,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-662be958cd",
+      "bucket": "M·groups·flow",
+      "leaves": 14,
+      "edges": 13,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-68a721ba69",
+      "bucket": "S·flat·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-691bee3057",
+      "bucket": "S·flat·flow",
+      "leaves": 7,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-74a2cce276",
+      "bucket": "M·flat·flow",
+      "leaves": 14,
+      "edges": 14,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-7f8fa63230",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 14,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-80390eb842",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 10,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-82f33f4b7f",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 12,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-86db9d7c9b",
+      "bucket": "S·flat·flow",
+      "leaves": 5,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-8807767669",
+      "bucket": "M·groups·flow",
+      "leaves": 16,
+      "edges": 9,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-894f5bb8d3",
+      "bucket": "S·flat·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-899b21347f",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-8c65b153fd",
+      "bucket": "M·groups·flow",
+      "leaves": 16,
+      "edges": 15,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-9071d30d55",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 14,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-95d8884151",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-9a9d78860b",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-a25c251593",
+      "bucket": "M·groups·flow",
+      "leaves": 13,
+      "edges": 11,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-a57be2b52e",
+      "bucket": "S·flat·flow",
+      "leaves": 5,
+      "edges": 4,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-aae15d3ebd",
+      "bucket": "M·flat·flow",
+      "leaves": 16,
+      "edges": 12,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-acb85883b6",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-b36f39cfd6",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 10,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "private-b64ff29fd2",
+      "bucket": "S·flat·flow",
+      "leaves": 8,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-bf19cda99d",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "private-c105acc466",
+      "bucket": "S·flat·flow",
+      "leaves": 5,
+      "edges": 5,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-c67e7eed48",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-c7ac04aaa7",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-c84222c797",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 12,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-caf88b236f",
+      "bucket": "M·flat·flow",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-cd2cff9bec",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 11,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-d6c166a817",
+      "bucket": "M·groups·flow",
+      "leaves": 16,
+      "edges": 9,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-dc20cf4d73",
+      "bucket": "S·flat·flow",
+      "leaves": 7,
+      "edges": 6,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-dc332e7974",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-dce1d7dd11",
+      "bucket": "S·flat·flow",
+      "leaves": 6,
+      "edges": 5,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-e19239d417",
+      "bucket": "S·groups·flow",
+      "leaves": 8,
+      "edges": 9,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "private-e26693bd7b",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-eef997558d",
+      "bucket": "S·flat·flow",
+      "leaves": 3,
+      "edges": 2,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "private-f222a4ef73",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 9,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-f5671eb086",
+      "bucket": "M·flat·flow",
+      "leaves": 12,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "private-f9b42ec47e",
+      "bucket": "L·groups·flow",
+      "leaves": 17,
+      "edges": 16,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "private-fb250f69fe",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "skills-2e7fa54883",
+      "bucket": "S·groups·flow",
+      "leaves": 7,
+      "edges": 6,
+      "depth": 1,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "srcly-a6d0f0b386",
+      "bucket": "S·flat·flow",
+      "leaves": 6,
+      "edges": 6,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "right"
+    },
+    {
+      "slug": "tsx-data-flow-1978b13006",
+      "bucket": "M·flat·flow",
+      "leaves": 11,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "tsx-data-flow-2ae506b088",
+      "bucket": "M·flat·flow",
+      "leaves": 14,
+      "edges": 13,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "tsx-data-flow-51f761998c",
+      "bucket": "M·flat·flow",
+      "leaves": 13,
+      "edges": 12,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "tsx-data-flow-93ec615ae9",
+      "bucket": "M·flat·flow",
+      "leaves": 10,
+      "edges": 15,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "down"
+    },
+    {
+      "slug": "wall-portfolio-0599308386",
+      "bucket": "S·flat·flow",
+      "leaves": 7,
+      "edges": 7,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-11819618f2",
+      "bucket": "M·groups·stack",
+      "leaves": 12,
+      "edges": 8,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-2a0bcedd8e",
+      "bucket": "L·groups·stack",
+      "leaves": 31,
+      "edges": 2,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-2a3617c372",
+      "bucket": "S·groups·stack",
+      "leaves": 8,
+      "edges": 7,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-7ce8b0e02b",
+      "bucket": "M·groups·flow",
+      "leaves": 11,
+      "edges": 11,
+      "depth": 1,
+      "recipe": "layered",
+      "direction": "right"
+    },
+    {
+      "slug": "wall-portfolio-9d9f73da5c",
+      "bucket": "S·flat·flow",
+      "leaves": 4,
+      "edges": 3,
+      "depth": 0,
+      "recipe": "flow",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-dbf21160bf",
+      "bucket": "S·groups·stack",
+      "leaves": 7,
+      "edges": 4,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    },
+    {
+      "slug": "wall-portfolio-dec7f697a1",
+      "bucket": "M·groups·stack",
+      "leaves": 9,
+      "edges": 8,
+      "depth": 1,
+      "recipe": "row",
+      "direction": "default"
+    }
+  ]
 }

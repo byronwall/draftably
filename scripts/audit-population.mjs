@@ -128,7 +128,9 @@ function isPublic(repo) {
           encoding: 'utf8',
           stdio: 'pipe',
         }).trim() === 'PUBLIC';
-    } catch {}
+    } catch {
+      // No GitHub remote, or no access: treat it as private.
+    }
     visibility.set(repo, open);
   }
   return visibility.get(repo);
@@ -177,9 +179,9 @@ function scramble(source, seed) {
           key && !/^(href|link-base)=$/.test(key)
             ? all
             : `${key ?? ''}"${t
-                .replace(/\\n/g, '\u0000')
-                .replace(/[A-Za-z]+/g, word)
-                .replace(/\u0000/g, '\\n')}"`,
+                .split('\\n')
+                .map(part => part.replace(/[A-Za-z]+/g, word))
+                .join('\\n')}"`,
         )
         .replace(
           /^(\s*\S+)(.*)$/,
@@ -388,6 +390,11 @@ if (write) {
     diagrams: index.sort((a, b) => a.slug.localeCompare(b.slug)),
   };
   fs.writeFileSync(path.join(setDir, 'weights.json'), JSON.stringify(weights, null, 1) + '\n');
+  execFileSync(
+    path.join(root, 'node_modules/.bin/prettier'),
+    ['--write', path.join(setDir, 'weights.json')],
+    { stdio: 'ignore' },
+  );
   console.log(
     `Wrote ${counted.length} diagrams and weights.json to ${path.relative(root, setDir)}`,
   );

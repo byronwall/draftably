@@ -15,7 +15,10 @@ export function featuresOf(source, geo) {
     if (!isGroup.has(n.id)) continue;
     let d = 1,
       p = n.parent;
-    while (p && p !== 'root' && d < 20) (d++, (p = parents.get(p)));
+    while (p && p !== 'root' && d < 20) {
+      d++;
+      p = parents.get(p);
+    }
     depth = Math.max(depth, d);
   }
   const edges = geo.routes?.length ?? 0;

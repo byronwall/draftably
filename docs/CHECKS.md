@@ -385,6 +385,52 @@ PASS, WARN or FAIL for each rule, and exits 1 when a rule fails:
 pnpm audit:compare --gate --shots
 ```
 
+### Frequency weights
+
+The flat gate weighs every render alike, but most real diagrams are small flat flows. A small
+rise on a rare, large diagram can be a fair price for a gain on the common shapes.
+`pnpm audit:compare --gate=weighted` judges a change by how often each shape occurs.
+
+**Population.** `pnpm audit:population` collects every `.draft` file, ` ```draft ` fence and
+Mermaid flowchart fence (converted with `draftably import`) in the repos under `~/Projects` that
+Byron owns. It skips `node_modules`, worktrees, build output, exact duplicates, the examples, the
+audit sets and test fixtures, so only real docs diagrams count. `--write` saves them as the
+`population` set in [intent/diagram-quality/population/](intent/diagram-quality/population/),
+with the bucket counts in `weights.json`. Diagrams from private repos keep their shape, but each
+label, title, id and link gets a placeholder of the same length. Run it again when the repos gain
+diagrams, and commit the result.
+
+**Buckets.** A diagram's bucket is its size (S up to 8 boxes, M up to 16, L up to 32, XL more),
+its group nesting (flat, groups, nested) and its recipe family (flow, stack, sequence, lanes,
+organic), for example `S·flat·flow`. The audit writes each render's bucket into `metrics.json`
+as `shape`. On 2026-11-20, 118 docs diagrams gave `S·flat·flow` 36%, `M·flat·flow` 33%,
+`S·groups·flow` and `M·groups·flow` 9% each, and ten rare buckets the last 13%.
+
+**Weights.** A render's weight is its bucket's share of the population, split over the renders
+in that bucket, so a bucket's renders together carry its share. A bucket that no docs diagram
+falls in counts as half a diagram. Weights average 1 over the renders they cover. `compare.md`
+shows each set's weighted mean DI beside its flat mean.
+
+| Rule                  | Pass condition                                                                                                                                            |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hard defects          | As in the flat gate, over every set including the population                                                                                              |
+| Weighted mean DI      | Pooled over population, corpus, heldout and examples, the weighted mean rises by at most 0.05. This is the main rule                                      |
+| Weighted mean per set | Population and heldout each rise by at most 0.05 (heldout stays the overfitting guard). Corpus and examples print WARN, because the main rule covers them |
+| Mean DI, issues       | As in the flat gate                                                                                                                                       |
+| Each issue kind       | Counted by weight over the pooled sets, each kind rises by at most max(1, 5%)                                                                             |
+| Each render           | A render may rise by 1.0 × (median bucket share ÷ its bucket's share), from 0.5 to 4 DI. Common shapes get 0.5; a rare XL drawing gets up to 4            |
+
+`--review` writes `review.html` and `review.pdf` in the output folder. They show base and head
+side by side for every render whose drawing or DI changed, grouped by bucket (most common first)
+and sorted by weighted impact (DI change × weight), with both gates' verdicts at the top. Attach
+the PDF to a heuristic PR that needs a judgment call.
+
+The flat `--gate` stays the default until the 2026-11-20 issue sweep lands.
+
+```bash
+pnpm audit:compare --gate=weighted --review
+```
+
 ## Screenshots
 
 `pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through

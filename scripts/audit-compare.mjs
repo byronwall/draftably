@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 /**
  * Compare the diagram quality audit between a base ref and the working tree, across the audit
- * corpus, the held-out diagrams, the examples and the issue reproductions. See docs/CHECKS.md.
+ * corpus, the held-out diagrams, the examples, the issue reproductions and the population of
+ * docs diagrams. See docs/CHECKS.md.
  *
  *   node scripts/audit-compare.mjs [--base origin/main] [--sets corpus,heldout,examples,issues]
- *                                  [--only slug,slug] [--shots] [--gate] [--out tmp/audit/compare]
+ *                                  [--only slug,slug] [--shots] [--gate | --gate=weighted]
+ *                                  [--review] [--out tmp/audit/compare]
  *
  * `--gate` checks the ratchet rules in docs/CHECKS.md ("Ratchet gate for heuristic changes"),
  * prints PASS, WARN or FAIL per rule and the top movers, and exits 1 when a rule fails.
+ * `--gate=weighted` checks the frequency-weighted rules ("Frequency weights") instead.
+ * `--review` writes `<out>/review.html` and `<out>/review.pdf`: before and after for every render
+ * that changed, grouped by shape bucket. Both add the population set to the default sets.
  *
  * The base side runs this checkout's audit script and inputs against the base ref's engine, so
  * the two sides differ only in the code under test. The base ref is checked out once into
@@ -443,7 +448,7 @@ function weightedGate() {
   const ev = (b, h) => `${b.toFixed(2)} → ${h.toFixed(2)} (${signed(+(h - b).toFixed(2))})`;
   const [pb, ph] = [weightedMean(GUARDED, 'base', pooled), weightedMean(GUARDED, 'head', pooled)];
   rows.push([
-    `Weighted mean DI (${GUARDED.join('+')}) rises ≤ 0.05`,
+    'Weighted mean DI (pooled sets) rises ≤ 0.05',
     ph - pb > 0.05 ? 'FAIL' : 'PASS',
     ev(pb, ph),
   ]);
@@ -467,7 +472,7 @@ function weightedGate() {
     .filter(k => kh[k] - (kb[k] ?? 0) > Math.max(1, 0.05 * (kb[k] ?? 0)))
     .map(k => `${k} ${(kb[k] ?? 0).toFixed(1)} → ${kh[k].toFixed(1)}`);
   rows.push([
-    `Each issue kind, weighted (${GUARDED.join('+')}), rises ≤ max(1, 5%)`,
+    'Each issue kind, weighted (pooled sets), rises ≤ max(1, 5%)',
     over.length ? 'FAIL' : 'PASS',
     over.join('; '),
   ]);
@@ -541,13 +546,18 @@ console.log(`\n${report}\nWrote ${path.relative(root, path.join(outDir, 'compare
 
 if (review) {
   const { writeReview } = await import('./lib/audit-review.mjs');
-  const pooled = weigh(Object.keys(loaded));
+  // The same weights as the weighted gate: pooled over its guarded sets; other sets (issues)
+  // weigh their renders among themselves.
+  const guarded = ['population', 'corpus', 'heldout', 'examples'].filter(s => loaded[s]);
+  const pooled = weigh(guarded);
+  const own = Object.fromEntries(Object.keys(loaded).map(s => [s, weigh([s])]));
   const files = await writeReview({
     outDir,
     title: `${baseRef} (${short}) → working tree`,
     loaded,
     moves: pairs,
-    weights: pooled,
+    weightOf: (set, key) => (guarded.includes(set) ? pooled : own[set]).get(key) ?? 0,
+    setMean: (set, side) => weightedMean([set], side, own[set]),
     population,
     shareOf,
     limitOf,
