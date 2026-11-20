@@ -341,16 +341,49 @@ rules and the round loop are in
 - `--baseline tmp/audit/rN-1` adds before/after `compare-*.png` sheets for PR screenshots.
 
 To measure a fix, use `pnpm audit:compare` instead of hand-built baselines, corpus copies and
-diff scripts. It audits the corpus, the held-out diagrams and `examples/` against
+diff scripts. It audits the corpus, the held-out diagrams, `examples/` and the issue
+reproductions (`docs/intent/diagram-quality/issues/`) against
 `origin/main` and against the working tree, in parallel. Both sides use this checkout's audit
 script and inputs, so only the engine differs. It then prints `compare.md`: mean defect index
 per set, the issue kinds whose counts changed, and the renders that moved most.
 
-- `--base <ref>`, `--sets corpus,heldout,examples`, `--only slug,slug`, and `--shots` for the
+- `--base <ref>`, `--sets corpus,heldout,examples,issues`, `--only slug,slug`, `--gate` (below),
+  and `--shots` for the
   images and before/after `compare-*.png` sheets (slower). Output goes to `tmp/audit/compare/`
   (`--out` to change it).
 - The base ref is checked out once into `tmp/audit-base/<sha>`, and its results are cached
   there, so later runs only audit the working tree.
+- A full run of all four sets takes about two minutes. Run it in the background.
+
+### Ratchet gate for heuristic changes
+
+A PR that changes layout, routing, port or label heuristics must not make whole categories of
+drawings worse. `pnpm audit:compare --gate` checks these rules against the base ref, prints
+PASS, WARN or FAIL for each rule, and exits 1 when a rule fails:
+
+| Rule             | Pass condition                                                                                                                                                                         |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hard defects     | No new `node-overlap`, `edge-through-node`, `clipped`, `label-on-node`, `label-overlap`, `label-through-text` or `expectation-failed` in any render of any set, and no new build error |
+| Mean DI, guarded | Corpus, heldout and examples each rise by at most 0.05                                                                                                                                 |
+| Mean DI, issues  | The issues set falls. Unchanged prints WARN: a PR that targets an issue must lower it                                                                                                  |
+| Each issue kind  | Summed over corpus, heldout and examples, each kind (with `crossing` and `back-edge`) rises by at most max(1, 5% of its base count)                                                    |
+| Each render      | No render's defect index rises by more than 1.0                                                                                                                                        |
+
+- Held-out is the overfitting guard. A change that helps the corpus and the issues but hurts
+  held-out fails.
+- A failing rule is allowed only with a compare sheet and a written reason in the PR. Run with
+  `--shots` and attach the `compare-*.png` of each render the rule names.
+- Every heuristic PR pastes the `--gate` output (the Gate table and the top 5 movers each way)
+  in its body, with `--shots` compare sheets for the top 5 movers each way.
+- Measure against `origin/main`, not against a sibling branch. When parallel PRs land, the next
+  PR's gate measures against the merged result, so the ratchet holds for the combined change.
+- The baseline for the 2026-11-20 issue sweep is main at `927f0839`:
+  [rounds/2026-11-20-issue-sweep.md](intent/diagram-quality/rounds/2026-11-20-issue-sweep.md).
+  Compare the final combined result against it with `--base 927f0839`.
+
+```bash
+pnpm audit:compare --gate --shots
+```
 
 ## Screenshots
 

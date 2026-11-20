@@ -51,8 +51,20 @@ below is a checklist for finding defects, not a scoresheet.
 
 **Metric versions.** The defect index is only comparable when both rounds ran the same script.
 When the script changes, re-run the previous round's code with the new script before comparing:
-`pnpm audit:compare --base <that round's commit>` does this for the corpus, the held-out set and
-the examples (add `--shots` if you also need its images).
+`pnpm audit:compare --base <that round's commit>` does this for the corpus, the held-out set, the
+examples and the issue reproductions (add `--shots` if you also need its images).
+
+| Version | Date       | Change                                                                                                        | Record                                          |
+| ------- | ---------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| 5       | round 5    | the round-5 script                                                                                            | [r5](rounds/r5.md)                              |
+| 6       | 2026-11-20 | adds `edge-on-node-border`, `off-center-gap`, `edge-through-title`, `non-facing-ports`; adds the `issues` set | [issue sweep](rounds/2026-11-20-issue-sweep.md) |
+
+## Issue reproductions
+
+[issues/](issues/) holds one folder per diagram from a GitHub issue that reports a layout or
+routing defect. It is the fourth set in `pnpm audit:compare`. A fix for an issue must lower its
+render's defect index. Unlike the corpus, a reproduction is not tuned to the corpus rules: it is
+the reporter's diagram as sent. Its README says which metric measures each issue.
 
 ## Corpus rules
 
@@ -208,6 +220,25 @@ under 16px apart) and **uneven-group-gap** (facing gaps of up to 160px between s
 one drawing differ by more than 16px). `metrics.json` records each group's fill (`groupFill`)
 and each facing gap (`groupGaps`).
 
+Issue sweep (version 6, 2026-11-20), each from one issue:
+
+- **edge-on-node-border** (#586): a line runs along a box's own outline, under 1.5px from the side
+  for more than 4px, as a port that slides along the border before it turns. Counted once per
+  line. A line must leave and arrive square to the side.
+- **off-center-gap** (#595): the only line in a gap under 80px between two facing sides (box or
+  group border) sits more than 4px nearer one side than the other. A line under 8px from a side
+  is left to the border metrics.
+- **edge-through-title** (#604): a line, the last leg into a top member included, runs through a
+  group title's letters (frame or soft). `edge-through-title-band` lets a straight terminal leg
+  through the band; this one does not let it through the text.
+- **non-facing-ports** (#606): two boxes sit in adjacent rows (or columns), their spans overlap by
+  32px or more, and a gap of 32px or more that no other box enters lies between them. The line
+  leaves or arrives on another side and doubles back across the stack, where the facing sides
+  would give a short, straight approach.
+
+Not measured: #589 (group fill past the border at a crossing) and #603 (seams between touching
+soft-group pieces) are rendering defects. Check them by eye on the compare sheet.
+
 Text: **mid-word-wrap** (a node or group title wraps inside a word, as `annotationCommand / s`,
 rather than at a space or where an identifier's parts meet, or strands one or two characters
 after a break, as `installed / ?`; a short word wrapped at a space is not counted).
@@ -233,9 +264,9 @@ swapped).
 
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap, label through text 6; expectation failed 4; hook, shared segment, label on edge,
-detached, on title, empty area 3; edge-through-group, edge-through-title-band, empty band, low contrast, edges too close, labels too
+detached, on title, empty area, edge through title 3; edge on node border, non-facing ports, edge-through-group, edge-through-title-band, empty band, low contrast, edges too close, labels too
 close, wide aspect 2; crossing, edge hugs node (per line and box), many
-bends, long edge, group border (label or edge), edge in slot, uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
+bends, long edge, group border (label or edge), edge in slot, off-center gap, uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
 uneven padding, padding varies, tight group gap 2; sparse group, group staircase (per link), uneven group gap 1;
 back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
 
