@@ -130,7 +130,8 @@ export function centre(ctx: Context) {
             Math.abs(c[axis] - d[axis]) < EPS &&
             c[axis] > below &&
             c[axis] < above &&
-            Math.min(hi, Math.max(c[along], d[along])) - Math.max(lo, Math.min(c[along], d[along])) >
+            Math.min(hi, Math.max(c[along], d[along])) -
+              Math.max(lo, Math.min(c[along], d[along])) >
               ALONGSIDE,
         ),
       );

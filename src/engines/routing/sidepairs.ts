@@ -84,7 +84,7 @@ export function sidePairs(
     const cx = center(r).x,
       limit = r.w / 2 - 12;
     let x = port(r, side, offset).x;
-    for (let moved = true; moved; ) {
+    for (let moved = true; moved;) {
       moved = false;
       for (const t of titles)
         if (
