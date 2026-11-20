@@ -48,7 +48,15 @@ describe('agent skill', () => {
     const used = [...skill.matchAll(/`(?:layout|routing)[^`]*`/g)].flatMap(m =>
       [...m[0].matchAll(/([a-z-]+)=/g)].map(s => s[1]),
     );
-    const common = ['engine', 'gap', 'direction', 'min-width', 'min-height', 'activations'];
+    const common = [
+      'engine',
+      'gap',
+      'direction',
+      'min-width',
+      'min-height',
+      'activations',
+      'columns',
+    ];
     expect(used.filter(s => !known.has(s) && !common.includes(s))).toEqual([]);
   });
 
