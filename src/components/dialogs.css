@@ -195,10 +195,113 @@ mark {
   line-height: 1.7;
 }
 
+.modal.import-dialog {
+  width: min(980px, calc(100vw - 32px));
+}
+
+/* Text on the left, the drawing it makes on the right, both one fixed height so nothing moves
+   while the preview catches up. */
+.import-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-3, 12px);
+  height: min(440px, calc(100dvh - 240px));
+}
+
+.import-source,
+.import-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
 .import-text {
+  flex: 1;
+  min-height: 0;
+  resize: none;
   font-family: var(--mono);
   font-size: var(--text-sm);
   line-height: 1.5;
+}
+
+.import-samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.import-preview {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  transition: opacity 140ms;
+}
+
+.import-preview.is-busy {
+  opacity: 0.6;
+}
+
+.import-preview .hint {
+  max-width: 32ch;
+  text-align: center;
+}
+
+.import-svg {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.import-svg svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.import-notes {
+  flex: none;
+  height: 88px;
+  overflow: auto;
+}
+
+.import-notes .hint {
+  margin: 0;
+}
+
+.import-notes ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 720px) {
+  .import-grid {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .import-text {
+    min-height: 160px;
+  }
+
+  .import-preview {
+    min-height: 200px;
+  }
 }
 
 .import-file {

@@ -204,7 +204,7 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
 let importRequest = 0;
 
 /** Convert before switching files; failed or cancelled imports leave the current work in place. */
-export async function importForeignText(text: string, name = '') {
+export async function importForeignText(text: string, name = '', { reviewed = false } = {}) {
   const request = ++importRequest;
   activeSession().prepareForEdit();
   await activeSession().settleSave();
@@ -244,8 +244,9 @@ export async function importForeignText(text: string, name = '') {
     const id = keepImportedSource(source);
     location.assign(`${location.pathname}?import=${encodeURIComponent(id)}`);
   };
+  // The paste dialog already showed the warnings beside its preview.
   const warnings = result.diagnostics.filter(item => item.severity === 'warning');
-  if (warnings.length) {
+  if (warnings.length && !reviewed) {
     confirmAction({
       title: 'Review import changes',
       message: warnings.map(item => item.message).join('\n'),

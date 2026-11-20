@@ -1,4 +1,14 @@
-import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
+import {
+  createEffect,
+  createSignal,
+  For,
+  Match,
+  onCleanup,
+  onMount,
+  Show,
+  Switch,
+  type JSX,
+} from 'solid-js';
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
 import { canPickFile, commandEnabled, pickForeignFile, runCommand } from '../state/commands';
@@ -222,7 +232,46 @@ const FORMAT_NAMES: Record<string, string> = {
   d2: 'D2',
 };
 
-/** Paste Mermaid, DOT or D2 text, or pick a file, and open it as a new diagram. */
+/** One click fills an empty dialog, so a first visit can see what an import does. */
+const IMPORT_SAMPLES: [string, string][] = [
+  [
+    'Mermaid flowchart',
+    'flowchart LR\n  web[Web app] -->|HTTPS| api[API]\n  api --> auth[Auth]\n  api --> cache{Cached?}\n  cache -->|no| db[(Orders DB)]\n  subgraph backend [Backend]\n    api\n    auth\n    cache\n    db\n  end',
+  ],
+  [
+    'Mermaid sequence',
+    'sequenceDiagram\n  participant B as Browser\n  participant A as API\n  B->>A: POST /orders\n  A-->>B: 201 Created',
+  ],
+  ['Graphviz DOT', 'digraph G {\n  rankdir=LR\n  cart -> api [label="submit"]\n  api -> db\n}'],
+];
+
+interface ImportPreview {
+  svg: string;
+  notes: string[];
+  error: string;
+}
+
+/** The import and its drawing, without opening anything. */
+async function previewImport(text: string, name: string): Promise<ImportPreview> {
+  try {
+    const { importBrowser } = await import('../import/browser');
+    const result = await importBrowser(text, name);
+    const errors = result.diagnostics.filter(d => d.severity === 'error');
+    const notes = result.diagnostics.filter(d => d.severity === 'warning').map(d => d.message);
+    if (!result.nativeSource || errors.length)
+      return { svg: '', notes, error: errors[0]?.message ?? 'This text did not import.' };
+    const { renderWithScene } = await import('../runtime/render');
+    const { result: drawn } = await renderWithScene(result.nativeSource);
+    return { svg: drawn.ok ? drawn.value.svg : '', notes, error: '' };
+  } catch (error) {
+    return { svg: '', notes: [], error: error instanceof Error ? error.message : String(error) };
+  }
+}
+
+/**
+ * Paste Mermaid, DOT or D2 text, or pick a file, and open it as a new diagram. The drawing and
+ * what the import changes show beside the text as you paste, so opening needs no second review.
+ */
 function ImportTextDialog() {
   const [text, setText] = createSignal('');
   // D2 has no signature, so plain text is read as D2 only when the importer is asked to.
@@ -236,23 +285,53 @@ function ImportTextDialog() {
       ? { name, format: found.format }
       : { error: `${found.format} import is not supported yet.` };
   };
+  const fileName = () => (format().format === 'd2' ? 'pasted.d2' : '');
+  const [preview, setPreview] = createSignal<ImportPreview | null>(null);
+  const [busy, setBusy] = createSignal(false);
+  let run = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  createEffect(() => {
+    const source = text().trim();
+    const f = format();
+    clearTimeout(timer);
+    const mine = ++run;
+    if (!source || f.error) {
+      setPreview(null);
+      setBusy(false);
+      return;
+    }
+    setBusy(true);
+    timer = setTimeout(async () => {
+      const out = await previewImport(source, fileName());
+      if (mine !== run) return;
+      setPreview(out);
+      setBusy(false);
+    }, 250);
+  });
+  onCleanup(() => clearTimeout(timer));
+
   const status = () => {
-    if (!text().trim()) return 'Paste Mermaid, DOT or D2 text.';
+    if (!text().trim()) return 'Paste Mermaid, DOT or D2 text, or try a sample.';
     const f = format();
-    return f.error ?? `Reads as ${f.name}.`;
+    if (f.error) return f.error;
+    const p = preview();
+    if (busy() && !p) return `Reading as ${f.name}…`;
+    if (p?.error) return p.error;
+    return `Reads as ${f.name}.`;
   };
-  const run = () => {
-    const f = format();
-    if (!text().trim() || f.error) return;
+  const ready = () => !!text().trim() && !format().error && !!preview()?.svg && !busy();
+  const run_ = () => {
+    if (!ready()) return;
     const source = text().trim();
     closeDialog();
-    void importForeignText(source, f.format === 'd2' ? 'pasted.d2' : '').catch(error =>
+    void importForeignText(source, fileName(), { reviewed: true }).catch(error =>
       showError(error instanceof Error ? error.message : String(error)),
     );
   };
   return (
     <Modal
       title="Import text diagram"
+      class="wide import-dialog"
       footer={
         <>
           <Show when={canPickFile()}>
@@ -270,45 +349,80 @@ function ImportTextDialog() {
           <button type="button" class="button" onClick={closeDialog}>
             Cancel
           </button>
-          <button
-            type="button"
-            class="button primary"
-            disabled={!text().trim() || !!format().error}
-            onClick={run}
-          >
-            Import
+          <button type="button" class="button primary" disabled={!ready()} onClick={run_}>
+            Open as new draft
           </button>
         </>
       }
     >
       <div
-        class="stack"
+        class="import-grid"
         onKeyDown={e => {
           if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
             e.preventDefault();
-            run();
+            run_();
           }
         }}
       >
-        <p class="hint">
-          The import opens as a new diagram. It keeps shapes, groups, labels and connections, then
-          lays them out again.
-        </p>
-        <label class="field">
+        <label class="field import-source">
           <span class="field-label">Diagram text</span>
           <textarea
             autofocus
-            class="quick-lines import-text"
-            rows={12}
+            class="import-text"
             spellcheck={false}
             value={text()}
             onInput={e => setText(e.currentTarget.value)}
             placeholder={'flowchart LR\n  A[Cart] -->|submit| B[API]\n  B --> C[Database]'}
           />
+          <span class="import-samples">
+            <span>Try</span>
+            <For each={IMPORT_SAMPLES}>
+              {([label, sample]) => (
+                <button type="button" class="link-button" onClick={() => setText(sample)}>
+                  {label}
+                </button>
+              )}
+            </For>
+          </span>
         </label>
-        <p class="hint" classList={{ 'error-text': !!text().trim() && !!format().error }}>
-          {status()}
-        </p>
+        <div class="import-result">
+          <span class="field-label">Draftably draws</span>
+          <div class="import-preview" classList={{ 'is-busy': busy() }}>
+            <Show
+              when={preview()?.svg}
+              fallback={
+                <p
+                  class="hint"
+                  classList={{ 'error-text': !!format().error || !!preview()?.error }}
+                >
+                  {status()}
+                </p>
+              }
+            >
+              {/* eslint-disable-next-line solid/no-innerhtml -- our own renderer's SVG */}
+              {svg => <div class="import-svg" innerHTML={svg()} />}
+            </Show>
+          </div>
+          <div class="import-notes">
+            <Show
+              when={preview()?.svg}
+              fallback={<p class="hint">It opens as a new draft. This diagram stays as it is.</p>}
+            >
+              <Show
+                when={preview()!.notes.length}
+                fallback={<p class="hint">{status()} The import keeps every detail.</p>}
+              >
+                <p class="hint">
+                  {status()} The import changes {preview()!.notes.length}{' '}
+                  {preview()!.notes.length === 1 ? 'detail' : 'details'}:
+                </p>
+                <ul>
+                  <For each={preview()!.notes}>{n => <li>{n}</li>}</For>
+                </ul>
+              </Show>
+            </Show>
+          </div>
+        </div>
       </div>
     </Modal>
   );

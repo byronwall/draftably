@@ -20,9 +20,10 @@ lets you inspect and refine the result. If the output file already exists, choos
 import never overwrites it.
 
 In the editor, choose **File › Import text diagram…**, or **Paste Mermaid or DOT** on an empty
-canvas. Paste the text, or choose a file, then choose **Import**. Pasting Mermaid or DOT text
-straight onto the canvas does the same. The result opens as a new draft, with any warnings shown
-before you open it. Choose **Source** in the toolbar to see the draft text beside the canvas.
+canvas. Paste the text or choose a file. As you paste, the dialog draws the result and lists what
+the import changes. Choose **Open as new draft** to open it. You can also paste Mermaid or DOT
+text straight onto the canvas; the editor shows the changes before it opens the draft. Choose
+**Source** in the toolbar to see the draft text beside the canvas.
 
 You can also paste Mermaid or DOT text into the Playground's source pane. It converts at once.
 **Compare** shows Mermaid's own drawing next to the result and lists what the import changed, and

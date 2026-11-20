@@ -402,6 +402,12 @@
   font-size: 20px;
 }
 
+.empty-hint {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
 .empty-actions {
   display: flex;
   flex-wrap: wrap;

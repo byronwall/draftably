@@ -199,6 +199,9 @@ export default function App() {
                 <button class="button" onClick={() => runCommand('toggle-source')}>
                   Write source <kbd>`</kbd>
                 </button>
+                <p class="empty-hint">
+                  Or copy Mermaid or DOT and press <kbd>⌘V</kbd> on the canvas.
+                </p>
               </div>
             }
           />

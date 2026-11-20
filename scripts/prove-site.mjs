@@ -785,11 +785,12 @@ const journeys = {
       await page.getByRole('menuitem', { name: 'Import text diagram…' }).click();
       await page.getByRole('dialog', { name: 'Import text diagram' }).waitFor();
     };
+    // A paste previews the drawing and lists the import's changes before anything opens.
     const paste = async text => {
       await openImport();
       await page.getByLabel('Diagram text').fill(text);
-      await page.getByRole('button', { name: 'Import', exact: true }).click();
     };
+    const cancel = () => page.getByRole('button', { name: 'Cancel' }).click();
     const choose = async (name, text) => {
       await openImport();
       const pending = page.waitForEvent('filechooser');
@@ -798,16 +799,26 @@ const journeys = {
       await chooser.setFiles({ name, mimeType: 'text/plain', buffer: Buffer.from(text) });
     };
     await paste('digraph { a -> b }');
-    await page.getByText('Review import changes').waitFor();
+    await page.locator('.import-svg svg').waitFor();
+    await page.getByText(/The import changes \d+ detail/).waitFor();
     await page.screenshot({ path: path.join(proof.out, 'import-warning.png') });
-    await page.getByRole('button', { name: 'Cancel' }).click();
+    check(
+      'the paste dialog previews the import',
+      await page.getByRole('button', { name: 'Open as new draft' }).isEnabled(),
+    );
+    await cancel();
     check('cancel keeps the current editor document', page.url() === before);
     await choose('sequence.mmd', 'sequenceDiagram\n actor Alice\n Alice->>Bob: Hello');
     await page.getByText('Review import changes').waitFor();
     await page.getByRole('button', { name: 'Cancel' }).click();
     check('a Mermaid sequence reaches import review', page.url() === before);
     await paste('classDiagram\n Alice <|-- Bob');
-    await page.getByText('Could not open file').waitFor();
+    await page.locator('.import-preview .error-text').waitFor();
+    check(
+      'unsupported input cannot open',
+      await page.getByRole('button', { name: 'Open as new draft' }).isDisabled(),
+    );
+    await cancel();
     check('unsupported input keeps the current editor document', page.url() === before);
     await page.context().close();
   },
