@@ -11,6 +11,7 @@ import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import { PIN_SIZE, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
+import { rectsOutline } from '../../model/outline';
 
 /** The rest of a field that runs on into another row: its title after an ellipsis. */
 export const pieceLabel = (title: string, w: number, look: ResolvedAppearance) =>
@@ -77,19 +78,8 @@ export function GroupView(props: GroupViewProps) {
       aria-label={props.interactive ? `${group().title}, soft group` : undefined}
       aria-pressed={props.interactive ? !!props.selected : undefined}
     >
-      <For each={hull()}>
-        {h => (
-          <rect
-            class="group-bg"
-            x={h.x}
-            y={h.y}
-            width={h.w}
-            height={h.h}
-            rx={SOFT_RADIUS}
-            fill={color().fill}
-          />
-        )}
-      </For>
+      {/* One outline for the whole tint, so touching pieces join without seams or bites. */}
+      <path class="group-bg" d={rectsOutline(hull(), SOFT_RADIUS)} fill={color().fill} />
       <text
         class="group-title"
         x={hull()[0].x + SOFT_TITLE.x}

@@ -71,6 +71,7 @@ import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
 import { haloPieces, panelDrawn, surfaces, phaseOpacity, type Surface } from '../model/surface';
 import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
+import { rectsOutline } from '../model/outline';
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -363,10 +364,10 @@ function sceneMarkup(
           g.href,
           [
             `<g data-id="${esc(g.id)}"${fade(p)}>`,
-            ...hull.map(
-              h =>
-                `<rect x="${r.x + h.x}" y="${r.y + h.y}" width="${h.w}" height="${h.h}" rx="${SOFT_RADIUS}" fill="${c.fill}"/>`,
-            ),
+            `<path d="${rectsOutline(
+              hull.map(h => ({ ...h, x: r.x + h.x, y: r.y + h.y })),
+              SOFT_RADIUS,
+            )}" fill="${c.fill}"/>`,
             `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
             '</g>',
           ],

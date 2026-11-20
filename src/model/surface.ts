@@ -57,16 +57,46 @@ export function surfaces(doc: Diagram, look: ResolvedAppearance) {
   };
 }
 
-/** A halo path's pieces, grouped by the surface under each piece's middle. */
+/**
+ * A halo path's pieces, grouped by the surface under them. A piece that crosses from one surface
+ * to another, as at a group's border, splits there: each part takes the surface it lies on, so
+ * a group's fill never paints past its border and the border still breaks under the line.
+ */
 export function haloPieces(under: (p: Point) => Surface, halo: string) {
   const out = new Map<string, { surface: Surface; d: string }>();
+  const add = (a: Point, b: Point, surface: Surface) => {
+    const key = JSON.stringify(surface),
+      d = `M${r(a.x)} ${r(a.y)}L${r(b.x)} ${r(b.y)}`,
+      piece = out.get(key);
+    if (piece) piece.d += d;
+    else out.set(key, { surface, d });
+  };
   for (const m of halo.matchAll(/M([-\d.]+) ([-\d.]+)L([-\d.]+) ([-\d.]+)/g)) {
     const [x1, y1, x2, y2] = m.slice(1).map(Number),
-      surface = under({ x: (x1 + x2) / 2, y: (y1 + y2) / 2 }),
-      key = JSON.stringify(surface),
-      piece = out.get(key);
-    if (piece) piece.d += m[0];
-    else out.set(key, { surface, d: m[0] });
+      at = (t: number) => ({ x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t }),
+      keyAt = (t: number) => JSON.stringify(under(at(t))),
+      steps = Math.max(1, Math.ceil(2 * Math.hypot(x2 - x1, y2 - y1)));
+    // Sample the middle of each half-unit step; where the surface changes, bisect to the cut.
+    const cuts = [0];
+    let prev = keyAt(0.5 / steps);
+    for (let i = 1; i < steps; i++) {
+      const key = keyAt((i + 0.5) / steps);
+      if (key === prev) continue;
+      let lo = (i - 0.5) / steps,
+        hi = (i + 0.5) / steps;
+      for (let k = 0; k < 12; k++) {
+        const mid = (lo + hi) / 2;
+        if (keyAt(mid) === prev) lo = mid;
+        else hi = mid;
+      }
+      cuts.push((lo + hi) / 2);
+      prev = key;
+    }
+    cuts.push(1);
+    for (let i = 1; i < cuts.length; i++)
+      add(at(cuts[i - 1]), at(cuts[i]), under(at((cuts[i - 1] + cuts[i]) / 2)));
   }
   return [...out.values()];
 }
+
+const r = (n: number) => Math.round(n * 100) / 100;
