@@ -22,6 +22,11 @@ import never overwrites it.
 In the editor or the [Playground](/play), choose **Import text diagram** and pick a file. It opens
 as a new draft, with any warnings shown before you open it.
 
+You can also paste Mermaid or DOT text into the Playground's source pane. It converts at once.
+**Compare** shows Mermaid's own drawing next to the result and lists what the import changed, and
+**Undo convert** brings the original text back. Typed Mermaid or DOT shows a preview of its
+import until you choose **Convert to draftably**.
+
 | Format            | Imports                              | Refuses                                          |
 | ----------------- | ------------------------------------ | ------------------------------------------------ |
 | Graphviz DOT      | Graphs, clusters, labels, arrowheads | Record fields, named ports, crow's feet          |

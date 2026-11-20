@@ -29,6 +29,8 @@ import {
   unreadableFile,
 } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
+import { foreignFormat, importForeign, type Imported } from './foreign';
+import { ImportNotice } from './ImportNotice';
 
 const BASE = import.meta.env.BASE_URL;
 const SPLIT_KEY = 'draftably.play.split';
@@ -133,6 +135,25 @@ export function Playground() {
   const [split, setSplit] = createSignal(readSplit());
   // Narrow screens show one pane at a time; wide ones ignore this.
   const [tab, setTab] = createSignal<'source' | 'diagram'>('diagram');
+  // Mermaid or DOT text in the editor, with its import.
+  const [imported, setImported] = createSignal<Imported | null>(null);
+  // The text a convert replaced, kept so Compare and Undo work until the next keystroke.
+  const [origin, setOrigin] = createSignal<(Imported & { text: string }) | null>(null);
+  // A paste of a whole Mermaid or DOT diagram converts at once; typing it shows a preview first.
+  let pastedAt = 0;
+  const convert = (found = imported(), text = source()) => {
+    if (!found?.native) return;
+    setOrigin({ ...found, text });
+    setFitKey(`import:${Date.now()}`);
+    editor?.replace(found.native);
+  };
+  const undoConvert = () => {
+    const was = origin();
+    if (!was) return;
+    setOrigin(null);
+    pastedAt = 0;
+    editor?.replace(was.text);
+  };
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
 
@@ -186,8 +207,30 @@ export function Playground() {
         async () => {
           const mine = ++run;
           const t0 = performance.now();
+          const kind = foreignFormat(text);
+          if (kind) {
+            // Another format: draw its import as a preview. Drags stay off until it converts.
+            const found = await importForeign(text, kind);
+            if (mine !== run) return;
+            if (found.native && Date.now() - pastedAt < 3000) {
+              pastedAt = 0;
+              convert(found, text);
+              return;
+            }
+            const result = found.native ? await draw(found.native) : undefined;
+            if (mine !== run) return;
+            setImported(found);
+            setMs(Math.round(performance.now() - t0));
+            setDrawing({ svg: result?.svg ?? null, diagnostics: [], items: [] });
+            setDrawn(text);
+            setSvg(result?.svg ?? '');
+            setGood(undefined);
+            setItems([]);
+            return;
+          }
           const result = await draw(text);
           if (mine !== run) return;
+          setImported(null);
           setMs(Math.round(performance.now() - t0));
           setDrawing(result);
           setDrawn(text);
@@ -387,6 +430,7 @@ export function Playground() {
   const shown = () => (source().trim() ? svg() : '');
   // An image export must show the current source, not the last drawing that worked.
   const imageBlocked = () => {
+    if (imported()) return 'Convert to draftably to export the image';
     const err = problems()[0];
     if (err)
       return err.line
@@ -689,22 +733,37 @@ export function Playground() {
               </div>
             )}
           </Show>
+          <Show when={imported() ? { ...imported()!, text: source() } : origin()}>
+            {found => (
+              <ImportNotice
+                found={found()}
+                converted={!imported()}
+                onConvert={() => convert()}
+                onUndo={undoConvert}
+                onDismiss={() => setOrigin(null)}
+              />
+            )}
+          </Show>
           <Show when={ready()}>
-            <CodeEditor
-              value={source()}
-              onChange={setSource}
-              diagnostics={drawing().diagnostics}
-              linkedLines={linkedLines()}
-              onCursorLine={setCursorLine}
-              onFocusChange={setEditing}
-              onType={() => {
-                setPicked(null);
-                setReplaced(null);
-                fromLink = false;
-                saveDraft();
-              }}
-              ref={api => (editor = api)}
-            />
+            {/* A paste sets a flag the next redraw reads, to convert at once. */}
+            <div class="play-editor-wrap" onPaste={() => (pastedAt = Date.now())}>
+              <CodeEditor
+                value={source()}
+                onChange={setSource}
+                diagnostics={drawing().diagnostics}
+                linkedLines={linkedLines()}
+                onCursorLine={setCursorLine}
+                onFocusChange={setEditing}
+                onType={() => {
+                  setOrigin(null);
+                  setPicked(null);
+                  setReplaced(null);
+                  fromLink = false;
+                  saveDraft();
+                }}
+                ref={api => (editor = api)}
+              />
+            </div>
           </Show>
           <div class="play-status-wrap">
             <Show when={listOpen() && allProblems().length > 1}>
@@ -752,7 +811,11 @@ export function Playground() {
                   <span>
                     {!source().trim()
                       ? 'Empty file'
-                      : note() || (svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…')}
+                      : imported()
+                        ? imported()!.native
+                          ? `${imported()!.name} preview · drawn in ${ms()} ms`
+                          : `${imported()!.name} did not import`
+                        : note() || (svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…')}
                   </span>
                 }
               >
@@ -764,7 +827,7 @@ export function Playground() {
                   </span>
                 )}
               </Show>
-              <Show when={shown() && !note()}>
+              <Show when={shown() && !note() && !imported()}>
                 <span class="play-hint">
                   Drag a shape to move it. Click it or use Outline to find its line.
                 </span>

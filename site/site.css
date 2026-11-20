@@ -3850,6 +3850,86 @@ kbd {
   }
 }
 
+/* Mermaid or DOT text in the editor: one line that converts it, or undoes a convert. Compare
+   opens over the editor, so the source never moves. */
+.play-import {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 41px;
+  padding: 0 6px 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+  font-size: 13px;
+}
+
+.play-import-text {
+  min-width: 0;
+  margin-right: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-import .tool {
+  height: 28px;
+  flex: none;
+}
+
+.play-editor-wrap {
+  display: contents;
+}
+
+.play-compare {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 8px;
+  z-index: 30;
+  /* Wider than a narrow source pane: it sits over the drawing, beside the result. */
+  width: max(calc(100% - 16px), min(640px, calc(100vw - 32px)));
+  max-height: min(560px, 70vh);
+  padding: 10px 12px;
+  overflow: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.14);
+}
+
+.play-compare-label {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.play-compare-drawing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+}
+
+.play-compare-drawing svg {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  height: auto;
+}
+
+.play-compare ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
 /* After an example replaces custom work: name what was replaced and offer it back. */
 .play-notice {
   display: flex;
