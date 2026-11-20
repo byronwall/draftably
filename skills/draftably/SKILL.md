@@ -71,7 +71,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    crossings, detours, stranded nodes and an aspect far from the target. Fix what it names, or run
    `vary --fit slide`, and compare the metrics line before and after. With `direction=` on the
    `layout root` line, it also notes `direction-bends` when the other direction removes most
-   bends, with both sizes; take it unless the direction is deliberate.
+   bends, with both sizes; take it unless the direction is deliberate. A `crossing-penalty` above
+   the default can buy long detours: `crossing-detour` names the line and what one crossing saves.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
    file, and edits to the file show in the viewer at once. If a viewer already serves the folder,

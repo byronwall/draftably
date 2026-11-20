@@ -3,6 +3,7 @@
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
 import { directionNotes } from './direction-note';
+import { penaltyNotes } from './penalty-note';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isMainThread, workerData } from 'node:worker_threads';
@@ -299,6 +300,7 @@ async function checkFile(
     diagnostics.push(
       ...qualityNotes(drawn, metrics!.fit),
       ...(await directionNotes(source, drawn)),
+      ...(await penaltyNotes(source, drawn)),
     );
   const errors = diagnostics.filter(d => d.level === 'error'),
     warnings = diagnostics.filter(d => d.level === 'warning');
