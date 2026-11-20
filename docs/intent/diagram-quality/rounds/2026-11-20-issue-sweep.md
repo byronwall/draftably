@@ -14,8 +14,8 @@ fixes.
 Reproduce, and compare the end of the sweep against it:
 
 ```bash
-pnpm audit:compare --base 927f0839 --gate          # main against itself: every rule PASS, issues WARN
-pnpm audit:compare --base 927f0839 --gate --shots  # the combined result, with compare sheets
+pnpm audit:compare --base 927f0839 --gate=flat     # main against itself: every rule PASS, issues WARN
+pnpm audit:compare --base 927f0839 --gate=flat --shots  # the combined result, with compare sheets
 ```
 
 ## Mean defect index

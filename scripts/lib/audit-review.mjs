@@ -245,10 +245,7 @@ h4 { margin: 14px 0 6px; font-size: 12px; font-weight: 500; color: var(--muted);
 <div class="top">
   ${Object.entries(o.gates)
     .map(([name, g]) =>
-      gateBlock(
-        name === 'flat' ? ['Flat gate', '--gate'] : ['Weighted gate', '--gate=weighted'],
-        g,
-      ),
+      gateBlock(name === 'flat' ? ['Flat gate', '--gate=flat'] : ['Weighted gate', '--gate'], g),
     )
     .join('')}
   <section class="buckets">

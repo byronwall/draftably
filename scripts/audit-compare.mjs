@@ -5,14 +5,15 @@
  * docs diagrams. See docs/CHECKS.md.
  *
  *   node scripts/audit-compare.mjs [--base origin/main] [--sets corpus,heldout,examples,issues]
- *                                  [--only slug,slug] [--shots] [--gate | --gate=weighted]
+ *                                  [--only slug,slug] [--shots] [--gate | --gate=flat]
  *                                  [--review] [--out tmp/audit/compare]
  *
- * `--gate` checks the ratchet rules in docs/CHECKS.md ("Ratchet gate for heuristic changes"),
+ * `--gate` checks the frequency-weighted rules in docs/CHECKS.md ("Ratchet gate for heuristic changes"),
  * prints PASS, WARN or FAIL per rule and the top movers, and exits 1 when a rule fails.
- * `--gate=weighted` checks the frequency-weighted rules ("Frequency weights") instead.
+ * `--gate=flat` checks the older flat rules ("Flat gate") instead.
  * `--review` writes `<out>/review.html` and `<out>/review.pdf`: before and after for every render
- * that changed, grouped by shape bucket. Both add the population set to the default sets.
+ * that changed, grouped by shape bucket. `--gate` and `--review` add the population set to the
+ * default sets.
  *
  * The base side runs this checkout's audit script and inputs against the base ref's engine, so
  * the two sides differ only in the code under test. The base ref is checked out once into
@@ -40,8 +41,12 @@ const option = (name, fallback) => {
 };
 const shots = flag('--shots');
 const review = flag('--review');
-/** `--gate` runs the flat rules; `--gate=weighted` runs the frequency-weighted rules. */
-const gate = flag('--gate=weighted') ? 'weighted' : flag('--gate') ? 'flat' : undefined;
+/** `--gate` runs the frequency-weighted rules (`--gate=weighted` too); `--gate=flat` the flat ones. */
+const gate = flag('--gate=flat')
+  ? 'flat'
+  : flag('--gate=weighted') || flag('--gate')
+    ? 'weighted'
+    : undefined;
 const baseRef = option('--base', 'origin/main');
 const setNames = option(
   '--sets',
@@ -53,7 +58,7 @@ const only = option('--only');
 const outDir = path.resolve(option('--out', 'tmp/audit/compare'));
 if (args.length) {
   console.error(
-    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues,population] [--only a,b] [--shots] [--gate | --gate=weighted] [--review] [--out <dir>]',
+    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues,population] [--only a,b] [--shots] [--gate | --gate=flat] [--review] [--out <dir>]',
   );
   process.exit(1);
 }
@@ -536,8 +541,8 @@ let failed = false;
 const gates = {};
 if (gate === 'flat' || review) gates.flat = flatGate();
 if ((gate === 'weighted' || review) && population) gates.weighted = weightedGate();
-if (gate === 'flat') lines.push(...gateLines('Gate', gates.flat, false));
-if (gate === 'weighted') lines.push(...gateLines('Gate (weighted)', gates.weighted, true));
+if (gate === 'flat') lines.push(...gateLines('Gate (flat)', gates.flat, false));
+if (gate === 'weighted') lines.push(...gateLines('Gate', gates.weighted, true));
 if (gate) failed = verdict(gates[gate]) === 'FAIL';
 
 const report = lines.join('\n') + '\n';

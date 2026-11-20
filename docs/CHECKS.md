@@ -357,24 +357,27 @@ per set, the issue kinds whose counts changed, and the renders that moved most.
 
 ### Ratchet gate for heuristic changes
 
-A PR that changes layout, routing, port or label heuristics must not make whole categories of
-drawings worse. `pnpm audit:compare --gate` checks these rules against the base ref, prints
-PASS, WARN or FAIL for each rule, and exits 1 when a rule fails:
+A PR that changes layout, routing, port or label heuristics must not make the diagrams that
+people draw worse. Most real diagrams are small flat flows, so a small rise on a rare, large
+diagram can be a fair price for a gain on the common shapes. `pnpm audit:compare --gate` weighs
+each render by how often its shape occurs, checks these rules against the base ref, prints PASS,
+WARN or FAIL for each rule, and exits 1 when a rule fails:
 
-| Rule             | Pass condition                                                                                                                                                                         |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hard defects     | No new `node-overlap`, `edge-through-node`, `clipped`, `label-on-node`, `label-overlap`, `label-through-text` or `expectation-failed` in any render of any set, and no new build error |
-| Mean DI, guarded | Corpus, heldout and examples each rise by at most 0.05                                                                                                                                 |
-| Mean DI, issues  | The issues set falls. Unchanged prints WARN: a PR that targets an issue must lower it                                                                                                  |
-| Each issue kind  | Summed over corpus, heldout and examples, each kind (with `crossing` and `back-edge`) rises by at most max(1, 5% of its base count)                                                    |
-| Each render      | No render's defect index rises by more than 1.0                                                                                                                                        |
+| Rule                  | Pass condition                                                                                                                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hard defects          | No new `node-overlap`, `edge-through-node`, `clipped`, `label-on-node`, `label-overlap`, `label-through-text` or `expectation-failed` in any render of any set, and no new build error |
+| Weighted mean DI      | Pooled over population, corpus, heldout and examples, the weighted mean rises by at most 0.05. This is the main rule                                                                   |
+| Weighted mean per set | Population and heldout each rise by at most 0.05. Corpus and examples print WARN, because the main rule covers them                                                                    |
+| Mean DI, issues       | The issues set falls. Unchanged prints WARN: a PR that targets an issue must lower it                                                                                                  |
+| Each issue kind       | Counted by weight over the pooled sets, each kind (with `crossing` and `back-edge`) rises by at most max(1, 5% of its weighted base count)                                             |
+| Each render           | A render may rise by 1.0 × (median bucket share ÷ its bucket's share), from 0.5 to 4 DI. Common shapes get 0.5; a rare XL drawing gets up to 4                                         |
 
 - Held-out is the overfitting guard. A change that helps the corpus and the issues but hurts
   held-out fails.
-- A failing rule is allowed only with a compare sheet and a written reason in the PR. Run with
-  `--shots` and attach the `compare-*.png` of each render the rule names.
-- Every heuristic PR pastes the `--gate` output (the Gate table and the top 5 movers each way)
-  in its body, with `--shots` compare sheets for the top 5 movers each way.
+- A failing rule is allowed only with the review page and a written reason in the PR. Run with
+  `--review` and attach captures of the renders the rule names.
+- Every heuristic PR pastes the `--gate` output (the Gate table and the top 5 movers each way by
+  weighted impact) in its body, with review captures of the top movers.
 - Measure against `origin/main`, not against a sibling branch. When parallel PRs land, the next
   PR's gate measures against the merged result, so the ratchet holds for the combined change.
 - The baseline for the 2026-11-20 issue sweep is main at `927f0839`:
@@ -382,14 +385,14 @@ PASS, WARN or FAIL for each rule, and exits 1 when a rule fails:
   Compare the final combined result against it with `--base 927f0839`.
 
 ```bash
-pnpm audit:compare --gate --shots
+pnpm audit:compare --gate --review
 ```
 
-### Frequency weights
+`--review` writes `review.html` and `review.pdf` in the output folder. They show base and head
+side by side for every render whose drawing or DI changed, grouped by bucket (most common first)
+and sorted by weighted impact (DI change × weight), with both gates' verdicts at the top.
 
-The flat gate weighs every render alike, but most real diagrams are small flat flows. A small
-rise on a rare, large diagram can be a fair price for a gain on the common shapes.
-`pnpm audit:compare --gate=weighted` judges a change by how often each shape occurs.
+### Frequency weights
 
 **Population.** `pnpm audit:population` collects every `.draft` file, ` ```draft ` fence and
 Mermaid flowchart fence (converted with `draftably import`) in the repos under `~/Projects` that
@@ -411,25 +414,18 @@ in that bucket, so a bucket's renders together carry its share. A bucket that no
 falls in counts as half a diagram. Weights average 1 over the renders they cover. `compare.md`
 shows each set's weighted mean DI beside its flat mean.
 
-| Rule                  | Pass condition                                                                                                                                            |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hard defects          | As in the flat gate, over every set including the population                                                                                              |
-| Weighted mean DI      | Pooled over population, corpus, heldout and examples, the weighted mean rises by at most 0.05. This is the main rule                                      |
-| Weighted mean per set | Population and heldout each rise by at most 0.05 (heldout stays the overfitting guard). Corpus and examples print WARN, because the main rule covers them |
-| Mean DI, issues       | As in the flat gate                                                                                                                                       |
-| Each issue kind       | Counted by weight over the pooled sets, each kind rises by at most max(1, 5%)                                                                             |
-| Each render           | A render may rise by 1.0 × (median bucket share ÷ its bucket's share), from 0.5 to 4 DI. Common shapes get 0.5; a rare XL drawing gets up to 4            |
+### Flat gate
 
-`--review` writes `review.html` and `review.pdf` in the output folder. They show base and head
-side by side for every render whose drawing or DI changed, grouped by bucket (most common first)
-and sorted by weighted impact (DI change × weight), with both gates' verdicts at the top. Attach
-the PDF to a heuristic PR that needs a judgment call.
+`--gate=flat` runs the rules the gate used before the weights, over corpus, heldout, examples
+and issues only. Every render weighs the same:
 
-The flat `--gate` stays the default until the 2026-11-20 issue sweep lands.
-
-```bash
-pnpm audit:compare --gate=weighted --review
-```
+| Rule             | Pass condition                                                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Hard defects     | As above, without the population set                                                                                                |
+| Mean DI, guarded | Corpus, heldout and examples each rise by at most 0.05                                                                              |
+| Mean DI, issues  | As above                                                                                                                            |
+| Each issue kind  | Summed over corpus, heldout and examples, each kind (with `crossing` and `back-edge`) rises by at most max(1, 5% of its base count) |
+| Each render      | No render's defect index rises by more than 1.0                                                                                     |
 
 ## Screenshots
 
