@@ -52,6 +52,11 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    boxes they connect to (`node` line order or an `order` line), then try
    `--try ordering=stable,crossings` or `--try crossing-penalty=360,900`. Some crossings cannot be
    removed; keep the variant with the fewest.
+   **For an arrow that points back** in a `row` or `column` (`check` notes `order-backward`):
+   those recipes keep declaration order and do not rank by edges. Move the target's `node` line
+   below the boxes that point to it, or write the `order` line the note names.
+   **When the drawing is mostly white space,** first look for a group of boxes with no edges of
+   their own laid out as a row, and change it to `layout groupId cells columns=2`.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image; `--png diagram.png --max-width 2000` saves a PNG sized
    for viewing and prints its pixel size. `npx draftably inspect diagram.draft` prints node and
@@ -64,7 +69,9 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    **Review before handing over:** `npx draftably check diagram.draft --metrics --fit slide`
    (or the shape the drawing is for) prints size, aspect, crossings and bends, and warns on
    crossings, detours, stranded nodes and an aspect far from the target. Fix what it names, or run
-   `vary --fit slide`, and compare the metrics line before and after.
+   `vary --fit slide`, and compare the metrics line before and after. With `direction=` on the
+   `layout root` line, it also notes `direction-bends` when the other direction removes most
+   bends, with both sizes; take it unless the direction is deliberate.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
    file, and edits to the file show in the viewer at once. If a viewer already serves the folder,
@@ -229,8 +236,9 @@ Good defaults:
   waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
-- One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request
-  body, a record, a schema. **Doesn't fit** steps that happen in order; those are nodes and edges.
+- One object made of parts, a table, or a list of boxes with no edges of their own:
+  `layout groupId cells` (see Cells). **Fits** a request body, a record, a schema, a checklist.
+  **Doesn't fit** steps that happen in order; those are nodes and edges.
 - Several readings of one diagram (a write path, a read path): `state` lines, not separate
   files. **Fits** paths through the same boxes. **Doesn't fit** different structure; that is a
   second diagram. States are interactive; for a document use `inspect --states` or `--state`.
@@ -361,6 +369,11 @@ node options "Options" in=tcp span=var
 
 Use cells for "is made of"; use separate nodes and edges for "flows to".
 
+Cells also pack a list: a group of boxes with no edges of their own (a checklist of shipped items,
+a set of follow-ups) fits in `layout groupId cells columns=2`, and edges go to the group. As a
+`row` the same group runs wide and leaves most of the drawing white. `check` notes `pack-cells`
+when a row or column of such boxes is much longer than it is deep.
+
 ### Refinements
 
 Use these only when automatic layout needs a nudge. Positions are relative to the parent's
@@ -387,6 +400,8 @@ content area.
   `layout`, `near` or `pin` of its own. `check` reports `soft-split` when its members end up apart
   and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
+  Write `\n` for a line break in a label. `\\n` draws a backslash and an n, and `check` warns
+  `literal-newline`.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
   A dashed edge into a box that a solid edge also reaches does not rank it, so a dashed side
   input never pushes its target past the boxes that call it.
