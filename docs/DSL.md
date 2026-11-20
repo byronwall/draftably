@@ -33,7 +33,8 @@ Views and checkpoints are not supported yet.
 Write one statement per line. Indentation means nothing; containment comes from `in=`. Strings
 use JSON double quotes. Inside a string, write `\"` for a quote, `\\` for a backslash and `\n` for
 a line break: `node n "Says \"hi\""`. A bare quote inside a string is an error that names its
-column. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
+column. `\\n` draws a backslash and an n, so `check` warns `literal-newline` on a label that holds
+it; change it to `\n` for a line break, or keep it when the label shows code. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
 | Statement                           | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -70,6 +71,12 @@ use `column gap=24`.
 In a `column`, every box and pill takes the widest one's width, so the column's edges line up. A
 node with a `size` line keeps its size, and diamonds, circles and groups keep their own. A title
 that wraps less at the wider width makes its box shorter.
+
+A `row` or `column` keeps declaration order (or the scope's `order` line); it does not rank by
+connections. An edge to an earlier child runs backwards: up in a column, left in a row. Move the
+`node` line of the shared target below the boxes that point to it, write an `order` line, or use
+`flow`. When no edges among the children form a loop, `check` notes `order-backward` with the
+order that makes every edge run forwards. A loop gets no note, because one edge in it must run back.
 
 `flow` ranks objects along its direction by their connections. A loop keeps its path in that
 direction, and only the edge that closes it runs backwards. Within its rank, an object lines up
@@ -694,6 +701,11 @@ node body "Body" in=req
 
 **Try it:** change the layout line to `layout req cells columns=2`. The cells become a grid with two
 columns, and Body starts a second row.
+
+Cells also pack a list: a group of boxes with no edges of their own, such as shipped items or
+follow-ups. As a `row` such a group runs wide and fills the drawing with white space; as
+`cells columns=2` it is a compact grid, and edges go to the group. `check` notes `pack-cells` for
+a row or column of three or more such boxes that is over 2.5 times longer than it is deep.
 
 ### Cells reference
 
@@ -1557,6 +1569,11 @@ crossings, bends, total line length and warnings. It also warns on how the drawi
 | `stranded` | A node is over 480px from every node it connects to.                                                                                                        |
 | `aspect`   | Wider than 2:1 and wider than 960px, so it shrinks in a page column; taller than 3:1; or with `--fit <shape>`, more than 1.5 times off that shape's aspect. |
 
+When the `layout root` line sets `direction=down` or `direction=right`, `check --metrics` also draws
+the file the other way. If that removes at least two bends and half of them, with no more
+crossings and shorter lines, it notes `direction-bends` with both sizes. Change the direction to
+take it, or keep it when the direction is deliberate.
+
 `inspect --json --metrics` adds the same numbers as a `metrics` object, so a script can compare
 two versions of a file without drawing an image.
 
@@ -1695,7 +1712,10 @@ drawing.
 - **One box is in the wrong place.** Drag it in the Editor, or add a `near` line. To hold it at an
   exact place, add a `pin` line. See [Refinements](#refinements).
 - **Boxes are in the wrong order.** Add an `order` line, or move the `node` lines. See
-  [Refinements](#refinements).
+  [Refinements](#refinements). In a `row` or `column`, an arrow that points back to an earlier box
+  goes forwards when you move that box's `node` line after the boxes that point to it.
+- **The drawing is mostly white space.** Look for a group of boxes with no edges of their own laid
+  out as a row, and change it to `layout group cells columns=2`. See [Cells](#cells).
 - **Lines cross.** Follow [Fixing line crossings](#fixing-line-crossings).
 - **Lines have too many bends, or run too close.** Change one setting on the `routing` line. See
   [Routing](#routing).
