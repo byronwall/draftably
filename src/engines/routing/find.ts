@@ -364,7 +364,11 @@ function findAmong(
       fromOffset: 0,
       toOffset: 0,
       points: ctx.facingFans
-        ? compress([start, as, ...bridge, bs, end])
+        ? compress(
+            cfg.waypoints?.length
+              ? square([start, as, ...cfg.waypoints, bs, end])
+              : [start, as, ...bridge, bs, end],
+          )
         : compress([start, { x: end.x, y: start.y }, end]),
       blocked: true,
       reason: 'No clear route within the search budget and current side / waypoint constraints.',
@@ -384,4 +388,17 @@ function findAmong(
   };
   scores.set(found, best.score);
   return found;
+}
+// Points joined by level and upright runs: an unaligned pair turns once, going on the way the run
+// before it went, so the stubs at each end stay square.
+function square(ps: Point[]) {
+  const out = [ps[0]];
+  for (const q of ps.slice(1)) {
+    const p = out.at(-1)!,
+      o = out.at(-2);
+    if (Math.abs(p.x - q.x) > EPS && Math.abs(p.y - q.y) > EPS)
+      out.push(o && Math.abs(o.x - p.x) < EPS ? { x: p.x, y: q.y } : { x: q.x, y: p.y });
+    out.push(q);
+  }
+  return out;
 }
