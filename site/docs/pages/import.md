@@ -40,6 +40,59 @@ import until you choose **Convert to draftably**.
 PlantUML, DBML, nomnoml and other Mermaid chart types are not supported yet. To move many Mermaid
 fences in Markdown at once, use [`draftably migrate`](#convert-the-source).
 
+## Mermaid next to the import
+
+Each block shows the Mermaid source and Mermaid's own drawing on the left. The right side shows
+the `.draft` file that the import writes and the drawing draftably makes from it. The import runs
+in your browser, so the right side is the real result, and the list under each block shows what
+the import changed. The Mermaid side is editable: change it, or paste your own diagram, and both
+drawings follow.
+
+A flowchart with a subgraph, a database shape and a `classDef` style:
+
+```mermaid compare
+flowchart LR
+  web[Web app] -->|HTTPS| api[API]
+  api --> auth[Auth]
+  api --> cache{Cached?}
+  cache -->|no| db[(Orders DB)]
+  subgraph backend [Backend]
+    api
+    auth
+    cache
+    db
+  end
+  classDef store fill:#fde68a
+  class db store
+```
+
+A loop with a decision. The import keeps each label and the line back to the start:
+
+```mermaid compare
+flowchart TD
+  start([Request]) --> check{Ready?}
+  check -->|yes| ship[Publish]
+  check -->|no| fix[Request changes]
+  fix --> check
+```
+
+A sequence with activations and an `alt` block. Each branch becomes a labeled phase band:
+
+```mermaid compare
+sequenceDiagram
+  participant B as Browser
+  participant A as API
+  participant D as Database
+  B->>+A: POST /orders
+  A->>+D: insert order
+  D-->>-A: order id
+  alt card accepted
+    A-->>B: 201 Created
+  else card declined
+    A-->>B: 402 Payment required
+  end
+```
+
 ## Options
 
 | Option           | Effect                                                                         |

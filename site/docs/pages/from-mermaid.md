@@ -70,6 +70,9 @@ check a page in the browser console:
 document.querySelectorAll('[data-renderer="mermaid"]');
 ```
 
+To see Mermaid source and its drawing next to the converted draft, read
+[Mermaid next to the import](#mermaid-next-to-the-import).
+
 The conversion keeps nodes, groups, labels and connections, and recomputes the layout. It drops
 `classDef` styling and click callbacks. It keeps sequence activation bars when each one runs
 from a call to its reply.

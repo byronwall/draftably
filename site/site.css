@@ -3005,6 +3005,177 @@ kbd {
 
 /* Live examples. They may run wider than the prose. */
 
+/* A ```mermaid compare block: Mermaid's source and drawing beside the imported .draft and its
+   drawing. Each pair shares a row, so the two sources and the two drawings line up. */
+.mermaid-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    'mh dh'
+    'mc dc'
+    'md dd'
+    'notes notes';
+  margin: 18px 0 24px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mc-m-head {
+  grid-area: mh;
+}
+.mc-d-head {
+  grid-area: dh;
+}
+.mc-m-code {
+  grid-area: mc;
+}
+.mc-d-code {
+  grid-area: dc;
+}
+.mc-m-drawing {
+  grid-area: md;
+}
+.mc-d-drawing {
+  grid-area: dd;
+}
+.mc-notes {
+  grid-area: notes;
+}
+
+.mc-d-head,
+.mc-d-code,
+.mc-d-drawing {
+  border-left: 1px solid var(--line);
+}
+
+.mc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font: 600 12px var(--mono);
+}
+
+.mc-sub {
+  margin-right: auto;
+  color: var(--muted);
+  font: 500 12px var(--font);
+}
+
+.mc-code {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  background: var(--surface);
+  font: 12.5px/1.6 var(--mono);
+}
+
+.mc-edit {
+  display: block;
+  font-variant-ligatures: none;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  color: var(--text);
+}
+
+.mc-edit:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent-soft);
+}
+
+.mc-drawing.is-stale .mc-svg {
+  opacity: 0.35;
+}
+
+.mc-error {
+  position: absolute;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background: var(--bg);
+  color: #b42318;
+  font-size: 13px;
+}
+
+.mc-drawing {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  background: var(--canvas);
+}
+
+.mc-svg {
+  max-width: 100%;
+}
+
+.mc-svg svg {
+  display: block;
+  max-width: 100%;
+  /* A tall top-down flow would otherwise fill the screen; both sides cap at one height. */
+  max-height: 420px;
+  width: auto;
+  height: auto;
+}
+
+/* Mermaid's SVG has only width="100%", so auto width would collapse it. */
+.mc-m-drawing .mc-svg,
+.mc-m-drawing .mc-svg svg {
+  width: 100%;
+}
+
+.mc-wait {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.mc-notes {
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.mc-notes p {
+  margin: 0;
+}
+
+.mc-notes ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.mc-notes .is-error {
+  color: var(--danger, #b42318);
+}
+
+@media (max-width: 760px) {
+  .mermaid-compare {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'mh' 'mc' 'md' 'dh' 'dc' 'dd' 'notes';
+  }
+
+  .mc-d-head,
+  .mc-d-code,
+  .mc-d-drawing {
+    border-left: 0;
+  }
+
+  .mc-d-head {
+    border-top: 1px solid var(--line-strong);
+  }
+}
+
 .doc-example {
   margin: 18px 0 24px;
   border: 1px solid var(--line-strong);
