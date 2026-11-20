@@ -117,7 +117,16 @@ export function Toolbar() {
         />
         <CommandButton command="toggle-sidebar" pressed={filesShown() || objectsOpen()} />
         <CommandButton command="toggle-inspector" pressed={propertiesOpen()} />
-        <CommandButton command="toggle-source" pressed={sourceOpen()} />
+        <button
+          type="button"
+          class="button ghost"
+          aria-pressed={sourceOpen()}
+          {...tip('Source', '`', 'Show and edit the .draft text beside the canvas.')}
+          onClick={run('toggle-source')}
+        >
+          <Icon name="code" />
+          <span class="label">Source</span>
+        </button>
         <button
           type="button"
           class="button ghost"

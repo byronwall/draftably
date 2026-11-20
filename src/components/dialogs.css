@@ -195,6 +195,16 @@ mark {
   line-height: 1.7;
 }
 
+.import-text {
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.import-file {
+  margin-right: auto;
+}
+
 .confirm-message {
   white-space: pre-line;
 }

@@ -1,9 +1,18 @@
 import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
-import { commandEnabled, runCommand } from '../state/commands';
+import { commandEnabled, pickForeignFile, runCommand } from '../state/commands';
+import { importForeignText } from '../state/files';
+import { detectSource } from '../import/detect';
 import { siteUrl } from '../state/launch';
-import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
+import {
+  closeDialog,
+  confirmRequest,
+  dialog,
+  errorMessage,
+  quickBuildText,
+  showError,
+} from '../state/ui';
 import { IconButton } from './controls';
 import { ExportDialog } from './ExportDialog';
 import { Icon } from './Icon';
@@ -23,6 +32,9 @@ export function Dialogs() {
       </Match>
       <Match when={dialog() === 'quick-build'}>
         <QuickBuildDialog />
+      </Match>
+      <Match when={dialog() === 'import-text'}>
+        <ImportTextDialog />
       </Match>
       <Match when={dialog() === 'export'}>
         <ExportDialog />
@@ -198,6 +210,102 @@ function HelpDialog() {
           default. One selected container arranges its contents. Multiple selected siblings arrange
           together. Otherwise L improves everything. Each pass has a movement cap and keeps the
           camera. Rebuild is explicit and previewed.
+        </p>
+      </div>
+    </Modal>
+  );
+}
+
+const FORMAT_NAMES: Record<string, string> = {
+  mermaid: 'Mermaid',
+  dot: 'Graphviz DOT',
+  d2: 'D2',
+};
+
+/** Paste Mermaid, DOT or D2 text, or pick a file, and open it as a new diagram. */
+function ImportTextDialog() {
+  const [text, setText] = createSignal('');
+  // D2 has no signature, so plain text is read as D2 only when the importer is asked to.
+  const format = () => {
+    const found = detectSource(text().trim());
+    if (found.status === 'choose-fence') return { error: 'Paste one diagram at a time.' };
+    if (found.status !== 'detected') return { name: 'D2', format: 'd2' };
+    if (found.format === 'native') return { error: 'This is draftably source. Open it instead.' };
+    const name = FORMAT_NAMES[found.format];
+    return name
+      ? { name, format: found.format }
+      : { error: `${found.format} import is not supported yet.` };
+  };
+  const status = () => {
+    if (!text().trim()) return 'Paste Mermaid, DOT or D2 text.';
+    const f = format();
+    return f.error ?? `Reads as ${f.name}.`;
+  };
+  const run = () => {
+    const f = format();
+    if (!text().trim() || f.error) return;
+    const source = text().trim();
+    closeDialog();
+    void importForeignText(source, f.format === 'd2' ? 'pasted.d2' : '').catch(error =>
+      showError(error instanceof Error ? error.message : String(error)),
+    );
+  };
+  return (
+    <Modal
+      title="Import text diagram"
+      footer={
+        <>
+          <button
+            type="button"
+            class="button import-file"
+            onClick={() => {
+              closeDialog();
+              pickForeignFile();
+            }}
+          >
+            Choose a file…
+          </button>
+          <button type="button" class="button" onClick={closeDialog}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="button primary"
+            disabled={!text().trim() || !!format().error}
+            onClick={run}
+          >
+            Import
+          </button>
+        </>
+      }
+    >
+      <div
+        class="stack"
+        onKeyDown={e => {
+          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            run();
+          }
+        }}
+      >
+        <p class="hint">
+          The import opens as a new diagram. It keeps shapes, groups, labels and connections, then
+          lays them out again.
+        </p>
+        <label class="field">
+          <span class="field-label">Diagram text</span>
+          <textarea
+            autofocus
+            class="quick-lines import-text"
+            rows={12}
+            spellcheck={false}
+            value={text()}
+            onInput={e => setText(e.currentTarget.value)}
+            placeholder={'flowchart LR\n  A[Cart] -->|submit| B[API]\n  B --> C[Database]'}
+          />
+        </label>
+        <p class="hint" classList={{ 'error-text': !!text().trim() && !!format().error }}>
+          {status()}
         </p>
       </div>
     </Modal>

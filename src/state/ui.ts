@@ -7,7 +7,8 @@ const UI_STORAGE = 'diagram-studio-v5-ui';
 export type MenuId =
   'file' | 'edit' | 'view' | 'layout' | 'help' | 'export' | 'context' | 'appearance' | 'tools';
 export type RightTab = 'properties' | 'arrange' | 'source';
-export type DialogId = 'help' | 'palette' | 'quick-build' | 'confirm' | 'error' | 'export';
+export type DialogId =
+  'help' | 'palette' | 'quick-build' | 'import-text' | 'confirm' | 'error' | 'export';
 
 export interface MenuState {
   id: MenuId;

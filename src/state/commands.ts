@@ -61,6 +61,8 @@ let fileInput:
   ((replaceImageId: string | null, accept: 'diagram' | 'image' | 'foreign') => void) | null = null;
 /** Set by the app shell, which owns the hidden file inputs. */
 export const setFilePicker = (fn: typeof fileInput) => (fileInput = fn);
+/** Pick a Mermaid, DOT or D2 file to import. */
+export const pickForeignFile = () => fileInput?.(null, 'foreign');
 
 function exportCommand(format: 'json') {
   if (activeSession().sculptInteracting()) {
@@ -402,10 +404,10 @@ export const commands = {
     run: () => setSavingExample(true),
   },
   'import-diagram': {
-    hint: 'Turn a Mermaid, DOT or D2 file into a diagram.',
+    hint: 'Paste or open Mermaid, DOT or D2 text and turn it into a diagram.',
     label: 'Import text diagram…',
     icon: 'folder',
-    run: () => fileInput?.(null, 'foreign'),
+    run: () => openDialog('import-text'),
   },
   'insert-image': {
     hint: 'Place a picture on the canvas.',
