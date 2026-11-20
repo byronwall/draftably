@@ -34,14 +34,21 @@ const option = (name, fallback) => {
   return i < 0 ? fallback : args.splice(i, 2)[1];
 };
 const shots = flag('--shots');
-const gate = flag('--gate');
+const review = flag('--review');
+/** `--gate` runs the flat rules; `--gate=weighted` runs the frequency-weighted rules. */
+const gate = flag('--gate=weighted') ? 'weighted' : flag('--gate') ? 'flat' : undefined;
 const baseRef = option('--base', 'origin/main');
-const setNames = option('--sets', 'corpus,heldout,examples,issues').split(',');
+const setNames = option(
+  '--sets',
+  gate === 'weighted' || review
+    ? 'corpus,heldout,examples,issues,population'
+    : 'corpus,heldout,examples,issues',
+).split(',');
 const only = option('--only');
 const outDir = path.resolve(option('--out', 'tmp/audit/compare'));
 if (args.length) {
   console.error(
-    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues] [--only a,b] [--shots] [--gate] [--out <dir>]',
+    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues,population] [--only a,b] [--shots] [--gate | --gate=weighted] [--review] [--out <dir>]',
   );
   process.exit(1);
 }
@@ -55,6 +62,7 @@ const SET_DIRS = {
   corpus: 'docs/intent/diagram-quality/corpus',
   heldout: 'docs/intent/diagram-quality/heldout',
   issues: 'docs/intent/diagram-quality/issues',
+  population: 'docs/intent/diagram-quality/population',
 };
 /** The examples are single files; the audit wants one folder per diagram with a `v0.draft`. */
 function examplesSet() {
@@ -72,7 +80,7 @@ function examplesSet() {
 const sets = setNames.map(name => {
   if (name === 'examples') return { name, dir: examplesSet() };
   if (!SET_DIRS[name]) {
-    console.error(`Unknown set "${name}". Sets: corpus, heldout, examples, issues.`);
+    console.error(`Unknown set "${name}". Sets: corpus, heldout, examples, issues, population.`);
     process.exit(1);
   }
   return { name, dir: path.join(root, SET_DIRS[name]) };
@@ -80,7 +88,12 @@ const sets = setNames.map(name => {
 
 // ---------- base checkout ----------
 // The audit measures text with this checkout's font table, so both sides measure alike.
-const SCRIPTS = ['scripts/diagram-audit.mjs', 'scripts/shoot.mjs', 'src/model/font-metrics.json'];
+const SCRIPTS = [
+  'scripts/diagram-audit.mjs',
+  'scripts/shoot.mjs',
+  'scripts/lib/buckets.mjs',
+  'src/model/font-metrics.json',
+];
 const baseRoot = path.join(root, 'tmp/audit-base', short);
 if (!fs.existsSync(path.join(baseRoot, 'package.json'))) {
   console.log(`Checking out ${baseRef} (${short}) into ${path.relative(root, baseRoot)}`);
@@ -196,30 +209,102 @@ const kindsOf = r => {
   if (r.backEdges) totals['back-edge'] = r.backEdges;
   return totals;
 };
-const kinds = list => {
+const kinds = (list, weightOf = () => 1) => {
   const totals = {};
   for (const r of list)
-    for (const [k, n] of Object.entries(kindsOf(r))) totals[k] = (totals[k] ?? 0) + n;
+    for (const [k, n] of Object.entries(kindsOf(r))) totals[k] = (totals[k] ?? 0) + n * weightOf(r);
   return totals;
 };
 const signed = n => (n > 0 ? `+${n}` : `${n}`);
 
+const loaded = {};
+for (const set of sets)
+  loaded[set.name] = { base: load(path.join(outDir, 'base', set.name)), head: load(headOut(set)) };
+const ok = list => list.filter(r => !r.error);
+
+// ---------- frequency weights ----------
+// Each render's bucket has a share of the docs-diagram population (weights.json). Renders in one
+// bucket split its share, so a bucket's renders together carry its share; a bucket no docs
+// diagram falls in counts as half a diagram. Weights are scaled to average 1 over the renders
+// they cover, so a weighted count reads in renders. See docs/CHECKS.md ("Frequency weights").
+const weightsFile = path.join(root, SET_DIRS.population, 'weights.json');
+const population = fs.existsSync(weightsFile)
+  ? JSON.parse(fs.readFileSync(weightsFile, 'utf8'))
+  : undefined;
+const shareOf = bucket => (population.buckets[bucket] ?? 0.5) / population.total;
+const medianShare = (() => {
+  if (!population) return 0;
+  const shares = Object.values(population.buckets)
+    .map(c => c / population.total)
+    .sort((a, b) => a - b);
+  const mid = shares.length / 2;
+  return shares.length % 2 ? shares[Math.floor(mid)] : (shares[mid - 1] + shares[mid]) / 2;
+})();
+/** How far one render's DI may rise under the weighted gate: 1.0 at the median bucket share. */
+const limitOf = bucket => Math.min(4, Math.max(0.5, medianShare / shareOf(bucket)));
+const keyOf = (set, r) => `${set}/${r.slug} ${r.file}`;
+/** The render's bucket, from either side (a render that fails to build on one side keeps it). */
+const bucketOf = (set, r) =>
+  r.shape?.bucket ??
+  [...loaded[set].head, ...loaded[set].base].find(
+    o => o.slug === r.slug && o.file === r.file && o.shape,
+  )?.shape.bucket ??
+  'unknown';
+/** Weights for the renders of the given sets, keyed by `set/slug file`. */
+function weigh(setList) {
+  const renders = setList.flatMap(set =>
+    loaded[set].head.map(r => ({ key: keyOf(set, r), bucket: bucketOf(set, r) })),
+  );
+  const perBucket = {};
+  for (const r of renders) perBucket[r.bucket] = (perBucket[r.bucket] ?? 0) + 1;
+  const raw = renders.map(r => shareOf(r.bucket) / perBucket[r.bucket]);
+  const scale =
+    renders.length /
+    Math.max(
+      1e-9,
+      raw.reduce((a, b) => a + b, 0),
+    );
+  return new Map(renders.map((r, i) => [r.key, raw[i] * scale]));
+}
+/** Weighted mean DI of one side, over renders that build on both sides. */
+function weightedMean(setList, side, weights) {
+  let sum = 0,
+    total = 0;
+  for (const set of setList)
+    for (const r of loaded[set][side]) {
+      const other = loaded[set][side === 'head' ? 'base' : 'head'].find(
+        o => o.slug === r.slug && o.file === r.file,
+      );
+      if (r.error || !other || other.error) continue;
+      const w = weights.get(keyOf(set, r)) ?? 0;
+      sum += w * r.defectIndex;
+      total += w;
+    }
+  return sum / Math.max(1e-9, total);
+}
+
 const lines = [
   `# Audit: ${baseRef} (${short}) → working tree`,
   '',
-  '| Set | Renders | Mean DI base | Mean DI head | Δ | Errors base/head |',
-  '| --- | --- | --- | --- | --- | --- |',
+  population
+    ? '| Set | Renders | Mean DI base | Mean DI head | Δ | Weighted base | Weighted head | Δw | Errors base/head |'
+    : '| Set | Renders | Mean DI base | Mean DI head | Δ | Errors base/head |',
+  population
+    ? '| --- | --- | --- | --- | --- | --- | --- | --- | --- |'
+    : '| --- | --- | --- | --- | --- | --- |',
 ];
 const details = [];
-const loaded = {};
 for (const set of sets) {
-  const base = load(path.join(outDir, 'base', set.name));
-  const head = load(headOut(set));
-  loaded[set.name] = { base, head };
-  const ok = list => list.filter(r => !r.error);
+  const { base, head } = loaded[set.name];
   const [b, h] = [mean(ok(base)), mean(ok(head))];
+  let weighted = '';
+  if (population) {
+    const w = weigh([set.name]);
+    const [wb, wh] = [weightedMean([set.name], 'base', w), weightedMean([set.name], 'head', w)];
+    weighted = ` ${wb.toFixed(1)} | ${wh.toFixed(1)} | ${signed(+(wh - wb).toFixed(1))} |`;
+  }
   lines.push(
-    `| ${set.name} | ${ok(head).length} | ${b.toFixed(1)} | ${h.toFixed(1)} | ${signed(+(h - b).toFixed(1))} | ${base.length - ok(base).length}/${head.length - ok(head).length} |`,
+    `| ${set.name} | ${ok(head).length} | ${b.toFixed(1)} | ${h.toFixed(1)} | ${signed(+(h - b).toFixed(1))} |${weighted} ${base.length - ok(base).length}/${head.length - ok(head).length} |`,
   );
   const [kb, kh] = [kinds(ok(base)), kinds(ok(head))];
   const changed = [...new Set([...Object.keys(kb), ...Object.keys(kh)])]
@@ -257,126 +342,221 @@ for (const set of sets) {
 }
 lines.push(...details);
 
-// ---------- gate ----------
-// The ratchet rules in docs/CHECKS.md. Each prints PASS, WARN or FAIL with its evidence.
-let failed = false;
-if (gate) {
-  const HARD = [
-    'node-overlap',
-    'edge-through-node',
-    'clipped',
-    'label-on-node',
-    'label-overlap',
-    'label-through-text',
-    'expectation-failed',
-  ];
-  const GUARDED = ['corpus', 'heldout', 'examples'];
-  const out = ['', '## Gate', '', '| Rule | Result | Evidence |', '| --- | --- | --- |'];
-  const rule = (name, result, evidence) => {
-    if (result === 'FAIL') failed = true;
-    out.push(`| ${name} | ${result} | ${evidence || '–'} |`);
-  };
-  const pairs = Object.entries(loaded).flatMap(([set, { base, head }]) =>
-    head.map(r => ({
-      set,
-      name: `${set}/${r.slug} ${r.file}`,
-      head: r,
-      base: base.find(o => o.slug === r.slug && o.file === r.file),
-    })),
-  );
+// ---------- gates ----------
+const HARD = [
+  'node-overlap',
+  'edge-through-node',
+  'clipped',
+  'label-on-node',
+  'label-overlap',
+  'label-through-text',
+  'expectation-failed',
+];
+const pairs = Object.entries(loaded).flatMap(([set, { base, head }]) =>
+  head.map(r => ({
+    set,
+    key: keyOf(set, r),
+    name: `${set}/${r.slug} ${r.file}`,
+    head: r,
+    base: base.find(o => o.slug === r.slug && o.file === r.file),
+  })),
+);
+const moves = pairs
+  .filter(p => p.base && !p.base.error && !p.head.error)
+  .map(p => ({
+    ...p,
+    from: p.base.defectIndex,
+    to: p.head.defectIndex,
+    d: +(p.head.defectIndex - p.base.defectIndex).toFixed(1),
+  }));
 
-  // 1. Hard defects: no new instance anywhere, and no render that newly fails to build.
+/** Rule 1 of both gates: no new hard defect anywhere, and no render that newly fails to build. */
+function hardDefects(inSet = () => true) {
   const added = [];
-  for (const p of pairs) {
+  for (const p of pairs.filter(p => inSet(p.set))) {
     if (p.head.error && p.base && !p.base.error) added.push(`${p.name} now errors`);
     if (p.head.error || !p.base || p.base.error) continue;
     const [b, h] = [kindsOf(p.base), kindsOf(p.head)];
     for (const k of HARD)
       if ((h[k] ?? 0) > (b[k] ?? 0)) added.push(`${p.name} +${h[k] - (b[k] ?? 0)} ${k}`);
   }
-  rule('Hard defects: no new instance', added.length ? 'FAIL' : 'PASS', added.join('; '));
+  return ['Hard defects: no new instance', added.length ? 'FAIL' : 'PASS', added.join('; ')];
+}
+const issuesFall = () => {
+  const { base, head } = loaded.issues;
+  const d = mean(ok(head)) - mean(ok(base));
+  return [
+    'Mean DI: issues falls',
+    d < -0.005 ? 'PASS' : d > 0.005 ? 'FAIL' : 'WARN',
+    `${mean(ok(base)).toFixed(2)} → ${mean(ok(head)).toFixed(2)} (${signed(+d.toFixed(2))})` +
+      (Math.abs(d) <= 0.005 ? ', unchanged' : ''),
+  ];
+};
 
-  // 2. Mean defect index: guarded sets may rise at most 0.05; the issues set must fall.
+/** The flat ratchet rules in docs/CHECKS.md ("Ratchet gate for heuristic changes"). */
+function flatGate() {
+  // The flat gate predates the population set and leaves it out.
+  const flat = set => set !== 'population';
+  const GUARDED = ['corpus', 'heldout', 'examples'];
+  const rows = [hardDefects(flat)];
   for (const [set, { base, head }] of Object.entries(loaded)) {
-    const ok = list => list.filter(r => !r.error);
-    const d = mean(ok(head)) - mean(ok(base));
-    const ev = `${mean(ok(base)).toFixed(2)} → ${mean(ok(head)).toFixed(2)} (${signed(+d.toFixed(2))})`;
-    if (set === 'issues')
-      rule(
-        'Mean DI: issues falls',
-        d < -0.005 ? 'PASS' : d > 0.005 ? 'FAIL' : 'WARN',
-        ev + (Math.abs(d) <= 0.005 ? ', unchanged' : ''),
-      );
-    else if (GUARDED.includes(set))
-      rule(`Mean DI: ${set} rises ≤ 0.05`, d > 0.05 ? 'FAIL' : 'PASS', ev);
+    if (set === 'issues') rows.push(issuesFall());
+    else if (GUARDED.includes(set)) {
+      const d = mean(ok(head)) - mean(ok(base));
+      const ev = `${mean(ok(base)).toFixed(2)} → ${mean(ok(head)).toFixed(2)} (${signed(+d.toFixed(2))})`;
+      rows.push([`Mean DI: ${set} rises ≤ 0.05`, d > 0.05 ? 'FAIL' : 'PASS', ev]);
+    }
   }
-
-  // 3. Each issue kind, summed over the guarded sets: rise at most max(1, 5% of its base count).
   const guarded = GUARDED.filter(s => loaded[s]);
   if (guarded.length) {
-    const ok = side => guarded.flatMap(s => loaded[s][side].filter(r => !r.error));
-    const [kb, kh] = [kinds(ok('base')), kinds(ok('head'))];
+    const all = side => guarded.flatMap(s => ok(loaded[s][side]));
+    const [kb, kh] = [kinds(all('base')), kinds(all('head'))];
     const over = Object.keys(kh)
       .filter(k => kh[k] - (kb[k] ?? 0) > Math.max(1, 0.05 * (kb[k] ?? 0)))
       .map(k => `${k} ${kb[k] ?? 0} → ${kh[k]}`);
-    rule(
+    rows.push([
       `Each issue kind (${guarded.join('+')}) rises ≤ max(1, 5%)`,
       over.length ? 'FAIL' : 'PASS',
       over.join('; '),
-    );
+    ]);
   }
-
-  // 4. Each render: its defect index may worsen by at most 1.0.
-  const moves = pairs
-    .filter(p => p.base && !p.base.error && !p.head.error)
-    .map(p => ({
-      name: p.name,
-      from: p.base.defectIndex,
-      to: p.head.defectIndex,
-      d: +(p.head.defectIndex - p.base.defectIndex).toFixed(1),
-    }));
-  const worse = moves.filter(m => m.d > 1.0).sort((a, b) => b.d - a.d);
-  rule(
+  const mine = moves.filter(m => flat(m.set));
+  const worse = mine.filter(m => m.d > 1.0).sort((a, b) => b.d - a.d);
+  rows.push([
     'Each render worsens ≤ 1.0 DI',
     worse.length ? 'FAIL' : 'PASS',
     worse.map(m => `${m.name} ${m.from} → ${m.to}`).join('; '),
-  );
+  ]);
+  return { rows, better: mine.filter(m => m.d < 0), worse: mine.filter(m => m.d > 0) };
+}
 
+/**
+ * The frequency-weighted rules in docs/CHECKS.md ("Frequency weights"): the pooled weighted mean
+ * is the main rule, held-out and the population each guard their own weighted mean, the issue
+ * kinds count by weight, and each render may rise by a limit that grows as its shape gets rarer.
+ */
+function weightedGate() {
+  if (!population) throw new Error(`--gate=weighted needs ${path.relative(root, weightsFile)}`);
+  const GUARDED = ['population', 'corpus', 'heldout', 'examples'].filter(s => loaded[s]);
+  const pooled = weigh(GUARDED);
+  const rows = [hardDefects()];
+  const ev = (b, h) => `${b.toFixed(2)} → ${h.toFixed(2)} (${signed(+(h - b).toFixed(2))})`;
+  const [pb, ph] = [weightedMean(GUARDED, 'base', pooled), weightedMean(GUARDED, 'head', pooled)];
+  rows.push([
+    `Weighted mean DI (${GUARDED.join('+')}) rises ≤ 0.05`,
+    ph - pb > 0.05 ? 'FAIL' : 'PASS',
+    ev(pb, ph),
+  ]);
+  for (const set of GUARDED) {
+    const w = weigh([set]);
+    const [b, h] = [weightedMean([set], 'base', w), weightedMean([set], 'head', w)];
+    // Held-out is the overfitting guard and the population is what people draw: both must hold.
+    // Corpus and examples are hand-picked, so the pooled rule covers them; they only warn.
+    const strict = set === 'heldout' || set === 'population';
+    rows.push([
+      `Weighted mean DI: ${set} rises ≤ 0.05`,
+      h - b > 0.05 ? (strict ? 'FAIL' : 'WARN') : 'PASS',
+      ev(b, h),
+    ]);
+  }
+  if (loaded.issues) rows.push(issuesFall());
+  const all = side => GUARDED.flatMap(s => ok(loaded[s][side]).map(r => ({ ...r, set: s })));
+  const wOf = r => pooled.get(keyOf(r.set, r)) ?? 0;
+  const [kb, kh] = [kinds(all('base'), wOf), kinds(all('head'), wOf)];
+  const over = Object.keys(kh)
+    .filter(k => kh[k] - (kb[k] ?? 0) > Math.max(1, 0.05 * (kb[k] ?? 0)))
+    .map(k => `${k} ${(kb[k] ?? 0).toFixed(1)} → ${kh[k].toFixed(1)}`);
+  rows.push([
+    `Each issue kind, weighted (${GUARDED.join('+')}), rises ≤ max(1, 5%)`,
+    over.length ? 'FAIL' : 'PASS',
+    over.join('; '),
+  ]);
+  const worse = moves
+    .map(m => ({ ...m, limit: limitOf(bucketOf(m.set, m.head)) }))
+    .filter(m => m.d > m.limit + 1e-9)
+    .sort((a, b) => b.d - b.limit - (a.d - a.limit));
+  rows.push([
+    'Each render worsens ≤ its bucket limit (0.5–4 DI)',
+    worse.length ? 'FAIL' : 'PASS',
+    worse
+      .map(
+        m =>
+          `${m.name} ${m.from} → ${m.to} (${bucketOf(m.set, m.head)}, limit ${m.limit.toFixed(1)})`,
+      )
+      .join('; '),
+  ]);
+  // Rank movers by weighted impact: the DI change times the render's pooled weight.
+  const impact = m => m.d * (pooled.get(m.key) ?? weigh([m.set]).get(m.key) ?? 0);
+  const ranked = moves.map(m => ({ ...m, impact: +impact(m).toFixed(2) }));
+  return { rows, better: ranked.filter(m => m.d < 0), worse: ranked.filter(m => m.d > 0) };
+}
+
+const verdict = g => (g.rows.some(r => r[1] === 'FAIL') ? 'FAIL' : 'PASS');
+function gateLines(title, g, weighted) {
+  const key = m => (weighted ? m.impact : m.d);
   const top = list =>
     list.length
       ? [
-          '| Render | DI base | DI head | Δ |',
-          '| --- | --- | --- | --- |',
-          ...list.map(m => `| ${m.name} | ${m.from} | ${m.to} | ${signed(m.d)} |`),
+          `| Render | DI base | DI head | Δ |${weighted ? ' Weighted Δ |' : ''}`,
+          `| --- | --- | --- | --- |${weighted ? ' --- |' : ''}`,
+          ...list.map(
+            m =>
+              `| ${m.name} | ${m.from} | ${m.to} | ${signed(m.d)} |${weighted ? ` ${signed(m.impact)} |` : ''}`,
+          ),
         ]
       : ['None.'];
-  out.push(
+  return [
     '',
-    '### Top 5 better',
+    `## ${title}`,
     '',
-    ...top(
-      moves
-        .filter(m => m.d < 0)
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 5),
-    ),
+    '| Rule | Result | Evidence |',
+    '| --- | --- | --- |',
+    ...g.rows.map(([name, result, evidence]) => `| ${name} | ${result} | ${evidence || '–'} |`),
     '',
-    '### Top 5 worse',
+    `### Top 5 better${weighted ? ' by weighted impact' : ''}`,
     '',
-    ...top(
-      moves
-        .filter(m => m.d > 0)
-        .sort((a, b) => b.d - a.d)
-        .slice(0, 5),
-    ),
+    ...top(g.better.sort((a, b) => key(a) - key(b)).slice(0, 5)),
     '',
-    failed
+    `### Top 5 worse${weighted ? ' by weighted impact' : ''}`,
+    '',
+    ...top(g.worse.sort((a, b) => key(b) - key(a)).slice(0, 5)),
+    '',
+    verdict(g) === 'FAIL'
       ? 'Gate: FAIL. A failing rule needs a compare sheet (`--shots`) and a written reason in the PR.'
       : 'Gate: PASS.',
-  );
-  lines.push(...out);
+  ];
 }
+
+let failed = false;
+const gates = {};
+if (gate === 'flat' || review) gates.flat = flatGate();
+if ((gate === 'weighted' || review) && population) gates.weighted = weightedGate();
+if (gate === 'flat') lines.push(...gateLines('Gate', gates.flat, false));
+if (gate === 'weighted') lines.push(...gateLines('Gate (weighted)', gates.weighted, true));
+if (gate) failed = verdict(gates[gate]) === 'FAIL';
+
 const report = lines.join('\n') + '\n';
 fs.writeFileSync(path.join(outDir, 'compare.md'), report);
 console.log(`\n${report}\nWrote ${path.relative(root, path.join(outDir, 'compare.md'))}`);
+
+if (review) {
+  const { writeReview } = await import('./lib/audit-review.mjs');
+  const pooled = weigh(Object.keys(loaded));
+  const files = await writeReview({
+    outDir,
+    title: `${baseRef} (${short}) → working tree`,
+    loaded,
+    moves: pairs,
+    weights: pooled,
+    population,
+    shareOf,
+    limitOf,
+    bucketOf,
+    kindsOf,
+    gates: Object.fromEntries(
+      Object.entries(gates).map(([name, g]) => [name, { verdict: verdict(g), rows: g.rows }]),
+    ),
+  });
+  console.log(`Wrote ${files.map(f => path.relative(root, f)).join(' and ')}`);
+}
 if (failed) process.exit(1);
