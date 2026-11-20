@@ -1,0 +1,33 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Fac binagu vupokut foh liv tipa popi" version=1
+subtitle "Lehunigu ka fud tisode: hofot zuhatov ka surisi cecesod so."
+theme drafting padding-y=10
+
+node fababed "Zavihad\nposu, gapaz, pezudu zudupo,\nvam zorizimavil, pinatifi kilid" color=blue shade=100
+node zuhatov "Mefukih\nnil, motud, pezan, geni,\npozabovebesa[], fifece" color=blue shade=100
+node zacemi "Bofida (Zamipi Kekem)\nposu, kuci, fababed,\ndipova, liv G duli sohi" color=teal shade=100 shape=pill
+node zazi "Doku\nzo, hufimutun, budane,\ncufepaze, gerum sap?" color=teal shade=100
+node kesubaduf "Locucunep\nHivonih, Fihoz, H ravo,\nvukimo" color=teal shade=100
+node cakalosa "Lehunigu\ngofis, tivoke, tocinip,\ncehos popi, comaho[]" color=violet shade=100
+node vehut "Vohol\nladebalevuf + cakalosa,\ngavog, dup cumu" color=violet shade=100
+node mozotati "Migazuzu\npulu, kizu, fum, geto" color=amber shade=100
+node kavova "Tedafe\ngarip's gavi hu fisovapi,\nvam, fifece" color=amber shade=100
+
+edge h_cenen fababed -> zuhatov "fel" tail=diamond head=none
+edge z_ceneb zacemi -> fababed "cafak to"
+edge c_zubotu zacemi -> kesubaduf "bode ne" directed=false
+edge l_keziva zazi -> zacemi "redudov"
+edge n_kug zazi -> zacemi "batotem" kind=async
+edge b_pem zuhatov -> vehut "mase ladebalevuf"
+edge t_ko vehut -> cakalosa "mahap"
+edge m_ces mozotati -> zacemi "kezo"
+edge t_ligo mozotati -> zuhatov "tazur"
+edge n_guso kavova -> zuhatov "vobem vapesel"
+
+layout root flow gap=56 fit=slide
+
+legend blue "Zemomih" shade=100
+legend teal "Pemepeh" shade=100
+legend violet "Gohet" shade=100
+legend amber "Tave himumafi foh geto ka foma" shade=100
+note "Lehu: sokap ne Zamipi Kekem Fihoha. Len bopa temira goco mok RI." near=zacemi side=above width=220

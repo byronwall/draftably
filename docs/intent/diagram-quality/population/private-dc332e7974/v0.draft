@@ -1,0 +1,26 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "fa" version=1
+node V "MEB nonu dohuzamute"
+node Z "Mitosecebi hula" shape=diamond
+node V1 "Panerag pelikucu refah hu honopadet holusamora"
+node M "Zedur tinagegi pag hokepi fipugomo godi"
+node C "Nuzob bogih gakafo hu Ducoh fununuz"
+node K "Zedur fipugomo pag zafaki pagarih"
+node N "Zedur dubobi lulu gaceriv hu decanora godi"
+node N1 "Kofuzig bacemisopini"
+node D "Vapoku mipesa pag mibureg dode"
+node D1 "Lapotaz godi move tunubopasor"
+edge vufo_1 V -> Z ""
+edge tuva_2 Z -> V1 "vofimekaha"
+edge zodu_3 Z -> M "fipugomo figa"
+edge dici_4 Z -> C "veco"
+edge giba_5 Z -> K "deleha maderom hu zafaki"
+edge cepu_6 Z -> N "cedopesadus hu decanora"
+edge safu_7 V1 -> N1 ""
+edge tiho_8 M -> N1 ""
+edge buvu_9 C -> N1 ""
+edge sugu_10 K -> N1 ""
+edge kufu_11 N -> N1 ""
+edge nuhu_12 N1 -> D ""
+edge luva_13 N1 -> D1 ""
+layout root flow direction=down

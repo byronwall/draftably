@@ -1,0 +1,10 @@
+# Population: diagram-studio/docs/DSL.md
+node web "Web"
+node orders "Orders"
+node users "Users"
+node cache "Cache"
+edge e1 web -> orders
+edge e2 web -> users
+edge e3 users -> cache
+order root web users orders
+near cache users side=right gap=64

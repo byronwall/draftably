@@ -1,0 +1,12 @@
+# Population: diagram-studio/docs/DSL.md
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+edge invoice_account invoices.account -> accounts.id

@@ -1,0 +1,8 @@
+# Population: diagram-studio/docs/DSL.md
+node api "API gateway"
+~node orders "Orders service" was="Orders"
++node refunds "Refunds"
+-node hook "Legacy webhook"
+.node audit "Audit log"
++edge refund orders -> refunds "refund"
+-edge notify api -> hook "notify"

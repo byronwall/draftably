@@ -1,0 +1,6 @@
+# Population: diagram-studio/docs/DSL.md
+node user "User"
+node app "Web app"
+edge m1 user -> app "sign in"
+edge m2 app -> user "welcome" kind=async
+layout root sequence

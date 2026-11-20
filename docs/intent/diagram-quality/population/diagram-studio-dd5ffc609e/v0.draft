@@ -1,0 +1,4 @@
+# Population: diagram-studio/docs/DSL.md
+group monitoring "namespace: monitoring" color=amber frame=soft
+node prometheus "prometheus" in=monitoring
+node grafana "grafana" in=monitoring

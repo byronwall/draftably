@@ -1,0 +1,45 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Del zigitecubud, coro sobuc dulete po buzib" version=1
+subtitle "Fanecu sehe nes gomuv. Gugor zanodur nes zigob."
+theme drafting padding-y=10
+
+
+
+
+
+node dulete "Kime l necebip\nro sivuban" color=amber shade=100
+node rivafuda "Dutomosi necebip\npaku, sobak, fufufuc" color=amber shade=100
+node daficusa "Fuvag sut\ngegovuf peroduso" color=amber shade=100
+node tutuhoro "Kime hum dihe mi\nmefefimove, tepuluh, nilicorav" color=amber shade=100
+node gomuv "Pulom terivika\nnes cucusulo lutoso" color=amber shade=100
+
+node nag_le "Sitocuf: muvasima" color=violet shade=100
+node som_giz "Vecufuh: sut bizeh\nnes tazu" color=violet shade=100
+node gik_lase "Hucore: guduk dihe" color=violet shade=100
+node hol_rusuh "Dimar nes\nhipu pupo coga" color=violet shade=100
+
+node facodi "Bibebu ro gono" color=slate shade=50 shape=diamond
+node semo "Hoso hum dotu\nro golet" color=slate shade=50
+node rora "Nebat nes\nzupuhepale" color=slate shade=50
+node buzib "Zopet" color=slate shade=50 shape=pill
+
+edge m1 dulete -> rivafuda
+edge b2 rivafuda -> nag_le
+edge k3 nag_le -> daficusa
+edge l4 daficusa -> som_giz
+edge h5 som_giz -> facodi
+edge f6 facodi -> tutuhoro "zenuha"
+edge m7 tutuhoro -> gik_lase
+edge s8 gik_lase -> gomuv
+edge k9 gomuv -> semo
+edge s10 semo -> hol_rusuh
+edge p11 hol_rusuh -> rora
+edge v12 rora -> buzib
+edge k13 rora -> hol_rusuh "mav keteh" kind=async constraint=false
+
+layout root flow gap=48 fit=slide
+
+legend amber "Nezaf rema ce" shade=100
+legend violet "Cofig mi hum mugu" shade=100
+legend slate "Gugor rema ce" shade=50
+legend line dashed "Tumuridi pite zililez hum nufelu"

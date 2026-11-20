@@ -1,0 +1,23 @@
+# Population: explorEDA/docs/intent/numeric-preparation/assets/pro-results/numeric-preparation-2026-10-26/numeric-preparation-report.md (Mermaid, imported)
+diagram "in" version=1
+node S "Raw project tables"
+node Q "Project query evaluation"
+node J "Relationship indexes"
+node R "Workspace input rows"
+node H "Host supplied rows"
+node P "Shared field conversion"
+node F "Saved field recipe"
+node A "Conversion audit"
+node V "Prepared runtime rows"
+node C "Calculations, profiles, and views"
+edge edge_1 S -> Q ""
+edge edge_2 S -> J ""
+edge edge_3 J -> Q ""
+edge edge_4 Q -> R ""
+edge edge_5 H -> R ""
+edge edge_6 R -> P ""
+edge edge_7 F -> P ""
+edge edge_8 P -> A ""
+edge edge_9 P -> V ""
+edge edge_10 V -> C ""
+layout root flow direction=down

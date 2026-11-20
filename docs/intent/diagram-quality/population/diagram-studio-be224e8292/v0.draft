@@ -1,0 +1,7 @@
+# Population: diagram-studio/docs/DSL.md
+theme fieldnotes padding-x=18 padding-y=12 radius=3 title-font=serif annotation-font=sans
+theme-color blue shade=500 fill="#405D48"
+theme-color brand shade=100 fill="#EAF1ED" stroke="#9AB4A4" ink="#244431"
+theme-color brand shade=800 fill="#244431" stroke="#244431" ink="#FFFFFF"
+node context "Context" color=brand shade=100
+node focus "Main step" color=brand shade=800

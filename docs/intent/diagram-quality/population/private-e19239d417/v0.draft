@@ -1,0 +1,26 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Buk vite, lik zuzukaf" version=1
+subtitle "Nut banev noluh coh lifa vis coh KIZ; L zuburo paho va coh hahuzo"
+
+group nanoperih "Cuvek cegu" color=blue
+node fub "Hurov senecec\n\"sufehig hisi PE\"" in=nanoperih shape=pill
+node banev "Cuvek + totac" in=nanoperih
+node tuz "KIZ: feget, pase, sakibat" in=nanoperih
+
+node cihoba ".dubeh / .bem vite" color=violet
+
+group lotemuvepi "Cafafo cegu" color=mint
+node hahuzo "Megivob zu hosukazuc" in=lotemuvepi
+node vahohu "Lesovi vahohu" in=lotemuvepi
+node kapi "Nuve: PE zu gobi zafa" in=lotemuvepi shape=pill
+node vogi "Logino fofu" in=lotemuvepi shape=pill
+
+edge c1 fub -> banev
+edge g2 banev -> cihoba "dapomo"
+edge d3 cihoba -> tuz "nutahida"
+edge r4 tuz -> banev "cudenato, zadela buvoruni" kind=async constraint=false
+edge l5 cihoba -> hahuzo "cunadez"
+edge b6 hahuzo -> vahohu "zavakuzap"
+edge v7 vahohu -> cihoba "toper pada" kind=async constraint=false
+edge p8 hahuzo -> kapi "kinav ric ricuv"
+edge l9 hahuzo -> vogi "zon ric fav"

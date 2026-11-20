@@ -1,0 +1,11 @@
+# Population: context-recorder/docs/intent/video-to-canvas/sources/design.md (Mermaid, imported)
+diagram "in" version=1
+node A "Page A: scroll into a tall view"
+node B "Page A: edited state"
+node C "Other page or motion"
+node D "Later visit to page A"
+edge edge_1 A -> B ""
+edge edge_2 B -> C ""
+edge edge_3 C -> D ""
+edge edge_4 D -> A "Return link" kind=async
+layout root flow direction=right

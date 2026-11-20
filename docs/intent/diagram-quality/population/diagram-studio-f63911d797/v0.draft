@@ -1,0 +1,19 @@
+# Population: diagram-studio/docs/DSL.md
+node web "Web app"
+node api "API"
+node orders "Orders"
+node payments "Payments"
+node catalog "Catalog"
+node cache "Cache"
+node db "Database"
+node queue "Event queue"
+edge e1 web -> api
+edge e2 api -> orders
+edge e3 orders -> payments
+edge e4 orders -> db
+edge e5 api -> catalog
+edge e6 catalog -> cache
+edge publish orders -> queue
+state write "Write path" web api orders payments db queue
+state read "Read path" web api catalog cache
+state events "Events" queue publish rest=plain

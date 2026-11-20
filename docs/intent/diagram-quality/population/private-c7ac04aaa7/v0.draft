@@ -1,0 +1,20 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "to" version=1
+node RibifuHig "sozon-lofede hanobuni"
+node Pag "Pag"
+node Bora "SaviTititaku"
+node Dicifi "Dicifi"
+node Relomani "TicifUgakolab + Tibiputu"
+node Zomavi "TuziHimabu"
+node Sigecun "DalefakUtuVumepogUmadalef"
+node Demir "NomemAhiFekar"
+node Ducunad "Ducunad rumul sutuf"
+edge lore_1 RibifuHig -> Pag ""
+edge doni_2 Pag -> Bora ""
+edge navo_3 Bora -> Dicifi ""
+edge heli_4 Dicifi -> Relomani ""
+edge pesa_5 Relomani -> Zomavi ""
+edge sico_6 Dicifi -> Sigecun ""
+edge gitu_7 Zomavi -> Demir ""
+edge boha_8 Demir -> Ducunad ""
+layout root flow direction=down

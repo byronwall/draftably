@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "po" version=1
+node Ziciso "MususepAcatob gobasavo"
+node ZadulediDifud "gideleKelokugIhatEnegidelEkelo"
+node SatefobebuVibic "pivefacabo fuhuda, tovecahip pivefacabo, pecu kasega"
+node RegunIfoto "lubano/bagufu cemutaz nipesub, nidelon kuzacer, dobufu"
+node LepotizazUtokapama "zirutimi gac tovecahip pihotolak nuvecosuk"
+node GopameZupehobo "LoharevAtovigOvegihal"
+node RodukecepUbebe "falehezig tovecahip gac kabedub"
+node Voretobal "DitanahOkonEbobifirIditanaho / SonokumIzivanakeNime"
+node Gucabizu "zirutimi rosukizu"
+node Vuviko "risezota recu gefid mero"
+edge secu_1 Ziciso -> ZadulediDifud ""
+edge soge_2 ZadulediDifud -> SatefobebuVibic ""
+edge rovu_3 ZadulediDifud -> RegunIfoto ""
+edge gero_4 ZadulediDifud -> LepotizazUtokapama ""
+edge tami_5 GopameZupehobo -> ZadulediDifud ""
+edge zame_6 GopameZupehobo -> RodukecepUbebe ""
+edge pice_7 Voretobal -> GopameZupehobo ""
+edge cadu_8 Voretobal -> Gucabizu ""
+edge gize_9 Gucabizu -> Vuviko ""
+layout root flow direction=down

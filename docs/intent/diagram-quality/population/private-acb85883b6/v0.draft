@@ -1,0 +1,19 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ki" version=1
+node Bisacel "Her hufigov"
+node Vegimima "Nudolice homotohu"
+node Nudolice "HivamEkoguhisOlisepuh"
+node Debezolip "LamonoveRezasevub"
+node Hebopafe "Himihigef dikabuLodasole"
+node PokasArumoceh "Moleb Vosozuba"
+node Cinahoze "Cinahoze TE"
+node Vakebuf "Kuve hapirozo"
+edge rasi_1 Bisacel -> Vegimima ""
+edge kela_2 Vegimima -> Debezolip ""
+edge roke_3 Nudolice -> PokasArumoceh ""
+edge hoga_4 PokasArumoceh -> Debezolip ""
+edge gido_5 PokasArumoceh -> Vakebuf ""
+edge nipa_6 Debezolip -> Hebopafe ""
+edge modi_7 Hebopafe -> PokasArumoceh ""
+edge ruhi_8 PokasArumoceh -> Cinahoze ""
+layout root flow direction=down

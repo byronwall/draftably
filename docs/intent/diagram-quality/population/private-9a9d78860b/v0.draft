@@ -1,0 +1,20 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "so" version=1
+node Relig "Relig zedenuro"
+node MIV "rin MIV"
+node Kotov "Tigahun ROL famik"
+node Bekuhikuv "PEN-focuh tatopirar"
+node PEN "rin PEN fufuci"
+node Mahehi "Votovi TUZ dugage"
+node TUZ "Vonigetini tehem TUZ"
+node Gureboku "Desotap/kuse/vutem titareri"
+node Cimun "Vonigetini neve + zisapi suzerah"
+edge gada_1 Relig -> MIV ""
+edge gili_2 Kotov -> MIV ""
+edge lote_3 Bekuhikuv -> PEN ""
+edge lame_4 MIV -> Mahehi ""
+edge rata_5 PEN -> Mahehi ""
+edge roti_6 Mahehi -> TUZ ""
+edge luse_7 TUZ -> Gureboku ""
+edge poci_8 Gureboku -> Cimun ""
+layout root flow direction=right

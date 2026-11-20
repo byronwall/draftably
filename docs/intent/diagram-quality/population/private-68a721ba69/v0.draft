@@ -1,0 +1,8 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ve" version=1
+node N "Lanavora rerenuru cot zuhiteras sokof"
+node S "Zutapubel Rorala goha vezo zunoc"
+node N1 "Colen kili zunoc guzoba"
+edge fosa_1 N -> S ""
+edge ruku_2 S -> N1 ""
+layout root flow direction=right

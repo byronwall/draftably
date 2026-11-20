@@ -1,0 +1,20 @@
+# Population: SKILLS/skills/repo-documenter/SKILL.md (Mermaid, imported)
+diagram "in" version=1
+group Client "Client App"
+group Server "Server App"
+node User "User / Browser"
+node UI "UI Components" in=Client
+node ClientData "Client Data Layer" in=Client
+node Routes "Routes / API Handlers" in=Server
+node Services "Services" in=Server
+node DB "Database"
+node External "External Services"
+edge edge_1 User -> UI ""
+edge edge_2 UI -> ClientData ""
+edge edge_3 ClientData -> Routes "HTTP / RPC / GraphQL"
+edge edge_4 Routes -> Services ""
+edge edge_5 Services -> DB ""
+edge edge_6 Services -> External ""
+layout root flow direction=down
+layout Client flow direction=down
+layout Server flow direction=down

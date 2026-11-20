@@ -1,0 +1,15 @@
+# Population: srcly/docs/research/data-flow-integration-2026-10-23/README.md (Mermaid, imported)
+diagram "in" version=1
+node A "Repository overview"
+node B "Pinned source preview"
+node C "Choose an exact expression"
+node D "Inspect value flow"
+node E "Ordered path and evidence"
+node F "Return to saved overview"
+edge edge_1 A -> B ""
+edge edge_2 B -> C ""
+edge edge_3 C -> D ""
+edge edge_4 D -> E ""
+edge edge_5 E -> F ""
+edge edge_6 F -> A ""
+layout root flow direction=right

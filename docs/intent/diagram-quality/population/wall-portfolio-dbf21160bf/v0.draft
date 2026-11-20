@@ -1,0 +1,30 @@
+# Population: wall-portfolio/public/images/posts/hn-offline-service-worker/fetch-routing.draft
+diagram "How the worker answers a request" version=1
+subtitle "Pages try the network first; built assets come from the cache"
+
+group pageCol "Page navigation" color=slate
+node nav "Network, 3 s timeout" in=pageCol color=amber
+node pages "Cached /, /day, /week, /offline" in=pageCol color=mint
+node offline "Redirect to /offline?next=…" in=pageCol color=rose shape=pill
+
+group assetCol "Built asset or icon" color=slate
+node assets "Cached at install" in=assetCol color=mint
+node fetchAsset "Network, then store" in=assetCol color=amber
+
+group otherCol "Server call or other" color=slate
+node pass "Worker skips it" in=otherCol
+node network "Network" in=otherCol color=amber
+
+legend amber "Network"
+legend mint "Cache Storage"
+legend rose "Fallback"
+
+edge e1 nav -> pages "slow or offline"
+edge e2 pages -> offline "not cached" kind=async
+edge e3 assets -> fetchAsset "miss" kind=async
+edge e4 pass -> network
+
+layout root row gap=48
+layout pageCol column gap=36
+layout assetCol column gap=36
+layout otherCol column gap=36

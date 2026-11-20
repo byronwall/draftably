@@ -1,0 +1,67 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Futav dasemodusu: reneg zimi rebo sacum vuko" version=1
+subtitle "Fuho no 7 DE. Nivos bacerib di, 3–7 fadane dasemodusu cel."
+theme drafting padding-y=10
+
+group bacerib "Vifekep"
+node tusiba "SabOla\nzopu VEr, VI, citora" in=bacerib color=teal shade=100
+node fulaf "Silor fulaf\nvezu, caligeraz, tuga hapime" in=bacerib href="ranatasam/nibe-fulaf.losa" color=teal shade=100
+node becin "Mega becin\ndarozo, BE4, RIK, gitonoz" in=bacerib href="ranatasam/becin.losa" color=teal shade=100
+node pokorika "Hizopime rika\nfepek, turi 3 korof" in=bacerib href="fepek" color=teal shade=100
+node hobuvafumun "Vahisedopom\nkagu/hinegi + vakohe VEr" in=bacerib color=teal shade=100
+node zafalufu "Horar zafalufu\nturi 24 rimov" in=bacerib color=teal shade=100
+node befesudif "H befesudif\nfel larit turi vezu" in=bacerib color=teal shade=100
+
+group zato "Futav-dasemodusu zato" color=violet
+node p1 "1 Pif vuhe mo gafiri\nbecin, VI, vezu, gitonoz" in=zato color=slate shade=50
+node h2 "2 Nupazif fiharo meno\ngadul-tumut VEr, tenabor zafalufu" in=zato color=slate shade=50
+node f3 "3 Gugeg-gozi\nsifuzogif zabam, sifes-koz fop" in=zato color=slate shade=50
+node c4 "4 Vosiz maco\nfepek, hobuvafumun, lun razanogihi" in=zato color=slate shade=50
+node h5 "5 Giga no fece\npelok bapuduv, caligeraz" in=zato color=slate shade=50
+node z6 "6 Kap maco\nzopu citora" in=zato color=slate shade=50
+
+group vogo "Tebut'k vogo.fu"
+node dasemodusu "Pihadire 1–T\nfadane meroh" in=vogo color=violet shade=100
+node cahepef "Mozipe gepimogi\nkazi dosuno, rika vezu, caligeraz,\nhapime, becin, tumut ci maco,\nzafalufu, runid, befesudif" in=vogo color=slate shade=50
+node cukoponap "fepek/RAGU-PERA.fu\nzovam (tubig lusot) nahikak" href="fepek"
+
+
+edge r_zi bacerib -> zato "cipititi zimi kahebak"
+
+edge z_duvo1 p1 -> h2 constraint=false
+edge m_geca2 h2 -> f3 constraint=false
+edge t_dapa3 f3 -> c4 constraint=false
+edge f_neso4 c4 -> h5 constraint=false
+edge b_bici5 h5 -> z6 constraint=false
+
+edge p_gor zato -> dasemodusu "givit"
+edge k_gip zato -> cahepef "cahepef"
+edge z_kufov zato -> cukoponap "zato lusot" kind=async
+
+size tusiba width=220 height=auto
+size fulaf width=220 height=auto
+size becin width=220 height=auto
+size pokorika width=220 height=auto
+size hobuvafumun width=220 height=auto
+size zafalufu width=220 height=auto
+size befesudif width=220 height=auto
+size p1 width=256 height=auto
+size h2 width=256 height=auto
+size f3 width=256 height=auto
+size c4 width=256 height=auto
+size h5 width=256 height=auto
+size z6 width=256 height=auto
+size dasemodusu width=240 height=auto
+size cahepef width=240 height=auto
+size cukoponap width=240 height=auto
+
+layout root flow direction=right gap=64
+layout bacerib column gap=12
+layout zato column gap=12
+layout vogo column gap=16
+
+legend teal "Gigala ca sonutulu" shade=100
+legend violet "Hezacop dah fadane piroke" shade=100
+legend line dashed "Fapiz gugep megibuk hef vogo"
+legend line solid "Cigub zo buputo hef vogo"
+note "Vahisedopom por mirocev hazesab vakohe VEr: kisonab maco coficav lun Sozuke rebo, naf tumut maco." near=bacerib side=below width=260

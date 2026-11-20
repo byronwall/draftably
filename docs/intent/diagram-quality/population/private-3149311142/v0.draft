@@ -1,0 +1,49 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Cibav ficirunipa: ragec fuhe tali golum nufu" version=1
+subtitle "Vibim vupuruh ce, 3–7 sahipi ficirunipa get."
+
+group vupuruh "Mefacip" color=teal
+node detifa "DumIra\ndoso VAf, LI, cafelo" in=vupuruh
+node filon "Dolep filon\nbelu, nomodohem, fume degafi" in=vupuruh href="kokuvuzop/degu-filon.dore"
+node gutip "Piva gutip\nlafahu, KE4, DUC, daruguf" in=vupuruh href="kokuvuzop/gutip.dore"
+node kedigopa "Lolagibo cuca\nlivak, mihe 3 lepef" in=vupuruh href="livak"
+node savozukibeb "Sabubemimig\nbize/fodeci + samoke VAf" in=vupuruh
+node nobelufa "Komep nobelufa\nmihe 24 razih" in=vupuruh
+node gubetifeh "M gubetifeh\nken bakab mihe belu" in=vupuruh
+
+group paci "redac-ficirunipa paci\nkecocazil, 7 FA" color=violet
+node z1 "1 Kig vapa gu zutemi\ngutip, LI, belu, daruguf" in=paci
+node m2 "2 Dihamag zavofi zumu\npadeg-rukig VAf, holineg nobelufa" in=paci
+node f3 "3 Lanuh-rofu\ntatitefun felal, hesim-luc cig" in=paci
+node c4 "4 Fonit begu\nlivak, savozukibeb, mog voborerago" in=paci
+node d5 "5 Zuha fa zezi\ntusag vimaham, nomodohem" in=paci
+node s6 "6 Rim begu\ndoso cafelo" in=paci
+
+group zosi "Vicut'r zosi.ra" color=slate
+node ficirunipa "Pucofaru 1–B\nsahipi tumir" in=zosi color=violet
+node lugosas "Gupuvu renufoze\nriki vicito, cuca belu, nomodohem,\ndegafi, gutip, rukig zi begu,\nnobelufa, bobit, gubetifeh" in=zosi
+node hapazuvim "livak/POMA-RUHE.ra\nhuzef (redac rihaf) zolupah" href="livak"
+
+
+edge m_ta vupuruh -> paci "fagokodi fuhe tufirih"
+
+edge d_puri1 z1 -> m2 constraint=false
+edge s_vana2 m2 -> f3 constraint=false
+edge h_nuti3 f3 -> c4 constraint=false
+edge h_fabo4 c4 -> d5 constraint=false
+edge n_nobu5 d5 -> s6 constraint=false
+
+edge m_bin paci -> ficirunipa "falaf"
+edge n_dek paci -> lugosas "lugosas"
+edge r_punak paci -> hapazuvim "paci rihaf" kind=async
+
+layout root flow direction=right gap=64
+layout vupuruh column gap=12
+layout paci column gap=12
+layout zosi column gap=16
+
+legend teal "Hepisu va pugahifi"
+legend violet "Rahofus ruf sahipi riduku"
+legend line dashed "Sabar gimon cobibuv vur zosi"
+legend line solid "Hitic ta begama vur zosi"
+note "Sabubemimig rel barurig togalob samoke VAf: sumipel begu mefisir mog Fisane tali, maz rukig begu." near=savozukibeb side=right width=190

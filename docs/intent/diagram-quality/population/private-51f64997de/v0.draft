@@ -1,0 +1,13 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "go" version=1
+node Fiduk "TinukonObucaPizac"
+node Rebural "VofomasUgaTepizid"
+node Rubizuz "FesagilAtosezo"
+node Sonuh "BevezIlonere"
+edge sila_1 Fiduk -> Rebural "divekufu, nekiti, ligurir, fafev/buvu, borura"
+edge veti_2 Fiduk -> Rubizuz "tevasifi vusunu, ligurir, dizibu, lugurocoZi"
+edge luto_3 Fiduk -> Sonuh "kivurut mulek, lireNinoz"
+edge miha_4 Rebural -> Fiduk "fuVininEsuduc/reZiru/buZahete/moLegisuf/faDami"
+edge dito_5 Rubizuz -> Fiduk "niLogiGebobu/daMehokuSume/soCehagUlafoka"
+edge tace_6 Sonuh -> Fiduk "niRubasifi/haCadoNumukig"
+layout root flow direction=down

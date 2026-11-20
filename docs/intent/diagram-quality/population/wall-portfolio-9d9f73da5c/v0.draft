@@ -1,0 +1,13 @@
+# Population: wall-portfolio/content/diagrams/allison-platform-growth.draft
+diagram "How the platform grew" version=1
+subtitle "Each step removed a reason to ask me for a change."
+theme drafting padding-y=10
+
+node excel "Before\nExcel and MATLAB" color=slate shade=100
+node v1 "First web app\nanalyses hard-coded" color=teal shade=100
+node v2 "User-defined analysis\nwritten by engineers" color=violet shade=100
+node v3 "Shared platform\nreused calculations" color=violet shade=100
+
+edge a excel -> v1 "repeat work"
+edge b v1 -> v2 "each question\nneeded a recompile"
+edge c v2 -> v3 "100+ engineers"

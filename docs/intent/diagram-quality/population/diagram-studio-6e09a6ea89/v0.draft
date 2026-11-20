@@ -1,0 +1,10 @@
+# Population: diagram-studio/docs/DSL.md
+node client "Client"
+node gateway "Gateway"
+node orders "Orders"
+node billing "Billing"
+edge e1 client -> gateway "request"
+edge e2 gateway -> orders
+edge e3 gateway -> billing
+edge e4 client -> billing "invoice"
+routing bend-penalty=64 crossing-penalty=900 corner-radius=0

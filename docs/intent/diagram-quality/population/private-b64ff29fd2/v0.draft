@@ -1,0 +1,18 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "da" version=1
+node Lepegebem "HakucemOfuhamEdofofaha"
+node Tubipo "DezudakUpucosEpozid"
+node GihanucitEfafevo "FitabazUvelovukadAsefita"
+node Kuvunig "PukudebUvagegaLebid"
+node Sipaf "RohitebUdimoluhugAgero"
+node Tinurepup "ZizulolEtupovosiPuzoz"
+node KimiceDazupulam "RuvarerOmuzogAvasuharuVarero"
+node DucelidEcez "BamogukEfihucodaZupabamOguk"
+edge fizu_1 Lepegebem -> Tubipo ""
+edge hupa_2 Lepegebem -> GihanucitEfafevo ""
+edge kicu_3 Lepegebem -> Kuvunig ""
+edge coli_4 Lepegebem -> Sipaf ""
+edge reza_5 Lepegebem -> Tinurepup ""
+edge vogo_6 Lepegebem -> KimiceDazupulam ""
+edge kari_7 Lepegebem -> DucelidEcez ""
+layout root flow direction=down

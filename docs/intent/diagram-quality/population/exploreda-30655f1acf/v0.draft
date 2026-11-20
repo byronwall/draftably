@@ -1,0 +1,29 @@
+# Population: explorEDA/docs/intent/customer-instance-hosting/raw/2026-10-11-pro/customer-instance-hosting-research.md (Mermaid, imported)
+diagram "in" version=1
+node A "Confirmed customer or approved release"
+node B "Write desired generation"
+node C "Acquire customer lease"
+node D "Reconcile exact owned resources"
+node E "Ready and verified?" shape=diamond
+node F "Record operation and retry"
+node G "Record blocked state for operator"
+node H "Publish access or switch revision"
+node J "Record observed healthy generation"
+node K "Periodic configuration drift check"
+node L "Release fails?" shape=diamond
+node M "Restore previous healthy digest"
+edge edge_1 A -> B ""
+edge edge_2 B -> C ""
+edge edge_3 C -> D ""
+edge edge_4 D -> E ""
+edge edge_5 E -> F "Transient failure"
+edge edge_6 F -> C ""
+edge edge_7 E -> G "Permanent mismatch"
+edge edge_8 E -> H "Yes"
+edge edge_9 H -> J ""
+edge edge_10 J -> K ""
+edge edge_11 K -> C "Drift"
+edge edge_12 H -> L ""
+edge edge_13 L -> M "Yes"
+edge edge_14 M -> D ""
+layout root flow direction=down

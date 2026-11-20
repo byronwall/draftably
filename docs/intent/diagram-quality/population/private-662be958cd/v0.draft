@@ -1,0 +1,36 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "vi" version=1
+group TimizidUver "Lokenik nafad"
+group TumetogAhem "Zofibeh recezo nafad"
+group LovedEbaf "Hocub fozama nafad"
+node BukuguzOzagon "Fuvuzit suheca"
+node FigEkasu "CucafOkeCarin"
+node DihacudOciruCuvub "DihacudOciruCuvub" in=TimizidUver
+node RovicezOzeTehaner "RovicezOzeTehaner" in=TimizidUver
+node ZabifehEsagide "ZabifehEsagide" in=TimizidUver
+node CucaledOrudof "CucaledOrudof" in=TimizidUver
+node SogupulInalunOgemiHosog "SogupulInalunOgemiHosog" in=TumetogAhem
+node RosuvihAdarabIsiburero "RosuvihAdarabIsiburero" in=TumetogAhem
+node ZisivumUdeke "BiduledAsemehukitAkabi" in=TumetogAhem
+node KihapicIludebiso "RifomorIgifuzemaNiher" in=TumetogAhem
+node BemakocOpafupe "ZorizofEsidinuMimun" in=TumetogAhem
+node MamazAfinaPicup "MamazAfinaPicup" in=LovedEbaf
+node DokekIvolapi "RosuvihAdarabIsiburero" in=LovedEbaf
+node HovasEdepusu "HigelAkuduseRunagezeh" in=LovedEbaf
+edge bito_1 BukuguzOzagon -> FigEkasu ""
+edge nulo_2 FigEkasu -> DihacudOciruCuvub ""
+edge kode_3 FigEkasu -> SogupulInalunOgemiHosog ""
+edge timu_4 FigEkasu -> MamazAfinaPicup ""
+edge rege_5 DihacudOciruCuvub -> RovicezOzeTehaner ""
+edge meca_6 DihacudOciruCuvub -> ZabifehEsagide ""
+edge doru_7 DihacudOciruCuvub -> CucaledOrudof ""
+edge tume_8 SogupulInalunOgemiHosog -> RosuvihAdarabIsiburero ""
+edge taze_9 RosuvihAdarabIsiburero -> ZisivumUdeke ""
+edge vizo_10 RosuvihAdarabIsiburero -> KihapicIludebiso ""
+edge fase_11 RosuvihAdarabIsiburero -> BemakocOpafupe ""
+edge rema_12 MamazAfinaPicup -> DokekIvolapi ""
+edge fisi_13 MamazAfinaPicup -> HovasEdepusu ""
+layout root flow direction=down
+layout TimizidUver flow direction=down
+layout TumetogAhem flow direction=down
+layout LovedEbaf flow direction=down

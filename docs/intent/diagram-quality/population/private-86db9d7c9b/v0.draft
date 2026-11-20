@@ -1,0 +1,12 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ha" version=1
+node Zumivi "RasulamApirac coronelu"
+node FibImalavavi "zazafekopo/bezaz/zidovuvato hiboguzuc dinureb"
+node FusadeneFukavubev "gutofuNatorifUsanesogUtofu tahocucok"
+node TekenamotOsarasel "lokaruri rasutinev botihoso"
+node MemugugiZacug "lana-hekap heh moge-zupila kidev"
+edge bobo_1 Zumivi -> FibImalavavi ""
+edge gomo_2 FibImalavavi -> FusadeneFukavubev ""
+edge poni_3 FusadeneFukavubev -> TekenamotOsarasel ""
+edge vato_4 FusadeneFukavubev -> MemugugiZacug ""
+layout root flow direction=down

@@ -1,0 +1,18 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pu" version=1
+node Dezap "/dikonari/nudurudim kufoz"
+node Dugot "cimOgunezoMemufafulUcimogune"
+node Zaged "tuviGitudivImucalohituViGitud"
+node Dedor "lifabev kitigimem nudurudim zebut"
+node DadedaSusog "peku-fema hudonofan mucima zebut"
+node Melafu "hudonofan cubonib mucima"
+node Vutos "pova-rani nudurudim fefe loroladi"
+node CofabIlem "bugit gibav gehulakab bar fok/rete hovumeke"
+edge hafu_1 Dezap -> Dugot ""
+edge dufi_2 Dugot -> Zaged ""
+edge gigi_3 Zaged -> Dedor ""
+edge giru_4 Dedor -> DadedaSusog ""
+edge maku_5 CofabIlem -> DadedaSusog ""
+edge hili_6 DadedaSusog -> Melafu ""
+edge mefa_7 Melafu -> Vutos ""
+layout root flow direction=down

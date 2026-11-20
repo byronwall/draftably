@@ -1,0 +1,20 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pu" version=1
+node Pezet "/lepoleri/gevovavan sazis"
+node Kugeb "cokUtabiviZahakukihOcokutabi"
+node Birah "FolubupIliburafuTobufolubUpiliBuraf"
+node Rakan "RovepumEhosufefuHitorovepUmeho"
+node Dorigu "TuvavosahIfugemoSurutu"
+node Favu "MotekasulAkikUgih"
+node Mekelof "ZugafonipAzivIsuceloZugaf"
+node Cuneko "gevovavan-nirike.mizavi"
+node Kobafa "KorasemihUcogObizidIkoras"
+edge teli_1 Pezet -> Kugeb ""
+edge pule_2 Kugeb -> Birah ""
+edge nuho_3 Birah -> Rakan ""
+edge mihi_4 Rakan -> Dorigu ""
+edge fima_5 Dorigu -> Favu ""
+edge make_6 Favu -> Mekelof ""
+edge nalu_7 Mekelof -> Cuneko ""
+edge gaza_8 Favu -> Kobafa ""
+layout root flow direction=down

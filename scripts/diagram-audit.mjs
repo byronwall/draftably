@@ -33,6 +33,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bucketOf, featuresOf } from './lib/buckets.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -1407,7 +1408,9 @@ function measure(file) {
     counts,
     defectIndex,
     issues,
+    shape: { ...featuresOf(source, geo), bucket: bucketOf(featuresOf(source, geo)) },
     geo,
+    svg,
   };
 }
 
@@ -1733,10 +1736,13 @@ for (const slug of slugs) {
   }
   const outSlug = path.join(outDir, slug);
   fs.mkdirSync(outSlug, { recursive: true });
+  // The plain drawing of each render, for `audit:compare --review`.
+  for (const r of results)
+    if (r.svg) fs.writeFileSync(path.join(outSlug, r.file.replace('.draft', '.svg')), r.svg);
   fs.writeFileSync(
     path.join(outSlug, 'metrics.json'),
     JSON.stringify(
-      results.map(({ geo: _geo, ...r }) => r),
+      results.map(({ geo: _geo, svg: _svg, ...r }) => r),
       null,
       2,
     ),

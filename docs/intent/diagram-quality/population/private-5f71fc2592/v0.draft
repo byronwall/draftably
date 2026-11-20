@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "zo" version=1
+node Vac "fis/zoc/fis.dog"
+node NutiZekara "NehatUsufo NutiZekara"
+node Gerifet "/ Gerifet"
+node Serevub "/sofakik SebivikAradoMonap"
+node Bipisak "/fasekuga/:norutanOp BikuhofUhilitItegaBobik"
+node Zonuma "/macita PunisuZovezAvugu"
+node Keles "/macita/:vecadAv TitamUvohaSucid"
+node Lanelaha "/funifuhu BodubuzaZizofOluha"
+node Mopin "/natab NohunecAlamoLicubAteno"
+node Sozal "/tukil/higatu-hesogoz LucohaKomuhulEluziPulucOhako"
+edge pami_1 Vac -> NutiZekara ""
+edge tule_2 NutiZekara -> Gerifet ""
+edge vara_3 NutiZekara -> Serevub ""
+edge sipo_4 NutiZekara -> Bipisak ""
+edge leku_5 NutiZekara -> Zonuma ""
+edge hide_6 NutiZekara -> Keles ""
+edge rasa_7 NutiZekara -> Lanelaha ""
+edge nase_8 NutiZekara -> Mopin ""
+edge fera_9 NutiZekara -> Sozal ""
+layout root flow direction=down

@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "gu" version=1
+node L1 "1. Kocu duc mub mifeza hogasi?"
+node D2 "2. Kocu rokenud hogasi zuke mub zineh mani?"
+node L3 "3. Kocu vareve kunulo mub dunise bedakufi?"
+node N4 "4. Kocu dofifi carun totide mub reboc?"
+node S5 "5. Kocu bisigu sic bubo tomo nunur carun?"
+node T6 "6. Daniz cedono niga tibucigo, nikuc, vap fiha?"
+node H7 "7. Daniz hofiko duc bubo, pecev, horagis, se zisonorasuh roc?"
+node V8 "8. Daniz vibi-gasez hefasi kunulo ce tozimegazako?"
+node H9 "9. Kocu nirat pohibap kunulo ce rutufalubeg?"
+node B10 "10. Kocu zozakolucus tedez cepifir se kudotut letahe?"
+edge zima_1 L1 -> D2 ""
+edge cipo_2 D2 -> L3 ""
+edge nacu_3 L3 -> N4 ""
+edge foru_4 N4 -> S5 ""
+edge hogi_5 S5 -> T6 ""
+edge hezi_6 T6 -> H7 ""
+edge vazo_7 H7 -> V8 ""
+edge toke_8 V8 -> H9 ""
+edge vale_9 H9 -> B10 ""
+layout root flow direction=down

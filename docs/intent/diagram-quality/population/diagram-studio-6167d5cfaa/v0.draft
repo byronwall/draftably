@@ -1,0 +1,6 @@
+# Population: diagram-studio/docs/DSL.md
+group req "Request" color=slate
+layout req cells
+node method "Method" in=req
+node path "Path" in=req
+node body "Body" in=req

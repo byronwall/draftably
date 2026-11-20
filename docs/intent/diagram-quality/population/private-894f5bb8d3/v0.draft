@@ -1,0 +1,8 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "co" version=1
+node V "Tob lupuhadef-kukofasa cuhozes"
+node S "Ficihic fudu"
+node F "Lezobocu mitefag"
+edge simu_1 V -> S ""
+edge nonu_2 V -> F ""
+layout root flow direction=right

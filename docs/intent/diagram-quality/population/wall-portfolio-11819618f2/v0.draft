@@ -1,0 +1,42 @@
+# Population: wall-portfolio/content/skills-map.draft
+diagram "How the skills connect" version=1
+subtitle "Consider and Contrast sits under most decisions"
+
+group plan "Plan" color=blue
+node sleuth "Software Design Sleuth" in=plan href="https://byroni.us/skills/software-design-sleuth"
+node cc "Consider and Contrast" in=plan href="https://byroni.us/skills/consider-contrast"
+node pro "ChatGPT Pro Repo Prompt" in=plan href="https://byroni.us/skills/prepare-chatgpt-pro-repo-prompt"
+node brief "Diagram-Led Brief" in=plan href="https://byroni.us/skills/diagram-led-technical-brief"
+
+group build "Build" color=teal
+node orch "Queued Orchestrator" in=build href="https://byroni.us/skills/queued-orchestrator"
+node tenx "10x" in=build href="https://byroni.us/skills/10x"
+node hundredx "100x" in=build href="https://byroni.us/skills/100x"
+node taste "Byron UI Taste" in=build href="https://byroni.us/skills/byron-ui-taste"
+node solid "SolidJS SSR" in=build href="https://byroni.us/skills/solid-ssr"
+
+group learn "Learn" color=amber
+node recorder "Context Recorder Breakdown" in=learn href="https://byroni.us/skills/context-recorder-breakdown"
+node retro "Retro" in=learn href="https://byroni.us/skills/retro"
+node threads "Analyze Codex Threads" in=learn href="https://byroni.us/skills/analyze-codex-threads"
+
+legend blue "Plan"
+legend teal "Build"
+legend amber "Learn"
+legend line solid "Hands its output to"
+legend line dashed "Calls or reads"
+
+edge e1 recorder -> sleuth "ledger"
+edge e2 tenx -> hundredx "handoff"
+edge u1 orch -> cc kind=async
+edge u2 orch -> sleuth kind=async
+edge u3 tenx -> cc kind=async
+edge u4 tenx -> taste kind=async
+edge u5 hundredx -> taste kind=async
+edge u6 retro -> cc kind=async
+
+order root plan build learn
+layout root row gap=72
+layout plan column gap=16
+layout build column gap=16
+layout learn column gap=16

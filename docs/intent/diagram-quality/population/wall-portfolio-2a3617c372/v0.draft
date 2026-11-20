@@ -1,0 +1,35 @@
+# Population: wall-portfolio/public/images/posts/hn-offline-service-worker/offline-story.draft
+diagram "Reloading a story page while offline" version=1
+subtitle "The worker redirects to a cached page; the client reads the story from IndexedDB"
+
+group worker "Service worker" color=blue
+node req "Reload /story/123" in=worker
+node sw "Network fails, no cached page" in=worker
+node redirect "302 to /offline?next=…" in=worker
+
+group client "Client app" color=teal
+node shell "Cached /offline loads" in=client
+node hydrate "Router returns to /story/123" in=client
+node idb "Read story from IndexedDB" in=client
+
+group result "Result" color=slate
+node shown "Story renders" in=result color=violet shape=pill
+node missing "Show \"not available\"" in=result color=rose shape=pill
+
+legend blue "Service worker"
+legend teal "Client app"
+legend violet "Story saved"
+legend rose "Story not saved"
+
+edge e1 req -> sw
+edge e2 sw -> redirect
+edge e3 redirect -> shell
+edge e4 shell -> hydrate
+edge e5 hydrate -> idb
+edge e6 idb -> shown "saved"
+edge e7 idb -> missing "not saved" kind=async
+
+layout root row gap=56
+layout worker column gap=32
+layout client column gap=32
+layout result column gap=32

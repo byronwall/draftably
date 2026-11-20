@@ -1,0 +1,16 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "su" version=1
+node Zihel "/cepanu/:budozUb vipit"
+node Beludefi "gopApiguGokeno(budozUb)"
+node Guhic "NegivEgopiVenum"
+node ZEL "rudu nuf soza ZEL gavuno"
+node Sicutom "ToremigOpufadAdahocuto tamivil rudu"
+node Cunopuf "TutarUgodeziVegakabat zacamot rudu"
+node Hubimez "PigavAhevitaZatihar"
+edge poha_1 Zihel -> Beludefi ""
+edge goza_2 Beludefi -> Guhic ""
+edge sovi_3 ZEL -> Guhic ""
+edge kuca_4 Guhic -> Sicutom ""
+edge taro_5 Guhic -> Cunopuf ""
+edge vuhe_6 Sicutom -> Hubimez ""
+layout root flow direction=down

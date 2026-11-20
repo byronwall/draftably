@@ -1,0 +1,19 @@
+# Population: explorEDA/docs/intent/time-series-axes/raw/2026-10-18-pro/time-series-axes-research.md (Mermaid, imported)
+diagram "in" version=1
+node A "Original rows"
+node B "Chart source population"
+node C "Domains by scale group"
+node D "Rows passing linked filters"
+node E "Original sample and contributor lookup"
+node F "Reduced display geometry"
+node G "Axis and lane projection"
+node H "Header values and source trace"
+edge edge_1 A -> B ""
+edge edge_2 B -> C ""
+edge edge_3 B -> D ""
+edge edge_4 D -> E ""
+edge edge_5 D -> F ""
+edge edge_6 C -> G ""
+edge edge_7 F -> G ""
+edge edge_8 E -> H ""
+layout root flow direction=down

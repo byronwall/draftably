@@ -1,0 +1,5 @@
+# Population: plan-viewer/fixtures/planning/tasks/TASK-0001/flow.draft
+diagram "Fixture flow" version=1
+node a "Start"
+node b "Finish"
+edge go a -> b

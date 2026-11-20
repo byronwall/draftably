@@ -1,0 +1,7 @@
+# Population: diagram-studio/docs/DSL.md
+group chunk "PNG chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data" in=chunk span=var
+node chunk.crc "CRC" in=chunk span=4

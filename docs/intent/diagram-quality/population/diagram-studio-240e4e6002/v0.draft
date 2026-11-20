@@ -1,0 +1,10 @@
+# Population: diagram-studio/docs/DSL.md
+group apps "Apps"
+group services "Services"
+node web "Web" in=apps
+node mobile "Mobile" in=apps
+node accounts "Accounts" in=services
+node orders "Orders" in=services
+edge e1 web -> orders
+edge e2 mobile -> accounts
+layout root row

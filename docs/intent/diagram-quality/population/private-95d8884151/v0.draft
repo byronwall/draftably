@@ -1,0 +1,10 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "zu" version=1
+node D "Muzo horimiri nezu"
+node C "Genuke hegabuta sizohul"
+node Z "Rehok lapov dobidi hipat"
+node L "Bimi nezu KE zu zenudu bobimadu"
+edge diho_1 D -> C ""
+edge dohi_2 D -> Z ""
+edge zoka_3 Z -> L ""
+layout root flow direction=right

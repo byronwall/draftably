@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "so" version=1
+node Z "Mosutav tir NOP vibadami"
+node G "Kilivodak cipe linatapafuhi"
+node T "Pudeforet huvomi nisekome"
+node B "Gelil dudehi mokunefone"
+node H "2B cacu tir vibadami"
+node L "3B tunecu tir huvomi GAk"
+node Z1 "Fopesiv hal gumuzarof duduvaso"
+node C "Funacu cicibe dazufu hasiro fusatak"
+node S "Vidisolim bepatopi tir gugukafu safafo"
+node B1 "Nusufef pikuva dazufu zeveda"
+edge hina_1 Z -> G ""
+edge tahi_2 G -> T ""
+edge kupe_3 T -> B ""
+edge cato_4 B -> H ""
+edge buhe_5 B -> L ""
+edge sose_6 T -> Z1 ""
+edge soko_7 Z1 -> C ""
+edge laba_8 C -> S ""
+edge relu_9 S -> B1 ""
+layout root flow direction=down
