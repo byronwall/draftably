@@ -77,9 +77,10 @@ export function sidePairs(
       );
   // Group titles in the way of this edge: a framed ancestor's (`:header`) or a soft group's.
   const titles = edgeObs.filter(r => r.id?.endsWith(':header') || r.id?.endsWith(':title'));
+  const softTitles = titles.filter(r => r.id?.endsWith(':title'));
   // The offset on side `side` of `r` that clears the titles just above it, or null when the
   // side has no room past them. Titles start at a group's left, so the port moves right.
-  function pastTitle(r: Box, side: Side, offset: number): number | null {
+  function pastTitle(r: Box, side: Side, offset: number, titles: Obstacle[]): number | null {
     if (side !== 'top' || !titles.length) return offset;
     const cx = center(r).x,
       limit = r.w / 2 - 12;
@@ -150,23 +151,34 @@ export function sidePairs(
       if (Math.abs(desired) <= limit && free(e.to, ts, desired)) [toff, moved] = [desired, true];
     }
     // A port on a member's top under a group title moves along the side past the title's end,
-    // so the line crosses the band clear of the text. The other end of a straight line moves
-    // with it, so the line stays straight.
+    // so the line crosses the band clear of the text. Past a framed group's title it moves only
+    // when the other end can line up with it: a straight line through the band reads as the
+    // obvious path, while a bent one is better off by another side. A soft group's title is in
+    // the way of every line, so its ports always move.
+    const shift = (
+      r: Box,
+      side: Side,
+      offset: number,
+      id: string,
+      o: Box,
+      oside: Side,
+      oid: string,
+      fixed: boolean,
+    ): [number, number] | null => {
+      const t = pastTitle(r, side, offset, titles);
+      if (t === null || t === offset || !free(id, side, t)) return null;
+      const line = sameAxis && !fixed && !vertices(o) ? alignTo(o, oside, r, side, t) : null;
+      if (line !== null && free(oid, oside, line)) return [t, line];
+      const u = pastTitle(r, side, offset, softTitles);
+      return u !== null && u !== offset && free(id, side, u) ? [u, NaN] : null;
+    };
     if (!pin.to && cfg.toOffset === undefined && !vertices(b)) {
-      const t = pastTitle(b, ts, toff);
-      if (t !== null && t !== toff && free(e.to, ts, t)) {
-        [toff, moved] = [t, true];
-        const o = sameAxis && !pin.from && !vertices(a) ? alignTo(a, fs, b, ts, toff) : null;
-        if (o !== null && free(e.from, fs, o)) fo = o;
-      }
+      const hit = shift(b, ts, toff, e.to, a, fs, e.from, !!pin.from);
+      if (hit) [toff, fo, moved] = [hit[0], Number.isNaN(hit[1]) ? fo : hit[1], true];
     }
     if (!pin.from && !vertices(a)) {
-      const f = pastTitle(a, fs, fo);
-      if (f !== null && f !== fo && free(e.from, fs, f)) {
-        [fo, moved] = [f, true];
-        const o = sameAxis && !pin.to && !vertices(b) ? alignTo(b, ts, a, fs, fo) : null;
-        if (o !== null && free(e.to, ts, o)) toff = o;
-      }
+      const hit = shift(a, fs, fo, e.from, b, ts, e.to, !!pin.to);
+      if (hit) [fo, toff, moved] = [hit[0], Number.isNaN(hit[1]) ? toff : hit[1], true];
     }
     // A lane may say where along the target's side the edge arrives.
     if (typeof cfg.toOffset === 'number' && cfg.toSide === ts && !vertices(b)) toff = cfg.toOffset;
