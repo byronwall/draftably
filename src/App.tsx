@@ -189,9 +189,20 @@ export default function App() {
             onContextMenu={e => openMenu('context', { x: e.clientX, y: e.clientY })}
             onDropFiles={dropFiles}
             emptyAction={
-              <button class="button primary" onClick={() => runCommand('quick-build')}>
-                Build from a list <kbd>B</kbd>
-              </button>
+              <div class="empty-actions">
+                <button class="button primary" onClick={() => runCommand('quick-build')}>
+                  Build from a list <kbd>B</kbd>
+                </button>
+                <button class="button" onClick={() => runCommand('import-diagram')}>
+                  Paste Mermaid or DOT
+                </button>
+                <button class="button" onClick={() => runCommand('toggle-source')}>
+                  Write source <kbd>`</kbd>
+                </button>
+                <p class="empty-hint">
+                  Or copy Mermaid or DOT and press <kbd>⌘V</kbd> on the canvas.
+                </p>
+              </div>
             }
           />
           <FileBanner />
