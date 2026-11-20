@@ -3909,7 +3909,12 @@ function layoutPass(
   }
   for (const o of objects) if (o.code) diagnostics.push(...codeNotes(o, m, look));
   settleLegendShades(m);
-  diagnostics.push(...paletteNotes(m), ...legendNotes(m), ...orderNotes(m));
+  diagnostics.push(
+    ...paletteNotes(m),
+    ...legendNotes(m),
+    ...orderNotes(m),
+    ...packNotes(m, objects),
+  );
   for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
@@ -3991,6 +3996,38 @@ function orderNotes(m: Model): Diagnostic[] {
     });
   }
   return out;
+}
+
+/**
+ * A long row or column of plain boxes with no edges of their own (a checklist, a set of
+ * follow-ups) packs into a cells grid; edges still reach the group. Name the line that does it.
+ */
+function packNotes(m: Model, objects: SceneObject[]): Diagnostic[] {
+  const ends = new Set(m.edges.flatMap(e => [e.source, e.target]));
+  return objects.flatMap(g => {
+    const layout = layoutFor(m, g.id);
+    if (g.type !== 'group' || layout.engine) return [];
+    if (layout.algorithm !== 'row' && layout.algorithm !== 'column') return [];
+    const kids = m.objects.filter(o => o.parent === g.id);
+    const plain = kids.every(
+      o =>
+        o.type === 'node' &&
+        !o.code &&
+        (o.shape === 'box' || o.shape === 'pill') &&
+        !ends.has(o.id),
+    );
+    if (kids.length < 3 || !plain || Math.max(g.w, g.h) < 2.5 * Math.min(g.w, g.h)) return [];
+    const columns = Math.ceil(Math.sqrt(kids.length));
+    return [
+      {
+        level: 'info' as const,
+        code: 'pack-cells',
+        message: `${g.id} is a ${layout.algorithm} of ${kids.length} boxes with no edges of their own, ${g.w}×${g.h}. \`layout ${g.id} cells columns=${columns}\` packs them into a grid; edges still reach ${g.id}.`,
+        line: layout.line || g.line,
+        ids: [g.id],
+      },
+    ];
+  });
 }
 
 /** What `check` says about a code node: an unknown language, long lines and a clipped body. */

@@ -63,6 +63,15 @@ describe('syntax', () => {
     expect(await note(`${steps}\norder p first second result`)).toBeUndefined();
   });
 
+  it('suggests cells for a long row of boxes with no edges of their own', async () => {
+    const done =
+      'node now "Now"\ngroup done "Done"\nnode k1 "PROJ-101" in=done\nnode k2 "PROJ-102" in=done\nnode k3 "PROJ-103" in=done\nnode k4 "PROJ-104" in=done\nedge e done -> now\nlayout done row';
+    const note = async (src: string) =>
+      (await compile(src)).diagnostics.find(d => d.code === 'pack-cells')?.message;
+    expect(await note(done)).toContain('`layout done cells columns=2`');
+    expect(await note(done.replace('done -> now', 'k1 -> now'))).toBeUndefined();
+  });
+
   it('formats consistently and keeps comments and unrelated statements', () => {
     const messy =
       '\n\n# heading\n  node   a  "A"   color=blue   # inline note\n\n\n\nnode b "B" // other style\n\n';
