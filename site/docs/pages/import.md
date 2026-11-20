@@ -44,8 +44,9 @@ fences in Markdown at once, use [`draftably migrate`](#convert-the-source).
 
 Each block shows the Mermaid source and Mermaid's own drawing on the left. The right side shows
 the `.draft` file that the import writes and the drawing draftably makes from it. The import runs
-in your browser when the page opens, so the right side is the real result. The list under each
-block shows what the import changed.
+in your browser, so the right side is the real result, and the list under each block shows what
+the import changed. The Mermaid side is editable: change it, or paste your own diagram, and both
+drawings follow.
 
 A flowchart with a subgraph, a database shape and a `classDef` style:
 
