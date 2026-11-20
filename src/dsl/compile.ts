@@ -3909,7 +3909,7 @@ function layoutPass(
   }
   for (const o of objects) if (o.code) diagnostics.push(...codeNotes(o, m, look));
   settleLegendShades(m);
-  diagnostics.push(...paletteNotes(m), ...legendNotes(m));
+  diagnostics.push(...paletteNotes(m), ...legendNotes(m), ...orderNotes(m));
   for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
@@ -3930,6 +3930,67 @@ function layoutPass(
   };
   packFolds.set(scene, { groups: foldGroups, wrap: wrapRoot });
   return scene;
+}
+
+/**
+ * A `row` or `column` places its children in declaration order, so an edge to an earlier child
+ * runs backwards. When no edge among the children closes a loop, an order exists that makes every
+ * edge run forwards; name it. Loops are left alone: one backwards edge there is the author's.
+ */
+function orderNotes(m: Model): Diagnostic[] {
+  const out: Diagnostic[] = [],
+    parent = new Map(m.objects.map(o => [o.id, o.parent])),
+    scopes = ['root', ...m.objects.filter(o => o.type === 'group').map(o => o.id)];
+  for (const scope of scopes) {
+    const layout = layoutFor(m, scope);
+    if ((layout.algorithm !== 'row' && layout.algorithm !== 'column') || layout.engine) continue;
+    const order = m.hints.find(h => h.type === 'order' && h.scope === scope);
+    let kids = m.objects.filter(o => o.parent === scope).map(o => o.id);
+    if (order?.type === 'order')
+      kids = [
+        ...order.ids.filter(id => kids.includes(id)),
+        ...kids.filter(id => !order.ids.includes(id)),
+      ];
+    if (kids.length < 2) continue;
+    const at = new Map(kids.map((id, i) => [id, i])),
+      child = (id: string | undefined): string | undefined =>
+        id === undefined || at.has(id) ? id : child(parent.get(id));
+    const links = m.edges.flatMap(e => {
+      const a = child(e.source),
+        b = child(e.target);
+      return e.directed !== false && e.constraint !== false && a && b && a !== b
+        ? [{ id: e.id, a, b }]
+        : [];
+    });
+    const back = links.filter(l => at.get(l.b)! < at.get(l.a)!);
+    if (!back.length) continue;
+    // Kahn's sort, taking the earliest ready child each time, so the fix moves as little as it can.
+    const ins = new Map(kids.map(id => [id, links.filter(l => l.b === id).length])),
+      sorted: string[] = [];
+    while (sorted.length < kids.length) {
+      const next = kids.find(id => ins.get(id) === 0 && !sorted.includes(id));
+      if (!next) break;
+      sorted.push(next);
+      for (const l of links) if (l.a === next) ins.set(l.b, ins.get(l.b)! - 1);
+    }
+    if (sorted.length < kids.length) continue;
+    const row = layout.algorithm === 'row',
+      where = scope === 'root' ? 'the root' : scope,
+      edges = back.map(l => l.id),
+      targets = [...new Set(back.map(l => l.b))],
+      first = targets[0],
+      callers = back.filter(l => l.b === first).map(l => l.a),
+      list = (ids: string[]) =>
+        ids.length < 2 ? ids.join('') : `${ids.slice(0, -1).join(', ')} and ${ids.at(-1)}`;
+    out.push({
+      level: 'info',
+      code: 'order-backward',
+      message: `${edges.length === 1 ? 'Edge' : 'Edges'} ${list(edges)} ${edges.length === 1 ? 'runs' : 'run'} ${row ? 'left' : 'up'} in ${where}, because a ${layout.algorithm} keeps declaration order. Move ${first} ${row ? 'after' : 'below'} ${list(callers)}${targets.length > 1 ? ', or' : ' or'} write \`order ${scope} ${sorted.join(' ')}\` to make every edge in it run ${row ? 'right' : 'down'}.`,
+      line: layout.line || m.objects.find(o => o.id === first)?.line,
+      ids: [scope, ...edges],
+    });
+  }
+  return out;
 }
 
 /** What `check` says about a code node: an unknown language, long lines and a clipped body. */

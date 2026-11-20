@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { checkSource, contentOrigin, rankLayers } from '../src/dsl/compile';
+import { checkSource, compile, contentOrigin, rankLayers } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
@@ -43,9 +43,24 @@ describe('syntax', () => {
     );
     expect(m.objects.find(o => o.id === 'b')?.label).toBe('Second card\\nDetail line');
     expect(m.warnings.filter(w => w.code === 'literal-newline')).toEqual([
-      expect.objectContaining({ line: 2, message: expect.stringMatching(/^Node b .*\\\\n to \\n/) }),
+      expect.objectContaining({
+        line: 2,
+        message: expect.stringMatching(/^Node b .*\\\\n to \\n/),
+      }),
       expect.objectContaining({ line: 3, message: expect.stringMatching(/^Edge e /) }),
     ]);
+  });
+
+  it('names the order that turns backward edges in a column, but leaves loops alone', async () => {
+    const steps =
+      'group p "Steps"\nnode result "Shared" in=p\nnode first "A" in=p\nnode second "B" in=p\nedge a first -> result\nedge b second -> result\nlayout p column';
+    const note = async (src: string) =>
+      (await compile(src)).diagnostics.find(d => d.code === 'order-backward')?.message;
+    expect(await note(steps)).toContain(
+      'Move result below first and second or write `order p first second result`',
+    );
+    expect(await note(`${steps}\nedge c result -> first`)).toBeUndefined();
+    expect(await note(`${steps}\norder p first second result`)).toBeUndefined();
   });
 
   it('formats consistently and keeps comments and unrelated statements', () => {
