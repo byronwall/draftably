@@ -641,6 +641,17 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       return w!.value;
     };
     const text = (w: Word | undefined) => w?.value ?? '';
+    // A label read from `"a\\nb"` shows a backslash and an n: usually a line break escaped twice.
+    const label = (w: Word | undefined, owner: string) => {
+      const v = text(w);
+      if (w?.quoted && v.includes('\\n'))
+        m.warnings.push({
+          code: 'literal-newline',
+          message: `${owner} displays a literal backslash and n. For a line break, change \\\\n to \\n in the .draft source.`,
+          line,
+        });
+      return v;
+    };
     const num = (key: string, fallback: number, min = -100_000, max = 100_000) => {
       const w = attrs.get(key);
       if (w === undefined) return fallback;
@@ -893,7 +904,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         m.objects.push({
           id: oid,
           type: command,
-          label: text(args[1]),
+          label: label(args[1], `${command === 'node' ? 'Node' : 'Group'} ${oid}`),
           parent: attrs.has('in') ? id(attrs.get('in')) : 'root',
           color,
           ...(shade !== undefined ? { shade } : {}),
@@ -966,7 +977,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           id: eid,
           source: id(args[1]),
           target: id(args[3]),
-          label: text(args[4]),
+          label: label(args[4], `Edge ${eid}`),
           dashed: choice('kind', 'sync', ['sync', 'async']) === 'async' || message === 'reply',
           ...(message ? { message } : {}),
           ...(attrs.has('answers') ? { replyTo: id(attrs.get('answers')) } : {}),

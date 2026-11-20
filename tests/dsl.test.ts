@@ -37,6 +37,17 @@ describe('syntax', () => {
       expect(errorLine(`node a "A"\nnode b "B"\nedge e a -> b ${attr}`)).toBe(3);
   });
 
+  it('warns on a line break escaped twice and keeps the label as written', () => {
+    const m = parseModel(
+      'node a "First card\\nDetail line"\nnode b "Second card\\\\nDetail line"\nedge e a -> b "x\\\\ny"',
+    );
+    expect(m.objects.find(o => o.id === 'b')?.label).toBe('Second card\\nDetail line');
+    expect(m.warnings.filter(w => w.code === 'literal-newline')).toEqual([
+      expect.objectContaining({ line: 2, message: expect.stringMatching(/^Node b .*\\\\n to \\n/) }),
+      expect.objectContaining({ line: 3, message: expect.stringMatching(/^Edge e /) }),
+    ]);
+  });
+
   it('formats consistently and keeps comments and unrelated statements', () => {
     const messy =
       '\n\n# heading\n  node   a  "A"   color=blue   # inline note\n\n\n\nnode b "B" // other style\n\n';
