@@ -79,7 +79,8 @@ const sets = setNames.map(name => {
 });
 
 // ---------- base checkout ----------
-const SCRIPTS = ['scripts/diagram-audit.mjs', 'scripts/shoot.mjs'];
+// The audit measures text with this checkout's font table, so both sides measure alike.
+const SCRIPTS = ['scripts/diagram-audit.mjs', 'scripts/shoot.mjs', 'src/model/font-metrics.json'];
 const baseRoot = path.join(root, 'tmp/audit-base', short);
 if (!fs.existsSync(path.join(baseRoot, 'package.json'))) {
   console.log(`Checking out ${baseRef} (${short}) into ${path.relative(root, baseRoot)}`);
@@ -109,8 +110,10 @@ if (!fs.existsSync(path.join(baseRoot, 'dist-cli/main.js')))
 // sit in the base checkout's ignored tmp/ (so it stays clean for `gh stack rebase`), beside a link
 // to its own CLI.
 const baseScripts = path.join(baseRoot, 'tmp/audit-scripts');
-fs.mkdirSync(path.join(baseScripts, 'scripts'), { recursive: true });
-for (const s of SCRIPTS) fs.copyFileSync(path.join(root, s), path.join(baseScripts, s));
+for (const s of SCRIPTS) {
+  fs.mkdirSync(path.dirname(path.join(baseScripts, s)), { recursive: true });
+  fs.copyFileSync(path.join(root, s), path.join(baseScripts, s));
+}
 const cliLink = path.join(baseScripts, 'scripts/draftably.mjs');
 if (!fs.existsSync(cliLink)) fs.symlinkSync(path.join(baseRoot, 'scripts/draftably.mjs'), cliLink);
 

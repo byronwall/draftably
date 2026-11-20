@@ -39,6 +39,8 @@ export interface RouteInput {
   nodes: RouteNodeInput[];
   groups: RouteGroupInput[];
   edges: RouteEdgeInput[];
+  /** Title text drawn outside a group frame (a soft group's): every line keeps clear of it. */
+  titles?: Array<Rect & { id: string }>;
 }
 
 export interface Route {
@@ -80,6 +82,8 @@ export interface RoutingReport extends RouteMetrics {
   repaired?: number;
   nudged: number;
   tidied?: number;
+  /** Routes whose inner run moved to the middle of a gap between facing sides. */
+  centred?: number;
   edges: number;
   milliseconds: number;
   passes: number;

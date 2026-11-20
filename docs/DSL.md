@@ -1574,6 +1574,12 @@ the file the other way. If that removes at least two bends and half of them, wit
 crossings and shorter lines, it notes `direction-bends` with both sizes. Change the direction to
 take it, or keep it when the direction is deliberate.
 
+When a `routing` line sets `crossing-penalty` above the default (360), `check --metrics` also
+draws the file at the default. If one line then loses a long detour (at least 200px and 40% of
+its length) for a crossing more, it notes `crossing-detour` with that line's length and bends both
+ways. Lower the penalty or reorder the boxes to take it, or keep it when no crossing is worth the
+detour.
+
 `inspect --json --metrics` adds the same numbers as a `metrics` object, so a script can compare
 two versions of a file without drawing an image.
 

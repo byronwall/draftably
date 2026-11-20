@@ -220,6 +220,12 @@ under 16px apart) and **uneven-group-gap** (facing gaps of up to 160px between s
 one drawing differ by more than 16px). `metrics.json` records each group's fill (`groupFill`)
 and each facing gap (`groupGaps`).
 
+Version 7 (2026-11-20) measures text instead of estimating it. A group title's ink (for
+`edge-through-title` and the header band) and an edge label's text box take their widths from
+`src/model/font-metrics.json`, the table the renderer and router measure with. Version 6 used 0.62
+em per character, about 40% too wide for Inter, and so counted lines that pass beside a title as
+lines through it.
+
 Issue sweep (version 6, 2026-11-20), each from one issue:
 
 - **edge-on-node-border** (#586): a line runs along a box's own outline, under 1.5px from the side

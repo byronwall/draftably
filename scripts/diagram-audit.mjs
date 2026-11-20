@@ -35,6 +35,37 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+// Text widths as the renderer measures them: the same advance-width table and face choice as
+// `measureText` and `faceFor` in src/model/fonts.ts (metric version 7). Kerning is ignored there
+// too, so a width here is never narrower than the drawn text.
+const FONT_TABLES = JSON.parse(
+  fs.readFileSync(path.join(root, 'src/model/font-metrics.json'), 'utf8'),
+);
+const decodeText = s =>
+  s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&amp;/g, '&');
+/** Width of `text` (SVG-escaped) drawn in the font a `<text>` tag names. */
+function textWidth(text, tag) {
+  const size = +(tag.match(/font-size="([\d.]+)"/)?.[1] ?? 13),
+    weight = +(tag.match(/font-weight="(\d+)"/)?.[1] ?? 500),
+    family = tag.match(/font-family="([^"]*)"/)?.[1] ?? '';
+  const face = /Serif/.test(family)
+    ? 'serif-600'
+    : /Mono/.test(family)
+      ? 'mono-500'
+      : weight >= 600
+        ? 'sans-600'
+        : 'sans-500';
+  const table = FONT_TABLES[face];
+  let units = 0;
+  for (const ch of decodeText(text)) units += table.advances[ch] ?? table.fallback;
+  return (units * size) / table.unitsPerEm;
+}
 const cli = path.join(root, 'scripts/draftably.mjs');
 
 const args = process.argv.slice(2);
@@ -178,8 +209,7 @@ function groupTitleInk(svg, g) {
     /<text x="([-\d.]+)" y="([-\d.]+)"[^>]*font-size="([\d.]+)" font-weight="600"[^>]*>([^<]*)</g;
   for (const m of svg.matchAll(re)) {
     if (Math.abs(+m[1] - (g.x + 33)) > 1 || Math.abs(+m[2] - (g.y + 17)) > 1) continue;
-    const chars = m[4].replace(/&[a-z#0-9]+;/g, '_').length;
-    return { x: g.x + 3, y: g.y + 2, w: 30 + chars * +m[3] * 0.62 + 8, h: 28 };
+    return { x: g.x + 3, y: g.y + 2, w: 30 + textWidth(m[4], m[0]) + 8, h: 28 };
   }
   return { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
 }
@@ -199,10 +229,9 @@ function parseLabels(svg) {
   // The text itself, inside the label's padding: the renderer pads the measured text by 8px
   // each side (to at least 36px wide) and centres one line of the annotation type in the box.
   for (const label of labels) {
-    const tag = svg.slice(label.at).match(/<text[^>]*font-size="([\d.]+)"/);
+    const tag = svg.slice(label.at).match(/<text[^>]*font-size="([\d.]+)"[^>]*>/);
     const size = tag ? +tag[1] : 10.5;
-    const chars = label.text.replace(/&[a-z#0-9]+;/g, '_').length;
-    const w = Math.min(label.w - 16, chars * size * 0.62);
+    const w = Math.min(label.w - 16, textWidth(label.text, tag ? tag[0] : ''));
     const c = center(label);
     label.ink = { x: c.x - w / 2, y: c.y - size / 2, w, h: size };
   }
@@ -640,7 +669,7 @@ function measure(file) {
     }
   }
 
-  // Issue-sweep metrics (2026-11-20, metric version 6). Each one names the issue it measures.
+  // Issue-sweep metrics (2026-11-20, metric version 6; text widths measured since version 7). Each one names the issue it measures.
   // On an outline (#586): a line runs along a box's own side, as a port that slides along the
   // border before it turns. A line should leave and arrive square to the side. Once per line:
   // boxes in a table share the line that runs along all of them.
@@ -704,7 +733,7 @@ function measure(file) {
     titleInk.set(g.id, {
       x: +m[1] - 2,
       y: +m[2] - size / 2 - 2,
-      w: title.length * size * 0.62 + 4,
+      w: textWidth(title, m[0]) + 4,
       h: size + 4,
     });
   }
