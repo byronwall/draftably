@@ -82,10 +82,15 @@ describe('docs links', () => {
   });
 
   it('serves every linked evaluation source from the public site', () => {
-    const sources = links.filter(({ href }) => href.startsWith('/evaluations/'));
-    expect(sources.length).toBeGreaterThan(40);
-    for (const { href } of sources) {
+    for (const { href } of links.filter(({ href }) => href.startsWith('/evaluations/')))
       expect(fs.existsSync(path.join(root, 'site/public', href)), href).toBe(true);
+    // The comparison grids link each cell's source and drawing from results.json.
+    const dir = path.join(root, 'site/public/evaluations/agent-diagrams');
+    const { cells } = JSON.parse(fs.readFileSync(path.join(dir, 'results.json'), 'utf8'));
+    expect(cells).toHaveLength(45);
+    for (const cell of cells) {
+      const files = [`source/${cell.source}.txt`, ...(cell.image ? [cell.image] : [])];
+      for (const file of files) expect(fs.existsSync(path.join(dir, file)), file).toBe(true);
     }
   });
 

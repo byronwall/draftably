@@ -101,36 +101,37 @@ const journeys = {
   async 'docs source links and source ZIP work under the nested base'() {
     const page = await open('docs/agent-diagram-evaluation', undefined, { acceptDownloads: true });
     await page.waitForSelector('.docs-search-button');
+    // Each drawing's source sits in the comparison grid's inspector.
+    await page
+      .getByRole('button', { name: 'Mermaid, With CLI and docs: open the drawing' })
+      .first()
+      .click();
     const source = page.locator(
-      '.doc a[href$="/evaluations/agent-diagrams/source/tooled/workflow/mermaid.mmd.txt"]',
+      '.ae-inspector a[href$="/evaluations/agent-diagrams/source/tooled/workflow/mermaid.mmd.txt"]',
     );
     const sourceUrl = await source.getAttribute('href');
     check('the source link keeps the nested site base', sourceUrl?.startsWith(BASE));
-    const sourceNav = page.waitForNavigation();
-    await source.click();
-    const response = await sourceNav;
-    const contentType = response?.headers()['content-type'] ?? '';
-    const sourceBody = await response?.text();
+    const response = await page.request.get(new URL(sourceUrl ?? '', page.url()).href);
+    const contentType = response.headers()['content-type'] ?? '';
+    const sourceBody = await response.text();
     check(
       'the source link serves text, not the SPA fallback',
-      response?.status() === 200 &&
+      response.status() === 200 &&
         /text\/plain/.test(contentType) &&
-        !/<!doctype html/i.test(sourceBody ?? ''),
-      `${response?.status()} ${contentType}; at ${page.url()}`,
+        !/<!doctype html/i.test(sourceBody),
+      `${response.status()} ${contentType}`,
     );
     check(
       'the source document has its expected contents',
-      /flowchart|graph/i.test(sourceBody ?? ''),
-      (sourceBody ?? '').slice(0, 80),
+      /flowchart|graph/i.test(sourceBody),
+      sourceBody.slice(0, 80),
     );
-    await page.goBack();
-    await page.waitForSelector('.doc');
-    const backPath = new URL(page.url()).pathname.replace(/\/$/, '');
     check(
-      'Back returns to the comparison docs under the nested base',
-      backPath === `${BASE}docs/agent-diagram-evaluation`,
-      backPath,
+      'the inspector shows the same source',
+      /flowchart|graph/i.test((await page.locator('.ae-side pre').textContent()) ?? ''),
     );
+    await page.keyboard.press('Escape');
+    check('Escape closes the inspector', (await page.locator('.ae-inspector').count()) === 0);
 
     const zip = page.locator('.doc a[href$="/evaluations/agent-diagrams/sources.zip"]');
     const zipUrl = await zip.getAttribute('href');
