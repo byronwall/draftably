@@ -30,6 +30,7 @@ import {
 } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
 import { foreignFormat, importForeign, type Imported } from './foreign';
+import { ImportNotice } from './ImportNotice';
 
 const BASE = import.meta.env.BASE_URL;
 const SPLIT_KEY = 'draftably.play.split';
@@ -136,11 +137,22 @@ export function Playground() {
   const [tab, setTab] = createSignal<'source' | 'diagram'>('diagram');
   // Mermaid or DOT text in the editor, with its import.
   const [imported, setImported] = createSignal<Imported | null>(null);
-  const convert = () => {
-    const found = imported();
+  // The text a convert replaced, kept so Compare and Undo work until the next keystroke.
+  const [origin, setOrigin] = createSignal<(Imported & { text: string }) | null>(null);
+  // A paste of a whole Mermaid or DOT diagram converts at once; typing it shows a preview first.
+  let pastedAt = 0;
+  const convert = (found = imported(), text = source()) => {
     if (!found?.native) return;
+    setOrigin({ ...found, text });
     setFitKey(`import:${Date.now()}`);
     editor?.replace(found.native);
+  };
+  const undoConvert = () => {
+    const was = origin();
+    if (!was) return;
+    setOrigin(null);
+    pastedAt = 0;
+    editor?.replace(was.text);
   };
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
@@ -199,6 +211,12 @@ export function Playground() {
           if (kind) {
             // Another format: draw its import as a preview. Drags stay off until it converts.
             const found = await importForeign(text, kind);
+            if (mine !== run) return;
+            if (found.native && Date.now() - pastedAt < 3000) {
+              pastedAt = 0;
+              convert(found, text);
+              return;
+            }
             const result = found.native ? await draw(found.native) : undefined;
             if (mine !== run) return;
             setImported(found);
@@ -715,52 +733,37 @@ export function Playground() {
               </div>
             )}
           </Show>
-          <Show when={imported()}>
+          <Show when={imported() ? { ...imported()!, text: source() } : origin()}>
             {found => (
-              <div class="play-import" role="status">
-                <div class="play-import-head">
-                  <span>
-                    <Show when={found().native} fallback={`${found().name}: ${found().error}`}>
-                      This is {found().name}. The drawing is a preview of its import.
-                    </Show>
-                  </span>
-                  <Show when={found().native}>
-                    <button type="button" class="tool primary" onClick={convert}>
-                      Convert to draftably
-                    </button>
-                  </Show>
-                </div>
-                <Show when={found().native && found().warnings.length}>
-                  <details class="play-import-changes">
-                    <summary>
-                      {found().warnings.length === 1
-                        ? 'The import changes 1 detail'
-                        : `The import changes ${found().warnings.length} details`}
-                    </summary>
-                    <ul>
-                      <For each={found().warnings}>{w => <li>{w}</li>}</For>
-                    </ul>
-                  </details>
-                </Show>
-              </div>
+              <ImportNotice
+                found={found()}
+                converted={!imported()}
+                onConvert={() => convert()}
+                onUndo={undoConvert}
+                onDismiss={() => setOrigin(null)}
+              />
             )}
           </Show>
           <Show when={ready()}>
-            <CodeEditor
-              value={source()}
-              onChange={setSource}
-              diagnostics={drawing().diagnostics}
-              linkedLines={linkedLines()}
-              onCursorLine={setCursorLine}
-              onFocusChange={setEditing}
-              onType={() => {
-                setPicked(null);
-                setReplaced(null);
-                fromLink = false;
-                saveDraft();
-              }}
-              ref={api => (editor = api)}
-            />
+            {/* A paste sets a flag the next redraw reads, to convert at once. */}
+            <div class="play-editor-wrap" onPaste={() => (pastedAt = Date.now())}>
+              <CodeEditor
+                value={source()}
+                onChange={setSource}
+                diagnostics={drawing().diagnostics}
+                linkedLines={linkedLines()}
+                onCursorLine={setCursorLine}
+                onFocusChange={setEditing}
+                onType={() => {
+                  setOrigin(null);
+                  setPicked(null);
+                  setReplaced(null);
+                  fromLink = false;
+                  saveDraft();
+                }}
+                ref={api => (editor = api)}
+              />
+            </div>
           </Show>
           <div class="play-status-wrap">
             <Show when={listOpen() && allProblems().length > 1}>
