@@ -1,0 +1,46 @@
+# Issue #587: Keep edge labels from hiding neighboring routes
+# https://github.com/byronwall/draftably/issues/587
+diagram "Parallel routes and edge labels" version=1
+theme drafting
+group inputs "Inputs" color=slate
+node a1 "Input 1" in=inputs
+node a2 "Input 2" in=inputs
+node a3 "Input 3" in=inputs
+node a4 "Input 4" in=inputs
+node a5 "Input 5" in=inputs
+node a6 "Input 6" in=inputs
+node a7 "Input 7" in=inputs
+node a8 "Input 8" in=inputs
+node a9 "Input 9" in=inputs
+node a10 "Input 10" in=inputs
+node a11 "Input 11" in=inputs
+group outputs "Outputs" color=stone
+node b1 "Output 1" in=outputs
+node b2 "Output 2" in=outputs
+node b3 "Output 3" in=outputs
+node b4 "Output 4" in=outputs
+node b5 "Output 5" in=outputs
+node b6 "Output 6" in=outputs
+edge e1 a1 -> b1
+edge e2 a2 -> b1
+edge e3 a3 -> b2
+edge e4 a4 -> b3 "First example label"
+edge e5 a5 -> b3
+edge e6 a6 -> b3 "Second example label"
+edge e7 a7 -> b3
+edge e8 a9 -> b4
+edge e9 a8 -> b4 "Follow the marked route"
+edge e10 a8 -> b3 "Alternate route" kind=async
+edge e11 a10 -> b5
+edge e12 a11 -> b6 "Last example label"
+layout root engine=layered direction=right ordering=stable fit=slide
+size a1 width=164 height=72
+size a2 width=164 height=72
+size a3 width=164 height=72
+size a5 width=164 height=72
+size b1 width=228 height=71
+size b2 width=228 height=71
+size b3 width=228 height=71
+size b4 width=228 height=71
+size b5 width=228 height=71
+size b6 width=228 height=71

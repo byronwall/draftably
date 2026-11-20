@@ -1,0 +1,41 @@
+# Issue #597: Offer aligned rows and columns for sibling nodes in compound layouts
+# https://github.com/byronwall/draftably/issues/597
+diagram "Alignment across five groups" version=1
+group group1 "Group 1" color=blue
+node A "A" in=group1 
+size A width=240 height=71
+node B "B" in=group1 
+size B width=240 height=71
+group group2 "Group 2" color=stone
+node C "C" in=group2 color=amber
+size C width=276 height=71
+node D "D" in=group2 color=amber
+size D width=276 height=71
+node E "E" in=group2 color=amber
+size E width=276 height=71
+group group3 "Group 3" color=teal
+node F "F" in=group3 
+size F width=164 height=71
+node G "G" in=group3 
+size G width=164 height=71
+group group4 "Group 4" color=violet
+node H "H" in=group4 
+size H width=184 height=71
+node I "I" in=group4 
+size I width=184 height=71
+group group5 "Group 5" color=rose
+node J "J" in=group5 
+size J width=164 height=56
+node K "K" in=group5 
+size K width=164 height=71
+edge e1 A -> C "Route 1"
+edge e2 C -> F "Route 2"
+edge e3 G -> F "Route 3" kind=async
+edge e4 C -> D "Route 4"
+edge e5 B -> D "Route 5"
+edge e6 D -> H "Route 6"
+edge e7 H -> E "Route 7"
+edge e8 E -> I "Route 8"
+edge e9 H -> J "Route 9"
+edge e10 I -> K "Route 10"
+layout root engine=compound-spring fit=slide node-gap=28 rank-gap=70 aspect=1.6

@@ -1,0 +1,43 @@
+# Issue #599: Swap adjacent outgoing ports to remove a local edge crossing
+# https://github.com/byronwall/draftably/issues/599
+diagram "Two bottom ports feed stacked destinations" version=1
+group group1 "Group 1" color=sky
+node A "A" in=group1
+size A width=208 height=71
+node B "B" in=group1
+size B width=208 height=71
+node C "C" in=group1
+size C width=208 height=71
+group group2 "Group 2" color=violet
+node D "D" in=group2
+size D width=256 height=71
+node E "E" in=group2
+size E width=256 height=71
+group group3 "Group 3" color=amber
+node F "F" in=group3
+size F width=264 height=71
+node G "G" in=group3
+size G width=264 height=71
+node H "H" in=group3
+size H width=264 height=71
+group group4 "Group 4" color=slate
+node I "I" in=group4
+size I width=188 height=71
+node J "J" in=group4
+size J width=188 height=71
+node K "K" in=group4
+size K width=188 height=71
+node L "L" in=group4
+size L width=188 height=71
+edge e1 A -> F "Route 1"
+edge e2 B -> F "Route 2"
+edge e3 C -> G "Route 3"
+edge e4 D -> G
+edge e5 E -> F kind=async
+edge e6 F -> G
+edge e7 G -> H
+edge e8 F -> I
+edge e9 G -> J
+edge e10 F -> K
+edge e11 F -> L
+layout root engine=compound-flow direction=right

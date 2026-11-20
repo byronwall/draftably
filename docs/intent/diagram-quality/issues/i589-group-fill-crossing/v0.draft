@@ -1,0 +1,9 @@
+# Issue #589: Keep group fill inside the border where edges cross
+# https://github.com/byronwall/draftably/issues/589
+diagram "Edge crossing two group borders" version=1
+group first "Group A" color=amber
+node a "A" in=first
+group second "Group B" color=teal
+node b "B" in=second
+edge link a -> b
+layout root row gap=90

@@ -1,0 +1,19 @@
+# Issue #586: Route edges perpendicular to the node surface before the first bend
+# https://github.com/byronwall/draftably/issues/586
+diagram "Arrival at the right port" version=1
+group one "Table A" color=teal
+node a "A" in=one
+node b "B" in=one
+group two "Table B" color=teal
+node c "C" in=two
+node d "D" in=two
+node reader "Source"
+size a width=240 height=51
+size b width=240 height=51
+size c width=193 height=51
+size d width=234 height=51
+size reader width=172 height=71
+edge link reader -> two "Read" to=right
+layout root engine=layered fit=slide
+layout one cells
+layout two cells

@@ -1,0 +1,23 @@
+# Issue #603: Draw touching soft-group backgrounds as one seamless region
+# https://github.com/byronwall/draftably/issues/603
+diagram "Touching and detached group regions" version=1
+group g "Group A" frame=soft color=sky
+node a "First" in=g
+node b "Second" in=g
+node c "Third" in=g
+node d "Fourth" in=g
+node e "Last" in=g
+node x "Outside" color=slate
+node y "Outside" color=slate
+size a width=180 height=56
+size b width=210 height=56
+size c width=250 height=56
+size d width=260 height=56
+edge ab a -> b
+edge bc b -> c "Continue"
+edge cd c -> d
+edge de d -> e
+edge be b -> e "Alternate"
+edge dx d -> x kind=async
+edge cy c -> y kind=async
+layout root flow gap=40 fit=slide

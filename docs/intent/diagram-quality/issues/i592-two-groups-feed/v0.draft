@@ -1,0 +1,29 @@
+# Issue #592: Offer a tighter arrangement for two groups feeding one destination
+# https://github.com/byronwall/draftably/issues/592
+diagram "Two inputs feed one output" version=1
+group first "Input A" color=blue
+node a "A1" in=first
+node b "A2" in=first
+group second "Input B" color=slate
+node c "B1 [1]" in=second
+node d "B2" in=second
+group last "Output" color=teal
+node e "C1 [2]" in=last
+node f "C2" in=last
+edge ab a -> b
+edge cd c -> d
+edge be b -> e
+edge de d -> e
+edge ef e -> f
+size a width=236 height=71
+size b width=236 height=71
+size c width=304 height=71
+size d width=304 height=71
+size e width=240 height=71
+size f width=240 height=71
+footnote 1 "The first note describes a detail about the sample."
+footnote 2 "The second note records another detail about the sample."
+layout root engine=compound-spring aspect=1.6 fit=slide
+layout first column
+layout second column
+layout last column

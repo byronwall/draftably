@@ -1,0 +1,12 @@
+# Issue #586: Route edges perpendicular to the node surface before the first bend
+# https://github.com/byronwall/draftably/issues/586
+group first "Row 1"
+group middle "Row 2"
+group last "Row 3"
+node c "C" in=first
+node f "F" in=middle
+node h "H" in=last
+node i "I" in=last
+edge ch c -> h kind=async from=bottom to=top
+edge fi f -> i
+layout root lanes fit=slide
