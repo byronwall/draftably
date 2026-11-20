@@ -3,7 +3,7 @@ import { standoffCost } from './cost.ts';
 import { center, clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { validPath } from './paths.ts';
 import { offsetKey, port, sideKey } from './ports.ts';
-import { centrePorts, ends, flat, tip, type Attempt } from './tidy-ports.ts';
+import { centrePorts, ends, flat, swapPorts, tip, type Attempt } from './tidy-ports.ts';
 import { PORT_SLACK } from './tuning.ts';
 import type { Axis, End, Obstacle, Point, Route, RouteEdge, Side } from './types.ts';
 
@@ -111,6 +111,7 @@ export function tidy(ctx: Context) {
   };
 
   centrePorts(ctx, attempt);
+  swapPorts(ctx, attempt);
 
   // Fans: edges leaving (or entering) one side turn on a shared line.
   const fans = new Map<string, number[]>();

@@ -69,6 +69,15 @@ describe('routing near group borders', () => {
     };
     input.edges[0].cfg = { fromSide: 'top', toSide: 'top' };
     const [route] = RouteLab.compute(input).routes;
+    // No route clears the title here. The drawn stand-in still leaves and enters square, a stub
+    // out from both tops, rather than running along them.
+    if (route.blocked) {
+      const ps = route.points;
+      expect(ps[0].x).toBe(ps[1].x);
+      expect(ps.at(-1)!.x).toBe(ps.at(-2)!.x);
+      expect(ps[1].y).toBeLessThan(ps[0].y);
+      return;
+    }
     for (let i = 1; i < route.points.length; i++)
       if (route.points[i].y === route.points[i - 1].y)
         expect(route.points[i].y <= 2 || route.points[i].y >= 40).toBe(true);

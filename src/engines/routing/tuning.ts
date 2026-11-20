@@ -26,7 +26,9 @@ export const DETOUR_RATIO = 1.75,
   DETOUR_SOFT = 1.2,
   // What crossing a title band away from a top member's terminal line costs a route.
   BAND_COST = 120;
-export const PORT_SLACK = 4;
+export const PORT_SLACK = 4,
+  // What a lone port's slide to its side's middle must save in standoff to stand.
+  LONE_GAIN = 0.5;
 export const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
 // Crossing pairs the repair pass tries before it stops, to bound its time on busy drawings. Each
