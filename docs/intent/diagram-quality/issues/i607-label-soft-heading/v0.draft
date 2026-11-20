@@ -1,0 +1,35 @@
+# Issue #607: Keep edge labels clear of soft-group headings
+# https://github.com/byronwall/draftably/issues/607
+diagram "Edge label beside a group heading" version=1
+node A "A" color=slate
+size A width=224 height=71
+node B "B" color=slate
+size B width=196 height=71
+group group1 "Collection 1" color=blue frame=soft
+node C "C" in=group1 color=red
+size C width=276 height=71
+node D "D" in=group1 color=amber
+size D width=208 height=71
+node E "E" in=group1 color=green
+size E width=196 height=71
+group group2 "Collection 2" color=blue frame=soft
+node F "F" in=group2 color=green
+size F width=204 height=71
+node G "G" in=group2 color=green
+size G width=200 height=71
+node H "H" color=red
+size H width=264 height=71
+node I "I" color=amber
+size I width=240 height=71
+node J "J" color=amber
+size J width=228 height=71
+edge e1 A -> B
+edge e2 B -> C
+edge e3 C -> D
+edge e4 D -> E
+edge e5 E -> F "Periodic refresh"
+edge e6 E -> G
+edge e7 H -> C kind=async
+edge e8 I -> D kind=async
+edge e9 J -> D kind=async
+layout root engine=layered fit=slide

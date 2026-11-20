@@ -1,0 +1,12 @@
+# Issue #591: Fit column group frames to their content and balance the side insets
+# https://github.com/byronwall/draftably/issues/591
+diagram "A column with a longer heading" version=1
+group other "First collection"
+node start "Start" in=other
+group sample "Second batch · Use yellow-triangle-collection.txt" color=teal
+node a "Circle\nTiny shapes" in=sample
+node b "Square" in=sample
+node c "Triangle" in=sample
+layout sample column gap=12
+edge flow other -> sample
+layout root row fit=slide

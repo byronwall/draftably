@@ -1,0 +1,21 @@
+# Issue #596: Prefer the free bottom-center port when it clears a nearby group border
+# https://github.com/byronwall/draftably/issues/596
+diagram "A dashed route beside a group" version=1
+group n7 "Example collection" color=violet
+node n4 "A" in=n7
+node n8 "B" in=n7
+node n6 "C" in=n7
+node n1 "Source 1"
+node n3 "Source 2"
+node n2 "Source 3"
+node n5 "Source 4"
+size n1 width=164 height=71
+size n3 width=192 height=71
+size n2 width=200 height=71
+size n5 width=164 height=72
+edge e1 n1 -> n4 "One"
+edge e2 n3 -> n8 "Two"
+edge e3 n2 -> n6 "Three"
+edge e4 n5 -> n6 "Short route"
+edge e5 n5 -> n4 "Follow the longer dashed route" kind=async
+layout root engine=compound-flow direction=down

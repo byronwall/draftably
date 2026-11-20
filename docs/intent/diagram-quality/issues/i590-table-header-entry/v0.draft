@@ -1,0 +1,17 @@
+# Issue #590: Shorten routes into tables by attaching to the near side of the header
+# https://github.com/byronwall/draftably/issues/590
+diagram "One input, two tables" version=1
+node input "Input"
+group upper "Table A" color=blue
+node a "A1" in=upper
+node b "A2" in=upper
+node c "A3" in=upper
+node d "A4" in=upper
+group lower "Table B" color=teal
+node e "B1" in=lower
+node f "B2" in=lower
+edge first input -> upper
+edge second input -> lower
+layout root engine=compound-flow direction=right fit=slide
+layout upper cells columns=2
+layout lower cells columns=2

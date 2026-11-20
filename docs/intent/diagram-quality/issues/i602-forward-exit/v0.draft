@@ -1,0 +1,48 @@
+# Issue #602: Prefer a forward exit over a detour around the outside of the drawing
+# https://github.com/byronwall/draftably/issues/602
+diagram "Route to a highlighted cell" version=1
+group tableA "Table A" color=teal
+node r1 "R1" in=tableA
+size r1 width=108 height=36
+node r2 "R2" in=tableA
+size r2 width=216 height=36
+node r3 "R3" in=tableA
+size r3 width=108 height=36
+node r4 "R4" in=tableA color=amber shade=200
+size r4 width=216 height=36
+node r5 "R5" in=tableA
+size r5 width=108 height=36
+node r6 "R6" in=tableA
+size r6 width=216 height=36
+node r7 "R7" in=tableA
+size r7 width=108 height=36
+node r8 "R8" in=tableA
+size r8 width=216 height=36
+node r9 "R9" in=tableA
+size r9 width=108 height=36
+node r10 "R10" in=tableA
+size r10 width=216 height=36
+group tableB "Table B" color=teal
+node k1 "K1" in=tableB
+size k1 width=142 height=36
+node k2 "K2" in=tableB
+size k2 width=199 height=36
+group tableC "Table C" color=teal
+node i1 "I1" in=tableC
+size i1 width=152 height=52
+node i2 "I2" in=tableC
+size i2 width=240 height=52
+group tableD "Table D" color=teal
+node o1 "O1" in=tableD
+size o1 width=109 height=36
+node o2 "O2" in=tableD
+size o2 width=142 height=36
+node source "Source" color=blue shade=200
+size source width=260 height=71
+edge primary source -> r4
+edge secondary source -> tableD "Other route"
+layout root engine=layered fit=slide
+layout tableA cells columns=2
+layout tableB cells
+layout tableC cells columns=2
+layout tableD cells columns=2

@@ -148,6 +148,7 @@ const opposite = { R: 'L', L: 'R', U: 'D', D: 'U' };
 function parseSource(text) {
   const edges = new Map();
   const diamonds = new Set();
+  const groupTitles = new Map();
   let direction,
     edgeGap = 16;
   for (const raw of text.split('\n')) {
@@ -156,12 +157,14 @@ function parseSource(text) {
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
     if (n) diamonds.add(n[1]);
+    const t = line.match(/^group\s+(\S+)\s+"((?:[^"\\]|\\.)*)"/);
+    if (t) groupTitles.set(t[1], t[2].split('\\n')[0]);
     const l = line.match(/^layout\s+root\b.*direction=(right|down)/);
     if (l) direction = l[1];
     const g = line.match(/^routing\b.*\b(?:edge|port)-gap=(\d+)/g);
     if (g) for (const m of g) edgeGap = Math.max(edgeGap, +m.match(/(\d+)$/)[1]);
   }
-  return { edges, diamonds, direction, edgeGap };
+  return { edges, diamonds, direction, edgeGap, groupTitles };
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
@@ -466,7 +469,7 @@ function measure(file) {
   if (!check.ok) return { file, error: check.out.trim() };
   const geo = JSON.parse(run('inspect', file).out);
   const svg = run('inspect', file, '--svg').out;
-  const { edges, diamonds, direction, edgeGap } = parseSource(source);
+  const { edges, diamonds, direction, edgeGap, groupTitles } = parseSource(source);
 
   const byId = new Map(geo.nodes.map(n => [n.id, n]));
   const parents = new Set(geo.nodes.map(n => n.parent));
@@ -634,6 +637,109 @@ function measure(file) {
         }),
       );
       if (close) note('edges-too-close', `${routes[i].id} & ${routes[j].id}`);
+    }
+  }
+
+  // Issue-sweep metrics (2026-11-20, metric version 6). Each one names the issue it measures.
+  // On an outline (#586): a line runs along a box's own side, as a port that slides along the
+  // border before it turns. A line should leave and arrive square to the side. Once per line:
+  // boxes in a table share the line that runs along all of them.
+  for (const r of routes) {
+    const runs = r.segs.map(straight).filter(Boolean);
+    const on = leaves.filter(n =>
+      runs.some(s =>
+        sides(n).some(side => Math.abs(s.at - side.at) < 1.5 && alongside(s, side) > 4),
+      ),
+    );
+    if (on.length)
+      note('edge-on-node-border', `${r.id} along ${on.map(n => n.id).join(', ')}'s outline`);
+  }
+  // Off centre in a gap (#595): the only line in a gap under 80px between two facing sides (box
+  // or group border) sits more than 4px nearer one side than the other, at least 8px from both.
+  const faces = [...leaves, ...groups].flatMap(sides);
+  for (const r of routes) {
+    for (const s of r.segs.map(straight).filter(s => s && s.to - s.from > 40)) {
+      const nearest = out =>
+        faces
+          .filter(f => f.axis === s.axis && alongside(s, f) > 20 && (s.at - f.at) * out > EPS)
+          .reduce(
+            (best, f) => (!best || Math.abs(s.at - f.at) < Math.abs(s.at - best.at) ? f : best),
+            null,
+          );
+      const lo = nearest(1),
+        hi = nearest(-1);
+      const onFace = faces.some(
+        f => f.axis === s.axis && Math.abs(s.at - f.at) < 1.5 && alongside(s, f) > 4,
+      );
+      if (!lo || !hi || onFace) continue;
+      const [a, b] = [s.at - lo.at, hi.at - s.at];
+      // Under 8px from a side is a line on a border or outline, which other metrics count.
+      if (a + b > 80 || Math.min(a, b) < 8 || Math.abs(a - b) <= 4) continue;
+      const shared = routes.some(
+        o =>
+          o !== r &&
+          o.segs.some(sg => {
+            const t = straight(sg);
+            return t && t.axis === s.axis && t.at > lo.at && t.at < hi.at && alongside(s, t) > 20;
+          }),
+      );
+      if (!shared) {
+        note('off-center-gap', `${r.id} ${Math.round(a)}/${Math.round(b)}px between sides`);
+        break;
+      }
+    }
+  }
+  // Through a title's text (#604): any run through a group title's letters, the last leg into a
+  // top member included. Frame titles sit at the frame's top left; soft titles at the hull's.
+  const titleInk = new Map();
+  for (const g of groups) {
+    const title = groupTitles.get(g.id);
+    if (!title) continue;
+    const esc = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/&/g, '&amp;');
+    const m = svg.match(
+      new RegExp(`<text x="([-\\d.]+)" y="([-\\d.]+)"[^>]*font-size="([\\d.]+)"[^>]*>${esc}<`),
+    );
+    if (!m) continue;
+    const size = +m[3];
+    titleInk.set(g.id, {
+      x: +m[1] - 2,
+      y: +m[2] - size / 2 - 2,
+      w: title.length * size * 0.62 + 4,
+      h: size + 4,
+    });
+  }
+  for (const r of routes)
+    for (const [id, ink] of titleInk)
+      if (r.segs.some(sg => segHitsRect(sg, ink)))
+        note('edge-through-title', `${r.id} through ${id}'s title`);
+  // Non-facing ports (#606): two boxes stacked in adjacent rows (or columns), their spans
+  // overlapping by 32px or more with a 32px gap between that no other box enters, and the line
+  // leaves or arrives on another side and doubles back across the stack.
+  for (const r of routes) {
+    const s = byId.get(r.source),
+      t = byId.get(r.target);
+    if (!s || !t || parents.has(s.id) || parents.has(t.id) || r.segs.length < 2) continue;
+    for (const [axis, size, across, acrossSize] of [
+      ['y', 'h', 'x', 'w'],
+      ['x', 'w', 'y', 'h'],
+    ]) {
+      const overlap =
+        Math.min(s[across] + s[acrossSize], t[across] + t[acrossSize]) -
+        Math.max(s[across], t[across]);
+      const gap = Math.max(t[axis] - (s[axis] + s[size]), s[axis] - (t[axis] + t[size]));
+      if (overlap < 32 || gap < 32) continue;
+      const lo = Math.max(s[across], t[across]),
+        near = Math.min(s[axis] + s[size], t[axis] + t[size]);
+      const corridor =
+        axis === 'y'
+          ? { x: lo, y: near, w: overlap, h: gap }
+          : { x: near, y: lo, w: gap, h: overlap };
+      if (leaves.some(n => n !== s && n !== t && rectsOverlap(n, corridor))) continue;
+      const coords = r.points.map(p => p[across]);
+      const steps = coords.slice(1).map((c, i) => Math.sign(Math.round(c - coords[i])));
+      const moves = steps.filter(Boolean);
+      const reverses = moves.some((m, i) => i && m !== moves[i - 1]);
+      if (reverses) note('non-facing-ports', `${r.id} doubles back between ${s.id} and ${t.id}`);
     }
   }
 
@@ -1168,6 +1274,10 @@ function measure(file) {
       'tight-group-gap',
       'uneven-group-gap',
       'label-through-text',
+      'edge-on-node-border',
+      'off-center-gap',
+      'edge-through-title',
+      'non-facing-ports',
       'labels-too-close',
       'label-beside-line',
       'empty-area',
@@ -1214,6 +1324,10 @@ function measure(file) {
     'tight-group-gap': 2,
     'uneven-group-gap': 1,
     'label-through-text': 6,
+    'edge-on-node-border': 2,
+    'off-center-gap': 1,
+    'edge-through-title': 3,
+    'non-facing-ports': 2,
     'labels-too-close': 2,
     'label-beside-line': 1,
     'empty-area': 3,

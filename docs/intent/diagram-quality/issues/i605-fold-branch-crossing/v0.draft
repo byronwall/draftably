@@ -1,0 +1,47 @@
+# Issue #605: Suggest reordering sibling branches to remove a crossing before a flow folds
+# https://github.com/byronwall/draftably/issues/605
+diagram "Routes across a folded flow" version=1
+group inputs "Inputs" color=sky frame=soft
+node A "A" in=inputs
+size A width=260 height=71
+node B "B" in=inputs
+size B width=268 height=71
+node C "C" in=inputs
+size C width=228 height=71
+group stage "Stage" color=violet frame=soft
+node D "D" in=stage
+size D width=216 height=71
+node E "E" in=stage
+size E width=224 height=71
+node F "F" color=amber
+size F width=164 height=56
+node G "G" color=slate
+size G width=164 height=56
+node H "H" color=slate
+size H width=164 height=56
+group batch "Second row of sample steps" color=amber frame=soft
+node I "I" in=batch
+size I width=192 height=71
+node J "J" in=batch
+size J width=164 height=72
+node K "K" in=batch
+size K width=164 height=71
+group end "End" color=mint frame=soft
+node L "L" in=end
+size L width=200 height=71
+node M "M" in=end
+size M width=208 height=71
+edge e1 A -> D
+edge e2 B -> D
+edge e3 C -> D
+edge e4 D -> E
+edge e5 E -> F "Upper branch"
+edge e6 E -> G "Middle branch with detail"
+edge e7 E -> H "Lower branch"
+edge e8 F -> I
+edge e9 I -> J
+edge e10 J -> K
+edge e11 K -> L
+edge e12 L -> M
+edge e13 G -> M kind=async
+layout root flow gap=48 fit=slide

@@ -1,0 +1,23 @@
+# Issue #594: Center incoming arrows symmetrically on their shared group frame
+# https://github.com/byronwall/draftably/issues/594
+diagram "Two arrows into one group" version=1
+group sources "Inputs" color=slate
+node a "Input A" in=sources
+node b "Input B" in=sources
+node c "Input C" in=sources
+group target "Collection" color=teal
+node x "Item X" in=target
+node y "Item Y" in=target
+node z "Separate output"
+size a width=220 height=71
+size b width=220 height=71
+size c width=220 height=71
+size x width=232 height=71
+size y width=232 height=71
+size z width=204 height=71
+edge first a -> target
+edge second b -> target
+edge third c -> z
+layout root engine=compound-spring direction=right fit=slide aspect=1.6
+layout sources column
+layout target column

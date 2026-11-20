@@ -1,7 +1,8 @@
+import { conflicts } from './conflicts.ts';
 import type { Context } from './context.ts';
 import { center, clone, EPS, round } from './geometry.ts';
 import { offsetKey, port, sideKey } from './ports.ts';
-import { PORT_SLACK } from './tuning.ts';
+import { LONE_GAIN, PORT_SLACK } from './tuning.ts';
 import type { Box, End, Point, Route, Side } from './types.ts';
 
 /** One end of a route, by the route's index. */
@@ -51,6 +52,21 @@ export function centrePorts(ctx: Context, attempt: Attempt) {
       mid = center(rect)[axis],
       limit = (vertical ? rect.h : rect.w) / 2 - 10,
       at = [...new Set(list.map(({ i, end }) => round(tip(state.routes[i].points, end)[axis])))];
+    // A lone bent line leaving off its side's middle (its siblings moved elsewhere) slides to the
+    // middle when that takes it clear of a border or box it runs beside: it must lower the
+    // standoff. An arrival keeps its port, which spaces it from the lines beside it.
+    if (list.length === 1 && flat(rect)) {
+      const { i, end } = list[0];
+      if (end !== 'from') continue;
+      const ps = clone(state.routes[i].points),
+        d = round(mid - at[0]);
+      if (ps.length < 3 || Math.abs(d) < 2) continue;
+      const moved = port(rect, side, 0);
+      Object.assign(tip(ps, end), moved);
+      tip(ps, end, 1)[axis] = moved[axis];
+      attempt(new Map([[i, ps]]), { [i]: { [offsetKey(end)]: 0 } }, false, -LONE_GAIN);
+      continue;
+    }
     if (at.length < 2) continue;
     const d = round(mid - at.reduce((n, v) => n + v, 0) / at.length);
     if (Math.abs(d) < 2 || at.some(v => Math.abs(v + d - mid) > limit + EPS)) continue;
@@ -137,5 +153,58 @@ export function centrePorts(ctx: Context, attempt: Attempt) {
         attempt(moves, extra, false, PORT_SLACK * moves.size)
       )
         break;
+  }
+}
+
+/**
+ * Ports: two bent lines out of (or into) one side that cross each other change ports, each
+ * keeping its own track beyond the first turn, when that removes the crossing and adds none.
+ * The two ports hold their places on the side, so the fan's spacing stays.
+ */
+export function swapPorts(ctx: Context, attempt: Attempt) {
+  const { rects, state, metrics } = ctx;
+  const sides = new Map<string, PortEnd[]>();
+  state.routes.forEach((r, i) => {
+    if (r.points.length < 3 || r.from === r.to) return;
+    for (const end of ends) {
+      const key = r[end] + '|' + end + '|' + r[sideKey(end)];
+      if (!sides.has(key)) sides.set(key, []);
+      sides.get(key)!.push({ i, end });
+    }
+  });
+  for (const [key, list] of sides) {
+    if (list.length < 2) continue;
+    const [id, , side] = key.split('|') as [string, End, Side],
+      rect = rects.get(id)!,
+      axis = side === 'left' || side === 'right' ? 'y' : 'x';
+    if (!flat(rect)) continue;
+    const at = (p: PortEnd) => tip(state.routes[p.i].points, p.end)[axis];
+    const sorted = [...list].sort((p, q) => at(p) - at(q));
+    for (let k = 1; k < sorted.length; k++) {
+      const p = sorted[k - 1],
+        q = sorted[k],
+        rp = state.routes[p.i],
+        rq = state.routes[q.i];
+      if (!conflicts(rp.points, [rq]).crossings) continue;
+      const changes = new Map<number, Point[]>(),
+        extra: Record<number, Partial<Route>> = {};
+      for (const [x, y] of [
+        [p, q],
+        [q, p],
+      ]) {
+        const ps = clone(state.routes[x.i].points),
+          offset = state.routes[y.i][offsetKey(y.end)],
+          moved = port(rect, side, offset);
+        Object.assign(tip(ps, x.end), moved);
+        tip(ps, x.end, 1)[axis] = moved[axis];
+        changes.set(x.i, ps);
+        extra[x.i] = { [offsetKey(x.end)]: offset };
+      }
+      const next = state.routes.map((r, i) =>
+        changes.has(i) ? { ...r, points: changes.get(i)! } : r,
+      );
+      if (metrics(next).crossings >= metrics(state.routes).crossings) continue;
+      if (attempt(changes, extra)) sorted.splice(k - 1, 2, q, p);
+    }
   }
 }

@@ -2,6 +2,9 @@ import { conflicts, parallelConflicts } from './conflicts.ts';
 import { BORDER_WEIGHT } from './cost.ts';
 import { center, cmp, distance, EPS, inflate, round, segments, SIDES, vector } from './geometry.ts';
 import { TIGHT_PITCH } from './ports.ts';
+
+// How far in from a corner a port sits (`port` clamps offsets the same).
+const PORT_INSET = 10;
 import { settings } from './settings.ts';
 import type {
   Box,
@@ -120,19 +123,60 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
       slots(Math.min(TIGHT_PITCH, gap)) > full
     );
   };
+  // Lines that end on each group's frame stub.
+  const frameLines = new Map<string, number>();
+  for (const e of edges)
+    for (const id of new Set([e.from, e.to]))
+      if (rects.get(id)?.frame) frameLines.set(id, (frameLines.get(id) ?? 0) + 1);
+  // More than one line ends on frame stub `id`: they fan out round the middle of its side.
+  const fanIn = (id: string) => facingFans && (frameLines.get(id) ?? 0) > 1;
+  // The span along side `side` of frame stub `id` above the members flush against that side,
+  // a port's inset in from each end: a table's header band beside its title. Null when no member
+  // sits flush, or the band is too short for a port.
+  const headerBand = (id: string, side: Side): [number, number] | null => {
+    const r = rects.get(id);
+    if (!facingFans || !r?.frame || (side !== 'left' && side !== 'right')) return null;
+    const g = r.parentId!,
+      edge = side === 'left' ? r.x : r.x + r.w,
+      flush = [...rects.values()].filter(
+        m =>
+          !m.frame &&
+          ancestors(m.id).includes(g) &&
+          Math.abs((side === 'left' ? m.x : m.x + m.w) - edge) < 1,
+      );
+    if (!flush.length) return null;
+    const lo = r.y + PORT_INSET,
+      hi = Math.min(...flush.map(m => m.y)) - PORT_INSET;
+    return hi >= lo ? [lo, hi] : null;
+  };
   const flowOf = (e: RouteEdge) =>
     [e.cfg.flow, rawOptions.direction].find(d => d === 'right' || d === 'down');
   // Each route's score when `findIn` chose it, to weigh a gated route against an open one.
   const scores = new WeakMap<Route, number>();
   const obsFor = (e: RouteEdge, open = openBands.has(e.id)) => {
     const allowed = new Set([...ancestors(e.from), ...ancestors(e.to)]),
+      // A line that ends on a group's frame meets the border from outside. The frame stub stands
+      // for the group, so the members and title flush against the border must not block the
+      // line's last run (a table's cells fill it to the border on every side).
+      framed = facingFans
+        ? new Set(
+            [e.from, e.to]
+              .filter(id => rects.get(id)?.frame)
+              .map(id => rects.get(id)!.parentId!)
+              .filter(
+                g => ![e.from, e.to].some(id => !rects.get(id)?.frame && ancestors(id).includes(g)),
+              ),
+          )
+        : new Set<string>(),
       // A frame stub (a line's end on an open group's frame) covers the group's members: it
       // blocks only its own lines, which must not run inside the group. Others see the group.
       obstacles: Obstacle[] = [...rects.values()]
         .filter(r => !r.frame || r.id === e.from || r.id === e.to)
+        .filter(r => r.frame || !ancestors(r.id).some(g => framed.has(g)))
         .map(r => inflate(r, s.clearance));
     for (const [id, g] of groups) {
       if (g.collapsed) continue;
+      if (framed.has(id)) continue;
       if (!allowed.has(id)) obstacles.push(inflate(g, s.clearance));
       else {
         // The title blocks the header band. Beside it, a line may cross the band
@@ -221,7 +265,7 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
   // A route that leaves or enters by a side pointing away from its other end took the long way
   // round, often because the facing side was full when it was routed. Edges routed later may
   // have moved off since, so the improvement passes try it again.
-  const far = (r: Route) => {
+  const far = (r: Pick<Route, 'from' | 'to' | 'fromSide' | 'toSide'>) => {
     if (r.from === r.to) return false;
     const ca = center(rects.get(r.from)!),
       cb = center(rects.get(r.to)!),
@@ -249,6 +293,8 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
     syncOpen,
     beyond,
     crowdedSide,
+    fanIn,
+    headerBand,
     flowOf,
     scores,
     obsFor,

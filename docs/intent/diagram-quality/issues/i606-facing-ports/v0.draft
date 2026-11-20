@@ -1,0 +1,44 @@
+# Issue #606: Use facing bottom and top ports for offset nodes in adjacent rows
+# https://github.com/byronwall/draftably/issues/606
+diagram "A downward connection between rows" version=1
+group group1 "Collection 1" color=slate
+node A "A" in=group1
+size A width=328 height=87
+node B "B" in=group1
+size B width=328 height=56
+node C "C" in=group1
+size C width=328 height=71
+group group2 "Collection 2" color=blue
+node D "D" in=group2
+size D width=272 height=71
+node E "E" in=group2
+size E width=272 height=86
+node F "F" in=group2
+size F width=272 height=86
+node G "G" color=amber
+size G width=256 height=71
+node H "H" color=blue
+size H width=248 height=86
+group group3 "Collection 3" color=slate
+layout group3 cells columns=2
+node I "I" in=group3 color=red
+size I width=205 height=36
+node J "J" in=group3 color=red
+size J width=185 height=36
+node K "K" in=group3 color=mint
+size K width=205 height=36
+node L "L" in=group3 color=mint
+size L width=185 height=36
+node M "M" in=group3 color=amber
+size M width=205 height=36
+node N "N" in=group3
+size N width=185 height=36
+edge r1 A -> D
+edge r2 B -> E
+edge r3 C -> F
+edge f1 D -> H "Example connection detail"
+edge f2 E -> H
+edge f3 F -> H "Example connection detail"
+edge i1 G -> H
+edge b1 H -> group3
+layout root engine=compound-flow direction=down

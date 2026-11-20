@@ -1,0 +1,55 @@
+# Issue #590: Shorten routes into tables by attaching to the near side of the header
+# https://github.com/byronwall/draftably/issues/590
+diagram "Table headers and an individual cell" version=1
+group lower "Lower table" color=slate
+node n1 "N1" in=lower
+size n1 width=109 height=36
+node n2 "N2" in=lower
+size n2 width=138 height=36
+node n3 "N3" in=lower
+size n3 width=109 height=36
+node n4 "N4" in=lower
+size n4 width=138 height=36
+node n5 "N5" in=lower color=amber shade=200
+size n5 width=109 height=36
+node n6 "N6" in=lower color=amber shade=200
+size n6 width=138 height=36
+node n7 "N7" in=lower
+size n7 width=109 height=36
+node n8 "N8" in=lower
+size n8 width=138 height=36
+group upper "Upper table" color=slate
+node p1 "P1" in=upper
+size p1 width=109 height=36
+node p2 "P2" in=upper
+size p2 width=148 height=36
+node p3 "P3" in=upper color=amber shade=200
+size p3 width=109 height=36
+node p4 "P4" in=upper color=amber shade=200
+size p4 width=148 height=36
+group left "Left table" color=slate
+node m1 "M1" in=left
+size m1 width=64 height=36
+node m2 "M2" in=left color=amber shade=200
+size m2 width=109 height=36
+node m3 "M3" in=left
+size m3 width=166 height=36
+group right "Right table" color=stone
+node e1 "E1" in=right
+size e1 width=109 height=36
+node e2 "E2" in=right
+size e2 width=194 height=36
+node e3 "E3" in=right
+size e3 width=109 height=36
+node e4 "E4" in=right
+size e4 width=194 height=36
+node source "SOURCE" color=blue shade=200
+size source width=320 height=71
+edge upperlink left -> right "Example connection"
+edge lowerlink source -> n6
+edge other e4 -> source
+layout root engine=layered fit=slide
+layout lower cells columns=2
+layout upper cells columns=2
+layout left cells
+layout right cells columns=2

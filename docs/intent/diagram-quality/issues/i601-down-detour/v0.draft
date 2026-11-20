@@ -1,0 +1,14 @@
+# Issue #601: Prefer a straight route for an unbranched chain through groups
+# https://github.com/byronwall/draftably/issues/601
+diagram "Three steps through two groups" version=1
+node a "Start" color=slate
+group first "First collection" color=slate
+node b "Middle" in=first color=amber
+group last "Additional collection" color=slate
+node c "Finish" in=last color=mint
+size a width=164 height=72
+size b width=164 height=71
+size c width=180 height=71
+edge ab a -> b
+edge bc b -> c kind=async
+layout root engine=compound-flow direction=down fit=slide

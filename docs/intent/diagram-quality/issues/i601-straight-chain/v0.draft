@@ -1,0 +1,14 @@
+# Issue #601: Prefer a straight route for an unbranched chain through groups
+# https://github.com/byronwall/draftably/issues/601
+diagram "Three steps in sequence" version=1
+node a "First step" color=slate
+group middle "Middle group" color=slate
+node b "Second step" in=middle color=amber
+group last "Last group" color=slate
+node c "Final step" in=last color=mint
+size a width=164 height=72
+size b width=212 height=71
+size c width=264 height=71
+edge ab a -> b
+edge bc b -> c kind=async
+layout root engine=compound-spring aspect=1.6 fit=slide

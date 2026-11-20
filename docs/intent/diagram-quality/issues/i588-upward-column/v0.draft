@@ -1,0 +1,10 @@
+# Issue #588: Suggest a declaration order for avoidable upward arrows in columns
+# https://github.com/byronwall/draftably/issues/588
+diagram "Two inputs and a shared step" version=1
+group pipeline "Steps"
+node result "Shared step" in=pipeline
+node first "Input A" in=pipeline
+node second "Input B" in=pipeline
+edge a first -> result
+edge b second -> result
+layout pipeline column

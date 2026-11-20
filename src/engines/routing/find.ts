@@ -13,6 +13,7 @@ import {
   pathLength,
   segments,
   SIDES,
+  vector,
 } from './geometry.ts';
 import { Queue } from './heap.ts';
 
@@ -126,12 +127,32 @@ function findAmong(
   old: Prior,
   open: boolean,
   wall: Obstacle[] = [],
+  loose = false,
 ): Route {
-  const { rects, s, near, rawOptions, obsFor, scores } = ctx;
+  const { rects, groups, s, near, rawOptions, obsFor, scores } = ctx;
   const a = rects.get(e.from)!,
     b = rects.get(e.to)!,
     cfg = e.cfg,
-    edgeObs = wall.length ? [...obsFor(e, open), ...wall] : obsFor(e, open);
+    all = wall.length ? [...obsFor(e, open), ...wall] : obsFor(e, open),
+    // `loose`: the groups that hold neither end stop being walls, only boxes block. A line still
+    // crosses a group's title band only upright, never along it.
+    edgeObs = loose
+      ? all.flatMap((r): Obstacle[] => {
+          const g = groups.get(r.id ?? '');
+          if (!g) return [r];
+          const lip = Math.max(s.clearance, s.standoff);
+          return [
+            {
+              id: g.id + ':header-band',
+              x: g.x - s.clearance,
+              w: g.w + 2 * s.clearance,
+              y: g.y - lip,
+              h: (g.titleHeight ?? 28) + s.clearance + lip,
+              across: true,
+            },
+          ];
+        })
+      : all;
   // `e.pin`: the repair pass's port order for a fan, a side and offset at either end.
   const pin = e.pin || {};
   // An end at a code range (`fromAt`, `toAt`) meets its node's left or right side.
@@ -264,8 +285,11 @@ function findAmong(
   for (const c of candidates) {
     if (best && c.lower > best.score) continue;
     if (searches++ >= (rawOptions.quick ? 1 : 3)) break;
+    // A clean route out of or into a far side still loops round the outside: a forward route
+    // with one bend more is found only by the search, so the search goes on.
     if (
       best &&
+      !(ctx.facingFans && ctx.far({ ...e, fromSide: best.fs, toSide: best.ts })) &&
       !conflicts(best.points, used).crossings &&
       !parallelConflicts(best.points, used, s.edgeGap).lanePairs &&
       !cfg.waypoints?.length &&
@@ -308,12 +332,46 @@ function findAmong(
     }
     if (ok) remember(path, c);
   }
-  if (!best && rawOptions.quick && old) return findAmong(ctx, e, used, null, open, wall);
+  if (!best && rawOptions.quick && old) return findAmong(ctx, e, used, null, open, wall, loose);
+  // Groups stacked edge to edge (rows of a lane layout) can leave no way round one that holds
+  // neither end: the line crosses it, square through its borders, rather than give up.
+  if (!best && !loose && ctx.facingFans && edgeObs.some(r => groups.has(r.id ?? '')))
+    return findAmong(ctx, e, used, old, open, wall, true);
   if (!best) {
-    const fs = from[0],
-      ts = to[0],
+    // No clear route: draw one anyway, through what is in the way. It still leaves and enters
+    // square to its sides, a stub out, and turns in the gap between them, never along a box.
+    const ca = center(a),
+      cb = center(b),
+      toward = (sides: Side[], p: Point, q: Point) =>
+        ctx.facingFans
+          ? sides.reduce((x, y) =>
+              vector[y].x * (q.x - p.x) + vector[y].y * (q.y - p.y) >
+              vector[x].x * (q.x - p.x) + vector[x].y * (q.y - p.y) + EPS
+                ? y
+                : x,
+            )
+          : sides[0],
+      fs = toward(from, ca, cb),
+      ts = toward(to, cb, ca),
       start = port(a, fs),
-      end = port(b, ts);
+      end = port(b, ts),
+      n = s.clearance + 3,
+      as = { x: start.x + vector[fs].x * n, y: start.y + vector[fs].y * n },
+      bs = { x: end.x + vector[ts].x * n, y: end.y + vector[ts].y * n },
+      upright = (x: Side) => x === 'top' || x === 'bottom',
+      bridge = !upright(fs)
+        ? upright(ts)
+          ? [{ x: bs.x, y: as.y }]
+          : [
+              { x: (as.x + bs.x) / 2, y: as.y },
+              { x: (as.x + bs.x) / 2, y: bs.y },
+            ]
+        : upright(ts)
+          ? [
+              { x: as.x, y: (as.y + bs.y) / 2 },
+              { x: bs.x, y: (as.y + bs.y) / 2 },
+            ]
+          : [{ x: as.x, y: bs.y }];
     return {
       id: e.id,
       from: e.from,
@@ -322,7 +380,11 @@ function findAmong(
       toSide: ts,
       fromOffset: 0,
       toOffset: 0,
-      points: compress([start, { x: end.x, y: start.y }, end]),
+      // A lane's waypoints can double back on a stand-in: it keeps the plain corner.
+      points:
+        ctx.facingFans && !cfg.waypoints?.length
+          ? compress([start, as, ...bridge, bs, end])
+          : compress([start, { x: end.x, y: start.y }, end]),
       blocked: true,
       reason: 'No clear route within the search budget and current side / waypoint constraints.',
     };

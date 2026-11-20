@@ -1,0 +1,20 @@
+# Issue #595: Center an edge segment in the gap between parallel group borders
+# https://github.com/byronwall/draftably/issues/595
+diagram "One edge between two groups" version=1
+node start "Start"
+group left "Group A" color=blue
+node a "A1" in=left
+node b "A2" in=left
+group right "Group B" color=violet
+node c "B1" in=right
+node d "B2" in=right
+size start width=256 height=71
+size a width=316 height=71
+size b width=316 height=71
+size c width=328 height=86
+size d width=328 height=71
+edge sa start -> a
+edge ab a -> b
+edge sd start -> d "Second path"
+edge cd c -> d "First path"
+layout root flow fit=slide

@@ -1,0 +1,13 @@
+# Issue #586: Route edges perpendicular to the node surface before the first bend
+# https://github.com/byronwall/draftably/issues/586
+diagram "Bottom port to right port" version=1
+group table "Collection" color=teal
+node a "A" in=table
+node b "B" in=table
+node c "C" in=table
+node d "D" in=table
+node e "E" in=table
+node result "Result"
+edge link table -> result from=bottom to=right
+layout root engine=layered direction=down
+layout table cells
