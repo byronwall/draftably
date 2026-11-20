@@ -28,6 +28,9 @@ export interface RouteState {
 }
 
 // Gate a group's header bands to the terminal lines of a route through a member's top.
+/** Room a line keeps round a soft group's title text. */
+const TITLE_CLEAR = 4;
+
 export function gate(obs: Obstacle[], start: Point, fs: Side, end: Point, ts: Side) {
   if (!obs.some(r => r.gates)) return obs;
   const gates = [...(fs === 'top' ? [start.x] : []), ...(ts === 'top' ? [end.x] : [])];
@@ -208,6 +211,8 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
           });
       }
     }
+    // A soft group's title, a few units out, blocks every line: no border gives way round it.
+    for (const t of input.titles ?? []) obstacles.push(inflate(t, TITLE_CLEAR));
     const common = ancestors(e.from).find(id => ancestors(e.to).includes(id))!;
     const g = groups.get(common);
     if (g) {

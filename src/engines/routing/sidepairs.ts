@@ -14,6 +14,11 @@ import type {
   Side,
 } from './types.ts';
 
+/** How far above a box's top a group title can sit and still be in the way of its port. */
+const TITLE_REACH = 48,
+  /** Room a line keeps from the end of a group title. */
+  TITLE_GAP = 4;
+
 /** One pair of sides an edge may use, with its ports and stubs, and how to look for its paths. */
 export interface SidePair {
   c: Candidate;
@@ -70,6 +75,38 @@ export function sidePairs(
             Math.abs(q.fromOffset - offset) < pitch - 0.01
           ) && !(q.to === id && q.toSide === side && Math.abs(q.toOffset - offset) < pitch - 0.01),
       );
+  // Group titles in the way of this edge: a framed ancestor's (`:header`) or a soft group's.
+  const titles = edgeObs.filter(r => r.id?.endsWith(':header') || r.id?.endsWith(':title'));
+  // The offset on side `side` of `r` that clears the titles just above it, or null when the
+  // side has no room past them. Titles start at a group's left, so the port moves right.
+  function pastTitle(r: Box, side: Side, offset: number): number | null {
+    if (side !== 'top' || !titles.length) return offset;
+    const cx = center(r).x,
+      limit = r.w / 2 - 12;
+    let x = port(r, side, offset).x;
+    for (let moved = true; moved; ) {
+      moved = false;
+      for (const t of titles)
+        if (
+          t.y + t.h <= r.y + EPS &&
+          t.y + t.h >= r.y - TITLE_REACH &&
+          x > t.x - TITLE_GAP &&
+          x < t.x + t.w + TITLE_GAP
+        ) {
+          x = Math.ceil(t.x + t.w + TITLE_GAP);
+          moved = true;
+        }
+    }
+    const o = x - cx;
+    return Math.abs(o - offset) < EPS ? offset : o <= limit ? round(o) : null;
+  }
+  // The offset on `side` of `r` in line with port `offset` on `oside` of `o`, or null when that
+  // falls off the side.
+  function alignTo(r: Box, side: Side, o: Box, oside: Side, offset: number): number | null {
+    const along = level(side) ? 'y' : 'x',
+      want = port(o, oside, offset)[along] - center(r)[along];
+    return Math.abs(want) <= (level(side) ? r.h : r.w) / 2 - 12 ? round(want) : null;
+  }
   // The ports, stubs and obstacles of one side pair. `plain` keeps both ports on their slots.
   // 'retry': a port moved off its slot (in line with the other end, or onto a header band) has
   // a blocked stub, so the slots are worth a try.
@@ -111,6 +148,25 @@ export function sidePairs(
       const want = port(a, fs, fo)[along] - center(b)[along],
         desired = b.frame ? clamp(want, -limit, limit) : want;
       if (Math.abs(desired) <= limit && free(e.to, ts, desired)) [toff, moved] = [desired, true];
+    }
+    // A port on a member's top under a group title moves along the side past the title's end,
+    // so the line crosses the band clear of the text. The other end of a straight line moves
+    // with it, so the line stays straight.
+    if (!pin.to && cfg.toOffset === undefined && !vertices(b)) {
+      const t = pastTitle(b, ts, toff);
+      if (t !== null && t !== toff && free(e.to, ts, t)) {
+        [toff, moved] = [t, true];
+        const o = sameAxis && !pin.from && !vertices(a) ? alignTo(a, fs, b, ts, toff) : null;
+        if (o !== null && free(e.from, fs, o)) fo = o;
+      }
+    }
+    if (!pin.from && !vertices(a)) {
+      const f = pastTitle(a, fs, fo);
+      if (f !== null && f !== fo && free(e.from, fs, f)) {
+        [fo, moved] = [f, true];
+        const o = sameAxis && !pin.to && !vertices(b) ? alignTo(b, ts, a, fs, fo) : null;
+        if (o !== null && free(e.to, ts, o)) toff = o;
+      }
     }
     // A lane may say where along the target's side the edge arrives.
     if (typeof cfg.toOffset === 'number' && cfg.toSide === ts && !vertices(b)) toff = cfg.toOffset;

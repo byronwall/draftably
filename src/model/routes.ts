@@ -6,7 +6,8 @@ import {
 } from '../engines/routing-engine';
 import { clamp, contains, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
-import { measureText } from './fonts';
+import { measureText, truncateText } from './fonts';
+import { SOFT_PAD, SOFT_TITLE } from '../dsl/frame';
 import {
   ACTION_PAD,
   actionSize,
@@ -643,6 +644,22 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
           ...(g.titleLines
             ? { titleHeight: 28 + (g.titleLines - 1) * look.groupTitle.lineHeight }
             : {}),
+        };
+      }),
+    // A soft group's title is text on the tint: no line runs through it.
+    titles: vg.groups
+      .filter(g => g.frame === 'soft' && g.title && !isCollapsed(doc, g.id))
+      .map(g => {
+        const r = rects.get(g.id)!,
+          h = g.hull?.[0] ?? { x: 0, y: 0, w: r.w, h: r.h },
+          type = look.annotation,
+          text = truncateText(g.title, Math.max(40, h.w - 2 * SOFT_PAD), type);
+        return {
+          id: g.id + ':title',
+          x: r.x + h.x + SOFT_TITLE.x,
+          y: r.y + h.y + SOFT_TITLE.y - type.lineHeight / 2,
+          w: measureText(text, type),
+          h: type.lineHeight,
         };
       }),
     // Sequence messages are drawn straight on their rows (`messageRoute`), not routed.

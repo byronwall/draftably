@@ -39,6 +39,8 @@ export interface RouteInput {
   nodes: RouteNodeInput[];
   groups: RouteGroupInput[];
   edges: RouteEdgeInput[];
+  /** Title text drawn outside a group frame (a soft group's): every line keeps clear of it. */
+  titles?: Array<Rect & { id: string }>;
 }
 
 export interface Route {
