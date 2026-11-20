@@ -779,14 +779,25 @@ const journeys = {
     page.setDefaultTimeout(30000);
     await editorReady(page);
     const before = page.url();
-    const choose = async (name, text) => {
+    // Import text diagram opens a dialog: paste the text, or choose a file from it.
+    const openImport = async () => {
       await page.click(FILE);
-      const pending = page.waitForEvent('filechooser');
       await page.getByRole('menuitem', { name: 'Import text diagram…' }).click();
+      await page.getByRole('dialog', { name: 'Import text diagram' }).waitFor();
+    };
+    const paste = async text => {
+      await openImport();
+      await page.getByLabel('Diagram text').fill(text);
+      await page.getByRole('button', { name: 'Import', exact: true }).click();
+    };
+    const choose = async (name, text) => {
+      await openImport();
+      const pending = page.waitForEvent('filechooser');
+      await page.getByRole('button', { name: 'Choose a file…' }).click();
       const chooser = await pending;
       await chooser.setFiles({ name, mimeType: 'text/plain', buffer: Buffer.from(text) });
     };
-    await choose('warning.dot', 'digraph { a -> b }');
+    await paste('digraph { a -> b }');
     await page.getByText('Review import changes').waitFor();
     await page.screenshot({ path: path.join(proof.out, 'import-warning.png') });
     await page.getByRole('button', { name: 'Cancel' }).click();
@@ -795,7 +806,7 @@ const journeys = {
     await page.getByText('Review import changes').waitFor();
     await page.getByRole('button', { name: 'Cancel' }).click();
     check('a Mermaid sequence reaches import review', page.url() === before);
-    await choose('unsupported.mmd', 'classDiagram\n Alice <|-- Bob');
+    await paste('classDiagram\n Alice <|-- Bob');
     await page.getByText('Could not open file').waitFor();
     check('unsupported input keeps the current editor document', page.url() === before);
     await page.context().close();
