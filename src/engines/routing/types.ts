@@ -82,6 +82,8 @@ export interface RoutingReport extends RouteMetrics {
   repaired?: number;
   nudged: number;
   tidied?: number;
+  /** Routes whose inner run moved to the middle of a gap between facing sides. */
+  centred?: number;
   edges: number;
   milliseconds: number;
   passes: number;

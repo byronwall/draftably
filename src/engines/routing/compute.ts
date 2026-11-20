@@ -2,7 +2,7 @@ import { createContext } from './context.ts';
 import { find } from './find.ts';
 import { cmp } from './geometry.ts';
 import { improve } from './improve.ts';
-import { nudge } from './nudge.ts';
+import { centre, nudge } from './nudge.ts';
 import { planned } from './planned.ts';
 import { repair } from './repair.ts';
 import { tidy } from './tidy.ts';
@@ -29,6 +29,7 @@ export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): Rou
     nudged = nudge(ctx),
     tidyOn = !rawOptions.quick && rawOptions.tidy !== false,
     tidied = tidyOn ? tidy(ctx) : 0,
+    centred = tidyOn ? centre(ctx) : 0,
     routes = state.routes;
   routes.sort((a, b) => cmp(a.id, b.id));
   const report: RoutingReport = {
@@ -37,7 +38,7 @@ export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): Rou
     accepted,
     ...(facingFans && !rawOptions.quick ? { repaired } : {}),
     nudged,
-    ...(tidyOn ? { tidied } : {}),
+    ...(tidyOn ? { tidied, centred } : {}),
     edges: routes.length,
     milliseconds: Date.now() - began,
     passes: rawOptions.quick ? 1 : s.passes,
