@@ -52,11 +52,13 @@ export function centrePorts(ctx: Context, attempt: Attempt) {
       mid = center(rect)[axis],
       limit = (vertical ? rect.h : rect.w) / 2 - 10,
       at = [...new Set(list.map(({ i, end }) => round(tip(state.routes[i].points, end)[axis])))];
-    // A lone bent line off its side's middle (its siblings moved elsewhere) slides to the middle
-    // when that takes it clear of a border or box it runs beside: it must lower the standoff.
+    // A lone bent line leaving off its side's middle (its siblings moved elsewhere) slides to the
+    // middle when that takes it clear of a border or box it runs beside: it must lower the
+    // standoff. An arrival keeps its port, which spaces it from the lines beside it.
     if (list.length === 1 && flat(rect)) {
-      const { i, end } = list[0],
-        ps = clone(state.routes[i].points),
+      const { i, end } = list[0];
+      if (end !== 'from') continue;
+      const ps = clone(state.routes[i].points),
         d = round(mid - at[0]);
       if (ps.length < 3 || Math.abs(d) < 2) continue;
       const moved = port(rect, side, 0);
