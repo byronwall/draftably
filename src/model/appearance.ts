@@ -267,7 +267,7 @@ export const PRESETS: Record<ThemeId, Preset> = {
       sky: [237, 0.11],
       green: [163, 0.13],
       mint: [172, 0.1],
-      amber: [72, 0.16],
+      amber: [82, 0.15],
       orange: [55, 0.16],
       red: [36, 0.18],
       rose: [350, 0.13],
@@ -473,14 +473,24 @@ const isPale = (s: Shade) => s <= 300;
 /**
  * Warm hues (orange, amber, gold) turn rust and brown when darkened for white text, so their 400
  * and 500 stay bright and carry dark text instead. 600 and darker carry white text as usual. This
- * also sets orange apart from red by lightness, which red-green color blindness keeps.
+ * also sets orange apart from red by lightness, which red-green color blindness keeps. Bright
+ * amber keeps its full chroma, so it reads as a clear yellow and not as ochre.
  */
 const isWarm = (H: number) => H >= 45 && H <= 110;
 const BRIGHT: Partial<Record<Shade, number>> = { 400: 0.8, 500: 0.74 };
-/** Orange sits a step darker than amber, so the two stay apart without hue. */
-const brightAt = (shade: Shade, H: number) =>
-  BRIGHT[shade] === undefined ? undefined : BRIGHT[shade] - (H < 65 ? 0.07 : 0);
-const darkInked = (s: Shade, H: number) => isPale(s) || (isWarm(H) && s in BRIGHT);
+/**
+ * Orange sits a step darker and amber a step lighter, so the two stay apart without hue. Amber's
+ * pale shades rise with it (`paleLift` at 300, less toward 50), which leaves room for a clear
+ * yellow at 400 and 500 below them.
+ */
+const isAmber = (H: number, C: number) => isWarm(H) && H >= 65 && C >= 0.08;
+const brightAt = (shade: Shade, H: number, C: number) =>
+  BRIGHT[shade] === undefined
+    ? undefined
+    : BRIGHT[shade] + (H < 65 ? -0.07 : isAmber(H, C) ? 0.06 : 0);
+const paleLift = (shade: Shade, H: number, C: number) => (isAmber(H, C) ? (0.07 * shade) / 300 : 0);
+const isBright = (shade: Shade, H: number) => isWarm(H) && shade in BRIGHT;
+const darkInked = (s: Shade, H: number) => isPale(s) || isBright(s, H);
 
 /** Contrast targets (WCAG ratios) every generated color meets. */
 export const CONTRAST = {
@@ -511,7 +521,7 @@ const FAMILY_HUES: Record<string, [number, number]> = {
   teal: [195, 0.085],
   mint: [168, 0.09],
   green: [155, 0.12],
-  amber: [78, 0.14],
+  amber: [84, 0.14],
   orange: [50, 0.15],
   red: [32, 0.17],
   rose: [358, 0.12],
@@ -550,12 +560,13 @@ function swatchAt(
 ): { swatch: Swatch; L: number } {
   const pale = darkInked(shade, H),
     ink = pale ? DARK_INK(H) : LIGHT_INK,
-    target = isPale(shade) ? CONTRAST.paleInk : CONTRAST.darkInk;
+    target = isPale(shade) ? CONTRAST.paleInk : CONTRAST.darkInk,
+    chroma = (l: number) => C * (isAmber(H, C) && isBright(shade, H) ? 1 : chromaAt(l));
   let L = fixed ? hexToLch(fixed)[0] : start,
-    fill = fixed ?? lchToHex([L, C * chromaAt(L), H]);
+    fill = fixed ?? lchToHex([L, chroma(L), H]);
   while (contrast(fill, ink) < target && L > 0.05 && L < 0.995) {
     L += pale ? 0.005 : -0.01;
-    fill = lchToHex([L, C * chromaAt(L), H]);
+    fill = lchToHex([L, chroma(L), H]);
   }
   const edge = pale ? L - 0.2 : dark ? L + 0.14 : L - 0.08;
   let stroke = lchToHex([edge, C * chromaAt(edge) * 1.1, H]);
@@ -572,9 +583,9 @@ function ramp(H: number, C: number, canvas: string, dark: boolean, anchor?: [str
   const out = new Map<Shade, Swatch>();
   let previous = 1;
   for (const shade of SHADES) {
-    const bright = isWarm(H) ? brightAt(shade, H) : undefined;
+    const bright = isWarm(H) ? brightAt(shade, H, C) : undefined;
     const start = isPale(shade)
-      ? LIGHTNESS[shade]
+      ? LIGHTNESS[shade] + paleLift(shade, H, C)
       : Math.min(bright ?? LIGHTNESS[shade], previous - DARK_STEP);
     let next = swatchAt(
       shade,
