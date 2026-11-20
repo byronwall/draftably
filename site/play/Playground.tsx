@@ -29,6 +29,7 @@ import {
   unreadableFile,
 } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
+import { foreignFormat, importForeign, type Imported } from './foreign';
 
 const BASE = import.meta.env.BASE_URL;
 const SPLIT_KEY = 'draftably.play.split';
@@ -133,6 +134,14 @@ export function Playground() {
   const [split, setSplit] = createSignal(readSplit());
   // Narrow screens show one pane at a time; wide ones ignore this.
   const [tab, setTab] = createSignal<'source' | 'diagram'>('diagram');
+  // Mermaid or DOT text in the editor, with its import.
+  const [imported, setImported] = createSignal<Imported | null>(null);
+  const convert = () => {
+    const found = imported();
+    if (!found?.native) return;
+    setFitKey(`import:${Date.now()}`);
+    editor?.replace(found.native);
+  };
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
 
@@ -186,8 +195,24 @@ export function Playground() {
         async () => {
           const mine = ++run;
           const t0 = performance.now();
+          const kind = foreignFormat(text);
+          if (kind) {
+            // Another format: draw its import as a preview. Drags stay off until it converts.
+            const found = await importForeign(text, kind);
+            const result = found.native ? await draw(found.native) : undefined;
+            if (mine !== run) return;
+            setImported(found);
+            setMs(Math.round(performance.now() - t0));
+            setDrawing({ svg: result?.svg ?? null, diagnostics: [], items: [] });
+            setDrawn(text);
+            setSvg(result?.svg ?? '');
+            setGood(undefined);
+            setItems([]);
+            return;
+          }
           const result = await draw(text);
           if (mine !== run) return;
+          setImported(null);
           setMs(Math.round(performance.now() - t0));
           setDrawing(result);
           setDrawn(text);
@@ -387,6 +412,7 @@ export function Playground() {
   const shown = () => (source().trim() ? svg() : '');
   // An image export must show the current source, not the last drawing that worked.
   const imageBlocked = () => {
+    if (imported()) return 'Convert to draftably to export the image';
     const err = problems()[0];
     if (err)
       return err.line
@@ -689,6 +715,36 @@ export function Playground() {
               </div>
             )}
           </Show>
+          <Show when={imported()}>
+            {found => (
+              <div class="play-import" role="status">
+                <div class="play-import-head">
+                  <span>
+                    <Show when={found().native} fallback={`${found().name}: ${found().error}`}>
+                      This is {found().name}. The drawing is a preview of its import.
+                    </Show>
+                  </span>
+                  <Show when={found().native}>
+                    <button type="button" class="tool primary" onClick={convert}>
+                      Convert to draftably
+                    </button>
+                  </Show>
+                </div>
+                <Show when={found().native && found().warnings.length}>
+                  <details class="play-import-changes">
+                    <summary>
+                      {found().warnings.length === 1
+                        ? 'The import changes 1 detail'
+                        : `The import changes ${found().warnings.length} details`}
+                    </summary>
+                    <ul>
+                      <For each={found().warnings}>{w => <li>{w}</li>}</For>
+                    </ul>
+                  </details>
+                </Show>
+              </div>
+            )}
+          </Show>
           <Show when={ready()}>
             <CodeEditor
               value={source()}
@@ -752,7 +808,11 @@ export function Playground() {
                   <span>
                     {!source().trim()
                       ? 'Empty file'
-                      : note() || (svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…')}
+                      : imported()
+                        ? imported()!.native
+                          ? `${imported()!.name} preview · drawn in ${ms()} ms`
+                          : `${imported()!.name} did not import`
+                        : note() || (svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…')}
                   </span>
                 }
               >
@@ -764,7 +824,7 @@ export function Playground() {
                   </span>
                 )}
               </Show>
-              <Show when={shown() && !note()}>
+              <Show when={shown() && !note() && !imported()}>
                 <span class="play-hint">
                   Drag a shape to move it. Click it or use Outline to find its line.
                 </span>

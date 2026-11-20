@@ -3850,6 +3850,45 @@ kbd {
   }
 }
 
+/* Mermaid or DOT text in the editor: the drawing is its import, and one click converts it. */
+.play-import {
+  flex: none;
+  padding: 8px 8px 8px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+  font-size: 13px;
+}
+
+.play-import-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.play-import-head > span {
+  min-width: 0;
+}
+
+.play-import-head .tool {
+  height: 28px;
+  margin-left: auto;
+  flex: none;
+}
+
+.play-import-changes {
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.play-import-changes summary {
+  cursor: pointer;
+}
+
+.play-import-changes ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
 /* After an example replaces custom work: name what was replaced and offer it back. */
 .play-notice {
   display: flex;
