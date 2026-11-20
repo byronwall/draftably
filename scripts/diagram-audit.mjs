@@ -713,8 +713,8 @@ function measure(file) {
       if (r.segs.some(sg => segHitsRect(sg, ink)))
         note('edge-through-title', `${r.id} through ${id}'s title`);
   // Non-facing ports (#606): two boxes stacked in adjacent rows (or columns), their spans
-  // overlapping by 32px or more with a clear 32px gap between, and the line leaves or arrives on
-  // another side and doubles back across the stack.
+  // overlapping by 32px or more with a 32px gap between that no other box enters, and the line
+  // leaves or arrives on another side and doubles back across the stack.
   for (const r of routes) {
     const s = byId.get(r.source),
       t = byId.get(r.target);
@@ -728,6 +728,13 @@ function measure(file) {
         Math.max(s[across], t[across]);
       const gap = Math.max(t[axis] - (s[axis] + s[size]), s[axis] - (t[axis] + t[size]));
       if (overlap < 32 || gap < 32) continue;
+      const lo = Math.max(s[across], t[across]),
+        near = Math.min(s[axis] + s[size], t[axis] + t[size]);
+      const corridor =
+        axis === 'y'
+          ? { x: lo, y: near, w: overlap, h: gap }
+          : { x: near, y: lo, w: gap, h: overlap };
+      if (leaves.some(n => n !== s && n !== t && rectsOverlap(n, corridor))) continue;
       const coords = r.points.map(p => p[across]);
       const steps = coords.slice(1).map((c, i) => Math.sign(Math.round(c - coords[i])));
       const moves = steps.filter(Boolean);
