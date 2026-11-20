@@ -75,7 +75,9 @@ const GAP_MAX = 80,
   /** A side counts as facing a segment when they run alongside each other this far. */
   ALONGSIDE = 20,
   /** A segment this short reads as a jog, not a run worth centring. */
-  RUN_MIN = 40;
+  RUN_MIN = 40,
+  /** Closer than this along a box's side, a line reads as hugging the box. */
+  HUG = 15;
 
 /**
  * Centre a line's inner segment in the gap between two facing sides (boxes or group borders)
@@ -86,15 +88,16 @@ export function centre(ctx: Context) {
   const { rawOptions, s, rects, groups, edges, state, obsFor } = ctx;
   if (rawOptions.quick || !s.standoff) return 0;
   const boxes = [
-    ...[...rects.values()].filter(r => !r.frame),
-    ...[...groups.values()].filter(g => !g.collapsed),
+    ...[...rects.values()].filter(r => !r.frame).map(r => ({ ...r, node: true })),
+    ...[...groups.values()].filter(g => !g.collapsed).map(g => ({ ...g, node: false })),
   ];
-  // Upright faces (x) and level faces (y), each with the span it covers.
+  // Upright faces (x) and level faces (y), each with the span it covers and whether a box (not
+  // a group border) owns it.
   const faces = (upright: boolean) =>
     boxes.flatMap(r =>
       upright
-        ? [r.x, r.x + r.w].map(at => ({ at, lo: r.y, hi: r.y + r.h }))
-        : [r.y, r.y + r.h].map(at => ({ at, lo: r.x, hi: r.x + r.w })),
+        ? [r.x, r.x + r.w].map(at => ({ at, lo: r.y, hi: r.y + r.h, node: r.node }))
+        : [r.y, r.y + r.h].map(at => ({ at, lo: r.x, hi: r.x + r.w, node: r.node })),
     );
   const sides = [faces(false), faces(true)];
   let moved = 0;
@@ -123,6 +126,12 @@ export function centre(ctx: Context) {
       if (above - below > GAP_MAX) continue;
       const mid = Math.round(below + above) / 2;
       if (Math.abs(mid - at) < 1) continue;
+      // A gap too narrow to clear a box by `HUG` on both sides: the middle would bring the line
+      // close along a box it now keeps clear of. Leave it where it is.
+      const hugs = facing.some(
+        f => f.node && Math.abs(mid - f.at) < HUG && Math.abs(at - f.at) >= HUG,
+      );
+      if (hugs) continue;
       // Another line in the gap shares it: the lanes, not the middle, decide where each runs.
       const shared = others.some(o =>
         segments(o.points).some(
