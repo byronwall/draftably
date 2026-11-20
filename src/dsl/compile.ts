@@ -1044,8 +1044,9 @@ const GROUP_TITLE_STRETCH = 1.25;
  * a line for each extra line instead.
  */
 function titleFit(title: string, inner: number, look: ResolvedAppearance) {
-  const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME;
-  let w = Math.max(inner, GROUP_TITLE_WIDTH);
+  const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME,
+    piece = Math.ceil(widestPiece(title, look.groupTitle)) + GROUP_TITLE_CHROME;
+  let w = Math.max(inner, Math.min(GROUP_TITLE_WIDTH, piece));
   if (full <= w * GROUP_TITLE_STRETCH) return { w: full, lines: 1 };
   const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle, true).length;
   while (lines() > GROUP_TITLE_LINES && w < full) w += 8;
@@ -1303,7 +1304,8 @@ export function foldRanks(
     aspect = FOLD_ASPECT,
     fewest = 4,
     room = axis === 'right' ? RENDER_CONTEXT.width : RENDER_CONTEXT.height,
-  }: { aspect?: number; fewest?: number; room?: number } = {},
+    ordered = false,
+  }: { aspect?: number; fewest?: number; room?: number; ordered?: boolean } = {},
 ): { positions: Map<string, Pos>; fold?: Fold } {
   const byId = new Map(items.map(n => [n.id, n]));
   const along = axis === 'right' ? 'x' : 'y',
@@ -1470,6 +1472,56 @@ export function foldRanks(
     }
     return out;
   };
+  /**
+   * Sibling branches that end a band, all from one source, are ordered so the ones whose edges
+   * wrap into the next band come last across, nearest the gap the wrap lines run along. The one
+   * that wraps to the earliest box in the next band goes last, so its return lane passes outside
+   * the others and no wrap line crosses a sibling's edge. Their slots stay where they were.
+   */
+  const wrapLast = (bands: Array<typeof blocks>, at: Map<string, Pos>) => {
+    let out = at;
+    for (const [k, band] of bands.entries()) {
+      const next = bands[k + 1];
+      if (!next) continue;
+      const later = new Set(bands.slice(k + 1).flatMap(b => b.flatMap(x => x.ids))),
+        startOf = (id: string) => at.get(id)![along],
+        block = [...band.at(-1)!.ids].sort((a, b) => at.get(a)![across] - at.get(b)![across]),
+        source = (id: string) => {
+          const ins = pairs.filter(([a, z]) => z === id && a !== id).map(([a]) => a);
+          return new Set(ins).size === 1 ? ins[0] : undefined;
+        },
+        wrapTo = (id: string) => {
+          const outs = pairs.filter(([a, z]) => a === id && later.has(z)).map(([, z]) => z);
+          return outs.length ? Math.min(...outs.map(startOf)) : undefined;
+        };
+      // Runs of neighbours across that share one source and have no edges among themselves.
+      for (let i = 0; i < block.length;) {
+        const from = source(block[i]);
+        let j = i + 1;
+        while (from && j < block.length && source(block[j]) === from) j++;
+        const run = block.slice(i, j);
+        i = j;
+        if (run.length < 2 || pairs.some(([a, z]) => run.includes(a) && run.includes(z))) continue;
+        const key = (id: string) => wrapTo(id) ?? Infinity,
+          sorted = [...run].sort((a, b) => key(b) - key(a));
+        if (sorted.every((id, n) => id === run[n])) continue;
+        // Keep the run's start and the gaps between its slots; only the order changes.
+        const gaps = run
+          .slice(1)
+          .map(
+            (id, n) =>
+              at.get(id)![across] - at.get(run[n])![across] - size(byId.get(run[n])!, across),
+          );
+        if (out === at) out = new Map(at);
+        let c = at.get(run[0])![across];
+        for (const [n, id] of sorted.entries()) {
+          out.set(id, { ...at.get(id)!, [across]: c });
+          c += size(byId.get(id)!, across) + (gaps[n] ?? 0);
+        }
+      }
+    }
+    return out;
+  };
   const place = (
     cuts: number[],
     bs: typeof blocks,
@@ -1478,6 +1530,7 @@ export function foldRanks(
     pulls = new Map<string, string>(),
   ) => {
     const bands = bandsOf(cuts, bs);
+    if (!ordered) at = wrapLast(bands, at);
     // A pulled branch lines up across with its source, past any branch already pulled beside it.
     if (pulls.size) {
       at = new Map(at);
@@ -3533,6 +3586,7 @@ function layoutPass(
           rooms,
           decisionsIn(scope),
           (plain ?? base).positions,
+          { ordered: !!order },
         );
         base.positions = folded.positions;
         fold = folded.fold;
@@ -3550,7 +3604,7 @@ function layoutPass(
           rooms,
           decisionsIn(scope),
           (plain ?? base).positions,
-          { fewest: 2, room: 0 },
+          { fewest: 2, room: 0, ordered: !!order },
         );
         base.positions = folded.positions;
         fold = folded.fold;
@@ -3565,7 +3619,7 @@ function layoutPass(
           rooms,
           decisionsIn(scope),
           (plain ?? base).positions,
-          { aspect: PACKED_FOLD_ASPECT, fewest: 2 },
+          { aspect: PACKED_FOLD_ASPECT, fewest: 2, ordered: !!order },
         );
         base.positions = folded.positions;
         fold = folded.fold;

@@ -168,6 +168,24 @@ node b "Second part" in=req`,
     expect(improves(m(1800, 1000), m(900, 600), 'slide')).toBe(false);
   });
 
+  it('prefers straight lines and a much tighter drawing over a closer --fit shape', () => {
+    const m = (width: number, height: number, bends = 0, length = 600): Metrics => ({
+      width,
+      height,
+      crossings: 0,
+      bends,
+      length,
+      warnings: 0,
+      moved: 0,
+    });
+    // A chain that loses its dogleg turns tall: still better for a slide (#601).
+    expect(improves(m(392, 580, 0), m(918, 389, 2), 'slide')).toBe(true);
+    expect(improves(m(392, 580, 1), m(918, 389, 2), 'slide')).toBe(false);
+    // A fifth smaller with shorter lines, a little squarer (#592).
+    expect(improves(m(768, 744, 4, 618), m(921, 782, 4, 817), 'slide')).toBe(true);
+    expect(improves(m(768, 744, 4, 900), m(921, 782, 4, 817), 'slide')).toBe(false);
+  });
+
   it('searches around a variant while keeping its own edits', async () => {
     const shape = shapeOf(await compile(SOURCE));
     const pick = [
