@@ -1,7 +1,7 @@
 import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
-import { commandEnabled, pickForeignFile, runCommand } from '../state/commands';
+import { canPickFile, commandEnabled, pickForeignFile, runCommand } from '../state/commands';
 import { importForeignText } from '../state/files';
 import { detectSource } from '../import/detect';
 import { siteUrl } from '../state/launch';
@@ -255,16 +255,18 @@ function ImportTextDialog() {
       title="Import text diagram"
       footer={
         <>
-          <button
-            type="button"
-            class="button import-file"
-            onClick={() => {
-              closeDialog();
-              pickForeignFile();
-            }}
-          >
-            Choose a file…
-          </button>
+          <Show when={canPickFile()}>
+            <button
+              type="button"
+              class="button import-file"
+              onClick={() => {
+                closeDialog();
+                pickForeignFile();
+              }}
+            >
+              Choose a file…
+            </button>
+          </Show>
           <button type="button" class="button" onClick={closeDialog}>
             Cancel
           </button>

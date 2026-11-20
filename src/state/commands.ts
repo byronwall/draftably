@@ -63,6 +63,8 @@ let fileInput:
 export const setFilePicker = (fn: typeof fileInput) => (fileInput = fn);
 /** Pick a Mermaid, DOT or D2 file to import. */
 export const pickForeignFile = () => fileInput?.(null, 'foreign');
+/** The start page has no file inputs; only the editor does. */
+export const canPickFile = () => !!fileInput;
 
 function exportCommand(format: 'json') {
   if (activeSession().sculptInteracting()) {

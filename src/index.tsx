@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import { render } from 'solid-js/web';
 import App from './App';
 import { DiagramSessionProvider } from './components/session-context';
+import { Dialogs } from './components/Dialogs';
 import { StartScreen } from './components/StartScreen';
 import { STORAGE_KEY } from './lib/saved-diagram';
 import { setActiveSession } from './state/active-session';
@@ -33,6 +34,8 @@ void launch().then(() => {
       <DiagramSessionProvider session={session}>
         <Show when={launchView() === 'start'} fallback={<App />}>
           <StartScreen variant="page" />
+          {/* Import text diagram opens its paste dialog here too. */}
+          <Dialogs />
         </Show>
       </DiagramSessionProvider>
     ),
