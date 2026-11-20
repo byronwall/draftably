@@ -1044,8 +1044,9 @@ const GROUP_TITLE_STRETCH = 1.25;
  * a line for each extra line instead.
  */
 function titleFit(title: string, inner: number, look: ResolvedAppearance) {
-  const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME;
-  let w = Math.max(inner, GROUP_TITLE_WIDTH);
+  const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME,
+    piece = Math.ceil(widestPiece(title, look.groupTitle)) + GROUP_TITLE_CHROME;
+  let w = Math.max(inner, Math.min(GROUP_TITLE_WIDTH, piece));
   if (full <= w * GROUP_TITLE_STRETCH) return { w: full, lines: 1 };
   const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle, true).length;
   while (lines() > GROUP_TITLE_LINES && w < full) w += 8;
