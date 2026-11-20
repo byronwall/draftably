@@ -1,5 +1,19 @@
 # draftably
 
+## 0.16.0
+
+### Minor Changes
+
+- 884a002: Add code nodes: shape=code with a <<TAG heredoc body, drawn in JetBrains Mono with exact indentation, sized to the listing, with wrap, line numbers and check notes for long or cut-off lines.
+- ad2c8a9: Color code nodes by language: `lang=sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` and `diff` color keywords, strings, numbers, comments and names in each theme's own colors at 4.5:1 contrast, and diff lines get green and red bands.
+- 57965e9: Name line ranges of a code node with `range sql.copy1 lines=3-6 "label"` or `match="regex" span=n`. A range draws a tinted band, a margin bar and a label without moving anything, and `sql.copy1` works in `edge` (the line meets the range's middle line), `note near=` and `state`.
+- 43dd8ff: Read a code node's body from a file with `src="queries/orders.sql#L10-L40"`, relative to the `.draft`. `lang=` and `start=` default from the file, the viewer redraws when the file changes, and every export inlines the code so an exported image opens on its own. The static app draws a placeholder that names the file, and `check` reports a missing file, a range past its end and a path outside the served folder.
+
+### Patch Changes
+
+- ff50b9a: PNG export now draws each theme's own fonts: mono and serif titles and labels no longer fall back to Inter.
+- 6a0cd1e: Document code nodes on every docs surface: a Code page in the docs sidebar, a "Code behind a step" recipe, the `src=` safety limits, and a `code-review` example with SQL, a diff, named ranges and edges that end on a range. The docs site's `.draft` highlighter now reads a code node's body as text, not as statements. The `code-wrap` and `code-clip` warnings now read "1 line wraps" and "1 line is cut off". A refused `src=` path in the CLI now names the `.draft` file's git root (or its folder) instead of "the folder draftably serves".
+
 ## 0.15.0
 
 ### Minor Changes
