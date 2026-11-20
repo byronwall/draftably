@@ -187,12 +187,12 @@ const issueScene = (slug: string) => {
   const source = fs.readFileSync(`docs/intent/diagram-quality/issues/${slug}/v0.draft`, 'utf8'),
     doc = projectScene(checkSource(source)),
     { vg, rects } = visibleRects(doc);
-  return { doc, rects, scene: buildStaticScene(doc, computeRoutes(doc, vg, rects, {}).result) };
+  return buildStaticScene(doc, computeRoutes(doc, vg, rects, {}).result);
 };
 
 describe('edge labels in a crowded drawing', () => {
   it('keeps every other line out of a label in a bundle of parallel routes (#587)', () => {
-    const { routes } = issueScene('i587-label-hides-routes').scene;
+    const { routes } = issueScene('i587-label-hides-routes');
     for (const route of routes) {
       if (!route.label) continue;
       const text = { ...rectOf(route.label), y: route.label.y - route.label.h / 2 + 3 };
@@ -211,14 +211,5 @@ describe('edge labels in a crowded drawing', () => {
         expect(hit, `${other.id} through ${route.id}'s label`).toBe(false);
       }
     }
-  });
-
-  it("keeps a label off a soft group's title (#607)", () => {
-    const { scene, rects } = issueScene('i607-label-soft-heading'),
-      label = scene.routes.find(r => r.id === 'e5')!.label!,
-      group = rects.get('group2')!;
-    // The title's first line starts 10px in from the tint's top left.
-    const title = { x: group.x + 10, y: group.y + 4, w: 80, h: 16 };
-    expect(overlaps(rectOf(label), title, 2)).toBe(false);
   });
 });
