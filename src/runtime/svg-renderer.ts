@@ -444,7 +444,7 @@ function sceneMarkup(
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
       type = edgeLabelType(look, message),
-      lines = edgeLabelLines(edge.label, look, message);
+      lines = edgeLabelLines(edge.label, look, message, l?.wrap);
     if (l)
       out.push(
         ...paintSurface(

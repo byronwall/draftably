@@ -94,7 +94,7 @@ export function EdgeView(props: EdgeViewProps) {
   /** A sequence message's label wraps and is set a step larger. */
   const message = () => props.doc.layout.edges[props.route.id]?.row !== undefined;
   const labelType = () => edgeLabelType(look(), message());
-  const labelLines = () => edgeLabelLines(edge().label, look(), message());
+  const labelLines = () => edgeLabelLines(edge().label, look(), message(), props.route.label?.wrap);
   const under = () => sharedSurfaces(props.doc)();
   const labelBg = () => (props.route.label ? under()(props.route.label) : { fill: look().canvas });
   const halos = () => (props.route.halo ? haloPieces(under(), props.route.halo) : []);
