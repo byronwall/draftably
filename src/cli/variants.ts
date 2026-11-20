@@ -357,6 +357,14 @@ export function suggestions(
     edits: [layout({ engine, direction: lead, ordering: 'crossings' })],
     why: 'order each rank to cut crossings',
   });
+  // A spring or grid root places groups by area, so a directed graph through them can stagger
+  // and bend. compound-flow keeps each group whole and ranks the groups by their connections,
+  // which lines up sibling inputs and outputs and straightens an unbranched chain.
+  if (shape.groups && engine !== 'compound-flow' && shape.ranks > 1)
+    out.push({
+      edits: [layout({ engine: 'compound-flow', direction: null })],
+      why: 'keep the groups, rank them by their connections',
+    });
   if (shape.groups)
     out.push({
       edits: [layout({ engine: 'layered', direction: 'right' })],
@@ -895,10 +903,34 @@ export function improves(m: Metrics, base: Metrics, fit?: Fit) {
   if (m.warnings > base.warnings || m.crossings > base.crossings) return false;
   if (m.warnings < base.warnings) return true;
   const fewer = m.crossings < base.crossings;
+  if (straighter(m, base)) return true;
   if (!fit) return area(m) <= area(base) && (fewer || area(m) < area(base));
   const [now, was] = [fitError(m, fit), fitError(base, fit)];
-  return area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05);
+  // A much tighter drawing with no more bends and shorter lines may drift a little off the shape.
+  const tighter =
+    area(m) <= area(base) * TIGHTER &&
+    m.bends <= base.bends &&
+    m.length <= base.length &&
+    now <= was + TIGHTER_DRIFT;
+  return (
+    tighter || (area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05))
+  );
 }
+
+/** A variant this much smaller (by area) counts as tighter, and may move this far off `--fit`. */
+const TIGHTER = 0.85,
+  TIGHTER_DRIFT = 0.15;
+
+/**
+ * Whether `m` removes avoidable bends at a comparable width: at least two bends and half of
+ * them, no wider (within 5%) and at most half as large again. A straight line reads better than
+ * a shape closer to the target, so this holds even when the aspect moves away from `--fit`.
+ */
+export const straighter = (m: Metrics, base: Metrics) =>
+  base.bends - m.bends >= 2 &&
+  m.bends * 2 <= base.bends &&
+  m.width <= base.width * 1.05 &&
+  area(m) <= area(base) * 1.5;
 
 /** Label what stands out in each variant: the fewest crossings, the smallest, the least moved. */
 function tag(list: Variant[], fit?: Fit) {
