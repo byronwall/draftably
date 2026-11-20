@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes, HALO_REACH, haloPath, wholeLines } from '../src/model/routes';
+import { haloPieces } from '../src/model/surface';
+import { rectsOutline } from '../src/model/outline';
 
 const p = (x: number, y: number) => ({ x, y });
 
@@ -67,5 +69,31 @@ pin Admin x=400 y=480
       haloPath(routes[ids.indexOf('edge_5')].points, [routes[ids.indexOf('edge_6')].points], []),
     ).not.toBe('');
     expect(ids.indexOf('edge_5')).toBeGreaterThan(ids.indexOf('edge_6'));
+  });
+});
+
+describe('halo pieces', () => {
+  it('split at a group border, so the group fill stays inside it', () => {
+    const under = (p: { x: number }) => ({ fill: p.x <= 212 ? 'group' : 'canvas' });
+    const pieces = haloPieces(under, 'M205 76L219 76');
+    expect(pieces.map(p => [p.surface.fill, p.d])).toEqual([
+      ['group', 'M205 76L212 76'],
+      ['canvas', 'M212 76L219 76'],
+    ]);
+  });
+});
+
+describe('soft group outline', () => {
+  it('joins touching pieces into one region and keeps a detached one apart', () => {
+    const outline = rectsOutline(
+      [
+        { x: 0, y: 0, w: 100, h: 50 },
+        { x: 10, y: 50, w: 50, h: 20 },
+        { x: 0, y: 70, w: 120, h: 50 },
+        { x: 300, y: 0, w: 40, h: 40 },
+      ],
+      6,
+    );
+    expect(outline.match(/M/g)).toHaveLength(2);
   });
 });
