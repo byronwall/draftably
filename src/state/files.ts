@@ -433,34 +433,13 @@ export async function exportDocument(
   toast(format.toUpperCase() + ' export created');
 }
 
-/** What Copy puts on the clipboard: every format at once, or one thing as text. */
+/** What Copy puts on the clipboard: a PNG image, or one thing as text. */
 export type CopyAs = 'image' | 'svg' | 'source' | 'link';
-
-/** Clipboard formats, richest first, with the word the toast uses for each. */
-const FORMATS: [string, string][] = [
-  ['image/png', 'PNG'],
-  ['image/svg+xml', 'SVG'],
-  ['web image/svg+xml', 'SVG'],
-  ['text/html', 'HTML'],
-  ['text/plain', 'text'],
-];
-
-const and = (words: string[]) =>
-  words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words.at(-1)}` : words[0];
-
-const blobText = (blob: Blob) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(Error('Could not read the image.'));
-    reader.readAsDataURL(blob);
-  });
 
 /**
  * Copy the diagram, or the selection when something is selected. `image` writes one clipboard item
- * with PNG, SVG, HTML and the SVG markup as text, so the app it is pasted into takes the format it
- * reads; a browser that refuses some of them gets the richest set it accepts, down to PNG alone.
- * The other kinds copy one thing as text.
+ * with PNG alone, so every app that pastes it gets the rendered picture and never SVG markup as
+ * text. The other kinds copy one thing as text; `svg` is the way to copy the markup.
  */
 export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onlySelection = true) {
   activeSession().finishInlineEdit(true);
@@ -482,46 +461,16 @@ export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onl
     await clip.writeText(svg);
     return toast(`Copied ${what || 'the diagram'} as SVG markup`);
   }
-  const png = pngOf(svg, look);
-  const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(svg) ?? [];
-  const blobs: Record<string, Promise<Blob>> = {
-    'image/png': png,
-    'image/svg+xml': Promise.resolve(new Blob([svg], { type: 'image/svg+xml' })),
-    'web image/svg+xml': Promise.resolve(new Blob([svg], { type: 'image/svg+xml' })),
-    'text/html': png.then(
-      async b =>
-        new Blob(
-          [
-            `<img src="${await blobText(b)}" width="${w}" height="${h}" alt="${activeSession().doc.title.replace(/"/g, '&quot;')}">`,
-          ],
-          { type: 'text/html' },
-        ),
-    ),
-    'text/plain': Promise.resolve(new Blob([svg], { type: 'text/plain' })),
-  };
-  const supports = (type: string) =>
-    typeof ClipboardItem.supports !== 'function' || ClipboardItem.supports(type);
-  let failure: unknown;
-  for (const drop of [
-    [],
-    ['web image/svg+xml'],
-    ['image/svg+xml', 'web image/svg+xml'],
-    FORMATS.slice(1).map(f => f[0]),
-  ]) {
-    const types = FORMATS.map(f => f[0]).filter(t => supports(t) && !drop.includes(t));
-    try {
-      await clip.write([new ClipboardItem(Object.fromEntries(types.map(t => [t, blobs[t]])))]);
-      const words = [...new Set(FORMATS.filter(f => types.includes(f[0])).map(f => f[1]))];
-      return toast(`Copied ${what ? what + ' ' : ''}as ${and(words)}`);
-    } catch (error) {
-      failure = error;
-    }
+  try {
+    await clip.write([new ClipboardItem({ 'image/png': pngOf(svg, look) })]);
+  } catch (failure) {
+    throw failure instanceof Error && failure.name !== 'NotAllowedError'
+      ? failure
+      : Error(
+          'The browser blocked the clipboard. Allow clipboard access for this page and copy again.',
+        );
   }
-  throw failure instanceof Error && failure.name !== 'NotAllowedError'
-    ? failure
-    : Error(
-        'The browser blocked the clipboard. Allow clipboard access for this page and copy again.',
-      );
+  toast(`Copied ${what || 'the diagram'} as an image`);
 }
 
 /** Formats the export dialog makes. */
