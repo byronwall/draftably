@@ -2,6 +2,7 @@
  * draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
+import { directionNotes } from './direction-note';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isMainThread, workerData } from 'node:worker_threads';
@@ -294,7 +295,11 @@ async function checkFile(
   // Measure only a file that compiles cleanly; errors come first.
   const drawn =
     metrics && !diagnostics.some(d => d.level === 'error') ? await draw(source) : undefined;
-  if (drawn) diagnostics.push(...qualityNotes(drawn, metrics!.fit));
+  if (drawn)
+    diagnostics.push(
+      ...qualityNotes(drawn, metrics!.fit),
+      ...(await directionNotes(source, drawn)),
+    );
   const errors = diagnostics.filter(d => d.level === 'error'),
     warnings = diagnostics.filter(d => d.level === 'warning');
   for (const d of diagnostics) if (!quiet || d.level !== 'info') console.log(tag + describe(d));
