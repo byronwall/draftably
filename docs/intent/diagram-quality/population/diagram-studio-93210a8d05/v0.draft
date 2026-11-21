@@ -1,0 +1,9 @@
+# Population: diagram-studio/docs/DSL.md
+group customer "Customer"
+group agents "Support agents"
+node opens "Opens a ticket" in=customer
+node triage "Triage" in=agents
+node resolved "Sees it resolved" in=customer
+edge e1 opens -> triage
+edge e2 triage -> resolved
+layout root lanes

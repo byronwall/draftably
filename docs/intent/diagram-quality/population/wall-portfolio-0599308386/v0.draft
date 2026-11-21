@@ -1,0 +1,20 @@
+# Population: wall-portfolio/content/diagrams/allison-analysis-flow.draft
+diagram "From test files to the next question" version=1
+subtitle "Engineers define events and analyses themselves. Nothing is hard-coded on the server."
+theme drafting padding-y=10
+
+node files "Test files\nthousands of DL4 files" color=slate shade=100
+node meta "File index\nmetadata on upload" color=slate shade=100
+node events "Events\nuser-defined triggers" color=teal shade=100
+node analyses "Analyses\nvalues per event" color=teal shade=100
+node explore "Exploration\nlinked, filtered charts" color=violet shade=100
+node overlay "Signal overlay\nraw signals, aligned" color=violet shade=100
+node reports "Reports\nsaved charts and slides" color=amber shade=100
+
+edge e1 files -> meta
+edge e2 meta -> events "preview, then run on all"
+edge e3 events -> analyses
+edge e4 analyses -> explore "tens of millions of values"
+edge e5 explore -> overlay "open a filtered set"
+edge e6 overlay -> analyses "a difference becomes the next analysis" kind=async
+edge e7 explore -> reports

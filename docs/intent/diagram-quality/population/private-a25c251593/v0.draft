@@ -1,0 +1,31 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ce" version=1
+group Kev "DububAluta Kev"
+group ZibenuRaza "Hoke-Vezozo Kanave Mika"
+node Puni "Puni / Bafipuf"
+node Ragecenag "Gahis Mepigu Ragecenag"
+node Duhati "Huca Duhati" in=Kev
+node DA "Gahis DA Kumibobosa" in=Kev
+node Mubobir "Gukak + Bumada Bucisilu" in=Kev
+node KUC "KUC Duhati" in=Kev
+node Lekorobahe "Pazucepud Lekorobahe" in=Kev
+node CE "/va/hehi Litukidif" in=Kev
+node TokifAruta "BOF_KUFE_TOH/debac" in=ZibenuRaza
+node DimeturUmenu "BOF_KUFE_TOH/ruhohub/sokab.reti" in=ZibenuRaza
+node TenumuzatEfuce "BOF_KUFE_TOH/lopuduvaz/sokab.reti" in=ZibenuRaza
+node Teparu "Teparu KUC"
+node Zumazi "Zumazi KUC"
+edge solu_1 Puni -> Duhati ""
+edge caka_2 Duhati -> DA ""
+edge noda_3 DA -> Mubobir ""
+edge rizu_4 Mubobir -> TokifAruta ""
+edge lubi_5 Ragecenag -> KUC ""
+edge noti_6 KUC -> TokifAruta ""
+edge vapi_7 KUC -> DimeturUmenu ""
+edge momi_8 KUC -> Teparu ""
+edge bobi_9 KUC -> Zumazi ""
+edge sifa_10 Lekorobahe -> TenumuzatEfuce ""
+edge cuno_11 Puni -> CE ""
+layout root flow direction=down
+layout Kev flow direction=down
+layout ZibenuRaza flow direction=down

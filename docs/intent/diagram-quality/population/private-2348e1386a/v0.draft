@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pi" version=1
+node N "VU pufodo mov vohagu fanok"
+node V "TusaZusara pevuniz mov ticekac"
+node H "Gamip hokilu masi-rera datis"
+node R "TAT pagu mov vohagu parasezuhas"
+node B "Ralif mov cireti finesotam"
+node V1 "Hosego mov ticetup dazihu"
+node T "Tipimur filekik boner"
+node L "Zokad keno dilokec"
+node G "Hisuz tudelala mov zurugiz"
+node H1 "Zolomelu mov hamub tizibisavo"
+edge feza_1 N -> V ""
+edge gefa_2 V -> H ""
+edge sedi_3 H -> R ""
+edge moge_4 H -> B ""
+edge kuke_5 H -> V1 ""
+edge dipi_6 V1 -> T ""
+edge naci_7 V1 -> L ""
+edge beta_8 V1 -> G ""
+edge lefo_9 V1 -> H1 ""
+layout root flow direction=down

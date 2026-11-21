@@ -1,0 +1,29 @@
+# Population: comic-books/docs/intent/multi-user-accounts/implementation-plan.md (Mermaid, imported)
+diagram "in" version=1
+node A "Stop app and drain jobs"
+node B "Inventory and validate"
+node C "All conflicts resolved?" shape=diamond
+node Stop "Stop without applying"
+node D "Copy full backup and verify hashes"
+node E "Stage account and annotated book files"
+node F "Write journal and replace files"
+node G "Compare content and every retained file"
+node H "Comparison passes?" shape=diamond
+node I "Write completion marker"
+node J "Start account-aware app privately"
+node K "Keep app closed and inspect"
+node L "Resume checked journal or restore before reopening"
+edge edge_1 A -> B ""
+edge edge_2 B -> C ""
+edge edge_3 C -> Stop "No"
+edge edge_4 C -> D "Yes"
+edge edge_5 D -> E ""
+edge edge_6 E -> F ""
+edge edge_7 F -> G ""
+edge edge_8 G -> H ""
+edge edge_9 H -> I "Yes"
+edge edge_10 I -> J ""
+edge edge_11 H -> K "No"
+edge edge_12 F -> K "interrupted" kind=async
+edge edge_13 K -> L ""
+layout root flow direction=down

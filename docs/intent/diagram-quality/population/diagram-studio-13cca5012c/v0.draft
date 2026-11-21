@@ -1,0 +1,5 @@
+# Population: diagram-studio/docs/intent/public-site/assets/pro-results/2026-10-29-usability/usability-audit.md
+diagram "Audit checkout" version=1
+node start "Cart"
+node next "Payment"
+edge go start -> next

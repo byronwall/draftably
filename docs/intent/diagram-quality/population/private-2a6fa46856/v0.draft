@@ -1,0 +1,17 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "bu" version=1
+node L "2Z bolufi puzakepa"
+node P "Totezugat gakozam modof"
+node F "Kusuku cog guguhoku tekorupu"
+node Z "Zoserivat cog ganokazucug"
+node G "Dapov tucudate pihozo"
+node G1 "2Z cog 3Z begum"
+node F1 "Cezoroko cavako mefolu"
+edge peme_1 L -> P ""
+edge toba_2 P -> F ""
+edge zepu_3 F -> Z ""
+edge coku_4 Z -> G ""
+edge koko_5 Z -> G1 ""
+edge boto_6 G -> F1 ""
+edge dari_7 G1 -> F1 ""
+layout root flow direction=down

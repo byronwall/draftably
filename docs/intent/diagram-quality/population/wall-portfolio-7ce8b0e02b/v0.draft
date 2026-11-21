@@ -1,0 +1,43 @@
+# Population: wall-portfolio/public/images/skills/queued-orchestrator.draft
+diagram "Queued orchestrator" version=1
+subtitle "Parallel workers, queued dependents, one PR stack"
+
+node input "Recording, transcript\nor issue list"
+node orch "Orchestrator session\nreads code, splits by file" color=blue
+node ask "Product questions\nByron decides" color=rose shade=200
+
+group wave "Wave 1: parallel worktrees" color=slate
+node copy "copy-pass\nowns content/*" in=wave
+node shell "list-shell\nowns components/list-*" in=wave
+node data "data-layer\nowns server/*" in=wave
+
+node filters "filters (queued)\nneeds list-shell" color=amber shade=200
+
+group stack "PR stack" color=green
+layout stack cells direction=down
+node s4 "4 · copy-pass" in=stack
+node s3 "3 · filters" in=stack
+node s2 "2 · list-shell" in=stack
+node s1 "1 · data-layer" in=stack
+
+legend blue "Coordinator"
+legend slate "Worker sessions"
+legend amber "Waits for a parent" shade=200
+legend green "Reviewable result"
+legend rose "Human decision" shade=200
+legend line solid "Brief or result"
+legend line dashed "Waiting"
+
+edge e_in input -> orch
+edge e_ask orch -> ask "asks" tail=arrow
+edge b1 orch -> data "brief"
+edge b2 orch -> shell
+edge b3 orch -> copy
+edge q orch -> filters "queued" kind=async
+edge land shell -> filters "lands, then starts"
+edge r1 data -> s1
+edge r2 shell -> s2
+edge r3 filters -> s3
+edge r4 copy -> s4
+
+layout root engine=layered direction=right fit=slide

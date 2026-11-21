@@ -1,0 +1,49 @@
+# Population: wall-portfolio/content/diagrams/event-rows.draft
+diagram "From triggers to rows" version=1
+subtitle "A trigger finds every event in every file. Analyses add one value per event. Rows are illustrative."
+theme drafting padding-y=10
+
+group triggers "Event triggers" color=teal
+layout triggers cells direction=down
+node trig.shift "Range shift\nstart: commanded range changes\nend: shift completes" in=triggers
+node trig.step "Step input\nstart: solenoid steps 0 to 1.1 A\nend: pressure settles" in=triggers
+node trig.custom "Your own trigger\nany condition you can write as math" in=triggers
+
+group rows "Events table" color=slate
+layout rows cells columns=6
+node h.event "event" in=rows color=teal shade=200
+node h.file "file" in=rows color=teal shade=200
+node h.start "start (s)" in=rows color=teal shade=200
+node h.end "end (s)" in=rows color=teal shade=200
+node h.speed "max engine speed" in=rows color=violet shade=200
+node h.press "min pressure" in=rows color=violet shade=200
+node r1.event "shift 3 to 4" in=rows
+node r1.file "file 0412" in=rows
+node r1.start "812.40" in=rows
+node r1.end "813.95" in=rows
+node r1.speed "2,140 rpm" in=rows
+node r1.press "410 kPa" in=rows
+node r2.event "shift 4 to 5" in=rows
+node r2.file "file 0412" in=rows
+node r2.start "829.10" in=rows
+node r2.end "830.72" in=rows
+node r2.speed "2,215 rpm" in=rows
+node r2.press "385 kPa" in=rows
+node r3.event "shift 5 to 4" in=rows
+node r3.file "file 0413" in=rows
+node r3.start "14.06" in=rows
+node r3.end "15.31" in=rows
+node r3.speed "1,890 rpm" in=rows
+node r3.press "432 kPa" in=rows
+node more "... about 500,000 rows for a 2,000-hour durability test" in=rows span=6
+
+group analyses "Analyses" color=violet
+layout analyses cells direction=down
+node an.speed "max engine speed" in=analyses
+node an.press "min pressure" in=analyses
+node an.custom "your own calculation" in=analyses
+
+edge find triggers -> h.event "run across every file"
+edge compute analyses -> h.press "one value per event" to=right
+
+layout root row gap=96

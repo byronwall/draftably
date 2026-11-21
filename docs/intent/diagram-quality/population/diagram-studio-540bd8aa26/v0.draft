@@ -1,0 +1,4 @@
+# Population: diagram-studio/docs/DSL.md
+node api "API"
+node cache "Cache"
+edge read api -> cache "read"

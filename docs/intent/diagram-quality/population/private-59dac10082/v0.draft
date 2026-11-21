@@ -1,0 +1,56 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Zeb nuzoci temime: cunu kafi fi, cunu zukep sog" version=1
+subtitle "Covasi gake mulec pet. Kurub bapomib, dopo laned se huboce."
+theme drafting padding-y=10
+config link-base="."
+
+group bisizeg "Basamed"
+node tebocosu "Caziveko duhoci\nnuruno-lapaheteh, nuruno vokego" in=bisizeg color=teal shade=100 href="nuruno-tebocosu-ginem.pa"
+node semonora "SefagiGa suhata\ndagevedocuv, besezimab" in=bisizeg color=teal shade=100 href="lohocig-bisizeg.pa"
+node zakehehu "Gedili Serup Beveva\nkeku muh hibum duda TUC" in=bisizeg color=teal shade=100 href="susab-cesevale.pa"
+node kozerunap "Sariravoruv\nKenebih, RemoNabasam Lubuc, K" in=bisizeg color=teal shade=100
+node pisuha "Zeb pisuha muh\nmurepin vosozu zucek" in=bisizeg color=teal shade=100
+
+group gilo "Zeb nuzoci gilo (gakuc)" color=violet
+node besezimab "Nonapohal\nlisiv kesa, vevazini" in=gilo color=violet shade=100
+node daliroga "Kalahuvo\nnizatenakeci, zodive" in=gilo color=violet shade=100
+node huboce "Tupati zikoz\nGedili Serup FUn, lesus fi" in=gilo color=violet shade=100
+node teraraf "Caziveko\nruside, muruduz, hicur" in=gilo color=violet shade=100
+node kov "Tuguburu kov\nzazociga, mapecul, genome" in=gilo color=violet shade=100
+
+group hozete "Covasi (Hire, Takup)" color=amber
+node vevazini "Rucir feni\npoce fevetane, roha guzufip" in=hozete color=amber shade=100
+node vin "Fit dopot\nzetohef be tebocosu" in=hozete color=amber shade=100
+node lesus "Haru lesus\nzel cac kosanumuk pi" in=hozete color=amber shade=100
+node cucibesis "Tecadomep mah Kurub\ncunu porem zulum pal lone" in=hozete color=amber shade=100
+node pukugo "Divozo\nkenaz, rudisita nuruno" in=hozete color=amber shade=100
+
+group sog "Kurub's garev"
+node fuzob "Pomozusu fuzob\nhu calag muh seke foko" in=sog color=slate shade=50
+node zipun "Vavef's guzufip\nmuh cucibesis" in=sog color=slate shade=50
+node kaba "Mun holomu\npevezaf hicur vez buda" in=sog color=slate shade=50
+node kuvo "Hofar geseciva kuvo\ncunu ki cop muh gag" in=sog color=slate shade=50
+
+edge m_nab bisizeg -> hozete "keku muh saguko"
+edge s_ca hozete -> gilo "hibum pebotan"
+edge g_kamu gilo -> hozete "keku pebotan" kind=async constraint=false
+edge k_kuf gilo -> sog "dupi"
+
+size tebocosu width=230 height=auto
+size semonora width=230 height=auto
+size zakehehu width=230 height=auto
+size kozerunap width=230 height=auto
+size pisuha width=230 height=auto
+
+layout root flow gap=64 fit=slide
+layout bisizeg column gap=12
+layout gilo column gap=12
+layout hozete column gap=12
+layout sog column gap=12
+
+legend teal "Kekimufu vime" shade=100
+legend violet "Lekevek pal gilo sefu" shade=100
+legend amber "Hofar gake" shade=100
+legend line dashed "Covasi keku veru bakeg dup pebotan"
+footnote "Beveva depa fi Gedili Serup Beveva. Dap tup gilo palid faze bakeg FUn."
+footnote "Covasi febap; Kurub kulaz. Mulisok nu rigida fi zemico."

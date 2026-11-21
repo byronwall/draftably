@@ -1,0 +1,11 @@
+# Population: diagram-studio/docs/DSL.md
+diagram "Plan"
+group app "App"
+node web "Web" in=app
+node api "API" in=app
+group data "Data"
+node db "Database" in=data
+node cache "Cache" in=data
+edge e1 web -> api "calls"
+edge e2 api -> db "reads"
+edge e3 api -> cache "checks"

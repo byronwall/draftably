@@ -1,0 +1,10 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pe" version=1
+node C "Hifemunu zivu cikukop"
+node C1 "Zulala han humok miseri"
+node T "Tipofaz hacu; sesi DO; sik mocecig"
+node K "Rive kevevud cikukop"
+edge maga_1 C -> C1 ""
+edge fatu_2 C1 -> T "Bizene"
+edge sena_3 C1 -> K "Kidize"
+layout root flow direction=right

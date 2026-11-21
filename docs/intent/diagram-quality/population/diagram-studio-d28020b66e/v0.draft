@@ -1,0 +1,5 @@
+# Population: diagram-studio/docs/DSL.md
+group edge "Edge" color=blue
+node db "Postgres" color=violet
+legend blue "Public entry points"
+legend violet "Data stores"

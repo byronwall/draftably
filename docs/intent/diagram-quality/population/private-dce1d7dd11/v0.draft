@@ -1,0 +1,14 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "mi" version=1
+node Nabus "/mivem/nafukoh-hagucic-ranamu"
+node Kugika "Rolo KadelizIfakirEvodumeka"
+node Madonol "Sipomavas rotop-tidaze TohilenUnutom"
+node Duzubil "Gokipak-helelarigiz tidaze pepifad"
+node Sidatetit "Murotivi ranamu mav rulucup + salovihus"
+node Fusozosuh "Murotivi nafukoh kulogeluv"
+edge zeci_1 Nabus -> Kugika ""
+edge simu_2 Madonol -> Kugika ""
+edge puli_3 Duzubil -> Kugika ""
+edge laco_4 Kugika -> Sidatetit ""
+edge tine_5 Sidatetit -> Fusozosuh ""
+layout root flow direction=right

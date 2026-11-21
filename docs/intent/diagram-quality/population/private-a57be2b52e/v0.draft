@@ -1,0 +1,12 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ko" version=1
+node H "Kod mogate"
+node V "Pupu ramo?" shape=diamond
+node P "Redugi fimipoli duli"
+node F "Vaparo d duli"
+node S "Hup nek lefihuno"
+edge dida_1 H -> V ""
+edge hupe_2 V -> P "Nas"
+edge digo_3 V -> F "Vi"
+edge telo_4 V -> S "Mavutas"
+layout root flow direction=right

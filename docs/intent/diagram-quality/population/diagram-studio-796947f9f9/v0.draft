@@ -1,0 +1,13 @@
+# Population: diagram-studio/docs/DSL.md
+group client "Client" color=blue
+group server "Server" color=teal
+node app "Web app" in=client
+node auth "Auth service" in=server
+node db "Database" in=server
+edge m1 app -> auth "verify"
+edge m2 auth -> db "read user"
+edge m3 auth -> db "write session"
+edge m4 auth -> app "token" kind=async
+phase check "Check: nothing written" m1 m2
+phase commit "Commit" m3 m4
+layout root sequence

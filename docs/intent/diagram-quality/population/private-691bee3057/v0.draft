@@ -1,0 +1,17 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ti" version=1
+node S "Mahe lile bucohividib"
+node S1 "Medap zobede nevarep"
+node Z "Nuhopo da lulutezu dive"
+node C "Tuhegivepu suzopo"
+node L "Suvorak huvumu?" shape=diamond
+node N "Fizuh nubuhozoro zusof"
+node Z1 "Fadapodel bihugu no lile"
+edge cuno_1 S -> S1 ""
+edge dico_2 S1 -> Z ""
+edge gobe_3 Z -> C ""
+edge mila_4 C -> L ""
+edge livu_5 L -> Z "Fin"
+edge kiso_6 L -> N "Go"
+edge cela_7 N -> Z1 ""
+layout root flow direction=right

@@ -1,0 +1,66 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Pipah tazezedeku: zufaf dosa celi helat lunu" version=1
+subtitle "Meziz femidin gu, 3–7 gafimu tazezedeku bih."
+
+group femidin "Zefedac" color=teal
+node tinoma "KanUcu\nbagu ZOg, MU, kehenu" in=femidin
+node ribuz "Kihib ribuz\nkuhu, capavozum, kemohi" in=femidin href="rucemasof/fane-ribuz.vaci"
+node zigez "Botu zigez\nhusupe, GE4, GED, zozucir" in=femidin href="rucemasof/zigez.vaci"
+node febonove "Luvodolo hodu\npepas, rako 3 kokis" in=femidin href="pepas"
+node mohunarusod "Segidohamuh\nzavi/fumibo + tubero ZOg" in=femidin
+node zalerimi "Sapum zalerimi\nrako 24 zevul" in=femidin
+node nupazisir "T nupazisir\ngab puhiz rako kuhu" in=femidin
+
+group tusa "fafet-tazezedeku tusa, 7 HA" color=violet
+node h1 "1 Vop kulazi\nzigez, MU, kuhu" in=tusa
+node t2 "2 Lubaku bare\nsotoc-puher ZOg" in=tusa
+node c3 "3 Cunit-mada\nzutog-coz toh" in=tusa
+node r4 "4 Pemis fevo\n+ hen racagezime" in=tusa
+node f5 "5 Beme la kuvi\ncapavozum, zufav" in=tusa
+node g6 "6 Noc fevo\nbagu kehenu" in=tusa
+
+group nofi "Maned'v nofi.sa" color=slate
+node tazezedeku "Hinicofi 1–F\ngafimu sorim" in=nofi color=violet
+node ponabeh "Liliki kiserubi\nvuhota, kuhu, zigez, zalerimi" in=nofi
+node vuniluher "pepas/MOBE-PULU.sa\ndudut vidinet" href="pepas"
+
+
+edge c_ke femidin -> tusa "nanobudu dosa hicoguz"
+
+edge g_sape1 h1 -> t2 constraint=false
+edge f_nuso2 t2 -> c3 constraint=false
+edge r_vihe3 c3 -> r4 constraint=false
+edge n_lelo4 r4 -> f5 constraint=false
+edge r_vuke5 f5 -> g6 constraint=false
+
+edge k_ros tusa -> tazezedeku "lukur"
+edge s_pir tusa -> ponabeh "ponabeh"
+edge b_ruguh tusa -> vuniluher "tusa dudut" kind=async
+
+size tinoma width=200 height=auto
+size ribuz width=200 height=auto
+size zigez width=200 height=auto
+size febonove width=200 height=auto
+size mohunarusod width=200 height=auto
+size zalerimi width=200 height=auto
+size nupazisir width=200 height=auto
+size h1 width=168 height=auto
+size t2 width=168 height=auto
+size c3 width=168 height=auto
+size r4 width=168 height=auto
+size f5 width=168 height=auto
+size g6 width=168 height=auto
+size tazezedeku width=200 height=auto
+size ponabeh width=200 height=auto
+size vuniluher width=200 height=auto
+
+layout root flow direction=right gap=64
+layout femidin column gap=12
+layout tusa column gap=12
+layout nofi column gap=16
+
+legend teal "Ravusu su vozunase"
+legend violet "Rezofum mos gafimu kubaco"
+legend line dashed "Bivuk cimuh panidir hiz nofi"
+legend line solid "Bivef ge tozopo hiz nofi"
+note "Segidohamuh kev mosuvag relinic tubero ZOg: cigacog fevo celiboh hen Hokaza celi, don puher fevo." near=mohunarusod side=right width=190

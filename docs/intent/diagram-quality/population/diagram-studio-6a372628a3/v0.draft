@@ -1,0 +1,9 @@
+# Population: diagram-studio/docs/DSL.md
+node user "User" shape=pill
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "sign in"
+edge m2 app -> auth "verify"
+edge m3 auth -> auth "check hash"
+edge m4 auth -> app "token" kind=async
+layout root sequence

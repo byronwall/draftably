@@ -1,0 +1,16 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "bi" version=1
+node DO "Lekec mehiviva has hiheho zupum"
+node SIZ "Fidepifu has tuzuracefopa"
+node LOL "Tahikinut nutetile magigofu"
+node HORIGE "Tadimo popav has heroruh limum"
+node MASOK "2S has 3S lifivudo"
+node DOLOKE "Sivosi hozoni bigoma"
+node NULI "Sovipima fucife has figabolamo"
+edge rabu_1 DO -> SIZ ""
+edge godu_2 SIZ -> LOL ""
+edge zoda_3 LOL -> HORIGE ""
+edge hihi_4 HORIGE -> MASOK ""
+edge pibo_5 HORIGE -> DOLOKE ""
+edge lesu_6 LOL -> NULI ""
+layout root flow direction=down

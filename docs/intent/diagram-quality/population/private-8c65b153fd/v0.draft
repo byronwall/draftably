@@ -1,0 +1,55 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Cafav cokibeliba: carik feni veto zevul luci" version=1
+subtitle "Fazog kodelud pi, 3–7 vuzica cokibeliba nub."
+
+group kodelud "Bugorov" color=teal
+node filutu "TipAgu\nlife LUs, FU, vosuve" in=kodelud
+node cinoc "Linor cinoc\nsamo, nozahetad, cuhe movazu" in=kodelud href="venacamed/nufe-cinoc.butu"
+node gelez "Doki gelez\nfedopu, KU4, PES, tebibak" in=kodelud href="venacamed/gelez.butu"
+node vecihega "Tuzedubi fovi\ncelad, habi 3 gucan" in=kodelud href="celad"
+node gepitipivir "Notavugizik\nhosu/lofaze + cobivi LUs" in=kodelud
+node sanotala "Titob sanotala\nhabi 24 cahog" in=kodelud
+node bezomuvol "F bezomuvol\nmat tipuh habi samo" in=kodelud
+
+group hori "tipev-cokibeliba hori\nmepahizuv, 7 VA" color=violet
+node f1 "1 Hal ruhu ku tuvado\ngelez, FU, samo, tebibak" in=hori
+node c2 "2 Nofarin bavatu beve\nbizin-zovor LUs, tegutuz sanotala" in=hori
+node d3 "3 Dicim-kuse\nkitolelep virab, rezop-pob hol" in=hori
+node g4 "4 Picer guvu\ncelad, gepitipivir, sis sorugerahi" in=hori
+node s5 "5 Dumi ke tefu\nvahon fafakun, nozahetad" in=hori
+node v6 "6 Lig guvu\nlife vosuve" in=hori
+
+group lule "Nosir'd lule.ci" color=slate
+node cokibeliba "Bidozagi 1–M\nvuzica kutil" in=lule color=violet
+node bonikus "Fihoti duhamale\ndofe cuvigi, fovi samo, nozahetad,\nmovazu, gelez, zovor sa guvu,\nsanotala, facuz, bezomuvol" in=lule
+node mafamaler "celad/LUSU-FEHU.ci\nbabal (tipev musil) zocolin" href="celad"
+
+
+edge g_necazi filutu -> hori
+edge l_zopal cinoc -> hori
+edge p_veheb gelez -> hori
+edge d_sebesegu vecihega -> hori
+edge k_vuredahalih gepitipivir -> hori
+edge d_lizohaho sanotala -> hori
+edge f_zohonodus bezomuvol -> hori
+
+edge c_buci1 f1 -> c2 constraint=false
+edge l_gesi2 c2 -> d3 constraint=false
+edge s_nigo3 d3 -> g4 constraint=false
+edge k_kifi4 g4 -> s5 constraint=false
+edge v_sila5 s5 -> v6 constraint=false
+
+edge b_vol hori -> cokibeliba "vedad"
+edge p_hur hori -> bonikus "bonikus"
+edge n_tebuh hori -> mafamaler "hori musil" kind=async
+
+layout root flow direction=right gap=64
+layout kodelud column gap=12
+layout hori column gap=12
+layout lule column gap=16
+
+legend teal "Latino du lataraca"
+legend violet "Sinavug zuz vuzica cobuno"
+legend line dashed "Zopin pobon gohusog gil lule"
+legend line solid "Zurib ve ribepo gil lule"
+note "Notavugizik nuz vuzizim suvelof cobivi LUs: segubug guvu bitibom sis Bipava veto, dag zovor guvu." near=gepitipivir side=right width=190

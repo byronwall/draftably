@@ -1,0 +1,10 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pe" version=1
+node S "Depa veribige RA"
+node P "Hizekab nagobu notubem"
+node K "Damuhecur sodosi 1"
+node R "Damuhecur sodosi 2"
+edge peka_1 S -> P ""
+edge gifu_2 S -> K ""
+edge dica_3 S -> R ""
+layout root flow direction=right

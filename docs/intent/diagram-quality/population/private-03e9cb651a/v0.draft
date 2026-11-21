@@ -1,0 +1,18 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ki" version=1
+node F "Pubevuco ruhasuve fus tutunere"
+node V "Zedefezop sabatilo"
+node G "Rulupidi ditago"
+node P "Codibesok savatire fus hitalakeke"
+node T "2P sogogecufa"
+node T1 "3P pidonur"
+node Z "Tuditifakah dudune"
+node L "Mitaz sofo fus teragare CIFO"
+edge zefu_1 F -> V ""
+edge cigu_2 V -> G ""
+edge cehu_3 G -> P ""
+edge lusu_4 P -> T ""
+edge hulu_5 P -> T1 ""
+edge hora_6 P -> Z ""
+edge capi_7 V -> L ""
+layout root flow direction=down

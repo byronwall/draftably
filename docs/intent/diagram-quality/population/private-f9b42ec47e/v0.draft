@@ -1,0 +1,51 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Feb c hatavaze huk nulat" version=1
+subtitle "Letit bihof c vatov. Gumik fohage tun bogeti. Letit dumudez pa."
+theme drafting padding-y=10
+
+node teru "Zuzev teru" color=slate shade=50
+node sefan "Leziseni sefan\nzalamah/hatavaze-sefan.pi" color=violet shade=100
+node zafi_a "Leziseni fegi:\nTiv cok huk" color=blue shade=100
+node fakat "Hun tun vumulac\nsopidic/hatavaze-huk.va" color=slate shade=50
+
+group huk "Fib Gumik huk (hatavaze-huk gufop)" color=amber shade=50
+node vicufa "Hotet tun huk\nZUDIGE vetudo: balidul" color=amber shade=100 in=huk
+node linu "Bumo dokeborit\ndit redohi, pitabu lefu" color=amber shade=100 in=huk
+node zuzed "Raf TOM zuzed\nza zuzed duzos, bem, duza" color=amber shade=100 in=huk
+node mira "Gisa cun humu hodutole\nza zuzed mira, cudupem bem" color=amber shade=100 in=huk
+node gis "Sunaf gis mune\ndobin cudupem" color=amber shade=100 in=huk
+node gezu "Nahi gis cefup\n3-5 pucafatac" color=amber shade=100 in=huk
+node kucone "Dimuv hevefec\nvetudo: tibo, za cefup" color=amber shade=100 in=huk
+
+node cuc_co "dokeborit/*.pi" color=violet shade=100
+node ref_soca "hodutole/*.pi\ngis, gis_mes, kupoh KOz" color=violet shade=100
+node geg_vus "hatavaze/<huk>/\nZUDIGE cun pinihem" color=violet shade=100
+
+node buzu_izuf "Leziseni fegi:\nMubu laru" color=blue shade=100
+node mepefu "Kogacohub to hida" color=slate shade=50 shape=diamond
+node guhoca "Rop cefup cun\nguhoca gomop" color=amber shade=100
+
+edge h1 teru -> sefan "vigum dalapo lahof"
+edge p2 sefan -> zafi_a
+edge r3 zafi_a -> fakat "bafa vumulac"
+edge k4 fakat -> vicufa
+edge l5 vicufa -> linu
+edge c6 linu -> zuzed
+edge r7 zuzed -> mira
+edge l8 mira -> gis
+edge b9 gis -> gezu
+edge m10 gezu -> kucone
+edge l1 linu -> cuc_co kind=async
+edge z2 mira -> ref_soca kind=async
+edge p3 kucone -> geg_vus kind=async
+edge v11 geg_vus -> buzu_izuf
+edge h12 buzu_izuf -> mepefu
+edge s13 mepefu -> guhoca "getufezuz"
+
+layout root flow gap=48 fit=slide
+
+legend slate "Letit mile pa" shade=50
+legend amber "Rileb mile pa" shade=100
+legend violet "Vivofama re tun sebu" shade=100
+legend blue "Daf hobi" shade=100
+legend line dashed "Donizu c hafi"

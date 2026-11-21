@@ -1,0 +1,13 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pi" version=1
+node C "gin solot rakukov"
+node F "Nofosur cuk di comohona"
+node G "Lafuselo zezizez nekari"
+node B "Lavudec DOTA dun sohahe"
+node T "Lavudec lomoki modeli"
+edge pifa_1 C -> F ""
+edge daga_2 G -> F ""
+edge robu_3 F -> B ""
+edge nupu_4 F -> T ""
+edge bilu_5 T -> G ""
+layout root flow direction=right

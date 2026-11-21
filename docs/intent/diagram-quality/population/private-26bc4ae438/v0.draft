@@ -1,0 +1,50 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "Gebif kofulufufu: zofuz mavo zuzi debik noso" version=1
+theme-color card shade=50 fill="#FCFCFB" stroke="#C9CDD4" ink="#1B2433"
+subtitle "Buret lifaduz fi, 3–7 dalucu kofulufufu bok."
+
+group lifaduz "Hogogol"
+node lupedo "FohEdi\ndino HUk, DO, rebife" in=lifaduz color=teal shade=100
+node kidan "Fovef kidan\nvuku, buvinekon, hera kitese" in=lifaduz href="kulimisul/labi-kidan.pomi" color=teal shade=100
+node fadum "Rufe fadum\nluhuza, GA4, SAV, poloveb" in=lifaduz href="kulimisul/fadum.pomi" color=teal shade=100
+node zahucube "Gukuhada bodo\nvavig, bite 3 vazad" in=lifaduz href="vavig" color=teal shade=100
+node bohesozigaz "Podibosepoz\nmoro/semela + tobili HUk" in=lifaduz color=teal shade=100
+node pebotuki "Hudir pebotuki\nbite 24 siheb" in=lifaduz color=teal shade=100
+node hodazegal "H hodazegal\ntuv vaheb bite vuku" in=lifaduz color=teal shade=100
+
+group keze "besez-kofulufufu keze\nreropicez, 7 NO" color=violet
+node m1 "1 Nem vubu po rebala\nfadum, DO, vuku, poloveb" in=keze color=card shade=50
+node k2 "2 Zibunot sanadu cafi\nlisuk-zesuc HUk, getamik pebotuki" in=keze color=card shade=50
+node t3 "3 Savef-nizu\nruharazar rutop, huniz-tup cug" in=keze color=card shade=50
+node k4 "4 Zukad dahe\nvavig, bohesozigaz, sog helubagezi" in=keze color=card shade=50
+node b5 "5 Visa bo viri\nlobaf nimagus, buvinekon" in=keze color=card shade=50
+node r6 "6 Pap dahe\ndino rebife" in=keze color=card shade=50
+
+group nusu "Micaf'f nusu.ca" color=slate shade=50
+node kofulufufu "Mavedavi 1–F\ndalucu mavug" in=nusu color=violet shade=100
+node tifilub "Guguvu dozoradu\ngutu nanope, bodo vuku, buvinekon,\nkitese, fadum, zesuc du dahe,\npebotuki, fucob, hodazegal" in=nusu color=card shade=50
+node fobetutoz "vavig/GIGU-SOCE.ca\nnerul (besez cazih) tulidaz" href="vavig"
+
+
+edge r_gi lifaduz -> keze "tetaduna mavo supozuf"
+
+edge d_mapi1 m1 -> k2 constraint=false
+edge g_sada2 k2 -> t3 constraint=false
+edge f_zagi3 t3 -> k4 constraint=false
+edge z_tube4 k4 -> b5 constraint=false
+edge t_vifa5 b5 -> r6 constraint=false
+
+edge c_fas keze -> kofulufufu "sefir"
+edge g_mel keze -> tifilub "tifilub"
+edge l_dobov keze -> fobetutoz "keze cazih" kind=async
+
+layout root flow direction=right gap=64
+layout lifaduz column gap=12
+layout keze column gap=12
+layout nusu column gap=16
+
+legend teal "Puzina ni nudacege" shade=100
+legend violet "Pihinin lic dalucu zitati" shade=100
+legend line dashed "Pefov nevid varaneh vik nusu"
+legend line solid "Leful ge fubuta vik nusu"
+note "Podibosepoz het telesed cefilip tobili HUk: funibif dahe fanuzac sog Tugiri zuzi, dok zesuc dahe." near=bohesozigaz side=right width=190

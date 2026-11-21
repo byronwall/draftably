@@ -1,0 +1,4 @@
+# Population: diagram-studio/site/docs/pages/get-started.md
+diagram "First diagram" version=1
+node idea "Idea" color=blue
+node sketch "Sketch" color=teal

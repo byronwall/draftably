@@ -1,0 +1,35 @@
+# Population: wall-portfolio/public/images/posts/hn-offline-service-worker/update-lifecycle.draft
+diagram "Getting new code to an open app" version=1
+subtitle "A deploy lands only after a full install, and the reload waits until you leave"
+
+group trigger "Check" color=slate
+node deploy "Deploy stamps a new VERSION" in=trigger
+node visible "App comes to the front" in=trigger
+node check "reg.update() finds new sw.js" in=trigger
+
+group install "Install" color=slate
+node precache "Precache every chunk and shell page" in=install
+node ok "All fetched?" in=install shape=diamond
+node keep "Old worker stays; retry later" in=install color=rose shape=pill
+
+group activate "Activate" color=slate
+node drop "Delete old caches, claim the page" in=activate
+node hidden "Page hidden?" in=activate shape=diamond
+node reload "Reload into new code" in=activate color=violet shape=pill
+
+legend rose "Failure keeps the old version"
+legend violet "What the reader sees"
+
+edge e1 deploy -> visible
+edge e2 visible -> check
+edge e3 check -> precache
+edge e4 precache -> ok
+edge e5 ok -> keep "no" kind=async
+edge e6 ok -> drop "yes"
+edge e8 drop -> hidden
+edge e10 hidden -> reload "yes"
+
+layout root row gap=56
+layout trigger column gap=32
+layout install column gap=32
+layout activate column gap=32

@@ -1,0 +1,8 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ba" version=1
+node V "Tabodefas livazabi zadez"
+node L "Guvufif rodi"
+node F "Gipo naliged zadez"
+edge zoti_1 V -> L ""
+edge lupa_2 F -> L ""
+layout root flow direction=right

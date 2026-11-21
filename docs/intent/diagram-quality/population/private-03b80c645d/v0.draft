@@ -1,0 +1,22 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "pu" version=1
+node RicinUbiredi "tekim-mipivu pagoh buhotih"
+node Rapisirazal "fetuguni mipivu namah"
+node ZozarAsamuza "pubof coferif pitu"
+node KamuketetEmedal "pebitafoh vovi febeke"
+node Varecib "duhiguk zanima + misamin bozepas"
+node Kivani "PazafivInulicOfahonipa"
+node Vukil "fuvazi vekuf vud vigober"
+node Vahicipem "fuvazi serugozif"
+node Netirug "fuvazi dederobed zihuges"
+node Gobemoroc "fuvazi gudidaloz"
+edge tufu_1 RicinUbiredi -> Rapisirazal ""
+edge memo_2 ZozarAsamuza -> Rapisirazal ""
+edge sege_3 KamuketetEmedal -> Rapisirazal ""
+edge mote_4 Rapisirazal -> Varecib ""
+edge hegu_5 Varecib -> Kivani ""
+edge vihi_6 Kivani -> Vukil ""
+edge henu_7 Kivani -> Vahicipem ""
+edge nemi_8 Kivani -> Netirug ""
+edge bopo_9 Kivani -> Gobemoroc ""
+layout root flow direction=down

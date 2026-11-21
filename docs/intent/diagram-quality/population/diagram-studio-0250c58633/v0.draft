@@ -1,0 +1,8 @@
+# Population: diagram-studio/site/docs/pages/get-started.md
+diagram "Architecture" version=1
+group backend "Backend" color=teal
+node app "Web app" color=blue
+node api "API" in=backend
+node db "Database" in=backend shape=pill
+edge request app -> api "HTTPS"
+edge query api -> db "query"

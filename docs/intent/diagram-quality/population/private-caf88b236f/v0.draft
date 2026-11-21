@@ -1,0 +1,20 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "ci" version=1
+node Hitom "/nofupag tecen"
+node Pafipoze "sihIfigaBacabakilArusihif mamezeko"
+node Mekoc "MevicipAfusuToruh"
+node RodEhiru "PapebObaMebac"
+node Helilu "TezugifIcasiPalucu"
+node Sinanop "FilifunEruBucipif"
+node Vevuneg "MorokucIzasefe"
+node Hipiv "NugegEvicepu"
+node Risof "BavipipiVadaKeca / SozigedEbefEhip"
+edge sava_1 Hitom -> Pafipoze ""
+edge tika_2 Pafipoze -> Mekoc ""
+edge dono_3 Mekoc -> RodEhiru ""
+edge nifi_4 RodEhiru -> Helilu ""
+edge gase_5 RodEhiru -> Sinanop ""
+edge hari_6 RodEhiru -> Vevuneg ""
+edge vako_7 RodEhiru -> Hipiv ""
+edge vusu_8 Vevuneg -> Risof ""
+layout root flow direction=down

@@ -1,0 +1,20 @@
+# Population: a private repo; labels replaced by placeholders of the same length
+diagram "be" version=1
+node Kekor "/zerolidi/depopir-dehizubuhe nunab"
+node Fomofuma "rahIlileRozanufanIcirahil hifuceti"
+node FokOzisu "TehesIcaVozum"
+node Sezic "GusuvabEcomufasaCivogUsuva"
+node FisUzog "CikulatAbekemiraGadOcik"
+node TigaFilifo "LanatopApekabebaNefiLanato"
+node Porirud "ZogonumulOdohoPazeduz"
+node Tanic "LisofecosErika"
+node Paponef "RuhupugEkivos"
+edge lala_1 Kekor -> Fomofuma ""
+edge dipi_2 Fomofuma -> FokOzisu ""
+edge bena_3 FokOzisu -> Sezic ""
+edge sido_4 Sezic -> FisUzog ""
+edge hudo_5 Sezic -> TigaFilifo ""
+edge sine_6 Sezic -> Porirud ""
+edge diru_7 Sezic -> Tanic ""
+edge gesa_8 Sezic -> Paponef ""
+layout root flow direction=down
