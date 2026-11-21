@@ -532,7 +532,7 @@ function gateLines(title, g, weighted) {
     ...top(g.worse.sort((a, b) => key(b) - key(a)).slice(0, 5)),
     '',
     verdict(g) === 'FAIL'
-      ? 'Gate: FAIL. A failing rule needs a compare sheet (`--shots`) and a written reason in the PR.'
+      ? 'Gate: FAIL. A failing rule needs the review page (`--review`) and a written reason in the PR.'
       : 'Gate: PASS.',
   ];
 }
