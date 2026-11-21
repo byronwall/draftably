@@ -1,5 +1,18 @@
 # @draftably/markdown
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [609b3d7]
+- Updated dependencies [2821fb9]
+- Updated dependencies [4703419]
+- Updated dependencies [424d4f6]
+- Updated dependencies [58f2712]
+- Updated dependencies [dc74563]
+- Updated dependencies [f7e76e2]
+  - @draftably/runtime@0.8.0
+
 ## 0.2.5
 
 ### Patch Changes
