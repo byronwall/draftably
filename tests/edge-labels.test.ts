@@ -3,7 +3,10 @@ import { checkSource } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
-import { placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
+import fs from 'node:fs';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes, placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
+import { buildStaticScene } from '../src/model/static-scene';
 import type { Point, Rect } from '../src/model/types';
 
 const rectOf = (l: { x: number; y: number; w: number; h: number }): Rect => ({
@@ -176,5 +179,37 @@ describe('room for a label at a bend', () => {
       { x: 148, y: 10, w: 12, h: 20 },
     ];
     expect(roomForLabel(z, 140, 21, boxes, [])).toEqual(z);
+  });
+});
+
+/** Issue reproductions, drawn as the static scene draws them. */
+const issueScene = (slug: string) => {
+  const source = fs.readFileSync(`docs/intent/diagram-quality/issues/${slug}/v0.draft`, 'utf8'),
+    doc = projectScene(checkSource(source)),
+    { vg, rects } = visibleRects(doc);
+  return buildStaticScene(doc, computeRoutes(doc, vg, rects, {}).result);
+};
+
+describe('edge labels in a crowded drawing', () => {
+  it('keeps every other line out of a label in a bundle of parallel routes (#587)', () => {
+    const { routes } = issueScene('i587-label-hides-routes');
+    for (const route of routes) {
+      if (!route.label) continue;
+      const text = { ...rectOf(route.label), y: route.label.y - route.label.h / 2 + 3 };
+      text.h -= 6;
+      for (const other of routes) {
+        if (other === route) continue;
+        const hit = other.points.slice(1).some((b, i) => {
+          const a = other.points[i];
+          return (
+            Math.max(a.x, b.x) > text.x &&
+            Math.min(a.x, b.x) < text.x + text.w &&
+            Math.max(a.y, b.y) > text.y &&
+            Math.min(a.y, b.y) < text.y + text.h
+          );
+        });
+        expect(hit, `${other.id} through ${route.id}'s label`).toBe(false);
+      }
+    }
   });
 });

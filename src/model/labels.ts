@@ -211,11 +211,21 @@ export const edgeLabelType = (r: ResolvedAppearance, message = false): TypeProfi
 export const LABEL_WRAP = 140;
 
 /**
- * A connection label's lines: split at each `\n` and wrapped to `LABEL_WRAP`, or a sequence
- * message's to `MESSAGE_WRAP`.
+ * Narrower widths a flow label may wrap to when no spot at `LABEL_WRAP` clears the lines around
+ * it: a stacked label fits a gap in a bundle of parallel lines that a long one would cross.
  */
-export const edgeLabelLines = (label: string, r: ResolvedAppearance, message = false) =>
-  wrapLines(label, message ? MESSAGE_WRAP : LABEL_WRAP, edgeLabelType(r, message));
+export const LABEL_NARROW_WRAPS = [96, 64];
+
+/**
+ * A connection label's lines: split at each `\n` and wrapped to `wrap`, by default `LABEL_WRAP`,
+ * or a sequence message's to `MESSAGE_WRAP`.
+ */
+export const edgeLabelLines = (
+  label: string,
+  r: ResolvedAppearance,
+  message = false,
+  wrap = message ? MESSAGE_WRAP : LABEL_WRAP,
+) => wrapLines(label, wrap, edgeLabelType(r, message));
 
 /**
  * A self-message's loop: its run out to the right of the lifeline and its drop. Its label sits
@@ -228,9 +238,10 @@ export function edgeLabelSize(
   label: string,
   r: ResolvedAppearance = resolveAppearance(),
   message = false,
+  wrap?: number,
 ) {
   const type = edgeLabelType(r, message),
-    lines = edgeLabelLines(label, r, message);
+    lines = edgeLabelLines(label, r, message, wrap);
   const w = Math.max(...lines.map(l => measureText(l, type))) + 16;
   return {
     w: Math.round(Math.max(36, w)),

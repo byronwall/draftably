@@ -13,6 +13,7 @@ import {
   actionSize,
   edgeLabelLines,
   edgeLabelSize,
+  LABEL_NARROW_WRAPS,
   groupTitleLines,
   SELF_LOOP,
 } from './labels';
@@ -75,6 +76,8 @@ export interface EdgeLabelBox extends Point {
   w: number;
   h: number;
   score?: number;
+  /** A narrower width the label's text wraps to than `LABEL_WRAP`, chosen to clear other lines. */
+  wrap?: number;
 }
 
 /** Lines and borders a label may sit on only when nothing better is free. */
@@ -129,8 +132,9 @@ function labelSpots(
   obstacles: Rect[],
   look: ResolvedAppearance,
   avoid: LabelAvoid,
+  wrap?: number,
 ) {
-  const { w, h } = edgeLabelSize(label, look),
+  const { w, h } = edgeLabelSize(label, look, false, wrap),
     spots: LabelSpot[] = [];
   const box = (p: Point) => ({ x: p.x - w / 2, y: p.y - h / 2, w, h });
   const start = points[0],
@@ -140,7 +144,8 @@ function labelSpots(
     }));
   // The text itself, inside the label's padding: 8px each side, its lines of the annotation type.
   const ink =
-    look.annotation.size + (edgeLabelLines(label, look).length - 1) * look.annotation.lineHeight;
+    look.annotation.size +
+    (edgeLabelLines(label, look, false, wrap).length - 1) * look.annotation.lineHeight;
   const cost = (p: Point) => {
     const r = box(p),
       text = { x: r.x + 8, y: p.y - ink / 2, w: Math.max(1, w - 16), h: ink },
@@ -192,8 +197,11 @@ function labelSpots(
       // line running alongside while its own line still crosses it. A short line with marks
       // adds a spot a step further out, which clears the tallest mark.
       clear = avoid.marks?.length ? [-(h / 2 + 7), h / 2 + 7] : [],
+      // A tall label may also shift a little up or down while its line still runs through it, to
+      // fit between two lines that run alongside.
+      shift = h / 2 - 6,
       offsets = flat
-        ? [0, -(h / 2 + 4), h / 2 + 4, ...clear]
+        ? [0, -(h / 2 + 4), h / 2 + 4, ...clear, ...(shift > 8 ? [-shift, shift] : [])]
         : [0, -(h - 4), h - 4, ...beside(a, b)],
       steps = Math.max(2, Math.ceil(len / 6));
     for (let k = 0; k <= steps; k++) {
@@ -206,7 +214,8 @@ function labelSpots(
           ...p,
           w,
           h,
-          cost: cost(p) + (flat && offset ? OFF_LINE : 0),
+          ...(wrap ? { wrap } : {}),
+          cost: cost(p) + (flat && Math.abs(offset) > shift ? OFF_LINE : 0),
           // Prefer long level segments, the middle of a segment, on the line, then above it.
           score: base - Math.abs(t - 0.5) * len * 0.5 - Math.abs(offset) * 3 + (offset < 0 ? 1 : 0),
         });
@@ -240,48 +249,95 @@ export function placeEdgeLabels(
   look: ResolvedAppearance = resolveAppearance(),
   fixed: Rect[] = [],
 ): EdgeLabelBox[] {
-  const prepared = jobs.map(j => labelSpots(j.label, j.points, obstacles, look, j.avoid ?? {})),
-    chosen: Array<EdgeLabelBox | null> = jobs.map(() => null);
+  const prepared = jobs.map(j => {
+      const at = labelSpots(j.label, j.points, obstacles, look, j.avoid ?? {}),
+        full = edgeLabelLines(j.label, look).length;
+      // A label that no spot clears of the lines around it also tries narrower wraps. Each extra
+      // line costs a little, so a label keeps its own shape wherever that is about as clear.
+      if (Math.min(Infinity, ...at.spots.map(s => s.cost)) < 3) return at;
+      for (const wrap of LABEL_NARROW_WRAPS) {
+        const narrow = labelSpots(j.label, j.points, obstacles, look, j.avoid ?? {}, wrap),
+          extra = edgeLabelLines(j.label, look, false, wrap).length - full;
+        if (narrow.w >= at.w - 8 || extra <= 0) continue;
+        at.spots.push(...narrow.spots.map(s => ({ ...s, cost: s.cost + extra })));
+      }
+      return at;
+    }),
+    chosen: Array<EdgeLabelBox | null> = jobs.map(() => null),
+    costs = jobs.map(() => 0);
   const rectOf = (i: number, s: EdgeLabelBox) => ({
     x: s.x + (jobs[i].dx ?? 0) - s.w / 2,
     y: s.y + (jobs[i].dy ?? 0) - s.h / 2,
     w: s.w,
     h: s.h,
   });
-  const pick = (i: number): EdgeLabelBox => {
-    const others = [...fixed, ...chosen.flatMap((c, k) => (k !== i && c ? [rectOf(k, c)] : []))],
-      { w, h, spots, cost } = prepared[i];
+  const othersOf = (i: number) => [
+    ...fixed,
+    ...chosen.flatMap((c, k) => (k !== i && c ? [rectOf(k, c)] : [])),
+  ];
+  /** Label `i`'s cheapest spot clear of `others`, and what it costs there. */
+  const cheapest = (i: number, others: Rect[]) => {
     let best: LabelSpot | null = null,
       bestCost = Infinity;
-    for (const s of spots) {
+    for (const s of prepared[i].spots) {
       const r = rectOf(i, s);
       if (others.some(o => overlaps(r, o, 6))) continue;
       // A label within its height of another reads as one phrase with it: that costs as much as
       // stepping off the line, so a close pair (a two-way link) sits beside its lines instead.
-      const c = s.cost + others.filter(o => overlaps(r, o, h)).length * OFF_LINE;
+      const c = s.cost + others.filter(o => overlaps(r, o, s.h)).length * OFF_LINE;
       if (c < bestCost || (c === bestCost && s.score > best!.score)) [best, bestCost] = [s, c];
     }
-    if (best) {
-      const { cost: _cost, ...spot } = best;
-      return spot;
+    if (!best) return null;
+    const { cost: _cost, ...spot } = best as LabelSpot;
+    return { spot: spot as EdgeLabelBox, cost: bestCost };
+  };
+  const pick = (i: number) => {
+    const others = othersOf(i),
+      found = cheapest(i, others);
+    if (found) [chosen[i], costs[i]] = [found.spot, found.cost];
+    else {
+      const { w, h, cost } = prepared[i],
+        box = (p: Point) => ({ x: p.x - w / 2, y: p.y - h / 2, w, h });
+      chosen[i] = shiftedLabel(
+        jobs[i].points,
+        w,
+        h,
+        obstacles,
+        others,
+        p =>
+          obstacles.some(o => overlaps(box(p), o, 4)) || others.some(o => overlaps(box(p), o, 6)),
+        cost,
+        jobs[i].avoid?.home,
+      );
+      costs[i] = cost(chosen[i]!) + 8;
     }
-    const box = (p: Point) => ({ x: p.x - w / 2, y: p.y - h / 2, w, h });
-    return shiftedLabel(
-      jobs[i].points,
-      w,
-      h,
-      obstacles,
-      others,
-      p => obstacles.some(o => overlaps(box(p), o, 4)) || others.some(o => overlaps(box(p), o, 6)),
-      cost,
-      jobs[i].avoid?.home,
-    );
   };
   // Labels with a clean spot go first, so one that crosses lines wherever it goes never takes it.
   const least = prepared.map(p => Math.min(Infinity, ...p.spots.map(s => s.cost))),
     order = jobs.map((_, i) => i).sort((a, b) => least[a] - least[b] || a - b);
-  for (const i of order) chosen[i] = pick(i);
-  for (const i of order) chosen[i] = pick(i);
+  for (const i of order) pick(i);
+  for (const i of order) pick(i);
+  // A label still crossing lines may take its best spot from a label that has another clear one:
+  // it does when the labels it displaces move and, all told, fewer lines run through labels.
+  const sum = () => costs.reduce((a, b) => a + b, 0);
+  for (const i of order) {
+    if (costs[i] < 3) continue;
+    const solo = cheapest(i, fixed);
+    if (!solo || solo.cost >= costs[i]) continue;
+    const was = sum(),
+      saved = [[...chosen], [...costs]] as const;
+    [chosen[i], costs[i]] = [solo.spot, solo.cost];
+    const mine = rectOf(i, solo.spot);
+    for (const k of order)
+      if (k !== i && chosen[k] && overlaps(rectOf(k, chosen[k]!), mine, 6)) pick(k);
+    const kept = cheapest(i, othersOf(i));
+    if (kept && kept.spot.x === solo.spot.x && kept.spot.y === solo.spot.y) costs[i] = kept.cost;
+    else costs[i] = Infinity;
+    if (sum() >= was) {
+      chosen.splice(0, chosen.length, ...saved[0]);
+      costs.splice(0, costs.length, ...saved[1]);
+    }
+  }
   return chosen.map((c, i) => ({
     ...c!,
     x: c!.x + (jobs[i].dx ?? 0),
@@ -791,8 +847,21 @@ export function drawRoutes(
   const obstacles: Rect[] = vg.nodes.map(n => rects.get(n.id)!),
     borders: Rect[] = [],
     open = new Map<string, Rect>();
+  const look = resolveAppearance(doc.appearance);
   for (const g of vg.groups) {
     const r = rects.get(g.id)!;
+    // A soft group's title is text on its tint: a label's opaque box must not cover it.
+    if (g.frame === 'soft' && g.title && !isCollapsed(doc, g.id)) {
+      const h = g.hull?.[0] ?? { x: 0, y: 0, w: r.w, h: r.h },
+        type = look.annotation,
+        text = truncateText(g.title, Math.max(40, h.w - 2 * SOFT_PAD), type);
+      obstacles.push({
+        x: r.x + h.x + SOFT_TITLE.x,
+        y: r.y + h.y + SOFT_TITLE.y - type.lineHeight / 2,
+        w: measureText(text, type),
+        h: type.lineHeight,
+      });
+    }
     if (g.frame) continue;
     if (isCollapsed(doc, g.id)) {
       obstacles.push(r);
@@ -806,8 +875,7 @@ export function drawRoutes(
       { x: r.x, y: r.y + r.h - 1, w: r.w, h: 2 },
     );
   }
-  const look = resolveAppearance(doc.appearance),
-    byEdge = new Map(vg.edges.map(e => [e.id, e])),
+  const byEdge = new Map(vg.edges.map(e => [e.id, e])),
     radius = doc.settings.routing?.cornerRadius ?? 6,
     { crosses } = cellEnds(doc, vg, rects);
   const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
