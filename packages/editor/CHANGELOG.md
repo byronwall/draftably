@@ -1,5 +1,22 @@
 # @draftably/editor
 
+## 0.8.0
+
+### Minor Changes
+
+- 609b3d7: check warns on a line break escaped twice (`literal-newline`), names the order that turns backward edges in a row or column (`order-backward`), suggests cells for a long row of boxes with no edges (`pack-cells`), and under --metrics suggests the other root direction when it removes most bends (`direction-bends`).
+
+### Patch Changes
+
+- 2821fb9: Lines leave and enter a box square, never along its border. A line to a table meets it on the header band, several lines into one group fan out round the middle of its side, and the router prefers a forward exit and facing bottom and top ports over a loop round the outside. Two lines out of one side that cross just past it swap ports.
+- 4703419: `color=amber` draws a clear warm yellow instead of ochre. Amber 400 and 500 are lighter and keep their full color, and the pale amber shades are a little lighter to make room. Text on amber stays above 8:1 contrast. Orange, red, stone and the other families do not change. A theme's gold `secondary` (Signal, Blueprint) keeps its anchor shade, and its other shades follow the same lighter amber ramp.
+- 8f209cc: The editor's Import text diagram opens a dialog to paste Mermaid, DOT or D2 text. It draws the result and lists what the import changes as you paste. The empty canvas offers Paste Mermaid or DOT and Write source, and the toolbar Source button shows its name.
+- 424d4f6: Keep a group's fill inside its border where a line crosses it, and draw touching parts of a soft group as one seamless tinted region.
+- a33dc44: Copy image in the editor puts only a PNG on the clipboard. Pasting gives the rendered diagram and never SVG markup as text. Copy SVG markup still copies the markup.
+- 58f2712: A long group title wraps to the content width when no word would break, so the frame no longer widens to 240 px around a narrow column. A folded flow puts sibling branches that wrap into the next row last, so their wrap lines cross no sibling edge. draftably vary offers compound-flow for a grouped spring or grid root, and ranks a variant first when it removes most bends at a similar width or is much smaller with shorter lines.
+- dc74563: Edge labels keep clear of soft-group titles. A label that would hide other lines in a bundle wraps narrower or takes a clear pocket on its own route.
+- f7e76e2: Lines keep clear of group titles and sit in the middle of narrow gaps. A line into a member's top passes beside its group's title instead of round the group, so a chain of single-box groups reads straight down. No line runs through a soft group's title text. A lone line between two group borders runs down the middle of the gap. `check --metrics` notes `crossing-detour` when a raised `crossing-penalty` sends a line on a long detour to avoid one crossing.
+
 ## 0.7.0
 
 ### Minor Changes
