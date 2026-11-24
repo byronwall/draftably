@@ -82,6 +82,43 @@ describe('translating editor edits', () => {
     expect(db.x).toBe(platform.x + platform.w + 40);
   });
 
+  it('duplicates a timeline item with its span, steps, and metadata', () => {
+    const source = [
+      'layout root timeline today=2025-01-20',
+      'node compare "Compare formatting" from=2025-01-01 to=2025-01-20 steps=2025-01-05,2025-01-11 key=compare introduced-by="#619" fixed-by="#621" platforms="Web, CLI"',
+      '',
+    ].join('\n');
+    const scene = checkSource(source),
+      before = projectScene(scene),
+      part = edits.copyFragment(before, ['compare']),
+      { doc: after, selected } = edits.pasteFragment(before, part),
+      result = translateEdit({
+        source: readSource(source),
+        scene,
+        before,
+        after,
+        label: 'Duplicate',
+        selection: selected,
+      }),
+      text = printSource(result.source),
+      newId = result.ids.get(selected[0])!,
+      duplicate = checkSource(text).model.objects.find(o => o.id === newId);
+
+    expect(duplicate?.dates).toEqual({
+      from: '2025-01-01',
+      to: '2025-01-20',
+      steps: ['2025-01-05', '2025-01-11'],
+      key: 'compare',
+      introducedBy: '#619',
+      fixedBy: '#621',
+      platforms: 'Web, CLI',
+      milestone: false,
+    });
+    expect(text).toContain(
+      `node ${newId} "Compare formatting" from=2025-01-01 to=2025-01-20 steps="2025-01-05,2025-01-11" key="compare" introduced-by="#619" fixed-by="#621" platforms="Web, CLI"`,
+    );
+  });
+
   it('places a node dropped under a neighbour below it, not beside the one across the gap', () => {
     // Issue #237: `paid` dropped under `declined` in submitPayment's row was saved right of it.
     const source = [

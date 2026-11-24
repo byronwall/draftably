@@ -23,6 +23,7 @@ import type { Footnote } from './footnote';
 import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
+import type { TimelineDates } from '../dsl/timeline';
 import type {
   ContainerLayout,
   Diagram,
@@ -73,6 +74,45 @@ export function emptyDiagram(title = 'Untitled diagram'): Diagram {
 // Untrusted JSON from files, storage and the clipboard. `normalize` validates every field it keeps.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Raw = any;
+
+function timelineDates(value: Raw): TimelineDates | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+  const calendarDate = (date: unknown): date is string =>
+    typeof date === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+    Number.isFinite(Date.parse(`${date}T00:00:00Z`)) &&
+    new Date(Date.parse(`${date}T00:00:00Z`)).toISOString().slice(0, 10) === date;
+  const at = value.at,
+    from = value.from,
+    to = value.to;
+  if (at !== undefined) {
+    if (!calendarDate(at) || from !== undefined || to !== undefined) return;
+  } else if (
+    typeof from !== 'string' ||
+    !calendarDate(from.replace(/^\?/, '')) ||
+    (to !== 'open' && !calendarDate(to))
+  )
+    return;
+  if (
+    value.steps !== undefined &&
+    (!Array.isArray(value.steps) || !value.steps.every(calendarDate))
+  )
+    return;
+  for (const key of ['key', 'introducedBy', 'fixedBy', 'platforms'])
+    if (value[key] !== undefined && typeof value[key] !== 'string') return;
+  if (value.milestone !== undefined && typeof value.milestone !== 'boolean') return;
+  return {
+    ...(at !== undefined ? { at } : {}),
+    ...(from !== undefined ? { from } : {}),
+    ...(to !== undefined ? { to } : {}),
+    steps: value.steps ?? [],
+    ...(value.key !== undefined ? { key: value.key } : {}),
+    ...(value.introducedBy !== undefined ? { introducedBy: value.introducedBy } : {}),
+    ...(value.fixedBy !== undefined ? { fixedBy: value.fixedBy } : {}),
+    ...(value.platforms !== undefined ? { platforms: value.platforms } : {}),
+    ...(value.milestone !== undefined ? { milestone: value.milestone } : {}),
+  };
+}
 
 /**
  * Import the active view of a version 1 file. The obsolete view-management data is dropped;
@@ -181,6 +221,7 @@ export function normalize(input: unknown): Diagram {
       ...(n.image ? { image: n.image } : {}),
       ...(finite(n.lifeline) && n.lifeline > 0 ? { lifeline: n.lifeline } : {}),
       ...(n.code && Array.isArray(n.code.lines) ? { code: n.code } : {}),
+      ...(timelineDates(n.dates) ? { dates: timelineDates(n.dates) } : {}),
     });
   }
   for (const g of data.graph.groups || []) {

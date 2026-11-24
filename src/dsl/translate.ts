@@ -12,6 +12,7 @@ import { findNode, isCell, selectionRoots } from '../model/graph';
 import { groupHeaderFor } from '../model/labels';
 import { CODE_MAX_WIDTH, type CodeBlock } from '../model/code';
 import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
+import type { TimelineDates } from './timeline';
 import { contentOrigin, layoutView, type Scene } from './compile';
 import {
   addRefinement,
@@ -53,6 +54,31 @@ function writeCode(s: Statement, code: CodeBlock) {
   let tag = 'CODE';
   for (let n = 2; code.lines.some(l => l.trim() === tag); n++) tag = `CODE${n}`;
   s.body = { tag, lines: code.lines, close: tag };
+}
+
+function writeTimelineDates(s: Statement, dates?: TimelineDates) {
+  for (const key of [
+    'at',
+    'from',
+    'to',
+    'milestone',
+    'steps',
+    'key',
+    'introduced-by',
+    'fixed-by',
+    'platforms',
+  ])
+    setAttr(s, key, undefined);
+  if (!dates) return;
+  if (dates.at) setAttr(s, 'at', bare(dates.at));
+  if (dates.from) setAttr(s, 'from', bare(dates.from));
+  if (dates.to) setAttr(s, 'to', bare(dates.to));
+  if (dates.milestone) setAttr(s, 'milestone', bare('on'));
+  if (dates.steps.length) setAttr(s, 'steps', bare(dates.steps.join(',')));
+  if (dates.key) setAttr(s, 'key', quoted(dates.key));
+  if (dates.introducedBy) setAttr(s, 'introduced-by', quoted(dates.introducedBy));
+  if (dates.fixedBy) setAttr(s, 'fixed-by', quoted(dates.fixedBy));
+  if (dates.platforms) setAttr(s, 'platforms', quoted(dates.platforms));
 }
 
 export interface EditInput {
@@ -299,6 +325,7 @@ export function translateEdit(input: EditInput): EditResult {
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
     if (code) writeCode(s, code);
+    if (type === 'node') writeTimelineDates(s, (o as DiagramNode).dates);
     writeColor(s, o.id, o.parentId ?? null);
     writeShade(s, after.styles[o.id]?.shade);
     insertAfter(source, s, isDeclaration);
@@ -338,6 +365,8 @@ export function translateEdit(input: EditInput): EditResult {
     const span = (o as DiagramNode).span;
     if (s.command === 'node' && span !== (old as DiagramNode).span)
       setAttr(s, 'span', span === undefined || span === 1 ? undefined : bare(span));
+    if (s.command === 'node' && !same((o as DiagramNode).dates, (old as DiagramNode).dates))
+      writeTimelineDates(s, (o as DiagramNode).dates);
   }
 
   // Connections.

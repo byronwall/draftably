@@ -9,6 +9,7 @@ import type { DiagramAppearance, Shade } from './appearance';
 import type { CodeBlock } from './code';
 import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
+import type { TimelineDates } from '../dsl/timeline';
 
 export type ShapeKind =
   | 'box'
@@ -47,6 +48,8 @@ export interface DiagramNode {
   lifeline?: number;
   /** A code node's body and options; its title, when set, is a caption above the code. */
   code?: CodeBlock;
+  /** Source timeline dates, preserved when the node is duplicated. */
+  dates?: TimelineDates;
 }
 
 export interface DiagramGroup {

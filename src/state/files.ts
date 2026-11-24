@@ -79,6 +79,9 @@ const exportSource = (look = exportLook()) =>
 /** Space round the selected objects when only they are exported. */
 const SELECTION_MARGIN = 24;
 
+export const wholeComparisonExport = (onlySelection: boolean, selectedCount: number) =>
+  !onlySelection || selectedCount === 0;
+
 /**
  * Open a PNG or SVG export that carries `.draft` source as a new scratch diagram, which the
  * example bar offers to save as a file. Resolves false when the image carries no source.
@@ -268,14 +271,14 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
   // A comparison draws each version as its own panel, which the canvas does not show.
   const source = exportSource(look),
     carry = (svg: string) => (source === undefined ? svg : embedSvgSource(svg, source));
-  if (activeSession().doc.appearance.compare) {
+  const picked = onlySelection ? activeSession().selection() : new Set<string>();
+  if (activeSession().doc.appearance.compare && wholeComparisonExport(onlySelection, picked.size)) {
     const svg = renderSvg(activeSession().doc);
     return (
       '<?xml version="1.0" encoding="UTF-8"?>\n' +
       carry(look.transparent ? svg.replace(/(<\/defs>)\s*<rect[^>]*\/>/, '$1') : svg)
     );
   }
-  const picked = onlySelection ? activeSession().selection() : new Set<string>();
   const world = sceneElement();
   if (!world) throw Error('The canvas is not ready.');
   const previousSelection = activeSession().selection(),

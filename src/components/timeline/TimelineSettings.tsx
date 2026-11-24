@@ -1,6 +1,12 @@
 import { calendarFor } from '../../dsl/calendar-layout';
 import { createSignal, For, Show, untrack } from 'solid-js';
-import { declaration, statements, setAttr, statement } from '../../dsl/source-edits';
+import { declaration, setAttr, statement } from '../../dsl/source-edits';
+import {
+  timelineLayout,
+  writeTimelineDraft,
+  writeTimelineDrafts,
+  type TimelineDraft,
+} from '../../dsl/timeline-settings';
 import { bare, printSource, quoted, readSource } from '../../dsl/syntax';
 import { closeDialog } from '../../state/ui';
 import { useDiagramSession } from '../session-context';
@@ -27,27 +33,51 @@ export function TimelineSettings() {
   const [unknown, setUnknown] = createSignal(false);
   const [open, setOpen] = createSignal(false);
   const [steps, setSteps] = createSignal('');
-  function load(key: string) {
-    setId(key);
-    const d = selected()?.dates;
-    setKind(
-      key === ':new'
-        ? 'point'
-        : d?.milestone
-          ? 'milestone'
-          : d?.from
-            ? 'span'
-            : d?.at
-              ? 'point'
-              : 'undated',
-    );
-    setStart(d?.at ?? d?.from?.replace(/^\?/, '') ?? '');
-    setEnd(d?.to === 'open' ? '' : (d?.to ?? ''));
-    setSteps(d?.steps.join(',') ?? '');
-    setUnknown(!!d?.from?.startsWith('?'));
-    setOpen(d?.to === 'open');
+  const drafts = new Map<string, TimelineDraft>();
+  const currentDraft = (): TimelineDraft => ({
+    kind: kind(),
+    start: start(),
+    end: end(),
+    unknown: unknown(),
+    open: open(),
+    steps: steps(),
+  });
+  function showDraft(d: TimelineDraft) {
+    setKind(d.kind);
+    setStart(d.start);
+    setEnd(d.end);
+    setUnknown(d.unknown);
+    setOpen(d.open);
+    setSteps(d.steps);
   }
-  untrack(() => load(id()));
+  function remember(key = id()) {
+    if (key) drafts.set(key, currentDraft());
+  }
+  function load(key: string, saveCurrent = true) {
+    if (saveCurrent) remember();
+    setId(key);
+    const saved = drafts.get(key);
+    if (saved) return showDraft(saved);
+    const d = selected()?.dates;
+    showDraft({
+      kind:
+        key === ':new'
+          ? 'point'
+          : d?.milestone
+            ? 'milestone'
+            : d?.from
+              ? 'span'
+              : d?.at
+                ? 'point'
+                : 'undated',
+      start: d?.at ?? d?.from?.replace(/^\?/, '') ?? '',
+      end: d?.to === 'open' ? '' : (d?.to ?? ''),
+      steps: d?.steps.join(',') ?? '',
+      unknown: !!d?.from?.startsWith('?'),
+      open: d?.to === 'open',
+    });
+  }
+  untrack(() => load(id(), false));
   async function save(e: SubmitEvent) {
     e.preventDefault();
     if (busy()) return;
@@ -56,15 +86,8 @@ export function TimelineSettings() {
     if (!!lo() !== !!hi() || (lo() && lo() >= hi()))
       return setError('Choose a start and a later end for the detail window.');
     const doc = readSource(s.currentSource());
-    const root =
-      statements(doc)
-        .filter(l => l.command === 'layout' && l.args[0]?.value === 'root')
-        .at(-1) ?? statement('layout', [bare('root'), bare('timeline')]);
-    if (!doc.lines.includes(root)) doc.lines.push(root);
-    if (root.args[1]?.value !== 'timeline') {
-      root.args = [bare('root'), bare('timeline')];
-      root.attrs = [];
-    }
+    remember();
+    const root = timelineLayout(doc);
     setAttr(root, 'today', today() ? bare(today()) : undefined);
     setAttr(root, 'zoom', lo() ? bare(lo() + '..' + hi()) : undefined);
     let n = declaration(doc, id());
@@ -74,31 +97,10 @@ export function TimelineSettings() {
       while (ids.has('event' + number)) number++;
       n = statement('node', [bare('event' + number), quoted(label().trim())]);
       doc.lines.push(n);
+      drafts.set(':new', currentDraft());
     }
-    if (n) {
-      for (const key of ['at', 'from', 'to', 'milestone', 'steps']) setAttr(n, key, undefined);
-      if (kind() === 'undated') {
-        for (const key of ['key', 'introduced-by', 'fixed-by', 'platforms'])
-          setAttr(n, key, undefined);
-      } else if (kind() === 'span') {
-        setAttr(n, 'from', bare((unknown() ? '?' : '') + start()));
-        setAttr(n, 'to', bare(open() ? 'open' : end()));
-        if (steps().trim())
-          setAttr(
-            n,
-            'steps',
-            bare(
-              steps()
-                .split(',')
-                .map(d => d.trim())
-                .join(','),
-            ),
-          );
-      } else {
-        setAttr(n, 'at', bare(start()));
-        if (kind() === 'milestone') setAttr(n, 'milestone', bare('on'));
-      }
-    }
+    writeTimelineDrafts(doc, drafts);
+    if (id() === ':new' && n) writeTimelineDraft(n, drafts.get(':new') ?? currentDraft());
     const next = printSource(doc);
     setBusy(true);
     try {

@@ -155,7 +155,13 @@ export function compareDetailed(before: string, after: string) {
       if (own) spares.set(line.args[0].value, (args[0].value = spare('edge:', args[0].value)));
       for (const i of [1, 3]) args[i].value = movedNodes.get(args[i].value) ?? args[i].value;
     } else if (own) args[0].value = movedNodes.get(args[0].value)!;
-    return { ...line, args, mark: '-', comment: undefined };
+    const removed = { ...line, args, mark: '-' as const, comment: undefined };
+    const openEnd = removed.attrs.findIndex(
+      ([key, value]) => key === 'to' && value.value === 'open',
+    );
+    if (line.command === 'node' && old.timeline?.today && openEnd >= 0)
+      removed.attrs[openEnd] = ['to', bare(old.timeline.today)];
+    return removed;
   };
 
   const out: SourceLine[] = [],
