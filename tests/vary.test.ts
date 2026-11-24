@@ -238,6 +238,20 @@ node b "Second part" in=req`,
     ]);
   });
 
+  it('ranks a straight rightward flow first for a chain through groups (#601)', async () => {
+    const source = fs.readFileSync(
+      'docs/intent/diagram-quality/issues/i601-straight-chain/v0.draft',
+      'utf8',
+    );
+    const result = await vary(source, { fit: 'slide' });
+    const [v0, v1] = result.variants;
+    expect(v1.title).toBe('compound-flow right');
+    expect(result.recommended).toBe('v1');
+    expect(v1.metrics!.bends).toBe(0);
+    expect(v0.metrics!.bends).toBeGreaterThan(1);
+    expect(v1.metrics!.width).toBeLessThanOrEqual(v0.metrics!.width);
+  });
+
   it('offers cells for a group of boxes that no edge ends on', async () => {
     const lines = [
       'node a "Start"',

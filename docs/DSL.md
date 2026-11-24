@@ -1648,10 +1648,15 @@ Recommended: v1. Apply: draftably vary plan.draft --apply v1
   mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
 - **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
   counts as better than the file when it has fewer warnings and no more crossings, or when it
-  has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
+  has no more warnings, crossings or area and less of one; those come first. Among them, a
+  variant that removes at least two bends and half of them, no wider (within 5%), comes first
+  even when its aspect is farther from `--fit`. Then fewest warnings, crossings, area and bends.
+  `fit-direction` does not count as a warning here: the aspect already ranks it. `--limit N` keeps
   N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
 - **Recommended** is the first variant better than the file, or `v0` when none is.
 - **From the file itself**, the suggestions also try:
+  - for one unbranched chain through groups, `compound-flow right`, which draws it as one
+    straight line;
   - dropping the refinement lines `check` blames for drawing conflicts, so layout places those
     objects (`no line 15`);
   - for a file with change marks or a `compare` line, panels side by side and stacked;
@@ -1738,6 +1743,12 @@ When the `layout root` line sets `direction=down` or `direction=right`, `check -
 the file the other way. If that removes at least two bends and half of them, with no more
 crossings and shorter lines, it notes `direction-bends` with both sizes. Change the direction to
 take it, or keep it when the direction is deliberate.
+
+When the `layout root` line sets no direction and the drawing is one unbranched chain through
+groups (one line in and one out at each step), `check --metrics` also draws it as
+`engine=compound-flow direction=right`. If that removes at least two bends and half of them, no
+wider (within 5%) and with shorter lines, it notes `direction-bends` with that line and both
+sizes.
 
 When a `routing` line sets `crossing-penalty` above the default (360), `check --metrics` also
 draws the file at the default. If one line then loses a long detour (at least 200px and 40% of
