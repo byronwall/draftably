@@ -286,6 +286,17 @@ Wrong :t, 2025-01-10, 2025-01-05`);
     );
   });
 
+  it('checks reversal on Mermaid’s own times, and reads <br> as a space', async () => {
+    const reversed = await run(`gantt
+dateFormat YYYY-MM-DD HH:mm
+Backwards :milestone, m, 2025-01-10 16:00, 2025-01-05 08:00`);
+    expect(reversed.status).toBe('failed');
+    expect(reversed.diagnostics.map(d => d.code)).toContain('MERMAID_GANTT_REVERSED');
+    const timeline = await run(`timeline
+2004 : Build<br>Launch`);
+    expect(timeline.nativeSource).toContain('"Build Launch"');
+  });
+
   it('places timeline periods on an ordinal axis, one row per event', async () => {
     const imported = await run(`timeline
 title History

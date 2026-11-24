@@ -69,6 +69,11 @@ export interface PlacedTimeline extends TimelinePlan {
 export interface TimelinePlan {
   /** The area every mark covers, in world units. */
   bounds: Rect;
+  /** Each line drawn between two rows: its points and label box, for public geometry. */
+  links?: Record<
+    string,
+    { from: string; to: string; points: Array<{ x: number; y: number }>; label?: Rect }
+  >;
   /** Where each row, band and milestone draws its title, so the editor edits it in place. */
   titles?: Record<string, { x: number; y: number; w: number; font: TimelineFont }>;
   /** Drawn under the rows (grid, shading, rules) and over them (bars, labels). */

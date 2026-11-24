@@ -200,6 +200,12 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
         pad = edits.containerPadding(s.doc, container);
       target = { x: p.x + pad + 82, y: p.y + pad + 56 };
     }
+    // With nothing to grow from, the new shape lands in its drop target or the root: never in a
+    // timeline or a band.
+    if (!source && dated(parentId ?? 'root')) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return;
+    }
     let id = '';
     s.transact(sibling ? 'Add sibling branch' : 'Add connected shape', d => {
       id = edits.addConnectedNode(

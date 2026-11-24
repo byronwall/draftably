@@ -3039,7 +3039,12 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       (Math.max(...objects.map(o => o.x + o.w)) - Math.min(...objects.map(o => o.x))) *
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
-      planChannels(plain.objects, m.edges, m.routing),
+      // A line a timeline draws on its chart takes no routing channel.
+      planChannels(
+        plain.objects,
+        m.edges.filter(e => !(plain.timelines ?? []).some(t => t.edges.includes(e.id))),
+        m.routing,
+      ),
       area(plain.objects),
       c => area(layoutPass(unrefined, arranged, false, c, packFold).objects),
     );

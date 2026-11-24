@@ -42,7 +42,8 @@ export function mapMermaidGantt(
       plan.objects.push({ id, kind: 'milestone', label, attrs: [['at', t.start]] });
       continue;
     }
-    if (!t.milestone && t.end < t.start) {
+    // Compared on Mermaid's timestamps, before a milestone is centered: a day hides an hour.
+    if (t.endAt < t.startAt) {
       diagnostics.push({
         code: 'MERMAID_GANTT_REVERSED',
         severity: 'error',
@@ -78,9 +79,9 @@ export function mapMermaidGantt(
     if (!t.after.length || !rows.has(t.id)) continue;
     const named = t.after.map(a => byId.get(a));
     const latest = named.every(n => n && !n.vert)
-      ? named.map(n => n!.end).reduce((a, b) => (a > b ? a : b))
+      ? Math.max(...named.map(n => n!.endAt))
       : undefined;
-    if (latest !== t.start || !t.after.every(a => rows.has(a))) {
+    if (latest !== t.startAt || !t.after.every(a => rows.has(a))) {
       note(
         'MERMAID_GANTT_AFTER',
         `${t.id} starts after ${t.after.join(' ')}, but Mermaid placed it on ${t.start}; no dependency arrow is drawn.`,
@@ -172,7 +173,11 @@ export function mapMermaidTimeline(
           `event_${i + 1}${events.length > 1 ? '_' + (j + 1) : ''}`,
         ),
         kind: 'node',
-        label: event,
+        // Mermaid breaks a line at <br>; a row name is one line, so the break becomes a space.
+        label: event
+          .replace(/<br\s*\/?>/gi, ' ')
+          .replace(/\s+/g, ' ')
+          .trim(),
         ...(parent ? { parent } : {}),
         attrs: [['at', at]],
       }),

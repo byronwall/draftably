@@ -28,6 +28,8 @@ interface Reply {
   source?: string;
   alt?: string;
   messages: string[];
+  /** What a successful conversion left out or changed, such as a dependency it could not draw. */
+  warnings?: string[];
 }
 
 let worker: Worker | undefined;
@@ -82,7 +84,13 @@ export async function convertMermaid(
     source: reply.source ?? null,
     alt: reply.alt,
     diagnostics: reply.source
-      ? []
+      ? (reply.warnings ?? []).map(message => ({
+          code: 'DRAFT_MERMAID_CHANGED',
+          severity: 'warning' as const,
+          message: `Converted this Mermaid fence with a change: ${message}`,
+          location,
+          itemIds: [],
+        }))
       : [
           {
             code: 'DRAFT_MERMAID',
@@ -140,6 +148,7 @@ async function runWorker(): Promise<void> {
         source: result.nativeSource,
         alt,
         messages: result.diagnostics.filter(d => d.severity === 'error').map(d => d.message),
+        warnings: result.diagnostics.filter(d => d.severity === 'warning').map(d => d.message),
       };
     } catch (error) {
       reply = { id, messages: [error instanceof Error ? error.message : String(error)] };

@@ -6,6 +6,7 @@ import { projectScene } from '../src/dsl/project';
 import { normalize } from '../src/model/document';
 import { drawingBounds } from '../src/model/bounds';
 import { visibleRects } from '../src/dsl/project';
+import { placedItems } from '../src/runtime/geometry';
 import { isMermaidCandidate } from '../packages/markdown/src/mermaid';
 import { renderSvg } from '../src/runtime/svg-renderer';
 import { writeArrangement } from '../src/dsl/layout-edits';
@@ -270,11 +271,11 @@ node c "C" at=2000-01-01`).timelines![0];
   it('leaves a timeline out of a selection that does not hold it', async () => {
     const doc = projectScene(await compile(example('release-investigation')));
     const { vg, rects } = visibleRects(doc);
-    const only = new Map([['planner', rects.get('planner')!]]);
+    // The editor passes every rectangle and filters only the graph, as its export does.
     const box = drawingBounds(
       doc,
       { ...vg, nodes: vg.nodes.filter(n => n.id === 'planner'), groups: [] },
-      only,
+      rects,
       [],
     );
     expect(box.w).toBe(rects.get('planner')!.w);
@@ -284,6 +285,33 @@ node c "C" at=2000-01-01`).timelines![0];
     expect(isMermaidCandidate('gantt\n  title Plan')).toBe(true);
     expect(isMermaidCandidate('timeline\n  2004 : Founded')).toBe(true);
     expect(isMermaidCandidate('pie\n  "A" : 1')).toBe(false);
+  });
+
+  it('reports on-chart lines in geometry and keeps them out of routing channels', async () => {
+    const src = (edge: string) => `group t "T"
+layout t timeline
+node a "A" in=t at=2025-01-01
+node b "B" in=t at=2025-01-05
+node c "C" in=t at=2025-01-09
+node x "Outside"
+${edge}`;
+    const doc = projectScene(await compile(src('edge dep a -> c "then"')));
+    const { rects } = visibleRects(doc);
+    const geo = placedItems(doc, rects, []);
+    expect(geo.edges.dep?.source).toBe('a');
+    expect(geo.edges.dep?.label).not.toBeNull();
+    // The line adds no channel: the group and the box beside it stay where they were.
+    const plain = await compile(src('')),
+      lined = await compile(src('edge dep a -> c'));
+    expect(lined.byId.get('t')!.w).toBe(plain.byId.get('t')!.w);
+    expect(lined.byId.get('x')!.x).toBe(plain.byId.get('x')!.x);
+  });
+
+  it('keeps the first ordinal date in a wide-type theme', () => {
+    const texts = checkSource(
+      `theme signal\n${example('company-history')}`,
+    ).timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    expect(texts).toContain("Mar 12 '89");
   });
 
   it('reports each date error on its own line', () => {

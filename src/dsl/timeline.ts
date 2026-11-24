@@ -353,7 +353,8 @@ export function layoutTimeline(
   const under: TimelineMark[] = [],
     over: TimelineMark[] = [],
     rects = new Map<string, Rect>(),
-    titles: NonNullable<TimelinePlan['titles']> = {};
+    titles: NonNullable<TimelinePlan['titles']> = {},
+    linkGeo: NonNullable<TimelinePlan['links']> = {};
   const w = (text: string, font: TimelineFont) => measureText(text, timelineFont(look, font));
   const text = (
     x: number,
@@ -513,7 +514,10 @@ export function layoutTimeline(
   const chartX = gutter + (rows.some(r => r.when.fromUnknown) ? LEAD + 10 : GUTTER_GAP),
     // An ordinal axis gives every distinct date one step, wide enough for its label.
     ordinal = options.scale === 'ordinal' ? [...new Set(allDays)].sort((a, b) => a - b) : [],
-    chartW = Math.max(options.width, (ordinal.length - 1) * (w("Sep 30 '25", 'small') + 18)),
+    chartW = Math.max(
+      options.width,
+      (ordinal.length - 1) * (w("Sep 30 '25", 'small') + 18) + w("Sep 30 '25", 'small') + 12,
+    ),
     chartR = chartX + chartW;
   const multiYear = dateOf(lo).getUTCFullYear() !== dateOf(hi).getUTCFullYear(),
     shortDate = (day: number) => (multiYear ? fullDate(dateOf(day)) : monthDay(dateOf(day)));
@@ -547,7 +551,8 @@ export function layoutTimeline(
     const { d0, d1 } = panel;
     const linear = (day: number) => chartX + ((day - d0) / (d1 - d0)) * chartW;
     // Ordinal: the index of the date among the distinct dates, with a little room at each end.
-    const edge = ordinal.length > 1 ? Math.min(24, chartW / (2 * ordinal.length)) : chartW / 2,
+    // The first and last dates keep room for their labels, in any theme's type.
+    const edge = ordinal.length > 1 ? Math.max(24, w("Sep 30 '25", 'small') / 2 + 6) : chartW / 2,
       step = ordinal.length > 1 ? (chartW - 2 * edge) / (ordinal.length - 1) : 0;
     const X = ordinal.length
       ? (day: number) => {
@@ -938,6 +943,7 @@ export function layoutTimeline(
   type Box = { x: number; y: number; w: number; h: number };
   const segments: Box[] = [],
     pending: Array<{
+      id: string;
       label: string;
       tries: Array<{ x: number; y: number; anchor: 'start' | 'end' }>;
     }> = [];
@@ -960,10 +966,19 @@ export function layoutTimeline(
     if (Math.abs(tx - x0) < 10) {
       // Same date: straight down into the target's mark.
       const y1 = b.y - down * (into + 1);
+      linkGeo[e.id] = {
+        from: e.source,
+        to: e.target,
+        points: [
+          { x: x0, y: y0 },
+          { x: x0, y: y1 },
+        ],
+      };
       over.push({ k: 'line', x1: x0, y1: y0, x2: x0, y2: y1 - down * 6, ink, w: 1.3 });
       over.push({ k: 'path', d: vHead(x0, y1, down), ink });
       if (e.label)
         pending.push({
+          id: e.id,
           label: e.label,
           tries: [
             { x: x0 + 6, y: mid, anchor: 'start' },
@@ -974,6 +989,15 @@ export function layoutTimeline(
     }
     const right = tx > x0 ? 1 : -1,
       x1 = tx - right * into;
+    linkGeo[e.id] = {
+      from: e.source,
+      to: e.target,
+      points: [
+        { x: x0, y: y0 },
+        { x: x0, y: b.y },
+        { x: x1, y: b.y },
+      ],
+    };
     segments.push({ x: Math.min(x0, x1), y: b.y - 1, w: Math.abs(x1 - x0), h: 2 });
     over.push({
       k: 'path',
@@ -986,6 +1010,7 @@ export function layoutTimeline(
       const side = right > 0 ? 'start' : 'end',
         back = right > 0 ? 'end' : 'start';
       pending.push({
+        id: e.id,
         label: e.label,
         tries: [
           { x: x0 + right * 10, y: b.y - 10, anchor: side },
@@ -1026,6 +1051,7 @@ export function layoutTimeline(
       pick.anchor = 'start';
     }
     placed.push(boxOf(pick));
+    if (linkGeo[p.id]) linkGeo[p.id].label = boxOf(pick);
     right = Math.max(right, boxOf(pick).x + boxOf(pick).w);
     text(pick.x, pick.y, p.label, ink, 'small', pick.anchor, 220, true);
   }
@@ -1160,6 +1186,7 @@ export function layoutTimeline(
       under,
       over,
       titles,
+      links: linkGeo,
     },
     rects,
     drawn,

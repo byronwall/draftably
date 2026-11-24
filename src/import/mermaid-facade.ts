@@ -104,6 +104,9 @@ export type GanttTask = {
   drawEnd: string;
   /** The day Mermaid centers a milestone on: halfway between start and end. */
   mid: string;
+  /** Mermaid's own timestamps, in ms, for checks a day would round away. */
+  startAt: number;
+  endAt: number;
   /** Whether either end falls inside a day, which a day-based axis rounds away. */
   partialDay: boolean;
   after: string[];
@@ -284,6 +287,8 @@ function ganttSnapshot(call: (name: string) => unknown): GanttSnapshot {
       end: localDay(end),
       drawEnd: localDay(t.renderEndTime instanceof Date ? t.renderEndTime : end),
       mid: localDay(new Date((start.getTime() + end.getTime()) / 2)),
+      startAt: start.getTime(),
+      endAt: end.getTime(),
       partialDay: inDay(start) || inDay(end),
       after,
       done: t.done === true,
