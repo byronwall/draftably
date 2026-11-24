@@ -106,7 +106,7 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     ).not.toContain('undefined');
   });
 
-  it('routes a dependency between panels, and draws a milestone-only timeline', async () => {
+  it('draws a dependency between panels on the chart, and a milestone-only timeline', async () => {
     const doc = projectScene(
       await compile(`layout root timeline zoom=2025-02-01..2025-02-03
 group jan "Jan"
@@ -115,8 +115,9 @@ node a "A" in=jan at=2025-01-05
 node b "B" in=feb at=2025-02-02
 edge e a -> b "then"`),
     );
-    // The two rows sit in different panels with different scales: the router draws the line.
-    expect(doc.layout.timelines![0].edges).toEqual([]);
+    // The elbow runs from the January row's end in the overview to the February row's start in
+    // the detail panel, so the line still reads in date order.
+    expect(doc.layout.timelines![0].edges).toEqual(['e']);
     expect(renderSvg(doc)).toContain('then');
     const only = checkSource('layout root timeline\nmilestone m "v1" at=2025-01-01');
     const rule = only.timelines![0].under.find(m => m.k === 'line' && m.dash);

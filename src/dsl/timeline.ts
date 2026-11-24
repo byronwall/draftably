@@ -154,7 +154,7 @@ const ROW = 34,
   BAND_HEAD = 34,
   BAND_GAP = 22,
   AXIS_ROW = 22,
-  RAIL = 17,
+  RAIL = 20,
   LEAD = 34,
   GUTTER_GAP = 28,
   NAME_MAX = 300,
@@ -381,8 +381,9 @@ export function layoutTimeline(
     zoom !== undefined && b.rows.every(r => daysOf(r).every(d => d >= zoom[0] && d <= zoom[1]));
   const panels: Array<{ bands: Band[]; d0: number; d1: number; detail: boolean }> = [];
   // The overview covers the data and the zoom window, so the detail is never wider than it.
-  const lo = Math.min(...allDays, ...(options.zoom ?? [])),
-    hi = Math.max(...allDays, ...(options.zoom ?? []));
+  const window = options.zoom && bands.some(b => inWindow(b)) ? options.zoom : [];
+  const lo = Math.min(...allDays, ...window),
+    hi = Math.max(...allDays, ...window);
   const pad = (a: number, b: number) => Math.max(0.6, (b - a) * 0.015);
   const overview = bands.filter(b => !inWindow(b)),
     detail = bands.filter(inWindow);
@@ -471,11 +472,15 @@ export function layoutTimeline(
     const axisY = y + AXIS_ROW;
     const todayX = todayShown ? X(today!) : undefined;
     const todayW = w('Today', 'caps');
-    let printed = 0;
+    let printed = 0,
+      hidMonth = false;
     for (const t of ticks) {
       const x = X(t.day),
         half = w(t.text, 'small') / 2;
-      if (todayX !== undefined && Math.abs(x - todayX) < half + todayW / 2 + 8) continue;
+      if (todayX !== undefined && Math.abs(x - todayX) < half + todayW / 2 + 8) {
+        if (t.major) hidMonth = true;
+        continue;
+      }
       if (x - half < chartX - 6 || x + half > chartR + 30) continue;
       text(x, y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
       printed++;
@@ -485,7 +490,7 @@ export function layoutTimeline(
       text(
         todayX,
         y + 8,
-        printed ? 'Today' : `Today · ${monthDay(dateOf(today!))}`,
+        printed && !hidMonth ? 'Today' : `Today · ${monthDay(dateOf(today!))}`,
         'text',
         'caps',
         'middle',
@@ -714,8 +719,9 @@ export function layoutTimeline(
   for (const e of links) {
     const a = anchors.get(e.source),
       b = anchors.get(e.target);
-    // Rows in different panels have no shared axis; the router draws that line instead.
-    if (!a || !b || a.panel !== b.panel || e.source === e.target) continue;
+    // A line to itself is routed. Across panels the elbow still runs from one row's end (on its
+    // panel's axis) to the other's start (on its own), so it reads in date order.
+    if (!a || !b || e.source === e.target) continue;
     drawn.push(e.id);
     const down = b.y > a.y ? 1 : -1,
       into = b.point ? 8 : 6,
@@ -787,6 +793,7 @@ export function layoutTimeline(
         return !segments.some(o => hits(r, o)) && !placed.some(o => hits(r, o));
       }) ?? p.tries[0];
     placed.push(boxOf(pick));
+    right = Math.max(right, boxOf(pick).x + boxOf(pick).w);
     text(pick.x, pick.y, p.label, ink, 'small', pick.anchor, 220, true);
   }
 

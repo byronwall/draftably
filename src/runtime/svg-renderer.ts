@@ -425,6 +425,9 @@ function sceneMarkup(
           const r = rects.get(id);
           return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - o.x, y: r.y - o.y } }] : [];
         }),
+        // A row with href= links from its whole row, as a box links from its whole shape.
+        (id, markup) =>
+          linked(doc.graph.nodes.find(n => n.id === id)?.href, [markup], opts).join(''),
       ),
       '</g>',
     );

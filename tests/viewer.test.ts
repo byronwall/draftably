@@ -189,6 +189,36 @@ describe('independent viewer lifecycle', () => {
     expect(fontSet.faces.size).toBe(0);
   });
 
+  it('draws a timeline with its bundled fonts, and a click on a row title activates the row', async () => {
+    const { readFileSync } = await import('node:fs');
+    for (const name of ['bug-timeline', 'release-investigation']) {
+      const element = host(),
+        viewer = mountViewer(element);
+      const text = readFileSync(`${process.cwd()}/examples/${name}.draft`, 'utf8');
+      expect((await viewer.update(text)).status, name).toBe('committed');
+      viewer.destroy();
+    }
+    const element = host(),
+      viewer = mountViewer(element, { render: { links: { mode: 'safe' } } });
+    const timeline = `layout root timeline
+node a "Alpha" at=2025-01-01 href="https://example.com/a"
+node b "Beta" at=2025-01-05`;
+    expect((await viewer.update(timeline)).status).toBe('committed');
+    let activated = '';
+    viewer.on('itemactivate', event => {
+      activated = event.id;
+    });
+    const svg = element.querySelector('svg')!;
+    // The hit area lies over the row's title, so the click lands on it.
+    const title = [...svg.querySelectorAll('text')].find(t => t.textContent === 'Beta')!;
+    const hit = svg.querySelector('rect[data-id="b"]')!;
+    expect(title.compareDocumentPosition(hit) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    hit.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(activated).toBe('b');
+    expect(svg.querySelector('a[href="https://example.com/a"] rect[data-id="a"]')).not.toBeNull();
+    viewer.destroy();
+  });
+
   it('keeps the last successful drawing visible after invalid source', async () => {
     const element = host(),
       viewer = mountViewer(element);

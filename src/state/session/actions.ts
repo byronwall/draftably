@@ -301,7 +301,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   }
 
   function alignSelection(kind: edits.AlignKind) {
-    const roots = selectionRoots(s.doc, s.selection());
+    const roots = selectionRoots(s.doc, s.selection()).filter(id => !onTimeline(s.doc, id));
     if (roots.length < 2) {
       toast('Select two or more objects.');
       return;

@@ -69,21 +69,25 @@ export interface TimelinePlan {
   over: TimelineMark[];
 }
 
-/** The type a timeline font role uses, from the diagram's own profiles. */
+/**
+ * The type a timeline font role uses. Each role is one of the theme's bundled faces (the bold
+ * title face, the regular detail face, the annotation face) at its own size, so measurement,
+ * export and the viewer's font loading all use the same face. Only sizes change here.
+ */
 export function timelineFont(look: ResolvedAppearance, font: TimelineFont) {
   switch (font) {
     case 'name':
-      return { ...look.title, weight: 500 };
+      return { ...look.detail, size: look.title.size, lineHeight: look.title.lineHeight };
     case 'key':
-      return { ...look.title, weight: 700 };
+      return look.title;
     case 'band':
-      return { ...look.groupTitle, size: look.groupTitle.size + 3, weight: 700 };
+      return { ...look.title, size: look.title.size + 3 };
     case 'detail':
       return { ...look.annotation, size: look.annotation.size + 0.5 };
     case 'label':
-      return { ...look.annotation, size: look.annotation.size + 1, weight: 500 };
+      return { ...look.detail, size: look.annotation.size + 1 };
     case 'caps':
-      return { ...look.annotation, size: look.annotation.size - 0.5, weight: 700 };
+      return { ...look.title, size: look.annotation.size - 0.5 };
     case 'small':
       return look.annotation;
   }
@@ -105,7 +109,12 @@ export function timelineColor(look: ResolvedAppearance, ink: TimelineInk): strin
             : look.dark
               ? 400
               : 600;
-    return swatchFor(look, ink.family, shade).fill;
+    // A file's own family may define other shades only: take the nearest one it has.
+    const have = [...(look.families.get(ink.family)?.keys() ?? [])];
+    const near = have.length
+      ? have.reduce((a, b) => (Math.abs(b - shade) < Math.abs(a - shade) ? b : a))
+      : shade;
+    return swatchFor(look, ink.family, near as typeof shade).fill;
   }
   switch (ink) {
     case 'text':
@@ -199,20 +208,26 @@ export function markSvg(look: ResolvedAppearance, m: TimelineMark): string {
   }
 }
 
-/** The whole timeline as SVG: marks under the rows, a hit area per row, marks over the rows. */
+/**
+ * The whole timeline as SVG, with a transparent hit area over each row last, so a click anywhere
+ * on a row (its title, its bar) reaches that row. `hit` wraps each area, for example in a link.
+ */
 export function timelineSvg(
   look: ResolvedAppearance,
   plan: TimelinePlan,
   rows: Array<{ id: string; rect: Rect }>,
+  hit: (id: string, markup: string) => string = (_id, markup) => markup,
 ): string {
   return [
     '<g class="timeline">',
     ...plan.under.map(m => markSvg(look, m)),
-    ...rows.map(
-      ({ id, rect: r }) =>
-        `<rect data-id="${escText(id)}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="transparent"/>`,
-    ),
     ...plan.over.map(m => markSvg(look, m)),
+    ...rows.map(({ id, rect: r }) =>
+      hit(
+        id,
+        `<rect data-id="${escText(id)}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="transparent"/>`,
+      ),
+    ),
     '</g>',
   ].join('\n');
 }

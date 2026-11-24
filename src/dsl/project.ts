@@ -117,7 +117,15 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
   if (scene.timelines?.length) doc.layout.timelines = clone(scene.timelines);
   const groups = new Set(doc.graph.groups.map(g => g.id));
-  doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id));
+  // A timeline band never collapses on its own, so a restored view drops it.
+  const bands = new Set(
+    (scene.timelines ?? []).flatMap(t =>
+      doc.graph.groups
+        .filter(g => (g.parentId ?? 'root') === t.scope && g.id !== t.scope)
+        .map(g => g.id),
+    ),
+  );
+  doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id) && !bands.has(id));
   doc.settings = clone(view.settings ?? DEFAULT_SETTINGS);
   // The file decides routing, and its root engine recipe is what layout tools start from.
   doc.settings.routing = { ...DEFAULT_SETTINGS.routing, ...scene.model.routing };

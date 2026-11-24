@@ -3,6 +3,8 @@
  * built from the boxes and routes a drawing uses. `renderSvg`, the viewer, the editor and the graph
  * API all build it here, so their numbers agree.
  */
+import { shownTimelines } from '../model/graph';
+import { timelineOrigin } from '../model/timeline';
 import type { Box, EdgeOut, PlacedBox } from '../graph-api/core';
 import type { Diagram, Point, Rect, Side } from '../model/types';
 
@@ -104,6 +106,11 @@ export function placedItems(
     ...Object.values(nodes),
     ...Object.values(groups),
     ...Object.values(edges).map(edgeBox),
+    // A timeline draws past its rows' boxes: its axis, rules, labels and legend.
+    ...shownTimelines(doc).map(t => {
+      const o = timelineOrigin(t, rects.get(t.scope));
+      return { x: o.x + t.bounds.x, y: o.y + t.bounds.y, width: t.bounds.w, height: t.bounds.h };
+    }),
   ];
   return { nodes, groups, edges, bounds: boundsOf(all) };
 }

@@ -59,6 +59,7 @@ const engineName = (id: string) => LayoutLab.algorithms.find(a => a.id === id)?.
 const SHAPED_BY_CONTENT: Record<string, string> = {
   sequence: 'Sequence diagrams follow message order.',
   cells: 'Cells follow their columns and spans.',
+  timeline: 'Timelines place each row by its dates.',
 };
 
 /** Recipes with a structure of their own, which an engine would replace and lose. */
@@ -144,6 +145,11 @@ export function createLayout(s: DocumentPart & FileSessionPart & EditorPart & Sc
     if (s.fileMode() && options.mode === 'rebuild') return runRecipe(options);
     if (s.doc.layout.sequence) {
       toast(LANES_HOLD);
+      return { status: 'cancelled' };
+    }
+    // Without a file to recompile, an engine would move rows away from the dates that place them.
+    if (!s.fileMode() && s.doc.layout.timelines?.length) {
+      toast('Timelines place each row by its dates. Open the diagram file to arrange around one.');
       return { status: 'cancelled' };
     }
     s.prepareForEdit();
