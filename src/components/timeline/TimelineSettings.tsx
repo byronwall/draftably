@@ -36,6 +36,8 @@ export function TimelineSettings() {
   const [steps, setSteps] = createSignal('');
   const [startBadInput, setStartBadInput] = createSignal(false);
   const inputs: Partial<Record<TimelineDraftIssue['field'], HTMLInputElement>> = {};
+  let zoomFromInput: HTMLInputElement | undefined;
+  let zoomThroughInput: HTMLInputElement | undefined;
   const drafts = new Map<string, TimelineDraft>();
   const currentDraft = (): TimelineDraft => ({
     kind: kind(),
@@ -102,6 +104,16 @@ export function TimelineSettings() {
       inputs.snapshot.focus();
       return;
     }
+    if (zoomFromInput?.validity.badInput) {
+      setError('Enter a complete detail start date or clear it.');
+      zoomFromInput.focus();
+      return;
+    }
+    if (zoomThroughInput?.validity.badInput) {
+      setError('Enter a complete detail end date or clear it.');
+      zoomThroughInput.focus();
+      return;
+    }
     if (!!lo() !== !!hi() || (lo() && lo() >= hi()))
       return setError('Choose a start and a later end for the detail window.');
     const doc = readSource(s.currentSource());
@@ -148,11 +160,21 @@ export function TimelineSettings() {
           </label>
           <label>
             Detail from
-            <input type="date" value={lo()} onInput={e => setLo(e.currentTarget.value)} />
+            <input
+              type="date"
+              value={lo()}
+              ref={el => (zoomFromInput = el)}
+              onInput={e => setLo(e.currentTarget.value)}
+            />
           </label>
           <label>
             Detail through
-            <input type="date" value={hi()} onInput={e => setHi(e.currentTarget.value)} />
+            <input
+              type="date"
+              value={hi()}
+              ref={el => (zoomThroughInput = el)}
+              onInput={e => setHi(e.currentTarget.value)}
+            />
           </label>
         </fieldset>
         <fieldset>
