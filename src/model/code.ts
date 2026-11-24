@@ -22,6 +22,8 @@ export interface CodeBlock {
   wrap: boolean;
   /** `numbers=on`: a line-number gutter. */
   numbers: boolean;
+  /** `table=on`: line 1 is a header with a rule under it, and the columns are aligned. */
+  table?: boolean;
   /** `start=`: the first line's number. */
   start: number;
   /** `max-width=`: the widest the box grows before lines wrap or clip. */
@@ -93,6 +95,55 @@ export function codeLines(raw: string[], tab = CODE_TAB): string[] {
   return Number.isFinite(indent) ? lines.map(l => l.slice(indent)) : lines;
 }
 
+const NUMBER = /^[-+]?[$€£]?\d[\d,]*(\.\d+)?%?$/;
+
+/**
+ * The cells of a table body, by column. Runs of two or more spaces split cells when every
+ * non-blank line splits into the same count; otherwise a column break is a run of positions that
+ * are blank in every line. Fewer than two columns: undefined.
+ */
+export function tableCells(lines: string[]): string[][] | undefined {
+  const rows = lines.filter(l => l.trim());
+  if (rows.length < 2) return undefined;
+  const split = rows.map(l => l.trim().split(/ {2,}/));
+  if (split[0].length > 1 && split.every(c => c.length === split[0].length))
+    return lines.map(l => (l.trim() ? l.trim().split(/ {2,}/) : []));
+  const width = Math.max(...rows.map(l => l.length)),
+    spans: Array<[number, number]> = [];
+  for (let i = 0; i < width; i++) {
+    if (rows.every(l => (l[i] ?? ' ') === ' ')) continue;
+    const last = spans[spans.length - 1];
+    if (last && last[1] === i) last[1] = i + 1;
+    else spans.push([i, i + 1]);
+  }
+  if (spans.length < 2) return undefined;
+  return lines.map(l => (l.trim() ? spans.map(([a, b]) => l.slice(a, b).trim()) : []));
+}
+
+/**
+ * `table=on`: a table body with its columns aligned two spaces apart, and a column whose body
+ * cells are all numbers right-aligned. Line count never changes, so ranges keep their lines.
+ */
+export function tableLines(lines: string[]): string[] {
+  const cells = tableCells(lines);
+  if (!cells) return lines;
+  const n = Math.max(...cells.map(c => c.length)),
+    head = cells.findIndex(c => c.length),
+    widths = Array.from({ length: n }, (_, i) => Math.max(...cells.map(c => (c[i] ?? '').length))),
+    right = widths.map((_, i) => {
+      const body = cells.filter((c, j) => j !== head && c[i]);
+      return body.length > 0 && body.every(c => NUMBER.test(c[i]));
+    });
+  return cells.map(c =>
+    c.length
+      ? widths
+          .map((w, i) => (right[i] ? (c[i] ?? '').padStart(w) : (c[i] ?? '').padEnd(w)))
+          .join('  ')
+          .trimEnd()
+      : '',
+  );
+}
+
 /** One drawn row: all of a source line, or one piece of a long one. */
 export interface CodeRow {
   /** Index into `CodeBlock.lines`. */
@@ -133,6 +184,8 @@ export interface CodeLayout {
   moreShown: boolean;
   /** Source lines that wrapped or were clipped. */
   long: number[];
+  /** `table=on`: y of the rule under the header line, from the box's top edge. */
+  rule?: number;
 }
 
 const columns = (s: string) => s.length;
@@ -235,7 +288,10 @@ export function codeLayout(
     moreY = top + kept.length * lh;
     moreShown = moreY + lh <= size.height + 0.5;
   }
+  const head = rows.filter(r => r.line === 0).pop(),
+    rule = code.table && head && lines.length > 1 ? head.y + lh : undefined;
   return {
+    ...(rule !== undefined ? { rule } : {}),
     w,
     h: size.height ?? auto,
     left: CODE_PAD.x + gutterW,

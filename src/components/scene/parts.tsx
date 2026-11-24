@@ -273,6 +273,17 @@ export function CodeBody(props: {
           {truncateText(props.caption, props.w - 2 * laid().gutter, props.look.annotation)}
         </text>
       </Show>
+      <Show when={laid().rule !== undefined}>
+        <line
+          class="code-rule"
+          x1={laid().left}
+          y1={laid().rule}
+          x2={props.w - laid().gutter}
+          y2={laid().rule}
+          stroke={props.swatch.stroke}
+          stroke-width={1}
+        />
+      </Show>
       <Show when={props.code.numbers}>
         <text dominant-baseline="central" {...font} fill={muted()}>
           <For each={numbers()}>

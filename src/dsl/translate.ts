@@ -48,6 +48,7 @@ function writeCode(s: Statement, code: CodeBlock) {
   if (code.lang) setAttr(s, 'lang', bare(code.lang));
   if (!code.wrap) setAttr(s, 'wrap', bare('off'));
   if (code.numbers) setAttr(s, 'numbers', bare('on'));
+  if (code.table) setAttr(s, 'table', bare('on'));
   if (code.start !== 1) setAttr(s, 'start', bare(code.start));
   if (code.maxWidth !== CODE_MAX_WIDTH) setAttr(s, 'max-width', bare(code.maxWidth));
   let tag = 'CODE';

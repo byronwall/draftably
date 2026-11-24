@@ -205,6 +205,10 @@ function codeMarkup(
       `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
       `<text x="${r.x + laid.gutter}" y="${r.y + laid.caption / 2}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(n.title, r.w - 2 * laid.gutter, look.annotation))}</text>`,
     );
+  if (laid.rule !== undefined)
+    out.push(
+      `<line class="code-rule" x1="${r.x + laid.left}" y1="${r.y + laid.rule}" x2="${r.x + r.w - laid.gutter}" y2="${r.y + laid.rule}" stroke="${c.stroke}" stroke-width="1"/>`,
+    );
   const spans: string[] = [],
     numbers: string[] = [];
   laid.rows.forEach((row, i) => {
