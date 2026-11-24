@@ -1,4 +1,4 @@
-import { typeProfile, wrapLines, measureText, type FontRole } from '../model/fonts';
+import { typeProfile, wrapLines, truncateText, type FontRole } from '../model/fonts';
 import type { TimelineRow, TimelineOptions } from './timeline';
 import type { TimelineMark, TimelinePlan } from './timeline-plan';
 
@@ -153,7 +153,7 @@ function drawCard(
   text(marks, kindLabel(event), x + 22, y + 16, {
     size: 9,
     weight: 700,
-    tone: kindTone(event),
+    tone: 'ink',
     id,
     title: kindLabel(event),
   });
@@ -215,7 +215,7 @@ function drawSnapshot(
     `TODAY · ${formatDate(today, { month: 'short', day: 'numeric', year: 'numeric' })}`,
     x + 12,
     top + 17,
-    { size: 10, weight: 750, tone: 'accent' },
+    { size: 10, weight: 750, tone: 'ink' },
   );
   text(
     marks,
@@ -232,17 +232,7 @@ function drawSnapshot(
     const itemX = x + 256 + col * 232;
     const itemY = top + 17 + line * 17;
     const profile = typeProfile(role, true, 10, 12);
-    let label = '',
-      used = 0;
-    const limit = 142 - measureText('…', profile);
-    for (const ch of row.label) {
-      used += measureText(ch, profile);
-      if (used > limit) {
-        label += '…';
-        break;
-      }
-      label += ch;
-    }
+    const label = truncateText(row.label, 142, profile);
     text(marks, label, itemX, itemY, {
       size: 10,
       weight: 600,
@@ -327,7 +317,7 @@ export function logPlan(
     }
 
     const dateY = cursor + 15;
-    const dateTone = group.today ? 'accent' : 'muted';
+    const dateTone = group.today ? 'ink' : 'muted';
     text(marks, formatDate(group.date, { weekday: 'short' }).toUpperCase(), LEFT, dateY - 1, {
       size: 8,
       weight: 700,
@@ -357,7 +347,7 @@ export function logPlan(
       text(marks, 'TODAY', CONTENT, dateY - 1, {
         size: 8,
         weight: 750,
-        tone: 'accent',
+        tone: 'ink',
       });
 
     if (group.events.length) {

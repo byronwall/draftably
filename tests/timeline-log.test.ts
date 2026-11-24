@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { contrast, resolveAppearance } from '../src/model/appearance';
+import { measureText, typeProfile } from '../src/model/fonts';
 import type { TimelineRow } from '../src/dsl/timeline';
 import { groupRows, logPlan, snapshotStatus } from '../src/dsl/timeline-log';
 
@@ -92,5 +94,51 @@ describe('ordinal timeline log', () => {
     expect(labels.some(label => label.startsWith('TODAY'))).toBe(false);
     expect(labels).not.toContain('TODAY');
     expect(plan.height).toBeGreaterThan(72);
+  });
+
+  it('uses readable ink for the snapshot date and event-kind labels in Blueprint', () => {
+    const look = resolveAppearance({ theme: 'blueprint', overrides: {}, colors: [] });
+    const rows = [
+      row({ id: 'event', label: 'Invoice observation', at: '2028-04-10' }),
+      row({ id: 'start', label: 'Code change', from: '2028-04-01', to: 'open' }),
+      row({ id: 'milestone', label: 'Release 2.4', at: '2028-04-10', milestone: true }),
+    ];
+    const plan = logPlan(rows, { today: '2028-04-10' }, look.annotation.role);
+    const labels = plan.marks.filter(mark => mark.kind === 'text');
+    const checked = labels.filter(
+      mark =>
+        mark.kind === 'text' &&
+        (mark.text.startsWith('TODAY ·') ||
+          mark.text === 'TODAY' ||
+          ['Event', 'Starts', 'Milestone'].includes(mark.text)),
+    );
+
+    expect(checked.map(mark => mark.kind === 'text' && mark.tone)).toEqual([
+      'ink',
+      'ink',
+      'ink',
+      'ink',
+      'ink',
+    ]);
+    expect(contrast(look.text, look.group.fill)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(look.text, look.canvas)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('keeps a complete snapshot label when its measured width fits the field', () => {
+    const look = resolveAppearance({ theme: 'signal', overrides: {}, colors: [] });
+    const label = 'Windows installer 2.4.1';
+    const profile = typeProfile(look.annotation.role, true, 10, 12);
+    expect(measureText(label, profile)).toBeLessThanOrEqual(142);
+
+    const plan = logPlan(
+      [row({ id: 'installer', label, from: '2028-04-01', to: 'open' })],
+      { today: '2028-04-10' },
+      look.annotation.role,
+    );
+    const snapshotLabel = plan.marks.find(
+      mark => mark.kind === 'text' && mark.id === 'installer' && mark.y === 83,
+    );
+
+    expect(snapshotLabel).toMatchObject({ kind: 'text', text: label, title: label });
   });
 });
