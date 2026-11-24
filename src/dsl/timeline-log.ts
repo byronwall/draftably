@@ -1,3 +1,4 @@
+import { typeProfile, wrapLines, truncateText } from '../model/fonts';
 import type { TimelineRow, TimelineOptions } from './timeline';
 import type { TimelineMark, TimelinePlan } from './timeline-plan';
 
@@ -29,22 +30,6 @@ function formatDate(date: string, options: Intl.DateTimeFormatOptions) {
 
 function gapDays(from: string, to: string) {
   return Math.round((day(to) - day(from)) / DAY);
-}
-
-function wrap(text: string, max: number) {
-  const words = text.split(/\s+/).filter(Boolean);
-  const lines: string[] = [];
-  let line = '';
-  for (const word of words) {
-    if (!line) line = word;
-    else if (`${line} ${word}`.length <= max) line += ` ${word}`;
-    else {
-      lines.push(line);
-      line = word;
-    }
-  }
-  if (line) lines.push(line);
-  return lines.length ? lines : [''];
 }
 
 function groupRows(rows: TimelineRow[]): DateGroup[] {
@@ -97,7 +82,7 @@ function kindLabel(event: LogEvent) {
 
 function kindTone(event: LogEvent): TimelineMark['tone'] {
   if (event.kind === 'point') return event.row.milestone ? 'release' : 'accent';
-  if (event.kind === 'start') return event.uncertain ? 'shade' : 'accent';
+  if (event.kind === 'start') return event.uncertain ? 'muted' : 'accent';
   if (event.kind === 'end') return 'release';
   return 'muted';
 }
@@ -128,7 +113,7 @@ function drawCard(
   x: number,
   y: number,
 ) {
-  const titleLines = wrap(event.row.label, 40);
+  const titleLines = wrapLines(event.row.label, CARD_W - 22, typeProfile('sans', true, 12, 14));
   const details = [
     event.uncertain && event.kind === 'start' ? 'Exact start unknown · began before this date' : '',
     event.row.band,
@@ -137,7 +122,9 @@ function drawCard(
     event.row.introducedBy ? `Introduced by ${event.row.introducedBy}` : '',
     event.row.fixedBy ? `Fixed by ${event.row.fixedBy}` : '',
   ].filter(Boolean);
-  const detailLines = details.flatMap(value => wrap(value, 58));
+  const detailLines = details.flatMap(value =>
+    wrapLines(value, CARD_W - 22, typeProfile('sans', false, 9, 12)),
+  );
   const height = 30 + titleLines.length * 14 + detailLines.length * 12;
   const id = event.row.id;
   const box = { x, y, w: CARD_W, h: height };
@@ -204,6 +191,8 @@ function drawSnapshot(
     const status = snapshotStatus(row, today);
     return status ? [{ row, status }] : [];
   });
+  const possible = current.filter(r => r.status === 'Start unclear').length;
+  const confirmed = current.length - possible;
   const columns = 2;
   const lines = Math.ceil(current.length / columns);
   const height = Math.max(48, 35 + lines * 17);
@@ -228,7 +217,9 @@ function drawSnapshot(
   );
   text(
     marks,
-    `${current.length} ${current.length === 1 ? 'span' : 'spans'} overlap this date`,
+    possible
+      ? `${confirmed} confirmed · ${possible} possible`
+      : `${confirmed} ${confirmed === 1 ? 'span overlaps' : 'spans overlap'} this date`,
     x + 12,
     top + 31,
     { size: 9, tone: 'muted' },
@@ -238,7 +229,7 @@ function drawSnapshot(
     const line = Math.floor(i / columns);
     const itemX = x + 256 + col * 232;
     const itemY = top + 17 + line * 17;
-    const label = wrap(row.label, 24)[0];
+    const label = truncateText(row.label, 142, typeProfile('sans', true, 10, 12));
     text(marks, label, itemX, itemY, {
       size: 10,
       weight: 600,
