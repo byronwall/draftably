@@ -236,7 +236,7 @@ export async function go(url: string, { push = true } = {}) {
       activeSession().clearSelection();
       activeSession().setDoc('collapsed', []);
       // The new drawing is projected in this same task, so it never paints at the old camera.
-      activeSession().fitView();
+      activeSession().frameOpenedDiagram();
     }
     state.setView('file');
   } else {

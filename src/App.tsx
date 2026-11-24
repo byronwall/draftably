@@ -109,7 +109,7 @@ export default function App() {
     // A first visit to the static site starts on the start screen instead of a blank canvas.
     if (!restored && !s.fileMode()) setStartOpen(true);
     requestAnimationFrame(() => {
-      if (!restored) s.fitView();
+      if (!restored) s.frameOpenedDiagram();
       if (notice) toast(notice);
     });
     console.info('[diagram-studio] ready', {

@@ -102,7 +102,7 @@ export async function openImageSource(file: File) {
   activeSession().clearSelection();
   activeSession().setDoc('collapsed', []);
   await activeSession().openExampleSession(name, title || name, source);
-  activeSession().fitView();
+  activeSession().frameOpenedDiagram();
   toast('Opened the diagram in ' + (file.name || 'the pasted image'));
   return true;
 }

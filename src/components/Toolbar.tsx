@@ -52,7 +52,9 @@ export function Toolbar() {
       <Show when={calendarFor(s.doc)}>
         {chart => (
           <button type="button" class="button ghost" onClick={() => s.frameCalendar(chart())}>
-            {s.stageSize().width < 720 ? 'Read timeline' : 'Fit timeline'}
+            {s.stageSize().width < 720 || s.doc.layout.timeline?.options.view === 'log'
+              ? 'Read timeline'
+              : 'Fit timeline'}
           </button>
         )}
       </Show>

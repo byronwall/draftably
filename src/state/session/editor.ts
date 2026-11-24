@@ -2,6 +2,7 @@
  * Interaction state that is never saved: the active tool, temporary geometry, drag feedback,
  * and the canvas camera helpers.
  */
+import { calendarFor } from '../../dsl/calendar-layout';
 import { createSignal } from 'solid-js';
 import { clamp, rectUnion } from '../../model/geometry';
 import { findNode, objectRect } from '../../model/graph';
@@ -204,10 +205,20 @@ export function createEditor(s: DocumentPart & ScenePart) {
   /** Open a long calendar at reading size on touch screens. Its marks pan with the canvas. */
   function frameCalendar(chart: { x: number; y: number; width: number; height: number }) {
     const { width } = stageSize();
-    if (width >= 720)
+    if (width >= 720 && s.doc.layout.timeline?.options.view !== 'log')
       return fitRects([{ x: chart.x, y: chart.y, w: chart.width, h: chart.height }]);
-    const k = 1;
-    s.setCamera({ x: 12 - chart.x * k, y: 12 - chart.y * k, k });
+    const k = width < 720 ? 1 : Math.min(1.35, (width - 40) / chart.width);
+    s.setCamera({
+      x: Math.max(12, (width - chart.width * k) / 2) - chart.x * k,
+      y: 16 - chart.y * k,
+      k,
+    });
+  }
+
+  function frameOpenedDiagram() {
+    const chart = calendarFor(s.doc);
+    if (chart) frameCalendar(chart);
+    else fitView();
   }
 
   /** Pan just enough to bring an object fully into view. */
@@ -265,6 +276,7 @@ export function createEditor(s: DocumentPart & ScenePart) {
     diagramClipped,
     fitRects,
     frameCalendar,
+    frameOpenedDiagram,
     revealObject,
     centerSelection,
   };
