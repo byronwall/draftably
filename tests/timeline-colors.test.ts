@@ -3,6 +3,7 @@ import {
   BUILT_IN_FAMILIES,
   contrast,
   resolveAppearance,
+  SHADES,
   swatchFor,
   THEME_IDS,
 } from '../src/model/appearance';
@@ -14,11 +15,14 @@ describe('timeline colors', () => {
   it('hold their contrast on every theme and backdrop', () => {
     for (const theme of THEME_IDS) {
       const look = resolveAppearance({ theme, overrides: {}, colors: [] });
-      // The page, the default group fill, and a dark group (`color=blue shade=900`).
+      // The page, the default group fill, and a group of every family at every shade.
+      const groups = BUILT_IN_FAMILIES.flatMap(f =>
+        SHADES.map(shade => swatchFor(look, f, shade, 'group').fill),
+      );
       for (const backdrop of [
         look.canvas,
         swatchFor(look, undefined, undefined, 'group').fill,
-        swatchFor(look, 'blue', 900, 'group').fill,
+        ...new Set(groups),
       ])
         for (const family of BUILT_IN_FAMILIES) {
           const c = (tone?: 'ink' | 'track' | 'tint') =>

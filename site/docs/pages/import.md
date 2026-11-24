@@ -147,16 +147,18 @@ dates Mermaid computes, so `after`, durations and `excludes weekends` land on th
 | Mermaid                          | Draftably                                                       |
 | -------------------------------- | --------------------------------------------------------------- |
 | `section Build`                  | A band                                                          |
-| `Index :a1, 2025-01-06, 10d`     | A row, `from=2025-01-06 to=…` with the end Mermaid computed     |
+| `Index :a1, 2025-01-06, 10d`     | A row from `2025-01-06` to the day Mermaid draws the bar to     |
 | `API :after a1, 2w`              | The same dates, and a drawn arrow from `a1`; Mermaid draws none |
 | `done`                           | `progress=100`                                                  |
 | `crit`                           | `color=red`                                                     |
 | `active`                         | Not drawn; the import notes it                                  |
-| `:milestone`                     | A point row (`at=`)                                             |
+| `:milestone`                     | A point row (`at=`) on the day Mermaid centers it               |
 | `:vert`                          | A milestone rule through every band                             |
 | `timeline` period `2004 : A : B` | `scale=ordinal`, one point row per event                        |
 
-A timeline period must be a year, `YYYY-MM` or `YYYY-MM-DD`. Times of day round to whole days,
+Labels keep their text as Mermaid draws it, `List<T>` included. A dependency whose start Mermaid
+computed differently from the tasks it names, and a task that ends before it starts, are reported
+instead of guessed. A timeline period must be a year, `YYYY-MM` or `YYYY-MM-DD`. Times of day round to whole days,
 and `axisFormat`, `tickInterval` and `todayMarker` give way to the native axis: set `today=` on the
 layout line for a fixed Today.
 

@@ -237,9 +237,10 @@ Docs :crit, d1, 2025-02-03, 2025-02-14
 Freeze :vert, v1, 2025-02-10, 0d`);
     expect(imported.status).toBe('ready');
     const src = imported.nativeSource!;
-    // Ten working days from Monday Jan 6 end on Monday Jan 20, skipping two weekends.
+    // Ten working days from Monday Jan 6: Mermaid schedules the next task on Monday Jan 20 and
+    // draws this bar to Saturday Jan 18, before the weekend it skips.
     expect(src).toContain(
-      'node a1 "Index" in=section_1 from=2025-01-06 to=2025-01-20 progress=100',
+      'node a1 "Index" in=section_1 from=2025-01-06 to=2025-01-18 progress=100',
     );
     expect(src).toContain('node a2 "API" in=section_1 from=2025-01-20 to=2025-02-07');
     expect(src).toContain('node m1 "Ship" in=section_1 at=2025-02-07');
@@ -251,6 +252,38 @@ Freeze :vert, v1, 2025-02-10, 0d`);
     // Both dependencies draw on the chart, not through the router.
     expect(doc.layout.timelines![0].edges).toHaveLength(2);
     expect(imported.diagnostics.map(d => d.code)).toContain('MERMAID_GANTT_EXCLUDES');
+  });
+
+  it('keeps labels verbatim, centers milestones and reports what it cannot keep', async () => {
+    const imported = await run(`gantt
+dateFormat YYYY-MM-DD
+section Build
+section Build
+Test List<T> parser :t1, 2025-01-01, 5d
+Ship :milestone, m, 2025-01-06, 4d
+Late :l1, after base.v2, 2d
+base :base, 2025-01-01, 1d
+base.v2 :base.v2, 2025-01-01, 90d
+section Markers
+Freeze :vert, v1, 2025-01-05, 0d`);
+    expect(imported.status).toBe('needs-review');
+    const src = imported.nativeSource!;
+    expect(src).toContain('"Test List<T> parser"');
+    // Mermaid centers a four-day milestone on its middle day.
+    expect(src).toContain('node m "Ship" in=section_1 at=2025-01-08');
+    // One band for a repeated section name, and none for a section with only a vertical rule.
+    expect(src.match(/^group /gm)).toHaveLength(1);
+    // Mermaid resolved `after base.v2` to another task, so no arrow claims otherwise.
+    expect(src).not.toMatch(/-> l1/);
+    expect(imported.diagnostics.map(d => d.code)).toContain('MERMAID_GANTT_AFTER');
+    await compile(src);
+    const reversed = await run(`gantt
+dateFormat YYYY-MM-DD
+Wrong :t, 2025-01-10, 2025-01-05`);
+    expect(reversed.status).toBe('failed');
+    expect(reversed.diagnostics.map(d => d.message).join()).toMatch(
+      /2025-01-05, before it starts on 2025-01-10/,
+    );
   });
 
   it('places timeline periods on an ordinal axis, one row per event', async () => {

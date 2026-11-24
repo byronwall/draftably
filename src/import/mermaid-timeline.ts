@@ -11,40 +11,58 @@ const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
 export function mapMermaidGantt(
   snapshot: GanttSnapshot,
-  plainText: (value: string) => string,
+  _plainText: (value: string) => string,
   title: string,
   diagnostics: Diagnostic[],
 ): ImportResult {
-  const plan = blankPlan(snapshot.title ? plainText(snapshot.title) : title),
+  // Mermaid draws gantt text verbatim (`List<T>` stays), so labels keep it; quoting makes it safe.
+  const plan = blankPlan(snapshot.title ?? title),
     ids = new Ids();
   const note = (code: string, message: string, severity: Diagnostic['severity'] = 'info') =>
-    diagnostics.push({ code, severity, impact: 'appearance', message });
+    diagnostics.push({ code, severity, impact: 'semantics', message });
   plan.layouts.push({ scope: 'root', kind: 'timeline' });
+  // A band is made once per section name, and only when it holds a row.
   const band = new Map<string, string>();
-  for (const name of snapshot.sections) {
-    const id = ids.get('section', name, 'section_' + (band.size + 1));
-    band.set(name, id);
-    plan.objects.push({ id, kind: 'group', label: plainText(name) });
-  }
+  const bandOf = (name: string | undefined) => {
+    if (!name) return undefined;
+    if (!band.has(name)) {
+      const id = ids.get('section', name, 'section_' + (band.size + 1));
+      band.set(name, id);
+      plan.objects.push({ id, kind: 'group', label: name });
+    }
+    return band.get(name);
+  };
+  const byId = new Map(snapshot.tasks.map(t => [t.id, t]));
   const rows = new Map<string, string>();
   for (const t of snapshot.tasks) {
-    const parent = t.section ? band.get(t.section) : undefined;
     const id = ids.get('task', t.id);
-    const label = plainText(t.label) || t.id;
+    const label = t.label || t.id;
     if (t.vert) {
       // A vertical marker crosses every section, as a milestone rule does.
       plan.objects.push({ id, kind: 'milestone', label, attrs: [['at', t.start]] });
       continue;
     }
+    if (!t.milestone && t.end < t.start) {
+      diagnostics.push({
+        code: 'MERMAID_GANTT_REVERSED',
+        severity: 'error',
+        impact: 'semantics',
+        message: `${t.id} (${label}) ends on ${t.end}, before it starts on ${t.start}.`,
+      });
+      continue;
+    }
     rows.set(t.id, id);
-    const attrs: Array<[string, string]> =
-      t.milestone || t.end <= t.start
+    // Mermaid centers a milestone on its span; a bar ends where Mermaid draws it.
+    const attrs: Array<[string, string]> = t.milestone
+      ? [['at', t.mid]]
+      : t.drawEnd <= t.start
         ? [['at', t.start]]
         : [
             ['from', t.start],
-            ['to', t.end],
+            ['to', t.drawEnd],
           ];
-    if (t.done && !t.milestone && t.end > t.start) attrs.push(['progress', '100']);
+    if (t.done && attrs[0][0] === 'from') attrs.push(['progress', '100']);
+    const parent = bandOf(t.section);
     plan.objects.push({
       id,
       kind: 'node',
@@ -54,17 +72,31 @@ export function mapMermaidGantt(
       attrs,
     });
   }
-  // `after` places a task in Mermaid and draws nothing; here it is also a drawn dependency.
-  for (const t of snapshot.tasks)
+  // `after` places a task in Mermaid and draws nothing; here it is also a drawn dependency, when
+  // the start Mermaid computed is the latest end of the tasks it names.
+  for (const t of snapshot.tasks) {
+    if (!t.after.length || !rows.has(t.id)) continue;
+    const named = t.after.map(a => byId.get(a));
+    const latest = named.every(n => n && !n.vert)
+      ? named.map(n => n!.end).reduce((a, b) => (a > b ? a : b))
+      : undefined;
+    if (latest !== t.start || !t.after.every(a => rows.has(a))) {
+      note(
+        'MERMAID_GANTT_AFTER',
+        `${t.id} starts after ${t.after.join(' ')}, but Mermaid placed it on ${t.start}; no dependency arrow is drawn.`,
+        'warning',
+      );
+      continue;
+    }
     for (const before of t.after)
-      if (rows.has(before) && rows.has(t.id))
-        plan.edges.push({
-          id: ids.get('edge', before + '>' + t.id, 'after_' + rows.get(t.id)),
-          from: rows.get(before)!,
-          to: rows.get(t.id)!,
-          label: '',
-          directed: true,
-        });
+      plan.edges.push({
+        id: ids.get('edge', before + '>' + t.id, 'after_' + rows.get(t.id)),
+        from: rows.get(before)!,
+        to: rows.get(t.id)!,
+        label: '',
+        directed: true,
+      });
+  }
   if (snapshot.tasks.some(t => t.partialDay))
     note(
       'MERMAID_GANTT_TIMES',
@@ -74,7 +106,7 @@ export function mapMermaidGantt(
   if (snapshot.excludes.length)
     note(
       'MERMAID_GANTT_EXCLUDES',
-      `Mermaid skipped ${snapshot.excludes.join(', ')} when it computed the dates; the drawing keeps those dates and shows calendar days.`,
+      `Mermaid skipped ${snapshot.excludes.join(', ')} when it computed the dates; each bar ends where Mermaid draws it, and the axis shows calendar days.`,
     );
   if (snapshot.tasks.some(t => t.active))
     note(
@@ -100,8 +132,9 @@ export function mapMermaidTimeline(
   title: string,
   diagnostics: Diagnostic[],
 ): ImportResult {
-  const plan = blankPlan(snapshot.title ? plainText(snapshot.title) : title),
+  const plan = blankPlan(snapshot.title ?? title),
     ids = new Ids();
+  void plainText;
   const undated = snapshot.periods.filter(p => !periodDate(p.period));
   if (undated.length) {
     diagnostics.push({
@@ -118,13 +151,17 @@ export function mapMermaidTimeline(
   // Periods are evenly spaced in Mermaid, so the native axis is ordinal: one step per date.
   plan.layouts.push({ scope: 'root', kind: 'timeline', options: [['scale', 'ordinal']] });
   const band = new Map<string, string>();
-  for (const name of snapshot.sections) {
-    const id = ids.get('section', name, 'section_' + (band.size + 1));
-    band.set(name, id);
-    plan.objects.push({ id, kind: 'group', label: plainText(name) });
-  }
+  const bandOf = (name: string | undefined) => {
+    if (!name) return undefined;
+    if (!band.has(name)) {
+      const id = ids.get('section', name, 'section_' + (band.size + 1));
+      band.set(name, id);
+      plan.objects.push({ id, kind: 'group', label: name });
+    }
+    return band.get(name);
+  };
   snapshot.periods.forEach((p, i) => {
-    const parent = p.section ? band.get(p.section) : undefined,
+    const parent = bandOf(p.section),
       at = periodDate(p.period)!;
     const events = p.events.length ? p.events : [p.period];
     events.forEach((event, j) =>
@@ -135,7 +172,7 @@ export function mapMermaidTimeline(
           `event_${i + 1}${events.length > 1 ? '_' + (j + 1) : ''}`,
         ),
         kind: 'node',
-        label: plainText(event),
+        label: event,
         ...(parent ? { parent } : {}),
         attrs: [['at', at]],
       }),

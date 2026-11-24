@@ -129,11 +129,11 @@ export function timelineColor(
     const deep = contrast(backdrop, '#ffffff') > contrast(backdrop, '#000000');
     switch (tone) {
       case 'ink':
-        return ensureContrast(family(look.dark ? 300 : 700), backdrop, 4.5);
+        return readable(family(look.dark ? 300 : 700), backdrop, 4.5);
       case 'track':
-        return mixColors(backdrop, strong, deep ? 0.38 : 0.3);
+        return mixUntil(backdrop, strong, deep ? 0.38 : 0.3, 1.3);
       case 'tint':
-        return mixColors(backdrop, strong, deep ? 0.16 : 0.11);
+        return mixUntil(backdrop, strong, deep ? 0.16 : 0.11, 1.12);
       case 'soft':
         return family(look.dark ? 900 : 100);
       default:
@@ -141,12 +141,12 @@ export function timelineColor(
     }
   }
   // Text, and the gridlines and rules mixed from it, hold 4.5:1 on a dark group fill too.
-  const text = ensureContrast(look.text, backdrop, 4.5);
+  const text = readable(look.text, backdrop, 4.5);
   switch (ink) {
     case 'text':
       return text;
     case 'muted':
-      return ensureContrast(look.muted, backdrop, 4.5);
+      return readable(look.muted, backdrop, 4.5);
     case 'grid':
       return mixColors(backdrop, text, look.dark ? 0.12 : 0.07);
     case 'rule':
@@ -207,6 +207,24 @@ export function validMark(m: unknown): m is TimelineMark {
       );
   }
   return false;
+}
+
+/**
+ * `color` faded into `bg` at `start`, made a little stronger until it reaches `min` contrast, so a
+ * wash stays visible on any fill without growing louder than it needs to.
+ */
+function mixUntil(bg: string, color: string, start: number, min: number) {
+  let t = start,
+    out = mixColors(bg, color, t);
+  while (contrast(out, bg) < min && t < 0.9) out = mixColors(bg, color, (t += 0.02));
+  return out;
+}
+
+/** A color moved toward `min` contrast on `bg`; when that search falls short, black or white. */
+function readable(color: string, bg: string, min: number) {
+  const out = ensureContrast(color, bg, min);
+  if (contrast(out, bg) >= min) return out;
+  return contrast('#000000', bg) >= contrast('#ffffff', bg) ? '#000000' : '#ffffff';
 }
 
 /** Where a timeline's marks sit now: beside its group's current box, or as compiled for root. */

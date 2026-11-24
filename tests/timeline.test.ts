@@ -4,6 +4,9 @@ import { describe, expect, it } from 'vitest';
 import { checkSource, compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { normalize } from '../src/model/document';
+import { drawingBounds } from '../src/model/bounds';
+import { visibleRects } from '../src/dsl/project';
+import { isMermaidCandidate } from '../packages/markdown/src/mermaid';
 import { renderSvg } from '../src/runtime/svg-renderer';
 import { writeArrangement } from '../src/dsl/layout-edits';
 import { printSource, readSource } from '../src/dsl/syntax';
@@ -262,6 +265,25 @@ node c "C" at=2000-01-01`).timelines![0];
         'layout root timeline\nnode a "A" at=2025-01-01\nnode b "B" at=2025-01-02\norder root a b a',
       ),
     ).toMatch(/Duplicate member in order/);
+  });
+
+  it('leaves a timeline out of a selection that does not hold it', async () => {
+    const doc = projectScene(await compile(example('release-investigation')));
+    const { vg, rects } = visibleRects(doc);
+    const only = new Map([['planner', rects.get('planner')!]]);
+    const box = drawingBounds(
+      doc,
+      { ...vg, nodes: vg.nodes.filter(n => n.id === 'planner'), groups: [] },
+      only,
+      [],
+    );
+    expect(box.w).toBe(rects.get('planner')!.w);
+  });
+
+  it('lets the Markdown build convert gantt and timeline fences', () => {
+    expect(isMermaidCandidate('gantt\n  title Plan')).toBe(true);
+    expect(isMermaidCandidate('timeline\n  2004 : Founded')).toBe(true);
+    expect(isMermaidCandidate('pie\n  "A" : 1')).toBe(false);
   });
 
   it('reports each date error on its own line', () => {

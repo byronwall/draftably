@@ -536,7 +536,8 @@ export function layoutTimeline(
   let right = chartR;
   const bandHeads = bands.some(b => b.g);
 
-  const drawnAsEvent = new Set<string>();
+  const drawnAsEvent = new Set<string>(),
+    captioned = new Set<string>();
   const anchors = new Map<
     string,
     { start: number; end: number; y: number; panel: number; point: boolean }
@@ -595,11 +596,14 @@ export function layoutTimeline(
           mid = (x0 + x1) / 2;
         // A period's tag stays over the chart, even when the period runs off one end.
         const x = period ? Math.min(Math.max(mid, chartX + lw / 2), chartR - lw / 2) : mid;
-        return { o, x, x0, x1, w: lw, period };
+        // A period across the zoom boundary names itself once, in the first panel it shows in.
+        const caption = !(period && captioned.has(o.id));
+        return { o, x, x0, x1, w: lw, period, caption };
       })
       .sort((a, b) => a.x - b.x);
     const rails: number[] = [];
     const tagRail = tags.map(t => {
+      if (!t.caption) return -1;
       let level = 0;
       while ((rails[level] ?? -Infinity) > t.x - t.w / 2 - 14) level++;
       rails[level] = t.x + t.w / 2;
@@ -660,16 +664,17 @@ export function layoutTimeline(
       if (options.headers[1] && tagW)
         text(tagX, y + 8, options.headers[1], 'muted', 'caps', 'start', tagW);
     }
-    for (const t of tags) right = Math.max(right, t.x + t.w / 2 + 4);
+    for (const t of tags) if (t.caption) right = Math.max(right, t.x + t.w / 2 + 4);
     tags.forEach((t, i) => {
+      if (!t.caption) return;
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
       text(t.x, ty, t.o.label, 'text', 'caps', 'middle');
-      // A period across the zoom boundary shows in both panels; the first keeps the box.
-      titles[t.o.id] ??= { x: t.x - t.w / 2, y: ty, w: t.w, font: 'caps' };
+      titles[t.o.id] = { x: t.x - t.w / 2, y: ty, w: t.w, font: 'caps' };
       // A milestone's box is its tag, so it can be selected, and it is never smaller than the
       // least box a document holds (24 by 20).
       const bw = Math.max(24, t.w + 8);
-      if (!rects.has(t.o.id)) rects.set(t.o.id, { x: t.x - bw / 2, y: ty - 10, w: bw, h: 20 });
+      rects.set(t.o.id, { x: t.x - bw / 2, y: ty - 10, w: bw, h: 20 });
+      if (t.period) captioned.add(t.o.id);
     });
     under.push({ k: 'line', x1: chartX, y1: axisY, x2: chartR, y2: axisY, ink: 'rule', w: 1 });
     y = axisY + 10;
@@ -865,8 +870,9 @@ export function layoutTimeline(
     }
     tags.forEach((t, i) => {
       if (!t.period) return;
-      // A period shades its dates from its tag down through every band, under the gridlines.
-      const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
+      // A period shades its dates from its tag down through every band, under the gridlines; with
+      // its caption in an earlier panel, from the axis down.
+      const ty = t.caption ? axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9 : top - 13;
       under.unshift({
         k: 'rect',
         x: t.x0,

@@ -53,7 +53,7 @@ const real = () => (upstream ??= import('mermaid-upstream').then(m => m.default)
 
 /** Draft source starts with a `diagram` line or a declaration; Mermaid starts with its family keyword. */
 const isDraft = (text: string) =>
-  /^\s*(?:%%.*\n\s*)*(?:diagram\s+"|(?:node|group|edge|layout|theme)\s)/.test(text);
+  /^\s*(?:%%.*\n\s*)*(?:diagram\s+"|(?:node|group|edge|layout|theme|milestone)\s)/.test(text);
 
 const dedent = (text: string) => {
   const lines = text

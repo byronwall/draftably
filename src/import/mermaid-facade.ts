@@ -97,9 +97,13 @@ export type GanttTask = {
   id: string;
   label: string;
   section?: string;
-  /** Local calendar days, YYYY-MM-DD; `end` is exclusive, as Mermaid draws it. */
+  /** Local calendar days, YYYY-MM-DD. `end` is where Mermaid schedules from (exclusive). */
   start: string;
   end: string;
+  /** Where Mermaid draws the bar's end: before the excluded days that `end` skips. */
+  drawEnd: string;
+  /** The day Mermaid centers a milestone on: halfway between start and end. */
+  mid: string;
   /** Whether either end falls inside a day, which a day-based axis rounds away. */
   partialDay: boolean;
   after: string[];
@@ -278,6 +282,8 @@ function ganttSnapshot(call: (name: string) => unknown): GanttSnapshot {
       section: optionalString(t.section),
       start: localDay(start),
       end: localDay(end),
+      drawEnd: localDay(t.renderEndTime instanceof Date ? t.renderEndTime : end),
+      mid: localDay(new Date((start.getTime() + end.getTime()) / 2)),
       partialDay: inDay(start) || inDay(end),
       after,
       done: t.done === true,

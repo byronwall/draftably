@@ -127,6 +127,15 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   // --- Creating objects ------------------------------------------------------------------------
 
   function addNode(partial: edits.NewNode = {}, at: Point = s.canvasCenter(), edit = false) {
+    // A timeline or one of its bands has no room for an undated box; a row is a dated source line.
+    const parent = partial.parentId ?? 'root';
+    if (
+      s.doc.layout.timelines?.some(t => t.scope === parent) ||
+      (parent !== 'root' && onTimeline(s.doc, parent))
+    ) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return '';
+    }
     let id = '';
     s.transact('Add shape', d => {
       id = edits.addNode(d, partial, at);

@@ -6,7 +6,7 @@ import type { Diagnostic } from '@draftably/runtime';
  * jsdom in one worker thread per process. The parser picks the family; this only skips the worker
  * for fences that are plainly another family.
  */
-const CANDIDATE = /^(?:flowchart|graph|sequenceDiagram)\b/;
+const CANDIDATE = /^(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/;
 
 export function isMermaidCandidate(text: string): boolean {
   const lines = text.replace(/^\uFEFF/, '').split('\n');
@@ -120,8 +120,20 @@ async function runWorker(): Promise<void> {
       const parsed = await parse(text);
       const snapshot = parsed.ok ? parsed.snapshot : undefined;
       // Mermaid draws no heading unless the source has a title, so only alt text names the family.
-      const title = snapshot?.family === 'sequence' ? (snapshot.title ?? '') : '';
-      const alt = title || (snapshot?.family === 'sequence' ? 'Sequence diagram' : 'Flowchart');
+      const family = snapshot?.family;
+      const title =
+        family === 'sequence' || family === 'gantt' || family === 'timeline'
+          ? (snapshot!.title ?? '')
+          : '';
+      const alt =
+        title ||
+        (family === 'sequence'
+          ? 'Sequence diagram'
+          : family === 'gantt'
+            ? 'Gantt chart'
+            : family === 'timeline'
+              ? 'Timeline'
+              : 'Flowchart');
       const result = importMermaidFlow(parsed, plain, title);
       reply = {
         id,

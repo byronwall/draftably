@@ -797,7 +797,7 @@ native timelines, and the `@draftably/mermaid` drop-in draws them with Draftably
 | `Task :a1, 2025-01-06, 10d`                     | A row with the dates Mermaid computed (`excludes` and `after` applied) |
 | `after a1`                                      | The same dates, and a drawn arrow from `a1`                            |
 | `done` · `crit` · `active`                      | `progress=100` · `color=red` · not drawn                               |
-| `:milestone`                                    | A point row (`at=`)                                                    |
+| `:milestone`                                    | A point row (`at=`) on the day Mermaid centers it                      |
 | `:vert`                                         | A milestone rule                                                       |
 | `timeline` periods (`2004 : Facebook : Google`) | `scale=ordinal`, one point row per event                               |
 
