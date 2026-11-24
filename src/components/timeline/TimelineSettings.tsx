@@ -23,6 +23,7 @@ export function TimelineSettings() {
   const [label, setLabel] = createSignal('');
   const selected = () => nodes.find(o => o.id === id());
   const [today, setToday] = createSignal(model.timeline?.today ?? '');
+  const [view, setView] = createSignal(model.timeline?.view ?? 'focus');
   const [lo, setLo] = createSignal(model.timeline?.zoom?.[0] ?? '');
   const [hi, setHi] = createSignal(model.timeline?.zoom?.[1] ?? '');
   const [error, setError] = createSignal('');
@@ -119,6 +120,7 @@ export function TimelineSettings() {
     const doc = readSource(s.currentSource());
     remember();
     const root = timelineLayout(doc);
+    setAttr(root, 'view', view() === 'log' ? bare('log') : undefined);
     setAttr(root, 'today', today() ? bare(today()) : undefined);
     setAttr(root, 'zoom', lo() ? bare(lo() + '..' + hi()) : undefined);
     const invalid = writeTimelineDrafts(doc, drafts);
@@ -149,6 +151,16 @@ export function TimelineSettings() {
       <form class="timeline-settings" novalidate onSubmit={save}>
         <fieldset>
           <legend>Time axis</legend>
+          <label>
+            Presentation
+            <select
+              value={view()}
+              onChange={e => setView(e.currentTarget.value === 'log' ? 'log' : 'focus')}
+            >
+              <option value="focus">Focus + context</option>
+              <option value="log">Event log</option>
+            </select>
+          </label>
           <label>
             Snapshot date
             <input

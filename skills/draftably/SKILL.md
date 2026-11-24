@@ -567,3 +567,5 @@ sections and `draftably docs legend` prints one. The package's `examples/` folde
 twenty diagrams to copy from.
 
 Date graph or code nodes with `at=DATE` or `from=DATE to=DATE` for an editor timeline. Keep ordinary edges to show calls and causes. Use the timeline root recipe with `today=DATE` and `zoom=START..END` to show open spans and a detail window. Use `sequence` for message order and the Timeline view for elapsed days.
+
+Add `view=log` on a timeline to group events by date and label calendar gaps.

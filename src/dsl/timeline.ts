@@ -18,6 +18,7 @@ export interface TimelineRow extends TimelineDates {
   key: string;
 }
 export interface TimelineOptions {
+  view?: 'focus' | 'log';
   today?: string;
   zoom?: [string, string];
 }
@@ -48,6 +49,9 @@ export function readTimelineOptions(attrs: Map<string, Word>, fail: Fail): Timel
   const today = attrs.get('today')?.value;
   const zoom = attrs.get('zoom')?.value;
   const result: TimelineOptions = {};
+  const view = attrs.get('view')?.value;
+  if (view === 'log' || view === 'focus') result.view = view;
+  else if (view !== undefined) fail('Use view=focus or view=log.');
   if (today !== undefined) result.today = dateValue(today, fail);
   if (zoom !== undefined && zoom !== 'none') {
     const parts = zoom.split('..');

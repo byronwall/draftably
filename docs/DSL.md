@@ -1793,3 +1793,5 @@ Use `layout root timeline` to draw a date axis on the diagram canvas. The same d
 Write `at=YYYY-MM-DD` for a point, or `from=DATE to=DATE` for a span. Prefix an uncertain start with `?` to mean “before this date.” Use `to=open` with a snapshot date. Put partial fixes in a comma-separated `steps=` list inside the span. A release point accepts `milestone=on`. Rows accept `key=`, `introduced-by=`, `fixed-by=`, and `platforms=`. A group supplies the row band. Undated nodes remain part of the graph.
 
 Use `layout root timeline today=2025-11-23 zoom=2025-11-03..2025-11-23` to add a snapshot and a detail window. Open the **Number formatting · release investigation** example to follow a fix into a named code range.
+
+Add `view=log` to the same layout to group events by date. The event log labels elapsed days between groups. In the editor choose **Timeline settings → Presentation** to switch between the two drawings.

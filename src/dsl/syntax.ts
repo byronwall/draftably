@@ -1086,7 +1086,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                   'gap',
                   ...(recipe === 'flow' ? ['fold'] : []),
                   ...(recipe === 'sequence' ? ['activations'] : []),
-                  ...(recipe === 'timeline' ? ['today', 'zoom'] : []),
+                  ...(recipe === 'timeline' ? ['today', 'zoom', 'view'] : []),
                   ...common,
                 ],
           );
