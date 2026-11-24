@@ -29,7 +29,8 @@ import { renderSvg } from './svg';
 
 /** One change to the source: attributes to set (a value) or remove (null) on one statement. */
 export type Edit =
-  | { kind: 'layout'; scope: string; attrs: Record<string, string | null> }
+  /** A `recipe` (such as `cells`) replaces the line's recipe or engine and its settings. */
+  | { kind: 'layout'; scope: string; recipe?: string; attrs: Record<string, string | null> }
   | { kind: 'routing'; attrs: Record<string, string | null> }
   | { kind: 'compare'; attrs: Record<string, string | null> }
   /** Attributes on a group's declaration, such as `frame=soft`. */
@@ -97,8 +98,12 @@ export const fitError = (m: Pick<Metrics, 'width' | 'height'>, fit: Fit) =>
 /** Settings a built-in recipe keeps when an engine replaces it. */
 const KEPT = ['direction', 'fold', 'min-width', 'min-height'];
 
-function merged(s: Statement, attrs: Record<string, string | null>): Statement {
+function merged(s: Statement, attrs: Record<string, string | null>, recipe?: string): Statement {
   const next: Statement = { ...s, args: [...s.args], attrs: [...s.attrs] };
+  if (recipe) {
+    next.args = [next.args[0], bare(recipe)];
+    next.attrs = [];
+  }
   // An engine replaces a built-in recipe (`layout root flow gap=48`): drop the recipe and its gap.
   if ('engine' in attrs && s.command === 'layout' && s.args.length > 1) {
     next.args = next.args.slice(0, 1);
@@ -155,7 +160,8 @@ export function applyEdits(source: string, edits: Edit[]) {
         : edit.kind === 'group'
           ? declaration(doc, edit.id)
           : statements(doc).find(s => s.command === edit.kind);
-    if (existing) replace(existing, merged(existing, edit.attrs));
+    const recipe = edit.kind === 'layout' ? edit.recipe : undefined;
+    if (existing) replace(existing, merged(existing, edit.attrs, recipe));
     // A missing group has nothing to change; layout, routing and compare lines are added.
     else if (edit.kind !== 'group') {
       const next =
@@ -163,7 +169,9 @@ export function applyEdits(source: string, edits: Edit[]) {
           ? // Without an engine a layout line needs a recipe; `flow` is the one with a direction.
             fresh(
               'layout',
-              edit.attrs.engine ? [bare(edit.scope)] : [bare(edit.scope), bare('flow')],
+              edit.attrs.engine && !recipe
+                ? [bare(edit.scope)]
+                : [bare(edit.scope), bare(recipe ?? 'flow')],
               edit.attrs,
             )
           : fresh(edit.kind, [], edit.attrs);
@@ -291,7 +299,13 @@ export const titleOf = (edits: Edit[]) =>
     .map(e =>
       e.kind === 'drop'
         ? `no line ${e.line}`
-        : (e.kind === 'group' ? `${e.id} ` : e.kind === 'compare' ? 'compare ' : '') +
+        : (e.kind === 'group'
+            ? `${e.id} `
+            : e.kind === 'compare'
+              ? 'compare '
+              : e.kind === 'layout' && e.recipe
+                ? `${e.scope} ${e.recipe} `
+                : '') +
           Object.entries(e.attrs)
             .map(([k, v]) =>
               v === null ? `no ${k}` : k === 'engine' || k === 'direction' ? v : `${k}=${v}`,
@@ -545,6 +559,8 @@ const target = (e: AttrEdit) =>
  * - **Fewer containers:** soften leaf groups and groups whose members span more than one rank,
  *   never the group that holds most of the drawing. Only groups with no `layout` or position
  *   lines of their own qualify, so applying it changes only `group` lines.
+ * - **Cells for a list:** a group of three or more plain boxes, none an edge end, packs into
+ *   `cells columns=2`; edges still reach the group. Its own `layout` line changes, or one is added.
  */
 export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
   const m = scene.model,
@@ -570,6 +586,24 @@ export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
         });
   const root = m.layouts.find(l => l.scope === 'root');
   if (root && ['lanes', 'sequence', 'timeline'].includes(root.algorithm)) return out;
+  const ends = new Set(m.edges.flatMap(e => [e.source, e.target])),
+    hinted = new Set(m.hints.flatMap(h => ('ids' in h ? h.ids : [h.id]))),
+    plain = (o: (typeof m.objects)[number]) =>
+      o.type === 'node' &&
+      !o.code &&
+      (o.shape === 'box' || o.shape === 'pill') &&
+      !ends.has(o.id) &&
+      !hinted.has(o.id);
+  for (const g of m.objects) {
+    if (g.type !== 'group' || g.frame) continue;
+    const own = m.layouts.find(l => l.scope === g.id),
+      kids = m.objects.filter(o => o.parent === g.id);
+    if (own?.algorithm === 'cells' || kids.length < 3 || !kids.every(plain)) continue;
+    out.push({
+      edits: [{ kind: 'layout', scope: g.id, recipe: 'cells', attrs: { columns: '2' } }],
+      why: `pack the ${kids.length} boxes in ${g.id}, none an edge end, into a grid`,
+    });
+  }
   const groups = m.objects.filter(o => o.type === 'group'),
     nodes = m.objects.filter(o => o.type === 'node'),
     parent = new Map(m.objects.map(o => [o.id, o.parent]));

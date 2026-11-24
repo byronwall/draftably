@@ -47,7 +47,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
    what wins a tie. When a variant is close, `--from v2` tries small changes around it.
    `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
-   as panels, and to soften groups (`frame=soft`) for fewer containers.
+   as panels, to soften groups (`frame=soft`) for fewer containers, and to pack a group of boxes
+   with no edges of their own into `cells columns=2`.
    **For a crossing** (`check --metrics` warns `Edges a and b cross.`): first put boxes in the order of the
    boxes they connect to (`node` line order or an `order` line), then try
    `--try ordering=stable,crossings` or `--try crossing-penalty=360,900`. Some crossings cannot be
