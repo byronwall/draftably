@@ -19,6 +19,7 @@ import { noteMarkup, placeNotes } from '../model/note';
 import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
+import { timelineSvg } from '../model/timeline';
 import {
   CODE_ADVANCE,
   CODE_TYPE,
@@ -343,6 +344,9 @@ function sceneMarkup(
     routes = shared ? shared.filter(r => kept.has(r.id)) : routesOf(doc);
   const out = new SvgChunks(opts.maxOutputBytes),
     diff = isDiff(doc);
+  // Timeline rows draw as the timeline's marks, not as boxes.
+  const timelines = doc.layout.timelines ?? [],
+    onTimeline = new Set(timelines.flatMap(t => t.ids));
   const backdrop = sequenceBackdrop(doc, look);
   out.push(...backdrop.panel);
   for (const g of vg.groups) {
@@ -410,6 +414,19 @@ function sceneMarkup(
       ),
     );
   }
+  for (const t of timelines)
+    out.push(
+      `<g transform="translate(${t.x},${t.y})">`,
+      timelineSvg(
+        look,
+        t,
+        t.ids.flatMap(id => {
+          const r = rects.get(id);
+          return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - t.x, y: r.y - t.y } }] : [];
+        }),
+      ),
+      '</g>',
+    );
   // Phases go over the groups' column bands, faint enough that both read where they cross.
   out.push(...backdrop.phases);
   // Sequence participants' lifelines, under the message lines.
@@ -457,6 +474,7 @@ function sceneMarkup(
     out.push('</g>');
   }
   for (const n of vg.nodes) {
+    if (onTimeline.has(n.id)) continue;
     const r = rects.get(n.id)!,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),

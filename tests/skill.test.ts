@@ -56,6 +56,9 @@ describe('agent skill', () => {
       'min-height',
       'activations',
       'columns',
+      'today',
+      'zoom',
+      'width',
     ];
     expect(used.filter(s => !known.has(s) && !common.includes(s))).toEqual([]);
   });

@@ -426,6 +426,18 @@ export function normalize(input: unknown): Diagram {
       ...(seq.bars ? { bars: true as const } : {}),
     };
   }
+  // A timeline's marks come from the compiler; keep them when they have their shape.
+  const timelines = (Array.isArray(data.layout?.timelines) ? data.layout.timelines : []).filter(
+    (t: Raw) =>
+      typeof t?.scope === 'string' &&
+      finite(t.x) &&
+      finite(t.y) &&
+      Array.isArray(t.ids) &&
+      ['x', 'y', 'w', 'h'].every(k => finite(t.bounds?.[k])) &&
+      Array.isArray(t.under) &&
+      Array.isArray(t.over),
+  );
+  if (timelines.length) out.layout.timelines = JSON.parse(JSON.stringify(timelines));
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))
     : [];

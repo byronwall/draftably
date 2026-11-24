@@ -686,6 +686,60 @@ layout root sequence
 Outside a sequence, a message ID in `near=` is an error. If a node and a message share an ID, the
 note goes beside the node.
 
+## Timelines
+
+A timeline places things on a real date axis: when each bug arrived and when it was fixed, a
+release history, an incident. Equal time takes equal width. A timeline is a group like any other,
+so it sits in the same drawing as boxes, code and lines.
+
+```draft
+group history "Bug history"
+layout history timeline today=2025-11-23
+
+group open "Still open" in=history color=red
+group fixed "Fixed" in=history color=teal
+milestone v2 "v2.0.0" at=2025-11-03 in=history
+
+node b6 "Mixed number comparison fails" in=open key=B6 from=2025-02-27 to=open detail="#142"
+node c2 "Divide by zero returned NaN" in=fixed key=C2 from=?2025-11-03 to=2025-11-16 steps=2025-11-04 end-label="#538"
+
+node planner "Query planner"
+edge fix c2 -> planner "fixed by"
+```
+
+**Try it:** add `zoom=2025-11-03..2025-11-23` to the layout line. The fixed band moves to a detail
+panel at 20 times the scale, under an overview with the window shaded.
+
+### Timelines reference
+
+- `layout <group> timeline` makes the group a timeline. `layout root timeline` makes the whole
+  drawing one. Options: `today=DATE` (draws a solid rule, and ends `to=open` spans),
+  `zoom=START..END` (an overview plus an enlarged detail panel), `width=` (the axis, 880 by
+  default).
+- Each node in the timeline is a row. Give a point as `at=DATE`, or a span as `from=DATE to=DATE`.
+  Dates are `YYYY-MM-DD`.
+  - `to=open`: still going; the bar ends at `today` with an arrowhead.
+  - `from=?DATE`: began some time before DATE; a dotted lead-in ends there.
+  - `steps=DATE,DATE`: partial steps, drawn as hollow circles inside the span.
+- Row text: `key=` (an ID column, bold in the row's color), `detail=` (a second line under the
+  name), `tag=` (a column after the name, such as platforms), `start-label=` (above the start),
+  `end-label=` (beside the end, such as the fixing PR).
+- A group directly inside a timeline is a band: its title heads its rows, and its color is the
+  rows' default. A band with `color=auto` takes the next color in a fixed order.
+- `milestone id "label" at=DATE in=<timeline>` draws a dashed rule across every band, with its tag
+  above the axis. Tags that would touch move up a rail.
+- With `zoom=`, a band whose dates all fall in the window draws in the detail panel. The other
+  bands stay in the overview. The detail heading states the magnification.
+- Ticks (days, weeks, months or years) come from the span and the width, so labels never
+  collide. A legend lists only the marks the drawing uses.
+- A row's box spans the whole timeline, so a line from a row leaves past every bar and label.
+  A line may join a row to anything outside its timeline, but not two rows of one timeline.
+- Rows are placed by date, so `near`, `nudge`, `stay`, `pin`, `size` and `align` on a row are
+  errors, and so is a date on a node outside a timeline.
+
+Pick `timeline` when elapsed time matters (how long, how far apart). Pick `sequence` when only the
+order of messages matters.
+
 ## Cells
 
 Cells draw a group as one object made of parts that touch, such as the fields of a record or the

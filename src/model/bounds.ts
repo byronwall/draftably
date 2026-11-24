@@ -38,6 +38,8 @@ export function drawingBounds(
     if (r) boxes.push(r);
   }
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
+  for (const t of doc.layout.timelines ?? [])
+    boxes.push({ ...t.bounds, x: t.x + t.bounds.x, y: t.y + t.bounds.y });
   for (const route of routes) {
     for (const p of route.points)
       boxes.push({ x: p.x - ROUTE_INK, y: p.y - ROUTE_INK, w: ROUTE_INK * 2, h: ROUTE_INK * 2 });

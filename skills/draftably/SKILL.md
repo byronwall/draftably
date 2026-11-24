@@ -237,6 +237,16 @@ Good defaults:
   waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
+- Things placed in time (bug history, releases, an incident): `layout <group> timeline
+today=DATE`, or `layout root timeline` for the whole drawing. Each node in the group is a row:
+  `at=DATE` for a point, `from=DATE to=DATE` for a span (`to=open` runs to `today`,
+  `from=?DATE` means it began before DATE, `steps=D1,D2` marks partial steps). Groups inside
+  the timeline are bands. `milestone id "v2.0" at=DATE in=<timeline>` draws a release rule
+  across every band. Row text: `key=`, `detail=`, `tag=`, `start-label=`, `end-label=`.
+  `zoom=START..END` adds an enlarged detail panel for a crowded stretch; bands wholly inside it
+  move there. Rows can join boxes outside the timeline by edges (a fix to the code it touched),
+  but not other rows of the same timeline. No `near`/`pin`/`size` on rows; dates place them.
+  **Fits** elapsed time and durations. **Doesn't fit** order alone; use `sequence`.
 - One object made of parts, a table, or a list of boxes with no edges of their own:
   `layout groupId cells` (see Cells). **Fits** a request body, a record, a schema, a checklist.
   **Doesn't fit** steps that happen in order; those are nodes and edges.

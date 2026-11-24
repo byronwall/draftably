@@ -77,7 +77,9 @@ function QuickAddButtons() {
       !s.drag() &&
       !s.inlineEditId() &&
       !s.connectFrom() &&
-      !s.timeline();
+      !s.timeline() &&
+      // A timeline row adds its neighbours by date in the source, not beside its box.
+      !s.doc.layout.timelines?.some(t => t.ids.includes(id));
     return visible ? id : null;
   };
   return (

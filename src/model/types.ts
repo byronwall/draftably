@@ -9,6 +9,7 @@ import type { DiagramAppearance, Shade } from './appearance';
 import type { CodeBlock } from './code';
 import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
+import type { PlacedTimeline } from './timeline';
 
 export type ShapeKind =
   | 'box'
@@ -285,6 +286,8 @@ export interface Diagram {
     intent: LayoutIntent;
     /** A sequence diagram's frame and the row bands of its `phase` statements. */
     sequence?: SequenceLayout;
+    /** Each timeline's drawing: rows, bands, axis and rules as one display list. */
+    timelines?: PlacedTimeline[];
   };
   styles: Record<string, NodeStyle>;
   collapsed: string[];

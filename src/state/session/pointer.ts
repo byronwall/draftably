@@ -390,6 +390,11 @@ export function createPointer(
       if (e.shiftKey) s.selectItems([objectId], { add: true, toggle: true });
       else if (!s.isSelected(objectId)) s.setSelection([objectId]);
       if (!s.isSelected(objectId)) return;
+      // A timeline places rows by their dates, so a row selects but never drags.
+      if (s.doc.layout.timelines?.some(t => t.ids.includes(objectId))) {
+        s.focusCanvas();
+        return;
+      }
       startObjectDrag(e, canvas, objectId, doubleCandidate);
       return;
     }
