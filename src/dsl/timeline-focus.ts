@@ -197,8 +197,19 @@ export function focusPlan(
     overviewEndY = 118;
   const detailTop = 164,
     axisY = 202,
-    rowsY = 224,
-    rowH = 52;
+    rowsY = 224;
+  const rowHeights = rows.map(row =>
+    row.steps?.some(step => {
+      const date = isoDay(step)!;
+      return date >= focus.start && date <= focus.end;
+    })
+      ? 82
+      : 52,
+  );
+  const rowTops = rowHeights.map(
+    (_, index) => rowsY + rowHeights.slice(0, index).reduce((sum, height) => sum + height, 0),
+  );
+  const chartBottom = rowsY + rowHeights.reduce((sum, height) => sum + height, 0);
   const contextTitle = `Full history  ${dateLabel(history.start)} — ${dateLabel(history.end)}`;
   text(marks, 24, 28, 'Timeline', 18, 'ink', { weight: 700 });
   text(marks, 24, 49, 'Focus + context', 11, 'muted');
@@ -307,7 +318,8 @@ export function focusPlan(
   // Detail is a readable list even when a row has no visible date inside the selected window.
   line(marks, 20, detailTop, width - 20, detailTop, 'grid');
   rows.forEach((row, index) => {
-    const y = rowsY + index * rowH;
+    const y = rowTops[index],
+      rowH = rowHeights[index];
     boxes[row.id] = { x: 18, y: y - 4, w: width - 36, h: rowH };
     rect(marks, 18, y - 4, width - 36, rowH, 'paper', {
       radius: 3,
@@ -324,7 +336,7 @@ export function focusPlan(
   const focusLabels = visibleTickLabels(focusTicks, focus, windowLeft, windowRight, annotationFace);
   for (const t of focusTicks) {
     const x = chartX + pct(t, focus) * chartW;
-    line(marks, x, axisY - 9, x, rowsY + rows.length * rowH, 'grid', {
+    line(marks, x, axisY - 9, x, chartBottom, 'grid', {
       strokeWidth: 1,
     });
   }
@@ -335,7 +347,7 @@ export function focusPlan(
     const d = isoDay(release.at!)!;
     if (d < focus.start || d > focus.end) continue;
     const x = chartX + pct(d, focus) * chartW;
-    line(marks, x, detailTop + 7, x, rowsY + rows.length * rowH, 'release', {
+    line(marks, x, detailTop + 7, x, chartBottom, 'release', {
       dash: true,
       id: release.id,
       title: `${release.label} release`,
@@ -343,14 +355,14 @@ export function focusPlan(
   }
   if (options.today && snapshot >= focus.start && snapshot <= focus.end) {
     const x = chartX + pct(snapshot, focus) * chartW;
-    line(marks, x, detailTop + 7, x, rowsY + rows.length * rowH, 'accent', {
+    line(marks, x, detailTop + 7, x, chartBottom, 'accent', {
       strokeWidth: 2,
       title: 'Snapshot date',
     });
   }
 
   rows.forEach((row, index) => {
-    const y = rowsY + index * rowH;
+    const y = rowTops[index];
     text(marks, 28, y + 11, row.band.toUpperCase(), 8, 'muted', {
       weight: 700,
       id: row.id,
@@ -511,6 +523,8 @@ export function focusPlan(
           });
         }
       }
+      const stepLabels: Array<{ x: number; label: string; step: string; lane: number }> = [];
+      let groupedSteps = false;
       for (const [stepIndex, step] of (row.steps ?? []).entries()) {
         const d = isoDay(step)!;
         if (d < focus.start || d > focus.end) continue;
@@ -529,19 +543,42 @@ export function focusPlan(
           marks.some(mark => {
             if (mark.kind !== 'text' || mark.id !== row.id || mark.y !== baseline) return false;
             const width = measureText(mark.text, { face: annotationFace, size: mark.size ?? 14 });
+            const anchor = mark.anchor ?? 'start';
             const markLeft =
-              mark.x - (mark.anchor === 'end' ? width : mark.anchor === 'middle' ? width / 2 : 0);
+              mark.x - (anchor === 'end' ? width : anchor === 'middle' ? width / 2 : 0);
             const markRight =
-              mark.x + (mark.anchor === 'start' ? width : mark.anchor === 'middle' ? width / 2 : 0);
+              mark.x + (anchor === 'start' ? width : anchor === 'middle' ? width / 2 : 0);
             return markRight + 3 > left && right + 3 > markLeft;
+          }) ||
+          stepLabels.some(previous => {
+            if (lanes[previous.lane] !== baseline) return false;
+            const width = measureText(previous.label, { face: annotationFace, size: 8 });
+            return previous.x + width / 2 + 3 > left && right + 3 > previous.x - width / 2;
           });
         const preferred = stepIndex % 2 ? 1 : 0;
-        const lane = [preferred, 1 - preferred].find(index => !overlaps(lanes[index])) ?? preferred;
-        text(marks, x, lanes[lane], label, 8, 'muted', {
-          anchor: 'middle',
-          id: row.id,
-          title: `Step ${step}`,
+        const lane = [preferred, 1 - preferred].find(index => !overlaps(lanes[index]));
+        if (lane === undefined) groupedSteps = true;
+        else stepLabels.push({ x, label, step, lane });
+      }
+      if (groupedSteps) {
+        const dates = (row.steps ?? []).filter(step => {
+          const d = isoDay(step)!;
+          return d >= focus.start && d <= focus.end;
         });
+        const labels = dates.map(step => stepLabel(isoDay(step)!));
+        const list = `Steps · ${labels.join(' · ')}`;
+        const max = Math.floor((chartW - 8) / measureText('M', { face: annotationFace, size: 8 }));
+        text(marks, chartX + 4, y + 70, clipText(list, max), 8, 'muted', {
+          id: row.id,
+          title: `Steps: ${dates.join(', ')}`,
+        });
+      } else {
+        for (const { x, label, step, lane } of stepLabels)
+          text(marks, x, y + (lane ? 40 : 10), label, 8, 'muted', {
+            anchor: 'middle',
+            id: row.id,
+            title: `Step ${step}`,
+          });
       }
     } else {
       text(marks, chartX + chartW / 2, cy + 3, '? date unknown', 9, 'muted', {
@@ -551,5 +588,5 @@ export function focusPlan(
     }
   });
 
-  return { width, height: rowsY + rows.length * rowH + 18, marks, boxes };
+  return { width, height: chartBottom + 18, marks, boxes };
 }

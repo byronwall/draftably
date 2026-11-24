@@ -134,6 +134,53 @@ describe('timeline focus geometry', () => {
     expect(step).toMatchObject({ kind: 'text', y: 264 });
   });
 
+  it('measures clipped start labels from their default start anchor', () => {
+    const plan = focusPlan(
+      [
+        row({
+          id: 'release',
+          label: 'Release',
+          from: '?2025-11-02',
+          to: '2025-11-16',
+          steps: ['2025-11-04'],
+        }),
+      ],
+      { zoom: ['2025-11-03', '2025-11-23'] },
+    );
+    const clipped = plan.marks.find(
+      m => m.kind === 'text' && m.id === 'release' && m.text.startsWith('← before'),
+    );
+    const step = plan.marks.find(
+      m => m.kind === 'text' && m.id === 'release' && m.title === 'Step 2025-11-04',
+    );
+    expect(clipped).toMatchObject({ kind: 'text', y: 234, x: 315 });
+    expect(step).toMatchObject({ kind: 'text', y: 264 });
+  });
+
+  it('groups dense step labels below endpoint labels without a focus window', () => {
+    const plan = focusPlan(
+      [
+        row({
+          id: 'compare',
+          label: 'Comparison',
+          from: '?2025-11-03',
+          to: '2025-11-16',
+          steps: ['2025-11-04', '2025-11-05'],
+        }),
+      ],
+      { today: '2025-11-23' },
+    );
+    const grouped = plan.marks.find(
+      m => m.kind === 'text' && m.id === 'compare' && m.title === 'Steps: 2025-11-04, 2025-11-05',
+    );
+    const stepMarks = plan.marks.filter(
+      m => m.id === 'compare' && m.title?.startsWith('Step 2025-11-'),
+    );
+    expect(grouped).toMatchObject({ kind: 'text', y: 294 });
+    expect(stepMarks).toHaveLength(4);
+    expect(plan.boxes.compare.h).toBe(82);
+  });
+
   it('keeps out-of-window today and release guides out of the detail edges', () => {
     const rows = [
       row({

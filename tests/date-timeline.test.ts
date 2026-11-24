@@ -48,7 +48,7 @@ it('keeps timeline row hit targets behind dated marks', async () => {
   );
   const doc = normalize(JSON.parse(JSON.stringify(projectScene(scene))));
   const markup = timelineMarkup(doc, resolveAppearance(doc.appearance));
-  const fill = markup.indexOf('<rect x="18" y="220" width="944" height="52"');
+  const fill = markup.indexOf('<rect x="18" y="220" width="944" height="82"');
   const target = markup.indexOf('<rect data-timeline-id="item"');
   const mark = markup.indexOf('<g data-timeline-id="item"><title>Step 2025-11-04</title>');
   expect(fill).toBeGreaterThan(-1);
