@@ -107,15 +107,8 @@ function addBox(
   id: string,
   box: { x: number; y: number; w: number; h: number },
 ) {
-  const prior = boxes[id];
-  boxes[id] = prior
-    ? {
-        x: Math.min(prior.x, box.x),
-        y: Math.min(prior.y, box.y),
-        w: Math.max(prior.x + prior.w, box.x + box.w) - Math.min(prior.x, box.x),
-        h: Math.max(prior.y + prior.h, box.y + box.h) - Math.min(prior.y, box.y),
-      }
-    : box;
+  // Each occurrence carries its own item ID. One box anchors keyboard focus and reveal.
+  if (!Object.hasOwn(boxes, id)) boxes[id] = box;
 }
 
 function text(
@@ -266,7 +259,7 @@ function drawSnapshot(
 
 export function logPlan(rows: TimelineRow[], options: TimelineOptions): TimelinePlan {
   const marks: TimelineMark[] = [];
-  const boxes: TimelinePlan['boxes'] = {};
+  const boxes: TimelinePlan['boxes'] = Object.create(null);
   text(marks, 'EVENT LOG', LEFT, 19, { size: 9, weight: 750, tone: 'muted' });
   text(marks, 'Events by date', LEFT, 39, {
     size: 16,
