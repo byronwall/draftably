@@ -171,6 +171,14 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     if (ids[0] && isEdge(s.doc, ids[0]) && !from && !sibling && !at) return insertStep(ids[0]);
     const source = from || ids.find(id => findNode(s.doc, id)) || null,
       container = ids.find(id => findGroup(s.doc, id));
+    // A timeline places rows by their dates, so a box can't be added beside or inside one; a
+    // new row is a dated line in the source.
+    const dated = (id: string | null | undefined) =>
+      !!id && (onTimeline(s.doc, id) || !!s.doc.layout.timelines?.some(t => t.scope === id));
+    if (dated(source) || (!source && dated(container))) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return;
+    }
     let parentId: string | null | undefined;
     let target = at;
     if (target) {

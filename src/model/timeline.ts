@@ -3,7 +3,13 @@
  * both renderers, the editor canvas and the SVG export, draw the same marks, so they cannot drift.
  * Colors stay semantic until drawing time, so a dark color scheme repaints without a recompile.
  */
-import { mixColors, swatchFor, type ResolvedAppearance } from './appearance';
+import {
+  ensureContrast,
+  mixColors,
+  swatchFor,
+  type ResolvedAppearance,
+  type Shade,
+} from './appearance';
 import type { Rect } from './types';
 
 /** What a mark is painted with: a theme role, or a color family at a strong or soft step. */
@@ -14,7 +20,7 @@ export type TimelineInk =
   | 'rule'
   | 'shade'
   | 'canvas'
-  | { family: string; tone?: 'strong' | 'ink' | 'soft' | 'track' };
+  | { family: string; tone?: 'strong' | 'ink' | 'soft' | 'track' | 'tint' };
 
 export type TimelineFont = 'name' | 'detail' | 'key' | 'band' | 'small' | 'label' | 'caps';
 
@@ -62,6 +68,8 @@ export interface PlacedTimeline extends TimelinePlan {
 export interface TimelinePlan {
   /** The area every mark covers, in world units. */
   bounds: Rect;
+  /** Where each row, band and milestone draws its title, so the editor edits it in place. */
+  titles?: Record<string, { x: number; y: number; w: number; font: TimelineFont }>;
   /** Drawn under the rows (grid, shading, rules) and over them (bars, labels). */
   under: TimelineMark[];
   over: TimelineMark[];
@@ -81,7 +89,7 @@ export function timelineFont(look: ResolvedAppearance, font: TimelineFont) {
     case 'band':
       return { ...look.title, size: look.title.size + 3 };
     case 'detail':
-      return { ...look.annotation, size: look.annotation.size + 0.5 };
+      return look.annotation;
     case 'label':
       return { ...look.detail, size: look.annotation.size + 1 };
     case 'caps':
@@ -91,46 +99,57 @@ export function timelineFont(look: ResolvedAppearance, font: TimelineFont) {
   }
 }
 
-/** A concrete color for an ink in this appearance. */
-export function timelineColor(look: ResolvedAppearance, ink: TimelineInk): string {
+/**
+ * A concrete color for an ink, drawn on `backdrop`: the canvas, or the fill of the group that
+ * holds the timeline. Every tone is measured against that backdrop, so a timeline inside a group
+ * reads as well as one on the page:
+ * - bars and marks (`strong`) keep 3:1, and text in a family color (`ink`) keeps 4.5:1;
+ * - a progress track is the row's color faded 70% into the backdrop, and a period's wash 89%,
+ *   so both stay visible on any fill without competing with the bars;
+ * - `canvas` is the backdrop itself, so label backings and ring centers vanish into it.
+ */
+export function timelineColor(
+  look: ResolvedAppearance,
+  ink: TimelineInk,
+  backdrop: string = look.canvas,
+): string {
   if (typeof ink === 'object') {
-    const tone = ink.tone ?? 'strong',
-      shade =
-        tone === 'soft'
-          ? look.dark
-            ? 900
-            : 100
-          : tone === 'track'
-            ? look.dark
-              ? 800
-              : 200
-            : tone === 'ink'
-              ? look.dark
-                ? 300
-                : 700
-              : look.dark
-                ? 400
-                : 600;
-    // A file's own family may define other shades only: take the nearest one it has.
-    const have = [...(look.families.get(ink.family)?.keys() ?? [])];
-    const near = have.length
-      ? have.reduce((a, b) => (Math.abs(b - shade) < Math.abs(a - shade) ? b : a))
-      : shade;
-    return swatchFor(look, ink.family, near as typeof shade).fill;
+    const tone = ink.tone ?? 'strong';
+    const family = (shade: number) => {
+      // A file's own family may define other shades only: take the nearest one it has.
+      const have = [...(look.families.get(ink.family)?.keys() ?? [])];
+      const near = have.length
+        ? have.reduce((a, b) => (Math.abs(b - shade) < Math.abs(a - shade) ? b : a))
+        : shade;
+      return swatchFor(look, ink.family, near as Shade).fill;
+    };
+    const strong = ensureContrast(family(look.dark ? 400 : 600), backdrop, 3);
+    switch (tone) {
+      case 'ink':
+        return ensureContrast(family(look.dark ? 300 : 700), backdrop, 4.5);
+      case 'track':
+        return mixColors(backdrop, strong, look.dark ? 0.38 : 0.3);
+      case 'tint':
+        return mixColors(backdrop, strong, look.dark ? 0.16 : 0.11);
+      case 'soft':
+        return family(look.dark ? 900 : 100);
+      default:
+        return strong;
+    }
   }
   switch (ink) {
     case 'text':
       return look.text;
     case 'muted':
-      return look.muted;
+      return ensureContrast(look.muted, backdrop, 4.5);
     case 'grid':
-      return mixColors(look.canvas, look.text, look.dark ? 0.12 : 0.07);
+      return mixColors(backdrop, look.text, look.dark ? 0.12 : 0.07);
     case 'rule':
-      return mixColors(look.canvas, look.text, look.dark ? 0.45 : 0.38);
+      return mixColors(backdrop, look.text, look.dark ? 0.45 : 0.38);
     case 'shade':
-      return mixColors(look.canvas, look.text, look.dark ? 0.1 : 0.05);
+      return mixColors(backdrop, look.text, look.dark ? 0.1 : 0.05);
     case 'canvas':
-      return look.canvas;
+      return backdrop;
   }
 }
 
@@ -153,7 +172,8 @@ export function validMark(m: unknown): m is TimelineMark {
         typeof ink === 'object' &&
         typeof ink.family === 'string' &&
         /^[\w-]+$/.test(ink.family) &&
-        (ink.tone === undefined || ['strong', 'ink', 'soft', 'track'].includes(ink.tone as string));
+        (ink.tone === undefined ||
+          ['strong', 'ink', 'soft', 'track', 'tint'].includes(ink.tone as string));
   if (!inkOk) return false;
   switch (v.k) {
     case 'line':
@@ -190,8 +210,8 @@ export function timelineOrigin(t: PlacedTimeline, scopeRect: Rect | undefined) {
 }
 
 /** One mark as SVG markup, for the string renderer. */
-export function markSvg(look: ResolvedAppearance, m: TimelineMark): string {
-  const c = timelineColor(look, m.ink);
+export function markSvg(look: ResolvedAppearance, m: TimelineMark, backdrop?: string): string {
+  const c = timelineColor(look, m.ink, backdrop);
   switch (m.k) {
     case 'line':
       return `<line x1="${m.x1}" y1="${m.y1}" x2="${m.x2}" y2="${m.y2}" stroke="${c}" stroke-width="${m.w}"${m.dash ? ` stroke-dasharray="${m.dash}"` : ''}${m.round ? ' stroke-linecap="round"' : ''}/>`;
@@ -219,11 +239,12 @@ export function timelineSvg(
   plan: TimelinePlan,
   rows: Array<{ id: string; rect: Rect }>,
   hit: (id: string, markup: string) => string = (_id, markup) => markup,
+  backdrop?: string,
 ): string {
   return [
     '<g class="timeline">',
-    ...plan.under.map(m => markSvg(look, m)),
-    ...plan.over.map(m => markSvg(look, m)),
+    ...plan.under.map(m => markSvg(look, m, backdrop)),
+    ...plan.over.map(m => markSvg(look, m, backdrop)),
     ...rows.map(({ id, rect: r }) =>
       hit(
         id,

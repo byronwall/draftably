@@ -37,7 +37,7 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     expect(xs).toHaveLength(3);
     expect(xs[1] - xs[0]).toBeCloseTo(xs[2] - xs[1], 6);
     // The span's end dot sits where B's dot sits: the same date, the same place.
-    const end = plan.over.find(m => m.k === 'dot' && m.r === 5.2 && typeof m.ink === 'object');
+    const end = plan.over.find(m => m.k === 'dot' && m.r === 5.6 && typeof m.ink === 'object');
     expect(end && end.k === 'dot' && end.x).toBeCloseTo(xs[1], 6);
   });
 
@@ -53,7 +53,7 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     const scene = checkSource(example('bug-timeline'));
     const texts = scene.timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
     expect(texts.some(t => t.includes('full history'))).toBe(true);
-    expect(texts.some(t => /enlarged \d+× per day/.test(t))).toBe(true);
+    expect(texts.some(t => /\d+× wider$/.test(t))).toBe(true);
     // The open bugs stay in the overview; November's fixes move to the detail panel below.
     expect(scene.byId.get('c1')!.y).toBeGreaterThan(scene.byId.get('b8')!.y + 100);
   });
@@ -131,9 +131,9 @@ group jan "Jan"
 group feb "Feb"
 node a "A" in=jan at=2025-01-01
 node b "B" in=feb at=2025-02-01`).timelines![0];
-    const caption = plan.over.find(m => m.k === 'text' && m.text.includes('per day'));
+    const caption = plan.over.find(m => m.k === 'text' && m.text.endsWith('wider'));
     const times = Number(
-      /enlarged ([\d.]+)×/.exec(caption && caption.k === 'text' ? caption.text : '')?.[1],
+      /([\d.]+)× wider/.exec(caption && caption.k === 'text' ? caption.text : '')?.[1],
     );
     // 31 days plus padding over 1 day plus padding: about 15, not 31.
     expect(times).toBeGreaterThan(12);
@@ -195,7 +195,7 @@ node y "Y" from=2025-01-31 to=+1m`);
     expect(at('y')).toBeLessThan(at('x'));
     // Progress: a full-length track and a solid part half as long.
     const bars = plan.timelines![0].over.filter(
-      m => m.k === 'line' && typeof m.ink === 'object' && m.w === 5 && m.y1 === m.y2,
+      m => m.k === 'line' && typeof m.ink === 'object' && m.w === 6 && m.y1 === m.y2,
     );
     expect(
       bars.some(m => m.k === 'line' && typeof m.ink === 'object' && m.ink.tone === 'track'),

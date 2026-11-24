@@ -215,9 +215,11 @@ const ROW = 34,
   NAME_MAX = 300,
   TAG_MAX = 170,
   PANEL_GAP = 40,
-  BAR = 5,
+  BAR = 6,
   /** Families a band with color=auto takes, in band order. */
-  AUTO_FAMILIES = ['blue', 'teal', 'amber', 'violet', 'rose', 'green', 'orange', 'sky'];
+  AUTO_FAMILIES = ['blue', 'teal', 'orange', 'violet', 'rose', 'green', 'amber', 'red'],
+  /** Periods wash in a cool color no band takes by default, so a period never reads as a bar. */
+  PERIOD = 'sky';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monthDay = (d: Date) => `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
@@ -350,7 +352,8 @@ export function layoutTimeline(
 ): { plan: TimelinePlan; rects: Map<string, Rect>; drawn: string[] } {
   const under: TimelineMark[] = [],
     over: TimelineMark[] = [],
-    rects = new Map<string, Rect>();
+    rects = new Map<string, Rect>(),
+    titles: NonNullable<TimelinePlan['titles']> = {};
   const w = (text: string, font: TimelineFont) => measureText(text, timelineFont(look, font));
   const text = (
     x: number,
@@ -563,9 +566,9 @@ export function layoutTimeline(
     }
     if (zoomed) {
       const caption = panel.detail
-        ? `${rangeText(zoom![0], zoom![1])} · enlarged ${formatTimes(
+        ? `${rangeText(zoom![0], zoom![1])} · ${formatTimes(
             (panels[0].d1 - panels[0].d0) / (panel.d1 - panel.d0),
-          )} per day`
+          )} wider`
         : `${rangeText(lo, hi)} · full history`;
       text(chartR, y + 8, caption, 'muted', 'caps', 'end');
       y += 22;
@@ -586,20 +589,18 @@ export function layoutTimeline(
       .map(o => {
         const x0 = X(Math.max(startOf(o), d0)),
           x1 = X(Math.min(endOf(o), d1));
-        return {
-          o,
-          x: (x0 + x1) / 2,
-          x0,
-          x1,
-          w: w(o.label, 'caps'),
-          period: o.when!.at === undefined,
-        };
+        const lw = w(o.label, 'caps'),
+          period = o.when!.at === undefined,
+          mid = (x0 + x1) / 2;
+        // A period's tag stays over the chart, even when the period runs off one end.
+        const x = period ? Math.min(Math.max(mid, chartX + lw / 2), chartR - lw / 2) : mid;
+        return { o, x, x0, x1, w: lw, period };
       })
       .sort((a, b) => a.x - b.x);
     const rails: number[] = [];
     const tagRail = tags.map(t => {
       let level = 0;
-      while ((rails[level] ?? -Infinity) > t.x - t.w / 2 - 8) level++;
+      while ((rails[level] ?? -Infinity) > t.x - t.w / 2 - 14) level++;
       rails[level] = t.x + t.w / 2;
       return level;
     });
@@ -654,6 +655,7 @@ export function layoutTimeline(
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
       text(t.x, ty, t.o.label, 'text', 'caps', 'middle');
+      titles[t.o.id] = { x: t.x - t.w / 2, y: ty, w: t.w, font: 'caps' };
       // A milestone's box is its tag, so it can be selected, and it is never smaller than the
       // least box a document holds (24 by 20).
       const bw = Math.max(24, t.w + 8);
@@ -668,6 +670,10 @@ export function layoutTimeline(
     panel.bands.forEach((band, bi) => {
       let bandY = y;
       // The panel's first band names itself on the axis row; later ones take a heading row.
+      if (band.g) {
+        const first = bi === 0 && !(options.headers && pi === 0);
+        titles[band.g.id] = { x: 0, y: first ? axisY - 9 : y + 13, w: gutter - 8, font: 'band' };
+      }
       if (band.g && bi === 0 && !(options.headers && pi === 0)) {
         bandY = axisY - AXIS_ROW;
         text(
@@ -715,6 +721,7 @@ export function layoutTimeline(
         const nameY = d.detail ? mid - 8 : mid;
         if (d.key) text(0, nameY, d.key, ink, 'key');
         text(keyCol, nameY, r.o.label, 'text', 'name', 'start', nameW);
+        titles[r.o.id] = { x: keyCol, y: nameY, w: nameW, font: 'name' };
         if (d.detail) text(keyCol, mid + 9, d.detail, 'muted', 'detail', 'start', nameW);
         if (d.tag) text(tagX, nameY, d.tag, 'muted', 'small', 'start', tagW);
 
@@ -725,7 +732,11 @@ export function layoutTimeline(
           over.push({ k: 'dot', x, y: mid, r: 2.2, ink: 'canvas' });
           const startLabel = labelOf(d.startLabel, d, false),
             endLabel = labelOf(d.endLabel, d, true);
-          if (startLabel) {
+          // A point's start label reads into the dot from the left, inside its own row; with no
+          // room before the chart's edge it sits above the dot.
+          if (startLabel && x - 12 - w(startLabel, 'small') >= chartX)
+            text(x - 12, mid, startLabel, ink, 'small', 'end', undefined, true);
+          else if (startLabel) {
             text(x, mid - 14, startLabel, ink, 'small', 'middle', undefined, true);
             right = Math.max(right, x + w(startLabel, 'small') / 2 + 4);
           }
@@ -737,6 +748,10 @@ export function layoutTimeline(
           const open = d.to === 'open';
           const xs = X(d.from!),
             xe = X(open ? today! : (d.to as number));
+          // A span too short to show a bar (one day on a long axis) draws as one event mark, not
+          // as an end dot hiding its own start ring.
+          const tiny =
+            !open && !d.fromUnknown && xe - xs < 6 && !d.steps.length && d.progress === undefined;
           if (d.fromUnknown) {
             over.push({
               k: 'line',
@@ -768,16 +783,19 @@ export function layoutTimeline(
             bar(barEnd, { family: r.family, tone: 'track' });
             if (d.progress > 0) bar(xs + (barEnd - xs) * d.progress, strong);
           } else bar(barEnd, strong);
-          if (!d.fromUnknown) {
-            over.push({ k: 'dot', x: xs, y: mid, r: 4.6, ink: strong });
-            over.push({ k: 'dot', x: xs, y: mid, r: 2.3, ink: 'canvas' });
+          if (!d.fromUnknown && !tiny) {
+            over.push({ k: 'dot', x: xs, y: mid, r: 5, ink: strong });
+            over.push({ k: 'dot', x: xs, y: mid, r: 2.5, ink: 'canvas' });
           }
           for (const s of d.steps) {
-            over.push({ k: 'dot', x: X(s), y: mid, r: 4.4, ink: strong });
-            over.push({ k: 'dot', x: X(s), y: mid, r: 2.4, ink: 'canvas' });
+            over.push({ k: 'dot', x: X(s), y: mid, r: 4.8, ink: strong });
+            over.push({ k: 'dot', x: X(s), y: mid, r: 2.6, ink: 'canvas' });
           }
           if (open) over.push({ k: 'path', d: arrowHead(xe + 4, mid), ink: strong });
-          else over.push({ k: 'dot', x: xe, y: mid, r: 5.2, ink: strong });
+          else if (tiny) {
+            over.push({ k: 'dot', x: (xs + xe) / 2, y: mid, r: 6, ink: strong });
+            over.push({ k: 'dot', x: (xs + xe) / 2, y: mid, r: 2.2, ink: 'canvas' });
+          } else over.push({ k: 'dot', x: xe, y: mid, r: 5.6, ink: strong });
           const startLabel = labelOf(d.startLabel, d, false),
             endLabel = labelOf(d.endLabel, d, true);
           if (startLabel) right = Math.max(right, xs + w(startLabel, 'small') + 4);
@@ -831,14 +849,7 @@ export function layoutTimeline(
         h: bottom - top + 4,
         ink: 'shade',
       });
-      text(
-        b,
-        bottom + 12,
-        `${rangeText(zoom![0], zoom![1])} enlarged below`,
-        'muted',
-        'small',
-        'end',
-      );
+      text(b, bottom + 12, 'Enlarged below', 'muted', 'small', 'end');
       y += 14;
     }
     tags.forEach((t, i) => {
@@ -851,7 +862,7 @@ export function layoutTimeline(
         y: ty + 9,
         w: Math.max(2, t.x1 - t.x0),
         h: bottom - ty - 9,
-        ink: { family: 'amber', tone: 'soft' },
+        ink: { family: PERIOD, tone: 'tint' },
       });
     });
     if (ordinal.length > 2) {
@@ -1010,8 +1021,8 @@ export function layoutTimeline(
     legend.push([
       'Start',
       (x, y) => [
-        { k: 'dot', x: x + 8, y, r: 4.6, ink: sample },
-        { k: 'dot', x: x + 8, y, r: 2.3, ink: 'canvas' },
+        { k: 'dot', x: x + 8, y, r: 5, ink: sample },
+        { k: 'dot', x: x + 8, y, r: 2.5, ink: 'canvas' },
       ],
     ]);
   if (used(d => !!d.fromUnknown))
@@ -1036,8 +1047,8 @@ export function layoutTimeline(
     legend.push([
       'Partial step',
       (x, y) => [
-        { k: 'dot', x: x + 8, y, r: 4.4, ink: sample },
-        { k: 'dot', x: x + 8, y, r: 2.4, ink: 'canvas' },
+        { k: 'dot', x: x + 8, y, r: 4.8, ink: sample },
+        { k: 'dot', x: x + 8, y, r: 2.6, ink: 'canvas' },
       ],
     ]);
   if (used(d => typeof d.to === 'number'))
@@ -1045,7 +1056,7 @@ export function layoutTimeline(
       'Ended',
       (x, y) => [
         { k: 'line', x1: x, y1: y, x2: x + 16, y2: y, ink: sample, w: BAR, round: true },
-        { k: 'dot', x: x + 18, y, r: 5.2, ink: sample },
+        { k: 'dot', x: x + 18, y, r: 5.6, ink: sample },
       ],
     ]);
   if (used(d => d.to === 'open'))
@@ -1083,7 +1094,7 @@ export function layoutTimeline(
           w: 20,
           h: 14,
           r: 2,
-          ink: { family: 'amber', tone: 'soft' },
+          ink: { family: PERIOD, tone: 'tint' },
         },
       ],
     ]);
@@ -1091,7 +1102,8 @@ export function layoutTimeline(
     legend.push([
       'Milestone',
       (x, y) => [
-        { k: 'line', x1: x + 8, y1: y - 8, x2: x + 8, y2: y + 8, ink: 'rule', w: 1, dash: '4 4' },
+        { k: 'line', x1: x + 8, y1: y - 4, x2: x + 8, y2: y + 9, ink: 'rule', w: 1, dash: '3 3' },
+        { k: 'path', d: `M${x + 4},${y - 9}L${x + 12},${y - 9}L${x + 8},${y - 3}Z`, ink: 'rule' },
       ],
     ]);
   if (today !== undefined)
@@ -1124,7 +1136,12 @@ export function layoutTimeline(
     if (r) r.w = Math.ceil(right + 4) - r.x;
   }
   return {
-    plan: { bounds: { x: 0, y: 0, w: Math.ceil(right + 4), h: Math.ceil(y + 4) }, under, over },
+    plan: {
+      bounds: { x: 0, y: 0, w: Math.ceil(right + 4), h: Math.ceil(y + 4) },
+      under,
+      over,
+      titles,
+    },
     rects,
     drawn,
   };

@@ -758,6 +758,9 @@ export function createPointer(
     if (object?.kind === 'node') return s.startInlineEdit(object.id!);
     if (object?.kind === 'group' && under.closest('[data-group-header],.group-title'))
       return s.startInlineEdit(object.id!);
+    // A band edits its title wherever it is clicked; it has no inside to add a box to.
+    if (object?.kind === 'group' && onTimeline(s.doc, object.id!))
+      return s.startInlineEdit(object.id!);
     if (object?.kind === 'edge') {
       if (under.closest('[data-edge-label]')) s.startInlineEdit(object.id!);
       else s.addWaypointAt(object.id!, s.screenToWorld(e.clientX, e.clientY));
@@ -765,6 +768,9 @@ export function createPointer(
     }
     const p = s.screenToWorld(e.clientX, e.clientY),
       target = edits.dropTarget(s.doc, '', { x: p.x, y: p.y, w: 0, h: 0 });
+    // Inside a timeline a new row needs dates, which only the source can give.
+    if (target && s.doc.layout.timelines?.some(t => t.scope === target.id))
+      return toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
     s.addNode(target ? { parentId: target.id } : {}, p, true);
   }
 

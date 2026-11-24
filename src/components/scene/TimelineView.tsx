@@ -1,6 +1,7 @@
 import { createMemo, For, Match, Switch } from 'solid-js';
 import type { ResolvedAppearance } from '../../model/appearance';
 import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import { shownTimelines } from '../../model/graph';
 import {
   timelineOrigin,
@@ -35,6 +36,12 @@ function TimelineView(props: {
   selected?: (id: string) => boolean;
 }) {
   const look = createMemo(() => resolveAppearance(props.doc.appearance));
+  // A timeline in a group draws on the group's fill, so its marks measure against that.
+  const backdrop = createMemo(() =>
+    props.t.scope === 'root'
+      ? look().canvas
+      : drawnSwatch(props.doc, look(), props.t.scope, 'group').fill,
+  );
   // The group's live box: while it is dragged, the marks move with its frame and rows.
   const origin = () => timelineOrigin(props.t, props.rect(props.t.scope));
   const bands = () =>
@@ -61,21 +68,21 @@ function TimelineView(props: {
     <g class="timeline">
       <For each={bands().filter(g => props.rect(g.id)?.w)}>{g => hit(g.id, 'group', 10)}</For>
       <g pointer-events="none" transform={`translate(${origin().x},${origin().y})`}>
-        <For each={props.t.under}>{m => <Mark look={look()} m={m} />}</For>
+        <For each={props.t.under}>{m => <Mark look={look()} m={m} backdrop={backdrop()} />}</For>
       </g>
       <For each={props.t.ids.filter(id => (props.rect(id)?.w ?? 0) > 1)}>
         {id => hit(id, 'node', 6)}
       </For>
       <g pointer-events="none" transform={`translate(${origin().x},${origin().y})`}>
-        <For each={props.t.over}>{m => <Mark look={look()} m={m} />}</For>
+        <For each={props.t.over}>{m => <Mark look={look()} m={m} backdrop={backdrop()} />}</For>
       </g>
     </g>
   );
 }
 
 /** One mark, as `markSvg` in `model/timeline.ts` writes it for the SVG export. */
-function Mark(props: { look: ResolvedAppearance; m: TimelineMark }) {
-  const c = () => timelineColor(props.look, props.m.ink);
+function Mark(props: { look: ResolvedAppearance; m: TimelineMark; backdrop: string }) {
+  const c = () => timelineColor(props.look, props.m.ink, props.backdrop);
   return (
     <Switch>
       <Match when={props.m.k === 'line' && props.m}>
