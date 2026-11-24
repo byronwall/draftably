@@ -844,6 +844,10 @@ export function drawRoutes(
   rects: Map<string, Rect>,
   result: RoutingResult,
 ): DrawnRoute[] {
+  // A route for an edge this graph doesn't draw (a timeline's on-chart line) is dropped.
+  const visible = new Set(vg.edges.map(e => e.id));
+  if (result.routes.some(r => !visible.has(r.id)))
+    result = { ...result, routes: result.routes.filter(r => visible.has(r.id)) };
   const obstacles: Rect[] = vg.nodes.map(n => rects.get(n.id)!),
     borders: Rect[] = [],
     open = new Map<string, Rect>();

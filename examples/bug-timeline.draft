@@ -1,0 +1,34 @@
+diagram "Example project bugs: when each arrived and when it was fixed"
+subtitle "Seven bugs are still open. Nine fixes landed in three weeks."
+
+# A timeline: open bugs run to today; a zoom panel enlarges the three weeks of November fixes.
+
+layout root timeline today=2025-11-23 zoom=2025-11-03..2025-11-23 headers="Bug|Platforms"
+
+group open "Still open" color=red
+group fixed "Fixed in November" color=teal
+
+milestone v100 "v1.0.0" at=2025-03-02
+milestone v200 "v2.0.0" at=2025-11-03
+milestone v210 "v2.1.0" at=2025-11-13
+milestone v220 "v2.2.0" at=2025-11-17
+milestone v221 "v2.2.1" at=2025-11-19
+milestone freeze "Release freeze" from=2025-11-14 to=2025-11-17
+
+node b1 "Dates before 1970 parse as empty" in=open key=B1 from=2024-10-29 to=open detail="#4, #5 date parser" tag="All platforms"
+node b2 "Search ignores accents" in=open key=B2 from=2024-11-20 to=open detail="#31 text search" tag="All platforms"
+node b3 "Trim keeps tabs and newlines" in=open key=B3 from=2025-02-13 to=open detail="#118 CSV import" tag="All platforms"
+node b4 "Decimals rounded through floats" in=open key="B4, B5" from=2025-02-13 to=open detail="#118 CSV import" tag="Windows only" color=orange
+node b6 "Mixed number comparison fails" in=open key=B6 from=2025-02-27 to=open detail="#142 number formatting" tag="All platforms"
+node b7 "Large integers lose precision" in=open key=B7 from=2025-06-04 to=open detail="#260 integer math" tag="Windows only" color=orange
+node b8 "Median rounds down" in=open key=B8 from=2025-09-18 to=open detail="#377, #381 statistics module" tag="Windows only" color=orange
+
+node c1 "Crash on empty file" in=fixed key=C1 from=?2025-11-03 to=2025-11-04 end-label="#502 input validation"
+node c2 "Divide by zero returned NaN" in=fixed key=C2 from=?2025-11-03 to=2025-11-16 steps=2025-11-04,2025-11-05 end-label="#538 query planner rewrite"
+node c3 "Sort unstable on ties" in=fixed key=C3 from=?2025-11-03 to=2025-11-06 end-label="#509 sort ties"
+node c4 "Defaults ignored in filters" in=fixed key=C4 from=?2025-11-03 to=2025-11-11 end-label="#521 merge rewrite"
+node c5 "Export dropped the last line" in=fixed key=C5 from=?2025-11-03 to=2025-11-12 end-label="#524 export fix"
+node c6 "Empty cells counted as values" in=fixed key=C6 from=?2025-11-03 to=2025-11-17 steps=2025-11-04 end-label="#541 empty cells"
+node c7 "% and _ acted as wildcards" in=fixed key=C7 from=?2025-11-03 to=2025-11-19 end-label="#549 search escaping · main only"
+node c8 "Running totals missing" in=fixed key=C8 from=?2025-11-03 to=2025-11-20 end-label="#552 running totals · main only"
+node r1 "Validation rejected valid rows" in=fixed key=R1 from=2025-11-04 to=2025-11-16 start-label="Introduced by #502" end-label="#538 · fixed by accident" tag="Regression" color=amber

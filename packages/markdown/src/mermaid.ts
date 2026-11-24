@@ -6,7 +6,7 @@ import type { Diagnostic } from '@draftably/runtime';
  * jsdom in one worker thread per process. The parser picks the family; this only skips the worker
  * for fences that are plainly another family.
  */
-const CANDIDATE = /^(?:flowchart|graph|sequenceDiagram)\b/;
+const CANDIDATE = /^(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/;
 
 export function isMermaidCandidate(text: string): boolean {
   const lines = text.replace(/^\uFEFF/, '').split('\n');
@@ -28,6 +28,8 @@ interface Reply {
   source?: string;
   alt?: string;
   messages: string[];
+  /** What a successful conversion left out or changed, such as a dependency it could not draw. */
+  warnings?: string[];
 }
 
 let worker: Worker | undefined;
@@ -82,7 +84,13 @@ export async function convertMermaid(
     source: reply.source ?? null,
     alt: reply.alt,
     diagnostics: reply.source
-      ? []
+      ? (reply.warnings ?? []).map(message => ({
+          code: 'DRAFT_MERMAID_CHANGED',
+          severity: 'warning' as const,
+          message: `Converted this Mermaid fence with a change: ${message}`,
+          location,
+          itemIds: [],
+        }))
       : [
           {
             code: 'DRAFT_MERMAID',
@@ -120,14 +128,27 @@ async function runWorker(): Promise<void> {
       const parsed = await parse(text);
       const snapshot = parsed.ok ? parsed.snapshot : undefined;
       // Mermaid draws no heading unless the source has a title, so only alt text names the family.
-      const title = snapshot?.family === 'sequence' ? (snapshot.title ?? '') : '';
-      const alt = title || (snapshot?.family === 'sequence' ? 'Sequence diagram' : 'Flowchart');
+      const family = snapshot?.family;
+      const title =
+        family === 'sequence' || family === 'gantt' || family === 'timeline'
+          ? (snapshot!.title ?? '')
+          : '';
+      const alt =
+        title ||
+        (family === 'sequence'
+          ? 'Sequence diagram'
+          : family === 'gantt'
+            ? 'Gantt chart'
+            : family === 'timeline'
+              ? 'Timeline'
+              : 'Flowchart');
       const result = importMermaidFlow(parsed, plain, title);
       reply = {
         id,
         source: result.nativeSource,
         alt,
         messages: result.diagnostics.filter(d => d.severity === 'error').map(d => d.message),
+        warnings: result.diagnostics.filter(d => d.severity === 'warning').map(d => d.message),
       };
     } catch (error) {
       reply = { id, messages: [error instanceof Error ? error.message : String(error)] };

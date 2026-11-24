@@ -101,6 +101,13 @@ export function compareDetailed(before: string, after: string) {
   // Marks carry a label, a shape and a count. They can't say that a message changed kind or
   // that a self-message became an action, so the panels would show such a change as none.
   for (const m of [old, next]) {
+    // A timeline's rows are marks on a date axis, so they have no box to carry a change mark.
+    const timeline = m.layouts.find(l => l.algorithm === 'timeline');
+    if (timeline)
+      throw new DslError(
+        `A comparison can't show changes inside a timeline yet (${timeline.scope}). Compare versions without layout … timeline.`,
+        timeline.line,
+      );
     const typed = m.edges.find(e => e.message);
     if (typed)
       throw new DslError(

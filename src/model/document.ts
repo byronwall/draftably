@@ -1,4 +1,5 @@
 import { LayoutLab } from '../engines/layout-engine';
+import { validMark } from './timeline';
 import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
@@ -426,6 +427,22 @@ export function normalize(input: unknown): Diagram {
       ...(seq.bars ? { bars: true as const } : {}),
     };
   }
+  // A timeline's marks come from the compiler; keep them when they have their shape.
+  const timelines = (Array.isArray(data.layout?.timelines) ? data.layout.timelines : []).filter(
+    (t: Raw) =>
+      typeof t?.scope === 'string' &&
+      finite(t.x) &&
+      finite(t.y) &&
+      finite(t.dx) &&
+      finite(t.dy) &&
+      Array.isArray(t.ids) &&
+      Array.isArray(t.edges) &&
+      ['x', 'y', 'w', 'h'].every(k => finite(t.bounds?.[k])) &&
+      Array.isArray(t.under) &&
+      Array.isArray(t.over) &&
+      [...t.under, ...t.over].every(validMark),
+  );
+  if (timelines.length) out.layout.timelines = JSON.parse(JSON.stringify(timelines));
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))
     : [];

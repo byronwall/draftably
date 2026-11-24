@@ -15,6 +15,7 @@ export const COMMANDS = [
   'was-order',
   'action',
   'node',
+  'milestone',
   'group',
   'edge',
   'layout',

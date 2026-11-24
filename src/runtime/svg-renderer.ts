@@ -19,6 +19,7 @@ import { noteMarkup, placeNotes } from '../model/note';
 import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
+import { timelineOrigin, timelineSvg } from '../model/timeline';
 import {
   CODE_ADVANCE,
   CODE_TYPE,
@@ -32,7 +33,7 @@ import {
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
-import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
+import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import {
@@ -343,6 +344,9 @@ function sceneMarkup(
     routes = shared ? shared.filter(r => kept.has(r.id)) : routesOf(doc);
   const out = new SvgChunks(opts.maxOutputBytes),
     diff = isDiff(doc);
+  // Timeline rows draw as the timeline's marks, not as boxes.
+  const timelines = shownTimelines(doc),
+    onTimeline = new Set(timelines.flatMap(t => t.ids));
   const backdrop = sequenceBackdrop(doc, look);
   out.push(...backdrop.panel);
   for (const g of vg.groups) {
@@ -410,6 +414,36 @@ function sceneMarkup(
       ),
     );
   }
+  for (const t of timelines) {
+    const o = timelineOrigin(t, rects.get(t.scope));
+    out.push(
+      `<g transform="translate(${o.x},${o.y})">`,
+      timelineSvg(
+        look,
+        t,
+        // Bands first, rows over them: a click on a row reaches the row, elsewhere the band.
+        [
+          ...doc.graph.groups
+            .filter(g => (g.parentId ?? 'root') === t.scope && g.id !== t.scope)
+            .map(g => g.id),
+          ...t.ids,
+        ].flatMap(id => {
+          const r = rects.get(id);
+          return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - o.x, y: r.y - o.y } }] : [];
+        }),
+        // A row or band with href= links from its whole area, as a box links from its shape.
+        (id, markup) =>
+          linked(
+            [...doc.graph.nodes, ...doc.graph.groups].find(n => n.id === id)?.href,
+            [markup],
+            opts,
+          ).join(''),
+        // A timeline in a group draws on the group's fill, so its marks measure against that.
+        t.scope === 'root' ? look.canvas : drawnSwatch(doc, look, t.scope, 'group').fill,
+      ),
+      '</g>',
+    );
+  }
   // Phases go over the groups' column bands, faint enough that both read where they cross.
   out.push(...backdrop.phases);
   // Sequence participants' lifelines, under the message lines.
@@ -457,6 +491,7 @@ function sceneMarkup(
     out.push('</g>');
   }
   for (const n of vg.nodes) {
+    if (onTimeline.has(n.id)) continue;
     const r = rects.get(n.id)!,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),

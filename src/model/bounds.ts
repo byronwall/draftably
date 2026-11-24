@@ -2,8 +2,9 @@
  * The area a drawing covers, shared by everything that frames one: the CLI SVG, workspace
  * thumbnails, SVG/PNG exports, comparison scenes and the viewer's fit-to-content.
  */
+import { timelineOrigin } from './timeline';
 import { rectUnion } from './geometry';
-import type { VisibleGraph } from './graph';
+import { shownTimelines, type VisibleGraph } from './graph';
 import { visualBounds } from './labels';
 import type { Diagram, Point, Rect } from './types';
 
@@ -38,6 +39,15 @@ export function drawingBounds(
     if (r) boxes.push(r);
   }
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
+  for (const t of shownTimelines(doc)) {
+    // A timeline's whole drawing counts when the whole timeline is drawn: its group, or every
+    // one of its rows (a root timeline, or a full export). A selection of some rows counts only
+    // those rows' own boxes, added above.
+    const drawn = new Set(vg.nodes.map(n => n.id));
+    if (!(vg.groups.some(g => g.id === t.scope) || t.ids.every(id => drawn.has(id)))) continue;
+    const o = timelineOrigin(t, rects.get(t.scope));
+    boxes.push({ ...t.bounds, x: o.x + t.bounds.x, y: o.y + t.bounds.y });
+  }
   for (const route of routes) {
     for (const p of route.points)
       boxes.push({ x: p.x - ROUTE_INK, y: p.y - ROUTE_INK, w: ROUTE_INK * 2, h: ROUTE_INK * 2 });

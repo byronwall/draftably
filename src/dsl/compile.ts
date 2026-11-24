@@ -30,6 +30,8 @@ import {
   wrapTitle,
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
+import { layoutTimeline, onChartEdges } from './timeline';
+import type { PlacedTimeline, TimelinePlan } from '../model/timeline';
 import { marginNoteRoom, marginNotes } from '../model/note';
 import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
 import { defaultShapeSize } from '../model/styles';
@@ -131,6 +133,8 @@ export interface Scene {
   cells: Map<string, CellsChrome>;
   /** Sequence diagrams: the panel they are drawn on and their phases' row bands. */
   sequence?: SequenceLayout;
+  /** Timelines: each timeline scope's drawing as one display list (`dsl/timeline.ts`). */
+  timelines?: PlacedTimeline[];
 }
 
 type Item = ModelObject & { w: number; h: number };
@@ -229,7 +233,8 @@ function fitVariants(root: ModelLayout) {
   const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
     { label: `as written (${reads(root)})`, layout: {} },
   ];
-  if (['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine) return out;
+  if (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine)
+    return out;
   // A stated direction holds, so the search has only folding left to try.
   const directions = root.direction === 'auto' ? (['right', 'down'] as const) : [root.direction];
   for (const direction of directions)
@@ -628,6 +633,7 @@ function dissolved(m: Model): Model {
     objects: m.objects
       .filter(o => !o.frame)
       .map(o => ({ ...o, parent: layoutParent(by, o.id), soft: chain(o.id) })),
+    dissolvedGroups: m.objects.filter(o => o.frame),
   };
 }
 
@@ -3033,7 +3039,12 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       (Math.max(...objects.map(o => o.x + o.w)) - Math.min(...objects.map(o => o.x))) *
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
-      planChannels(plain.objects, m.edges, m.routing),
+      // A line a timeline draws on its chart takes no routing channel.
+      planChannels(
+        plain.objects,
+        m.edges.filter(e => !onChartEdges(m).has(e.id)),
+        m.routing,
+      ),
       area(plain.objects),
       c => area(layoutPass(unrefined, arranged, false, c, packFold).objects),
     );
@@ -3049,12 +3060,16 @@ interface PackFold {
 const packFolds = new WeakMap<Scene, PackFold>();
 
 function layoutPass(
-  m: Model,
+  model: Model,
   arranged?: Map<string, Pos & Size>,
   slots = false,
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
+  // A line a timeline draws on its chart takes no part in ranking, placement or channels: layout
+  // runs on the other lines, and the scene keeps every line (`onChartEdges`).
+  const onChart = onChartEdges(model),
+    m = onChart.size ? { ...model, edges: model.edges.filter(e => !onChart.has(e.id)) } : model;
   /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
   const ordering = m.edges.filter(e => e.constraint !== false && e.directed !== false),
     // A dashed edge into a box that a solid edge already places is a side input, such as "same
@@ -3084,7 +3099,8 @@ function layoutPass(
   const drawn = new Map<string, { w: number; h: number }>();
   /** The title band of each `cells` group, which holds no inset around its cells. */
   const cellBands = new Map<string, number>(),
-    chrome = new Map<string, CellsChrome>();
+    chrome = new Map<string, CellsChrome>(),
+    timelinePlans = new Map<string, { plan: TimelinePlan; ids: string[]; edges: string[] }>();
   const items = new Map<string, Item>(),
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
@@ -3328,6 +3344,7 @@ function layoutPass(
       kids = [...listed, ...kids.filter(k => !order.ids.includes(k.id))];
     }
     if (layout.algorithm === 'cells') return arrangeCells(scope, kids, layout);
+    if (layout.algorithm === 'timeline') return arrangeTimeline(scope, kids, layout);
     // Theme size and reference size of each leaf; the slot is chosen below.
     const leaves = new Map<string, { look: Size; ref: Size }>();
     const list: Item[] = kids.map(o => {
@@ -3766,6 +3783,34 @@ function layoutPass(
     // A marker's tail is drawn past the frame; the frame holds only the cells.
     return { w: Math.max(out.w, title), h: out.h };
   }
+  /**
+   * A timeline scope: every member a row placed by date (`layoutTimeline`), its frameless
+   * groups the bands. Each row's box is its whole row, so lines from outside reach its side.
+   */
+  function arrangeTimeline(scope: string, kids: ModelObject[], layout: ModelLayout) {
+    const ids = new Set(kids.map(o => o.id)),
+      links = model.edges.filter(e => onChart.has(e.id) && ids.has(e.source) && ids.has(e.target));
+    const { plan, rects, drawn } = layoutTimeline(
+      kids,
+      (m.dissolvedGroups ?? []).filter(g => g.parent === scope),
+      layout.timeline!,
+      look,
+      links,
+      id => {
+        const order = m.hints.find(h => h.type === 'order' && h.scope === id);
+        return order?.type === 'order' ? order.ids : [];
+      },
+      scope,
+    );
+    for (const o of kids) {
+      const r = rects.get(o.id) ?? { x: plan.bounds.x, y: plan.bounds.y, w: 24, h: 20 };
+      items.set(o.id, { ...o, w: round(r.w), h: round(r.h) });
+      local.set(o.id, { x: round(r.x), y: round(r.y) });
+      bases.set(o.id, { x: r.x, y: r.y });
+    }
+    timelinePlans.set(scope, { plan, ids: kids.map(o => o.id), edges: drawn });
+    return { w: plan.bounds.w, h: plan.bounds.h };
+  }
   /** A byte or bit layout: one width per unit, a ruler under the title band, run-on fields. */
   function arrangeUnits(scope: string, kids: ModelObject[], layout: ModelLayout) {
     const out = layoutUnits(
@@ -3901,7 +3946,22 @@ function layoutPass(
   }
 
   const objects: SceneObject[] = [];
+  const timelines: PlacedTimeline[] = [];
   const place = (scope: string, origin: Pos, depth: number) => {
+    const tl = timelinePlans.get(scope);
+    if (tl) {
+      const box = objects.find(o => o.id === scope);
+      timelines.push({
+        ...tl.plan,
+        scope,
+        x: origin.x,
+        y: origin.y,
+        dx: origin.x - (box?.x ?? 0),
+        dy: origin.y - (box?.y ?? 0),
+        ids: tl.ids,
+        edges: tl.edges,
+      });
+    }
     for (const o of children.get(scope) ?? []) {
       const item = drawn.get(o.id) ?? items.get(o.id)!,
         l = local.get(o.id)!,
@@ -3974,11 +4034,11 @@ function layoutPass(
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);
   const scene: Scene = {
-    model: m,
+    model,
     title: m.title,
     objects,
     byId: new Map(objects.map(o => [o.id, o])),
-    edges: m.edges.map(e => {
+    edges: model.edges.map(e => {
       const lane = lanes.get(e.id),
         plan = lane ? undefined : plans.get(e.id);
       return lane ? { ...e, lane } : plan ? { ...e, plan } : e;
@@ -3986,6 +4046,7 @@ function layoutPass(
     diagnostics,
     look,
     cells: chrome,
+    ...(timelines.length ? { timelines } : {}),
   };
   packFolds.set(scene, { groups: foldGroups, wrap: wrapRoot });
   return scene;

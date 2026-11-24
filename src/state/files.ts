@@ -330,6 +330,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     style.textContent = fontFaceCss(
       theme,
       activeSession().doc.graph.nodes.some(n => n.code),
+      !!activeSession().doc.layout.timelines?.length,
     );
     defs.append(style);
     svg.append(title, meta, defs);

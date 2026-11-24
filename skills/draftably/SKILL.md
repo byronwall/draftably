@@ -94,7 +94,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
    edits; `format --drop-stale --write` removes those lines.
 10. **Move from Mermaid:** `npx draftably migrate docs/` lists the Markdown `mermaid` fences a
-    run would rewrite as `draft` fences (flowcharts and sequences only; other charts stay) and
+    run would rewrite as `draft` fences (flowcharts, sequences, gantt charts and dated timelines;
+    other charts stay) and
     the importer's warnings. Add `--write` to apply, and `--accept-lossy` for fences with
     warnings. `import chart.mmd --output chart.draft` converts one Mermaid, DOT or D2 file.
 
@@ -237,6 +238,22 @@ Good defaults:
   waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
+- Things placed in time (bug history, releases, an incident): `layout <group> timeline
+today=DATE`, or `layout root timeline` for the whole drawing. Each node in the group is a row:
+  `at=DATE` for a point, `from=DATE to=DATE` for a span (`to=open` runs to `today`,
+  `from=?DATE` means it began before DATE, `steps=D1,D2` marks partial steps). Groups inside
+  the timeline are bands. `milestone id "v2.0" at=DATE in=<timeline>` draws a release rule
+  across every band; `from=`/`to=` on a milestone shades a period (a freeze). Row text: `key=`,
+  `detail=`, `tag=`, `start-label=`, `end-label=` (`=date` or `=duration` print them for you).
+  `progress=40` fills part of a bar; `to=+3d|+2w|+1m` ends a span by duration.
+  `headers="Name|Owner"` heads the columns. `scale=ordinal` spaces dates evenly and labels the
+  gaps (an event history, like a Mermaid timeline).
+  `zoom=START..END` adds an enlarged detail panel for a crowded stretch; bands wholly inside it
+  move there. Edges from rows to boxes outside the timeline route normally (a fix to the code
+  it touched); an edge between two rows draws on the chart as a dated elbow arrow. An edge can't
+  end on a milestone, so make a release a point row when the graph needs it. No
+  `near`/`pin`/`size` on rows; dates place them.
+  **Fits** elapsed time and durations. **Doesn't fit** order alone; use `sequence`.
 - One object made of parts, a table, or a list of boxes with no edges of their own:
   `layout groupId cells` (see Cells). **Fits** a request body, a record, a schema, a checklist.
   **Doesn't fit** steps that happen in order; those are nodes and edges.

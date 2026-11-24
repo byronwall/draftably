@@ -335,6 +335,7 @@ export async function renderWithScene(
       fontCss = (await import('../lib/font-data')).fontFaceCss(
         resolveAppearance(doc.appearance),
         doc.graph.nodes.some(n => n.code),
+        !!doc.layout.timelines?.length,
       );
   } catch {
     return {

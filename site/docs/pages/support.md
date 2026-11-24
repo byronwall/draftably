@@ -14,13 +14,14 @@ Choose a package by where the diagram runs:
 | `@draftably/react` and others | Show or edit a diagram in a component                       | [Choose how to embed](#embed)                        |
 | `@draftably/editor`           | Put the drag-and-drop editor in your page                   | [Editor component](#editor-component)                |
 | `@draftably/markdown`         | Turn `draft` and `mermaid` fences into images at build time | [Markdown](#markdown)                                |
-| `@draftably/mermaid`          | Draw your Mermaid flowcharts and sequences with Draftably   | [Switch from Mermaid](#from-mermaid)                 |
+| `@draftably/mermaid`          | Draw your Mermaid flowcharts, sequences and gantt charts    | [Switch from Mermaid](#from-mermaid)                 |
 
 Every package draws with the same compiler and renderer, so a diagram looks the same in each.
 For Markdown that a host renders without your JavaScript, use the CLI or the
 [GitHub Action](#github-action) to commit SVGs. For a site build you control, use
 `@draftably/markdown` to generate image assets. Use `@draftably/mermaid` when an app already calls
-the Mermaid API and you want Draftably to draw supported flowcharts and sequences.
+the Mermaid API and you want Draftably to draw supported flowcharts, sequences, gantt charts and
+timelines.
 
 ## Tested hosts
 
@@ -68,7 +69,7 @@ Exports from 0.10 open in the new version, and new exports open in 0.10.
 ## Move Mermaid diagrams
 
 Use `@draftably/mermaid` to keep an app's Mermaid API calls, or use
-`draftably migrate 'docs/**/*.md' --write` to convert supported Markdown flowchart and sequence
-fences to Draftably source. Review warnings before adding `--accept-lossy`; unsupported Mermaid
+`draftably migrate 'docs/**/*.md' --write` to convert supported Markdown flowchart, sequence,
+gantt and timeline fences to Draftably source. Review warnings before adding `--accept-lossy`; unsupported Mermaid
 families stay Mermaid. For built documentation, the Markdown plugin can render supported Mermaid
 fences to static SVGs without changing their source.

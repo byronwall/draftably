@@ -1,0 +1,26 @@
+diagram "Search rewrite: plan for the first half"
+subtitle "The index ships before the ranking work can start."
+
+# A roadmap: spans with progress, durations, a holiday freeze, quarter ticks and dependencies.
+
+group plan "Roadmap"
+layout plan timeline today=2026-02-16 headers="Workstream|Owner"
+
+group build "Build" in=plan color=blue
+group launch "Launch" in=plan color=teal
+
+milestone holidays "Holiday freeze" from=2025-12-20 to=2026-01-05 in=plan
+milestone beta "Beta" at=2026-04-01 in=plan
+
+node index "New search index" in=build from=2025-11-03 to=+3m progress=100 tag="Priya" end-label=date
+node rank "Ranking model" in=build from=2026-02-02 to=+10w progress=40 tag="Sam" end-label=duration
+node api "Query API" in=build from=2026-01-12 to=+8w progress=60 tag="Lee"
+node docs "Docs and examples" in=launch from=2026-03-09 to=+4w progress=0 tag="Ana"
+node rollout "Staged rollout" in=launch from=2026-04-06 to=2026-06-12 tag="Sam"
+
+node flags "Feature flags" shape=box
+
+edge e1 index -> rank "trains on"
+edge e2 api -> docs "documents"
+edge e3 rank -> rollout "gates"
+edge e4 rollout -> flags "behind"

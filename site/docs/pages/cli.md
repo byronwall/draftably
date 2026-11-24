@@ -184,9 +184,9 @@ draftably migrate docs/                 # print what would change
 draftably migrate 'docs/**/*.md' --write
 ```
 
-Rewrites `mermaid` code fences in Markdown files as `draft` fences. Only flowcharts (`flowchart`,
-`graph`) and sequence diagrams (`sequenceDiagram`) convert. Pie, gantt, class and other Mermaid
-charts stay as they are. A folder adds its `.md`, `.mdx` and `.markdown` files, and skips
+Rewrites `mermaid` code fences in Markdown files as `draft` fences. Flowcharts (`flowchart`,
+`graph`), sequence diagrams (`sequenceDiagram`), gantt charts (`gantt`) and timelines whose
+periods are dates (`timeline`) convert. Pie, class and other Mermaid charts stay as they are. A folder adds its `.md`, `.mdx` and `.markdown` files, and skips
 `node_modules`. Quote a glob so the shell does not expand it.
 
 Without `--write`, nothing changes. It prints each file's fences, what happens to each one, and

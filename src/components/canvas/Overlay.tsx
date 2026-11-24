@@ -1,7 +1,7 @@
 import { createMemo, For, Show } from 'solid-js';
 import { SculptLab } from '../../engines/sculpt-engine';
 import { center } from '../../model/geometry';
-import { findNode, isGroup, styleOf } from '../../model/graph';
+import { findNode, isGroup, onTimeline, styleOf } from '../../model/graph';
 import { portPoint, sideToward, SIDE_VECTORS } from '../../model/routes';
 import type { NodeLayout, Side } from '../../model/types';
 import { roundedPath } from '../../model/geometry';
@@ -77,7 +77,9 @@ function QuickAddButtons() {
       !s.drag() &&
       !s.inlineEditId() &&
       !s.connectFrom() &&
-      !s.timeline();
+      !s.timeline() &&
+      // A timeline row adds its neighbours by date in the source, not beside its box.
+      !onTimeline(s.doc, id);
     return visible ? id : null;
   };
   return (

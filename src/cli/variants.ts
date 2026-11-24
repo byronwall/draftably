@@ -6,6 +6,7 @@
  * comments, IDs and refinements. Everything here is deterministic: the same source gives the same
  * variants, in the same order, with the same numbers.
  */
+import { timelineRoutes } from '../model/graph';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from '../dsl/compile';
@@ -269,7 +270,7 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
       ? labelled.reduce((sum, e) => sum + e.label.length, 0) / labelled.length
       : 0,
     scope,
-    ...(root && ['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine
+    ...(root && ['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine
       ? { fixed: root.algorithm }
       : {}),
     layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
@@ -568,7 +569,7 @@ export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
           why: `${compare ? 'compare' : 'change marks as'} panels ${direction === 'right' ? 'side by side' : 'stacked'}`,
         });
   const root = m.layouts.find(l => l.scope === 'root');
-  if (root && ['lanes', 'sequence'].includes(root.algorithm)) return out;
+  if (root && ['lanes', 'sequence', 'timeline'].includes(root.algorithm)) return out;
   const groups = m.objects.filter(o => o.type === 'group'),
     nodes = m.objects.filter(o => o.type === 'node'),
     parent = new Map(m.objects.map(o => [o.id, o.parent]));
@@ -720,6 +721,16 @@ export async function draw(source: string): Promise<Drawn> {
   const warnings =
     scene.diagnostics.filter(d => d.level === 'warning' || d.code === 'soft-split').length +
     findConflicts(scene, doc, rects, routes).length;
+  const onChart = timelineRoutes(doc, rects),
+    drawnBends = onChart.reduce((n, r) => n + r.points.length - 2, 0),
+    drawnLength = onChart.reduce(
+      (n, r) =>
+        n +
+        r.points
+          .slice(1)
+          .reduce((m, p, i) => m + Math.hypot(p.x - r.points[i].x, p.y - r.points[i].y), 0),
+      0,
+    );
   const svg = renderSvg(doc);
   const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg)!;
   const c = centers(rects);
@@ -728,8 +739,9 @@ export async function draw(source: string): Promise<Drawn> {
       width: Math.round(Number(size[1])),
       height: Math.round(Number(size[2])),
       crossings: result.report.crossings,
-      bends: result.report.bends,
-      length: Math.round(result.report.length),
+      // A timeline's own lines are drawn without the router, so their bends and length add here.
+      bends: result.report.bends + drawnBends,
+      length: Math.round(result.report.length + drawnLength),
       warnings,
     },
     routes,

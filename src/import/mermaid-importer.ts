@@ -18,6 +18,7 @@ import {
 } from './import-core';
 import { MERMAID_VERSION, type ParseFlowResult, type FlowClass } from './mermaid-facade';
 import { mapMermaidSequence } from './mermaid-sequence';
+import { mapMermaidGantt, mapMermaidTimeline } from './mermaid-timeline';
 
 /** Mermaid's link types that native ends cover; a type outside this list is refused. */
 const MERMAID_ENDS: Record<string, Pick<NativeEdge, 'head' | 'tail'>> = {
@@ -74,6 +75,9 @@ function mapMermaidFlow(
   }
   if (snapshot.family === 'sequence')
     return mapMermaidSequence(snapshot, plainText, title, diagnostics);
+  if (snapshot.family === 'gantt') return mapMermaidGantt(snapshot, plainText, title, diagnostics);
+  if (snapshot.family === 'timeline')
+    return mapMermaidTimeline(snapshot, plainText, title, diagnostics);
 
   const label = (value: string, labelType: string, foreignId: string) => {
     if (/<\/?[a-z][\s\S]*?>/i.test(value)) {

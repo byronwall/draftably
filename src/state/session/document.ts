@@ -6,7 +6,7 @@ import { batch, createSignal } from 'solid-js';
 import { createStore, produce, reconcile, unwrap } from 'solid-js/store';
 import { STORAGE_KEY } from '../../lib/saved-diagram';
 import { emptyDiagram, normalize } from '../../model/document';
-import { findEntity } from '../../model/graph';
+import { findEntity, holdTimelines } from '../../model/graph';
 import { DEFAULT_SAMPLE, loadSample } from '../../model/samples';
 import type { Camera, Diagram } from '../../model/types';
 import type { CameraReason } from '../../runtime/camera';
@@ -161,6 +161,18 @@ export function createDocument(s: CanvasTextPart, options: SessionOptions) {
   /** Push an undo step if the document changed since `before`. Returns whether it did. */
   function commit(before: string, label = 'Edit', kind: EditKind = 'edit'): boolean {
     if (before === snapshot()) return false;
+    // Timelines hold their members wherever their dates put them; see `holdTimelines`.
+    if (state.doc.layout.timelines?.length) {
+      const was = JSON.parse(before) as Diagram;
+      let refused: string | undefined;
+      state.setDoc(produce(d => void (refused = holdTimelines(was, d))));
+      if (refused) {
+        state.setDoc(reconcile(was));
+        toast(refused);
+        return false;
+      }
+      if (before === snapshot()) return false;
+    }
     if (commitHandler) return commitHandler(before, label, kind);
     pushUndo({ data: before, label });
     return true;

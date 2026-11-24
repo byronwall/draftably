@@ -20,10 +20,12 @@ const DATA: Record<FaceId, string> = {
  * `@font-face` rules for the faces an appearance draws with, and JetBrains Mono when the drawing
  * has a code node.
  */
-export function fontFaceCss(look: ResolvedAppearance, code = false): string {
+export function fontFaceCss(look: ResolvedAppearance, code = false, timeline = false): string {
   const faces = [
     ...new Set<FaceId>([
       look.title.face,
+      // A timeline's row names use the title font's regular face; other drawings never need it.
+      ...(timeline ? [look.detail.face] : []),
       look.groupTitle.face,
       look.annotation.face,
       ...(code ? (['mono-500'] as const) : []),

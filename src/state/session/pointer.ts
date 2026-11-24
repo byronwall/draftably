@@ -25,6 +25,7 @@ import {
   isGroup,
   makeGeometry,
   objectRect,
+  onTimeline,
   selectionRoots,
 } from '../../model/graph';
 import type { NodeLayout, Point, Rect, Side } from '../../model/types';
@@ -390,6 +391,11 @@ export function createPointer(
       if (e.shiftKey) s.selectItems([objectId], { add: true, toggle: true });
       else if (!s.isSelected(objectId)) s.setSelection([objectId]);
       if (!s.isSelected(objectId)) return;
+      // A timeline places rows by their dates, so a row selects but never drags.
+      if (onTimeline(s.doc, objectId)) {
+        s.focusCanvas();
+        return;
+      }
       startObjectDrag(e, canvas, objectId, doubleCandidate);
       return;
     }
@@ -421,7 +427,8 @@ export function createPointer(
   }
 
   function startObjectDrag(e: PointerEvent, canvas: Element, id: string, doubleCandidate: boolean) {
-    const roots = selectionRoots(s.doc, s.selection()),
+    // Timeline rows and bands in a mixed selection stay put; their timeline group carries them.
+    const roots = selectionRoots(s.doc, s.selection()).filter(r => !onTimeline(s.doc, r)),
       moving = new Set(roots);
     for (const root of roots)
       if (isGroup(s.doc, root)) descendants(s.doc, root).forEach(n => moving.add(n));
@@ -751,6 +758,9 @@ export function createPointer(
     if (object?.kind === 'node') return s.startInlineEdit(object.id!);
     if (object?.kind === 'group' && under.closest('[data-group-header],.group-title'))
       return s.startInlineEdit(object.id!);
+    // A band edits its title wherever it is clicked; it has no inside to add a box to.
+    if (object?.kind === 'group' && onTimeline(s.doc, object.id!))
+      return s.startInlineEdit(object.id!);
     if (object?.kind === 'edge') {
       if (under.closest('[data-edge-label]')) s.startInlineEdit(object.id!);
       else s.addWaypointAt(object.id!, s.screenToWorld(e.clientX, e.clientY));
@@ -758,6 +768,9 @@ export function createPointer(
     }
     const p = s.screenToWorld(e.clientX, e.clientY),
       target = edits.dropTarget(s.doc, '', { x: p.x, y: p.y, w: 0, h: 0 });
+    // Inside a timeline a new row needs dates, which only the source can give.
+    if (s.doc.layout.timelines?.some(t => t.scope === (target?.id ?? 'root')))
+      return toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
     s.addNode(target ? { parentId: target.id } : {}, p, true);
   }
 

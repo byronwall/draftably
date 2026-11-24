@@ -3,6 +3,8 @@
  * built from the boxes and routes a drawing uses. `renderSvg`, the viewer, the editor and the graph
  * API all build it here, so their numbers agree.
  */
+import { shownTimelines, timelineRoutes } from '../model/graph';
+import { timelineOrigin } from '../model/timeline';
 import type { Box, EdgeOut, PlacedBox } from '../graph-api/core';
 import type { Diagram, Point, Rect, Side } from '../model/types';
 
@@ -100,10 +102,32 @@ export function placedItems(
         } satisfies EdgeOut,
       ]),
     );
+  // Lines a timeline draws between its rows never reach the router; report them as drawn.
+  for (const r of timelineRoutes(doc, rects)) {
+    const [a, b] = r.points,
+      last = r.points[r.points.length - 1],
+      prev = r.points[r.points.length - 2];
+    const vertical = (from: Point, to: Point): Side => (to.y > from.y ? 'bottom' : 'top');
+    (edges as Record<string, EdgeOut>)[edgeId(r.id)] = {
+      source: objectId(r.from),
+      target: objectId(r.to),
+      sourceSide: vertical(a, b),
+      targetSide: prev.y === last.y ? (last.x > prev.x ? 'left' : 'right') : vertical(last, prev),
+      points: r.points,
+      path: r.points.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(''),
+      label: r.label ? { x: r.label.x, y: r.label.y, width: r.label.w, height: r.label.h } : null,
+      blocked: false,
+    };
+  }
   const all: Box[] = [
     ...Object.values(nodes),
     ...Object.values(groups),
     ...Object.values(edges).map(edgeBox),
+    // A timeline draws past its rows' boxes: its axis, rules, labels and legend.
+    ...shownTimelines(doc).map(t => {
+      const o = timelineOrigin(t, rects.get(t.scope));
+      return { x: o.x + t.bounds.x, y: o.y + t.bounds.y, width: t.bounds.w, height: t.bounds.h };
+    }),
   ];
   return { nodes, groups, edges, bounds: boundsOf(all) };
 }

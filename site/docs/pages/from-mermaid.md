@@ -1,7 +1,8 @@
 # Switch from Mermaid
 
 Keep your Mermaid diagrams and your page code. Draftably draws the diagrams that read better as
-Draftably diagrams: flowcharts, sequences, and Draftably's own source. Every other Mermaid chart
+Draftably diagrams: flowcharts, sequences, gantt charts, timelines, and Draftably's own source.
+Every other Mermaid chart
 still goes to Mermaid, so nothing on your site goes blank.
 
 | Where your diagrams show                        | What to change                                          |
@@ -58,6 +59,8 @@ Draftably leaves to Mermaid.
 | -------------------------------------------- | --------- |
 | `flowchart` or `graph`                       | Draftably |
 | `sequenceDiagram`                            | Draftably |
+| `gantt`                                      | Draftably |
+| `timeline` with dated periods                | Draftably |
 | Draftably source (`node`, `edge`, `diagram`) | Draftably |
 | Any other Mermaid chart                      | Mermaid   |
 
@@ -81,7 +84,8 @@ from a call to its reply.
 
 For a static site with no diagram JavaScript, add the
 [Markdown plugin](#mermaid-fences) with `mermaid: 'convert'`.
-Your existing `mermaid` flowcharts and sequences become ordinary SVG images at build time, and
+Your existing `mermaid` flowcharts, sequences, gantt charts and timelines become ordinary SVG
+images at build time, and
 `draft` fences work beside them. Other Mermaid families stay code blocks, so keep your Mermaid
 setup for those. [Documentation sites](#documentation-sites) has recipes for Astro Starlight,
 Docusaurus and VitePress.

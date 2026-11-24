@@ -3,7 +3,15 @@ import { SOFT_PAD, SOFT_TITLE } from '../../dsl/frame';
 import { clamp } from '../../model/geometry';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
-import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
+import {
+  findEdge,
+  findGroup,
+  findNode,
+  objectRect,
+  shownTimelines,
+  styleOf,
+} from '../../model/graph';
+import { timelineFont, timelineOrigin } from '../../model/timeline';
 import { parseTextId, TEXT_NAMES } from '../../state/session/canvas-text';
 import { textBox } from './text-boxes';
 import { useDiagramSession } from '../session-context';
@@ -34,7 +42,20 @@ function Editor(props: { id: string }) {
       align: 'center' | 'left' = 'center',
       radius = 4;
     const text = textBox(s.doc, s.viewerFrame(), props.id);
-    if (text) {
+    // A timeline row, band or milestone edits its title where the timeline draws it.
+    const placed = shownTimelines(s.doc).find(t => t.titles?.[props.id]),
+      title = placed?.titles?.[props.id];
+    if (placed && title) {
+      const o = timelineOrigin(placed, s.sceneRects().get(placed.scope));
+      type = timelineFont(look(), title.font);
+      align = 'left';
+      world = {
+        x: o.x + title.x - 4,
+        y: o.y + title.y - type.lineHeight / 2 - 2,
+        w: Math.max(title.w + 8, 160),
+        h: type.lineHeight + 4,
+      };
+    } else if (text) {
       ({ type, fill, ink } = text);
       align = 'left';
       // A short label edits in a box wide enough to type a longer one; prose shows its links'

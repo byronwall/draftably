@@ -6,6 +6,7 @@ import { CrossingView, EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
 import { NodeChrome, NodeView } from '../scene/NodeView';
 import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
+import { TimelineViews } from '../scene/TimelineView';
 import { replyPair } from '../../model/status';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
@@ -88,6 +89,9 @@ export function Canvas(props: CanvasProps) {
   // The drawing in the chosen emphasis state; edits still go to `doc`.
   const shown = createMemo(s.drawnDoc);
   const isSelected = (id: string) => s.selection().has(id);
+  const onTimeline = createMemo(
+    () => new Set((shown().layout.timelines ?? []).flatMap(t => t.ids)),
+  );
   // In a sequence, one selected message brings its call or its replies with it, and their bar.
   const paired = createMemo(() => {
     const only = s.singleSelection();
@@ -196,6 +200,7 @@ export function Canvas(props: CanvasProps) {
               )}
             </For>
           </g>
+          <TimelineViews doc={shown()} rect={id => s.sceneRects().get(id)} selected={isSelected} />
           <SequenceBackdrop doc={shown()} part="phases" />
           <Lifelines doc={s.doc} ids={s.nodeIds()} rect={id => s.sceneRects().get(id)} />
           <SequenceBackdrop doc={shown()} part="bars" />
@@ -223,7 +228,7 @@ export function Canvas(props: CanvasProps) {
             </For>
           </g>
           <g>
-            <For each={s.nodeIds()}>
+            <For each={s.nodeIds().filter(id => !onTimeline().has(id))}>
               {id => (
                 <NodeView
                   doc={shown()}

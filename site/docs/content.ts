@@ -60,7 +60,7 @@ const GROUPS: [string, string[]][] = [
       'emphasis-states',
     ],
   ],
-  ['Diagram kinds', ['swim-lanes', 'sequence-diagrams', 'cells']],
+  ['Diagram kinds', ['swim-lanes', 'sequence-diagrams', 'timelines', 'cells']],
   ['Layout', ['layout-engines', 'routing', 'layout-tools']],
   [
     'Embed in an app',
