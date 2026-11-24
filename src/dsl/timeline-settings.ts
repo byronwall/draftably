@@ -1,4 +1,4 @@
-import { bare, type SourceDoc, type Statement } from './syntax';
+import { bare, quoted, type SourceDoc, type Statement } from './syntax';
 import { declaration, setAttr, statement, statements } from './source-edits';
 
 export type TimelineDraft = {
@@ -8,6 +8,7 @@ export type TimelineDraft = {
   unknown: boolean;
   open: boolean;
   steps: string;
+  label: string;
 };
 
 /** Change the root recipe while retaining its direction, gap and sizing attributes. */
@@ -18,13 +19,36 @@ export function timelineLayout(doc: SourceDoc) {
       .at(-1) ?? statement('layout', [bare('root'), bare('timeline')]);
   if (!doc.lines.includes(root)) doc.lines.push(root);
   if (root.args[1]?.value !== 'timeline') root.args = [bare('root'), bare('timeline')];
+  const supported = new Set([
+    'direction',
+    'gap',
+    'min-width',
+    'min-height',
+    'fit',
+    'today',
+    'zoom',
+  ]);
+  root.attrs = root.attrs.filter(([key]) => supported.has(key));
   return root;
 }
 
 /** Apply each item draft together so changing the selected item does not discard prior edits. */
 export function writeTimelineDrafts(doc: SourceDoc, drafts: Map<string, TimelineDraft>) {
   for (const [id, draft] of drafts) {
-    if (id === ':new') continue;
+    if (id === ':new') {
+      if (!draft.label.trim()) continue;
+      const ids = new Set(
+        statements(doc)
+          .filter(line => ['node', 'group', 'edge', 'action'].includes(line.command))
+          .map(line => line.args[0]?.value),
+      );
+      let number = 1;
+      while (ids.has(`event${number}`)) number++;
+      const created = statement('node', [bare(`event${number}`), quoted(draft.label.trim())]);
+      writeTimelineDraft(created, draft);
+      doc.lines.push(created);
+      continue;
+    }
     const target = declaration(doc, id);
     if (target) writeTimelineDraft(target, draft);
   }

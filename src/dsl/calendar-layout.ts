@@ -22,10 +22,31 @@ export function calendarFor(doc: Diagram): PlacedTimeline | undefined {
   if (!data) return;
   const nodes = new Map(doc.graph.nodes.map(n => [n.id, n]));
   const groups = new Map(doc.graph.groups.map(g => [g.id, g.title]));
+  const stored = new Map(data.rows.map(row => [row.id, row]));
   const rows = data.rows.flatMap(row => {
     const n = nodes.get(row.id);
-    return n ? [{ ...row, label: n.title, band: groups.get(n.parentId ?? '') ?? 'Diagram' }] : [];
+    if (!n) return [];
+    const current = n.dates
+      ? {
+          ...n.dates,
+          id: n.id,
+          key: n.dates.key ?? n.id,
+          label: n.title,
+          band: groups.get(n.parentId ?? '') ?? 'Diagram',
+        }
+      : row;
+    return [{ ...current, label: n.title, band: groups.get(n.parentId ?? '') ?? 'Diagram' }];
   });
+  for (const n of doc.graph.nodes) {
+    if (!n.dates || stored.has(n.id)) continue;
+    rows.push({
+      ...n.dates,
+      id: n.id,
+      key: n.dates.key ?? n.id,
+      label: n.title,
+      band: groups.get(n.parentId ?? '') ?? 'Diagram',
+    });
+  }
   const plan = focusPlan(rows, data.options, resolveAppearance(doc.appearance).annotation.face);
   return { ...plan, x: data.x, y: data.bottom - plan.height };
 }

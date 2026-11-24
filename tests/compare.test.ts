@@ -54,6 +54,15 @@ layout root flow gap=48
     expect(() => checkSource(merged)).not.toThrow();
   });
 
+  it('keeps a removed open span open when both panels share its snapshot', () => {
+    const before =
+      'layout root timeline today=2026-01-20\nnode active "Active" from=2026-01-01 to=open\n';
+    const after = 'layout root timeline today=2026-01-20\nnode current "Current" at=2026-01-22\n';
+    const merged = compareSources(before, after);
+    expect(merged).toContain('-node active "Active" from=2026-01-01 to=open');
+    expect(() => checkSource(merged)).not.toThrow();
+  });
+
   it('draws each line both panels keep along the same path', () => {
     const source = fs.readFileSync('examples/checkout-change.draft', 'utf8') + 'compare\n';
     const panels = renderSvg(projectScene(checkSource(source)))

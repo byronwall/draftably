@@ -1,13 +1,12 @@
 import { calendarFor } from '../../dsl/calendar-layout';
 import { createSignal, For, Show, untrack } from 'solid-js';
-import { declaration, setAttr, statement } from '../../dsl/source-edits';
+import { setAttr } from '../../dsl/source-edits';
 import {
   timelineLayout,
-  writeTimelineDraft,
   writeTimelineDrafts,
   type TimelineDraft,
 } from '../../dsl/timeline-settings';
-import { bare, printSource, quoted, readSource } from '../../dsl/syntax';
+import { bare, printSource, readSource } from '../../dsl/syntax';
 import { closeDialog } from '../../state/ui';
 import { useDiagramSession } from '../session-context';
 import { Modal } from '../Dialogs';
@@ -41,8 +40,10 @@ export function TimelineSettings() {
     unknown: unknown(),
     open: open(),
     steps: steps(),
+    label: label(),
   });
   function showDraft(d: TimelineDraft) {
+    setLabel(d.label);
     setKind(d.kind);
     setStart(d.start);
     setEnd(d.end);
@@ -75,6 +76,7 @@ export function TimelineSettings() {
       steps: d?.steps.join(',') ?? '',
       unknown: !!d?.from?.startsWith('?'),
       open: d?.to === 'open',
+      label: '',
     });
   }
   untrack(() => load(id(), false));
@@ -90,17 +92,7 @@ export function TimelineSettings() {
     const root = timelineLayout(doc);
     setAttr(root, 'today', today() ? bare(today()) : undefined);
     setAttr(root, 'zoom', lo() ? bare(lo() + '..' + hi()) : undefined);
-    let n = declaration(doc, id());
-    if (id() === ':new') {
-      const ids = new Set([...model.objects, ...model.edges].map(o => o.id));
-      let number = 1;
-      while (ids.has('event' + number)) number++;
-      n = statement('node', [bare('event' + number), quoted(label().trim())]);
-      doc.lines.push(n);
-      drafts.set(':new', currentDraft());
-    }
     writeTimelineDrafts(doc, drafts);
-    if (id() === ':new' && n) writeTimelineDraft(n, drafts.get(':new') ?? currentDraft());
     const next = printSource(doc);
     setBusy(true);
     try {

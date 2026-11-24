@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
+import { normalize } from '../src/model/document';
 import { projectScene } from '../src/dsl/project';
+import { calendarFor } from '../src/dsl/calendar-layout';
 import { printSource, readSource } from '../src/dsl/syntax';
 import {
   movedOutsideEdit,
@@ -117,6 +119,51 @@ describe('translating editor edits', () => {
     expect(text).toContain(
       `node ${newId} "Compare formatting" from=2025-01-01 to=2025-01-20 steps="2025-01-05,2025-01-11" key="compare" introduced-by="#619" fixed-by="#621" platforms="Web, CLI"`,
     );
+  });
+
+  it('bounds copied open spans at the source snapshot when pasted without timeline settings', () => {
+    const source = [
+      'layout root timeline today=2025-01-20',
+      'node active "Active" from=2025-01-01 to=open',
+      '',
+    ].join('\n');
+    const scene = checkSource(source),
+      before = projectScene(scene),
+      part = edits.copyFragment(before, ['active']);
+
+    expect(part.today).toBe('2025-01-20');
+    const destinationSource = 'node other "Other"\n',
+      destinationScene = checkSource(destinationSource),
+      destination = projectScene(destinationScene),
+      { doc: after, selected } = edits.pasteFragment(destination, part),
+      result = translateEdit({
+        source: readSource(destinationSource),
+        scene: destinationScene,
+        before: destination,
+        after,
+        label: 'Paste',
+        selection: selected,
+      }),
+      text = printSource(result.source),
+      pasted = checkSource(text).model.objects.find(o => o.id === result.ids.get(selected[0])!);
+
+    expect(pasted?.dates?.to).toBe('2025-01-20');
+  });
+
+  it('shows current dated nodes added after JSON import in the timeline', () => {
+    const source = [
+      'layout root timeline today=2025-01-20',
+      'node active "Active" from=2025-01-01 to=open',
+      '',
+    ].join('\n');
+    const scene = checkSource(source),
+      before = projectScene(scene),
+      part = edits.copyFragment(before, ['active']),
+      { doc: after, selected } = edits.pasteFragment(before, part),
+      imported = normalize(JSON.parse(JSON.stringify(after))),
+      newId = selected[0];
+
+    expect(calendarFor(imported)?.boxes[newId]).toBeDefined();
   });
 
   it('places a node dropped under a neighbour below it, not beside the one across the gap', () => {

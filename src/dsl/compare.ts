@@ -159,7 +159,12 @@ export function compareDetailed(before: string, after: string) {
     const openEnd = removed.attrs.findIndex(
       ([key, value]) => key === 'to' && value.value === 'open',
     );
-    if (line.command === 'node' && old.timeline?.today && openEnd >= 0)
+    if (
+      line.command === 'node' &&
+      old.timeline?.today &&
+      old.timeline.today !== next.timeline?.today &&
+      openEnd >= 0
+    )
       removed.attrs[openEnd] = ['to', bare(old.timeline.today)];
     return removed;
   };

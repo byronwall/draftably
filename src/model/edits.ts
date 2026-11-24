@@ -839,6 +839,8 @@ export function setIntent(
 
 export interface ClipboardFragment {
   kind: 'diagram-studio/clipboard';
+  /** Snapshot that bounds open timeline spans copied from their source file. */
+  today?: string;
   nodes: DiagramNode[];
   groups: DiagramGroup[];
   edges: DiagramEdge[];
@@ -860,6 +862,7 @@ export function copyFragment(doc: Diagram, selected: Iterable<string>): Clipboar
     );
   return {
     kind: 'diagram-studio/clipboard',
+    ...(doc.layout.timeline?.options.today ? { today: doc.layout.timeline.options.today } : {}),
     nodes: clone(doc.graph.nodes.filter(n => ids.has(n.id))),
     groups: clone(doc.graph.groups.filter(g => ids.has(g.id))),
     edges: clone(edges),
@@ -887,9 +890,19 @@ export function pasteFragment(doc: Diagram, part: ClipboardFragment) {
   for (const e of part.edges) ids.set(e.id, uid('e'));
   const candidate = clone(doc),
     selected: string[] = [];
+  const sourceSnapshot = part.today;
+  const snapshotMs =
+    typeof sourceSnapshot === 'string' ? Date.parse(`${sourceSnapshot}T00:00:00Z`) : NaN;
+  const validSnapshot =
+    typeof sourceSnapshot === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(sourceSnapshot) &&
+    Number.isFinite(snapshotMs) &&
+    new Date(snapshotMs).toISOString().slice(0, 10) === sourceSnapshot;
   const existingGroup = (id?: string) => candidate.graph.groups.some(g => g.id === id);
   for (const n of part.nodes) {
     const next = { ...clone(n), id: ids.get(n.id)! };
+    if (next.dates?.to === 'open' && !candidate.layout.timeline?.options.today && validSnapshot)
+      next.dates = { ...next.dates, to: sourceSnapshot };
     next.parentId = ids.get(n.parentId!) || (existingGroup(n.parentId) ? n.parentId : undefined);
     candidate.graph.nodes.push(next);
     selected.push(next.id);
