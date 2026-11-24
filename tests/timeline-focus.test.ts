@@ -64,6 +64,53 @@ describe('timeline focus geometry', () => {
     expect(plan.marks.some(m => m.id === 'uncertain' && m.title === 'Step 2025-07-15')).toBe(true);
   });
 
+  it('shows an uncertain lead-in when the detail window ends before its known bound', () => {
+    const plan = focusPlan(
+      [row({ id: 'uncertain', label: 'Uncertain start', from: '?2025-11-09', to: '2025-11-16' })],
+      { zoom: ['2025-11-01', '2025-11-05'] },
+    );
+    const leadIn = plan.marks.find(
+      m => m.kind === 'line' && m.id === 'uncertain' && m.strokeWidth === 5,
+    );
+    expect(leadIn).toMatchObject({ kind: 'line', x: 310, x2: 952, dash: true });
+    expect(
+      plan.marks.some(
+        m => m.kind === 'line' && m.id === 'uncertain' && m.strokeWidth === 5 && !m.dash,
+      ),
+    ).toBe(false);
+  });
+
+  it('labels close step dates on alternating lines and hides only colliding axis labels', () => {
+    const plan = focusPlan(
+      [
+        row({
+          id: 'uncertain',
+          label: 'Uncertain start',
+          from: '?2025-11-09',
+          to: '2025-11-16',
+          steps: ['2025-11-04', '2025-11-05'],
+        }),
+      ],
+      { zoom: ['2025-11-01', '2025-11-23'] },
+    );
+    const stepDates = plan.marks.filter(
+      m => m.kind === 'text' && m.id === 'uncertain' && m.title?.startsWith('Step '),
+    );
+    expect(stepDates.map(mark => mark.kind === 'text' && [mark.text, mark.y])).toEqual([
+      ['Nov 4', 234],
+      ['Nov 5', 264],
+    ]);
+    expect(plan.marks.some(m => m.kind === 'text' && m.y === 202 && m.text === 'Nov 22')).toBe(
+      false,
+    );
+    expect(plan.marks.some(m => m.kind === 'text' && m.y === 202 && m.text === 'Nov 23')).toBe(
+      true,
+    );
+    expect(plan.marks.some(m => m.kind === 'line' && Math.abs(m.x - 923) < 1 && m.y === 193)).toBe(
+      true,
+    );
+  });
+
   it('keeps out-of-window today and release guides out of the detail edges', () => {
     const rows = [
       row({

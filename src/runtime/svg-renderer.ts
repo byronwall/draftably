@@ -845,7 +845,7 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
     `<g class="date-chart" transform="translate(${chart.x} ${chart.y})" font-family="${esc(look.annotation.family)}">`,
   ];
   parts.push(`<rect width="${chart.width}" height="${chart.height}" fill="${look.canvas}"/>`);
-  for (const m of chart.marks) {
+  const drawMark = (m: (typeof chart.marks)[number]) => {
     const color = colors[m.tone ?? 'ink'];
     const id = m.id ? ` data-timeline-id="${esc(m.id)}"` : '';
     const title = m.title ? `<title>${esc(m.title)}</title>` : '';
@@ -867,11 +867,16 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
         `<circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="${m.hollow ? look.canvas : color}" stroke="${color}" stroke-width="1.5"/>`,
       );
     parts.push('</g>');
-  }
+  };
+  const rowFills = chart.marks.filter(m => m.kind === 'rect' && m.tone === 'paper');
+  for (const m of rowFills) drawMark(m);
   for (const [id, b] of Object.entries(chart.boxes))
     parts.push(
-      `<rect data-timeline-id="${esc(id)}" tabindex="0" role="button" aria-label="${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="transparent"/>`,
+      `<rect data-timeline-id="${esc(id)}" tabindex="0" role="button" aria-label="${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="transparent"><title>Reveal ${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}</title></rect>`,
     );
+  for (const m of chart.marks) {
+    if (!(m.kind === 'rect' && m.tone === 'paper')) drawMark(m);
+  }
   parts.push('</g>');
   return parts.join('');
 }

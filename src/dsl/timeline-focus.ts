@@ -1,5 +1,6 @@
 import type { TimelineMark, TimelinePlan, Tone } from './timeline-plan';
 import type { TimelineOptions, TimelineRow } from './timeline';
+import { measureText, type TypeProfile } from '../model/fonts';
 
 type Window = { start: number; end: number };
 type SpanShape =
@@ -79,8 +80,48 @@ function tickLabel(date: number, window: Window) {
     ...(window.end - window.start > 180 * DAY ? { year: '2-digit' } : { day: 'numeric' }),
   }).format(date);
 }
-const tickAnchor = (x: number, left: number, right: number) =>
+const stepLabel = (date: number) =>
+  new Intl.DateTimeFormat('en', { timeZone: 'UTC', month: 'short', day: 'numeric' }).format(date);
+const tickAnchor = (x: number, left: number, right: number): 'start' | 'middle' | 'end' =>
   x <= left + 14 ? 'start' : x >= right - 14 ? 'end' : 'middle';
+
+function visibleTickLabels(
+  values: number[],
+  window: Window,
+  left: number,
+  right: number,
+  face: TypeProfile['face'],
+) {
+  const candidates = values.map((date, index) => {
+    const x = left + pct(date, window) * (right - left);
+    const label = tickLabel(date, window);
+    const anchor = tickAnchor(x, left, right);
+    const width = measureText(label, { face, size: 9 });
+    return {
+      x,
+      label,
+      anchor,
+      index,
+      left: x - (anchor === 'end' ? width : anchor === 'middle' ? width / 2 : 0),
+      right: x + (anchor === 'start' ? width : anchor === 'middle' ? width / 2 : 0),
+    };
+  });
+  const visible: typeof candidates = [];
+  for (const candidate of candidates) {
+    if (candidate.index === candidates.length - 1) {
+      while (visible.length > 1 && visible[visible.length - 1].right + 3 > candidate.left)
+        visible.pop();
+      visible.push(candidate);
+    } else if (
+      visible.length === 0 ||
+      (visible[visible.length - 1].right + 3 <= candidate.left &&
+        candidate.right + 3 <= candidates[candidates.length - 1].left)
+    ) {
+      visible.push(candidate);
+    }
+  }
+  return visible;
+}
 
 function text(
   marks: TimelineMark[],
@@ -127,7 +168,11 @@ function dot(
 }
 
 /** Build a two-scale SVG plan: a full history rail and a row-by-row focus view. */
-export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): TimelinePlan {
+export function focusPlan(
+  rows: TimelineRow[],
+  options: TimelineOptions = {},
+  annotationFace: TypeProfile['face'] = 'sans-500',
+): TimelinePlan {
   const marks: TimelineMark[] = [],
     boxes: TimelinePlan['boxes'] = Object.create(null);
   const rowDates = rows.flatMap(row => {
@@ -185,12 +230,20 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
     radius: 4,
     title: 'Detailed date window',
   });
-  for (const t of ticks(history)) {
+  const historyTicks = ticks(history);
+  const historyLabels = visibleTickLabels(
+    historyTicks,
+    history,
+    chartX,
+    chartX + chartW,
+    annotationFace,
+  );
+  for (const t of historyTicks) {
     const x = chartX + pct(t, history) * chartW;
     line(marks, x, overviewY - 8, x, overviewEndY, 'grid', { strokeWidth: 1 });
-    text(marks, x, 135, tickLabel(t, history), 9, 'muted', {
-      anchor: tickAnchor(x, chartX, chartX + chartW),
-    });
+  }
+  for (const { x, label, anchor } of historyLabels) {
+    text(marks, x, 135, label, 9, 'muted', { anchor });
   }
   for (const release of rows.filter(r => r.milestone && r.at)) {
     const d = isoDay(release.at!)!;
@@ -267,14 +320,16 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
   });
   const windowLeft = chartX,
     windowRight = chartX + chartW;
-  for (const t of ticks(focus)) {
+  const focusTicks = ticks(focus);
+  const focusLabels = visibleTickLabels(focusTicks, focus, windowLeft, windowRight, annotationFace);
+  for (const t of focusTicks) {
     const x = chartX + pct(t, focus) * chartW;
     line(marks, x, axisY - 9, x, rowsY + rows.length * rowH, 'grid', {
       strokeWidth: 1,
     });
-    text(marks, x, axisY, tickLabel(t, focus), 9, 'muted', {
-      anchor: tickAnchor(x, windowLeft, windowRight),
-    });
+  }
+  for (const { x, label, anchor } of focusLabels) {
+    text(marks, x, axisY, label, 9, 'muted', { anchor });
   }
   for (const release of rows.filter(r => r.milestone && r.at)) {
     const d = isoDay(release.at!)!;
@@ -342,7 +397,9 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
       }
     } else if (mark.kind === 'span') {
       const end = mark.to ?? snapshot;
-      const overlaps = (mark.from === undefined || mark.from <= focus.end) && end >= focus.start;
+      const overlaps =
+        end >= focus.start &&
+        (mark.unknownStart || mark.from === undefined || mark.from <= focus.end);
       if (overlaps) {
         const left =
           mark.unknownStart || mark.from === undefined
@@ -350,7 +407,8 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
             : chartX + pct(Math.max(mark.from, focus.start), focus) * chartW;
         const right = chartX + pct(Math.min(end, focus.end), focus) * chartW;
         if (mark.unknownStart && mark.from !== undefined) {
-          const boundary = chartX + pct(mark.from, focus) * chartW;
+          const boundary =
+            chartX + pct(Math.max(focus.start, Math.min(mark.from, focus.end)), focus) * chartW;
           if (boundary > left)
             line(marks, left, cy, boundary, cy, 'muted', {
               dash: true,
@@ -453,12 +511,17 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
           });
         }
       }
-      for (const step of row.steps ?? []) {
+      for (const [stepIndex, step] of (row.steps ?? []).entries()) {
         const d = isoDay(step)!;
         if (d < focus.start || d > focus.end) continue;
         const x = chartX + pct(d, focus) * chartW;
         dot(marks, x, cy, 2.5, 'paper', { id: row.id, title: `Step ${step}` });
         line(marks, x, cy - 6, x, cy + 6, 'ink', {
+          id: row.id,
+          title: `Step ${step}`,
+        });
+        text(marks, x, y + (stepIndex % 2 ? 40 : 10), stepLabel(d), 8, 'muted', {
+          anchor: 'middle',
           id: row.id,
           title: `Step ${step}`,
         });

@@ -1,4 +1,5 @@
 import type { Diagram } from '../model/types';
+import { resolveAppearance } from '../model/appearance';
 import { focusPlan } from './timeline-focus';
 import {
   type TimelineRow,
@@ -25,7 +26,7 @@ export function calendarFor(doc: Diagram): PlacedTimeline | undefined {
     const n = nodes.get(row.id);
     return n ? [{ ...row, label: n.title, band: groups.get(n.parentId ?? '') ?? 'Diagram' }] : [];
   });
-  const plan = focusPlan(rows, data.options);
+  const plan = focusPlan(rows, data.options, resolveAppearance(doc.appearance).annotation.face);
   return { ...plan, x: data.x, y: data.bottom - plan.height };
 }
 export function validateCalendar(data: CalendarLayout) {
