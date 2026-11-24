@@ -1906,6 +1906,7 @@ function validateReferences(m: Model) {
       h.type === 'order' &&
       (timelineScope(h.scope) || timelineScope(by.get(h.scope)?.parent ?? ''));
     if (h.type === 'order' && inTimeline) {
+      assert(new Set(h.ids).size === h.ids.length, 'Duplicate member in order.', h.line);
       for (const id of h.ids) {
         exists(id, h.line);
         assert(

@@ -536,6 +536,7 @@ export function layoutTimeline(
   let right = chartR;
   const bandHeads = bands.some(b => b.g);
 
+  const drawnAsEvent = new Set<string>();
   const anchors = new Map<
     string,
     { start: number; end: number; y: number; panel: number; point: boolean }
@@ -649,8 +650,10 @@ export function layoutTimeline(
     }
     for (const t of kept)
       text(X(t.day), y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
-    if (todayX !== undefined) text(todayX, y + 8, caption, 'text', 'caps', 'middle');
-    else if (!kept.length) text(chartX, y + 8, fullDate(dateOf(Math.ceil(d0))), 'muted', 'small');
+    if (todayX !== undefined) {
+      text(todayX, y + 8, caption, 'text', 'caps', 'middle');
+      right = Math.max(right, todayX + w(caption, 'caps') / 2 + 4);
+    } else if (!kept.length) text(chartX, y + 8, fullDate(dateOf(Math.ceil(d0))), 'muted', 'small');
     if (options.headers && pi === 0) {
       if (options.headers[0])
         text(0, y + 8, options.headers[0], 'muted', 'caps', 'start', nameW + keyCol);
@@ -661,11 +664,12 @@ export function layoutTimeline(
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
       text(t.x, ty, t.o.label, 'text', 'caps', 'middle');
-      titles[t.o.id] = { x: t.x - t.w / 2, y: ty, w: t.w, font: 'caps' };
+      // A period across the zoom boundary shows in both panels; the first keeps the box.
+      titles[t.o.id] ??= { x: t.x - t.w / 2, y: ty, w: t.w, font: 'caps' };
       // A milestone's box is its tag, so it can be selected, and it is never smaller than the
       // least box a document holds (24 by 20).
       const bw = Math.max(24, t.w + 8);
-      rects.set(t.o.id, { x: t.x - bw / 2, y: ty - 10, w: bw, h: 20 });
+      if (!rects.has(t.o.id)) rects.set(t.o.id, { x: t.x - bw / 2, y: ty - 10, w: bw, h: 20 });
     });
     under.push({ k: 'line', x1: chartX, y1: axisY, x2: chartR, y2: axisY, ink: 'rule', w: 1 });
     y = axisY + 10;
@@ -758,6 +762,7 @@ export function layoutTimeline(
           // as an end dot hiding its own start ring.
           const tiny =
             !open && !d.fromUnknown && xe - xs < 6 && !d.steps.length && d.progress === undefined;
+          if (tiny) drawnAsEvent.add(r.o.id);
           if (d.fromUnknown) {
             over.push({
               k: 'line',
@@ -871,7 +876,7 @@ export function layoutTimeline(
         ink: { family: PERIOD, tone: 'tint' },
       });
     });
-    if (ordinal.length > 2) {
+    if (ordinal.length >= 2) {
       // Long gaps say how long they are, since an ordinal axis does not show it.
       const gaps = ordinal.slice(1).map((day, i) => day - ordinal[i]),
         median = [...gaps].sort((a, b) => a - b)[Math.floor(gaps.length / 2)];
@@ -1020,7 +1025,9 @@ export function layoutTimeline(
   }
 
   // The legend: one entry for each kind of mark the drawing uses.
-  const used = (test: (d: TimelineWhen) => boolean) => rows.some(r => test(r.when));
+  // The legend follows what was drawn: a span drawn as an event counts as an event.
+  const used = (test: (d: TimelineWhen) => boolean) =>
+    rows.some(r => test(drawnAsEvent.has(r.o.id) ? { steps: [], at: r.when.from } : r.when));
   const legend: Array<[string, (x: number, y: number) => TimelineMark[]]> = [];
   const sample: TimelineInk = 'muted';
   if (used(d => d.from !== undefined && !d.fromUnknown))

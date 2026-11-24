@@ -245,6 +245,25 @@ node c "C" at=2000-01-01`).timelines![0];
     expect(() => checkSource(out)).not.toThrow();
   });
 
+  it('builds its legend from the marks drawn, and labels a lone ordinal gap', () => {
+    const texts = (src: string) =>
+      checkSource(src).timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    // A one-day span draws as an event, so the legend says Event, not Start and Ended.
+    const legend = texts('layout root timeline\nnode a "A" from=2025-01-01 to=2025-01-01');
+    expect(legend).toContain('Event');
+    expect(legend).not.toContain('Ended');
+    expect(
+      texts(
+        'layout root timeline scale=ordinal\nnode a "A" at=1990-04-01\nnode b "B" at=2025-04-01',
+      ),
+    ).toContain('35 years');
+    expect(
+      errorOf(
+        'layout root timeline\nnode a "A" at=2025-01-01\nnode b "B" at=2025-01-02\norder root a b a',
+      ),
+    ).toMatch(/Duplicate member in order/);
+  });
+
   it('reports each date error on its own line', () => {
     expect(errorOf('layout root timeline\nnode a "A"')).toMatch(/needs at=DATE/);
     expect(errorOf('layout root timeline\nnode a "A" at=2025-02-30')).toMatch(/YYYY-MM-DD/);

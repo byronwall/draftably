@@ -9,7 +9,7 @@ export { accentPath, PHASE_TAB, sequenceBackdrop, type SvgOptions } from '../run
 export function renderSvg(doc: Diagram, options: SvgOptions = {}): string {
   const code = doc.graph.nodes.some(n => n.code);
   return writeSvg(doc, {
-    fontCss: fontFaceCss(resolveAppearance(doc.appearance), code),
+    fontCss: fontFaceCss(resolveAppearance(doc.appearance), code, !!doc.layout.timelines?.length),
     ...options,
   });
 }

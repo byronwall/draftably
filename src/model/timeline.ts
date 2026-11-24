@@ -4,6 +4,7 @@
  * Colors stay semantic until drawing time, so a dark color scheme repaints without a recompile.
  */
 import {
+  contrast,
   ensureContrast,
   mixColors,
   swatchFor,
@@ -124,30 +125,34 @@ export function timelineColor(
       return swatchFor(look, ink.family, near as Shade).fill;
     };
     const strong = ensureContrast(family(look.dark ? 400 : 600), backdrop, 3);
+    // A dark backdrop (a dark theme, or a dark group in a light one) needs stronger washes.
+    const deep = contrast(backdrop, '#ffffff') > contrast(backdrop, '#000000');
     switch (tone) {
       case 'ink':
         return ensureContrast(family(look.dark ? 300 : 700), backdrop, 4.5);
       case 'track':
-        return mixColors(backdrop, strong, look.dark ? 0.38 : 0.3);
+        return mixColors(backdrop, strong, deep ? 0.38 : 0.3);
       case 'tint':
-        return mixColors(backdrop, strong, look.dark ? 0.16 : 0.11);
+        return mixColors(backdrop, strong, deep ? 0.16 : 0.11);
       case 'soft':
         return family(look.dark ? 900 : 100);
       default:
         return strong;
     }
   }
+  // Text, and the gridlines and rules mixed from it, hold 4.5:1 on a dark group fill too.
+  const text = ensureContrast(look.text, backdrop, 4.5);
   switch (ink) {
     case 'text':
-      return look.text;
+      return text;
     case 'muted':
       return ensureContrast(look.muted, backdrop, 4.5);
     case 'grid':
-      return mixColors(backdrop, look.text, look.dark ? 0.12 : 0.07);
+      return mixColors(backdrop, text, look.dark ? 0.12 : 0.07);
     case 'rule':
-      return mixColors(backdrop, look.text, look.dark ? 0.45 : 0.38);
+      return mixColors(backdrop, text, look.dark ? 0.45 : 0.38);
     case 'shade':
-      return mixColors(backdrop, look.text, look.dark ? 0.1 : 0.05);
+      return mixColors(backdrop, text, look.dark ? 0.1 : 0.05);
     case 'canvas':
       return backdrop;
   }

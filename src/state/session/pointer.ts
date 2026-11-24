@@ -769,7 +769,7 @@ export function createPointer(
     const p = s.screenToWorld(e.clientX, e.clientY),
       target = edits.dropTarget(s.doc, '', { x: p.x, y: p.y, w: 0, h: 0 });
     // Inside a timeline a new row needs dates, which only the source can give.
-    if (target && s.doc.layout.timelines?.some(t => t.scope === target.id))
+    if (s.doc.layout.timelines?.some(t => t.scope === (target?.id ?? 'root')))
       return toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
     s.addNode(target ? { parentId: target.id } : {}, p, true);
   }
