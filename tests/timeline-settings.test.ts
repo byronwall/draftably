@@ -138,6 +138,20 @@ describe('timeline settings edits', () => {
     expect(
       validateTimelineDraft(
         ':new',
+        { ...base, kind: 'undated', start: '', end: '', steps: '', startBadInput: true },
+        undefined,
+      ),
+    ).toBeUndefined();
+    expect(
+      validateTimelineDraft(
+        ':new',
+        { ...base, kind: 'undated', start: '', end: '', steps: '', label: '' },
+        undefined,
+      )?.field,
+    ).toBe('label');
+    expect(
+      validateTimelineDraft(
+        ':new',
         { ...base, label: '', start: '2025-01-08', end: '', steps: '' },
         undefined,
       )?.field,

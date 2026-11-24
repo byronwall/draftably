@@ -45,7 +45,7 @@ export function TimelineSettings() {
     open: open(),
     steps: steps(),
     label: label(),
-    startBadInput: startBadInput(),
+    startBadInput: startBadInput() || inputs.start?.validity.badInput === true,
   });
   function showDraft(d: TimelineDraft) {
     setLabel(d.label);
@@ -97,6 +97,11 @@ export function TimelineSettings() {
     if (busy()) return;
     if (original !== s.currentSource() || s.fileBlocked())
       return setError('The diagram changed. Reopen settings to edit its current dates.');
+    if (inputs.snapshot?.validity.badInput) {
+      setError('Enter a complete snapshot date or clear it.');
+      inputs.snapshot.focus();
+      return;
+    }
     if (!!lo() !== !!hi() || (lo() && lo() >= hi()))
       return setError('Choose a start and a later end for the detail window.');
     const doc = readSource(s.currentSource());
@@ -129,7 +134,7 @@ export function TimelineSettings() {
   }
   return (
     <Modal title="Timeline settings">
-      <form class="timeline-settings" onSubmit={save}>
+      <form class="timeline-settings" novalidate onSubmit={save}>
         <fieldset>
           <legend>Time axis</legend>
           <label>

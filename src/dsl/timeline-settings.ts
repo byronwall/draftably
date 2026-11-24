@@ -29,8 +29,6 @@ export function validateTimelineDraft(
     field,
     message,
   });
-  if (draft.startBadInput)
-    return issue('start', 'Finish entering the date, or discard this new item.');
   const untouchedNew =
     id === ':new' &&
     draft.kind === 'point' &&
@@ -39,11 +37,16 @@ export function validateTimelineDraft(
     !draft.end &&
     !draft.unknown &&
     !draft.open &&
-    !draft.steps.trim();
+    !draft.steps.trim() &&
+    !draft.startBadInput;
   if (untouchedNew) return;
+  if (id === ':new' && !draft.label.trim() && draft.kind !== 'undated' && draft.startBadInput)
+    return issue('start', 'Finish entering the date, or discard this new item.');
   if (id === ':new' && !draft.label.trim())
     return issue('label', 'Add a name for the new item, or discard it.');
   if (draft.kind === 'undated') return;
+  if (draft.startBadInput)
+    return issue('start', 'Finish entering the date, or discard this new item.');
   if (!draft.start) return issue('start', 'Add a date before applying this item.');
   if (draft.kind === 'span' && !draft.open && !draft.end)
     return issue('end', 'Add an end date or mark this span open.');
