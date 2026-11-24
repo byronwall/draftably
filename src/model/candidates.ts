@@ -14,6 +14,8 @@ export interface Measure {
   labels: number;
   bends: number;
   length: number;
+  /** Drawn width; with `area` and `length`, what a tighter arrangement saves. */
+  width: number;
   area: number;
   aspect: number;
 }
@@ -44,6 +46,7 @@ export function measure(scene: StaticScene, routing: RoutingResult): Measure {
     labels: labelHits(scene).length,
     bends: r.bends,
     length: r.length,
+    width: scene.bounds.w,
     area: scene.bounds.w * scene.bounds.h,
     aspect: scene.bounds.w / Math.max(1, scene.bounds.h),
   };
@@ -112,9 +115,12 @@ export function readDifference(m: Measure, base: Measure): Reading {
   defect(m.labels, base.labels, 'label collision');
   fewer(m.crossings - base.crossings, 'crossing');
   const area = percent(m.area, base.area),
+    width = percent(m.width, base.width),
     length = percent(m.length, base.length);
   if (area < 0) reading.gains.push(`${-area}% smaller`);
   if (area > 0) reading.costs.push(`${area}% larger`);
+  if (width < 0) reading.gains.push(`${-width}% narrower`);
+  if (width > 0) reading.costs.push(`${width}% wider`);
   if (length < 0) reading.gains.push(`${-length}% shorter lines`);
   if (length > 0) reading.costs.push(`${length}% longer lines`);
   fewer(m.bends - base.bends, 'bend');

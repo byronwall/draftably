@@ -969,16 +969,21 @@ export function improves(m: Metrics, base: Metrics, fit?: Fit) {
   if (straighter(m, base)) return true;
   if (!fit) return area(m) <= area(base) && (fewer || area(m) < area(base));
   const [now, was] = [fitError(m, fit), fitError(base, fit)];
-  // A much tighter drawing with no more bends and shorter lines may drift a little off the shape.
-  const tighter =
-    area(m) <= area(base) * TIGHTER &&
-    m.bends <= base.bends &&
-    m.length <= base.length &&
-    now <= was + TIGHTER_DRIFT;
   return (
-    tighter || (area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05))
+    tighter(m, base, fit) ||
+    (area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05))
   );
 }
+
+/**
+ * Whether `m` is much tighter than `base`: at most 85% of the area, no more bends and no longer
+ * lines. With `--fit` it may drift a little off the shape.
+ */
+export const tighter = (m: Metrics, base: Metrics, fit?: Fit) =>
+  area(m) <= area(base) * TIGHTER &&
+  m.bends <= base.bends &&
+  m.length <= base.length &&
+  (!fit || fitError(m, fit) <= fitError(base, fit) + TIGHTER_DRIFT);
 
 /** A variant this much smaller (by area) counts as tighter, and may move this far off `--fit`. */
 const TIGHTER = 0.85,
@@ -1148,9 +1153,11 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     }
   }
   const better = (v: Variant) => improves(v.metrics!, v0.metrics!, goal.fit);
-  // Among better variants, one that removes the file's avoidable bends comes first, even when
-  // another is closer to `--fit`.
-  const straight = (v: Variant) => better(v) && straighter(v.metrics!, v0.metrics!);
+  // Among better variants, one that removes the file's avoidable bends or packs it much tighter
+  // with shorter lines comes first, even when another is closer to `--fit`.
+  const straight = (v: Variant) =>
+    better(v) &&
+    (straighter(v.metrics!, v0.metrics!) || tighter(v.metrics!, v0.metrics!, goal.fit));
   const order = (a: Variant, b: Variant) =>
     Number(better(b)) - Number(better(a)) ||
     Number(straight(b)) - Number(straight(a)) ||

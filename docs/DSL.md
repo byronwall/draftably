@@ -1649,8 +1649,9 @@ Recommended: v1. Apply: draftably vary plan.draft --apply v1
 - **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
   counts as better than the file when it has fewer warnings and no more crossings, or when it
   has no more warnings, crossings or area and less of one; those come first. Among them, a
-  variant that removes at least two bends and half of them, no wider (within 5%), comes first
-  even when its aspect is farther from `--fit`. Then fewest warnings, crossings, area and bends.
+  variant that removes at least two bends and half of them, no wider (within 5%), or one that
+  takes at most 85% of the area with no more bends and shorter lines, comes first even when its
+  aspect is farther from `--fit`. Then fewest warnings, crossings, area and bends.
   `fit-direction` does not count as a warning here: the aspect already ranks it. `--limit N` keeps
   N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
 - **Recommended** is the first variant better than the file, or `v0` when none is.
@@ -1950,7 +1951,7 @@ where they go.
 
 **Compare alternatives** opens on the current drawing and up to three others. Every engine runs, and
 drawings that match the current one or each other are left out. Each card says what it gains and
-costs against the current drawing, from its crossings, area, line length and bends, and a drawing
+costs against the current drawing, from its crossings, area, width, line length and bends, and a drawing
 with a blocked line or an overlap comes last. Those numbers are a guide: look at the drawing. **More**
 shows every other result, including any that failed. The sliders button holds the method list,
 parameter grids, cameras and export. For connections, **Compare** tries `clearance=4`, `clearance=22`
