@@ -33,7 +33,7 @@ import {
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
-import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
+import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import {
@@ -345,7 +345,7 @@ function sceneMarkup(
   const out = new SvgChunks(opts.maxOutputBytes),
     diff = isDiff(doc);
   // Timeline rows draw as the timeline's marks, not as boxes.
-  const timelines = doc.layout.timelines ?? [],
+  const timelines = shownTimelines(doc),
     onTimeline = new Set(timelines.flatMap(t => t.ids));
   const backdrop = sequenceBackdrop(doc, look);
   out.push(...backdrop.panel);

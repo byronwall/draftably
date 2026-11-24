@@ -126,6 +126,53 @@ export function timelineColor(look: ResolvedAppearance, ink: TimelineInk): strin
 const escText = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+const num = (v: unknown) => typeof v === 'number' && Number.isFinite(v);
+const INKS = ['text', 'muted', 'grid', 'rule', 'shade', 'canvas'];
+const FONTS = ['name', 'detail', 'key', 'band', 'small', 'label', 'caps'];
+
+/** Whether stored data is a mark this module draws, with safe values in every string field. */
+export function validMark(m: unknown): m is TimelineMark {
+  if (!m || typeof m !== 'object') return false;
+  const v = m as Record<string, unknown>,
+    ink = v.ink as { family?: unknown; tone?: unknown } | string;
+  const inkOk =
+    typeof ink === 'string'
+      ? INKS.includes(ink)
+      : !!ink &&
+        typeof ink === 'object' &&
+        typeof ink.family === 'string' &&
+        /^[\w-]+$/.test(ink.family) &&
+        (ink.tone === undefined || ['strong', 'ink', 'soft'].includes(ink.tone as string));
+  if (!inkOk) return false;
+  switch (v.k) {
+    case 'line':
+      return (
+        ['x1', 'y1', 'x2', 'y2', 'w'].every(k => num(v[k])) &&
+        (v.dash === undefined || (typeof v.dash === 'string' && /^[\d. ]+$/.test(v.dash)))
+      );
+    case 'rect':
+      return ['x', 'y', 'w', 'h'].every(k => num(v[k])) && (v.r === undefined || num(v.r));
+    case 'dot':
+      return ['x', 'y', 'r'].every(k => num(v[k]));
+    case 'path':
+      return (
+        typeof v.d === 'string' &&
+        /^[MLQZ\d.,\s-]+$/.test(v.d) &&
+        (v.stroke === undefined || num(v.stroke))
+      );
+    case 'text':
+      return (
+        num(v.x) &&
+        num(v.y) &&
+        typeof v.text === 'string' &&
+        FONTS.includes(v.font as string) &&
+        (v.anchor === undefined || ['start', 'middle', 'end'].includes(v.anchor as string)) &&
+        (v.full === undefined || typeof v.full === 'string')
+      );
+  }
+  return false;
+}
+
 /** Where a timeline's marks sit now: beside its group's current box, or as compiled for root. */
 export function timelineOrigin(t: PlacedTimeline, scopeRect: Rect | undefined) {
   return scopeRect ? { x: scopeRect.x + t.dx, y: scopeRect.y + t.dy } : { x: t.x, y: t.y };

@@ -25,6 +25,7 @@ import {
   isGroup,
   makeGeometry,
   objectRect,
+  onTimeline,
   selectionRoots,
 } from '../../model/graph';
 import type { NodeLayout, Point, Rect, Side } from '../../model/types';
@@ -391,7 +392,7 @@ export function createPointer(
       else if (!s.isSelected(objectId)) s.setSelection([objectId]);
       if (!s.isSelected(objectId)) return;
       // A timeline places rows by their dates, so a row selects but never drags.
-      if (s.doc.layout.timelines?.some(t => t.ids.includes(objectId))) {
+      if (onTimeline(s.doc, objectId)) {
         s.focusCanvas();
         return;
       }

@@ -1665,6 +1665,11 @@ function validateReferences(m: Model) {
       o.line,
     );
     assert(
+      !o.status && o.was === undefined,
+      `${o.id} is a timeline row; a row can't carry a change mark or was= yet.`,
+      o.line,
+    );
+    assert(
       !o.when!.milestone || timelines.has(o.parent),
       `Milestone ${o.id} crosses every band: put it in=${scope}, not in a band.`,
       o.line,
@@ -1679,11 +1684,22 @@ function validateReferences(m: Model) {
       `${e.id} ends on a milestone, which is a rule, not a box. Connect a row instead.`,
       e.line,
     );
-  for (const h of m.hints)
+  for (const h of m.hints) {
+    const row = [...('id' in h ? [h.id] : []), ...(h.type === 'align' ? h.ids : [])].find(id =>
+      timelineOf(id),
+    );
     assert(
-      !('id' in h && timelineOf(h.id)),
-      `${'id' in h ? h.id : ''} is a timeline row, placed by its dates; remove this ${h.type} line.`,
+      !row,
+      `${row} is a timeline row, placed by its dates; remove this ${h.type} line.`,
       h.line,
+    );
+  }
+  const rootRecipe = m.layouts.find(l => l.scope === 'root')?.algorithm;
+  if (timelines.size && (rootRecipe === 'lanes' || rootRecipe === 'sequence'))
+    assert(
+      false,
+      `A ${rootRecipe} diagram places every node itself, so it can't hold a timeline. Draw the timeline in its own file, or use a flow.`,
+      m.layouts.find(l => l.scope === 'root')!.line,
     );
   // Sequence: participants and messages only.
   const sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');

@@ -4,7 +4,7 @@
  */
 import { timelineOrigin } from './timeline';
 import { rectUnion } from './geometry';
-import type { VisibleGraph } from './graph';
+import { shownTimelines, type VisibleGraph } from './graph';
 import { visualBounds } from './labels';
 import type { Diagram, Point, Rect } from './types';
 
@@ -39,7 +39,7 @@ export function drawingBounds(
     if (r) boxes.push(r);
   }
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
-  for (const t of doc.layout.timelines ?? []) {
+  for (const t of shownTimelines(doc)) {
     const o = timelineOrigin(t, rects.get(t.scope));
     boxes.push({ ...t.bounds, x: o.x + t.bounds.x, y: o.y + t.bounds.y });
   }

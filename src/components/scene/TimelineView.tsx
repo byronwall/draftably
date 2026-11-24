@@ -1,6 +1,7 @@
 import { createMemo, For, Match, Switch } from 'solid-js';
 import type { ResolvedAppearance } from '../../model/appearance';
 import { resolveAppearance } from '../../model/appearance';
+import { shownTimelines } from '../../model/graph';
 import {
   timelineOrigin,
   timelineColor,
@@ -21,7 +22,7 @@ export function TimelineViews(props: {
   selected?: (id: string) => boolean;
 }) {
   return (
-    <For each={props.doc.layout.timelines ?? []}>
+    <For each={shownTimelines(props.doc)}>
       {t => <TimelineView doc={props.doc} t={t} rect={props.rect} selected={props.selected} />}
     </For>
   );

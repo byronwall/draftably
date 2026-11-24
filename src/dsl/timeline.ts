@@ -166,7 +166,6 @@ const ROW = 34,
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monthDay = (d: Date) => `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
-const yearShort = (d: Date) => `'${String(d.getUTCFullYear()).slice(2)}`;
 const fullDate = (d: Date) => `${monthDay(d)}, ${d.getUTCFullYear()}`;
 
 /** A readable range: "Nov 3–23, 2025", "Oct 29, 2024 – Nov 23, 2025". */
@@ -186,26 +185,36 @@ interface Tick {
   major: boolean;
 }
 
-/** Ticks for a domain: the finest step whose labels stand apart at this width. */
+/** The first day of a month in day numbers; years 0 to 99 stay themselves (not 1900 to 1999). */
+function monthStart(year: number, month: number) {
+  const d = new Date(0);
+  d.setUTCFullYear(year + Math.floor(month / 12), ((month % 12) + 12) % 12, 1);
+  return Math.round(d.getTime() / DAY);
+}
+
+/**
+ * Ticks for a domain: the finest step whose labels stand apart at this width. A step is judged
+ * on its sample label before any tick is made, so a long domain never builds a tick per day.
+ */
 function axisTicks(d0: number, d1: number, width: number, look: ResolvedAppearance): Tick[] {
   const px = width / (d1 - d0),
-    font = timelineFont(look, 'small');
-  const steps: Array<{ unit: 'day' | 'month' | 'year'; n: number }> = [
-    { unit: 'day', n: 1 },
-    { unit: 'day', n: 2 },
-    { unit: 'day', n: 7 },
-    { unit: 'month', n: 1 },
-    { unit: 'month', n: 2 },
-    { unit: 'month', n: 3 },
-    { unit: 'month', n: 6 },
-    { unit: 'year', n: 1 },
-    { unit: 'year', n: 2 },
-    { unit: 'year', n: 5 },
-    { unit: 'year', n: 10 },
-  ];
+    font = timelineFont(look, 'small'),
+    fits = (texts: string[], spacing: number) =>
+      spacing >= Math.max(0, ...texts.map(t => measureText(t, font))) + 12;
+  const steps: Array<{ unit: 'day' | 'month' | 'year'; n: number; days: number; sample: string }> =
+    [
+      ...[1, 2, 7].map(n => ({ unit: 'day' as const, n, days: n, sample: 'Sep 30' })),
+      ...[1, 2, 3, 6].map(n => ({ unit: 'month' as const, n, days: n * 28, sample: "Sep '25" })),
+      ...[1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000].map(n => ({
+        unit: 'year' as const,
+        n,
+        days: n * 365,
+        sample: '2025',
+      })),
+    ];
   for (const step of steps) {
+    if (!fits([step.sample], step.days * px)) continue;
     const ticks: Tick[] = [];
-    const start = dateOf(Math.ceil(d0));
     if (step.unit === 'day') {
       let day = Math.ceil(d0);
       // Weekly ticks fall on Mondays.
@@ -222,41 +231,33 @@ function axisTicks(d0: number, d1: number, width: number, look: ResolvedAppearan
         });
       }
     } else {
-      const y = start.getUTCFullYear();
-      let m = step.unit === 'year' ? 0 : start.getUTCMonth();
-      let year = step.unit === 'year' ? Math.ceil(y / step.n) * step.n : y;
-      if (step.unit === 'month') m = Math.ceil(m / step.n) * step.n;
-      for (let i = 0; i < 400; i++) {
-        const day = Math.round(Date.UTC(year, m, 1) / DAY);
+      const start = dateOf(Math.ceil(d0));
+      // Months count from year 0, so a step stays on whole months and whole years.
+      const per = step.unit === 'year' ? 12 * step.n : step.n;
+      let k = Math.ceil((start.getUTCFullYear() * 12 + start.getUTCMonth()) / per) * per;
+      for (; ; k += per) {
+        const year = Math.floor(k / 12),
+          month = k - year * 12,
+          day = monthStart(year, month);
         if (day > d1) break;
-        if (day >= d0) {
-          const d = dateOf(day);
-          const text =
-            step.unit === 'year'
-              ? String(year)
-              : m === 0 || !ticks.length
-                ? `${MONTHS[m]} ${yearShort(d)}`
-                : MONTHS[m];
-          ticks.push({ day, text, major: m === 0 });
-        }
-        if (step.unit === 'year') year += step.n;
-        else {
-          m += step.n;
-          if (m >= 12) {
-            m -= 12;
-            year++;
-          }
-        }
+        if (day < d0) continue;
+        const text =
+          step.unit === 'year'
+            ? String(year)
+            : month === 0 || !ticks.length
+              ? `${MONTHS[month]} '${String(year).slice(-2).padStart(2, '0')}`
+              : MONTHS[month];
+        ticks.push({ day, text, major: month === 0 });
       }
     }
-    const widest = Math.max(0, ...ticks.map(t => measureText(t.text, font)));
-    const gap =
-      step.unit === 'day'
-        ? step.n * px
-        : step.unit === 'month'
-          ? step.n * 28 * px
-          : step.n * 365 * px;
-    if (gap >= widest + 12 && ticks.length) return ticks;
+    if (
+      ticks.length &&
+      fits(
+        ticks.map(t => t.text),
+        step.days * px,
+      )
+    )
+      return ticks;
   }
   return [];
 }
@@ -285,7 +286,7 @@ export function layoutTimeline(
   options: TimelineOptions,
   look: ResolvedAppearance,
   links: ModelEdge[] = [],
-): { plan: TimelinePlan; rects: Map<string, Rect> } {
+): { plan: TimelinePlan; rects: Map<string, Rect>; drawn: string[] } {
   const under: TimelineMark[] = [],
     over: TimelineMark[] = [],
     rects = new Map<string, Rect>();
@@ -369,7 +370,9 @@ export function layoutTimeline(
     ...milestones.map(o => o.when!.at!),
     ...(today !== undefined ? [today] : []),
   ];
-  if (!allDays.length) return { plan: { bounds: { x: 0, y: 0, w: 0, h: 0 }, under, over }, rects };
+  const drawn: string[] = [];
+  if (!allDays.length)
+    return { plan: { bounds: { x: 0, y: 0, w: 0, h: 0 }, under, over }, rects, drawn };
 
   // With zoom=, a band whose every date falls in the window is drawn in a detail panel; the
   // rest stay in the overview, where the window is shaded.
@@ -431,7 +434,9 @@ export function layoutTimeline(
     // Panel heading: what range this panel shows and at what scale.
     if (zoomed) {
       const caption = panel.detail
-        ? `${rangeText(zoom![0], zoom![1])} · enlarged ${formatTimes((hi - lo) / (zoom![1] - zoom![0]))} per day`
+        ? `${rangeText(zoom![0], zoom![1])} · enlarged ${formatTimes(
+            (panels[0].d1 - panels[0].d0) / (panel.d1 - panel.d0),
+          )} per day`
         : `${rangeText(lo, hi)} · full history`;
       text(chartR, y + 8, caption, 'muted', 'caps', 'end');
       y += 22;
@@ -455,10 +460,7 @@ export function layoutTimeline(
       return level;
     });
     const railRows = rails.length;
-    const todayShown =
-      today !== undefined &&
-      inPanel(today) &&
-      (!zoomed || panel.detail || !zoom || today < zoom[0] || pi === panels.length - 1);
+    const todayShown = today !== undefined && inPanel(today);
     y += railRows * RAIL;
 
     // The axis: tick labels, then a baseline.
@@ -474,6 +476,7 @@ export function layoutTimeline(
       text(x, y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
     }
     if (todayX !== undefined) text(todayX, y + 8, 'Today', 'text', 'caps', 'middle');
+    for (const t of tags) right = Math.max(right, t.x + t.w / 2 + 4);
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
       text(t.x, ty, t.o.label, 'text', 'caps', 'middle');
@@ -612,8 +615,8 @@ export function layoutTimeline(
       if (band.g) rects.set(band.g.id, { x: 0, y: bandY, w: chartR, h: y - bandY });
       y += BAND_GAP;
     });
-    y -= BAND_GAP;
-    const bottom = y + 6;
+    if (panel.bands.length) y -= BAND_GAP;
+    const bottom = Math.max(y + 6, axisY + 24);
 
     // Under the rows: tick gridlines, the zoom window's shade, milestone and today rules.
     for (const t of ticks) {
@@ -630,7 +633,7 @@ export function layoutTimeline(
       });
     }
     if (zoomed && !panel.detail) {
-      const a = X(zoom![0]),
+      const a = Math.max(chartX, X(zoom![0])),
         b = Math.min(chartR, X(zoom![1]));
       under.unshift({
         k: 'rect',
@@ -693,7 +696,9 @@ export function layoutTimeline(
   for (const e of links) {
     const a = anchors.get(e.source),
       b = anchors.get(e.target);
+    // Rows in different panels have no shared axis; the router draws that line instead.
     if (!a || !b || a.panel !== b.panel) continue;
+    drawn.push(e.id);
     const down = b.y > a.y ? 1 : -1,
       into = b.point ? 8 : 6,
       x0 = a.end,
@@ -865,6 +870,7 @@ export function layoutTimeline(
   return {
     plan: { bounds: { x: 0, y: 0, w: Math.ceil(right + 4), h: Math.ceil(y + 4) }, under, over },
     rects,
+    drawn,
   };
 }
 

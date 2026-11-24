@@ -83,6 +83,59 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     }
   });
 
+  it('labels every axis, from centuries to early years and month rollovers', () => {
+    const labels = (src: string) =>
+      checkSource(src).timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    // Four centuries: a handful of year ticks, not a tick per day.
+    const long = labels('layout root timeline\nnode a "A" from=1600-01-01 to=2025-01-01');
+    expect(long.some(t => /^\d{4}$/.test(t))).toBe(true);
+    expect(
+      labels('layout root timeline width=240\nnode a "A" from=1800-01-01 to=2000-01-01').some(t =>
+        /^\d{4}$/.test(t),
+      ),
+    ).toBe(true);
+    expect(
+      labels('layout root timeline width=240\nnode a "A" from=0050-01-01 to=0055-06-01').some(t =>
+        /^\d+$/.test(t),
+      ),
+    ).toBe(true);
+    expect(
+      labels('layout root timeline width=240\nnode a "A" from=2025-11-20 to=2026-11-01').join(' '),
+    ).not.toContain('undefined');
+  });
+
+  it('routes a dependency between panels, and draws a milestone-only timeline', async () => {
+    const doc = projectScene(
+      await compile(`layout root timeline zoom=2025-02-01..2025-02-03
+group jan "Jan"
+group feb "Feb"
+node a "A" in=jan at=2025-01-05
+node b "B" in=feb at=2025-02-02
+edge e a -> b "then"`),
+    );
+    // The two rows sit in different panels with different scales: the router draws the line.
+    expect(doc.layout.timelines![0].edges).toEqual([]);
+    expect(renderSvg(doc)).toContain('then');
+    const only = checkSource('layout root timeline\nmilestone m "v1" at=2025-01-01');
+    const rule = only.timelines![0].under.find(m => m.k === 'line' && m.dash);
+    expect(rule && rule.k === 'line' && rule.y2 > rule.y1).toBe(true);
+  });
+
+  it('states the magnification the two panels really have', () => {
+    const plan = checkSource(`layout root timeline zoom=2025-02-01..2025-02-02
+group jan "Jan"
+group feb "Feb"
+node a "A" in=jan at=2025-01-01
+node b "B" in=feb at=2025-02-01`).timelines![0];
+    const caption = plan.over.find(m => m.k === 'text' && m.text.includes('per day'));
+    const times = Number(
+      /enlarged ([\d.]+)×/.exec(caption && caption.k === 'text' ? caption.text : '')?.[1],
+    );
+    // 31 days plus padding over 1 day plus padding: about 15, not 31.
+    expect(times).toBeGreaterThan(12);
+    expect(times).toBeLessThan(18);
+  });
+
   it('reports each date error on its own line', () => {
     expect(errorOf('layout root timeline\nnode a "A"')).toMatch(/needs at=DATE/);
     expect(errorOf('layout root timeline\nnode a "A" at=2025-02-30')).toMatch(/YYYY-MM-DD/);

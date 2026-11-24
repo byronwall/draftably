@@ -24,10 +24,12 @@ export function statement(
   return { kind: 'statement', command, args, attrs, line: 0 };
 }
 
-/** The `node` or `group` declaration of an object. */
+/** The `node`, `group` or `milestone` declaration of an object. */
 export const declaration = (doc: SourceDoc, id: string) =>
   statements(doc).find(
-    s => (s.command === 'node' || s.command === 'group') && s.args[0]?.value === id,
+    s =>
+      (s.command === 'node' || s.command === 'group' || s.command === 'milestone') &&
+      s.args[0]?.value === id,
   );
 
 /** A statement that makes a connection: an `edge`, or a sequence's `action`. */

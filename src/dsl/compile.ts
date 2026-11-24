@@ -233,7 +233,8 @@ function fitVariants(root: ModelLayout) {
   const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
     { label: `as written (${reads(root)})`, layout: {} },
   ];
-  if (['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine) return out;
+  if (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine)
+    return out;
   // A stated direction holds, so the search has only folding left to try.
   const directions = root.direction === 'auto' ? (['right', 'down'] as const) : [root.direction];
   for (const direction of directions)
@@ -3780,7 +3781,7 @@ function layoutPass(
   function arrangeTimeline(scope: string, kids: ModelObject[], layout: ModelLayout) {
     const ids = new Set(kids.map(o => o.id)),
       links = m.edges.filter(e => ids.has(e.source) && ids.has(e.target));
-    const { plan, rects } = layoutTimeline(
+    const { plan, rects, drawn } = layoutTimeline(
       kids,
       (m.dissolvedGroups ?? []).filter(g => g.parent === scope),
       layout.timeline!,
@@ -3793,7 +3794,7 @@ function layoutPass(
       local.set(o.id, { x: round(r.x), y: round(r.y) });
       bases.set(o.id, { x: r.x, y: r.y });
     }
-    timelinePlans.set(scope, { plan, ids: kids.map(o => o.id), edges: links.map(e => e.id) });
+    timelinePlans.set(scope, { plan, ids: kids.map(o => o.id), edges: drawn });
     return { w: plan.bounds.w, h: plan.bounds.h };
   }
   /** A byte or bit layout: one width per unit, a ruler under the title band, run-on fields. */

@@ -1,4 +1,5 @@
 import { LayoutLab } from '../engines/layout-engine';
+import { validMark } from './timeline';
 import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
@@ -438,7 +439,8 @@ export function normalize(input: unknown): Diagram {
       Array.isArray(t.edges) &&
       ['x', 'y', 'w', 'h'].every(k => finite(t.bounds?.[k])) &&
       Array.isArray(t.under) &&
-      Array.isArray(t.over),
+      Array.isArray(t.over) &&
+      [...t.under, ...t.over].every(validMark),
   );
   if (timelines.length) out.layout.timelines = JSON.parse(JSON.stringify(timelines));
   out.collapsed = Array.isArray(data.collapsed)

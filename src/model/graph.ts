@@ -100,11 +100,30 @@ export function visibleGraph(doc: Diagram): VisibleGraph {
   const groups = doc.graph.groups
     .filter(g => !isHiddenByCollapse(doc, g.id))
     .sort((a, b) => ancestors(doc, a.id).length - ancestors(doc, b.id).length);
+  // A line between two rows of one timeline is drawn by the timeline, so no router sees it.
+  const onChart = new Set((doc.layout.timelines ?? []).flatMap(t => t.edges));
   const edges = doc.graph.edges
+    .filter(e => !onChart.has(e.id))
     .map(e => ({ ...e, a: visibleProxy(doc, e.from), b: visibleProxy(doc, e.to) }))
     .filter(e => e.a !== e.b || e.from === e.to);
   return { nodes, groups, edges };
 }
+
+/** A timeline row, milestone or band: placed by dates, so it selects but never moves. */
+export const onTimeline = (doc: Diagram, id: string) =>
+  (doc.layout.timelines ?? []).some(
+    t =>
+      t.ids.includes(id) ||
+      doc.graph.groups.some(
+        g => g.id === id && (g.parentId ?? 'root') === t.scope && t.scope !== id,
+      ),
+  );
+
+/** The timelines the drawing shows: one inside a collapsed group draws nothing. */
+export const shownTimelines = (doc: Diagram) =>
+  (doc.layout.timelines ?? []).filter(
+    t => t.scope === 'root' || (!isCollapsed(doc, t.scope) && !isHiddenByCollapse(doc, t.scope)),
+  );
 
 /** Selected shapes and containers whose own container is not also selected. */
 export function selectionRoots(doc: Diagram, selected: Iterable<string>) {

@@ -269,7 +269,7 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
       ? labelled.reduce((sum, e) => sum + e.label.length, 0) / labelled.length
       : 0,
     scope,
-    ...(root && ['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine
+    ...(root && ['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine
       ? { fixed: root.algorithm }
       : {}),
     layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
@@ -568,7 +568,7 @@ export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
           why: `${compare ? 'compare' : 'change marks as'} panels ${direction === 'right' ? 'side by side' : 'stacked'}`,
         });
   const root = m.layouts.find(l => l.scope === 'root');
-  if (root && ['lanes', 'sequence'].includes(root.algorithm)) return out;
+  if (root && ['lanes', 'sequence', 'timeline'].includes(root.algorithm)) return out;
   const groups = m.objects.filter(o => o.type === 'group'),
     nodes = m.objects.filter(o => o.type === 'node'),
     parent = new Map(m.objects.map(o => [o.id, o.parent]));
