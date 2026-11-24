@@ -5,6 +5,7 @@ import {
   timelineLayout,
   writeTimelineDrafts,
   type TimelineDraft,
+  type TimelineDraftIssue,
 } from '../../dsl/timeline-settings';
 import { bare, printSource, readSource } from '../../dsl/syntax';
 import { closeDialog } from '../../state/ui';
@@ -25,6 +26,7 @@ export function TimelineSettings() {
   const [lo, setLo] = createSignal(model.timeline?.zoom?.[0] ?? '');
   const [hi, setHi] = createSignal(model.timeline?.zoom?.[1] ?? '');
   const [error, setError] = createSignal('');
+  const [issue, setIssue] = createSignal<TimelineDraftIssue>();
   const [busy, setBusy] = createSignal(false);
   const [kind, setKind] = createSignal('point');
   const [start, setStart] = createSignal('');
@@ -32,6 +34,7 @@ export function TimelineSettings() {
   const [unknown, setUnknown] = createSignal(false);
   const [open, setOpen] = createSignal(false);
   const [steps, setSteps] = createSignal('');
+  const inputs: Partial<Record<TimelineDraftIssue['field'], HTMLInputElement>> = {};
   const drafts = new Map<string, TimelineDraft>();
   const currentDraft = (): TimelineDraft => ({
     kind: kind(),
@@ -55,6 +58,8 @@ export function TimelineSettings() {
     if (key) drafts.set(key, currentDraft());
   }
   function load(key: string, saveCurrent = true) {
+    setError('');
+    setIssue(undefined);
     if (saveCurrent) remember();
     setId(key);
     const saved = drafts.get(key);
@@ -79,6 +84,10 @@ export function TimelineSettings() {
       label: '',
     });
   }
+  function discardNewDraft() {
+    drafts.delete(':new');
+    load('', false);
+  }
   untrack(() => load(id(), false));
   async function save(e: SubmitEvent) {
     e.preventDefault();
@@ -92,7 +101,14 @@ export function TimelineSettings() {
     const root = timelineLayout(doc);
     setAttr(root, 'today', today() ? bare(today()) : undefined);
     setAttr(root, 'zoom', lo() ? bare(lo() + '..' + hi()) : undefined);
-    writeTimelineDrafts(doc, drafts);
+    const invalid = writeTimelineDrafts(doc, drafts);
+    if (invalid) {
+      load(invalid.id, false);
+      setIssue(invalid);
+      setError(invalid.message);
+      setTimeout(() => inputs[invalid.field]?.focus(), 0);
+      return;
+    }
     const next = printSource(doc);
     setBusy(true);
     try {
@@ -115,7 +131,12 @@ export function TimelineSettings() {
           <legend>Time axis</legend>
           <label>
             Snapshot date
-            <input type="date" value={today()} onInput={e => setToday(e.currentTarget.value)} />
+            <input
+              type="date"
+              value={today()}
+              ref={el => (inputs.snapshot = el)}
+              onInput={e => setToday(e.currentTarget.value)}
+            />
           </label>
           <label>
             Detail from
@@ -160,6 +181,7 @@ export function TimelineSettings() {
                 required
                 type="date"
                 value={start()}
+                ref={el => (inputs.start = el)}
                 onInput={e => setStart(e.currentTarget.value)}
               />
             </label>
@@ -188,6 +210,7 @@ export function TimelineSettings() {
                   required
                   type="date"
                   value={end()}
+                  ref={el => (inputs.end = el)}
                   onInput={e => setEnd(e.currentTarget.value)}
                 />
               </label>
@@ -197,6 +220,7 @@ export function TimelineSettings() {
               <input
                 placeholder="YYYY-MM-DD, YYYY-MM-DD"
                 value={steps()}
+                ref={el => (inputs.steps = el)}
                 onInput={e => setSteps(e.currentTarget.value)}
               />
             </label>
@@ -204,6 +228,11 @@ export function TimelineSettings() {
         </fieldset>
         <Show when={error()}>
           <p role="alert">{error()}</p>
+        </Show>
+        <Show when={issue()?.id === ':new'}>
+          <button type="button" class="button" onClick={discardNewDraft}>
+            Discard incomplete new item
+          </button>
         </Show>
         <button type="submit" class="button primary" disabled={busy()}>
           Apply timeline

@@ -898,11 +898,18 @@ export function pasteFragment(doc: Diagram, part: ClipboardFragment) {
     /^\d{4}-\d{2}-\d{2}$/.test(sourceSnapshot) &&
     Number.isFinite(snapshotMs) &&
     new Date(snapshotMs).toISOString().slice(0, 10) === sourceSnapshot;
+  const targetSnapshot = candidate.layout.timeline?.options.today;
   const existingGroup = (id?: string) => candidate.graph.groups.some(g => g.id === id);
   for (const n of part.nodes) {
     const next = { ...clone(n), id: ids.get(n.id)! };
-    if (next.dates?.to === 'open' && !candidate.layout.timeline?.options.today && validSnapshot)
-      next.dates = { ...next.dates, to: sourceSnapshot };
+    if (next.dates?.to === 'open' && validSnapshot) {
+      const start = next.dates.from?.replace(/^\?/, '');
+      const snapshotTooEarly =
+        !targetSnapshot ||
+        (start !== undefined && targetSnapshot < start) ||
+        next.dates.steps.some(step => targetSnapshot <= step);
+      if (snapshotTooEarly) next.dates = { ...next.dates, to: sourceSnapshot };
+    }
     next.parentId = ids.get(n.parentId!) || (existingGroup(n.parentId) ? n.parentId : undefined);
     candidate.graph.nodes.push(next);
     selected.push(next.id);

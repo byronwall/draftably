@@ -2,7 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { printSource, readSource, parseModel } from '../src/dsl/syntax';
 import { statements } from '../src/dsl/source-edits';
-import { timelineLayout, writeTimelineDrafts } from '../src/dsl/timeline-settings';
+import {
+  timelineLayout,
+  validateTimelineDraft,
+  writeTimelineDrafts,
+  type TimelineDraft,
+} from '../src/dsl/timeline-settings';
 
 describe('timeline settings edits', () => {
   it('retains root layout attributes and commits drafts for every edited item', () => {
@@ -83,5 +88,76 @@ describe('timeline settings edits', () => {
       expect(root, file).toBeDefined();
       expect(() => parseModel(printSource({ lines: [root!] })), `${file} root`).not.toThrow();
     }
+  });
+
+  it('checks start, step order, end, and snapshot bounds before writing drafts', () => {
+    const base: TimelineDraft = {
+      kind: 'span',
+      start: '2025-01-01',
+      end: '2025-01-10',
+      unknown: false,
+      open: false,
+      steps: '2025-01-03, 2025-01-05',
+      label: 'Review',
+    };
+    expect(validateTimelineDraft('a', base, '2025-01-10')).toBeUndefined();
+    expect(validateTimelineDraft('a', { ...base, start: '' }, '2025-01-10')?.field).toBe('start');
+    expect(validateTimelineDraft('a', { ...base, steps: '2025-01-01' }, '2025-01-10')?.field).toBe(
+      'steps',
+    );
+    expect(
+      validateTimelineDraft('a', { ...base, steps: '2025-01-05, 2025-01-03' }, '2025-01-10')?.field,
+    ).toBe('steps');
+    expect(validateTimelineDraft('a', { ...base, end: '2025-01-04' }, '2025-01-10')?.field).toBe(
+      'end',
+    );
+    expect(
+      validateTimelineDraft('a', { ...base, open: true, steps: '2025-01-05' }, '2025-01-05')?.field,
+    ).toBe('snapshot');
+    expect(validateTimelineDraft('a', { ...base, open: true }, undefined)?.field).toBe('snapshot');
+    expect(validateTimelineDraft('a', { ...base, open: true }, '2025-02-29')?.field).toBe(
+      'snapshot',
+    );
+  });
+
+  it('reports an incomplete new draft without writing any edits, then allows it to be discarded', () => {
+    const doc = readSource('layout root timeline today=2025-01-31\nnode b "B" at=2025-01-12\n');
+    timelineLayout(doc);
+    const drafts = new Map<string, TimelineDraft>([
+      [
+        'b',
+        {
+          kind: 'point',
+          start: '2025-01-13',
+          end: '',
+          unknown: false,
+          open: false,
+          steps: '',
+          label: '',
+        },
+      ],
+      [
+        ':new',
+        {
+          kind: 'point',
+          start: '',
+          end: '',
+          unknown: false,
+          open: false,
+          steps: '',
+          label: 'Review',
+        },
+      ],
+    ]);
+
+    expect(writeTimelineDrafts(doc, drafts)).toMatchObject({ id: ':new', field: 'start' });
+    expect(parseModel(printSource(doc)).objects.find(o => o.id === 'b')?.dates?.at).toBe(
+      '2025-01-12',
+    );
+    drafts.delete(':new');
+    expect(writeTimelineDrafts(doc, drafts)).toBeUndefined();
+    expect(parseModel(printSource(doc)).objects.find(o => o.id === 'b')?.dates?.at).toBe(
+      '2025-01-13',
+    );
   });
 });

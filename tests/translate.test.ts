@@ -150,6 +150,90 @@ describe('translating editor edits', () => {
     expect(pasted?.dates?.to).toBe('2025-01-20');
   });
 
+  it('uses the source snapshot when an open span starts after the destination snapshot', () => {
+    const source = readFileSync(
+        path.join(__dirname, '../examples/release-investigation.draft'),
+        'utf8',
+      ),
+      sourceDoc = projectScene(checkSource(source)),
+      part = edits.copyFragment(sourceDoc, ['importer']),
+      destinationSource =
+        'layout root timeline today=2024-10-01\nnode target "Target" at=2024-10-01\n',
+      destinationScene = checkSource(destinationSource),
+      destination = projectScene(destinationScene),
+      { doc: pasted, selected } = edits.pasteFragment(destination, part),
+      result = translateEdit({
+        source: readSource(destinationSource),
+        scene: destinationScene,
+        before: destination,
+        after: pasted,
+        label: 'Paste',
+        selection: selected,
+      }),
+      output = printSource(result.source),
+      duplicate = checkSource(output).model.objects.find(
+        o => o.id === result.ids.get(selected[0])!,
+      );
+
+    expect(duplicate?.dates?.to).toBe('2025-11-23');
+  });
+
+  it('keeps an open span open when the destination snapshot is after its dates', () => {
+    const source = readFileSync(
+        path.join(__dirname, '../examples/release-investigation.draft'),
+        'utf8',
+      ),
+      sourceDoc = projectScene(checkSource(source)),
+      part = edits.copyFragment(sourceDoc, ['importer']),
+      destinationSource =
+        'layout root timeline today=2024-10-30\nnode target "Target" at=2024-10-01\n',
+      destinationScene = checkSource(destinationSource),
+      destination = projectScene(destinationScene),
+      { doc: pasted, selected } = edits.pasteFragment(destination, part),
+      result = translateEdit({
+        source: readSource(destinationSource),
+        scene: destinationScene,
+        before: destination,
+        after: pasted,
+        label: 'Paste',
+        selection: selected,
+      }),
+      duplicate = checkSource(printSource(result.source)).model.objects.find(
+        o => o.id === result.ids.get(selected[0])!,
+      );
+
+    expect(duplicate?.dates?.to).toBe('open');
+  });
+
+  it('uses the source snapshot when the destination snapshot lands on a step', () => {
+    const source = [
+      'layout root timeline today=2025-01-06',
+      'node active "Active" from=2025-01-01 to=open steps=2025-01-05',
+      '',
+    ].join('\n');
+    const scene = checkSource(source),
+      before = projectScene(scene),
+      part = edits.copyFragment(before, ['active']),
+      destinationSource =
+        'layout root timeline today=2025-01-05\nnode target "Target" at=2025-01-01\n',
+      destinationScene = checkSource(destinationSource),
+      destination = projectScene(destinationScene),
+      { doc: pasted, selected } = edits.pasteFragment(destination, part),
+      result = translateEdit({
+        source: readSource(destinationSource),
+        scene: destinationScene,
+        before: destination,
+        after: pasted,
+        label: 'Paste',
+        selection: selected,
+      }),
+      duplicate = checkSource(printSource(result.source)).model.objects.find(
+        o => o.id === result.ids.get(selected[0])!,
+      );
+
+    expect(duplicate?.dates?.to).toBe('2025-01-06');
+  });
+
   it('shows current dated nodes added after JSON import in the timeline', () => {
     const source = [
       'layout root timeline today=2025-01-20',
