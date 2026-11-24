@@ -3787,6 +3787,11 @@ function layoutPass(
       layout.timeline!,
       look,
       links,
+      id => {
+        const order = m.hints.find(h => h.type === 'order' && h.scope === id);
+        return order?.type === 'order' ? order.ids : [];
+      },
+      scope,
     );
     for (const o of kids) {
       const r = rects.get(o.id) ?? { x: plan.bounds.x, y: plan.bounds.y, w: 24, h: 20 };

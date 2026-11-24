@@ -242,7 +242,11 @@ today=DATE`, or `layout root timeline` for the whole drawing. Each node in the g
   `at=DATE` for a point, `from=DATE to=DATE` for a span (`to=open` runs to `today`,
   `from=?DATE` means it began before DATE, `steps=D1,D2` marks partial steps). Groups inside
   the timeline are bands. `milestone id "v2.0" at=DATE in=<timeline>` draws a release rule
-  across every band. Row text: `key=`, `detail=`, `tag=`, `start-label=`, `end-label=`.
+  across every band; `from=`/`to=` on a milestone shades a period (a freeze). Row text: `key=`,
+  `detail=`, `tag=`, `start-label=`, `end-label=` (`=date` or `=duration` print them for you).
+  `progress=40` fills part of a bar; `to=+3d|+2w|+1m` ends a span by duration.
+  `headers="Name|Owner"` heads the columns. `scale=ordinal` spaces dates evenly and labels the
+  gaps (an event history, like a Mermaid timeline).
   `zoom=START..END` adds an enlarged detail panel for a crowded stretch; bands wholly inside it
   move there. Edges from rows to boxes outside the timeline route normally (a fix to the code
   it touched); an edge between two rows draws on the chart as a dated elbow arrow. An edge can't

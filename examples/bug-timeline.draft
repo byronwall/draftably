@@ -3,7 +3,7 @@ subtitle "Seven bugs are still open. Nine fixes landed in three weeks."
 
 # A timeline: open bugs run to today; a zoom panel enlarges the three weeks of November fixes.
 
-layout root timeline today=2025-11-23 zoom=2025-11-03..2025-11-23
+layout root timeline today=2025-11-23 zoom=2025-11-03..2025-11-23 headers="Bug|Platforms"
 
 group open "Still open" color=red
 group fixed "Fixed in November" color=teal
@@ -13,6 +13,7 @@ milestone v200 "v2.0.0" at=2025-11-03
 milestone v210 "v2.1.0" at=2025-11-13
 milestone v220 "v2.2.0" at=2025-11-17
 milestone v221 "v2.2.1" at=2025-11-19
+milestone freeze "Release freeze" from=2025-11-14 to=2025-11-17
 
 node b1 "Dates before 1970 parse as empty" in=open key=B1 from=2024-10-29 to=open detail="#4, #5 date parser" tag="All platforms"
 node b2 "Search ignores accents" in=open key=B2 from=2024-11-20 to=open detail="#31 text search" tag="All platforms"

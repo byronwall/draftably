@@ -1,0 +1,16 @@
+diagram "A short history of the web"
+subtitle "Each step is one date, so a busy year and a quiet decade read alike."
+
+# An ordinal timeline, like a Mermaid timeline: the order and the gaps matter, not the scale.
+
+layout root timeline scale=ordinal
+
+group web "The web" color=blue
+group search "Search" color=teal
+
+node www "World Wide Web proposed" in=web at=1989-03-12 end-label="Tim Berners-Lee, CERN"
+node mosaic "Mosaic browser" in=web at=1993-04-22 end-label="NCSA"
+node js "JavaScript" in=web at=1995-12-04 end-label="Netscape"
+node google "Google founded" in=search at=1998-09-04 end-label="Menlo Park garage"
+node wiki "Wikipedia" in=web at=2001-01-15 end-label="Wiki model, open edits"
+node chrome "Chrome" in=web at=2008-09-02 end-label="V8 engine"

@@ -24,6 +24,8 @@ export function fontFaceCss(look: ResolvedAppearance, code = false): string {
   const faces = [
     ...new Set<FaceId>([
       look.title.face,
+      // Detail lines, and a timeline's row names, use the title font's regular face.
+      look.detail.face,
       look.groupTitle.face,
       look.annotation.face,
       ...(code ? (['mono-500'] as const) : []),

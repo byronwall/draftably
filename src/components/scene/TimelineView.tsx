@@ -128,7 +128,6 @@ function Mark(props: { look: ResolvedAppearance; m: TimelineMark }) {
               font-weight={String(f().weight)}
               fill={c()}
             >
-              {m().full ? <title>{m().full}</title> : null}
               {m().text}
             </text>
           );

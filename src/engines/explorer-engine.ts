@@ -220,7 +220,10 @@ function sceneInput(doc: Diagram): RouteInput {
         collapsed = doc.collapsed.includes(g.id);
       return { ...g, ...r, ...(collapsed ? { w: Math.min(r.w, 210), h: 58 } : {}), collapsed };
     });
+  // A timeline draws its own lines between rows; the router never sees them.
+  const onChart = new Set((doc.layout.timelines ?? []).flatMap(t => t.edges));
   const edges = doc.graph.edges
+    .filter(e => !onChart.has(e.id))
     .map(e => ({ ...e, from: proxy(e.from), to: proxy(e.to), cfg: doc.layout.edges[e.id] || {} }))
     .filter(
       e =>

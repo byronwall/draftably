@@ -14,7 +14,7 @@ export type TimelineInk =
   | 'rule'
   | 'shade'
   | 'canvas'
-  | { family: string; tone?: 'strong' | 'ink' | 'soft' };
+  | { family: string; tone?: 'strong' | 'ink' | 'soft' | 'track' };
 
 export type TimelineFont = 'name' | 'detail' | 'key' | 'band' | 'small' | 'label' | 'caps';
 
@@ -41,8 +41,6 @@ export type TimelineMark =
       ink: TimelineInk;
       font: TimelineFont;
       anchor?: 'start' | 'middle' | 'end';
-      /** The full text when this one was cut to fit. */
-      full?: string;
     };
 
 /** A timeline as the diagram holds it: its scope, where its plan's origin sits, and its rows. */
@@ -102,13 +100,17 @@ export function timelineColor(look: ResolvedAppearance, ink: TimelineInk): strin
           ? look.dark
             ? 900
             : 100
-          : tone === 'ink'
+          : tone === 'track'
             ? look.dark
-              ? 300
-              : 700
-            : look.dark
-              ? 400
-              : 600;
+              ? 800
+              : 200
+            : tone === 'ink'
+              ? look.dark
+                ? 300
+                : 700
+              : look.dark
+                ? 400
+                : 600;
     // A file's own family may define other shades only: take the nearest one it has.
     const have = [...(look.families.get(ink.family)?.keys() ?? [])];
     const near = have.length
@@ -151,7 +153,7 @@ export function validMark(m: unknown): m is TimelineMark {
         typeof ink === 'object' &&
         typeof ink.family === 'string' &&
         /^[\w-]+$/.test(ink.family) &&
-        (ink.tone === undefined || ['strong', 'ink', 'soft'].includes(ink.tone as string));
+        (ink.tone === undefined || ['strong', 'ink', 'soft', 'track'].includes(ink.tone as string));
   if (!inkOk) return false;
   switch (v.k) {
     case 'line':
@@ -176,7 +178,7 @@ export function validMark(m: unknown): m is TimelineMark {
         typeof v.text === 'string' &&
         FONTS.includes(v.font as string) &&
         (v.anchor === undefined || ['start', 'middle', 'end'].includes(v.anchor as string)) &&
-        (v.full === undefined || typeof v.full === 'string')
+        v.full === undefined
       );
   }
   return false;
@@ -203,7 +205,7 @@ export function markSvg(look: ResolvedAppearance, m: TimelineMark): string {
         : `<path d="${m.d}" fill="${c}"/>`;
     case 'text': {
       const f = timelineFont(look, m.font);
-      return `<text x="${m.x}" y="${m.y}" dominant-baseline="central"${m.anchor && m.anchor !== 'start' ? ` text-anchor="${m.anchor}"` : ''} font-family="${escText(f.family)}" font-size="${f.size}" font-weight="${f.weight}" fill="${c}">${m.full ? `<title>${escText(m.full)}</title>` : ''}${escText(m.text)}</text>`;
+      return `<text x="${m.x}" y="${m.y}" dominant-baseline="central"${m.anchor && m.anchor !== 'start' ? ` text-anchor="${m.anchor}"` : ''} font-family="${escText(f.family)}" font-size="${f.size}" font-weight="${f.weight}" fill="${c}">${escText(m.text)}</text>`;
     }
   }
 }

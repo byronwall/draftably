@@ -949,7 +949,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       case 'milestone': {
         // A dated rule across every band of a timeline. It shares the node id namespace.
         count(2);
-        allow(['at', 'in']);
+        allow(['at', 'from', 'to', 'in']);
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
         assert(!objectIds.has(oid), `Duplicate node/group id ${oid}.`);
@@ -1105,7 +1105,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                   'gap',
                   ...(recipe === 'flow' ? ['fold'] : []),
                   ...(recipe === 'sequence' ? ['activations'] : []),
-                  ...(recipe === 'timeline' ? ['today', 'zoom', 'width'] : []),
+                  ...(recipe === 'timeline' ? ['today', 'zoom', 'width', 'scale', 'headers'] : []),
                   ...common,
                 ],
           );
@@ -1899,7 +1899,22 @@ function validateReferences(m: Model) {
     }
   }
   for (const h of m.hints) {
-    if (h.type === 'order') {
+    // A timeline orders its bands, and a band its rows, by the model's own parents.
+    const timelineScope = (id: string) =>
+      m.layouts.some(l => l.algorithm === 'timeline' && l.scope === id);
+    const inTimeline =
+      h.type === 'order' &&
+      (timelineScope(h.scope) || timelineScope(by.get(h.scope)?.parent ?? ''));
+    if (h.type === 'order' && inTimeline) {
+      for (const id of h.ids) {
+        exists(id, h.line);
+        assert(
+          by.get(id)!.parent === h.scope,
+          `${id} is not a direct child of ${h.scope}.`,
+          h.line,
+        );
+      }
+    } else if (h.type === 'order') {
       scope(h.scope, h.line);
       framed(h.scope, h.line, 'layout');
       for (const id of h.ids) {

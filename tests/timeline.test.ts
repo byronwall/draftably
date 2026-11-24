@@ -6,7 +6,8 @@ import { projectScene } from '../src/dsl/project';
 import { normalize } from '../src/model/document';
 import { renderSvg } from '../src/runtime/svg-renderer';
 import { writeArrangement } from '../src/dsl/layout-edits';
-import { readSource } from '../src/dsl/syntax';
+import { printSource, readSource } from '../src/dsl/syntax';
+import { translateEdit } from '../src/dsl/translate';
 
 const example = (name: string) =>
   readFileSync(path.join(__dirname, `../examples/${name}.draft`), 'utf8');
@@ -170,6 +171,78 @@ node b "B" in=feb at=2025-02-10`).timelines![0].over.flatMap(m => (m.k === 'text
     const doc = readSource(source);
     const placed = writeArrangement(doc, scene, after);
     expect(placed.some(id => ['b3', 'b6', 'c2', 'c4', 'v100'].includes(id))).toBe(false);
+  });
+
+  it('draws progress, periods, headers, order, durations and label tokens', () => {
+    const plan = checkSource(`layout root timeline today=2025-03-01 headers="Work|Owner"
+group b "Build"
+group l "Launch"
+order root l b
+order b y x
+milestone p "Freeze" from=2025-02-01 to=2025-02-10
+node x "X" in=b from=2025-01-01 to=+1m progress=50 tag="Ana" end-label=date
+node y "Y" in=b from=2025-01-31 to=+1m end-label=duration
+node z "Z" in=l at=2025-02-20 end-label=date`);
+    const scene = checkSource(`layout root timeline
+node y "Y" from=2025-01-31 to=+1m`);
+    const texts = plan.timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    // to=+1m from Jan 31 ends on the last day of February.
+    expect(scene.model.objects[0].when!.to).toBe(Math.round(Date.UTC(2025, 1, 28) / 86_400_000));
+    expect(texts).toEqual(expect.arrayContaining(['Work', 'Owner', 'Freeze', 'Feb 1', '4 weeks']));
+    // order lines: Launch before Build, and y before x inside Build.
+    const at = (id: string) => plan.byId.get(id)!.y;
+    expect(at('z')).toBeLessThan(at('y'));
+    expect(at('y')).toBeLessThan(at('x'));
+    // Progress: a full-length track and a solid part half as long.
+    const bars = plan.timelines![0].over.filter(
+      m => m.k === 'line' && typeof m.ink === 'object' && m.w === 5 && m.y1 === m.y2,
+    );
+    expect(
+      bars.some(m => m.k === 'line' && typeof m.ink === 'object' && m.ink.tone === 'track'),
+    ).toBe(true);
+    expect(plan.timelines![0].under.some(m => m.k === 'rect' && typeof m.ink === 'object')).toBe(
+      true,
+    );
+  });
+
+  it('gives every date one step on an ordinal axis and labels the gaps', () => {
+    const plan = checkSource(`layout root timeline scale=ordinal
+node a "A" at=1990-01-01
+node b "B" at=1990-01-03
+node c "C" at=2000-01-01`).timelines![0];
+    const xs = plan.over.flatMap(m =>
+      m.k === 'dot' && m.r === 6 && typeof m.ink === 'object' ? [m.x] : [],
+    );
+    expect(xs[1] - xs[0]).toBeCloseTo(xs[2] - xs[1], 6);
+    const texts = plan.over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    expect(texts).toEqual(expect.arrayContaining(['2 days', '10 years']));
+    expect(
+      errorOf(
+        'layout root timeline scale=ordinal zoom=2025-01-01..2025-01-02\nnode a "A" at=2025-01-01',
+      ),
+    ).toMatch(/ordinal/);
+  });
+
+  it('renames a row in a .draft file without writing a size', () => {
+    const source = 'layout root timeline\nnode a "A" at=2025-01-01\nnode b "B" at=2025-01-05',
+      scene = checkSource(source),
+      before = projectScene(scene),
+      after = structuredClone(before);
+    after.graph.nodes.find(n => n.id === 'a')!.title = 'A much longer name';
+    after.layout.nodes.a.h += 2;
+    const out = printSource(
+      translateEdit({
+        source: readSource(source),
+        scene,
+        before,
+        after,
+        label: 'Rename',
+        selection: ['a'],
+      }).source,
+    );
+    expect(out).toContain('"A much longer name"');
+    expect(out).not.toMatch(/^size /m);
+    expect(() => checkSource(out)).not.toThrow();
   });
 
   it('reports each date error on its own line', () => {

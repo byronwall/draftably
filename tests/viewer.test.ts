@@ -198,6 +198,14 @@ describe('independent viewer lifecycle', () => {
       expect((await viewer.update(text)).status, name).toBe('committed');
       viewer.destroy();
     }
+    // Every theme's faces load, including one whose row names use a face its titles don't.
+    for (const theme of ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint']) {
+      const element = host(),
+        viewer = mountViewer(element);
+      const text = `theme ${theme}\nlayout root timeline\nnode a "A" at=2025-01-01 key=A1 end-label=date`;
+      expect((await viewer.update(text)).status, theme).toBe('committed');
+      viewer.destroy();
+    }
     const element = host(),
       viewer = mountViewer(element, { render: { links: { mode: 'safe' } } });
     const timeline = `layout root timeline

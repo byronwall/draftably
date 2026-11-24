@@ -30,6 +30,8 @@ export interface TimelineWhen {
   tag?: string;
   startLabel?: string;
   endLabel?: string;
+  /** Spans: how much is done, from 0 to 1. */
+  progress?: number;
 }
 
 export interface TimelineOptions {
@@ -37,6 +39,10 @@ export interface TimelineOptions {
   zoom?: [number, number];
   /** Width of the date axis. */
   width: number;
+  /** `ordinal`: every distinct date takes one equal step, and long gaps are labeled. */
+  scale: 'linear' | 'ordinal';
+  /** Column headings over the gutter: the name column, then the tag column. */
+  headers?: string[];
 }
 
 /** Node attributes a timeline reads. */
@@ -50,6 +56,7 @@ export const TIMELINE_ATTRS = [
   'tag',
   'start-label',
   'end-label',
+  'progress',
 ];
 
 type Fail = (message: string) => never;
@@ -68,11 +75,34 @@ export function dayOf(value: string, fail: Fail): number {
 
 const dateOf = (day: number) => new Date(day * DAY);
 
+/** The same day of the month, n months on (clamped to the month's last day). */
+function addMonths(day: number, n: number) {
+  const d = dateOf(day),
+    m = d.getUTCMonth() + n,
+    year = d.getUTCFullYear() + Math.floor(m / 12),
+    month = ((m % 12) + 12) % 12;
+  const end = new Date(0);
+  end.setUTCFullYear(year, month + 1, 0);
+  const out = new Date(0);
+  out.setUTCFullYear(year, month, Math.min(d.getUTCDate(), end.getUTCDate()));
+  return Math.round(out.getTime() / DAY);
+}
+
 export function readTimelineOptions(attrs: Map<string, Word>, fail: Fail): TimelineOptions {
   const today = attrs.get('today')?.value,
     zoom = attrs.get('zoom')?.value,
-    width = attrs.get('width')?.value;
-  const out: TimelineOptions = { width: 880 };
+    width = attrs.get('width')?.value,
+    scale = attrs.get('scale')?.value,
+    headers = attrs.get('headers')?.value;
+  const out: TimelineOptions = { width: 880, scale: 'linear' };
+  if (scale !== undefined) {
+    if (scale !== 'linear' && scale !== 'ordinal')
+      fail(`Expected scale=linear or scale=ordinal; got ${scale}.`);
+    out.scale = scale;
+  }
+  if (headers !== undefined) out.headers = headers.split('|').map(h => h.trim());
+  if (out.scale === 'ordinal' && zoom !== undefined && zoom !== 'none')
+    fail('scale=ordinal already gives every date room; remove zoom=.');
   if (today !== undefined) out.today = dayOf(today, fail);
   if (zoom !== undefined && zoom !== 'none') {
     const parts = zoom.split('..');
@@ -102,8 +132,10 @@ export function readWhen(
     from = get('from'),
     to = get('to');
   if (milestone) {
-    if (at === undefined || from !== undefined || to !== undefined)
-      fail('A milestone takes one date: at=YYYY-MM-DD.');
+    // A milestone is a rule (at=) or a shaded period (from= to=) across every band.
+    if (at !== undefined ? from !== undefined || to !== undefined : !from || !to || to === 'open')
+      fail('A milestone takes at=DATE, or a period as from=DATE to=DATE.');
+    if (from?.startsWith('?')) fail('A period needs a known start; remove the ?.');
   } else if (at !== undefined ? from !== undefined || to !== undefined : !from || !to)
     fail('Give a point as at=DATE, or a span as from=DATE to=DATE (to=open runs to today).');
   const when: TimelineWhen = { steps: [] };
@@ -113,7 +145,26 @@ export function readWhen(
     when.fromUnknown = from.startsWith('?');
     when.from = dayOf(from.replace(/^\?/, ''), fail);
   }
-  if (to !== undefined) when.to = to === 'open' ? 'open' : dayOf(to, fail);
+  if (to !== undefined) {
+    // to=+3d, +2w or +1m: a duration from the start, as Mermaid and PlantUML write one.
+    const rel = /^\+(\d+)([dwm])$/.exec(to);
+    if (rel && when.from === undefined) fail('A duration like to=+3d needs from=DATE.');
+    when.to =
+      to === 'open'
+        ? 'open'
+        : rel
+          ? rel[2] === 'm'
+            ? addMonths(when.from!, Number(rel[1]))
+            : when.from! + Number(rel[1]) * (rel[2] === 'w' ? 7 : 1)
+          : dayOf(to, fail);
+  }
+  const progress = get('progress');
+  if (progress !== undefined) {
+    const n = Number(progress.replace(/%$/, ''));
+    if (when.from === undefined || !Number.isFinite(n) || n < 0 || n > 100)
+      fail('progress= is a percent from 0 to 100 on a span (from= and to=).');
+    when.progress = n / 100;
+  }
   const steps = get('steps');
   if (steps !== undefined) {
     if (when.from === undefined) fail('steps= marks points along a span; give from= and to=.');
@@ -136,6 +187,10 @@ export function readWhen(
 /** Errors a span can only show once the whole file is read, since `today` comes from the layout. */
 export function checkWhen(when: TimelineWhen, today: number | undefined, fail: Fail) {
   if (when.from === undefined) return;
+  if (when.milestone) {
+    if ((when.to as number) <= when.from) fail('A period ends after it starts.');
+    return;
+  }
   if (when.to === 'open' && today === undefined)
     fail('to=open runs to today: add today=YYYY-MM-DD to the layout root timeline line.');
   const end = when.to === 'open' ? today! : when.to!;
@@ -241,12 +296,15 @@ function axisTicks(d0: number, d1: number, width: number, look: ResolvedAppearan
           day = monthStart(year, month);
         if (day > d1) break;
         if (day < d0) continue;
+        const yy = `'${String(year).slice(-2).padStart(2, '0')}`,
+          // Three-month steps fall on Jan, Apr, Jul and Oct: name them as quarters.
+          name = step.n === 3 && step.unit === 'month' ? `Q${month / 3 + 1}` : MONTHS[month];
         const text =
           step.unit === 'year'
             ? String(year)
             : month === 0 || !ticks.length
-              ? `${MONTHS[month]} '${String(year).slice(-2).padStart(2, '0')}`
-              : MONTHS[month];
+              ? `${name} ${yy}`
+              : name;
         ticks.push({ day, text, major: month === 0 });
       }
     }
@@ -286,6 +344,9 @@ export function layoutTimeline(
   options: TimelineOptions,
   look: ResolvedAppearance,
   links: ModelEdge[] = [],
+  /** The ids an `order` line lists for a scope: the timeline (its bands) or a band (its rows). */
+  orderOf: (scope: string) => string[] = () => [],
+  scope = 'root',
 ): { plan: TimelinePlan; rects: Map<string, Rect>; drawn: string[] } {
   const under: TimelineMark[] = [],
     over: TimelineMark[] = [],
@@ -317,7 +378,6 @@ export function layoutTimeline(
       ink,
       font,
       anchor,
-      ...(cut !== value ? { full: value } : {}),
     });
   };
 
@@ -325,7 +385,18 @@ export function layoutTimeline(
   // frameless group it sits in (`soft`), or its parent when the model still has it.
   const bandOf = (o: ModelObject) =>
     bandGroups.find(g => o.soft?.[0] === g.id || o.parent === g.id)?.id;
-  const groups = bandGroups.filter(g => members.some(o => bandOf(o) === g.id));
+  // An `order` line puts its ids first, in its order; the rest keep file order.
+  const ordered = <T extends { id: string }>(list: T[], ids: string[]) => {
+    const rank = (id: string) => (ids.includes(id) ? ids.indexOf(id) : ids.length);
+    return list
+      .map((x, i) => ({ x, i }))
+      .sort((a, b) => rank(a.x.id) - rank(b.x.id) || a.i - b.i)
+      .map(e => e.x);
+  };
+  const groups = ordered(
+    bandGroups.filter(g => members.some(o => bandOf(o) === g.id)),
+    orderOf(scope),
+  );
   let auto = 0;
   const loose = members.filter(o => o.type === 'node' && !bandOf(o) && !o.when?.milestone);
   const bands: Band[] = [];
@@ -347,7 +418,10 @@ export function layoutTimeline(
       g,
       family,
       rows: rowsOf(
-        members.filter(o => bandOf(o) === g.id && !o.when?.milestone),
+        ordered(
+          members.filter(o => bandOf(o) === g.id && !o.when?.milestone),
+          orderOf(g.id),
+        ),
         family,
       ),
     });
@@ -367,7 +441,9 @@ export function layoutTimeline(
   };
   const allDays = [
     ...bands.flatMap(b => b.rows.flatMap(daysOf)),
-    ...milestones.map(o => o.when!.at!),
+    ...milestones.flatMap(o =>
+      o.when!.at !== undefined ? [o.when!.at] : [o.when!.from!, o.when!.to as number],
+    ),
     ...(today !== undefined ? [today] : []),
   ];
   const drawn: string[] = [];
@@ -391,7 +467,12 @@ export function layoutTimeline(
   // thing is drawn somewhere.
   const beyond = (day: number) => !zoom || day < zoom[0] || day > zoom[1];
   const outside =
-    milestones.some(o => beyond(o.when!.at!)) || (today !== undefined && beyond(today));
+    milestones.some(o =>
+      o.when!.at !== undefined
+        ? beyond(o.when!.at)
+        : beyond(o.when!.from!) || beyond(o.when!.to as number),
+    ) ||
+    (today !== undefined && beyond(today));
   if (overview.length || !detail.length || outside) {
     const p = pad(lo, hi);
     panels.push({ bands: overview, d0: lo - p, d1: hi + p, detail: false });
@@ -415,13 +496,40 @@ export function layoutTimeline(
   );
   const tagW = Math.min(
     TAG_MAX,
-    Math.max(0, ...rows.map(r => (r.when.tag ? w(r.when.tag, 'small') : 0))),
+    Math.max(
+      0,
+      ...rows.map(r => (r.when.tag ? w(r.when.tag, 'small') : 0)),
+      // A heading over the tag column widens it, but only when some row has a tag.
+      ...(rows.some(r => r.when.tag) && options.headers?.[1]
+        ? [w(options.headers[1], 'caps')]
+        : []),
+    ),
   );
   const tagX = keyCol + nameW + 20;
   const gutter = tagX + (tagW ? tagW + 20 : 0);
   const chartX = gutter + (rows.some(r => r.when.fromUnknown) ? LEAD + 10 : GUTTER_GAP),
-    chartW = options.width,
+    // An ordinal axis gives every distinct date one step, wide enough for its label.
+    ordinal = options.scale === 'ordinal' ? [...new Set(allDays)].sort((a, b) => a - b) : [],
+    chartW = Math.max(options.width, (ordinal.length - 1) * (w("Sep 30 '25", 'small') + 18)),
     chartR = chartX + chartW;
+  const multiYear = dateOf(lo).getUTCFullYear() !== dateOf(hi).getUTCFullYear(),
+    shortDate = (day: number) => (multiYear ? fullDate(dateOf(day)) : monthDay(dateOf(day)));
+  // start-label=date and end-label=date print the date; =duration prints the span's length.
+  const labelOf = (v: string | undefined, d: TimelineWhen, end: boolean) => {
+    if (v === undefined) return undefined;
+    const last = d.to === 'open' ? today! : (d.to as number);
+    if (v === 'date')
+      return d.at !== undefined
+        ? shortDate(d.at)
+        : end && d.to === 'open'
+          ? 'open'
+          : shortDate(end ? last : d.from!);
+    if (v === 'duration')
+      return d.at !== undefined
+        ? undefined
+        : `${durationText(last - d.from!)}${d.to === 'open' ? ' so far' : ''}`;
+    return v;
+  };
   let right = chartR;
   const bandHeads = bands.some(b => b.g);
 
@@ -432,10 +540,27 @@ export function layoutTimeline(
   let y = 2;
   panels.forEach((panel, pi) => {
     const { d0, d1 } = panel;
-    const X = (day: number) => chartX + ((day - d0) / (d1 - d0)) * chartW;
+    const linear = (day: number) => chartX + ((day - d0) / (d1 - d0)) * chartW;
+    // Ordinal: the index of the date among the distinct dates, with a little room at each end.
+    const edge = ordinal.length > 1 ? Math.min(24, chartW / (2 * ordinal.length)) : chartW / 2,
+      step = ordinal.length > 1 ? (chartW - 2 * edge) / (ordinal.length - 1) : 0;
+    const X = ordinal.length
+      ? (day: number) => {
+          let i = ordinal.findIndex(o => o >= day);
+          if (i < 0) i = ordinal.length - 1;
+          if (ordinal[i] === day || i === 0) return chartX + edge + i * step;
+          const a = ordinal[i - 1],
+            b = ordinal[i];
+          return chartX + edge + (i - 1 + (day - a) / (b - a)) * step;
+        }
+      : linear;
     const inPanel = (day: number) => day >= d0 && day <= d1;
 
     // Panel heading: what range this panel shows and at what scale.
+    if (ordinal.length) {
+      text(chartR, y + 8, 'One step per date · gaps labeled', 'muted', 'caps', 'end');
+      y += 22;
+    }
     if (zoomed) {
       const caption = panel.detail
         ? `${rangeText(zoom![0], zoom![1])} · enlarged ${formatTimes(
@@ -448,13 +573,28 @@ export function layoutTimeline(
 
     // Milestone tags on rails above the axis; a tag that would touch the one before it moves up
     // a rail. Milestones inside the zoom window are drawn in the detail panel only.
+    const startOf = (o: ModelObject) => o.when!.at ?? o.when!.from!,
+      endOf = (o: ModelObject) => o.when!.at ?? (o.when!.to as number);
     const shown = milestones.filter(
       o =>
-        inPanel(o.when!.at!) &&
-        !(zoomed && !panel.detail && o.when!.at! >= zoom![0] && o.when!.at! <= zoom![1]),
+        startOf(o) <= d1 &&
+        endOf(o) >= d0 &&
+        !(zoomed && !panel.detail && startOf(o) >= zoom![0] && endOf(o) <= zoom![1]),
     );
+    // A rule's tag sits on its date; a period's tag is centered over the part this panel shows.
     const tags = shown
-      .map(o => ({ o, x: X(o.when!.at!), w: w(o.label, 'caps') }))
+      .map(o => {
+        const x0 = X(Math.max(startOf(o), d0)),
+          x1 = X(Math.min(endOf(o), d1));
+        return {
+          o,
+          x: (x0 + x1) / 2,
+          x0,
+          x1,
+          w: w(o.label, 'caps'),
+          period: o.when!.at === undefined,
+        };
+      })
       .sort((a, b) => a.x - b.x);
     const rails: number[] = [];
     const tagRail = tags.map(t => {
@@ -468,34 +608,48 @@ export function layoutTimeline(
     y += railRows * RAIL;
 
     // The axis: tick labels, then a baseline.
-    const ticks = axisTicks(d0, d1, chartW, look);
+    const ticks: Tick[] = ordinal.length
+      ? ordinal.map((day, i) => {
+          const d = dateOf(day),
+            prev = i ? dateOf(ordinal[i - 1]) : undefined,
+            year = !prev || prev.getUTCFullYear() !== d.getUTCFullYear();
+          return {
+            day,
+            text: year ? `${monthDay(d)} '${String(d.getUTCFullYear()).slice(-2)}` : monthDay(d),
+            major: !prev || prev.getUTCMonth() !== d.getUTCMonth(),
+          };
+        })
+      : axisTicks(d0, d1, chartW, look);
     const axisY = y + AXIS_ROW;
     const todayX = todayShown ? X(today!) : undefined;
-    const todayW = w('Today', 'caps');
-    let printed = 0,
-      hidMonth = false;
-    for (const t of ticks) {
-      const x = X(t.day),
-        half = w(t.text, 'small') / 2;
-      if (todayX !== undefined && Math.abs(x - todayX) < half + todayW / 2 + 8) {
-        if (t.major) hidMonth = true;
-        continue;
-      }
-      if (x - half < chartX - 6 || x + half > chartR + 30) continue;
-      text(x, y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
-      printed++;
+    // The ticks that stand clear of the Today caption and inside the axis.
+    const clear = (caption: string) =>
+      ticks.filter(t => {
+        const x = X(t.day),
+          half = w(t.text, 'small') / 2;
+        if (todayX !== undefined && Math.abs(x - todayX) < half + w(caption, 'caps') / 2 + 8)
+          return false;
+        return x - half >= chartX - 6 && x + half <= chartR + 30;
+      });
+    // An axis always names a date: Today's caption takes its date when it would hide the only
+    // month name or every tick, and the ticks then clear the longer caption.
+    let caption = 'Today',
+      kept = clear(caption);
+    const hidMonth = ticks.some(t => t.major && !kept.includes(t));
+    if (todayX !== undefined && (!kept.length || hidMonth)) {
+      caption = `Today · ${monthDay(dateOf(today!))}`;
+      kept = clear(caption);
     }
-    // An axis always names at least one date: Today's, or the first day it shows.
-    if (todayX !== undefined)
-      text(
-        todayX,
-        y + 8,
-        printed && !hidMonth ? 'Today' : `Today · ${monthDay(dateOf(today!))}`,
-        'text',
-        'caps',
-        'middle',
-      );
-    else if (!printed) text(chartX, y + 8, fullDate(dateOf(Math.ceil(d0))), 'muted', 'small');
+    for (const t of kept)
+      text(X(t.day), y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
+    if (todayX !== undefined) text(todayX, y + 8, caption, 'text', 'caps', 'middle');
+    else if (!kept.length) text(chartX, y + 8, fullDate(dateOf(Math.ceil(d0))), 'muted', 'small');
+    if (options.headers && pi === 0) {
+      if (options.headers[0])
+        text(0, y + 8, options.headers[0], 'muted', 'caps', 'start', nameW + keyCol);
+      if (options.headers[1] && tagW)
+        text(tagX, y + 8, options.headers[1], 'muted', 'caps', 'start', tagW);
+    }
     for (const t of tags) right = Math.max(right, t.x + t.w / 2 + 4);
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
@@ -514,7 +668,7 @@ export function layoutTimeline(
     panel.bands.forEach((band, bi) => {
       let bandY = y;
       // The panel's first band names itself on the axis row; later ones take a heading row.
-      if (band.g && bi === 0) {
+      if (band.g && bi === 0 && !(options.headers && pi === 0)) {
         bandY = axisY - AXIS_ROW;
         text(
           0,
@@ -569,13 +723,15 @@ export function layoutTimeline(
           const x = X(d.at);
           over.push({ k: 'dot', x, y: mid, r: 6, ink: strong });
           over.push({ k: 'dot', x, y: mid, r: 2.2, ink: 'canvas' });
-          if (d.startLabel) {
-            text(x, mid - 14, d.startLabel, ink, 'small', 'middle', undefined, true);
-            right = Math.max(right, x + w(d.startLabel, 'small') / 2 + 4);
+          const startLabel = labelOf(d.startLabel, d, false),
+            endLabel = labelOf(d.endLabel, d, true);
+          if (startLabel) {
+            text(x, mid - 14, startLabel, ink, 'small', 'middle', undefined, true);
+            right = Math.max(right, x + w(startLabel, 'small') / 2 + 4);
           }
-          if (d.endLabel) {
-            text(x + 12, mid, d.endLabel, 'text', 'label', 'start', undefined, true);
-            right = Math.max(right, x + 12 + w(d.endLabel, 'label'));
+          if (endLabel) {
+            text(x + 12, mid, endLabel, 'text', 'label', 'start', undefined, true);
+            right = Math.max(right, x + 12 + w(endLabel, 'label'));
           }
         } else {
           const open = d.to === 'open';
@@ -595,16 +751,23 @@ export function layoutTimeline(
             });
             over.push({ k: 'path', d: chevron(xs - LEAD - 1, mid), ink: strong, stroke: 1.6 });
           }
-          over.push({
-            k: 'line',
-            x1: xs,
-            y1: mid,
-            x2: xe - (open ? 6 : 0),
-            y2: mid,
-            ink: strong,
-            w: BAR,
-            round: !d.fromUnknown,
-          });
+          const bar = (x2: number, ink: TimelineInk) =>
+            over.push({
+              k: 'line',
+              x1: xs,
+              y1: mid,
+              x2,
+              y2: mid,
+              ink,
+              w: BAR,
+              round: !d.fromUnknown,
+            });
+          const barEnd = xe - (open ? 6 : 0);
+          // progress=: the done part is solid, the rest a soft track of the same color.
+          if (d.progress !== undefined) {
+            bar(barEnd, { family: r.family, tone: 'track' });
+            if (d.progress > 0) bar(xs + (barEnd - xs) * d.progress, strong);
+          } else bar(barEnd, strong);
           if (!d.fromUnknown) {
             over.push({ k: 'dot', x: xs, y: mid, r: 4.6, ink: strong });
             over.push({ k: 'dot', x: xs, y: mid, r: 2.3, ink: 'canvas' });
@@ -615,22 +778,24 @@ export function layoutTimeline(
           }
           if (open) over.push({ k: 'path', d: arrowHead(xe + 4, mid), ink: strong });
           else over.push({ k: 'dot', x: xe, y: mid, r: 5.2, ink: strong });
-          if (d.startLabel) right = Math.max(right, xs + w(d.startLabel, 'small') + 4);
-          if (d.startLabel)
+          const startLabel = labelOf(d.startLabel, d, false),
+            endLabel = labelOf(d.endLabel, d, true);
+          if (startLabel) right = Math.max(right, xs + w(startLabel, 'small') + 4);
+          if (startLabel)
             text(
               xs + (d.fromUnknown ? 0 : -3),
               mid - 13,
-              d.startLabel,
+              startLabel,
               ink,
               'small',
               'start',
               undefined,
               true,
             );
-          if (d.endLabel) {
+          if (endLabel) {
             const lx = xe + (open ? 14 : 11);
-            text(lx, mid, d.endLabel, 'text', 'label', 'start', undefined, true);
-            right = Math.max(right, lx + w(d.endLabel, 'label'));
+            text(lx, mid, endLabel, 'text', 'label', 'start', undefined, true);
+            right = Math.max(right, lx + w(endLabel, 'label'));
           }
         }
         y += r.h;
@@ -676,7 +841,40 @@ export function layoutTimeline(
       );
       y += 14;
     }
+    tags.forEach((t, i) => {
+      if (!t.period) return;
+      // A period shades its dates from its tag down through every band, under the gridlines.
+      const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
+      under.unshift({
+        k: 'rect',
+        x: t.x0,
+        y: ty + 9,
+        w: Math.max(2, t.x1 - t.x0),
+        h: bottom - ty - 9,
+        ink: { family: 'amber', tone: 'soft' },
+      });
+    });
+    if (ordinal.length > 2) {
+      // Long gaps say how long they are, since an ordinal axis does not show it.
+      const gaps = ordinal.slice(1).map((day, i) => day - ordinal[i]),
+        median = [...gaps].sort((a, b) => a - b)[Math.floor(gaps.length / 2)];
+      gaps.forEach((gap, i) => {
+        // A short timeline labels every gap; a long one only the gaps well above the median.
+        if (ordinal.length <= 12 ? gap > 0 : gap > Math.max(1, median * 1.5))
+          text(
+            (X(ordinal[i]) + X(ordinal[i + 1])) / 2,
+            axisY + 9,
+            durationText(gap),
+            'muted',
+            'small',
+            'middle',
+            step - 8,
+            true,
+          );
+      });
+    }
     for (const t of tags) {
+      if (t.period) continue;
       under.push({
         k: 'line',
         x1: t.x,
@@ -787,11 +985,18 @@ export function layoutTimeline(
       w: lw + 4,
       h: lh,
     });
+    const free = (t: { x: number; y: number; anchor: 'start' | 'end' }) => boxOf(t).x >= chartX - 4;
     const pick =
       p.tries.find(t => {
+        if (!free(t)) return false;
         const r = boxOf(t);
         return !segments.some(o => hits(r, o)) && !placed.some(o => hits(r, o));
       }) ?? p.tries[0];
+    // With no clear spot, a label still never covers the row titles: it starts at the chart.
+    if (!free(pick)) {
+      pick.x = chartX;
+      pick.anchor = 'start';
+    }
     placed.push(boxOf(pick));
     right = Math.max(right, boxOf(pick).x + boxOf(pick).w);
     text(pick.x, pick.y, p.label, ink, 'small', pick.anchor, 220, true);
@@ -851,6 +1056,14 @@ export function layoutTimeline(
         { k: 'path', d: arrowHead(x + 24, y), ink: sample },
       ],
     ]);
+  if (used(d => d.progress !== undefined))
+    legend.push([
+      'Progress',
+      (x, y) => [
+        { k: 'line', x1: x, y1: y, x2: x + 22, y2: y, ink: 'grid', w: BAR, round: true },
+        { k: 'line', x1: x, y1: y, x2: x + 12, y2: y, ink: sample, w: BAR, round: true },
+      ],
+    ]);
   if (used(d => d.at !== undefined))
     legend.push([
       'Event',
@@ -859,7 +1072,22 @@ export function layoutTimeline(
         { k: 'dot', x: x + 8, y, r: 2.2, ink: 'canvas' },
       ],
     ]);
-  if (milestones.length)
+  if (milestones.some(o => o.when!.at === undefined))
+    legend.push([
+      'Period',
+      (x, y) => [
+        {
+          k: 'rect',
+          x: x + 1,
+          y: y - 7,
+          w: 20,
+          h: 14,
+          r: 2,
+          ink: { family: 'amber', tone: 'soft' },
+        },
+      ],
+    ]);
+  if (milestones.some(o => o.when!.at !== undefined))
     legend.push([
       'Milestone',
       (x, y) => [
@@ -908,6 +1136,15 @@ const vHead = (x: number, y: number, dir: number) =>
   `M${x - 4},${y - dir * 7}L${x},${y}L${x + 4},${y - dir * 7}Z`;
 const chevron = (x: number, y: number) => `M${x + 5},${y - 4.5}L${x},${y}L${x + 5},${y + 4.5}`;
 const arrowHead = (x: number, y: number) => `M${x - 11},${y - 7}L${x + 1},${y}L${x - 11},${y + 7}Z`;
+
+/** A length of time in the largest unit that keeps it a whole, readable number. */
+export function durationText(days: number) {
+  const n = (v: number, unit: string) => `${v} ${unit}${v === 1 ? '' : 's'}`;
+  if (days < 14) return n(Math.round(days), 'day');
+  if (days < 70) return n(Math.round(days / 7), 'week');
+  if (days < 730) return n(Math.round(days / 30.44), 'month');
+  return n(Math.round(days / 365.25), 'year');
+}
 
 function formatTimes(n: number) {
   return `${n >= 10 ? Math.round(n) : n.toFixed(1).replace(/\.0$/, '')}×`;

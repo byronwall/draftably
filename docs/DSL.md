@@ -713,21 +713,31 @@ panel at 20 times the scale, under an overview with the window shaded.
 ### Timelines reference
 
 - `layout <group> timeline` makes the group a timeline. `layout root timeline` makes the whole
-  drawing one. Options: `today=DATE` (draws a solid rule, and ends `to=open` spans),
-  `zoom=START..END` (an overview plus an enlarged detail panel), `width=` (the axis, 880 by
-  default).
+  drawing one. Options:
+  - `today=DATE` draws a solid rule, and ends `to=open` spans.
+  - `zoom=START..END` adds an enlarged detail panel under an overview.
+  - `scale=ordinal` gives every distinct date one equal step and labels each gap with its length,
+    like a Mermaid `timeline`. Use it when order matters more than elapsed time.
+  - `headers="Name|Tag"` puts headings over the name column and the tag column.
+  - `width=` sets the axis width (880 by default).
 - Each node in the timeline is a row. Give a point as `at=DATE`, or a span as `from=DATE to=DATE`.
   Dates are `YYYY-MM-DD`.
   - `to=open`: still going; the bar ends at `today` with an arrowhead.
   - `from=?DATE`: began some time before DATE; a dotted lead-in ends there.
   - `steps=DATE,DATE`: partial steps, drawn as hollow circles inside the span.
+  - `to=+3d`, `to=+2w` or `to=+1m`: an end given as a duration from `from=`.
+  - `progress=40`: the first 40% of the bar is solid, the rest a lighter track.
 - Row text: `key=` (an ID column, bold in the row's color), `detail=` (a second line under the
   name), `tag=` (a column after the name, such as platforms), `start-label=` (above the start),
-  `end-label=` (beside the end, such as the fixing PR).
+  `end-label=` (beside the end, such as the fixing PR). The words `date` and `duration` print the
+  date or the span's length (`end-label=duration` gives "3 weeks").
 - A group directly inside a timeline is a band: its title heads its rows, and its color is the
   rows' default. A band with `color=auto` takes the next color in a fixed order.
 - `milestone id "label" at=DATE in=<timeline>` draws a dashed rule across every band, with its tag
-  above the axis. Tags that would touch move up a rail.
+  above the axis. Tags that would touch move up a rail. With `from=DATE to=DATE` instead of `at=`,
+  it shades a period, such as a code freeze, across every band.
+- `order <timeline> band1 band2` orders the bands, and `order <band> row1 row2` the rows. File order
+  is the default.
 - With `zoom=`, a band whose dates all fall in the window draws in the detail panel. The other
   bands stay in the overview. The detail heading states the magnification.
 - Ticks (days, weeks, months or years) come from the span and the width, so labels never
