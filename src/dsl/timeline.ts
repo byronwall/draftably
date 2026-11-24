@@ -13,7 +13,7 @@ import {
   type TimelinePlan,
 } from '../model/timeline';
 import type { Rect } from '../model/types';
-import type { ModelObject, Word } from './syntax';
+import type { ModelEdge, ModelObject, Word } from './syntax';
 
 /** A node's place in time. Days count from 1970-01-01 (UTC). */
 export interface TimelineWhen {
@@ -284,6 +284,7 @@ export function layoutTimeline(
   bandGroups: ModelObject[],
   options: TimelineOptions,
   look: ResolvedAppearance,
+  links: ModelEdge[] = [],
 ): { plan: TimelinePlan; rects: Map<string, Rect> } {
   const under: TimelineMark[] = [],
     over: TimelineMark[] = [],
@@ -414,6 +415,10 @@ export function layoutTimeline(
   let right = chartR;
   const bandHeads = bands.some(b => b.g);
 
+  const anchors = new Map<
+    string,
+    { start: number; end: number; y: number; panel: number; point: boolean }
+  >();
   let y = 2;
   panels.forEach((panel, pi) => {
     const { d0, d1 } = panel;
@@ -508,6 +513,11 @@ export function layoutTimeline(
           strong: TimelineInk = { family: r.family },
           ink: TimelineInk = { family: r.family, tone: 'ink' };
         rects.set(r.o.id, { x: 0, y, w: chartR, h: r.h });
+        {
+          const a = d.at !== undefined ? X(d.at) : X(d.from!),
+            b = d.at !== undefined ? X(d.at) : X(d.to === 'open' ? today! : (d.to as number));
+          anchors.set(r.o.id, { start: a, end: b, y: mid, panel: pi, point: d.at !== undefined });
+        }
         under.push({
           k: 'line',
           x1: 0,
@@ -666,6 +676,51 @@ export function layoutTimeline(
     y = bottom + (pi < panels.length - 1 ? PANEL_GAP : 0);
   });
 
+  // Lines between two rows: an elbow from the source's end (finish) down or up to the target's
+  // row, then across into its start, so the arrow reads as "this, then that" on the dates.
+  for (const e of links) {
+    const a = anchors.get(e.source),
+      b = anchors.get(e.target);
+    if (!a || !b || a.panel !== b.panel) continue;
+    const ink: TimelineInk = 'muted',
+      gap = a.point ? 8 : 7,
+      down = b.y > a.y ? 1 : -1,
+      into = b.point ? 8 : 6;
+    const x0 = a.end,
+      y0 = a.y + down * gap,
+      tx = b.start;
+    if (Math.abs(tx - x0) < 10) {
+      // Same date: straight down into the target's mark.
+      const y1 = b.y - down * (into + 1);
+      over.push({ k: 'line', x1: x0, y1: y0, x2: x0, y2: y1 - down * 6, ink, w: 1.3 });
+      over.push({ k: 'path', d: vHead(x0, y1, down), ink });
+      if (e.label) text(x0 + 6, (y0 + y1) / 2, e.label, ink, 'small', 'start', 220, true);
+      continue;
+    }
+    const right = tx > x0 ? 1 : -1,
+      x1 = tx - right * into;
+    over.push({
+      k: 'path',
+      d: `M${x0},${y0}L${x0},${b.y - 4 * down}Q${x0},${b.y} ${x0 + 4 * right},${b.y}L${x1 - right * 6},${b.y}`,
+      ink,
+      stroke: 1.3,
+    });
+    over.push({ k: 'path', d: hHead(x1, b.y, right), ink });
+    if (e.label) {
+      const ly = (y0 + b.y) / 2;
+      text(
+        x0 + (right > 0 ? 6 : -6),
+        ly,
+        e.label,
+        ink,
+        'small',
+        right > 0 ? 'start' : 'end',
+        220,
+        true,
+      );
+    }
+  }
+
   // The legend: one entry for each kind of mark the drawing uses.
   const used = (test: (d: TimelineWhen) => boolean) => rows.some(r => test(r.when));
   const legend: Array<[string, (x: number, y: number) => TimelineMark[]]> = [];
@@ -767,6 +822,10 @@ export function layoutTimeline(
   };
 }
 
+const hHead = (x: number, y: number, dir: number) =>
+  `M${x - dir * 7},${y - 4}L${x},${y}L${x - dir * 7},${y + 4}Z`;
+const vHead = (x: number, y: number, dir: number) =>
+  `M${x - 4},${y - dir * 7}L${x},${y}L${x + 4},${y - dir * 7}Z`;
 const chevron = (x: number, y: number) => `M${x + 5},${y - 4.5}L${x},${y}L${x + 5},${y + 4.5}`;
 const arrowHead = (x: number, y: number) => `M${x - 11},${y - 7}L${x + 1},${y}L${x - 11},${y + 7}Z`;
 

@@ -89,9 +89,26 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     expect(
       errorOf(`group t "T"
 layout t timeline
+milestone m "v1" at=2025-01-01 in=t
+node a "A" in=t at=2025-01-02
+edge e a -> m`),
+    ).toMatch(/milestone/);
+  });
+
+  it('draws a line between two rows on the chart and routes only lines that leave it', async () => {
+    const scene = await compile(`group t "T"
+layout t timeline
 node a "A" in=t at=2025-01-01
-node b "B" in=t at=2025-01-02
-edge e a -> b`),
-    ).toMatch(/joins two rows/);
+node b "B" in=t at=2025-01-05
+node c "Code"
+edge dep a -> b "then"
+edge out b -> c "lives in"`);
+    const doc = projectScene(scene);
+    expect(doc.layout.timelines![0].edges).toEqual(['dep']);
+    const texts = doc.layout.timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    expect(texts).toContain('then');
+    const svg = renderSvg(doc);
+    expect(svg).toContain('lives in');
+    expect(svg.match(/>then</g)).toHaveLength(1);
   });
 });

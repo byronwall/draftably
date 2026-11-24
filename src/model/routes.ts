@@ -1244,6 +1244,9 @@ export function computeRoutes(
   rects: Map<string, Rect>,
   options: { previous?: PriorRoute[]; quick?: boolean } = {},
 ): SceneRoutes {
+  // A line between two rows of one timeline is drawn by the timeline, not routed.
+  const onChart = new Set((doc.layout.timelines ?? []).flatMap(t => t.edges));
+  if (onChart.size) vg = { ...vg, edges: vg.edges.filter(e => !onChart.has(e.id)) };
   const { input, settings, key } = routingKey(doc, vg, rects, options),
     hit = recent.get(key),
     result = hit ? structuredClone(hit) : RouteLab.compute(input, settings);

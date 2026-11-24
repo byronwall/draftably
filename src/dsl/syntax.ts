@@ -1673,20 +1673,12 @@ function validateReferences(m: Model) {
       throw new DslError(msg, o.line);
     });
   }
-  for (const e of m.edges) {
-    const a = timelineOf(e.source),
-      b = timelineOf(e.target);
-    assert(
-      !a || a !== b,
-      `${e.id} joins two rows of timeline ${a}. Rows sit on one date axis; connect a row to something outside the timeline.`,
-      e.line,
-    );
+  for (const e of m.edges)
     assert(
       !by.get(e.source)?.when?.milestone && !by.get(e.target)?.when?.milestone,
       `${e.id} ends on a milestone, which is a rule, not a box. Connect a row instead.`,
       e.line,
     );
-  }
   for (const h of m.hints)
     assert(
       !('id' in h && timelineOf(h.id)),

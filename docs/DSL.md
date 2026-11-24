@@ -732,8 +732,12 @@ panel at 20 times the scale, under an overview with the window shaded.
   bands stay in the overview. The detail heading states the magnification.
 - Ticks (days, weeks, months or years) come from the span and the width, so labels never
   collide. A legend lists only the marks the drawing uses.
-- A row's box spans the whole timeline, so a line from a row leaves past every bar and label.
-  A line may join a row to anything outside its timeline, but not two rows of one timeline.
+- A line from a row to something outside the timeline is routed like any other line. A row's
+  box spans the whole timeline, so the line leaves past every bar and label.
+- A line between two rows of one timeline is drawn on the chart: from the first row's end, down
+  or up to the second row, then across into its start. It reads as "this, then that" on the
+  dates. A line cannot end on a milestone, because a milestone is a rule, not a box. To connect a
+  release, make it a point row (`at=`) in a band of its own.
 - Rows are placed by date, so `near`, `nudge`, `stay`, `pin`, `size` and `align` on a row are
   errors, and so is a date on a node outside a timeline.
 

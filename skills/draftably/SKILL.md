@@ -244,8 +244,10 @@ today=DATE`, or `layout root timeline` for the whole drawing. Each node in the g
   the timeline are bands. `milestone id "v2.0" at=DATE in=<timeline>` draws a release rule
   across every band. Row text: `key=`, `detail=`, `tag=`, `start-label=`, `end-label=`.
   `zoom=START..END` adds an enlarged detail panel for a crowded stretch; bands wholly inside it
-  move there. Rows can join boxes outside the timeline by edges (a fix to the code it touched),
-  but not other rows of the same timeline. No `near`/`pin`/`size` on rows; dates place them.
+  move there. Edges from rows to boxes outside the timeline route normally (a fix to the code
+  it touched); an edge between two rows draws on the chart as a dated elbow arrow. An edge can't
+  end on a milestone, so make a release a point row when the graph needs it. No
+  `near`/`pin`/`size` on rows; dates place them.
   **Fits** elapsed time and durations. **Doesn't fit** order alone; use `sequence`.
 - One object made of parts, a table, or a list of boxes with no edges of their own:
   `layout groupId cells` (see Cells). **Fits** a request body, a record, a schema, a checklist.

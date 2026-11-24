@@ -433,6 +433,7 @@ export function normalize(input: unknown): Diagram {
       finite(t.x) &&
       finite(t.y) &&
       Array.isArray(t.ids) &&
+      Array.isArray(t.edges) &&
       ['x', 'y', 'w', 'h'].every(k => finite(t.bounds?.[k])) &&
       Array.isArray(t.under) &&
       Array.isArray(t.over),

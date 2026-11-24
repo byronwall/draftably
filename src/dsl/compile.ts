@@ -3090,7 +3090,7 @@ function layoutPass(
   /** The title band of each `cells` group, which holds no inset around its cells. */
   const cellBands = new Map<string, number>(),
     chrome = new Map<string, CellsChrome>(),
-    timelinePlans = new Map<string, { plan: TimelinePlan; ids: string[] }>();
+    timelinePlans = new Map<string, { plan: TimelinePlan; ids: string[]; edges: string[] }>();
   const items = new Map<string, Item>(),
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
@@ -3778,11 +3778,14 @@ function layoutPass(
    * groups the bands. Each row's box is its whole row, so lines from outside reach its side.
    */
   function arrangeTimeline(scope: string, kids: ModelObject[], layout: ModelLayout) {
+    const ids = new Set(kids.map(o => o.id)),
+      links = m.edges.filter(e => ids.has(e.source) && ids.has(e.target));
     const { plan, rects } = layoutTimeline(
       kids,
       (m.dissolvedGroups ?? []).filter(g => g.parent === scope),
       layout.timeline!,
       look,
+      links,
     );
     for (const o of kids) {
       const r = rects.get(o.id) ?? { x: plan.bounds.x, y: plan.bounds.y, w: 1, h: 1 };
@@ -3790,7 +3793,7 @@ function layoutPass(
       local.set(o.id, { x: round(r.x), y: round(r.y) });
       bases.set(o.id, { x: r.x, y: r.y });
     }
-    timelinePlans.set(scope, { plan, ids: kids.map(o => o.id) });
+    timelinePlans.set(scope, { plan, ids: kids.map(o => o.id), edges: links.map(e => e.id) });
     return { w: plan.bounds.w, h: plan.bounds.h };
   }
   /** A byte or bit layout: one width per unit, a ruler under the title band, run-on fields. */
@@ -3931,7 +3934,8 @@ function layoutPass(
   const timelines: PlacedTimeline[] = [];
   const place = (scope: string, origin: Pos, depth: number) => {
     const tl = timelinePlans.get(scope);
-    if (tl) timelines.push({ ...tl.plan, scope, x: origin.x, y: origin.y, ids: tl.ids });
+    if (tl)
+      timelines.push({ ...tl.plan, scope, x: origin.x, y: origin.y, ids: tl.ids, edges: tl.edges });
     for (const o of children.get(scope) ?? []) {
       const item = drawn.get(o.id) ?? items.get(o.id)!,
         l = local.get(o.id)!,

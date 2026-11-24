@@ -53,6 +53,8 @@ export interface PlacedTimeline extends TimelinePlan {
   y: number;
   /** Every node the timeline draws: its rows and milestones. */
   ids: string[];
+  /** Lines between two of its rows, drawn as dependency arrows on the chart, not routed. */
+  edges: string[];
 }
 
 export interface TimelinePlan {
