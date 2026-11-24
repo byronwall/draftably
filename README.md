@@ -5,8 +5,8 @@ draftably places the boxes and routes the lines. Open the diagram in the browser
 Your source stays readable, so you can keep it beside your code, review changes in Git,
 and give the same file to a coding agent.
 
-Use it for architecture diagrams, process flows, sequences, state machines, database schemas and
-annotated code listings.
+Use it for architecture diagrams, process flows, sequences, timelines and roadmaps, state machines,
+database schemas and annotated code listings.
 Start in the browser with no install, or use the CLI to edit files on disk.
 
 [Try the live demo](https://draftably.dev/) · [Playground](https://draftably.dev/play) ·
@@ -37,7 +37,7 @@ Editor changes save to the same `.draft` source. Changes from a text editor or a
 the drawing while the local editor is open.
 
 See the [language reference](docs/DSL.md) for layout rules, nested groups, swim lanes, sequences,
-cells, code listings and placement controls. The [examples](examples/) show complete diagrams.
+timelines, cells, code listings and placement controls. The [examples](examples/) show complete diagrams.
 
 ## Get started
 
@@ -131,7 +131,8 @@ The agent edits text and checks the result with the CLI. You can refine the draw
 and return the same file to the agent. Read the [skill](skills/draftably/SKILL.md) or the
 [agent guide](https://draftably.dev/docs/agent-skill) for the full workflow.
 
-Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](https://draftably.dev/docs/import).
+Import DOT, Mermaid flowcharts, sequences, gantt charts and timelines, and D2 graphs as editable
+native diagrams. See [Import diagrams](https://draftably.dev/docs/import).
 
 ## Integrate
 
