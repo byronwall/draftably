@@ -678,27 +678,43 @@ export function layoutTimeline(
 
   // Lines between two rows: an elbow from the source's end (finish) down or up to the target's
   // row, then across into its start, so the arrow reads as "this, then that" on the dates.
+  type Box = { x: number; y: number; w: number; h: number };
+  const segments: Box[] = [],
+    pending: Array<{
+      label: string;
+      tries: Array<{ x: number; y: number; anchor: 'start' | 'end' }>;
+    }> = [];
+  const ink: TimelineInk = 'muted';
   for (const e of links) {
     const a = anchors.get(e.source),
       b = anchors.get(e.target);
     if (!a || !b || a.panel !== b.panel) continue;
-    const ink: TimelineInk = 'muted',
-      gap = a.point ? 8 : 7,
-      down = b.y > a.y ? 1 : -1,
-      into = b.point ? 8 : 6;
-    const x0 = a.end,
-      y0 = a.y + down * gap,
-      tx = b.start;
+    const down = b.y > a.y ? 1 : -1,
+      into = b.point ? 8 : 6,
+      x0 = a.end,
+      y0 = a.y + down * (a.point ? 8 : 7),
+      tx = b.start,
+      mid = (y0 + b.y) / 2;
+    const vertical = { x: x0 - 1, y: Math.min(y0, b.y), w: 2, h: Math.abs(b.y - y0) };
+    segments.push(vertical);
     if (Math.abs(tx - x0) < 10) {
       // Same date: straight down into the target's mark.
       const y1 = b.y - down * (into + 1);
       over.push({ k: 'line', x1: x0, y1: y0, x2: x0, y2: y1 - down * 6, ink, w: 1.3 });
       over.push({ k: 'path', d: vHead(x0, y1, down), ink });
-      if (e.label) text(x0 + 6, (y0 + y1) / 2, e.label, ink, 'small', 'start', 220, true);
+      if (e.label)
+        pending.push({
+          label: e.label,
+          tries: [
+            { x: x0 + 6, y: mid, anchor: 'start' },
+            { x: x0 - 6, y: mid, anchor: 'end' },
+          ],
+        });
       continue;
     }
     const right = tx > x0 ? 1 : -1,
       x1 = tx - right * into;
+    segments.push({ x: Math.min(x0, x1), y: b.y - 1, w: Math.abs(x1 - x0), h: 2 });
     over.push({
       k: 'path',
       d: `M${x0},${y0}L${x0},${b.y - 4 * down}Q${x0},${b.y} ${x0 + 4 * right},${b.y}L${x1 - right * 6},${b.y}`,
@@ -707,18 +723,43 @@ export function layoutTimeline(
     });
     over.push({ k: 'path', d: hHead(x1, b.y, right), ink });
     if (e.label) {
-      const ly = (y0 + b.y) / 2;
-      text(
-        x0 + (right > 0 ? 6 : -6),
-        ly,
-        e.label,
-        ink,
-        'small',
-        right > 0 ? 'start' : 'end',
-        220,
-        true,
-      );
+      const side = right > 0 ? 'start' : 'end',
+        back = right > 0 ? 'end' : 'start';
+      pending.push({
+        label: e.label,
+        tries: [
+          { x: x0 + right * 10, y: b.y - 10, anchor: side },
+          { x: x0 + right * 6, y: mid, anchor: side },
+          { x: x0 - right * 6, y: mid, anchor: back },
+          { x: x0 + right * 10, y: b.y + 10, anchor: side },
+        ],
+      });
     }
+  }
+  // Each label takes the first spot clear of every arrow, every row's marks and every label
+  // placed before it.
+  const placed: Box[] = [...anchors.values()].flatMap(a => [
+    { x: a.start - 8, y: a.y - 8, w: 16, h: 16 },
+    { x: a.end - 8, y: a.y - 8, w: 16, h: 16 },
+  ]);
+  const hits = (r: Box, o: Box) =>
+    r.x < o.x + o.w && o.x < r.x + r.w && r.y < o.y + o.h && o.y < r.y + r.h;
+  for (const p of pending) {
+    const lw = Math.min(220, w(p.label, 'small')),
+      lh = timelineFont(look, 'small').size + 4;
+    const boxOf = (t: { x: number; y: number; anchor: 'start' | 'end' }) => ({
+      x: t.anchor === 'start' ? t.x - 2 : t.x - lw - 2,
+      y: t.y - lh / 2,
+      w: lw + 4,
+      h: lh,
+    });
+    const pick =
+      p.tries.find(t => {
+        const r = boxOf(t);
+        return !segments.some(o => hits(r, o)) && !placed.some(o => hits(r, o));
+      }) ?? p.tries[0];
+    placed.push(boxOf(pick));
+    text(pick.x, pick.y, p.label, ink, 'small', pick.anchor, 220, true);
   }
 
   // The legend: one entry for each kind of mark the drawing uses.
