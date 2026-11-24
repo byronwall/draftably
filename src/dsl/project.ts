@@ -9,6 +9,8 @@ import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
+import { timelineRows } from './timeline';
+import { focusPlan } from './timeline-focus';
 import { cellsBandFor } from './cells';
 import { GROUP_INSET } from './frame';
 
@@ -113,6 +115,13 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.row !== undefined ? { row: e.row } : {}),
       ...(e.labelX !== undefined ? { labelX: e.labelX } : {}),
     });
+  }
+  if (scene.model.timeline) {
+    const rows = timelineRows(scene.model);
+    const plan = focusPlan(rows, scene.model.timeline);
+    const x = Math.min(0, ...scene.objects.map(o => o.x));
+    const top = Math.min(0, ...scene.objects.map(o => o.y));
+    doc.layout.timeline = { ...plan, x, y: top - plan.height - 80 };
   }
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
   const groups = new Set(doc.graph.groups.map(g => g.id));

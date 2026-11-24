@@ -7,6 +7,7 @@ import {
   menu,
   objectsOpen,
   openMenu,
+  openDialog,
   propertiesOpen,
   sourceOpen,
 } from '../state/ui';
@@ -37,6 +38,31 @@ const DRAW_TOOLS: ToolInfo[] = [
 export function Toolbar() {
   const s = useDiagramSession();
   const locked = () => s.timelineOpen();
+  const timelineTools = () => (
+    <Show when={s.fileScene()}>
+      <button
+        type="button"
+        class="button ghost"
+        disabled={!!s.fileBlocked()}
+        onClick={() => openDialog('calendar')}
+      >
+        Timeline settings
+      </button>
+      <Show when={s.doc.layout.timeline}>
+        {chart => (
+          <button
+            type="button"
+            class="button ghost"
+            onClick={() =>
+              s.fitRects([{ x: chart().x, y: chart().y, w: chart().width, h: chart().height }])
+            }
+          >
+            Fit timeline
+          </button>
+        )}
+      </Show>
+    </Show>
+  );
   const run = (id: CommandId) => () => runCommand(id);
   const menuButton = (id: Parameters<typeof openMenu>[0]) => (e: MouseEvent) =>
     openMenu(id, e.currentTarget as HTMLElement);
@@ -105,6 +131,7 @@ export function Toolbar() {
       </div>
 
       <div class="toolbar-group toolbar-panels">
+        {timelineTools()}
         <AppNav />
         <CommandButton command="palette" />
         <IconButton
@@ -145,6 +172,7 @@ export function Toolbar() {
         </button>
       </div>
       <div class="mobile-tools" role="toolbar" aria-label="Common tools">
+        {timelineTools()}
         <button type="button" class="button ghost" onClick={run('add-node')} disabled={locked()}>
           <Icon name="plus" />
           Add

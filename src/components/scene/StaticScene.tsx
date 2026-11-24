@@ -1,3 +1,4 @@
+import { TimelineSurface } from './TimelineSurface';
 import { For } from 'solid-js';
 import type { StaticScene as Scene } from '../../model/static-scene';
 import { CrossingView, EdgeView } from './EdgeView';
@@ -14,6 +15,7 @@ export function StaticScene(props: {
 }) {
   return (
     <>
+      <TimelineSurface doc={props.scene.doc} />
       <SequenceBackdrop doc={props.scene.doc} part="panel" />
       <For each={props.scene.vg.groups}>
         {g => (

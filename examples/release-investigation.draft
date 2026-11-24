@@ -1,0 +1,22 @@
+# Follow a rounding regression across releases, callers and the fixing code.
+diagram "Number formatting · release investigation"
+layout root timeline today=2025-11-23 zoom=2025-11-03..2025-11-23
+group bugs "Customer reports"
+group fixes "Implementation"
+group releases "Releases"
+node importer "Legacy date import" in=bugs key=B1 from=2024-10-29 to=open platforms="Desktop"
+node decimals "Decimal totals drift" in=bugs key=B6 from=2025-02-27 to=open introduced-by="#142" platforms="Web, CLI"
+node compare "Mixed-number comparison" in=bugs key=C2 from=?2025-11-03 to=2025-11-16 steps=2025-11-04,2025-11-05 fixed-by="#538" platforms="CLI"
+node invoice "Invoice comparison" in=bugs at=2025-11-06
+node formatter "format.ts" in=fixes shape=code lang=ts numbers=on at=2025-11-16 <<TS
+function compareAmount(a: string, b: string) {
+  return decimal(a).cmp(decimal(b));
+}
+TS
+range formatter.exact lines=2 color=blue "Exact decimal comparison"
+edge calls invoice -> compare "uses"
+edge repaired compare -> formatter.exact "fixed by"
+node v20 "v2.0.0" in=releases at=2025-11-03 milestone=on
+node v21 "v2.1.0" in=releases at=2025-11-13 milestone=on
+node v22 "v2.2.0" in=releases at=2025-11-19 milestone=on
+node v221 "v2.2.1" in=releases at=2025-11-21 milestone=on

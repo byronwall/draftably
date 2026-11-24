@@ -37,6 +37,8 @@ export function drawingBounds(
     const r = rects.get(g.id);
     if (r) boxes.push(r);
   }
+  const chart = doc.layout.timeline;
+  if (chart) boxes.push({ x: chart.x, y: chart.y, w: chart.width, h: chart.height });
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
   for (const route of routes) {
     for (const p of route.points)

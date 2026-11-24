@@ -24,6 +24,7 @@ import {
   showError,
 } from '../state/ui';
 import { IconButton } from './controls';
+import { TimelineSettings } from './timeline/TimelineSettings';
 import { ExportDialog } from './ExportDialog';
 import { Icon } from './Icon';
 import { Palette } from './Palette';
@@ -45,6 +46,9 @@ export function Dialogs() {
       </Match>
       <Match when={dialog() === 'import-text'}>
         <ImportTextDialog />
+      </Match>
+      <Match when={dialog() === 'calendar'}>
+        <TimelineSettings />
       </Match>
       <Match when={dialog() === 'export'}>
         <ExportDialog />

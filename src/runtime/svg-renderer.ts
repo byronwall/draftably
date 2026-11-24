@@ -3,6 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import {
+  swatchFor,
   bandSwatch,
   panelSwatch,
   resolveAppearance,
@@ -345,6 +346,7 @@ function sceneMarkup(
     diff = isDiff(doc);
   const backdrop = sequenceBackdrop(doc, look);
   out.push(...backdrop.panel);
+  if (doc.layout.timeline) out.push(timelineMarkup(doc, look));
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
       c = drawnSwatch(doc, look, g.id, 'group'),
@@ -824,3 +826,51 @@ const union = (a: Rect, b: Rect): Rect => {
     y = Math.min(a.y, b.y);
   return { x, y, w: Math.max(a.x + a.w, b.x + b.w) - x, h: Math.max(a.y + a.h, b.y + b.h) - y };
 };
+
+/** Calendar marks use the same geometry, type and palette on the canvas and in exports. */
+export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
+  const chart = doc.layout.timeline;
+  if (!chart) return '';
+  const colors = {
+    ink: look.text,
+    muted: look.muted,
+    accent: swatchFor(look, 'blue', 600).stroke,
+    release: swatchFor(look, 'amber', 600).stroke,
+    grid: look.group.stroke,
+    shade: look.group.fill,
+    paper: look.canvas,
+  };
+  const parts = [
+    `<g class="date-chart" transform="translate(${chart.x} ${chart.y})" font-family="${esc(look.annotation.family)}">`,
+  ];
+  parts.push(`<rect width="${chart.width}" height="${chart.height}" fill="${look.canvas}"/>`);
+  for (const m of chart.marks) {
+    const color = colors[m.tone ?? 'ink'];
+    const id = m.id ? ` data-id="${esc(m.id)}" data-timeline-id="${esc(m.id)}"` : '';
+    const title = m.title ? `<title>${esc(m.title)}</title>` : '';
+    parts.push(`<g${id}>${title}`);
+    if (m.kind === 'text')
+      parts.push(
+        `<text x="${m.x}" y="${m.y}" fill="${color}" font-size="${m.size ?? 14}" font-weight="${m.weight ?? 400}" text-anchor="${m.anchor ?? 'start'}">${esc(m.text)}</text>`,
+      );
+    if (m.kind === 'line')
+      parts.push(
+        `<line x1="${m.x}" y1="${m.y}" x2="${m.x2}" y2="${m.y2}" stroke="${color}" stroke-width="${m.strokeWidth ?? 1}" ${m.dash ? 'stroke-dasharray="4 4"' : ''}/>`,
+      );
+    if (m.kind === 'rect')
+      parts.push(
+        `<rect x="${m.x}" y="${m.y}" width="${m.w}" height="${m.h}" rx="${m.radius ?? 0}" fill="${color}"/>`,
+      );
+    if (m.kind === 'dot')
+      parts.push(
+        `<circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="${m.hollow ? look.canvas : color}" stroke="${color}" stroke-width="1.5"/>`,
+      );
+    parts.push('</g>');
+  }
+  for (const [id, b] of Object.entries(chart.boxes))
+    parts.push(
+      `<rect data-id="${esc(id)}" data-timeline-id="${esc(id)}" tabindex="0" role="button" aria-label="${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="transparent"/>`,
+    );
+  parts.push('</g>');
+  return parts.join('');
+}

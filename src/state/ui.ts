@@ -8,7 +8,7 @@ export type MenuId =
   'file' | 'edit' | 'view' | 'layout' | 'help' | 'export' | 'context' | 'appearance' | 'tools';
 export type RightTab = 'properties' | 'arrange' | 'source';
 export type DialogId =
-  'help' | 'palette' | 'quick-build' | 'import-text' | 'confirm' | 'error' | 'export';
+  'help' | 'palette' | 'quick-build' | 'import-text' | 'confirm' | 'error' | 'export' | 'calendar';
 
 export interface MenuState {
   id: MenuId;

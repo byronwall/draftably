@@ -285,9 +285,18 @@ export const formatSource = (source: string) => printSource(readSource(source));
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
 /** `cells` lays a group's members edge to edge as one object: a sequence, table or byte layout. */
-export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells';
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells' | 'timeline';
 
+import {
+  dateAttrs,
+  readTimelineDates,
+  readTimelineOptions,
+  validateSpan,
+  type TimelineOptions,
+  type TimelineDates,
+} from './timeline';
 export interface ModelObject {
+  dates?: TimelineDates;
   id: string;
   type: 'node' | 'group';
   label: string;
@@ -430,6 +439,7 @@ export type HintType = Hint['type'];
 export const POSITION_HINTS: HintType[] = ['near', 'nudge', 'stay', 'pin'];
 
 export interface Model {
+  timeline?: TimelineOptions;
   title: string;
   objects: ModelObject[];
   edges: ModelEdge[];
@@ -842,6 +852,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           command === 'node'
             ? [
                 ...CODE_ATTRS,
+                ...dateAttrs,
                 'in',
                 'color',
                 'shade',
@@ -903,6 +914,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         };
         m.objects.push({
           id: oid,
+          dates: command === 'node' ? readTimelineDates(attrs, fail) : undefined,
           type: command,
           label: label(args[1], `${command === 'node' ? 'Node' : 'Group'} ${oid}`),
           parent: attrs.has('in') ? id(attrs.get('in')) : 'root',
@@ -1021,6 +1033,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       }
       case 'layout': {
         const scope = id(args[0]);
+        if (scope === 'root') delete m.timeline;
         // A layout line only moves things, so a mistake in one is a warning, not a failure:
         // a repeated scope keeps the later line, and an attribute it does not take is ignored.
         const named = attrs.get('engine')?.value as LayoutAlgorithmId | undefined;
@@ -1062,6 +1075,10 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         } else {
           count(2);
           const recipe = args[1]?.value;
+          if (recipe === 'timeline') {
+            assert(scope === 'root', 'Use layout root timeline.');
+            m.timeline = readTimelineOptions(attrs, fail);
+          }
           allow(
             recipe === 'cells'
               ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
@@ -1069,14 +1086,15 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                   'gap',
                   ...(recipe === 'flow' ? ['fold'] : []),
                   ...(recipe === 'sequence' ? ['activations'] : []),
+                  ...(recipe === 'timeline' ? ['today', 'zoom'] : []),
                   ...common,
                 ],
           );
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence or cells, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells', 'timeline'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline or cells, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
@@ -1371,6 +1389,11 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
 
   if (m.objects.length > 500) throw new DslError('Limit: 500 nodes and groups.');
   if (m.edges.length > 1200) throw new DslError('Limit: 1,200 edges.');
+  for (const o of m.objects)
+    if (o.dates)
+      validateSpan(o.dates, m.timeline?.today, message => {
+        throw new DslError(message, o.line);
+      });
   validateReferences(m);
   return m;
 }

@@ -1,0 +1,33 @@
+.timeline-settings {
+  display: grid;
+  gap: 16px;
+}
+.timeline-settings fieldset {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.timeline-settings legend {
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+.timeline-settings label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+.timeline-settings select {
+  max-width: 65%;
+}
+.timeline-settings .button {
+  justify-self: end;
+}
+.timeline-surface [data-timeline-id] {
+  cursor: pointer;
+}
+.timeline-surface rect[role='button']:focus-visible {
+  stroke: var(--accent);
+  outline: none;
+}

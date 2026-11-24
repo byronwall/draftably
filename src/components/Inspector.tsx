@@ -33,7 +33,7 @@ import {
   textValue,
 } from '../state/session/canvas-text';
 import { NOTE_SIDES, noteSide, type Note } from '../model/note';
-import { labelFocus, setRightTab } from '../state/ui';
+import { labelFocus, openDialog, setRightTab } from '../state/ui';
 import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
 import { CommandButton as IconCommand } from './CommandButton';
 import { describeLink } from '../state/links';
@@ -521,6 +521,34 @@ function ObjectInspector(props: { id: string }) {
   return (
     <>
       <Heading title={container() ? 'Container' : 'Shape'} />
+      <Show when={!container() && s.fileScene()}>
+        <Section title="Timeline">
+          <button
+            type="button"
+            class="button small"
+            disabled={!!s.fileBlocked()}
+            onClick={() => openDialog('calendar')}
+          >
+            Edit dates
+          </button>
+          <Show when={s.doc.layout.timeline?.boxes[props.id]}>
+            {box => (
+              <button
+                type="button"
+                class="button small"
+                onClick={() => {
+                  const chart = s.doc.layout.timeline!;
+                  s.fitRects([
+                    { x: chart.x + box().x, y: chart.y + box().y, w: box().w, h: box().h },
+                  ]);
+                }}
+              >
+                Show on timeline
+              </button>
+            )}
+          </Show>
+        </Section>
+      </Show>
       <Section>
         <TextField
           label="Label"

@@ -1,3 +1,5 @@
+import { TimelineSurface } from '../scene/TimelineSurface';
+import { ancestors, isCollapsed } from '../../model/graph';
 import { createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
 import { setActiveSession } from '../../state/active-session';
 import { BrushDock } from '../sculpt/BrushDock';
@@ -179,6 +181,18 @@ export function Canvas(props: CanvasProps) {
           <Show when={!empty()}>
             <Frame />
           </Show>
+          <TimelineSurface
+            doc={shown()}
+            selected={s.selectedIds()}
+            pick={id => s.selectItems([id])}
+            reveal={id => {
+              for (const parent of ancestors(s.doc, id).reverse())
+                if (isCollapsed(s.doc, parent)) s.toggleCollapse(parent);
+              s.setSelection([id]);
+              const rect = s.geometry(id);
+              if (rect) s.fitRects([rect]);
+            }}
+          />
           <SequenceBackdrop doc={shown()} part="panel" />
           <g>
             <For each={s.groupIds()}>
