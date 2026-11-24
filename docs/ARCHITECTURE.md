@@ -171,7 +171,7 @@ them alone, and `scripts/build-editor.ts` fails when a shell module gets into it
 
 ## import/ — foreign diagram source
 
-`import/` detects supported text formats and converts DOT, Mermaid flowchart and sequence, and D2 graph
+`import/` detects supported text formats and converts DOT, Mermaid flowchart, sequence, gantt and timeline, and D2 graph
 facts to validated native source. It reports unsupported meaning and loss before opening. The CLI `import`
 command writes a new `.draft` file. Viewer entry points are planned separately.
 
@@ -206,6 +206,15 @@ Groups and the opinionated root layouts follow a few rules:
   keeps members side by side in each rank. It joins their padded boxes where one rectangle would
   cover a non-member, and `check` reports `soft-split` and `soft-overlap` for what remains. In the
   viewer, a drag on a tint writes one `stay` per member, as Tidy does.
+- **A timeline is a group recipe with its own drawing.** `layout <group> timeline` (`arrangeTimeline`
+  in `dsl/compile.ts`) places each member by date with `layoutTimeline` (`dsl/timeline.ts`). The
+  groups inside it become frameless bands, so `dissolved()` hands their rows to the timeline scope.
+  The result is one display list of marks (`model/timeline.ts`), placed at the scope's content
+  origin. The canvas (`TimelineView`) and the SVG export (`markSvg`) draw the same list, so they
+  cannot disagree. Each row's box spans the whole timeline, for selection and for routed lines.
+  A line between two rows is drawn by the timeline and leaves `visibleGraph`, so no router sees
+  it. Colors stay semantic in the marks and resolve at draw time against the backdrop (the page
+  or the group's fill), with contrast floors that `tests/timeline-colors.test.ts` holds.
 - **Lanes and sequence are root recipes, not engines.** `layout root lanes` (`swimLanes`) ranks
   every leaf across the whole drawing, so one rank is one column across every lane. Every node
   must sit in a top-level group. `layout root sequence` (`sequenced`) puts participants in file

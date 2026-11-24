@@ -94,7 +94,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
    edits; `format --drop-stale --write` removes those lines.
 10. **Move from Mermaid:** `npx draftably migrate docs/` lists the Markdown `mermaid` fences a
-    run would rewrite as `draft` fences (flowcharts and sequences only; other charts stay) and
+    run would rewrite as `draft` fences (flowcharts, sequences, gantt charts and dated timelines;
+    other charts stay) and
     the importer's warnings. Add `--write` to apply, and `--accept-lossy` for fences with
     warnings. `import chart.mmd --output chart.draft` converts one Mermaid, DOT or D2 file.
 

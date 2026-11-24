@@ -1,6 +1,7 @@
 /**
  * A drop-in for the `mermaid` package. Pages call the same `initialize`, `run`, `render` and `parse`;
- * Draftably draws `draft` source and Mermaid flowcharts and sequences, and hands every other
+ * Draftably draws `draft` source and Mermaid flowcharts, sequences, gantt charts and timelines,
+ * and hands every other
  * Mermaid family to the real Mermaid so nothing on the page stops rendering.
  */
 import { renderSvg, validate } from '@draftably/runtime';
@@ -10,7 +11,7 @@ export interface MermaidConfig {
   startOnLoad?: boolean;
   /** Drop-in settings. Every other key passes through to Mermaid for families it still draws. */
   draftably?: {
-    /** `convert` (default) draws Mermaid flowcharts and sequences with Draftably; `off` leaves them to Mermaid. */
+    /** `convert` (default) draws Mermaid flowcharts, sequences, gantt charts and timelines with Draftably; `off` leaves them to Mermaid. */
     mermaid?: 'convert' | 'off';
   };
   [key: string]: unknown;

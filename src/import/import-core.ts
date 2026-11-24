@@ -14,12 +14,15 @@ export interface Diagnostic {
 }
 export interface NativeObject {
   id: string;
-  kind: 'node' | 'group';
+  /** `milestone`: a dated rule or period across a timeline, which takes no row. */
+  kind: 'node' | 'group' | 'milestone';
   label: string;
   parent?: string;
   shape?: 'box' | 'pill' | 'circle' | 'diamond' | 'text';
   color?: string;
   shade?: number;
+  /** Extra attributes in order, such as a timeline row's `from=` and `to=`. */
+  attrs?: Array<[string, string]>;
 }
 export interface NativeEdge {
   id: string;
@@ -39,7 +42,9 @@ export interface NativeEdge {
 }
 export interface NativeLayout {
   scope: string;
-  kind: 'flow' | 'column' | 'row' | 'sequence';
+  kind: 'flow' | 'column' | 'row' | 'sequence' | 'timeline';
+  /** Recipe settings in order, such as a timeline's `scale=ordinal`. */
+  options?: Array<[string, string]>;
   /** `sequence` only: draw activation bars from calls and their replies. */
   activations?: true;
   direction?: 'right' | 'down';
@@ -119,6 +124,8 @@ export class Ids {
   }
 }
 export const quote = (value: string) => JSON.stringify(value);
+/** A value bare when it reads as one word (a date, a number, `?2025-01-01`), quoted otherwise. */
+const attrValue = (value: string) => (/^[\w?+.,:%-]+$/.test(value) ? value : quote(value));
 export const blankPlan = (title: string): NativePlan => ({
   title,
   objects: [],
@@ -224,6 +231,7 @@ export function finish(
     if (o.parent) s += ' in=' + o.parent;
     if (o.shape && o.shape !== 'box' && o.kind === 'node') s += ' shape=' + o.shape;
     if (o.color) s += ' color=' + o.color + ' shade=' + (o.shade ?? 500);
+    for (const [k, v] of o.attrs ?? []) s += ' ' + k + '=' + attrValue(v);
     lines.push(s);
   }
   for (const e of plan.edges) {
@@ -247,7 +255,8 @@ export function finish(
         ' ' +
         l.kind +
         (l.direction ? ' direction=' + l.direction : '') +
-        (l.activations ? ' activations=on' : ''),
+        (l.activations ? ' activations=on' : '') +
+        (l.options ?? []).map(([k, v]) => ' ' + k + '=' + attrValue(v)).join(''),
     );
   for (const p of plan.phases ?? [])
     lines.push(['phase', p.id, quote(p.label), ...p.members].join(' '));

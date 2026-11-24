@@ -218,3 +218,61 @@ a-)b: send`);
     expect((await run('a-|\\b: half')).status).toBe('failed');
   });
 });
+
+describe('Mermaid gantt and timeline import', () => {
+  const run = async (text: string) =>
+    importMermaidFlow(await parse(text), makePlainLabel(dom.window.document));
+
+  it('keeps Mermaid’s computed dates and draws `after` as dependencies', async () => {
+    const imported = await run(`gantt
+title Plan
+dateFormat YYYY-MM-DD
+excludes weekends
+section Build
+Index :done, a1, 2025-01-06, 10d
+API :active, a2, after a1, 2w
+Ship :milestone, m1, after a2, 0d
+section Launch
+Docs :crit, d1, 2025-02-03, 2025-02-14
+Freeze :vert, v1, 2025-02-10, 0d`);
+    expect(imported.status).toBe('ready');
+    const src = imported.nativeSource!;
+    // Ten working days from Monday Jan 6 end on Monday Jan 20, skipping two weekends.
+    expect(src).toContain(
+      'node a1 "Index" in=section_1 from=2025-01-06 to=2025-01-20 progress=100',
+    );
+    expect(src).toContain('node a2 "API" in=section_1 from=2025-01-20 to=2025-02-07');
+    expect(src).toContain('node m1 "Ship" in=section_1 at=2025-02-07');
+    expect(src).toContain('color=red');
+    expect(src).toContain('milestone v1 "Freeze" at=2025-02-10');
+    expect(src).toMatch(/^edge \S+ a1 -> a2 ""$/m);
+    expect(src).toContain('layout root timeline');
+    const doc = projectScene(await compile(src));
+    // Both dependencies draw on the chart, not through the router.
+    expect(doc.layout.timelines![0].edges).toHaveLength(2);
+    expect(imported.diagnostics.map(d => d.code)).toContain('MERMAID_GANTT_EXCLUDES');
+  });
+
+  it('places timeline periods on an ordinal axis, one row per event', async () => {
+    const imported = await run(`timeline
+title History
+section Early
+2002 : LinkedIn
+2004 : Facebook : Google
+section Later
+2005 : YouTube`);
+    expect(imported.status).toBe('ready');
+    const src = imported.nativeSource!;
+    expect(src).toContain('layout root timeline scale=ordinal');
+    expect(src).toContain('node event_2_2 "Google" in=section_1 at=2004-01-01');
+    await compile(src);
+  });
+
+  it('refuses a timeline whose periods are not dates, so the drop-in leaves it to Mermaid', async () => {
+    const imported = await run(`timeline
+Industry 1.0 : Machinery
+Industry 2.0 : Electricity`);
+    expect(imported.status).toBe('failed');
+    expect(imported.diagnostics[0].code).toBe('MERMAID_TIMELINE_UNDATED');
+  });
+});

@@ -609,8 +609,14 @@ export function layoutTimeline(
     y += railRows * RAIL;
 
     // The axis: tick labels, then a baseline.
+    // Years written as years (every date a January 1st) label as years.
+    const yearly = ordinal.every(day => {
+      const d = dateOf(day);
+      return d.getUTCMonth() === 0 && d.getUTCDate() === 1;
+    });
     const ticks: Tick[] = ordinal.length
       ? ordinal.map((day, i) => {
+          if (yearly) return { day, text: String(dateOf(day).getUTCFullYear()), major: true };
           const d = dateOf(day),
             prev = i ? dateOf(ordinal[i - 1]) : undefined,
             year = !prev || prev.getUTCFullYear() !== d.getUTCFullYear();
@@ -1158,9 +1164,10 @@ const arrowHead = (x: number, y: number) => `M${x - 11},${y - 7}L${x + 1},${y}L$
 export function durationText(days: number) {
   const n = (v: number, unit: string) => `${v} ${unit}${v === 1 ? '' : 's'}`;
   if (days < 14) return n(Math.round(days), 'day');
-  if (days < 70) return n(Math.round(days / 7), 'week');
-  if (days < 730) return n(Math.round(days / 30.44), 'month');
-  return n(Math.round(days / 365.25), 'year');
+  if (days < 61) return n(Math.round(days / 7), 'week');
+  // From about eleven months a span reads in years, so a year is "1 year", not "12 months".
+  if (days < 335) return n(Math.round(days / 30.44), 'month');
+  return n(Math.max(1, Math.round(days / 365.25)), 'year');
 }
 
 function formatTimes(n: number) {

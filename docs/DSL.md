@@ -689,8 +689,8 @@ note goes beside the node.
 ## Timelines
 
 A timeline places things on a real date axis: when each bug arrived and when it was fixed, a
-release history, an incident. Equal time takes equal width. A timeline is a group like any other,
-so it sits in the same drawing as boxes, code and lines.
+roadmap, a release history, an incident. Equal time takes equal width. A timeline is a group like
+any other, so it sits in the same drawing as boxes, code and lines, and lines join its rows to them.
 
 ```draft
 group history "Bug history"
@@ -708,51 +708,114 @@ edge fix c2 -> planner "fixed by"
 ```
 
 **Try it:** add `zoom=2025-11-03..2025-11-23` to the layout line. The fixed band moves to a detail
-panel at 20 times the scale, under an overview with the window shaded.
+panel about 19 times wider per day, under an overview with the window shaded.
 
-### Timelines reference
+Pick `timeline` when elapsed time matters: how long, how far apart, what overlapped. Pick
+`sequence` when only the order of messages matters, and `scale=ordinal` (below) for a history
+where the order of dates matters more than the gaps between them.
 
-- `layout <group> timeline` makes the group a timeline. `layout root timeline` makes the whole
-  drawing one. Options:
-  - `today=DATE` draws a solid rule, and ends `to=open` spans.
-  - `zoom=START..END` adds an enlarged detail panel under an overview.
-  - `scale=ordinal` gives every distinct date one equal step and labels each gap with its length,
-    like a Mermaid `timeline`. Use it when order matters more than elapsed time.
-  - `headers="Name|Tag"` puts headings over the name column and the tag column.
-  - `width=` sets the axis width (880 by default).
-- Each node in the timeline is a row. Give a point as `at=DATE`, or a span as `from=DATE to=DATE`.
-  Dates are `YYYY-MM-DD`.
-  - `to=open`: still going; the bar ends at `today` with an arrowhead.
-  - `from=?DATE`: began some time before DATE; a dotted lead-in ends there.
-  - `steps=DATE,DATE`: partial steps, drawn as hollow circles inside the span.
-  - `to=+3d`, `to=+2w` or `to=+1m`: an end given as a duration from `from=`.
-  - `progress=40`: the first 40% of the bar is solid, the rest a lighter track.
-- Row text: `key=` (an ID column, bold in the row's color), `detail=` (a second line under the
-  name), `tag=` (a column after the name, such as platforms), `start-label=` (above the start),
-  `end-label=` (beside the end, such as the fixing PR). The words `date` and `duration` print the
-  date or the span's length (`end-label=duration` gives "3 weeks").
-- A group directly inside a timeline is a band: its title heads its rows, and its color is the
-  rows' default. A band with `color=auto` takes the next color in a fixed order.
-- `milestone id "label" at=DATE in=<timeline>` draws a dashed rule across every band, with its tag
-  above the axis. Tags that would touch move up a rail. With `from=DATE to=DATE` instead of `at=`,
-  it shades a period, such as a code freeze, across every band.
-- `order <timeline> band1 band2` orders the bands, and `order <band> row1 row2` the rows. File order
-  is the default.
-- With `zoom=`, a band whose dates all fall in the window draws in the detail panel. The other
-  bands stay in the overview. The detail heading states the magnification.
-- Ticks (days, weeks, months or years) come from the span and the width, so labels never
-  collide. A legend lists only the marks the drawing uses.
-- A line from a row to something outside the timeline is routed like any other line. A row's
-  box spans the whole timeline, so the line leaves past every bar and label.
-- A line between two rows of one timeline is drawn on the chart: from the first row's end, down
-  or up to the second row, then across into its start. It reads as "this, then that" on the
-  dates. A line cannot end on a milestone, because a milestone is a rule, not a box. To connect a
-  release, make it a point row (`at=`) in a band of its own.
-- Rows are placed by date, so `near`, `nudge`, `stay`, `pin`, `size` and `align` on a row are
-  errors, and so is a date on a node outside a timeline.
+### What each mark means
 
-Pick `timeline` when elapsed time matters (how long, how far apart). Pick `sequence` when only the
-order of messages matters.
+| Mark                                               | Means                             | Written as                                |
+| -------------------------------------------------- | --------------------------------- | ----------------------------------------- |
+| Bar with a ring at the left and a dot at the right | A span with a known start and end | `from=DATE to=DATE`                       |
+| Bar ending in an arrowhead at Today                | Still going                       | `to=open`, with `today=` on the layout    |
+| Dotted lead-in with a chevron                      | Began some time before this date  | `from=?DATE`                              |
+| Hollow circles on a bar                            | Partial steps                     | `steps=DATE,DATE`                         |
+| Solid part over a lighter track                    | How much is done                  | `progress=40`                             |
+| Dot with a hollow center                           | One day, a point in time          | `at=DATE`                                 |
+| Dashed rule with a tag above the axis              | A release or other milestone      | `milestone id "v2" at=DATE`               |
+| Pale wash with a tag above the axis                | A period, such as a freeze        | `milestone id "Freeze" from=DATE to=DATE` |
+| Dark solid rule                                    | Today                             | `today=DATE`                              |
+| Elbow arrow between two rows                       | This, then that                   | `edge e a -> b` between rows              |
+
+The legend under the timeline lists only the marks the drawing uses.
+
+### Rows
+
+Each node in the timeline is a row: `at=DATE` for a point, or `from=DATE to=DATE` for a span. Dates
+are `YYYY-MM-DD`.
+
+- `to=+3d`, `to=+2w` or `to=+1m` ends a span by duration from `from=`. A month keeps the day of the
+  month (January 31 plus one month is February 28).
+- `key=` adds an ID column, bold in the row's color. `detail=` adds a second line under the name.
+  `tag=` adds a column after the name, such as an owner or a platform.
+- `end-label=` puts text beside the end, such as the fixing PR. `start-label=` puts text at the
+  start: above a bar, or to the left of a point. The words `date` and `duration` print the date or
+  the span's length for you: `end-label=duration` gives "3 weeks", and an open span adds "so far"
+  ("2 months so far").
+- A span too short to show as a bar (one day on a long axis) draws as a point.
+
+### Bands and color
+
+- A group directly inside a timeline is a band. Its title heads its rows, and its color is its rows'
+  default. Bands with `color=auto` take blue, teal, orange, violet, rose, green, amber and red in
+  turn. A row's own `color=` wins.
+- Rows keep file order. `order <timeline> band1 band2` orders the bands, and `order <band> row1
+row2` the rows in one band.
+- `headers="Workstream|Owner"` on the layout line heads the name column and the tag column.
+- Bars keep 3:1 contrast and band titles 4.5:1 on the page or the group that holds the timeline,
+  in every theme.
+
+### Milestones and periods
+
+- `milestone id "v2.0.0" at=DATE in=<timeline>` draws a dashed rule through every band, with its
+  tag above the axis.
+- `milestone id "Code freeze" from=DATE to=DATE in=<timeline>` shades a period through every band.
+- Tags that would touch move up a rail. A milestone takes no row, so a line cannot end on one. To
+  connect a release, write it as a point row (`at=`) in a band of its own.
+- `today=DATE` draws Today's rule and ends `to=open` spans. Give a fixed date, so the drawing is
+  the same every time it renders.
+
+### The axis: zoom and ordinal scale
+
+- Ticks (days, weeks, months, quarters or years) come from the span and the width, so their labels
+  never collide. `width=` sets the axis width (880 by default).
+- `zoom=START..END` adds a detail panel for a crowded stretch. A band whose dates all fall in the
+  window moves to the detail panel, under an overview of the whole history with the window shaded.
+  The detail heading states how much wider it is.
+- `scale=ordinal` gives every distinct date one equal step and labels each gap with its length
+  ("8 years"). Use it for an event history, as a Mermaid `timeline` draws one. Years written as
+  January 1st read as years.
+
+### Lines
+
+- A line from a row to something outside the timeline is routed like any other line. A row's box
+  spans the whole timeline, so the line leaves past every bar and label.
+- A line between two rows of one timeline draws on the chart: from the first row's end, down or up
+  to the second row, then across into its start. Its label sits beside the arrow, clear of other
+  arrows and marks.
+
+### From Mermaid
+
+`draftably import plan.mmd` and `draftably migrate` convert Mermaid `gantt` and `timeline` charts to
+native timelines, and the `@draftably/mermaid` drop-in draws them with Draftably.
+
+| Mermaid                                         | Native                                                                 |
+| ----------------------------------------------- | ---------------------------------------------------------------------- |
+| `section Build`                                 | A band                                                                 |
+| `Task :a1, 2025-01-06, 10d`                     | A row with the dates Mermaid computed (`excludes` and `after` applied) |
+| `after a1`                                      | The same dates, and a drawn arrow from `a1`                            |
+| `done` · `crit` · `active`                      | `progress=100` · `color=red` · not drawn                               |
+| `:milestone`                                    | A point row (`at=`)                                                    |
+| `:vert`                                         | A milestone rule                                                       |
+| `timeline` periods (`2004 : Facebook : Google`) | `scale=ordinal`, one point row per event                               |
+
+A Mermaid timeline whose periods are not dates (`Industry 4.0`) stays Mermaid: write each period as
+a year, `YYYY-MM` or `YYYY-MM-DD` to convert it. Times of day round to whole days, and
+`axisFormat` and `tickInterval` give way to the native ticks.
+
+### What check reports
+
+- A node in a timeline with no date, a date that is not a real `YYYY-MM-DD` day, a span that ends
+  before it starts, `steps=` outside its span, and `to=open` without `today=`.
+- A date on a node outside a timeline, and a band with no rows.
+- `near`, `nudge`, `stay`, `pin`, `size` and `align` on a row: dates place it.
+- A timeline under `layout root lanes` or `layout root sequence`, and `compare` on a file with a
+  timeline.
+
+In the viewer, rows and bands select but don't drag. Drag the timeline's frame to move the whole
+timeline, and double-click a row or band title to rename it.
 
 ## Cells
 
@@ -1686,6 +1749,13 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Webhook delivery with one retry](https://draftably.dev/app/?example=webhook-delivery): A sequence of sends: no sender waits, one message gets two replies, and actions show each side's own work.
 - [How a label reaches the page](https://draftably.dev/app/?example=label-history): A sequence whose labels point at footnotes; each footnote links its PR.
 - [How a request is built](https://draftably.dev/app/?example=prompt-request): The request is one group of touching cells, and a marker shows the cache point.
+
+### Timelines
+
+- [Example project bugs](https://draftably.dev/app/?example=bug-timeline): Open bugs run to today, release rules cross every band, and a detail panel enlarges three crowded weeks.
+- [Search rewrite roadmap](https://draftably.dev/app/?example=roadmap): Progress, durations, a holiday freeze and dependency arrows, beside a box the plan depends on.
+- [Number formatting](https://draftably.dev/app/?example=release-investigation): A timeline beside code: rows say when, lines say where each fix lives.
+- [A short history of the web](https://draftably.dev/app/?example=company-history): An ordinal timeline: one step per date, with every gap labeled.
 
 ### Tables and byte layouts
 

@@ -35,9 +35,11 @@ import until you choose **Convert to draftably**.
 | Graphviz DOT      | Graphs, clusters, labels, arrowheads | Record fields, named ports, crow's feet          |
 | Mermaid flowchart | Nodes, subgraphs, labels, line ends  | Unsupported arrow types, a node in two subgraphs |
 | Mermaid sequence  | Participants, boxes, messages, notes | Half arrows, central connections                 |
+| Mermaid gantt     | Sections, tasks, `after`, milestones | Nothing; times of day round to whole days        |
+| Mermaid timeline  | Sections, periods, events            | Periods that are not dates (`Industry 4.0`)      |
 | D2                | Ordinary graphs, containers, labels  | Sequence, class, table and multi-board diagrams  |
 
-PlantUML, DBML, nomnoml and other Mermaid chart types are not supported yet. To move many Mermaid
+PlantUML, DBML, nomnoml and Mermaid's other chart types are not supported yet. To move many Mermaid
 fences in Markdown at once, use [`draftably migrate`](#convert-the-source).
 
 ## Mermaid next to the import
@@ -136,6 +138,42 @@ own. A native activation bar runs from a call to the reply that answers it. The 
 bars on only when that gives the bars the source draws. Otherwise it leaves them off and the
 warning counts both sets. The import also warns about `autonumber`, `rect`, `create`, `destroy`,
 participant symbols, participant links and a dotted line whose end is not an arrowhead.
+
+## Mermaid gantt charts and timelines
+
+A Mermaid `gantt` or `timeline` becomes a native [timeline](#timelines). The import keeps the
+dates Mermaid computes, so `after`, durations and `excludes weekends` land on the same days:
+
+| Mermaid                          | Draftably                                                       |
+| -------------------------------- | --------------------------------------------------------------- |
+| `section Build`                  | A band                                                          |
+| `Index :a1, 2025-01-06, 10d`     | A row, `from=2025-01-06 to=…` with the end Mermaid computed     |
+| `API :after a1, 2w`              | The same dates, and a drawn arrow from `a1`; Mermaid draws none |
+| `done`                           | `progress=100`                                                  |
+| `crit`                           | `color=red`                                                     |
+| `active`                         | Not drawn; the import notes it                                  |
+| `:milestone`                     | A point row (`at=`)                                             |
+| `:vert`                          | A milestone rule through every band                             |
+| `timeline` period `2004 : A : B` | `scale=ordinal`, one point row per event                        |
+
+A timeline period must be a year, `YYYY-MM` or `YYYY-MM-DD`. Times of day round to whole days,
+and `axisFormat`, `tickInterval` and `todayMarker` give way to the native axis: set `today=` on the
+layout line for a fixed Today.
+
+```mermaid compare
+gantt
+  title Search rewrite
+  dateFormat YYYY-MM-DD
+  excludes weekends
+  section Build
+  New index     :done, idx, 2025-01-06, 15d
+  Query API     :api, after idx, 3w
+  Ranking model :rank, after idx, 30d
+  Beta          :milestone, beta, after api rank, 0d
+  section Launch
+  Docs          :crit, docs, after api, 10d
+  Rollout       :roll, after beta, 2025-04-04
+```
 
 ## Limits
 

@@ -13,7 +13,7 @@ export interface FenceReport {
   messages: string[];
 }
 
-const DRAFTABLE = /^\s*(?:flowchart|graph|sequenceDiagram)\b/;
+const DRAFTABLE = /^\s*(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/;
 const OUTCOME = {
   converted: 'converted',
   kept: 'stays Mermaid (warnings; --accept-lossy converts it)',
@@ -23,7 +23,7 @@ const OUTCOME = {
 const MARKDOWN = new Set(['.md', '.mdx', '.markdown']);
 
 /**
- * Rewrite flowchart and sequence ```mermaid fences in Markdown text as ```draft fences.
+ * Rewrite flowchart, sequence, gantt and timeline ```mermaid fences in Markdown text as ```draft fences.
  * Other families stay as they are. A fence with importer warnings stays unless `acceptLossy`.
  */
 export async function migrateText(

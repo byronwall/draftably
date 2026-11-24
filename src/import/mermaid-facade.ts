@@ -92,8 +92,49 @@ export type SequenceSnapshot = {
   created: string[];
   destroyed: string[];
 };
+/** One Mermaid gantt task with the dates Mermaid computed (`after`, durations, excludes). */
+export type GanttTask = {
+  id: string;
+  label: string;
+  section?: string;
+  /** Local calendar days, YYYY-MM-DD; `end` is exclusive, as Mermaid draws it. */
+  start: string;
+  end: string;
+  /** Whether either end falls inside a day, which a day-based axis rounds away. */
+  partialDay: boolean;
+  after: string[];
+  done: boolean;
+  active: boolean;
+  crit: boolean;
+  milestone: boolean;
+  vert: boolean;
+};
+export type GanttSnapshot = {
+  format: 'mermaid';
+  family: 'gantt';
+  parserVersion: typeof MERMAID_VERSION;
+  title?: string;
+  sections: string[];
+  tasks: GanttTask[];
+  excludes: string[];
+  axisFormat?: string;
+};
+/** One Mermaid timeline period (free text) and the events listed under it. */
+export type TimelinePeriod = { section?: string; period: string; events: string[] };
+export type TimelineSnapshot = {
+  format: 'mermaid';
+  family: 'timeline';
+  parserVersion: typeof MERMAID_VERSION;
+  title?: string;
+  sections: string[];
+  periods: TimelinePeriod[];
+};
 export type ParseFlowResult =
-  | { ok: true; snapshot: FlowSnapshot | SequenceSnapshot; diagnostics: ParserDiagnostic[] }
+  | {
+      ok: true;
+      snapshot: FlowSnapshot | SequenceSnapshot | GanttSnapshot | TimelineSnapshot;
+      diagnostics: ParserDiagnostic[];
+    }
   | { ok: false; diagnostics: ParserDiagnostic[] };
 
 type MermaidApi = Pick<(typeof import('mermaid'))['default'], 'initialize' | 'mermaidAPI'>;
@@ -192,13 +233,13 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   // A conservative family check, not a Mermaid grammar replacement.
   const firstCodeLine =
     normalized.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
-  if (!/^\s*(?:flowchart|graph|sequenceDiagram)\b/.test(firstCodeLine)) {
+  if (!/^\s*(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/.test(firstCodeLine)) {
     return [
       {
         code: 'MERMAID_FAMILY_UNSUPPORTED',
         severity: 'error',
         message:
-          'This adapter supports Mermaid flowcharts and sequence diagrams only. Class, ER, state, chart and other families require separate semantic adapters.',
+          'This adapter supports Mermaid flowcharts, sequence diagrams, gantt charts and timelines. Class, ER, state, chart and other families require separate semantic adapters.',
       },
     ];
   }
@@ -215,6 +256,74 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     }
   }
   return diagnostics;
+}
+
+/** A Date as the local calendar day Mermaid meant (its parser works in local time). */
+const localDay = (d: Date) =>
+  `${String(d.getFullYear()).padStart(4, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+/** Read the gantt DB: Mermaid has already resolved every `after`, duration and exclusion. */
+function ganttSnapshot(call: (name: string) => unknown): GanttSnapshot {
+  const tasks = array(call('getTasks')).map((value): GanttTask => {
+    const t = object(value),
+      start = t.startTime instanceof Date ? t.startTime : new Date(NaN),
+      end = t.endTime instanceof Date ? t.endTime : start;
+    if (Number.isNaN(start.getTime())) throw new Error('Mermaid gantt task without a start date.');
+    const startData = string(object(object(t.raw).startTime).startData, '');
+    const after = /^\s*after\s+(.+)$/i.exec(startData)?.[1].trim().split(/\s+/) ?? [];
+    const inDay = (d: Date) => d.getHours() + d.getMinutes() + d.getSeconds() > 0;
+    return {
+      id: string(t.id),
+      label: string(t.task, string(t.id)).trim(),
+      section: optionalString(t.section),
+      start: localDay(start),
+      end: localDay(end),
+      partialDay: inDay(start) || inDay(end),
+      after,
+      done: t.done === true,
+      active: t.active === true,
+      crit: t.crit === true,
+      milestone: t.milestone === true,
+      vert: t.vert === true,
+    };
+  });
+  return {
+    format: 'mermaid',
+    family: 'gantt',
+    parserVersion: MERMAID_VERSION,
+    title: optionalString(call('getDiagramTitle')) || undefined,
+    sections: strings(call('getSections')),
+    tasks,
+    excludes: strings(call('getExcludes')),
+    axisFormat: optionalString(call('getAxisFormat')) || undefined,
+  };
+}
+
+/** Read the timeline DB: sections, and each period with its events in order. */
+function timelineSnapshot(
+  db: Record<string, unknown>,
+  call: (name: string) => unknown,
+): TimelineSnapshot {
+  const common = typeof db.getCommonDb === 'function' ? object(call('getCommonDb')) : {};
+  const title =
+    typeof common.getDiagramTitle === 'function'
+      ? optionalString((common.getDiagramTitle as () => unknown).call(common))
+      : undefined;
+  return {
+    format: 'mermaid',
+    family: 'timeline',
+    parserVersion: MERMAID_VERSION,
+    title: title || undefined,
+    sections: strings(call('getSections')),
+    periods: array(call('getTasks')).map(value => {
+      const t = object(value);
+      return {
+        section: optionalString(t.section),
+        period: string(t.task, '').trim(),
+        events: strings(t.events).map(e => e.trim()),
+      };
+    }),
+  };
 }
 
 /** Read the sequence DB. It holds one ordered log of messages, notes and block markers. */
@@ -299,7 +408,9 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
         });
         phase = 'parse';
         const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''));
-        if (!['flowchart', 'flowchart-v2', 'sequence'].includes(diagram.type)) {
+        if (
+          !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)
+        ) {
           return {
             ok: false,
             diagnostics: [
@@ -319,6 +430,10 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
             throw new Error(`Mermaid ${MERMAID_VERSION} boundary missing ${name}().`);
           return (db[name] as () => unknown).call(db);
         };
+        if (diagram.type === 'gantt')
+          return { ok: true, diagnostics, snapshot: ganttSnapshot(call) };
+        if (diagram.type === 'timeline')
+          return { ok: true, diagnostics, snapshot: timelineSnapshot(db, call) };
         if (diagram.type === 'sequence') {
           const snapshot = sequenceSnapshot(db, call);
           if (snapshot.actors.length > MAX_ENTITIES || snapshot.events.length > MAX_EDGES) {
