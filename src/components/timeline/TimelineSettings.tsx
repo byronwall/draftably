@@ -34,6 +34,7 @@ export function TimelineSettings() {
   const [unknown, setUnknown] = createSignal(false);
   const [open, setOpen] = createSignal(false);
   const [steps, setSteps] = createSignal('');
+  const [startBadInput, setStartBadInput] = createSignal(false);
   const inputs: Partial<Record<TimelineDraftIssue['field'], HTMLInputElement>> = {};
   const drafts = new Map<string, TimelineDraft>();
   const currentDraft = (): TimelineDraft => ({
@@ -44,6 +45,7 @@ export function TimelineSettings() {
     open: open(),
     steps: steps(),
     label: label(),
+    startBadInput: startBadInput(),
   });
   function showDraft(d: TimelineDraft) {
     setLabel(d.label);
@@ -53,6 +55,7 @@ export function TimelineSettings() {
     setUnknown(d.unknown);
     setOpen(d.open);
     setSteps(d.steps);
+    setStartBadInput(d.startBadInput ?? false);
   }
   function remember(key = id()) {
     if (key) drafts.set(key, currentDraft());
@@ -161,7 +164,6 @@ export function TimelineSettings() {
             <label>
               Item name
               <input
-                required
                 value={label()}
                 ref={el => (inputs.label = el)}
                 onInput={e => setLabel(e.currentTarget.value)}
@@ -183,11 +185,14 @@ export function TimelineSettings() {
             <label>
               {kind() === 'span' ? 'Start' : 'Date'}
               <input
-                required
+                required={id() !== ':new'}
                 type="date"
                 value={start()}
                 ref={el => (inputs.start = el)}
-                onInput={e => setStart(e.currentTarget.value)}
+                onInput={e => {
+                  setStart(e.currentTarget.value);
+                  setStartBadInput(e.currentTarget.validity.badInput);
+                }}
               />
             </label>
           </Show>

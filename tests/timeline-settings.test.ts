@@ -153,6 +153,22 @@ describe('timeline settings edits', () => {
           open: false,
           steps: '',
           label: '',
+          startBadInput: true,
+        },
+        undefined,
+      )?.field,
+    ).toBe('start');
+    expect(
+      validateTimelineDraft(
+        ':new',
+        {
+          kind: 'point',
+          start: '',
+          end: '',
+          unknown: false,
+          open: false,
+          steps: '',
+          label: '',
         },
         undefined,
       ),

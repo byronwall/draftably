@@ -10,6 +10,7 @@ export type TimelineDraft = {
   open: boolean;
   steps: string;
   label: string;
+  startBadInput?: boolean;
 };
 
 export type TimelineDraftIssue = {
@@ -28,6 +29,8 @@ export function validateTimelineDraft(
     field,
     message,
   });
+  if (draft.startBadInput)
+    return issue('start', 'Finish entering the date, or discard this new item.');
   const untouchedNew =
     id === ':new' &&
     draft.kind === 'point' &&
