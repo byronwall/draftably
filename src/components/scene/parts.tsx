@@ -212,10 +212,15 @@ export function CodeBody(props: {
   );
   const bandInk = (line: number) => {
     const t = tokens()?.[line]?.line;
-    if (t === 'added' || t === 'removed') return colors()[t].ink;
-    // A table's header line is muted; the rule under it does the separating.
-    return props.code.table && line === 0 ? muted() : undefined;
+    return t === 'added' || t === 'removed' ? colors()[t].ink : undefined;
   };
+  // A table's header line is muted, over any token colors; the rule under it separates it.
+  const runInk = (line: number, cls?: string) =>
+    laid().rule !== undefined && line === 0
+      ? muted()
+      : cls
+        ? colors().tokens[cls as keyof ReturnType<typeof colors>['tokens']]
+        : bandInk(line);
   const muted = () => detailInk(props.look, props.swatch),
     mid = CODE_TYPE.lineHeight / 2,
     font = {
@@ -280,10 +285,11 @@ export function CodeBody(props: {
           class="code-rule"
           x1={laid().left}
           y1={laid().rule}
-          x2={props.w - laid().gutter}
+          x2={laid().ruleEnd}
           y2={laid().rule}
           stroke={props.swatch.stroke}
           stroke-width={1}
+          stroke-opacity={0.5}
         />
       </Show>
       <Show when={props.code.numbers}>
@@ -317,7 +323,7 @@ export function CodeBody(props: {
                 <tspan
                   x={columnX(laid(), run.col)}
                   y={row.y + mid}
-                  fill={run.cls ? colors().tokens[run.cls] : bandInk(row.line)}
+                  fill={runInk(row.line, run.cls)}
                 >
                   {run.text}
                 </tspan>

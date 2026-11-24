@@ -207,7 +207,7 @@ function codeMarkup(
     );
   if (laid.rule !== undefined)
     out.push(
-      `<line class="code-rule" x1="${r.x + laid.left}" y1="${r.y + laid.rule}" x2="${r.x + r.w - laid.gutter}" y2="${r.y + laid.rule}" stroke="${c.stroke}" stroke-width="1"/>`,
+      `<line class="code-rule" x1="${r.x + laid.left}" y1="${r.y + laid.rule}" x2="${r.x + laid.ruleEnd!}" y2="${r.y + laid.rule}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
     );
   const spans: string[] = [],
     numbers: string[] = [];
@@ -219,14 +219,11 @@ function codeMarkup(
         `<tspan x="${r.x + laid.gutter + (laid.numberCols - number.length) * CODE_ADVANCE}" y="${y}">${number}</tspan>`,
       );
     const t = tokens?.[row.line],
-      bandInk =
-        t?.line === 'added' || t?.line === 'removed'
-          ? colors[t.line].ink
-          : code.table && row.line === 0
-            ? muted
-            : undefined;
+      bandInk = t?.line === 'added' || t?.line === 'removed' ? colors[t.line].ink : undefined,
+      // A table's header line is muted, over any token colors; the rule separates it.
+      head = laid.rule !== undefined && row.line === 0;
     for (const run of coloredRuns(row, codeRuns(row, code.lines[row.line]), t)) {
-      const ink = run.cls ? colors.tokens[run.cls] : bandInk;
+      const ink = head ? muted : run.cls ? colors.tokens[run.cls] : bandInk;
       spans.push(
         `<tspan x="${r.x + columnX(laid, run.col)}" y="${y}"${ink ? ` fill="${ink}"` : ''}>${esc(run.text)}</tspan>`,
       );

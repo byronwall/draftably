@@ -104,6 +104,13 @@ const NO_VALUE = /^(-|—|NULL|null|None|NaN|n\/a)?$/;
 /** A rule typed under a header: dashes or equals signs, with `|`, `+` or `:` between columns. */
 const RULE = /^[\s|+:]*[-=]{3,}[\s|+:=-]*$/;
 
+/** A typed rule: dashes or equals signs, or a Markdown row of `---` cells such as `|:-:|--|`. */
+const isRule = (l: string) =>
+  RULE.test(l) || (l.includes('|') && pipeCells(l).every(c => /^:?-+:?$/.test(c)));
+
+/** psql's row count under a result. */
+const FOOTER = /^\(\d+ rows?\)$/;
+
 /** A Markdown or psql row's cells: the outer pipes go, and `|` splits the rest. */
 const pipeCells = (l: string) =>
   l
@@ -141,28 +148,40 @@ export function tableCells(lines: string[]): string[][] | undefined {
 /**
  * `table=on`: the body as a table with its columns two spaces apart. A rule typed under the
  * header (`-----`, `|---|---:|`, `----+----`) is dropped, since the drawing has its own; its
- * `:` marks set the alignment. Otherwise a column whose cells under the header are all numbers
+ * `:` marks set the alignment (`---:`, `:---:`). Otherwise a column whose cells under the header are all numbers
  * aligns right.
  */
 export function tableLines(lines: string[]): string[] {
+  // psql ends with a "(3 rows)" line: keep it as it is, outside the columns.
+  const last = lines.findLastIndex(l => l.trim());
+  if (last > 0 && FOOTER.test(lines[last].trim()))
+    return [...tableLines(lines.slice(0, last)), lines[last].trim()];
   const first = lines.findIndex(l => l.trim()),
-    typed = first >= 0 && RULE.test(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
+    typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
     body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
     cells = tableCells(body);
   if (!cells) return body;
   const n = Math.max(...cells.map(c => c.length)),
     head = cells.findIndex(c => c.length),
     widths = Array.from({ length: n }, (_, i) => Math.max(...cells.map(c => (c[i] ?? '').length))),
-    right = widths.map((_, i) => {
+    align = widths.map((_, i) => {
       const mark = typed.length === n ? typed[i] : '';
-      if (mark.endsWith(':') || mark.startsWith(':')) return !mark.startsWith(':');
+      if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
+      if (mark.endsWith(':')) return 'right';
+      if (mark.startsWith(':')) return 'left';
       const values = cells.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
-      return values.length > 0 && values.every(c => NUMBER.test(c[i]));
-    });
+      return values.length > 0 && values.every(c => NUMBER.test(c[i])) ? 'right' : 'left';
+    }),
+    pad = (s: string, w: number, a: string) =>
+      a === 'right'
+        ? s.padStart(w)
+        : a === 'center'
+          ? s.padStart(s.length + Math.floor((w - s.length) / 2)).padEnd(w)
+          : s.padEnd(w);
   return cells.map(c =>
     c.length
       ? widths
-          .map((w, i) => (right[i] ? (c[i] ?? '').padStart(w) : (c[i] ?? '').padEnd(w)))
+          .map((w, i) => pad(c[i] ?? '', w, align[i]))
           .join('  ')
           .trimEnd()
       : '',
@@ -211,6 +230,8 @@ export interface CodeLayout {
   long: number[];
   /** `table=on`: y of the rule under the header line, from the box's top edge. */
   rule?: number;
+  /** x where the rule ends: the table's last column, or the right padding when that is nearer. */
+  ruleEnd?: number;
 }
 
 const columns = (s: string) => s.length;
@@ -318,7 +339,9 @@ export function codeLayout(
   const head = rows.filter(r => r.line === 0).pop(),
     rule = gap && head ? head.y + lh + gap / 2 : undefined;
   return {
-    ...(rule !== undefined ? { rule } : {}),
+    ...(rule !== undefined
+      ? { rule, ruleEnd: Math.min(w - CODE_PAD.x, CODE_PAD.x + gutterW + longest * adv) }
+      : {}),
     w,
     h: size.height ?? auto,
     left: CODE_PAD.x + gutterW,

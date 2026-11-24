@@ -278,10 +278,12 @@ range df.row lines=3
   the same number of cells, a column break is a run of positions that are blank in every line, so
   `New York` stays one cell.
 - A rule typed under the header (`-----`, `|---|---:|`, `----+----`) is removed, because the table
-  draws its own. Its `:` marks set the alignment: `---:` aligns right, `:---` aligns left.
+  draws its own. Its `:` marks set the alignment: `---:` aligns right, `:---:` centres, `:---` aligns left.
 - The columns are aligned two spaces apart. A column whose cells under the header are all numbers
   aligns right. `12ms`, `$48.2k`, `1,204` and `0.2%` are numbers. Empty cells, `NULL` and `-` do
   not stop a column from counting as numbers.
+- psql's `(3 rows)` line stays under the table, outside the columns.
+- The header is muted only when the table has rows under it. A table with one line draws as plain code.
 - A table does not wrap: `wrap=` defaults to `off`, so a long row is cut with `…`.
 - The rows are still code: the same font, line numbers and ranges. `range` counts the header as
   line 1 and does not count a removed rule.

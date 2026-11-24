@@ -166,6 +166,17 @@ describe('code tables', () => {
       ' 1  pro',
       ' 2  free',
     ]);
+    // `:---:` centres; a psql row count stays as its own line, out of the columns.
+    expect(tableLines(['| a | b |', '|:-:|---|', '| x | 1 |', '| long | 2 |'])).toEqual([
+      ' a    b',
+      ' x    1',
+      'long  2',
+    ]);
+    expect(tableLines([' id | n', '----+---', '  1 | 5', '(1 row)'])).toEqual([
+      'id  n',
+      ' 1  5',
+      '(1 row)',
+    ]);
     // The old workaround: dashes typed under the header.
     expect(tableLines(['name   n', '-----  --', 'apple  10'])).toEqual(['name    n', 'apple  10']);
   });
@@ -180,6 +191,10 @@ describe('code tables', () => {
     expect(laid.rule).toBe(laid.rows[0].y + lh + gap / 2);
     expect(laid.rows[2].y - laid.rows[1].y).toBe(lh);
     expect(laid.h).toBe(plain.h + gap);
+    // A box wider than its table: the rule stops at the table's last column.
+    const wide = codeLayout(block(['k  v', '1  2'], { table: true }), 'a long caption here', look);
+    expect(wide.ruleEnd).toBe(CODE_PAD.x + 4 * CODE_ADVANCE);
+    expect(wide.ruleEnd).toBeLessThan(wide.w - CODE_PAD.x);
     // A box too short to show the header draws no rule.
     expect(codeLayout(block(['a', 'b'], { table: true }), 'q', look, { height: 20 }).rule).toBe(
       undefined,
