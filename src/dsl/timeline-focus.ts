@@ -520,7 +520,24 @@ export function focusPlan(
           id: row.id,
           title: `Step ${step}`,
         });
-        text(marks, x, y + (stepIndex % 2 ? 40 : 10), stepLabel(d), 8, 'muted', {
+        const label = stepLabel(d);
+        const labelWidth = measureText(label, { face: annotationFace, size: 8 });
+        const left = x - labelWidth / 2,
+          right = x + labelWidth / 2;
+        const lanes = [y + 10, y + 40];
+        const overlaps = (baseline: number) =>
+          marks.some(mark => {
+            if (mark.kind !== 'text' || mark.id !== row.id || mark.y !== baseline) return false;
+            const width = measureText(mark.text, { face: annotationFace, size: mark.size ?? 14 });
+            const markLeft =
+              mark.x - (mark.anchor === 'end' ? width : mark.anchor === 'middle' ? width / 2 : 0);
+            const markRight =
+              mark.x + (mark.anchor === 'start' ? width : mark.anchor === 'middle' ? width / 2 : 0);
+            return markRight + 3 > left && right + 3 > markLeft;
+          });
+        const preferred = stepIndex % 2 ? 1 : 0;
+        const lane = [preferred, 1 - preferred].find(index => !overlaps(lanes[index])) ?? preferred;
+        text(marks, x, lanes[lane], label, 8, 'muted', {
           anchor: 'middle',
           id: row.id,
           title: `Step ${step}`,

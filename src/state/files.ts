@@ -307,6 +307,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
             .filter(r => picked.has(r.id)),
           SELECTION_MARGIN,
           false,
+          false,
         )
       : look.heading
         ? frame

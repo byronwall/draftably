@@ -54,4 +54,14 @@ describe('drawingBounds', () => {
     expect(b.x).toBe(left - 50 - 60 - 10);
     expect(b.y + b.h).toBe(bottom + 40 + 10 + 10);
   });
+
+  it('can omit the sequence panel from selection bounds', () => {
+    const { doc, vg, rects, left, right } = oneEdge();
+    doc.layout.sequence = { panel: { x: left - 500, y: 0, w: 50, h: 50 }, phases: [] };
+    const selected = drawingBounds(doc, vg, rects, [], 0, false, false);
+    const full = drawingBounds(doc, vg, rects, [], 0, false);
+    expect(selected.x).toBe(left);
+    expect(selected.x + selected.w).toBe(right);
+    expect(full.x).toBe(left - 500);
+  });
 });

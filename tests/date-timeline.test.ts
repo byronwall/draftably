@@ -55,4 +55,30 @@ it('keeps timeline row hit targets behind dated marks', async () => {
   expect(fill).toBeLessThan(target);
   expect(target).toBeGreaterThan(-1);
   expect(mark).toBeGreaterThan(target);
+  expect(markup).toContain('pointer-events="none"');
+  const stepMark = markup.slice(markup.indexOf('<title>Step 2025-11-04</title>'));
+  expect(stepMark.slice(0, stepMark.indexOf('</g>'))).not.toContain('pointer-events="none"');
+});
+
+it('keeps endpoint and step labels clear in both comparison panels', async () => {
+  const { compile } = await import('../src/dsl/compile');
+  const { projectScene } = await import('../src/dsl/project');
+  const { normalize } = await import('../src/model/document');
+  const { panelDoc } = await import('../src/model/panels');
+  const { calendarFor } = await import('../src/dsl/calendar-layout');
+  const scene = await compile(
+    'compare "Before" "After" direction=right\nlayout root timeline zoom=2025-11-01..2025-11-23\nnode release "Release" from=2025-11-03 to=2025-11-16 steps=2025-11-04',
+  );
+  const doc = normalize(JSON.parse(JSON.stringify(projectScene(scene))));
+  for (const side of ['before', 'after'] as const) {
+    const chart = calendarFor(panelDoc(doc, side))!;
+    const endpoint = chart.marks.find(
+      mark => mark.kind === 'text' && mark.id === 'release' && mark.text === '2025-11-03',
+    );
+    const step = chart.marks.find(
+      mark => mark.kind === 'text' && mark.id === 'release' && mark.title === 'Step 2025-11-04',
+    );
+    expect(endpoint).toMatchObject({ kind: 'text', y: 234 });
+    expect(step).toMatchObject({ kind: 'text', y: 264 });
+  }
 });

@@ -111,6 +111,29 @@ describe('timeline focus geometry', () => {
     );
   });
 
+  it('moves a step label away from a span endpoint label', () => {
+    const plan = focusPlan(
+      [
+        row({
+          id: 'release',
+          label: 'Release',
+          from: '2025-11-03',
+          to: '2025-11-16',
+          steps: ['2025-11-04'],
+        }),
+      ],
+      { zoom: ['2025-11-01', '2025-11-23'] },
+    );
+    const endpoint = plan.marks.find(
+      m => m.kind === 'text' && m.id === 'release' && m.text === '2025-11-03',
+    );
+    const step = plan.marks.find(
+      m => m.kind === 'text' && m.id === 'release' && m.title === 'Step 2025-11-04',
+    );
+    expect(endpoint).toMatchObject({ kind: 'text', y: 234 });
+    expect(step).toMatchObject({ kind: 'text', y: 264 });
+  });
+
   it('keeps out-of-window today and release guides out of the detail edges', () => {
     const rows = [
       row({

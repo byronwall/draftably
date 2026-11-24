@@ -856,7 +856,7 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
       );
     if (m.kind === 'line')
       parts.push(
-        `<line x1="${m.x}" y1="${m.y}" x2="${m.x2}" y2="${m.y2}" stroke="${color}" stroke-width="${m.strokeWidth ?? 1}" ${m.dash ? 'stroke-dasharray="4 4"' : ''}/>`,
+        `<line x1="${m.x}" y1="${m.y}" x2="${m.x2}" y2="${m.y2}" stroke="${color}" stroke-width="${m.strokeWidth ?? 1}" ${m.tone === 'grid' ? 'pointer-events="none"' : ''} ${m.dash ? 'stroke-dasharray="4 4"' : ''}/>`,
       );
     if (m.kind === 'rect')
       parts.push(
