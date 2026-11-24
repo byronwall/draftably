@@ -291,6 +291,13 @@ export function createPointer(
         window.open(link.openLink!, '_blank', 'noopener');
       return;
     }
+    const timelineId = t.closest('[data-timeline-id]')?.getAttribute('data-timeline-id');
+    if (timelineId && (s.tool() === 'select' || s.tool() === 'pan')) {
+      if (e.pointerType === 'touch' || s.tool() === 'pan')
+        begin('pan', e, canvas, { clickId: timelineId });
+      else s.selectItems([timelineId], { add: e.shiftKey, toggle: e.shiftKey });
+      return;
+    }
     if (quickAdd) {
       e.preventDefault();
       s.setSelection([quickAdd.owner!]);
@@ -763,6 +770,13 @@ export function createPointer(
 
   /** Right-click selects the object under the pointer before the edit menu opens. */
   function selectForContextMenu(e: MouseEvent) {
+    const calendarId = (e.target as Element)
+      .closest('[data-timeline-id]')
+      ?.getAttribute('data-timeline-id');
+    if (calendarId) {
+      if (!s.isSelected(calendarId)) s.setSelection([calendarId]);
+      return;
+    }
     const object = targetData(e.target as Element, '[data-kind]');
     if (object?.id && !s.isSelected(object.id)) s.setSelection([object.id]);
   }

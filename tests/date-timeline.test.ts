@@ -16,3 +16,23 @@ it('shares the authored code node identity and group label with the calendar', (
   );
   expect(timelineRows(m)).toMatchObject([{ id: 'f', band: 'Service', at: '2024-02-29' }]);
 });
+
+it('projects current graph membership, labels and world coordinates after JSON import', async () => {
+  const { compile } = await import('../src/dsl/compile');
+  const { projectScene, canonicalGeometry } = await import('../src/dsl/project');
+  const { normalize } = await import('../src/model/document');
+  const { calendarFor } = await import('../src/dsl/calendar-layout');
+  const { panelDoc } = await import('../src/model/panels');
+  const scene = await compile(
+    'layout root timeline\n+node a "First" at=2025-03-03\nnode b "Second" at=2025-03-04',
+  );
+  const doc = normalize(JSON.parse(JSON.stringify(projectScene(scene))));
+  expect(Object.keys(calendarFor(panelDoc(doc, 'before'))!.boxes)).toEqual(['b']);
+  doc.graph.nodes = doc.graph.nodes.filter(n => n.id === 'b');
+  doc.graph.nodes[0].title = 'Renamed';
+  const chart = calendarFor(doc)!;
+  expect(chart.marks.some(m => m.kind === 'text' && m.text === 'Renamed')).toBe(true);
+  expect(canonicalGeometry(doc).timeline?.items).toEqual([
+    { ...chart.boxes.b, id: 'b', x: chart.x + chart.boxes.b.x, y: chart.y + chart.boxes.b.y },
+  ]);
+});

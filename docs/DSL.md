@@ -1788,7 +1788,7 @@ file cannot store them yet.
 
 ## Timelines
 
-Use `layout root timeline` to draw a date axis on the diagram canvas. The same drawing appears in the CLI SVG and image exports. Its items share IDs with the graph and code below. Select a timeline mark to inspect its node. Double-click a mark to reveal the node and its connections. **Timeline settings** edits the source and supports Undo. **Fit timeline** frames the chart.
+Use `layout root timeline` to draw a date axis on the diagram canvas. The same drawing appears in the CLI SVG and image exports. Its items share IDs with the graph and code below. Select a timeline mark to inspect its node. Double-click a mark to reveal the node and its connections. **Timeline settings** edits the source and supports Undo. **Fit timeline** frames the chart. On narrow screens, **Read timeline** opens the chart at reading size. Drag to pan across rows.
 
 Write `at=YYYY-MM-DD` for a point, or `from=DATE to=DATE` for a span. Prefix an uncertain start with `?` to mean “before this date.” Use `to=open` with a snapshot date. Put partial fixes in a comma-separated `steps=` list inside the span. A release point accepts `milestone=on`. Rows accept `key=`, `introduced-by=`, `fixed-by=`, and `platforms=`. A group supplies the row band. Undated nodes remain part of the graph.
 

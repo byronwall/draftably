@@ -1,3 +1,4 @@
+import { calendarFor } from '../dsl/calendar-layout';
 /**
  * The area a drawing covers, shared by everything that frames one: the CLI SVG, workspace
  * thumbnails, SVG/PNG exports, comparison scenes and the viewer's fit-to-content.
@@ -26,6 +27,7 @@ export function drawingBounds(
   rects: ReadonlyMap<string, Rect>,
   routes: readonly BoundedRoute[],
   pad = 0,
+  includeTimeline = true,
 ): Rect {
   const boxes: Rect[] = [];
   for (const n of vg.nodes) {
@@ -37,7 +39,7 @@ export function drawingBounds(
     const r = rects.get(g.id);
     if (r) boxes.push(r);
   }
-  const chart = doc.layout.timeline;
+  const chart = includeTimeline && calendarFor(doc);
   if (chart) boxes.push({ x: chart.x, y: chart.y, w: chart.width, h: chart.height });
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
   for (const route of routes) {

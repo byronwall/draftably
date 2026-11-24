@@ -1,3 +1,4 @@
+import { validateCalendar, type CalendarLayout } from '../dsl/calendar-layout';
 import { LayoutLab } from '../engines/layout-engine';
 import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
@@ -132,7 +133,6 @@ const validId = (id: unknown): id is string =>
  * Validate a diagram from any source and return a complete, canonical copy.
  * Throws a readable error for anything that cannot be repaired.
  */
-import { validTimeline, type PlacedTimeline } from '../dsl/timeline-plan';
 export function normalize(input: unknown): Diagram {
   if (!input || typeof input !== 'object' || Array.isArray(input))
     throw Error('Expected a diagram object.');
@@ -384,9 +384,9 @@ export function normalize(input: unknown): Diagram {
   }
 
   out.layout.intent = LayoutLab.normalizeIntent(data.layout?.intent || {}, nodes);
-  const chart = data.layout?.timeline as PlacedTimeline | undefined;
+  const chart = data.layout?.timeline as CalendarLayout | undefined;
   if (chart) {
-    if (!validTimeline(chart)) throw Error('Invalid timeline geometry.');
+    validateCalendar(chart);
     out.layout.timeline = structuredClone(chart);
   }
   const seq = data.layout?.sequence as SequenceLayout | undefined;

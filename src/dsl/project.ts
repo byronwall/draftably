@@ -1,3 +1,4 @@
+import { calendarFor } from './calendar-layout';
 /**
  * Turn a compiled scene into an editor document, and measure the canonical geometry that the
  * CLI and the browser compare. Routes come from the editor's own router, with no prior routes,
@@ -10,7 +11,6 @@ import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
 import { timelineRows } from './timeline';
-import { focusPlan } from './timeline-focus';
 import { cellsBandFor } from './cells';
 import { GROUP_INSET } from './frame';
 
@@ -118,10 +118,9 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   }
   if (scene.model.timeline) {
     const rows = timelineRows(scene.model);
-    const plan = focusPlan(rows, scene.model.timeline);
     const x = Math.min(0, ...scene.objects.map(o => o.x));
     const top = Math.min(0, ...scene.objects.map(o => o.y));
-    doc.layout.timeline = { ...plan, x, y: top - plan.height - 80 };
+    doc.layout.timeline = { rows, options: scene.model.timeline, x, bottom: top - 80 };
   }
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
   const groups = new Set(doc.graph.groups.map(g => g.id));
@@ -165,6 +164,7 @@ function readingDirections(scene: Scene) {
 }
 
 export interface CanonicalGeometry {
+  timeline?: { bounds: Rect; items: Array<Rect & { id: string }> };
   nodes: Array<{ id: string; parent: string; x: number; y: number; w: number; h: number }>;
   routes: Array<{ id: string; points: Array<{ x: number; y: number }> }>;
 }
@@ -194,10 +194,24 @@ export function measured(
   rects: Map<string, Rect>,
   routes: Array<{ id: string; points: Array<{ x: number; y: number }> }>,
 ): CanonicalGeometry {
+  const chart = calendarFor(doc);
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId ?? 'root']),
   );
   return {
+    ...(chart
+      ? {
+          timeline: {
+            bounds: { x: chart.x, y: chart.y, w: chart.width, h: chart.height },
+            items: Object.entries(chart.boxes).map(([id, b]) => ({
+              ...b,
+              id,
+              x: chart.x + b.x,
+              y: chart.y + b.y,
+            })),
+          },
+        }
+      : {}),
     nodes: [...rects]
       .map(([id, r]) => ({ id, parent: parent.get(id)!, x: r.x, y: r.y, w: r.w, h: r.h }))
       .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),

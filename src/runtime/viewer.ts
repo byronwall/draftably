@@ -135,7 +135,7 @@ const TAGS = new Set(
   ),
 );
 const ATTRS = new Set(
-  'aria-labelledby role id data-id data-phase data-state data-theme xmlns viewBox width height x y x1 y1 x2 y2 cx cy r rx ry d points transform fill fill-rule fill-opacity stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray opacity font-family font-size font-weight text-anchor dominant-baseline dy text-decoration marker-start marker-end markerWidth markerHeight markerUnits refX refY orient class clip-path nonce href target rel'.split(
+  'aria-labelledby role id data-id data-timeline-id data-phase data-state data-theme xmlns viewBox width height x y x1 y1 x2 y2 cx cy r rx ry d points transform fill fill-rule fill-opacity stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray opacity font-family font-size font-weight text-anchor dominant-baseline dy text-decoration marker-start marker-end markerWidth markerHeight markerUnits refX refY orient class clip-path nonce href target rel'.split(
     ' ',
   ),
 );
@@ -580,14 +580,19 @@ export function mountViewer(host: HTMLElement, options: ViewerOptions = {}): Vie
       }
       return;
     }
-    const id = target?.closest('[data-id]')?.getAttribute('data-id');
+    const id =
+      target?.closest('[data-timeline-id]')?.getAttribute('data-timeline-id') ??
+      target?.closest('[data-id]')?.getAttribute('data-id');
     const item = drawing?.items.find(value => value.id === id);
     if (item) emit('itemactivate', { id: item.id, kind: item.kind, input: 'pointer', revision });
   });
   viewport.addEventListener('contextmenu', event => {
     if (fromHost(event)) return;
     const target = event.target instanceof win.Element ? event.target : null;
-    const id = target?.closest('[data-id]')?.getAttribute('data-id') ?? null;
+    const id =
+      target?.closest('[data-timeline-id]')?.getAttribute('data-timeline-id') ??
+      target?.closest('[data-id]')?.getAttribute('data-id') ??
+      null;
     const item = id ? drawing?.items.find(value => value.id === id) : undefined;
     emit('contextmenu', {
       id: item?.id ?? null,

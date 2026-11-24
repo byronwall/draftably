@@ -285,7 +285,7 @@ export interface Diagram {
     intent: LayoutIntent;
     /** A sequence diagram's frame and the row bands of its `phase` statements. */
     sequence?: SequenceLayout;
-    timeline?: import('../dsl/timeline-plan').PlacedTimeline;
+    timeline?: import('../dsl/calendar-layout').CalendarLayout;
   };
   styles: Record<string, NodeStyle>;
   collapsed: string[];

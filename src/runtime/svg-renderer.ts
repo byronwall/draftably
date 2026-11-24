@@ -1,3 +1,4 @@
+import { calendarFor } from '../dsl/calendar-layout';
 /**
  * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
@@ -829,7 +830,7 @@ const union = (a: Rect, b: Rect): Rect => {
 
 /** Calendar marks use the same geometry, type and palette on the canvas and in exports. */
 export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
-  const chart = doc.layout.timeline;
+  const chart = calendarFor(doc);
   if (!chart) return '';
   const colors = {
     ink: look.text,
@@ -846,7 +847,7 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
   parts.push(`<rect width="${chart.width}" height="${chart.height}" fill="${look.canvas}"/>`);
   for (const m of chart.marks) {
     const color = colors[m.tone ?? 'ink'];
-    const id = m.id ? ` data-id="${esc(m.id)}" data-timeline-id="${esc(m.id)}"` : '';
+    const id = m.id ? ` data-timeline-id="${esc(m.id)}"` : '';
     const title = m.title ? `<title>${esc(m.title)}</title>` : '';
     parts.push(`<g${id}>${title}`);
     if (m.kind === 'text')
@@ -869,7 +870,7 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
   }
   for (const [id, b] of Object.entries(chart.boxes))
     parts.push(
-      `<rect data-id="${esc(id)}" data-timeline-id="${esc(id)}" tabindex="0" role="button" aria-label="${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="transparent"/>`,
+      `<rect data-timeline-id="${esc(id)}" tabindex="0" role="button" aria-label="${esc(doc.graph.nodes.find(n => n.id === id)?.title ?? id)}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="transparent"/>`,
     );
   parts.push('</g>');
   return parts.join('');

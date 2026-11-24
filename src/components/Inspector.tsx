@@ -1,3 +1,4 @@
+import { calendarFor } from '../dsl/calendar-layout';
 import { createEffect, For, Match, on, Show, Switch, type JSX } from 'solid-js';
 import * as edits from '../model/edits';
 import {
@@ -531,13 +532,13 @@ function ObjectInspector(props: { id: string }) {
           >
             Edit dates
           </button>
-          <Show when={s.doc.layout.timeline?.boxes[props.id]}>
+          <Show when={calendarFor(s.doc)?.boxes[props.id]}>
             {box => (
               <button
                 type="button"
                 class="button small"
                 onClick={() => {
-                  const chart = s.doc.layout.timeline!;
+                  const chart = calendarFor(s.doc)!;
                   s.fitRects([
                     { x: chart.x + box().x, y: chart.y + box().y, w: box().w, h: box().h },
                   ]);

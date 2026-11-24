@@ -303,6 +303,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
             .routes()
             .filter(r => picked.has(r.id)),
           SELECTION_MARGIN,
+          false,
         )
       : look.heading
         ? frame

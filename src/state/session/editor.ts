@@ -201,6 +201,15 @@ export function createEditor(s: DocumentPart & ScenePart) {
     s.setCamera({ x: (w - b.w * k) / 2 - b.x * k, y: (h - b.h * k) / 2 - b.y * k, k });
   }
 
+  /** Open a long calendar at reading size on touch screens. Its marks pan with the canvas. */
+  function frameCalendar(chart: { x: number; y: number; width: number; height: number }) {
+    const { width } = stageSize();
+    if (width >= 720)
+      return fitRects([{ x: chart.x, y: chart.y, w: chart.width, h: chart.height }]);
+    const k = 1;
+    s.setCamera({ x: 12 - chart.x * k, y: 12 - chart.y * k, k });
+  }
+
   /** Pan just enough to bring an object fully into view. */
   function revealObject(id: string) {
     const r = objectRect(s.doc, s.geometry, id),
@@ -255,6 +264,7 @@ export function createEditor(s: DocumentPart & ScenePart) {
     fitView,
     diagramClipped,
     fitRects,
+    frameCalendar,
     revealObject,
     centerSelection,
   };

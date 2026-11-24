@@ -1,5 +1,6 @@
+import { calendarFor } from '../../dsl/calendar-layout';
 import { createSignal, For, Show, untrack } from 'solid-js';
-import { declaration, layoutStatement, setAttr, statement } from '../../dsl/source-edits';
+import { declaration, statements, setAttr, statement } from '../../dsl/source-edits';
 import { bare, printSource, quoted, readSource } from '../../dsl/syntax';
 import { closeDialog } from '../../state/ui';
 import { useDiagramSession } from '../session-context';
@@ -8,6 +9,7 @@ import './settings.css';
 
 export function TimelineSettings() {
   const s = useDiagramSession();
+  const original = s.currentSource();
   const model = s.fileScene()!.model;
   const nodes = model.objects.filter(o => o.type === 'node');
   const initial = nodes.find(o => s.selectedIds().includes(o.id)) ?? nodes[0];
@@ -29,7 +31,15 @@ export function TimelineSettings() {
     setId(key);
     const d = selected()?.dates;
     setKind(
-      !key ? 'point' : d?.milestone ? 'milestone' : d?.from ? 'span' : d?.at ? 'point' : 'undated',
+      key === ':new'
+        ? 'point'
+        : d?.milestone
+          ? 'milestone'
+          : d?.from
+            ? 'span'
+            : d?.at
+              ? 'point'
+              : 'undated',
     );
     setStart(d?.at ?? d?.from?.replace(/^\?/, '') ?? '');
     setEnd(d?.to === 'open' ? '' : (d?.to ?? ''));
@@ -41,11 +51,15 @@ export function TimelineSettings() {
   async function save(e: SubmitEvent) {
     e.preventDefault();
     if (busy()) return;
+    if (original !== s.currentSource() || s.fileBlocked())
+      return setError('The diagram changed. Reopen settings to edit its current dates.');
     if (!!lo() !== !!hi() || (lo() && lo() >= hi()))
       return setError('Choose a start and a later end for the detail window.');
     const doc = readSource(s.currentSource());
     const root =
-      layoutStatement(doc, 'root') ?? statement('layout', [bare('root'), bare('timeline')]);
+      statements(doc)
+        .filter(l => l.command === 'layout' && l.args[0]?.value === 'root')
+        .at(-1) ?? statement('layout', [bare('root'), bare('timeline')]);
     if (!doc.lines.includes(root)) doc.lines.push(root);
     if (root.args[1]?.value !== 'timeline') {
       root.args = [bare('root'), bare('timeline')];
@@ -54,7 +68,7 @@ export function TimelineSettings() {
     setAttr(root, 'today', today() ? bare(today()) : undefined);
     setAttr(root, 'zoom', lo() ? bare(lo() + '..' + hi()) : undefined);
     let n = declaration(doc, id());
-    if (!id()) {
+    if (id() === ':new') {
       const ids = new Set([...model.objects, ...model.edges].map(o => o.id));
       let number = 1;
       while (ids.has('event' + number)) number++;
@@ -94,8 +108,8 @@ export function TimelineSettings() {
       )
         return setError('Check the dates and source diagnostic before saving.');
       closeDialog();
-      const c = s.doc.layout.timeline;
-      if (c) s.fitRects([{ x: c.x, y: c.y, w: c.width, h: c.height }]);
+      const c = calendarFor(s.doc);
+      if (c) s.frameCalendar(c);
     } finally {
       setBusy(false);
     }
@@ -123,26 +137,29 @@ export function TimelineSettings() {
           <label>
             Item
             <select value={id()} onChange={e => load(e.currentTarget.value)}>
-              <option value="">Add new item…</option>
+              <option value="">Time axis only</option>
+              <option value=":new">Add new item…</option>
               <For each={nodes}>{n => <option value={n.id}>{n.label}</option>}</For>
             </select>
           </label>
-          <Show when={!id()}>
+          <Show when={id() === ':new'}>
             <label>
               Item name
               <input required value={label()} onInput={e => setLabel(e.currentTarget.value)} />
             </label>
           </Show>
-          <label>
-            Mark
-            <select value={kind()} onChange={e => setKind(e.currentTarget.value)}>
-              <option value="undated">Undated</option>
-              <option value="point">Event</option>
-              <option value="milestone">Milestone</option>
-              <option value="span">Duration</option>
-            </select>
-          </label>
-          <Show when={kind() !== 'undated'}>
+          <Show when={id()}>
+            <label>
+              Mark
+              <select value={kind()} onChange={e => setKind(e.currentTarget.value)}>
+                <option value="undated">Undated</option>
+                <option value="point">Event</option>
+                <option value="milestone">Milestone</option>
+                <option value="span">Duration</option>
+              </select>
+            </label>
+          </Show>
+          <Show when={id() && kind() !== 'undated'}>
             <label>
               {kind() === 'span' ? 'Start' : 'Date'}
               <input

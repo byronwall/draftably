@@ -1,3 +1,4 @@
+import { calendarFor } from '../dsl/calendar-layout';
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
 import { type Tool } from '../state/session/editor';
@@ -48,16 +49,10 @@ export function Toolbar() {
       >
         Timeline settings
       </button>
-      <Show when={s.doc.layout.timeline}>
+      <Show when={calendarFor(s.doc)}>
         {chart => (
-          <button
-            type="button"
-            class="button ghost"
-            onClick={() =>
-              s.fitRects([{ x: chart().x, y: chart().y, w: chart().width, h: chart().height }])
-            }
-          >
-            Fit timeline
+          <button type="button" class="button ghost" onClick={() => s.frameCalendar(chart())}>
+            {s.stageSize().width < 720 ? 'Read timeline' : 'Fit timeline'}
           </button>
         )}
       </Show>

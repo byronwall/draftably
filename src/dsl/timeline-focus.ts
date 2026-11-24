@@ -12,6 +12,10 @@ const isoDay = (value: string) => {
   return Number.isFinite(n) ? n : undefined;
 };
 const dateLabel = (n: number) => new Date(n).toISOString().slice(0, 10);
+const clipText = (value: string, max: number) => {
+  const chars = Array.from(value);
+  return chars.length > max ? `${chars.slice(0, max - 1).join('')}…` : value;
+};
 const pct = (n: number, w: Window) =>
   Math.max(0, Math.min(1, (n - w.start) / Math.max(1, w.end - w.start)));
 
@@ -52,12 +56,18 @@ function ticks(window: Window) {
     return values;
   }
   const first = new Date(window.start);
-  let n = Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 1);
+  const startYear = first.getUTCFullYear(),
+    startMonth = first.getUTCMonth();
+  const last = new Date(window.end);
+  const monthCount = (last.getUTCFullYear() - startYear) * 12 + last.getUTCMonth() - startMonth + 1;
+  const monthStep = Math.max(1, Math.ceil(monthCount / 8));
+  let n = Date.UTC(startYear, startMonth + 1, 1);
   const values: number[] = [];
   while (n < window.end) {
-    values.push(n);
-    first.setTime(n);
-    n = Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 1);
+    const date = new Date(n);
+    const index = (date.getUTCFullYear() - startYear) * 12 + date.getUTCMonth() - startMonth;
+    if (index % monthStep === 0) values.push(n);
+    n = Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1);
   }
   return values;
 }
@@ -69,6 +79,8 @@ function tickLabel(date: number, window: Window) {
     ...(window.end - window.start > 180 * DAY ? { year: '2-digit' } : { day: 'numeric' }),
   }).format(date);
 }
+const tickAnchor = (x: number, left: number, right: number) =>
+  x <= left + 14 ? 'start' : x >= right - 14 ? 'end' : 'middle';
 
 function text(
   marks: TimelineMark[],
@@ -117,7 +129,7 @@ function dot(
 /** Build a two-scale SVG plan: a full history rail and a row-by-row focus view. */
 export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): TimelinePlan {
   const marks: TimelineMark[] = [],
-    boxes: TimelinePlan['boxes'] = {};
+    boxes: TimelinePlan['boxes'] = Object.create(null);
   const rowDates = rows.flatMap(row => {
     const mark = shape(row);
     return mark.kind === 'point'
@@ -164,7 +176,9 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
   });
 
   // The overview carries every item as a quiet compressed mark and outlines the detail window.
-  line(marks, chartX, overviewY, chartX + chartW, overviewY, 'grid', { strokeWidth: 1 });
+  line(marks, chartX, overviewY, chartX + chartW, overviewY, 'grid', {
+    strokeWidth: 1,
+  });
   const zoomX = chartX + pct(focus.start, history) * chartW;
   const zoomRight = chartX + pct(focus.end, history) * chartW;
   rect(marks, zoomX, 62, Math.max(2, zoomRight - zoomX), 66, 'shade', {
@@ -175,7 +189,7 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
     const x = chartX + pct(t, history) * chartW;
     line(marks, x, overviewY - 8, x, overviewEndY, 'grid', { strokeWidth: 1 });
     text(marks, x, 135, tickLabel(t, history), 9, 'muted', {
-      anchor: x === chartX ? 'start' : x >= chartX + chartW - 2 ? 'end' : 'middle',
+      anchor: tickAnchor(x, chartX, chartX + chartW),
     });
   }
   for (const release of rows.filter(r => r.milestone && r.at)) {
@@ -188,7 +202,7 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
       title: `${release.label} release`,
     });
   }
-  if (snapshot >= history.start && snapshot <= history.end) {
+  if (options.today && snapshot >= history.start && snapshot <= history.end) {
     const x = chartX + pct(snapshot, history) * chartW;
     line(marks, x, overviewY - 18, x, overviewEndY, 'accent', {
       strokeWidth: 2,
@@ -204,17 +218,36 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
           ? chartX + pct(mark.from, history) * chartW
           : chartX;
     if (mark.kind === 'point')
-      dot(marks, x, overviewY, 2.5, 'muted', { id: row.id, title: `${row.label}: ${row.at}` });
+      dot(marks, x, overviewY, 2.5, 'muted', {
+        id: row.id,
+        title: `${row.label}: ${row.at}`,
+      });
     else if (mark.kind === 'span') {
       const end = mark.to ?? snapshot;
-      const left = mark.unknownStart || mark.from === undefined ? chartX : x;
+      const left = mark.from === undefined ? chartX : x;
       const right = chartX + pct(end, history) * chartW;
-      line(marks, left, overviewY, right, overviewY, mark.unknownStart ? 'muted' : 'shade', {
-        dash: mark.unknownStart,
-        strokeWidth: 3,
-        id: row.id,
-        title: `${row.label}: ${mark.unknownStart ? 'unknown start' : dateLabel(mark.from!)} to ${row.to === 'open' ? 'snapshot' : dateLabel(end)}`,
-      });
+      if (mark.unknownStart && mark.from !== undefined) {
+        const boundary = chartX + pct(mark.from, history) * chartW;
+        if (boundary > chartX)
+          line(marks, chartX, overviewY, boundary, overviewY, 'muted', {
+            dash: true,
+            strokeWidth: 3,
+            id: row.id,
+            title: `Before ${dateLabel(mark.from)}`,
+          });
+        if (right > boundary)
+          line(marks, boundary, overviewY, right, overviewY, 'accent', {
+            strokeWidth: 3,
+            id: row.id,
+            title: `Known duration after ${dateLabel(mark.from)}`,
+          });
+      } else {
+        line(marks, left, overviewY, right, overviewY, 'accent', {
+          strokeWidth: 3,
+          id: row.id,
+          title: `${row.label}: ${dateLabel(mark.from!)} to ${row.to === 'open' ? 'snapshot' : dateLabel(end)}`,
+        });
+      }
     }
   }
 
@@ -228,15 +261,19 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
       id: row.id,
       title: `Reveal ${row.label}`,
     });
-    line(marks, 18, y + rowH - 4, width - 18, y + rowH - 4, 'grid', { id: row.id });
+    line(marks, 18, y + rowH - 4, width - 18, y + rowH - 4, 'grid', {
+      id: row.id,
+    });
   });
   const windowLeft = chartX,
     windowRight = chartX + chartW;
   for (const t of ticks(focus)) {
     const x = chartX + pct(t, focus) * chartW;
-    line(marks, x, axisY - 9, x, rowsY + rows.length * rowH, 'grid', { strokeWidth: 1 });
+    line(marks, x, axisY - 9, x, rowsY + rows.length * rowH, 'grid', {
+      strokeWidth: 1,
+    });
     text(marks, x, axisY, tickLabel(t, focus), 9, 'muted', {
-      anchor: x === windowLeft ? 'start' : x >= windowRight - 2 ? 'end' : 'middle',
+      anchor: tickAnchor(x, windowLeft, windowRight),
     });
   }
   for (const release of rows.filter(r => r.milestone && r.at)) {
@@ -249,7 +286,7 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
       title: `${release.label} release`,
     });
   }
-  if (snapshot >= focus.start && snapshot <= focus.end) {
+  if (options.today && snapshot >= focus.start && snapshot <= focus.end) {
     const x = chartX + pct(snapshot, focus) * chartW;
     line(marks, x, detailTop + 7, x, rowsY + rows.length * rowH, 'accent', {
       strokeWidth: 2,
@@ -259,8 +296,15 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
 
   rows.forEach((row, index) => {
     const y = rowsY + index * rowH;
-    text(marks, 28, y + 11, row.band.toUpperCase(), 8, 'muted', { weight: 700, id: row.id });
-    text(marks, 28, y + 27, row.label, 12, 'ink', { weight: 600, id: row.id, title: row.label });
+    text(marks, 28, y + 11, row.band.toUpperCase(), 8, 'muted', {
+      weight: 700,
+      id: row.id,
+    });
+    text(marks, 28, y + 27, clipText(row.label, 39), 12, 'ink', {
+      weight: 600,
+      id: row.id,
+      title: row.label,
+    });
     text(
       marks,
       28,
@@ -305,12 +349,28 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
             ? windowLeft
             : chartX + pct(Math.max(mark.from, focus.start), focus) * chartW;
         const right = chartX + pct(Math.min(end, focus.end), focus) * chartW;
-        line(marks, left, cy, right, cy, mark.unknownStart ? 'muted' : 'accent', {
-          dash: mark.unknownStart,
-          strokeWidth: 5,
-          id: row.id,
-          title: `${row.label}: ${mark.unknownStart ? 'unknown start' : row.from!.replace(/^\?/, '')} to ${row.to === 'open' ? (options.today ?? 'snapshot') : row.to}`,
-        });
+        if (mark.unknownStart && mark.from !== undefined) {
+          const boundary = chartX + pct(mark.from, focus) * chartW;
+          if (boundary > left)
+            line(marks, left, cy, boundary, cy, 'muted', {
+              dash: true,
+              strokeWidth: 5,
+              id: row.id,
+              title: `Before ${dateLabel(mark.from)}`,
+            });
+          if (right > boundary)
+            line(marks, boundary, cy, right, cy, 'accent', {
+              strokeWidth: 5,
+              id: row.id,
+              title: `Known duration after ${dateLabel(mark.from)} to ${row.to === 'open' ? (options.today ?? 'snapshot') : row.to}`,
+            });
+        } else {
+          line(marks, left, cy, right, cy, 'accent', {
+            strokeWidth: 5,
+            id: row.id,
+            title: `${row.label}: ${row.from!.replace(/^\?/, '')} to ${row.to === 'open' ? (options.today ?? 'snapshot') : row.to}`,
+          });
+        }
         if (
           !mark.unknownStart &&
           mark.from !== undefined &&
@@ -326,13 +386,43 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
             id: row.id,
           });
         } else if (mark.from !== undefined && mark.from < focus.start) {
-          text(marks, left + 5, y + 10, `← ${dateLabel(mark.from)}`, 8, 'muted', {
-            id: row.id,
-            title: `Actual start ${dateLabel(mark.from)} is before this detail window`,
-          });
+          text(
+            marks,
+            left + 5,
+            y + 10,
+            `← ${mark.unknownStart ? 'before ' : ''}${dateLabel(mark.from)}`,
+            8,
+            'muted',
+            {
+              id: row.id,
+              title: `${mark.unknownStart ? 'Known-from bound' : 'Actual start'} ${dateLabel(mark.from)} is before this detail window`,
+            },
+          );
         }
+        if (
+          mark.unknownStart &&
+          mark.from !== undefined &&
+          mark.from >= focus.start &&
+          mark.from <= focus.end
+        )
+          text(
+            marks,
+            chartX + pct(mark.from, focus) * chartW,
+            y + 10,
+            `before ${dateLabel(mark.from)}`,
+            8,
+            'muted',
+            {
+              anchor: 'middle',
+              id: row.id,
+              title: `Unknown duration before ${dateLabel(mark.from)}`,
+            },
+          );
         if (mark.to !== undefined && mark.to >= focus.start && mark.to <= focus.end) {
-          dot(marks, right, cy, 3, 'accent', { id: row.id, title: `End ${row.to}` });
+          dot(marks, right, cy, 3, 'accent', {
+            id: row.id,
+            title: `End ${row.to}`,
+          });
           text(marks, right, y + 40, dateLabel(mark.to), 8, 'muted', {
             anchor: 'middle',
             id: row.id,
@@ -362,18 +452,16 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
             title: `Open end at snapshot ${dateLabel(snapshot)}`,
           });
         }
-        if (mark.unknownStart)
-          text(marks, left, cy - 9, '? start', 8, 'muted', {
-            id: row.id,
-            title: 'Start date is unknown',
-          });
       }
       for (const step of row.steps ?? []) {
         const d = isoDay(step)!;
-        if (d < focus.start || d > focus.end || d > snapshot) continue;
+        if (d < focus.start || d > focus.end) continue;
         const x = chartX + pct(d, focus) * chartW;
         dot(marks, x, cy, 2.5, 'paper', { id: row.id, title: `Step ${step}` });
-        line(marks, x, cy - 6, x, cy + 6, 'ink', { id: row.id, title: `Step ${step}` });
+        line(marks, x, cy - 6, x, cy + 6, 'ink', {
+          id: row.id,
+          title: `Step ${step}`,
+        });
       }
     } else {
       text(marks, chartX + chartW / 2, cy + 3, '? date unknown', 9, 'muted', {

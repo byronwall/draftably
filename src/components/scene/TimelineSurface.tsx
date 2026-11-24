@@ -1,3 +1,4 @@
+import { calendarFor } from '../../dsl/calendar-layout';
 import { createMemo, For, Show } from 'solid-js';
 import { timelineMarkup } from '../../runtime/svg-renderer';
 import { resolveAppearance } from '../../model/appearance';
@@ -9,7 +10,7 @@ export function TimelineSurface(props: {
   pick?: (id: string) => void;
   reveal?: (id: string) => void;
 }) {
-  const chart = () => props.doc.layout.timeline;
+  const chart = createMemo(() => calendarFor(props.doc));
   const markup = createMemo(() =>
     timelineMarkup(props.doc, resolveAppearance(props.doc.appearance)),
   );
@@ -20,13 +21,6 @@ export function TimelineSurface(props: {
       {c => (
         <g
           class="timeline-surface"
-          onPointerDown={e => {
-            const id = item(e);
-            if (id && props.pick && e.button === 0) {
-              e.stopPropagation();
-              props.pick(id);
-            }
-          }}
           onDblClick={e => {
             const id = item(e);
             if (id && props.reveal) {
