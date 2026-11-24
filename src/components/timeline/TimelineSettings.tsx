@@ -118,81 +118,79 @@ export function TimelineSettings() {
             <input type="date" value={hi()} onInput={e => setHi(e.currentTarget.value)} />
           </label>
         </fieldset>
-        <>
-          <fieldset>
-            <legend>Diagram item</legend>
+        <fieldset>
+          <legend>Diagram item</legend>
+          <label>
+            Item
+            <select value={id()} onChange={e => load(e.currentTarget.value)}>
+              <option value="">Add new item…</option>
+              <For each={nodes}>{n => <option value={n.id}>{n.label}</option>}</For>
+            </select>
+          </label>
+          <Show when={!id()}>
             <label>
-              Item
-              <select value={id()} onChange={e => load(e.currentTarget.value)}>
-                <option value="">Add new item…</option>
-                <For each={nodes}>{n => <option value={n.id}>{n.label}</option>}</For>
-              </select>
+              Item name
+              <input required value={label()} onInput={e => setLabel(e.currentTarget.value)} />
             </label>
-            <Show when={!id()}>
-              <label>
-                Item name
-                <input required value={label()} onInput={e => setLabel(e.currentTarget.value)} />
-              </label>
-            </Show>
+          </Show>
+          <label>
+            Mark
+            <select value={kind()} onChange={e => setKind(e.currentTarget.value)}>
+              <option value="undated">Undated</option>
+              <option value="point">Event</option>
+              <option value="milestone">Milestone</option>
+              <option value="span">Duration</option>
+            </select>
+          </label>
+          <Show when={kind() !== 'undated'}>
             <label>
-              Mark
-              <select value={kind()} onChange={e => setKind(e.currentTarget.value)}>
-                <option value="undated">Undated</option>
-                <option value="point">Event</option>
-                <option value="milestone">Milestone</option>
-                <option value="span">Duration</option>
-              </select>
+              {kind() === 'span' ? 'Start' : 'Date'}
+              <input
+                required
+                type="date"
+                value={start()}
+                onInput={e => setStart(e.currentTarget.value)}
+              />
             </label>
-            <Show when={kind() !== 'undated'}>
+          </Show>
+          <Show when={kind() === 'span'}>
+            <label>
+              <input
+                type="checkbox"
+                checked={unknown()}
+                onChange={e => setUnknown(e.currentTarget.checked)}
+              />
+              Began before start date
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={open()}
+                onChange={e => setOpen(e.currentTarget.checked)}
+              />
+              Still open at snapshot
+            </label>
+            <Show when={!open()}>
               <label>
-                {kind() === 'span' ? 'Start' : 'Date'}
+                End
                 <input
                   required
                   type="date"
-                  value={start()}
-                  onInput={e => setStart(e.currentTarget.value)}
+                  value={end()}
+                  onInput={e => setEnd(e.currentTarget.value)}
                 />
               </label>
             </Show>
-            <Show when={kind() === 'span'}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={unknown()}
-                  onChange={e => setUnknown(e.currentTarget.checked)}
-                />
-                Began before start date
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={open()}
-                  onChange={e => setOpen(e.currentTarget.checked)}
-                />
-                Still open at snapshot
-              </label>
-              <Show when={!open()}>
-                <label>
-                  End
-                  <input
-                    required
-                    type="date"
-                    value={end()}
-                    onInput={e => setEnd(e.currentTarget.value)}
-                  />
-                </label>
-              </Show>
-              <label>
-                Partial steps
-                <input
-                  placeholder="YYYY-MM-DD, YYYY-MM-DD"
-                  value={steps()}
-                  onInput={e => setSteps(e.currentTarget.value)}
-                />
-              </label>
-            </Show>
-          </fieldset>
-        </>
+            <label>
+              Partial steps
+              <input
+                placeholder="YYYY-MM-DD, YYYY-MM-DD"
+                value={steps()}
+                onInput={e => setSteps(e.currentTarget.value)}
+              />
+            </label>
+          </Show>
+        </fieldset>
         <Show when={error()}>
           <p role="alert">{error()}</p>
         </Show>

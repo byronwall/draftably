@@ -53,13 +53,12 @@ function ticks(window: Window) {
   }
   const first = new Date(window.start);
   let n = Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 1);
-  const values: number[] = [window.start];
+  const values: number[] = [];
   while (n < window.end) {
     values.push(n);
     first.setTime(n);
     n = Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 1);
   }
-  values.push(window.end);
   return values;
 }
 
@@ -148,15 +147,30 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
   text(marks, 24, 49, 'Focus + context', 11, 'muted');
   text(marks, width - 26, 28, contextTitle, 11, 'muted', { anchor: 'end' });
   text(marks, 24, 78, 'CONTEXT', 10, 'muted', { weight: 700 });
-  text(marks, 24, 176, options.zoom ? 'MAGNIFIED DETAIL' : 'FULL HISTORY', 10, 'muted', {
-    weight: 700,
-  });
+  const magnification = (history.end - history.start) / Math.max(1, focus.end - focus.start);
+  text(
+    marks,
+    24,
+    176,
+    options.zoom ? `MAGNIFIED DETAIL · ${magnification.toFixed(1)}×` : 'FULL HISTORY',
+    10,
+    'muted',
+    {
+      weight: 700,
+    },
+  );
   text(marks, width - 26, 176, `${dateLabel(focus.start)} — ${dateLabel(focus.end)}`, 11, 'muted', {
     anchor: 'end',
   });
 
   // The overview carries every item as a quiet compressed mark and outlines the detail window.
   line(marks, chartX, overviewY, chartX + chartW, overviewY, 'grid', { strokeWidth: 1 });
+  const zoomX = chartX + pct(focus.start, history) * chartW;
+  const zoomRight = chartX + pct(focus.end, history) * chartW;
+  rect(marks, zoomX, 62, Math.max(2, zoomRight - zoomX), 66, 'shade', {
+    radius: 4,
+    title: 'Detailed date window',
+  });
   for (const t of ticks(history)) {
     const x = chartX + pct(t, history) * chartW;
     line(marks, x, overviewY - 8, x, overviewEndY, 'grid', { strokeWidth: 1 });
@@ -164,12 +178,6 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
       anchor: x === chartX ? 'start' : x >= chartX + chartW - 2 ? 'end' : 'middle',
     });
   }
-  const zoomX = chartX + pct(focus.start, history) * chartW;
-  const zoomRight = chartX + pct(focus.end, history) * chartW;
-  rect(marks, zoomX, 62, Math.max(2, zoomRight - zoomX), 66, 'shade', {
-    radius: 4,
-    title: 'Detailed date window',
-  });
   for (const release of rows.filter(r => r.milestone && r.at)) {
     const d = isoDay(release.at!)!;
     if (d < history.start || d > history.end) continue;
@@ -212,6 +220,16 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
 
   // Detail is a readable list even when a row has no visible date inside the selected window.
   line(marks, 20, detailTop, width - 20, detailTop, 'grid');
+  rows.forEach((row, index) => {
+    const y = rowsY + index * rowH;
+    boxes[row.id] = { x: 18, y: y - 4, w: width - 36, h: rowH };
+    rect(marks, 18, y - 4, width - 36, rowH, 'paper', {
+      radius: 3,
+      id: row.id,
+      title: `Reveal ${row.label}`,
+    });
+    line(marks, 18, y + rowH - 4, width - 18, y + rowH - 4, 'grid', { id: row.id });
+  });
   const windowLeft = chartX,
     windowRight = chartX + chartW;
   for (const t of ticks(focus)) {
@@ -241,13 +259,6 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
 
   rows.forEach((row, index) => {
     const y = rowsY + index * rowH;
-    boxes[row.id] = { x: 18, y: y - 4, w: width - 36, h: rowH };
-    rect(marks, 18, y - 4, width - 36, rowH, 'paper', {
-      radius: 3,
-      id: row.id,
-      title: `Reveal ${row.label}`,
-    });
-    line(marks, 18, y + rowH - 4, width - 18, y + rowH - 4, 'grid', { id: row.id });
     text(marks, 28, y + 11, row.band.toUpperCase(), 8, 'muted', { weight: 700, id: row.id });
     text(marks, 28, y + 27, row.label, 12, 'ink', { weight: 600, id: row.id, title: row.label });
     text(
@@ -314,12 +325,23 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
             anchor: 'middle',
             id: row.id,
           });
+        } else if (mark.from !== undefined && mark.from < focus.start) {
+          text(marks, left + 5, y + 10, `← ${dateLabel(mark.from)}`, 8, 'muted', {
+            id: row.id,
+            title: `Actual start ${dateLabel(mark.from)} is before this detail window`,
+          });
         }
         if (mark.to !== undefined && mark.to >= focus.start && mark.to <= focus.end) {
           dot(marks, right, cy, 3, 'accent', { id: row.id, title: `End ${row.to}` });
           text(marks, right, y + 40, dateLabel(mark.to), 8, 'muted', {
             anchor: 'middle',
             id: row.id,
+          });
+        } else if (mark.to !== undefined && mark.to > focus.end) {
+          text(marks, right - 5, y + 40, `→ ${dateLabel(mark.to)}`, 8, 'muted', {
+            anchor: 'end',
+            id: row.id,
+            title: `Actual end ${dateLabel(mark.to)} is after this detail window`,
           });
         }
         if (row.to === 'open' && snapshot >= focus.start && snapshot <= focus.end) {
@@ -330,6 +352,12 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
           });
           text(marks, x, y + 40, dateLabel(snapshot), 8, 'muted', {
             anchor: 'middle',
+            id: row.id,
+            title: `Open end at snapshot ${dateLabel(snapshot)}`,
+          });
+        } else if (row.to === 'open' && snapshot > focus.end) {
+          text(marks, chartX + chartW - 5, y + 40, `→ ${dateLabel(snapshot)} open`, 8, 'muted', {
+            anchor: 'end',
             id: row.id,
             title: `Open end at snapshot ${dateLabel(snapshot)}`,
           });
@@ -346,11 +374,6 @@ export function focusPlan(rows: TimelineRow[], options: TimelineOptions = {}): T
         const x = chartX + pct(d, focus) * chartW;
         dot(marks, x, cy, 2.5, 'paper', { id: row.id, title: `Step ${step}` });
         line(marks, x, cy - 6, x, cy + 6, 'ink', { id: row.id, title: `Step ${step}` });
-        text(marks, x, y + 10, dateLabel(d), 8, 'muted', {
-          anchor: 'middle',
-          id: row.id,
-          title: `Step ${step}`,
-        });
       }
     } else {
       text(marks, chartX + chartW / 2, cy + 3, '? date unknown', 9, 'muted', {

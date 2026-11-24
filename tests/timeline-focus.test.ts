@@ -49,6 +49,24 @@ describe('timeline focus geometry', () => {
     expect(plan.boxes.release).toBeDefined();
   });
 
+  it('layers release guides over row fills and keeps clipped endpoint dates visible', () => {
+    const rows = [
+      row({ id: 'history', label: 'Old open range', from: '2024-10-13', to: 'open' }),
+      row({ id: 'release', label: 'Release', at: '2025-11-10', milestone: true }),
+    ];
+    const plan = focusPlan(rows, { today: '2025-11-23', zoom: ['2025-11-03', '2025-11-23'] });
+    const rowFill = plan.marks.findIndex(m => m.kind === 'rect' && m.id === 'history');
+    const guide = plan.marks.findIndex(
+      m => m.kind === 'line' && m.id === 'release' && m.tone === 'release' && m.y > 164,
+    );
+    const rangeBar = plan.marks.findIndex(
+      m => m.kind === 'line' && m.id === 'history' && m.strokeWidth === 5,
+    );
+    expect(rowFill).toBeLessThan(guide);
+    expect(guide).toBeLessThan(rangeBar);
+    expect(plan.marks.some(m => m.kind === 'text' && m.text === '← 2024-10-13')).toBe(true);
+  });
+
   it('uses full history without an explicit zoom and includes row metadata in the plan', () => {
     const plan = focusPlan(
       [
