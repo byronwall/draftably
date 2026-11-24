@@ -7,7 +7,14 @@ import { projectScene } from '../src/dsl/project';
 import { formatSource, parseModel, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit, UnsupportedEdit } from '../src/dsl/translate';
 import { resolveAppearance } from '../src/model/appearance';
-import { CODE_ADVANCE, CODE_PAD, codeLayout, type CodeBlock } from '../src/model/code';
+import {
+  CODE_ADVANCE,
+  CODE_PAD,
+  CODE_TYPE,
+  codeLayout,
+  tableLines,
+  type CodeBlock,
+} from '../src/model/code';
 import { FACES } from '../src/model/fonts';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
@@ -123,6 +130,60 @@ describe('code layout', () => {
     expect(laid.more).toBe(30 - laid.rows.length);
     expect(laid.moreY + 17).toBeLessThanOrEqual(150);
     expect(laid.numberCols).toBe(3);
+  });
+});
+
+describe('code tables', () => {
+  it('finds columns from runs of spaces or blank positions, and right-aligns numbers', () => {
+    // Ragged gaps of two or more spaces.
+    expect(tableLines(['name  cat  count', 'apple   fruit   10', 'bread  bakery  4'])).toEqual([
+      'name   cat     count',
+      'apple  fruit      10',
+      'bread  bakery      4',
+    ]);
+    // Single spaces in a cell, aligned by hand: blank positions split the columns.
+    expect(tableLines(['city     pop', 'New York 8.3', 'Rome     2.8'])).toEqual([
+      'city      pop',
+      'New York  8.3',
+      'Rome      2.8',
+    ]);
+    // One column is no table: the text stays as it is.
+    expect(tableLines(['apples', 'kiwi'])).toEqual(['apples', 'kiwi']);
+  });
+
+  it('draws a rule under the header line and nowhere else, with rows where they were', () => {
+    const plain = codeLayout(block(['a  b', '1  2', '3  4']), 'q', look),
+      laid = codeLayout(block(['a  b', '1  2', '3  4'], { table: true }), 'q', look);
+    expect(plain.rule).toBeUndefined();
+    expect(laid.rule).toBe(laid.rows[0].y + CODE_TYPE.lineHeight);
+    expect(laid.rows).toEqual(plain.rows);
+    // A box too short to show the header draws no rule.
+    expect(codeLayout(block(['a', 'b'], { table: true }), 'q', look, { height: 20 }).rule).toBe(
+      undefined,
+    );
+  });
+
+  it('keeps line numbers for ranges, and draws the rule in the SVG', () => {
+    const doc = projectScene(
+        checkSource(
+          [
+            'node df "Query result" shape=code table=on <<T',
+            'name    cat     count',
+            'apple   fruit   10',
+            'bread   bakery  4',
+            'T',
+            'range df.row lines=3',
+          ].join('\n'),
+        ),
+      ),
+      node = doc.graph.nodes.find(n => n.id === 'df')!;
+    expect(node.code!.lines).toEqual([
+      'name   cat     count',
+      'apple  fruit      10',
+      'bread  bakery      4',
+    ]);
+    expect(node.code!.ranges![0]).toMatchObject({ from: 2, to: 2 });
+    expect(renderSvg(doc)).toContain('class="code-rule"');
   });
 });
 

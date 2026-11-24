@@ -238,6 +238,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 | `"label"`    | none          | A caption band above the code, like a file tab.                                                               |
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
 | `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
+| `table=`     | `off`         | `on` draws the body as a light table. See [Code tables](#code-tables).                                        |
 | `start=`     | `1`           | The first line number. Ranges count from it too.                                                              |
 | `max-width=` | `960`         | The widest the box grows (120–8000 px; 960 is about 130 columns).                                             |
 | `wrap=`      | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
@@ -256,6 +257,28 @@ uncolored.
 
 In the viewer, a code node moves, sizes, groups and connects like any node. Edit its code and
 caption in the file.
+
+### Code tables
+
+`table=on` draws a small fixed-width table, such as a query result, with no boxed cells. Paste the
+table as it is, with no dashed rule under the header:
+
+```draft
+node df "Query result" shape=code table=on <<T
+name    cat     count
+apple   fruit   10
+bread   bakery  4
+T
+range df.row lines=3
+```
+
+- Line 1 is the header. A thin rule goes under it.
+- Two or more spaces split the cells. If the lines do not all split into the same number of cells,
+  a column break is a run of positions that are blank in every line, so `New York` stays one cell.
+- The columns are aligned two spaces apart. A column whose cells under the header are all numbers
+  aligns right.
+- The rows are still code: the same font, line numbers and ranges. `range` counts the header as
+  line 1.
 
 ### Line ranges
 
