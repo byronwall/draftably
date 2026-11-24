@@ -219,7 +219,12 @@ function codeMarkup(
         `<tspan x="${r.x + laid.gutter + (laid.numberCols - number.length) * CODE_ADVANCE}" y="${y}">${number}</tspan>`,
       );
     const t = tokens?.[row.line],
-      bandInk = t?.line === 'added' || t?.line === 'removed' ? colors[t.line].ink : undefined;
+      bandInk =
+        t?.line === 'added' || t?.line === 'removed'
+          ? colors[t.line].ink
+          : code.table && row.line === 0
+            ? muted
+            : undefined;
     for (const run of coloredRuns(row, codeRuns(row, code.lines[row.line]), t)) {
       const ink = run.cls ? colors.tokens[run.cls] : bandInk;
       spans.push(

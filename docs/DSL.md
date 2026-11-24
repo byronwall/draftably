@@ -272,13 +272,19 @@ T
 range df.row lines=3
 ```
 
-- Line 1 is the header. A thin rule goes under it.
-- Two or more spaces split the cells. If the lines do not all split into the same number of cells,
-  a column break is a run of positions that are blank in every line, so `New York` stays one cell.
+- Line 1 is the header. It is drawn muted, with a thin rule under it.
+- Paste Markdown and psql tables as they are. When every line has a `|`, pipes split the cells and
+  are not drawn. Otherwise two or more spaces split the cells. If the lines do not all split into
+  the same number of cells, a column break is a run of positions that are blank in every line, so
+  `New York` stays one cell.
+- A rule typed under the header (`-----`, `|---|---:|`, `----+----`) is removed, because the table
+  draws its own. Its `:` marks set the alignment: `---:` aligns right, `:---` aligns left.
 - The columns are aligned two spaces apart. A column whose cells under the header are all numbers
-  aligns right.
+  aligns right. `12ms`, `$48.2k`, `1,204` and `0.2%` are numbers. Empty cells, `NULL` and `-` do
+  not stop a column from counting as numbers.
+- A table does not wrap: `wrap=` defaults to `off`, so a long row is cut with `…`.
 - The rows are still code: the same font, line numbers and ranges. `range` counts the header as
-  line 1.
+  line 1 and does not count a removed rule.
 
 ### Line ranges
 

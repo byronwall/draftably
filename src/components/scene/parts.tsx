@@ -212,7 +212,9 @@ export function CodeBody(props: {
   );
   const bandInk = (line: number) => {
     const t = tokens()?.[line]?.line;
-    return t === 'added' || t === 'removed' ? colors()[t].ink : undefined;
+    if (t === 'added' || t === 'removed') return colors()[t].ink;
+    // A table's header line is muted; the rule under it does the separating.
+    return props.code.table && line === 0 ? muted() : undefined;
   };
   const muted = () => detailInk(props.look, props.swatch),
     mid = CODE_TYPE.lineHeight / 2,

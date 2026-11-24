@@ -881,7 +881,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
             lines: table && !read?.placeholder ? tableLines(lines) : lines,
             ...(table ? { table } : {}),
             ...(lang && !read?.placeholder ? { lang } : {}),
-            wrap: choice('wrap', 'on', ['on', 'off'] as const) === 'on',
+            wrap: choice('wrap', table ? 'off' : 'on', ['on', 'off'] as const) === 'on',
             numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',
             start: num('start', read?.start ?? 1, 0, 1_000_000),
             maxWidth: num('max-width', CODE_MAX_WIDTH, 120, 8000),

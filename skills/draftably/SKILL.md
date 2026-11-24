@@ -281,9 +281,9 @@ Options: the quoted label is an optional caption (a file name). `lang=sql|python
 colors tokens; `diff` adds green and red line bands. `numbers=on` adds line numbers and `start=`
 sets the first. The box fits the code up to `max-width=` (960, about 130 columns); longer lines
 wrap with ↩ (`wrap=off` cuts them with `…`) and `check` warns, so break long lines. Never add a
-`size` line to fit code. `table=on` draws a pasted table (a query result): line 1 is the header
-with a rule under it, cells split on two or more spaces, and number columns align right. Don't
-type a dashed rule under the header.
+`size` line to fit code. `table=on` draws a pasted table (a query result, Markdown or psql output):
+line 1 is the header with a rule under it, cells split on `|` or two or more spaces, and number
+columns align right. A typed rule under the header is removed, and `range` does not count it.
 
 Ranges:
 

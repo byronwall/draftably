@@ -151,12 +151,35 @@ describe('code tables', () => {
     expect(tableLines(['apples', 'kiwi'])).toEqual(['apples', 'kiwi']);
   });
 
-  it('draws a rule under the header line and nowhere else, with rows where they were', () => {
-    const plain = codeLayout(block(['a  b', '1  2', '3  4']), 'q', look),
-      laid = codeLayout(block(['a  b', '1  2', '3  4'], { table: true }), 'q', look);
+  it('reads Markdown and psql pastes, drops a typed rule and keeps its alignment marks', () => {
+    // `:---` holds a number column left; units and NULL still count as numbers.
+    expect(
+      tableLines([
+        '| id | ms | note |',
+        '|:---|---:|------|',
+        '| 7 | 12ms | ok |',
+        '| 10 | NULL | x |',
+      ]),
+    ).toEqual(['id    ms  note', '7   12ms  ok', '10  NULL  x']);
+    expect(tableLines([' id | plan', '----+------', '  1 | pro', '  2 | free'])).toEqual([
+      'id  plan',
+      ' 1  pro',
+      ' 2  free',
+    ]);
+    // The old workaround: dashes typed under the header.
+    expect(tableLines(['name   n', '-----  --', 'apple  10'])).toEqual(['name    n', 'apple  10']);
+  });
+
+  it('draws the rule in a gap under the header, clear of both rows', () => {
+    const lh = CODE_TYPE.lineHeight,
+      plain = codeLayout(block(['a  b', '1  2', '3  4']), 'q', look),
+      laid = codeLayout(block(['a  b', '1  2', '3  4'], { table: true }), 'q', look),
+      gap = laid.rows[1].y - laid.rows[0].y - lh;
     expect(plain.rule).toBeUndefined();
-    expect(laid.rule).toBe(laid.rows[0].y + CODE_TYPE.lineHeight);
-    expect(laid.rows).toEqual(plain.rows);
+    expect(gap).toBeGreaterThan(0);
+    expect(laid.rule).toBe(laid.rows[0].y + lh + gap / 2);
+    expect(laid.rows[2].y - laid.rows[1].y).toBe(lh);
+    expect(laid.h).toBe(plain.h + gap);
     // A box too short to show the header draws no rule.
     expect(codeLayout(block(['a', 'b'], { table: true }), 'q', look, { height: 20 }).rule).toBe(
       undefined,
