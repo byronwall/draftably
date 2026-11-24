@@ -1,19 +1,21 @@
 /**
  * How a code node draws its named ranges (`range sql.copy1 lines=3-6`): a band behind the lines,
- * a bar in the left margin and a label tag in the right margin. Every mark sits inside the box
- * and under the text, so a range never changes the node's size or the layout. The canvas and
+ * a bar in the left margin and a label tag in the label column on the right. Every mark sits
+ * inside the box. The label column belongs to `codeLayout`, so code never runs under a tag and
+ * every tag starts at the same x, whatever its text or the line beside it. The canvas and
  * `renderSvg` both draw from `rangeMarks`, so the viewer and every export agree.
  */
 import { ensureContrast, swatchFor, type ResolvedAppearance } from './appearance';
 import {
   CODE_TYPE,
+  TAG_PAD,
   codeLayout,
-  columnX,
+  tagText,
   type CodeBlock,
   type CodeLayout,
   type CodeRange,
 } from './code';
-import { measureText, truncateText } from './fonts';
+import { measureText } from './fonts';
 import type { Diagram, Rect } from './types';
 
 /** Opacity of a band, so overlapping bands blend into a deeper tint. */
@@ -23,11 +25,6 @@ const BAR = 3;
 const BAR_STEP = 4;
 /** Bars fit in the left padding: at most this many side by side. */
 const BAR_LANES = 3;
-/** The label tag's padding and its gap from the box's right edge. */
-const TAG_PAD = 4;
-const TAG_INSET = 6;
-/** Room a tag keeps from the code before it on its row. */
-const TAG_GAP = 12;
 
 /** The family a status draws in; a range without a change mark keeps its own color. */
 const STATUS_FAMILY: Record<string, string> = { added: 'green', changed: 'amber', removed: 'red' };
@@ -61,7 +58,6 @@ export function rangeMarks(
   code: CodeBlock,
   laid: CodeLayout,
   look: ResolvedAppearance,
-  w: number,
   fill: string,
 ): RangeMark[] {
   const ranges = code.ranges ?? [];
@@ -97,25 +93,20 @@ export function rangeMarks(
       ...(r.status === 'removed' ? { dash: '4 3' } : {}),
       opacity,
     };
-    if (r.label) {
-      const text = truncateText(r.label, Math.max(40, w / 2), tagType),
+    if (r.label && laid.tags) {
+      const text = tagText(r.label, laid, look),
         tw = measureText(text, tagType) + 2 * TAG_PAD,
         th = CODE_TYPE.lineHeight - 1,
-        x = w - TAG_INSET - tw,
-        rows = laid.rows
-          .map((row, i) => ({ row, i }))
-          .filter(({ row }) => row.line >= r.from && row.line <= r.to),
-        // The tag takes the range's first row the code leaves room on, so it covers nothing;
-        // a row another tag holds is skipped, so tags of overlapping ranges stack.
-        free = rows.filter(({ i }) => !usedRows.has(i)),
-        room =
-          free.find(({ row }) => columnX(laid, row.col + (row.to - row.from)) + TAG_GAP <= x) ??
-          free[0] ??
-          rows[0];
-      usedRows.add(room.i);
+        first = laid.rows.findIndex(row => row.line >= r.from),
+        // The tag takes the range's first row; a row another tag holds passes it to the next
+        // free row, so tags of ranges on the same or next-door lines stack instead of covering
+        // each other.
+        at = laid.rows.findIndex((_, i) => i >= first && !usedRows.has(i)),
+        row = at < 0 ? first : at;
+      usedRows.add(row);
       mark.tag = {
-        x,
-        y: room.row.y + 0.5,
+        x: laid.tags.x,
+        y: laid.rows[row].y + 0.5,
         w: tw,
         h: th,
         text,

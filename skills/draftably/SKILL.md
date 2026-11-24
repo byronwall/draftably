@@ -310,7 +310,8 @@ Ranges:
 - `lines=3-5` counts body lines from 1 (or `start=`). `match="regex" span=n` finds the first
   matching line and survives edits; write each backslash twice in the pattern.
 - `sql.scan1` works in `edge` (it meets the node's left or right side), `note near=` and `state`,
-  and takes change marks (`+range`). A range never moves anything.
+  and takes change marks (`+range`). A label adds a label column to the right of the code, so the
+  node grows by the widest label; keep labels short. A range without a label moves nothing.
 
 Read code from its file with `src=` instead of pasting a copy:
 
