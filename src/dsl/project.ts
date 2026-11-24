@@ -5,7 +5,7 @@
  */
 import { DEFAULT_SETTINGS, emptyDiagram } from '../model/document';
 import { clone } from '../model/geometry';
-import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
+import { timelineRoutes, frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
@@ -192,8 +192,13 @@ export function canonicalGeometry(doc: Diagram): CanonicalGeometry {
 export function measured(
   doc: Diagram,
   rects: Map<string, Rect>,
-  routes: Array<{ id: string; points: Array<{ x: number; y: number }> }>,
+  drawn: Array<{ id: string; points: Array<{ x: number; y: number }> }>,
 ): CanonicalGeometry {
+  // A timeline's own lines are drawn without the router; they belong to the geometry all the same.
+  const routes = [
+    ...drawn,
+    ...timelineRoutes(doc, rects).map(r => ({ id: r.id, points: r.points })),
+  ];
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId ?? 'root']),
   );

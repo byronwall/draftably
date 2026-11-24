@@ -40,9 +40,11 @@ export function drawingBounds(
   }
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
   for (const t of shownTimelines(doc)) {
-    // Only a timeline that is part of what is drawn: its group, or any of its rows.
-    if (!(vg.groups.some(g => g.id === t.scope) || vg.nodes.some(n => t.ids.includes(n.id))))
-      continue;
+    // A timeline's whole drawing counts when the whole timeline is drawn: its group, or every
+    // one of its rows (a root timeline, or a full export). A selection of some rows counts only
+    // those rows' own boxes, added above.
+    const drawn = new Set(vg.nodes.map(n => n.id));
+    if (!(vg.groups.some(g => g.id === t.scope) || t.ids.every(id => drawn.has(id)))) continue;
     const o = timelineOrigin(t, rects.get(t.scope));
     boxes.push({ ...t.bounds, x: o.x + t.bounds.x, y: o.y + t.bounds.y });
   }

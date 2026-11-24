@@ -273,19 +273,6 @@ export function translateEdit(input: EditInput): EditResult {
       removeWhere(source, s => s === declaration(source, o.id));
       removeReferences(source, o.id);
     }
-  // A timeline band whose last row was deleted goes with it: a band with no rows draws nothing,
-  // and the file would not compile with it.
-  for (const t of after.layout.timelines ?? [])
-    for (const g of after.graph.groups)
-      if (
-        (g.parentId ?? 'root') === t.scope &&
-        g.id !== t.scope &&
-        objectsOf(before).some(o => parentOf(before, o.id) === g.id) &&
-        !objectsOf(after).some(o => parentOf(after, o.id) === g.id)
-      ) {
-        removeWhere(source, x => x === declaration(source, sid(g.id)));
-        removeReferences(source, sid(g.id));
-      }
   const afterEdges = new Set(after.graph.edges.map(e => e.id));
   for (const e of before.graph.edges) if (!afterEdges.has(e.id)) removeEdge(source, e.id);
 

@@ -324,7 +324,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   }
 
   function alignSelection(kind: edits.AlignKind) {
-    const roots = selectionRoots(s.doc, s.selection()).filter(id => !onTimeline(s.doc, id));
+    const roots = selectionRoots(s.doc, s.selection());
     if (roots.length < 2) {
       toast('Select two or more objects.');
       return;
@@ -333,8 +333,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   }
 
   function nudgeSelection(dx: number, dy: number) {
-    // Timeline rows and bands sit where their dates put them; their timeline group moves them.
-    const roots = selectionRoots(s.doc, s.selection()).filter(id => !onTimeline(s.doc, id));
+    const roots = selectionRoots(s.doc, s.selection());
     if (roots.length) s.transact('Nudge', d => edits.nudge(d, roots, dx, dy));
     return roots.length > 0;
   }

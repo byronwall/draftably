@@ -173,3 +173,49 @@ export function removeEdge(doc: SourceDoc, id: string) {
 
 export const num = (n: number) => bare(String(Math.round(n)));
 export { bare, quoted };
+
+/** Commands that place or size an object by hand. */
+const HAND_PLACED = new Set(['near', 'nudge', 'stay', 'pin', 'size', 'align']);
+
+/**
+ * The file side of the timeline rule (`holdTimelines` in model/graph.ts): a timeline places its
+ * rows, bands and milestones by date, so no position or size line may name one. Every editor and
+ * CLI edit passes through this before its source is checked, whichever writer added the line.
+ * Also removes a band an edit left with no rows, which a timeline cannot draw.
+ */
+export function settleTimelines(doc: SourceDoc) {
+  const timelines = new Set(
+    statements(doc)
+      .filter(s => s.command === 'layout' && s.args[1]?.value === 'timeline')
+      .map(s => s.args[0]?.value),
+  );
+  if (!timelines.size) return;
+  const parentOf = new Map(
+    statements(doc)
+      .filter(s => ['node', 'group', 'milestone'].includes(s.command))
+      .map(s => [s.args[0]?.value, s.attrs.find(([k]) => k === 'in')?.[1].value ?? 'root']),
+  );
+  const bands = new Set(
+    [...parentOf].filter(([id, p]) => timelines.has(p) && groupIds(doc).has(id)).map(([id]) => id),
+  );
+  const member = (id: string | undefined) =>
+    !!id &&
+    (timelines.has(parentOf.get(id) ?? '') || bands.has(parentOf.get(id) ?? '') || bands.has(id));
+  removeWhere(doc, s => {
+    if (!HAND_PLACED.has(s.command)) return false;
+    const ids = s.command === 'align' ? s.args.map(a => a.value) : [s.args[0]?.value];
+    return ids.some(member);
+  });
+  for (const band of bands)
+    if (![...parentOf.values()].includes(band)) {
+      removeWhere(doc, s => s === declaration(doc, band));
+      removeReferences(doc, band);
+    }
+}
+
+const groupIds = (doc: SourceDoc) =>
+  new Set(
+    statements(doc)
+      .filter(s => s.command === 'group')
+      .map(s => s.args[0]?.value),
+  );

@@ -9,6 +9,13 @@ import type { GanttSnapshot, TimelineSnapshot } from './mermaid-facade';
 
 const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
+/** Mermaid breaks a line at <br>; a row name or band title is one line, so a break is a space. */
+const oneLine = (text: string) =>
+  text
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 export function mapMermaidGantt(
   snapshot: GanttSnapshot,
   _plainText: (value: string) => string,
@@ -157,7 +164,7 @@ export function mapMermaidTimeline(
     if (!band.has(name)) {
       const id = ids.get('section', name, 'section_' + (band.size + 1));
       band.set(name, id);
-      plan.objects.push({ id, kind: 'group', label: name });
+      plan.objects.push({ id, kind: 'group', label: oneLine(name) });
     }
     return band.get(name);
   };
@@ -173,11 +180,7 @@ export function mapMermaidTimeline(
           `event_${i + 1}${events.length > 1 ? '_' + (j + 1) : ''}`,
         ),
         kind: 'node',
-        // Mermaid breaks a line at <br>; a row name is one line, so the break becomes a space.
-        label: event
-          .replace(/<br\s*\/?>/gi, ' ')
-          .replace(/\s+/g, ' ')
-          .trim(),
+        label: oneLine(event),
         ...(parent ? { parent } : {}),
         attrs: [['at', at]],
       }),

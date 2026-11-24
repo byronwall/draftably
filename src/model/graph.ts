@@ -11,6 +11,7 @@ import type {
 } from './types';
 import { resolveAppearance } from './appearance';
 import { DEFAULT_STYLE } from './styles';
+import { timelineOrigin } from './timeline';
 
 export const findNode = (doc: Diagram, id: string | null | undefined): DiagramNode | undefined =>
   id ? doc.graph.nodes.find(n => n.id === id) : undefined;
@@ -166,3 +167,82 @@ export function frameRect(doc: Diagram, geometry: GeometryLookup, id: string): N
 
 export const objectRect = (doc: Diagram, geometry: GeometryLookup, id: string): Rect =>
   isGroup(doc, id) ? frameRect(doc, geometry, id) : geometry(id);
+
+/**
+ * The one rule every edit passes through (`commit` in state/session/document.ts): a timeline places
+ * its rows, bands and milestones by date, so an edit never moves, sizes or reparents them on its
+ * own. Each keeps its place from `before`, shifted only by its timeline group's own move. An edit
+ * that adds an object inside a timeline or a band is refused, because a new row needs dates the
+ * editor cannot give; the returned message says so. Mutates `after`.
+ */
+export function holdTimelines(before: Diagram, after: Diagram): string | undefined {
+  const timelines = before.layout.timelines ?? [];
+  if (!timelines.length) return undefined;
+  const existed = new Set([...before.graph.nodes, ...before.graph.groups].map(o => o.id));
+  const bandsOf = (scope: string) =>
+    before.graph.groups
+      .filter(g => (g.parentId ?? 'root') === scope && g.id !== scope)
+      .map(g => g.id);
+  for (const o of [...after.graph.nodes, ...after.graph.groups]) {
+    if (existed.has(o.id)) continue;
+    const parent = o.parentId ?? 'root';
+    if (timelines.some(t => t.scope === parent || bandsOf(t.scope).includes(parent)))
+      return 'Timelines place rows by their dates. Add a row as a dated line in the source.';
+  }
+  const exists = new Set([...after.graph.nodes, ...after.graph.groups].map(o => o.id));
+  for (const t of timelines) {
+    // Removing a timeline group but not its rows would leave dated rows outside any timeline.
+    if (t.scope !== 'root' && !exists.has(t.scope) && t.ids.some(id => exists.has(id)))
+      return "A timeline's rows need their timeline. Delete the timeline with its rows, or remove its layout line in the source.";
+  }
+  for (const t of timelines) {
+    const was = t.scope === 'root' ? undefined : before.layout.nodes[t.scope],
+      now = t.scope === 'root' ? undefined : after.layout.nodes[t.scope];
+    if (t.scope !== 'root' && (!was || !now)) continue;
+    const dx = was && now ? now.x - was.x : 0,
+      dy = was && now ? now.y - was.y : 0;
+    for (const id of [...t.ids, ...bandsOf(t.scope)]) {
+      const r = before.layout.nodes[id],
+        n = after.layout.nodes[id];
+      if (!r || !n) continue;
+      after.layout.nodes[id] = { ...n, x: r.x + dx, y: r.y + dy, w: r.w, h: r.h };
+      // A row stays in its band: an edit cannot move it to another container.
+      const prior = [...before.graph.nodes, ...before.graph.groups].find(o => o.id === id),
+        next = [...after.graph.nodes, ...after.graph.groups].find(o => o.id === id);
+      // (A band that was removed lets its rows move up into the timeline itself.)
+      if (
+        prior &&
+        next &&
+        next.parentId !== prior.parentId &&
+        (!prior.parentId || exists.has(prior.parentId))
+      )
+        next.parentId = prior.parentId;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Every line a timeline draws between its rows, in world coordinates: the one source that public
+ * geometry, `inspect`, metrics and exports read, since these lines never reach the router.
+ */
+export function timelineRoutes(doc: Diagram, rects: ReadonlyMap<string, Rect>) {
+  return shownTimelines(doc).flatMap(t => {
+    const o = timelineOrigin(t, rects.get(t.scope));
+    return Object.entries(t.links ?? {}).flatMap(([id, link]) =>
+      Array.isArray(link?.points) && link.points.length >= 2
+        ? [
+            {
+              id,
+              from: link.from,
+              to: link.to,
+              points: link.points.map(p => ({ x: p.x + o.x, y: p.y + o.y })),
+              ...(link.label
+                ? { label: { ...link.label, x: link.label.x + o.x, y: link.label.y + o.y } }
+                : {}),
+            },
+          ]
+        : [],
+    );
+  });
+}

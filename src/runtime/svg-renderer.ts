@@ -421,13 +421,23 @@ function sceneMarkup(
       timelineSvg(
         look,
         t,
-        t.ids.flatMap(id => {
+        // Bands first, rows over them: a click on a row reaches the row, elsewhere the band.
+        [
+          ...doc.graph.groups
+            .filter(g => (g.parentId ?? 'root') === t.scope && g.id !== t.scope)
+            .map(g => g.id),
+          ...t.ids,
+        ].flatMap(id => {
           const r = rects.get(id);
           return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - o.x, y: r.y - o.y } }] : [];
         }),
-        // A row with href= links from its whole row, as a box links from its whole shape.
+        // A row or band with href= links from its whole area, as a box links from its shape.
         (id, markup) =>
-          linked(doc.graph.nodes.find(n => n.id === id)?.href, [markup], opts).join(''),
+          linked(
+            [...doc.graph.nodes, ...doc.graph.groups].find(n => n.id === id)?.href,
+            [markup],
+            opts,
+          ).join(''),
         // A timeline in a group draws on the group's fill, so its marks measure against that.
         t.scope === 'root' ? look.canvas : drawnSwatch(doc, look, t.scope, 'group').fill,
       ),

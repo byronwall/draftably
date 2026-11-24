@@ -9,7 +9,7 @@ import {
 } from '../../engines/layout-engine';
 import { normalize } from '../../model/document';
 import { clamp, clone } from '../../model/geometry';
-import { findGroup, selectionRoots } from '../../model/graph';
+import { findGroup, holdTimelines, selectionRoots } from '../../model/graph';
 import { layoutShape, type LayoutShape, type ShapeChange } from '../../dsl/layout-edits';
 import type { Diagram, LayoutAlgorithmId, NodeGeometry, RoutingSettings } from '../../model/types';
 import { CancelledError, startEngineTask, type RunningTask } from '../../lib/engine-tasks';
@@ -147,11 +147,6 @@ export function createLayout(s: DocumentPart & FileSessionPart & EditorPart & Sc
       toast(LANES_HOLD);
       return { status: 'cancelled' };
     }
-    // Without a file to recompile, an engine would move rows away from the dates that place them.
-    if (!s.fileMode() && s.doc.layout.timelines?.length) {
-      toast('Timelines place each row by its dates. Open the diagram file to arrange around one.');
-      return { status: 'cancelled' };
-    }
     s.prepareForEdit();
     const before = s.snapshot(),
       startRevision = s.revision(),
@@ -179,8 +174,11 @@ export function createLayout(s: DocumentPart & FileSessionPart & EditorPart & Sc
       result.report.thread = running.thread();
       if (job !== thisJob || s.revision() !== startRevision) return { status: 'cancelled' };
       const old = clone(s.doc.layout.nodes);
+      // An engine moves boxes freely; a timeline's members keep their dated places, as in a commit.
+      const next = normalize(result.document);
+      holdTimelines(JSON.parse(before), next);
       batch(() => {
-        s.restoreDocument(normalize(result.document));
+        s.restoreDocument(next);
         state.setReport(result.report);
         s.resetRoutes();
       });

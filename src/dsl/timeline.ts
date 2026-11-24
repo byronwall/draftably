@@ -13,7 +13,7 @@ import {
   type TimelinePlan,
 } from '../model/timeline';
 import type { Rect } from '../model/types';
-import type { ModelEdge, ModelObject, Word } from './syntax';
+import type { Model, ModelEdge, ModelObject, Word } from './syntax';
 
 /** A node's place in time. Days count from 1970-01-01 (UTC). */
 export interface TimelineWhen {
@@ -1212,4 +1212,27 @@ export function durationText(days: number) {
 
 function formatTimes(n: number) {
   return `${n >= 10 ? Math.round(n) : n.toFixed(1).replace(/\.0$/, '')}×`;
+}
+
+/**
+ * The lines a timeline draws on its chart: both ends rows of one timeline, not a line to itself.
+ * Read from the model alone, so layout, routing and drawing all agree on the same set.
+ */
+export function onChartEdges(m: Pick<Model, 'objects' | 'edges' | 'layouts'>): Set<string> {
+  const scopes = new Set(m.layouts.filter(l => l.algorithm === 'timeline').map(l => l.scope));
+  if (!scopes.size) return new Set();
+  const by = new Map(m.objects.map(o => [o.id, o]));
+  const timelineOf = (id: string) => {
+    const o = by.get(id);
+    if (!o || o.type !== 'node' || o.when?.milestone) return undefined;
+    if (scopes.has(o.parent)) return o.parent;
+    const band = by.get(o.parent);
+    return band && scopes.has(band.parent) ? band.parent : undefined;
+  };
+  return new Set(
+    m.edges
+      .filter(e => e.source !== e.target && timelineOf(e.source) !== undefined)
+      .filter(e => timelineOf(e.source) === timelineOf(e.target))
+      .map(e => e.id),
+  );
 }

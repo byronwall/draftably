@@ -3,7 +3,7 @@
  * built from the boxes and routes a drawing uses. `renderSvg`, the viewer, the editor and the graph
  * API all build it here, so their numbers agree.
  */
-import { shownTimelines } from '../model/graph';
+import { shownTimelines, timelineRoutes } from '../model/graph';
 import { timelineOrigin } from '../model/timeline';
 import type { Box, EdgeOut, PlacedBox } from '../graph-api/core';
 import type { Diagram, Point, Rect, Side } from '../model/types';
@@ -103,33 +103,21 @@ export function placedItems(
       ]),
     );
   // Lines a timeline draws between its rows never reach the router; report them as drawn.
-  for (const t of shownTimelines(doc)) {
-    const o = timelineOrigin(t, rects.get(t.scope));
-    for (const [id, link] of Object.entries(t.links ?? {})) {
-      if (!Array.isArray(link?.points) || link.points.length < 2) continue;
-      const points = link.points.map(p => ({ x: p.x + o.x, y: p.y + o.y })),
-        [a, b] = [points[0], points[1]],
-        last = points[points.length - 1],
-        prev = points[points.length - 2];
-      const vertical = (from: Point, to: Point): Side => (to.y > from.y ? 'bottom' : 'top');
-      (edges as Record<string, EdgeOut>)[edgeId(id)] = {
-        source: objectId(link.from),
-        target: objectId(link.to),
-        sourceSide: vertical(a, b),
-        targetSide: prev.y === last.y ? (last.x > prev.x ? 'left' : 'right') : vertical(last, prev),
-        points,
-        path: points.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(''),
-        label: link.label
-          ? {
-              x: link.label.x + o.x,
-              y: link.label.y + o.y,
-              width: link.label.w,
-              height: link.label.h,
-            }
-          : null,
-        blocked: false,
-      };
-    }
+  for (const r of timelineRoutes(doc, rects)) {
+    const [a, b] = r.points,
+      last = r.points[r.points.length - 1],
+      prev = r.points[r.points.length - 2];
+    const vertical = (from: Point, to: Point): Side => (to.y > from.y ? 'bottom' : 'top');
+    (edges as Record<string, EdgeOut>)[edgeId(r.id)] = {
+      source: objectId(r.from),
+      target: objectId(r.to),
+      sourceSide: vertical(a, b),
+      targetSide: prev.y === last.y ? (last.x > prev.x ? 'left' : 'right') : vertical(last, prev),
+      points: r.points,
+      path: r.points.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(''),
+      label: r.label ? { x: r.label.x, y: r.label.y, width: r.label.w, height: r.label.h } : null,
+      blocked: false,
+    };
   }
   const all: Box[] = [
     ...Object.values(nodes),

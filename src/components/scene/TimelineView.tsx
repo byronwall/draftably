@@ -56,7 +56,9 @@ function TimelineView(props: {
         classList={{ 'timeline-row': kind === 'node', selected: props.selected?.(id) }}
         data-kind={kind}
         data-id={id}
-        data-href={kind === 'node' ? props.doc.graph.nodes.find(n => n.id === id)?.href : undefined}
+        data-href={
+          [...props.doc.graph.nodes, ...props.doc.graph.groups].find(n => n.id === id)?.href
+        }
         x={(r()?.x ?? 0) - pad}
         y={r()?.y ?? 0}
         width={(r()?.w ?? 0) + 2 * pad}

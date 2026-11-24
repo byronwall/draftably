@@ -30,7 +30,7 @@ import {
   wrapTitle,
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
-import { layoutTimeline } from './timeline';
+import { layoutTimeline, onChartEdges } from './timeline';
 import type { PlacedTimeline, TimelinePlan } from '../model/timeline';
 import { marginNoteRoom, marginNotes } from '../model/note';
 import { activationSpans, eventRows, labelSlot, laneCentres, type Hold } from './sequence-layout';
@@ -3042,7 +3042,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       // A line a timeline draws on its chart takes no routing channel.
       planChannels(
         plain.objects,
-        m.edges.filter(e => !(plain.timelines ?? []).some(t => t.edges.includes(e.id))),
+        m.edges.filter(e => !onChartEdges(m).has(e.id)),
         m.routing,
       ),
       area(plain.objects),
@@ -3060,12 +3060,16 @@ interface PackFold {
 const packFolds = new WeakMap<Scene, PackFold>();
 
 function layoutPass(
-  m: Model,
+  model: Model,
   arranged?: Map<string, Pos & Size>,
   slots = false,
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
+  // A line a timeline draws on its chart takes no part in ranking, placement or channels: layout
+  // runs on the other lines, and the scene keeps every line (`onChartEdges`).
+  const onChart = onChartEdges(model),
+    m = onChart.size ? { ...model, edges: model.edges.filter(e => !onChart.has(e.id)) } : model;
   /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
   const ordering = m.edges.filter(e => e.constraint !== false && e.directed !== false),
     // A dashed edge into a box that a solid edge already places is a side input, such as "same
@@ -3785,7 +3789,7 @@ function layoutPass(
    */
   function arrangeTimeline(scope: string, kids: ModelObject[], layout: ModelLayout) {
     const ids = new Set(kids.map(o => o.id)),
-      links = m.edges.filter(e => ids.has(e.source) && ids.has(e.target));
+      links = model.edges.filter(e => onChart.has(e.id) && ids.has(e.source) && ids.has(e.target));
     const { plan, rects, drawn } = layoutTimeline(
       kids,
       (m.dissolvedGroups ?? []).filter(g => g.parent === scope),
@@ -4030,11 +4034,11 @@ function layoutPass(
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);
   const scene: Scene = {
-    model: m,
+    model,
     title: m.title,
     objects,
     byId: new Map(objects.map(o => [o.id, o])),
-    edges: m.edges.map(e => {
+    edges: model.edges.map(e => {
       const lane = lanes.get(e.id),
         plan = lane ? undefined : plans.get(e.id);
       return lane ? { ...e, lane } : plan ? { ...e, plan } : e;

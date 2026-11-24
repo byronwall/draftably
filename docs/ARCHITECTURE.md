@@ -215,6 +215,18 @@ Groups and the opinionated root layouts follow a few rules:
   A line between two rows is drawn by the timeline and leaves `visibleGraph`, so no router sees
   it. Colors stay semantic in the marks and resolve at draw time against the backdrop (the page
   or the group's fill), with contrast floors that `tests/timeline-colors.test.ts` holds.
+- **One rule holds a timeline's members.** A timeline places its rows, bands and milestones by
+  date, so no edit may move, size or reparent them. This is enforced in two places only, never
+  per tool: `holdTimelines` (`model/graph.ts`) runs in `commit` and on layout previews, putting
+  every member back where the timeline placed it, shifted only by the timeline group's own move,
+  and refusing a new object inside a timeline. `settleTimelines` (`dsl/source-edits.ts`) runs on
+  every editor and CLI edit before its source is checked, dropping any position or size line that
+  names a member and any band left empty. `tests/timeline-edits.test.ts` runs every model edit
+  against timeline examples through both and fails on any source that no longer compiles.
+- **One definition of a timeline's own lines.** `onChartEdges` (`dsl/timeline.ts`) names the lines
+  a timeline draws itself: both ends rows of one timeline. Layout runs without them, the router
+  never sees them (`visibleGraph`), and `timelineRoutes` (`model/graph.ts`) gives their drawn
+  points to public geometry, `inspect` and the metrics.
 - **Lanes and sequence are root recipes, not engines.** `layout root lanes` (`swimLanes`) ranks
   every leaf across the whole drawing, so one rank is one column across every lane. Every node
   must sit in a top-level group. `layout root sequence` (`sequenced`) puts participants in file

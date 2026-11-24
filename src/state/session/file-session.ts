@@ -28,6 +28,7 @@ import {
   translateEdit,
   UnsupportedEdit,
 } from '../../dsl/translate';
+import { settleTimelines } from '../../dsl/source-edits';
 import {
   setLayoutRecipe,
   setLayoutShape,
@@ -593,6 +594,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       if (error instanceof UnsupportedEdit) return snapBack(error.message);
       throw error;
     }
+    // Whatever wrote it, the source keeps the timeline rule before it is checked and saved.
+    settleTimelines(result.source);
     const next = printSource(result.source);
     // Nothing the file stores changed (for example a move of an object that was not selected).
     if (next === localSource) return snapBack('That change is not saved to diagram files.');
