@@ -834,6 +834,7 @@ export function timelineMarkup(doc: Diagram, look: ResolvedAppearance) {
   if (!chart) return '';
   const colors = {
     ink: look.text,
+    'shade-ink': look.group.ink,
     muted: look.muted,
     accent: swatchFor(look, 'blue', 600).stroke,
     release: swatchFor(look, 'amber', 600).stroke,

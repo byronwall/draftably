@@ -1,6 +1,7 @@
 import type { Rect } from '../model/types';
 
-export type Tone = 'ink' | 'muted' | 'grid' | 'accent' | 'release' | 'shade' | 'paper';
+export type Tone =
+  'ink' | 'shade-ink' | 'muted' | 'grid' | 'accent' | 'release' | 'shade' | 'paper';
 interface MarkBase {
   x: number;
   y: number;

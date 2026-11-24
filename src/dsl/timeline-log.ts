@@ -1,4 +1,4 @@
-import { typeProfile, wrapLines, truncateText, type FontRole } from '../model/fonts';
+import { typeProfile, wrapLines, measureText, type FontRole } from '../model/fonts';
 import type { TimelineRow, TimelineOptions } from './timeline';
 import type { TimelineMark, TimelinePlan } from './timeline-plan';
 
@@ -87,6 +87,10 @@ function kindTone(event: LogEvent): TimelineMark['tone'] {
   return 'muted';
 }
 
+function kindTextTone(event: LogEvent): TimelineMark['tone'] {
+  return event.row.milestone ? 'shade-ink' : 'ink';
+}
+
 function addBox(
   boxes: TimelinePlan['boxes'],
   id: string,
@@ -106,6 +110,20 @@ function text(
   marks.push({ kind: 'text', text: textValue, x, y, ...options });
 }
 
+function truncateLabel(value: string, width: number, profile: ReturnType<typeof typeProfile>) {
+  if (measureText(value, profile) <= width) return value;
+  const ellipsisWidth = measureText('…', profile);
+  let label = '';
+  let used = 0;
+  for (const char of value) {
+    const charWidth = measureText(char, profile);
+    if (used + charWidth + ellipsisWidth > width) break;
+    label += char;
+    used += charWidth;
+  }
+  return label.trimEnd() + '…';
+}
+
 function drawCard(
   marks: TimelineMark[],
   boxes: TimelinePlan['boxes'],
@@ -115,6 +133,7 @@ function drawCard(
   y: number,
 ) {
   const titleLines = wrapLines(event.row.label, CARD_W - 22, typeProfile(role, true, 12, 14));
+  const cardTextTone = event.row.milestone ? 'shade-ink' : 'ink';
   const details = [
     event.uncertain && event.kind === 'start' ? 'Exact start unknown · began before this date' : '',
     event.row.band,
@@ -153,7 +172,7 @@ function drawCard(
   text(marks, kindLabel(event), x + 22, y + 16, {
     size: 9,
     weight: 700,
-    tone: 'ink',
+    tone: kindTextTone(event),
     id,
     title: kindLabel(event),
   });
@@ -162,7 +181,7 @@ function drawCard(
     text(marks, line, x + 11, lineY, {
       size: 12,
       weight: 600,
-      tone: 'ink',
+      tone: cardTextTone,
       id,
       title: event.row.label,
     });
@@ -171,7 +190,7 @@ function drawCard(
   for (const line of detailLines) {
     text(marks, line, x + 11, lineY, {
       size: 9,
-      tone: 'muted',
+      tone: event.row.milestone ? 'shade-ink' : 'muted',
       id,
       title: event.row.label,
     });
@@ -215,7 +234,7 @@ function drawSnapshot(
     `TODAY · ${formatDate(today, { month: 'short', day: 'numeric', year: 'numeric' })}`,
     x + 12,
     top + 17,
-    { size: 10, weight: 750, tone: 'ink' },
+    { size: 10, weight: 750, tone: 'shade-ink' },
   );
   text(
     marks,
@@ -224,7 +243,7 @@ function drawSnapshot(
       : `${confirmed} ${confirmed === 1 ? 'span overlaps' : 'spans overlap'} this date`,
     x + 12,
     top + 31,
-    { size: 9, tone: 'muted' },
+    { size: 9, tone: 'shade-ink' },
   );
   current.forEach(({ row, status }, i) => {
     const col = i % columns;
@@ -232,17 +251,17 @@ function drawSnapshot(
     const itemX = x + 256 + col * 232;
     const itemY = top + 17 + line * 17;
     const profile = typeProfile(role, true, 10, 12);
-    const label = truncateText(row.label, 142, profile);
+    const label = truncateLabel(row.label, 142, profile);
     text(marks, label, itemX, itemY, {
       size: 10,
       weight: 600,
-      tone: 'ink',
+      tone: 'shade-ink',
       id: row.id,
       title: row.label,
     });
     text(marks, status, itemX + 150, itemY, {
       size: 9,
-      tone: 'ink',
+      tone: 'shade-ink',
       id: row.id,
       title: `${row.label}: ${status}`,
     });
@@ -332,7 +351,7 @@ export function logPlan(
       }),
       LEFT,
       dateY + 12,
-      { size: 10, weight: 650, tone: group.today ? 'accent' : 'ink' },
+      { size: 10, weight: 650, tone: 'ink' },
     );
     marks.push({
       kind: 'dot',

@@ -97,7 +97,11 @@ describe('ordinal timeline log', () => {
   });
 
   it('uses readable ink for the snapshot date and event-kind labels in Blueprint', () => {
-    const look = resolveAppearance({ theme: 'blueprint', overrides: {}, colors: [] });
+    const look = resolveAppearance({
+      theme: 'blueprint',
+      overrides: { canvas: '#FFFFFF' },
+      colors: [],
+    });
     const rows = [
       row({ id: 'event', label: 'Invoice observation', at: '2028-04-10' }),
       row({ id: 'start', label: 'Code change', from: '2028-04-01', to: 'open' }),
@@ -105,22 +109,17 @@ describe('ordinal timeline log', () => {
     ];
     const plan = logPlan(rows, { today: '2028-04-10' }, look.annotation.role);
     const labels = plan.marks.filter(mark => mark.kind === 'text');
-    const checked = labels.filter(
-      mark =>
-        mark.kind === 'text' &&
-        (mark.text.startsWith('TODAY ·') ||
-          mark.text === 'TODAY' ||
-          ['Event', 'Starts', 'Milestone'].includes(mark.text)),
-    );
+    const toneFor = (value: string) =>
+      labels.find(mark => mark.kind === 'text' && mark.text === value)?.tone;
 
-    expect(checked.map(mark => mark.kind === 'text' && mark.tone)).toEqual([
-      'ink',
-      'ink',
-      'ink',
-      'ink',
-      'ink',
-    ]);
-    expect(contrast(look.text, look.group.fill)).toBeGreaterThanOrEqual(4.5);
+    expect(toneFor('TODAY · Apr 10, 2028')).toBe('shade-ink');
+    expect(toneFor('TODAY')).toBe('ink');
+    expect(toneFor('Apr 10, 2028')).toBe('ink');
+    expect(toneFor('Event')).toBe('ink');
+    expect(toneFor('Starts')).toBe('ink');
+    expect(toneFor('Milestone')).toBe('shade-ink');
+    expect(toneFor('Release 2.4')).toBe('shade-ink');
+    expect(contrast(look.group.ink, look.group.fill)).toBeGreaterThanOrEqual(4.5);
     expect(contrast(look.text, look.canvas)).toBeGreaterThanOrEqual(4.5);
   });
 
@@ -140,5 +139,26 @@ describe('ordinal timeline log', () => {
     );
 
     expect(snapshotLabel).toMatchObject({ kind: 'text', text: label, title: label });
+  });
+
+  it('truncates a very long snapshot label in one bounded scan', () => {
+    const look = resolveAppearance({ theme: 'signal', overrides: {}, colors: [] });
+    const label = 'Data '.repeat(4_000);
+    const plan = logPlan(
+      [row({ id: 'large', label, from: '2028-04-01', to: 'open' })],
+      { today: '2028-04-10' },
+      look.annotation.role,
+    );
+    const snapshotLabel = plan.marks.find(
+      mark => mark.kind === 'text' && mark.id === 'large' && mark.y === 83,
+    );
+
+    expect(snapshotLabel?.kind).toBe('text');
+    if (snapshotLabel?.kind === 'text') {
+      expect(snapshotLabel.text.endsWith('…')).toBe(true);
+      expect(
+        measureText(snapshotLabel.text, typeProfile(look.annotation.role, true, 10, 12)),
+      ).toBeLessThanOrEqual(142);
+    }
   });
 });
