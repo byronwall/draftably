@@ -1,4 +1,4 @@
-import { typeProfile, wrapLines, truncateText } from '../model/fonts';
+import { typeProfile, wrapLines, measureText, type FontRole } from '../model/fonts';
 import type { TimelineRow, TimelineOptions } from './timeline';
 import type { TimelineMark, TimelinePlan } from './timeline-plan';
 
@@ -110,10 +110,11 @@ function drawCard(
   marks: TimelineMark[],
   boxes: TimelinePlan['boxes'],
   event: LogEvent,
+  role: FontRole,
   x: number,
   y: number,
 ) {
-  const titleLines = wrapLines(event.row.label, CARD_W - 22, typeProfile('sans', true, 12, 14));
+  const titleLines = wrapLines(event.row.label, CARD_W - 22, typeProfile(role, true, 12, 14));
   const details = [
     event.uncertain && event.kind === 'start' ? 'Exact start unknown · began before this date' : '',
     event.row.band,
@@ -123,7 +124,7 @@ function drawCard(
     event.row.fixedBy ? `Fixed by ${event.row.fixedBy}` : '',
   ].filter(Boolean);
   const detailLines = details.flatMap(value =>
-    wrapLines(value, CARD_W - 22, typeProfile('sans', false, 9, 12)),
+    wrapLines(value, CARD_W - 22, typeProfile(role, false, 9, 12)),
   );
   const height = 30 + titleLines.length * 14 + detailLines.length * 12;
   const id = event.row.id;
@@ -185,6 +186,7 @@ function drawSnapshot(
   boxes: TimelinePlan['boxes'],
   rows: TimelineRow[],
   today: string,
+  role: FontRole,
   top: number,
 ) {
   const current = rows.flatMap(row => {
@@ -229,7 +231,18 @@ function drawSnapshot(
     const line = Math.floor(i / columns);
     const itemX = x + 256 + col * 232;
     const itemY = top + 17 + line * 17;
-    const label = truncateText(row.label, 142, typeProfile('sans', true, 10, 12));
+    const profile = typeProfile(role, true, 10, 12);
+    let label = '',
+      used = 0;
+    const limit = 142 - measureText('…', profile);
+    for (const ch of row.label) {
+      used += measureText(ch, profile);
+      if (used > limit) {
+        label += '…';
+        break;
+      }
+      label += ch;
+    }
     text(marks, label, itemX, itemY, {
       size: 10,
       weight: 600,
@@ -239,7 +252,7 @@ function drawSnapshot(
     });
     text(marks, status, itemX + 150, itemY, {
       size: 9,
-      tone: status === 'Ends today' || status === 'Start unclear' ? 'release' : 'accent',
+      tone: 'ink',
       id: row.id,
       title: `${row.label}: ${status}`,
     });
@@ -248,7 +261,11 @@ function drawSnapshot(
   return height;
 }
 
-export function logPlan(rows: TimelineRow[], options: TimelineOptions): TimelinePlan {
+export function logPlan(
+  rows: TimelineRow[],
+  options: TimelineOptions,
+  role: FontRole = 'sans',
+): TimelinePlan {
   const marks: TimelineMark[] = [];
   const boxes: TimelinePlan['boxes'] = Object.create(null);
   text(marks, 'EVENT LOG', LEFT, 19, { size: 9, weight: 750, tone: 'muted' });
@@ -264,7 +281,7 @@ export function logPlan(rows: TimelineRow[], options: TimelineOptions): Timeline
 
   const snapshotTop = 66;
   const snapshotHeight = options.today
-    ? drawSnapshot(marks, boxes, rows, options.today, snapshotTop)
+    ? drawSnapshot(marks, boxes, rows, options.today, role, snapshotTop)
     : 0;
   const groups = groupRows(rows);
   if (options.today) {
@@ -349,7 +366,7 @@ export function logPlan(rows: TimelineRow[], options: TimelineOptions): Timeline
         const pair = group.events.slice(i, i + 2);
         const rowY = dateY + 20 + groupHeight;
         const heights = pair.map((event, col) =>
-          drawCard(marks, boxes, event, CONTENT + col * (CARD_W + CARD_GAP), rowY),
+          drawCard(marks, boxes, event, role, CONTENT + col * (CARD_W + CARD_GAP), rowY),
         );
         groupHeight += Math.max(...heights) + 8;
       }

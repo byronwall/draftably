@@ -48,7 +48,11 @@ export function calendarFor(doc: Diagram): PlacedTimeline | undefined {
       band: groups.get(n.parentId ?? '') ?? 'Diagram',
     });
   }
-  const plan = data.options.view === 'log' ? logPlan(rows, data.options) : focusPlan(rows, data.options, resolveAppearance(doc.appearance).annotation.face);
+  const annotation = resolveAppearance(doc.appearance).annotation;
+  const plan =
+    data.options.view === 'log'
+      ? logPlan(rows, data.options, annotation.role)
+      : focusPlan(rows, data.options, annotation.face);
   return { ...plan, x: data.x, y: data.bottom - plan.height };
 }
 export function validateCalendar(data: CalendarLayout) {

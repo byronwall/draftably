@@ -42,22 +42,24 @@ export function TimelineSurface(props: {
           {/* eslint-disable-next-line solid/no-innerhtml */}
           <g innerHTML={markup()} />
           <g transform={`translate(${c().x} ${c().y})`} pointer-events="none">
-            <For each={props.selected}>
-              {id => (
-                <Show when={c().boxes[id]}>
-                  {b => (
-                    <rect
-                      x={b().x}
-                      y={b().y}
-                      width={b().w}
-                      height={b().h}
-                      rx="4"
-                      stroke="var(--accent)"
-                      fill="none"
-                      stroke-width="2"
-                    />
-                  )}
-                </Show>
+            <For
+              each={(props.selected ?? []).flatMap(id => {
+                const box = c().boxes[id];
+                const cards = c().marks.flatMap(m => (m.kind === 'rect' && m.id === id ? [m] : []));
+                return box ? [box, ...cards.filter(r => r.x !== box.x || r.y !== box.y)] : cards;
+              })}
+            >
+              {b => (
+                <rect
+                  x={b.x}
+                  y={b.y}
+                  width={b.w}
+                  height={b.h}
+                  rx="4"
+                  stroke="var(--accent)"
+                  fill="none"
+                  stroke-width="2"
+                />
               )}
             </For>
           </g>
