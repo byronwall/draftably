@@ -382,7 +382,10 @@ export function layoutTimeline(
   const pad = (a: number, b: number) => Math.max(0.6, (b - a) * 0.015);
   const overview = bands.filter(b => !inWindow(b)),
     detail = bands.filter(inWindow);
-  if (overview.length || !detail.length) {
+  // The overview stays when a band or a milestone lies outside the zoom window, so every dated
+  // thing is drawn somewhere.
+  const outside = milestones.some(o => !zoom || o.when!.at! < zoom[0] || o.when!.at! > zoom[1]);
+  if (overview.length || !detail.length || outside) {
     const p = pad(lo, hi);
     panels.push({ bands: overview, d0: lo - p, d1: hi + p, detail: false });
   }
@@ -474,6 +477,10 @@ export function layoutTimeline(
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
       text(t.x, ty, t.o.label, 'text', 'caps', 'middle');
+      // A milestone's box is its tag, so it can be selected, and it is never smaller than the
+      // least box a document holds (24 by 20).
+      const bw = Math.max(24, t.w + 8);
+      rects.set(t.o.id, { x: t.x - bw / 2, y: ty - 10, w: bw, h: 20 });
     });
     under.push({ k: 'line', x1: chartX, y1: axisY, x2: chartR, y2: axisY, ink: 'rule', w: 1 });
     y = axisY + 10;
@@ -644,8 +651,6 @@ export function layoutTimeline(
       y += 14;
     }
     for (const t of tags) {
-      // A milestone has no row; its box is a point on the axis, so nothing overlaps it.
-      rects.set(t.o.id, { x: t.x, y: top - 1, w: 1, h: 1 });
       under.push({
         k: 'line',
         x1: t.x,

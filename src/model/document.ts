@@ -432,6 +432,8 @@ export function normalize(input: unknown): Diagram {
       typeof t?.scope === 'string' &&
       finite(t.x) &&
       finite(t.y) &&
+      finite(t.dx) &&
+      finite(t.dy) &&
       Array.isArray(t.ids) &&
       Array.isArray(t.edges) &&
       ['x', 'y', 'w', 'h'].every(k => finite(t.bounds?.[k])) &&

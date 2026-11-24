@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkSource, compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
+import { normalize } from '../src/model/document';
 import { renderSvg } from '../src/runtime/svg-renderer';
 
 const example = (name: string) =>
@@ -71,6 +72,15 @@ node s "S" from=2025-01-01 to=2025-01-11`);
     expect(svg).toContain('Query planner');
     // Rows are drawn by the timeline, never as boxes with centered titles.
     expect(svg).not.toMatch(/data-id="c2"[^>]*>\s*<rect class="shape"/);
+  });
+
+  it('commits as a valid document, so an edit saves and can be undone', () => {
+    // Every edit runs the document through normalize; a milestone's box must pass its size rules.
+    for (const name of ['bug-timeline', 'release-investigation']) {
+      const doc = projectScene(checkSource(example(name)));
+      expect(() => normalize(structuredClone(doc))).not.toThrow();
+      expect(normalize(structuredClone(doc)).layout.timelines).toHaveLength(1);
+    }
   });
 
   it('reports each date error on its own line', () => {

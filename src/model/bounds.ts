@@ -2,6 +2,7 @@
  * The area a drawing covers, shared by everything that frames one: the CLI SVG, workspace
  * thumbnails, SVG/PNG exports, comparison scenes and the viewer's fit-to-content.
  */
+import { timelineOrigin } from './timeline';
 import { rectUnion } from './geometry';
 import type { VisibleGraph } from './graph';
 import { visualBounds } from './labels';
@@ -38,8 +39,10 @@ export function drawingBounds(
     if (r) boxes.push(r);
   }
   if (doc.layout.sequence) boxes.push(doc.layout.sequence.panel);
-  for (const t of doc.layout.timelines ?? [])
-    boxes.push({ ...t.bounds, x: t.x + t.bounds.x, y: t.y + t.bounds.y });
+  for (const t of doc.layout.timelines ?? []) {
+    const o = timelineOrigin(t, rects.get(t.scope));
+    boxes.push({ ...t.bounds, x: o.x + t.bounds.x, y: o.y + t.bounds.y });
+  }
   for (const route of routes) {
     for (const p of route.points)
       boxes.push({ x: p.x - ROUTE_INK, y: p.y - ROUTE_INK, w: ROUTE_INK * 2, h: ROUTE_INK * 2 });

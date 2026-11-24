@@ -2,6 +2,7 @@ import { createMemo, For, Match, Switch } from 'solid-js';
 import type { ResolvedAppearance } from '../../model/appearance';
 import { resolveAppearance } from '../../model/appearance';
 import {
+  timelineOrigin,
   timelineColor,
   timelineFont,
   type PlacedTimeline,
@@ -33,6 +34,8 @@ function TimelineView(props: {
   selected?: (id: string) => boolean;
 }) {
   const look = createMemo(() => resolveAppearance(props.doc.appearance));
+  // The group's live box: while it is dragged, the marks move with its frame and rows.
+  const origin = () => timelineOrigin(props.t, props.rect(props.t.scope));
   const bands = () =>
     props.doc.graph.groups.filter(
       g => g.parentId === props.t.scope || (props.t.scope === 'root' && !g.parentId),
@@ -56,13 +59,13 @@ function TimelineView(props: {
   return (
     <g class="timeline">
       <For each={bands().filter(g => props.rect(g.id)?.w)}>{g => hit(g.id, 'group', 10)}</For>
-      <g pointer-events="none" transform={`translate(${props.t.x},${props.t.y})`}>
+      <g pointer-events="none" transform={`translate(${origin().x},${origin().y})`}>
         <For each={props.t.under}>{m => <Mark look={look()} m={m} />}</For>
       </g>
       <For each={props.t.ids.filter(id => (props.rect(id)?.w ?? 0) > 1)}>
         {id => hit(id, 'node', 6)}
       </For>
-      <g pointer-events="none" transform={`translate(${props.t.x},${props.t.y})`}>
+      <g pointer-events="none" transform={`translate(${origin().x},${origin().y})`}>
         <For each={props.t.over}>{m => <Mark look={look()} m={m} />}</For>
       </g>
     </g>

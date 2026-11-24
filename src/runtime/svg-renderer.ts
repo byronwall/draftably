@@ -19,7 +19,7 @@ import { noteMarkup, placeNotes } from '../model/note';
 import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
-import { timelineSvg } from '../model/timeline';
+import { timelineOrigin, timelineSvg } from '../model/timeline';
 import {
   CODE_ADVANCE,
   CODE_TYPE,
@@ -414,19 +414,21 @@ function sceneMarkup(
       ),
     );
   }
-  for (const t of timelines)
+  for (const t of timelines) {
+    const o = timelineOrigin(t, rects.get(t.scope));
     out.push(
-      `<g transform="translate(${t.x},${t.y})">`,
+      `<g transform="translate(${o.x},${o.y})">`,
       timelineSvg(
         look,
         t,
         t.ids.flatMap(id => {
           const r = rects.get(id);
-          return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - t.x, y: r.y - t.y } }] : [];
+          return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - o.x, y: r.y - o.y } }] : [];
         }),
       ),
       '</g>',
     );
+  }
   // Phases go over the groups' column bands, faint enough that both read where they cross.
   out.push(...backdrop.phases);
   // Sequence participants' lifelines, under the message lines.

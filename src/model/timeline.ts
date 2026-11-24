@@ -49,8 +49,12 @@ export type TimelineMark =
 export interface PlacedTimeline extends TimelinePlan {
   /** The group the timeline lays out, or `root`. */
   scope: string;
+  /** Where the plan's origin sits as compiled. */
   x: number;
   y: number;
+  /** The origin's offset from the scope group's box, so the marks follow the group when it moves. */
+  dx: number;
+  dy: number;
   /** Every node the timeline draws: its rows and milestones. */
   ids: string[];
   /** Lines between two of its rows, drawn as dependency arrows on the chart, not routed. */
@@ -121,6 +125,11 @@ export function timelineColor(look: ResolvedAppearance, ink: TimelineInk): strin
 
 const escText = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Where a timeline's marks sit now: beside its group's current box, or as compiled for root. */
+export function timelineOrigin(t: PlacedTimeline, scopeRect: Rect | undefined) {
+  return scopeRect ? { x: scopeRect.x + t.dx, y: scopeRect.y + t.dy } : { x: t.x, y: t.y };
+}
 
 /** One mark as SVG markup, for the string renderer. */
 export function markSvg(look: ResolvedAppearance, m: TimelineMark): string {
