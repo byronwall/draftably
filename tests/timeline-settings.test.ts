@@ -101,7 +101,17 @@ describe('timeline settings edits', () => {
       label: 'Review',
     };
     expect(validateTimelineDraft('a', base, '2025-01-10')).toBeUndefined();
+    expect(validateTimelineDraft('a', { ...base, end: base.start, steps: '' }, '2025-01-10')).toBe(
+      undefined,
+    );
     expect(validateTimelineDraft('a', { ...base, start: '' }, '2025-01-10')?.field).toBe('start');
+    expect(
+      validateTimelineDraft(
+        'a',
+        { ...base, start: 'not-a-date', steps: '2025-01-03' },
+        '2025-01-10',
+      )?.field,
+    ).toBe('start');
     expect(validateTimelineDraft('a', { ...base, steps: '2025-01-01' }, '2025-01-10')?.field).toBe(
       'steps',
     );
@@ -109,15 +119,44 @@ describe('timeline settings edits', () => {
       validateTimelineDraft('a', { ...base, steps: '2025-01-05, 2025-01-03' }, '2025-01-10')?.field,
     ).toBe('steps');
     expect(validateTimelineDraft('a', { ...base, end: '2025-01-04' }, '2025-01-10')?.field).toBe(
-      'end',
+      'steps',
     );
     expect(
       validateTimelineDraft('a', { ...base, open: true, steps: '2025-01-05' }, '2025-01-05')?.field,
-    ).toBe('snapshot');
+    ).toBe('steps');
     expect(validateTimelineDraft('a', { ...base, open: true }, undefined)?.field).toBe('snapshot');
     expect(validateTimelineDraft('a', { ...base, open: true }, '2025-02-29')?.field).toBe(
       'snapshot',
     );
+    expect(
+      validateTimelineDraft(
+        ':new',
+        { ...base, kind: 'undated', start: '', end: '', steps: '' },
+        undefined,
+      ),
+    ).toBeUndefined();
+    expect(
+      validateTimelineDraft(
+        ':new',
+        { ...base, label: '', start: '2025-01-08', end: '', steps: '' },
+        undefined,
+      )?.field,
+    ).toBe('label');
+    expect(
+      validateTimelineDraft(
+        ':new',
+        {
+          kind: 'point',
+          start: '',
+          end: '',
+          unknown: false,
+          open: false,
+          steps: '',
+          label: '',
+        },
+        undefined,
+      ),
+    ).toBeUndefined();
   });
 
   it('reports an incomplete new draft without writing any edits, then allows it to be discarded', () => {

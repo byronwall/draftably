@@ -1,5 +1,6 @@
-import { bare, quoted, type SourceDoc, type Statement } from './syntax';
+import { bare, quoted, type SourceDoc, type Statement, type Word } from './syntax';
 import { declaration, setAttr, statement, statements } from './source-edits';
+import { readTimelineDates, readTimelineOptions, validateSpan } from './timeline';
 
 export type TimelineDraft = {
   kind: string;
@@ -17,15 +18,6 @@ export type TimelineDraftIssue = {
   message: string;
 };
 
-function validDate(value: string) {
-  const ms = Date.parse(`${value}T00:00:00Z`);
-  return (
-    /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-    Number.isFinite(ms) &&
-    new Date(ms).toISOString().slice(0, 10) === value
-  );
-}
-
 export function validateTimelineDraft(
   id: string,
   draft: TimelineDraft,
@@ -36,37 +28,82 @@ export function validateTimelineDraft(
     field,
     message,
   });
-  if (id === ':new' && !draft.label.trim()) return;
-  if (id === ':new' && !draft.start)
-    return issue('start', 'Add a date for the new item, or discard it.');
+  const untouchedNew =
+    id === ':new' &&
+    draft.kind === 'point' &&
+    !draft.label.trim() &&
+    !draft.start &&
+    !draft.end &&
+    !draft.unknown &&
+    !draft.open &&
+    !draft.steps.trim();
+  if (untouchedNew) return;
+  if (id === ':new' && !draft.label.trim())
+    return issue('label', 'Add a name for the new item, or discard it.');
   if (draft.kind === 'undated') return;
   if (!draft.start) return issue('start', 'Add a date before applying this item.');
-  if (!validDate(draft.start)) return issue('start', 'Enter a valid date.');
-  if (draft.kind !== 'span') return;
+  if (draft.kind === 'span' && !draft.open && !draft.end)
+    return issue('end', 'Add an end date or mark this span open.');
 
-  const steps = draft.steps.trim() ? draft.steps.split(',').map(step => step.trim()) : [];
-  if (steps.some(step => !step || !validDate(step)))
-    return issue('steps', 'Enter each step as a valid YYYY-MM-DD date.');
-  let previous = draft.start;
-  for (const step of steps) {
-    if (step <= previous) return issue('steps', 'Steps must follow the start date in order.');
-    previous = step;
-  }
-
-  let end = draft.end;
-  if (draft.open) {
-    if (!today) return issue('snapshot', 'Set a snapshot date for an open span.');
-    if (!validDate(today)) return issue('snapshot', 'Enter a valid snapshot date.');
-    end = today;
-  } else {
-    if (!end) return issue('end', 'Add an end date or mark this span open.');
-    if (!validDate(end)) return issue('end', 'Enter a valid end date.');
-  }
-  if (end <= previous)
-    return issue(
-      draft.open ? 'snapshot' : 'end',
-      'The end date must follow the start and all steps.',
+  const fail = (message: string): never => {
+    throw new Error(message);
+  };
+  let options;
+  try {
+    options = readTimelineOptions(
+      new Map<string, Word>(today ? [['today', bare(today)]] : []),
+      fail,
     );
+  } catch {
+    return issue('snapshot', 'Enter a valid snapshot date.');
+  }
+
+  const attrs = new Map<string, Word>();
+  if (draft.kind === 'span') {
+    attrs.set('from', bare((draft.unknown ? '?' : '') + draft.start));
+    if (draft.open) attrs.set('to', bare('open'));
+    else attrs.set('to', bare(draft.end));
+    if (draft.steps.trim())
+      attrs.set(
+        'steps',
+        bare(
+          draft.steps
+            .split(',')
+            .map(date => date.trim())
+            .join(','),
+        ),
+      );
+  } else attrs.set('at', bare(draft.start));
+
+  let dates;
+  try {
+    dates = readTimelineDates(attrs, fail);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const invalidDate = message.match(/got (.*)\.$/)?.[1];
+    const stepValues = draft.steps.split(',').map(date => date.trim());
+    const field =
+      draft.kind === 'span' && invalidDate !== undefined && stepValues.includes(invalidDate)
+        ? 'steps'
+        : invalidDate === draft.start
+          ? 'start'
+          : 'end';
+    return issue(
+      field,
+      field === 'steps' ? 'Enter valid dates for each step.' : 'Enter a valid date.',
+    );
+  }
+  if (!dates) return;
+  try {
+    validateSpan(dates, options.today, fail);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (message.includes('open span needs'))
+      return issue('snapshot', 'Set a snapshot date for an open span.');
+    if (message.includes('Steps must'))
+      return issue('steps', 'Steps must increase inside the span.');
+    return issue(draft.open ? 'snapshot' : 'end', 'The span ends before it starts.');
+  }
 }
 
 /** Change the root recipe while retaining its direction, gap and sizing attributes. */

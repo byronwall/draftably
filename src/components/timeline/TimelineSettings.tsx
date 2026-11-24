@@ -160,7 +160,12 @@ export function TimelineSettings() {
           <Show when={id() === ':new'}>
             <label>
               Item name
-              <input required value={label()} onInput={e => setLabel(e.currentTarget.value)} />
+              <input
+                required
+                value={label()}
+                ref={el => (inputs.label = el)}
+                onInput={e => setLabel(e.currentTarget.value)}
+              />
             </label>
           </Show>
           <Show when={id()}>
