@@ -380,14 +380,17 @@ export function layoutTimeline(
   const inWindow = (b: Band) =>
     zoom !== undefined && b.rows.every(r => daysOf(r).every(d => d >= zoom[0] && d <= zoom[1]));
   const panels: Array<{ bands: Band[]; d0: number; d1: number; detail: boolean }> = [];
-  const lo = Math.min(...allDays),
-    hi = Math.max(...allDays);
+  // The overview covers the data and the zoom window, so the detail is never wider than it.
+  const lo = Math.min(...allDays, ...(options.zoom ?? [])),
+    hi = Math.max(...allDays, ...(options.zoom ?? []));
   const pad = (a: number, b: number) => Math.max(0.6, (b - a) * 0.015);
   const overview = bands.filter(b => !inWindow(b)),
     detail = bands.filter(inWindow);
   // The overview stays when a band or a milestone lies outside the zoom window, so every dated
   // thing is drawn somewhere.
-  const outside = milestones.some(o => !zoom || o.when!.at! < zoom[0] || o.when!.at! > zoom[1]);
+  const beyond = (day: number) => !zoom || day < zoom[0] || day > zoom[1];
+  const outside =
+    milestones.some(o => beyond(o.when!.at!)) || (today !== undefined && beyond(today));
   if (overview.length || !detail.length || outside) {
     const p = pad(lo, hi);
     panels.push({ bands: overview, d0: lo - p, d1: hi + p, detail: false });
@@ -468,14 +471,26 @@ export function layoutTimeline(
     const axisY = y + AXIS_ROW;
     const todayX = todayShown ? X(today!) : undefined;
     const todayW = w('Today', 'caps');
+    let printed = 0;
     for (const t of ticks) {
       const x = X(t.day),
         half = w(t.text, 'small') / 2;
       if (todayX !== undefined && Math.abs(x - todayX) < half + todayW / 2 + 8) continue;
       if (x - half < chartX - 6 || x + half > chartR + 30) continue;
       text(x, y + 8, t.text, t.major ? 'text' : 'muted', 'small', 'middle');
+      printed++;
     }
-    if (todayX !== undefined) text(todayX, y + 8, 'Today', 'text', 'caps', 'middle');
+    // An axis always names at least one date: Today's, or the first day it shows.
+    if (todayX !== undefined)
+      text(
+        todayX,
+        y + 8,
+        printed ? 'Today' : `Today · ${monthDay(dateOf(today!))}`,
+        'text',
+        'caps',
+        'middle',
+      );
+    else if (!printed) text(chartX, y + 8, fullDate(dateOf(Math.ceil(d0))), 'muted', 'small');
     for (const t of tags) right = Math.max(right, t.x + t.w / 2 + 4);
     tags.forEach((t, i) => {
       const ty = axisY - AXIS_ROW - (tagRail[i] + 1) * RAIL + 9;
@@ -549,8 +564,10 @@ export function layoutTimeline(
           const x = X(d.at);
           over.push({ k: 'dot', x, y: mid, r: 6, ink: strong });
           over.push({ k: 'dot', x, y: mid, r: 2.2, ink: 'canvas' });
-          if (d.startLabel)
+          if (d.startLabel) {
             text(x, mid - 14, d.startLabel, ink, 'small', 'middle', undefined, true);
+            right = Math.max(right, x + w(d.startLabel, 'small') / 2 + 4);
+          }
           if (d.endLabel) {
             text(x + 12, mid, d.endLabel, 'text', 'label', 'start', undefined, true);
             right = Math.max(right, x + 12 + w(d.endLabel, 'label'));
@@ -593,6 +610,7 @@ export function layoutTimeline(
           }
           if (open) over.push({ k: 'path', d: arrowHead(xe + 4, mid), ink: strong });
           else over.push({ k: 'dot', x: xe, y: mid, r: 5.2, ink: strong });
+          if (d.startLabel) right = Math.max(right, xs + w(d.startLabel, 'small') + 4);
           if (d.startLabel)
             text(
               xs + (d.fromUnknown ? 0 : -3),
@@ -697,7 +715,7 @@ export function layoutTimeline(
     const a = anchors.get(e.source),
       b = anchors.get(e.target);
     // Rows in different panels have no shared axis; the router draws that line instead.
-    if (!a || !b || a.panel !== b.panel) continue;
+    if (!a || !b || a.panel !== b.panel || e.source === e.target) continue;
     drawn.push(e.id);
     const down = b.y > a.y ? 1 : -1,
       into = b.point ? 8 : 6,
@@ -866,7 +884,10 @@ export function layoutTimeline(
 
   // Every row and band reaches the right edge, so a line to something outside the timeline
   // leaves past every bar and label.
-  for (const r of rects.values()) if (r.w > 1) r.w = Math.ceil(right + 4) - r.x;
+  for (const id of [...rows.map(r => r.o.id), ...bands.flatMap(b => (b.g ? [b.g.id] : []))]) {
+    const r = rects.get(id);
+    if (r) r.w = Math.ceil(right + 4) - r.x;
+  }
   return {
     plan: { bounds: { x: 0, y: 0, w: Math.ceil(right + 4), h: Math.ceil(y + 4) }, under, over },
     rects,

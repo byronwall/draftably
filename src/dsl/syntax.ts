@@ -1647,6 +1647,11 @@ function validateReferences(m: Model) {
         `${o.id} sits in a band of timeline ${scope}; a band holds rows, not groups.`,
         o.line,
       );
+      assert(
+        m.objects.some(x => x.parent === o.id),
+        `Band ${o.id} has no rows, so it has nothing to draw. Put a row in=${o.id} or remove the band.`,
+        o.line,
+      );
       continue;
     }
     if (!scope) {
@@ -1694,6 +1699,12 @@ function validateReferences(m: Model) {
       h.line,
     );
   }
+  if (timelines.size && m.appearance.compare)
+    assert(
+      false,
+      "A comparison can't show changes inside a timeline yet. Remove the compare line or the timeline.",
+      [...timelines.values()][0].line,
+    );
   const rootRecipe = m.layouts.find(l => l.scope === 'root')?.algorithm;
   if (timelines.size && (rootRecipe === 'lanes' || rootRecipe === 'sequence'))
     assert(

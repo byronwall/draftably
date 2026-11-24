@@ -24,6 +24,7 @@ import {
   isCollapsed,
   isEdge,
   isGroup,
+  onTimeline,
   selectionRoots,
 } from '../../model/graph';
 import { loadSample } from '../../model/samples';
@@ -309,7 +310,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   }
 
   function nudgeSelection(dx: number, dy: number) {
-    const roots = selectionRoots(s.doc, s.selection());
+    // Timeline rows and bands sit where their dates put them; their timeline group moves them.
+    const roots = selectionRoots(s.doc, s.selection()).filter(id => !onTimeline(s.doc, id));
     if (roots.length) s.transact('Nudge', d => edits.nudge(d, roots, dx, dy));
     return roots.length > 0;
   }
@@ -382,6 +384,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     id = selectionRoots(s.doc, s.selection()).find(id => isGroup(s.doc, id)),
   ) {
     if (!id || !isGroup(s.doc, id)) return;
+    // A band's rows are drawn by its timeline, so a band never collapses on its own.
+    if (onTimeline(s.doc, id)) return;
     const before = frameRect(s.doc, s.geometry, id);
     // A file never stores which containers are collapsed: there it is a view, like the camera,
     // and needs no translation, recompile or save.

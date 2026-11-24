@@ -31,7 +31,7 @@ export type TimelineMark =
       round?: boolean;
     }
   | { k: 'rect'; x: number; y: number; w: number; h: number; ink: TimelineInk; r?: number }
-  | { k: 'dot'; x: number; y: number; r: number; ink: TimelineInk; hollow?: boolean }
+  | { k: 'dot'; x: number; y: number; r: number; ink: TimelineInk }
   | { k: 'path'; d: string; ink: TimelineInk; stroke?: number }
   | {
       k: 'text';
@@ -153,7 +153,7 @@ export function validMark(m: unknown): m is TimelineMark {
     case 'rect':
       return ['x', 'y', 'w', 'h'].every(k => num(v[k])) && (v.r === undefined || num(v.r));
     case 'dot':
-      return ['x', 'y', 'r'].every(k => num(v[k]));
+      return ['x', 'y', 'r'].every(k => num(v[k])) && v.hollow === undefined;
     case 'path':
       return (
         typeof v.d === 'string' &&
@@ -187,9 +187,7 @@ export function markSvg(look: ResolvedAppearance, m: TimelineMark): string {
     case 'rect':
       return `<rect x="${m.x}" y="${m.y}" width="${m.w}" height="${m.h}"${m.r ? ` rx="${m.r}"` : ''} fill="${c}"/>`;
     case 'dot':
-      return m.hollow
-        ? `<circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="${look.canvas}" stroke="${c}" stroke-width="2"/>`
-        : `<circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="${c}"/>`;
+      return `<circle cx="${m.x}" cy="${m.y}" r="${m.r}" fill="${c}"/>`;
     case 'path':
       return m.stroke
         ? `<path d="${m.d}" fill="none" stroke="${c}" stroke-width="${m.stroke}" stroke-linecap="round" stroke-linejoin="round"/>`

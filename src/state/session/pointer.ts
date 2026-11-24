@@ -427,7 +427,8 @@ export function createPointer(
   }
 
   function startObjectDrag(e: PointerEvent, canvas: Element, id: string, doubleCandidate: boolean) {
-    const roots = selectionRoots(s.doc, s.selection()),
+    // Timeline rows and bands in a mixed selection stay put; their timeline group carries them.
+    const roots = selectionRoots(s.doc, s.selection()).filter(r => !onTimeline(s.doc, r)),
       moving = new Set(roots);
     for (const root of roots)
       if (isGroup(s.doc, root)) descendants(s.doc, root).forEach(n => moving.add(n));

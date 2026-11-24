@@ -5,6 +5,8 @@ import { checkSource, compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { normalize } from '../src/model/document';
 import { renderSvg } from '../src/runtime/svg-renderer';
+import { writeArrangement } from '../src/dsl/layout-edits';
+import { readSource } from '../src/dsl/syntax';
 
 const example = (name: string) =>
   readFileSync(path.join(__dirname, `../examples/${name}.draft`), 'utf8');
@@ -134,6 +136,39 @@ node b "B" in=feb at=2025-02-01`).timelines![0];
     // 31 days plus padding over 1 day plus padding: about 15, not 31.
     expect(times).toBeGreaterThan(12);
     expect(times).toBeLessThan(18);
+  });
+
+  it('keeps every box valid and every dated rule visible in narrow or zoomed timelines', () => {
+    // A one-letter milestone on a narrow axis still commits.
+    const narrow = projectScene(
+      checkSource(
+        'layout root timeline width=240\nnode a "A" at=2000-01-01\nmilestone m "I" at=2025-01-01',
+      ),
+    );
+    expect(() => normalize(structuredClone(narrow))).not.toThrow();
+    // Today before a zoom window keeps the overview, so its rule is drawn.
+    const texts = checkSource(`layout root timeline today=2025-01-01 zoom=2025-02-01..2025-02-28
+group feb "Feb"
+node b "B" in=feb at=2025-02-10`).timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    expect(texts.filter(t => t.startsWith('Today')).length).toBeGreaterThanOrEqual(2);
+    // An axis that has room for no tick label still names a date.
+    const short = checkSource(
+      'layout root timeline width=240 today=2025-01-06\nnode a "A" from=2025-01-01 to=2025-01-10',
+    ).timelines![0].over.flatMap(m => (m.k === 'text' ? [m.text] : []));
+    expect(short.some(t => /Jan \d/.test(t))).toBe(true);
+    expect(errorOf('layout root timeline\ngroup e "Empty"\nnode a "A" at=2025-01-01')).toMatch(
+      /has no rows/,
+    );
+  });
+
+  it('saves an arrangement without placing timeline rows', () => {
+    const source = example('release-investigation'),
+      scene = checkSource(source),
+      after = structuredClone(projectScene(scene));
+    after.layout.nodes.csv.y += 20;
+    const doc = readSource(source);
+    const placed = writeArrangement(doc, scene, after);
+    expect(placed.some(id => ['b3', 'b6', 'c2', 'c4', 'v100'].includes(id))).toBe(false);
   });
 
   it('reports each date error on its own line', () => {
