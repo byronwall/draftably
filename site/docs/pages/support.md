@@ -57,7 +57,7 @@ To build an integration for another host, read [Build an adapter](#build-an-adap
 The CLI, the editor, the `.draft` language and saved files do not change, and diagrams lay out the
 same way. SVG exports change in two small ways:
 
-- Bundled font family names carry a short hash, such as `'Draft Inter 269b2d3580f4'`. CSS that
+- Bundled font family names carry a short hash, such as `'Draft Inter 637d9aa4846a'`. CSS that
   targets `'Draft Inter'` no longer matches. The fallback list (`Inter, Arial, sans-serif`) is the
   same.
 - The root `<svg>` has `id="draft-svg"`, `role="img"` and `aria-labelledby`. To paste several

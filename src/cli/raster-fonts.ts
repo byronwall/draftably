@@ -1,7 +1,8 @@
 /**
  * The bundled diagram fonts as TrueType files on disk, for the PNG and PDF writers. resvg and
  * PDFKit read TrueType, not WOFF2, and resvg loads fonts reliably only from files. The TrueType
- * files are the WOFF2 files in `src/assets/fonts`, decompressed; only the CLI ships them.
+ * files hold the same glyphs as the WOFF2 files in `src/assets/fonts`; only the CLI ships them.
+ * `scripts/subset-fonts.py` builds both sets. Neither path falls back to a system font.
  */
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
