@@ -80,6 +80,8 @@ export function handleCopy(e: ClipboardEvent) {
 export async function handlePaste(e: ClipboardEvent) {
   if (isEditable(e.target) || modalOpen() || !e.clipboardData) return;
   try {
+    // A spreadsheet copies its cells as text and as a picture: the cells win.
+    if (pasteTable(e)) return;
     const image = [...e.clipboardData.items].find(i => /^image\/(png|jpeg|webp|gif)$/.test(i.type));
     if (image) {
       e.preventDefault();
@@ -97,7 +99,6 @@ export async function handlePaste(e: ClipboardEvent) {
       e.preventDefault();
       throw Error('This text has more than one diagram. Paste one diagram at a time.');
     }
-    if (pasteTable(e)) return;
     if (text.includes('\n') && !text.startsWith('{')) {
       e.preventDefault();
       openQuickBuild(text);

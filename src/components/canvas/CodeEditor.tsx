@@ -5,6 +5,7 @@ import { resolveAppearance } from '../../model/appearance';
 import {
   CODE_TAB,
   CODE_TYPE,
+  bodyLines,
   codeLines,
   autoAlign,
   pastedTable,
@@ -55,21 +56,42 @@ function Editor(props: { id: string }) {
     tab = CODE_TAB,
     wrapSet = false,
     file = code.src?.path ?? '';
-  /** The file when the editor opened: a save over a file changed since then is refused. */
-  const opened = s.currentSource();
-  try {
-    const decl = declaration(readSource(opened), id);
-    file ||= String(getAttr(decl!, 'src')?.value ?? '');
-    tab = Number(getAttr(decl!, 'tab')?.value) || CODE_TAB;
-    wrapSet = !!getAttr(decl!, 'wrap');
-    if (decl?.body && !code.body) raw = decl.body.lines;
-  } catch {
-    // An unsaved or unparsable source: edit the lines the canvas draws.
+  /**
+   * This node as it stands: its declaration in the file when the file is the one drawn, else its
+   * caption and lines. A save is refused when it changed after the editor opened.
+   */
+  const snapshot = () => {
+    const now = findNode(s.doc, id),
+      drawn = JSON.stringify([now?.title, now?.code?.lines]);
+    try {
+      const decl = declaration(readSource(s.currentSource()), id);
+      if (!decl?.body || !now?.code) return { drawn, decl: undefined };
+      const tab = Number(getAttr(decl, 'tab')?.value) || CODE_TAB;
+      // A file that no longer draws this node (another document is open) is not its source.
+      const same =
+        JSON.stringify(bodyLines(decl.body.lines, now.code.table, tab)) ===
+        JSON.stringify(now.code.lines);
+      return {
+        drawn: same ? JSON.stringify([decl.args, decl.attrs, decl.body]) : drawn,
+        decl: same ? decl : undefined,
+      };
+    } catch {
+      return { drawn, decl: undefined };
+    }
+  };
+  const opened = snapshot();
+  if (opened.decl) {
+    tab = Number(getAttr(opened.decl, 'tab')?.value) || CODE_TAB;
+    file ||= String(getAttr(opened.decl, 'src')?.value ?? '');
+    wrapSet = !!getAttr(opened.decl, 'wrap');
+    if (!code.body) raw = opened.decl.body!.lines;
   }
 
   const start = readTable(codeLines(raw, tab));
-  /** Columns whose alignment differs from the one numbers give: the user's own choice. */
-  let chosen = start.align.map((a, i) => a !== autoAlign(start.rows, start.align.length)[i]);
+  /** Columns aligned on purpose: by a `:` mark, or differently from what their numbers give. */
+  const choices = (t: { rows: string[][]; align: Align[]; marked?: boolean[] }) =>
+    t.align.map((a, i) => !!t.marked?.[i] || a !== autoAlign(t.rows, t.align.length)[i]);
+  let chosen = choices(start);
   const [table, setTable] = createSignal(!!code.table),
     [rows, setRows] = createSignal(start.rows),
     [footer, setFooter] = createSignal(start.footer),
@@ -78,8 +100,10 @@ function Editor(props: { id: string }) {
     [title, setTitle] = createSignal(node.title),
     [focus, setFocus] = createSignal({ r: 0, c: 0 }),
     [dirty, setDirty] = createSignal(false);
-  /** Rows the body had; empty rows past these are ones the editor added and the save drops. */
-  let kept = start.rows.length;
+  /** Rows the body had, less those deleted; empty rows past these were added and are dropped. */
+  let kept = start.rows.length,
+    /** Rows when the body was read, for the psql footer's count. */
+    read = start.rows.length;
   /** The psql footer's count when the body was read; rows added or deleted since change it. */
   let counted = Number(/\d+/.exec(start.footer ?? '')?.[0] ?? 0);
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
@@ -145,6 +169,7 @@ function Editor(props: { id: string }) {
   const removeRow = () => {
     const { r, c } = focus();
     if (r === 0 || rows().length < 2) return;
+    if (r < kept) kept--;
     edit(() => setRows(all => all.filter((_, i) => i !== r)));
     go(Math.min(r, rows().length - 1), c);
   };
@@ -174,9 +199,9 @@ function Editor(props: { id: string }) {
         setRows(t.rows);
         setAlign(t.align);
         setFooter(t.footer);
-        kept = t.rows.length;
+        kept = read = t.rows.length;
         counted = Number(/\d+/.exec(t.footer ?? '')?.[0] ?? 0);
-        chosen = t.align.map((a, i) => a !== autoAlign(t.rows, t.align.length)[i]);
+        chosen = choices(t);
       }
       setTable(!table());
     });
@@ -194,7 +219,7 @@ function Editor(props: { id: string }) {
     const all = rows().slice();
     while (all.length > Math.max(1, kept) && !all[all.length - 1].some(c => c.trim())) all.pop();
     const auto = autoAlign(all, align().length),
-      count = counted + all.length - kept,
+      count = counted + all.length - read,
       note = footer() && `(${count} row${count === 1 ? '' : 's'})`;
     return writeTable({
       rows: all,
@@ -215,7 +240,7 @@ function Editor(props: { id: string }) {
       : undefined;
     closed = true;
     const changed = dirty() || title().trim() !== node.title,
-      stale = s.currentSource() !== opened;
+      stale = snapshot().drawn !== opened.drawn;
     if (save && changed && stale)
       toast('The file changed while you edited this code, so your edit was not saved.');
     // Turning Table on or off changes the wrap default, unless the file sets `wrap=`.
@@ -308,6 +333,7 @@ function Editor(props: { id: string }) {
         return next.map(row => Array.from({ length: n }, (_, j) => row[j] ?? ''));
       });
       setAlign(a => Array.from({ length: width() }, (_, j) => a[j] ?? 'left'));
+      chosen = Array.from({ length: width() }, (_, j) => chosen[j] ?? false);
     });
     toast(`Pasted ${cells.length} row${cells.length === 1 ? '' : 's'}`);
   };

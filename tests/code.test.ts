@@ -359,15 +359,32 @@ describe('editing code tables', () => {
       ],
       align: ['left', 'center', 'right'],
       footer: '(2 rows)',
+      marked: [true, true, true],
     });
   });
 
   it('keeps psql blank edge fields, a header-only table, an empty table and one column', () => {
-    expect(
-      readTable(['id | units | price', '---+-------+------', '   | EUR   |   123']).rows,
-    ).toEqual([
+    const psql = readTable([
+      'id | units | price',
+      '---+-------+------',
+      '   | EUR   |   123',
+      '   | EUR |   ',
+    ]);
+    expect(psql.rows).toEqual([
       ['id', 'units', 'price'],
       ['', 'EUR', '123'],
+      ['', 'EUR', ''],
+    ]);
+    // A typed `:` mark is a choice, even where numbers would align the column the same way.
+    expect(readTable(['| id | amount |', '|----|:-------|', '| A  | NULL   |']).marked).toEqual([
+      false,
+      true,
+    ]);
+    expect(pastedTable('| n |\n|---|\n| Ana |\n\n| Bo |')?.rows).toEqual([
+      ['n'],
+      ['Ana'],
+      [],
+      ['Bo'],
     ]);
     const headerOnly = writeTable({ rows: [['id', 'name']], align: ['left', 'left'] });
     expect(readTable(headerOnly).rows).toEqual([['id', 'name']]);

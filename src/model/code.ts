@@ -222,6 +222,8 @@ export interface Table {
   align: Align[];
   /** psql's "(3 rows)" line under the table. */
   footer?: string;
+  /** Columns a `:` mark in a typed rule aligned, even where numbers would align them the same. */
+  marked?: boolean[];
 }
 
 /**
@@ -237,9 +239,18 @@ export function readTable(lines: string[]): Table {
   const first = lines.findIndex(l => l.trim()),
     typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
     body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
+    // psql's rule joins its columns with `+`: every `|` splits, so blank first and last fields
+    // keep their places.
+    psql =
+      typed.length > 0 &&
+      lines[first + 1].includes('+') &&
+      body.every(l => !l.trim() || l.includes('|')),
     // A pipe table with a rule is a table even with only its header; one column keeps its lines
     // as they are, indent and all.
     rows =
+      (psql
+        ? body.map(l => (l.trim() ? l.split(/(?<!\\)\|/).map(c => c.trim()) : []))
+        : undefined) ??
       tableCells(body) ??
       (typed.length && body.every(l => !l.trim() || l.includes('|'))
         ? body.map(l => (l.trim() ? pipeCells(l) : []))
@@ -252,8 +263,9 @@ export function readTable(lines: string[]): Table {
       if (mark.endsWith(':')) return 'right';
       if (mark.startsWith(':')) return 'left';
       return a;
-    });
-  return { rows, align };
+    }),
+    marked = align.map((_, i) => typed.length === n && typed[i].includes(':'));
+  return { rows, align, ...(marked.some(Boolean) ? { marked } : {}) };
 }
 
 /**
@@ -376,7 +388,8 @@ export function pastedTable(text: string): Table | undefined {
     isRule(lines[1]) &&
     lines.every((l, i) => i === 1 || l.includes('|') || FOOTER.test(l.trim()))
   )
-    return readTable(lines);
+    // Read with its blank lines, as the file would be, so a `range` counts the same lines.
+    return readTable(clean.split('\n'));
   return undefined;
 }
 
