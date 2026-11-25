@@ -45,6 +45,11 @@ layout root flow gap=48
     expect(compareSources(AFTER, AFTER)).toBe(AFTER);
   });
 
+  it('leaves re-indented code unmarked: code counts by the lines it draws', () => {
+    const indented = 'node c shape=code <<C\n  select 1\nC\n';
+    expect(compareSources('node c shape=code <<C\nselect 1\nC\n', indented)).toBe(indented);
+  });
+
   it('draws each line both panels keep along the same path', () => {
     const source = fs.readFileSync('examples/checkout-change.draft', 'utf8') + 'compare\n';
     const panels = renderSvg(projectScene(checkSource(source)))

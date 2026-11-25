@@ -22,8 +22,17 @@ import { readBodyRows } from './table-rows';
 
 const DECLARATIONS = ['node', 'group', 'edge'];
 
-/** What makes a declaration `~`: every parsed field but its line, so new fields count by default. */
-const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) => JSON.stringify(fields);
+/**
+ * What makes a declaration `~`: every parsed field but its line, so new fields count by default.
+ * Code counts by the lines it draws, not by the heredoc's text: re-indenting a body changes
+ * nothing a reader sees.
+ */
+const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) =>
+  JSON.stringify(fields, (key, value) => {
+    if (key !== 'code' || !value) return value;
+    const { body: _b, cells: _c, tab: _t, ...drawn } = value;
+    return drawn;
+  });
 
 /** A statement's content, whatever its comment or the order of its attributes. */
 const content = (s: Statement) =>
