@@ -19,6 +19,10 @@ const outAt = args.indexOf('--out');
 const out = outAt >= 0 ? args.splice(outAt, 2)[1] : 'tmp/strip';
 const pngOnly = args.includes('--png');
 if (pngOnly) args.splice(args.indexOf('--png'), 1);
+const exact = args.includes('--exact');
+if (exact) args.splice(args.indexOf('--exact'), 1);
+const baseAt = args.indexOf('--base');
+const BASE = baseAt >= 0 ? Number(args.splice(baseAt, 2)[1]) : 2;
 const setAt = args.indexOf('--set');
 const only = setAt >= 0 ? args.splice(setAt, 2)[1] : '';
 const files = args.length
@@ -48,9 +52,13 @@ const PNG = [2, 1.5, 1, 0.75, 0.63, 0.5, 0.4].map(scale => ({
   scale,
   type: 'image/png',
 }));
-const TRANSFORMS: { name: string; scale: number; type: string; q?: number }[] = pngOnly
-  ? PNG
-  : LOSSY;
+// The export's own pixels, as a PNG file or a clipboard copy carries them.
+const EXACT = [{ name: `png ${BASE}x exact`, scale: BASE, type: 'image/png' }];
+const TRANSFORMS: { name: string; scale: number; type: string; q?: number }[] = exact
+  ? EXACT
+  : pngOnly
+    ? PNG
+    : LOSSY;
 
 const decoder =
   stripTypeScriptTypes(fs.readFileSync(path.join(root, 'src/model/strip.ts'), 'utf8')).replace(
@@ -74,10 +82,14 @@ const browser = await chromium.launch({
     process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   args: ['--use-mock-keychain', '--password-store=basic'],
 });
-const lab = await (await browser.newContext()).newPage();
-await lab.setContent('<!doctype html><meta charset="utf-8">');
-await lab.addScriptTag({ content: decoder, type: 'module' });
-await lab.waitForFunction(() => 'strip' in window || '__strip' in window);
+const newLab = async () => {
+  const page = await (await browser.newContext()).newPage();
+  await page.setContent('<!doctype html><meta charset="utf-8">');
+  await page.addScriptTag({ content: decoder, type: 'module' });
+  await page.waitForFunction(() => '__strip' in window);
+  return page;
+};
+let lab = await newLab();
 
 const svgs = files.map(f => ({
   name: path.basename(f, '.draft'),
@@ -90,30 +102,67 @@ for (const m of MODULES)
     const pass = TRANSFORMS.map(() => 0);
     const notes: string[] = [];
     const bands: number[] = [];
+    const grows: number[] = [];
+    let overlaps = 0;
     for (const d of svgs) {
       const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{6})"/.exec(d.svg)?.[1] ?? '#1B2433';
-      const { svg, grid } = await addSourceStrip(d.svg, d.source, {
+      const { svg, grid, grew, top } = await addSourceStrip(d.svg, d.source, {
+        scale: BASE,
         module: m,
         parity: PARITY,
         ink,
         opacity,
       });
       bands.push(grid.rows * m);
+      grows.push(grew);
       const size = /width="([\d.]+)" height="([\d.]+)"/.exec(svg)!;
       const w = Math.ceil(Number(size[1]));
       const h = Math.ceil(Number(size[2]));
       type Read = { ok: boolean; why?: string; fixed?: number; bytes: number; png?: string };
-      const results: Read[] = await lab.evaluate(
-        async ({ svg, w, h, transforms, source, want, parity }) => {
+      // A stuck decode cannot be interrupted inside the page: drop the page and go on.
+      let timer: NodeJS.Timeout | undefined;
+      const timeout = new Promise<null>(r => (timer = setTimeout(() => r(null), 20_000)));
+      const running = lab.evaluate(
+        async ({ svg, plain, base: k, bandTop, w, h, transforms, source, want, parity }) => {
           const el = new Image();
           el.src = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
           await el.decode();
           const base = document.createElement('canvas');
-          base.width = w * 2;
-          base.height = h * 2;
+          base.width = Math.round(w * k);
+          base.height = Math.round(h * k);
           base.getContext('2d')!.drawImage(el, 0, 0, base.width, base.height);
           const img = await createImageBitmap(base);
-          const res: Read[] = [{ ok: true, bytes: 0, png: base.toDataURL('image/png') }];
+          // Lowest drawn row of the drawing without its band, to check the band clears it.
+          const el0 = new Image();
+          el0.src = URL.createObjectURL(new Blob([plain], { type: 'image/svg+xml' }));
+          await el0.decode();
+          const c0 = document.createElement('canvas');
+          c0.width = el0.naturalWidth * k;
+          c0.height = el0.naturalHeight * k;
+          const x0 = c0.getContext('2d')!;
+          x0.drawImage(el0, 0, 0, c0.width, c0.height);
+          const d0 = x0.getImageData(0, 0, c0.width, c0.height).data;
+          const bg = [d0[0], d0[1], d0[2]];
+          let last = 0;
+          for (let y = 0; y < c0.height; y++)
+            for (let x = 0; x < c0.width; x++) {
+              const i = (y * c0.width + x) * 4;
+              if (
+                Math.abs(d0[i] - bg[0]) +
+                  Math.abs(d0[i + 1] - bg[1]) +
+                  Math.abs(d0[i + 2] - bg[2]) >
+                6
+              )
+                last = y;
+            }
+          const res: Read[] = [
+            {
+              ok: last < bandTop * k,
+              bytes: 0,
+              png: base.toDataURL('image/png'),
+              why: `content to ${last}, band at ${bandTop * k}`,
+            },
+          ];
           for (const t of transforms) {
             const c = document.createElement('canvas');
             c.width = Math.round(w * t.scale);
@@ -148,6 +197,9 @@ for (const m of MODULES)
         },
         {
           svg,
+          plain: d.svg,
+          base: BASE,
+          bandTop: top,
           parity: PARITY,
           w,
           h,
@@ -156,7 +208,20 @@ for (const m of MODULES)
           want: { cols: grid.cols, rows: grid.rows, on: Array.from(grid.on).join('') },
         },
       );
+      const results: Read[] | null = await Promise.race([running, timeout]);
+      clearTimeout(timer);
+      if (!results) {
+        notes.push(`${d.name}: timed out`);
+        running.catch(() => {});
+        await lab.context().close();
+        lab = await newLab();
+        continue;
+      }
       const first = results.shift()!;
+      if (!first.ok) {
+        overlaps++;
+        notes.push(`${d.name} overlap: ${first.why}`);
+      }
       if (files.length <= 3 || d.name === 'checkout')
         fs.writeFileSync(
           path.join(out, `${d.name}-m${m}-o${opacity}.png`),
@@ -168,11 +233,12 @@ for (const m of MODULES)
       });
     }
     bands.sort((x, y) => x - y);
-    const row = `| ${m} | ${opacity} | ${PARITY} | ${bands[bands.length >> 1]} / ${bands[bands.length - 1]} | ${pass.map(p => `${p}/${svgs.length}`).join(' | ')} |`;
+    grows.sort((x, y) => x - y);
+    const row = `| ${m} | ${opacity} | ${PARITY} | ${bands[bands.length >> 1]} / ${bands[bands.length - 1]} | ${grows[grows.length >> 1]} / ${grows[grows.length - 1]} | ${overlaps} | ${pass.map(p => `${p}/${svgs.length}`).join(' | ')} |`;
     rows.push(row);
     console.log(row, notes.length ? `\n    ${notes.join('\n    ')}` : '');
   }
 await browser.close();
-const head = `| module px | opacity | parity | band px median / max | ${TRANSFORMS.map(t => t.name).join(' | ')} |\n|${' --- |'.repeat(TRANSFORMS.length + 4)}`;
+const head = `| module px | opacity | parity | band px median / max | added height median / max | overlaps | ${TRANSFORMS.map(t => t.name).join(' | ')} |\n|${' --- |'.repeat(TRANSFORMS.length + 6)}`;
 fs.writeFileSync(path.join(out, 'results.md'), `${head}\n${rows.join('\n')}\n`);
 console.log(`\n${head}\n${rows.join('\n')}`);

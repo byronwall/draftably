@@ -49,10 +49,10 @@ main{padding:16px;overflow-x:auto}
 </style></head><body>
 <header>
 <label>Example <select id="ex">${examples.map((e, i) => `<option value="${i}"${e.name === 'checkout' ? ' selected' : ''}>${e.name}</option>`).join('')}</select></label>
-<label>Module <input id="m" type="range" min="1" max="4" step="0.25" value="2"><output id="mv"></output></label>
-<label>Opacity <input id="o" type="range" min="0.01" max="0.4" step="0.01" value="0.05"><output id="ov"></output></label>
-<label>Parity <select id="p"><option selected>0.2</option><option>0.25</option><option>0.33</option><option>0.5</option></select></label>
-<label>Shown at <select id="z"><option value="fit">Fit to width (chat preview)</option><option value="1" selected>1x (as pasted at CSS size)</option><option value="0.5">0.5x</option><option value="0.63">0.63x</option><option value="0.75">0.75x</option><option value="1.5">1.5x</option><option value="2">2x (full export pixels)</option></select></label>
+<label>Module <input id="m" type="range" min="0.5" max="4" step="0.25" value="0.5"><output id="mv"></output></label>
+<label>Opacity <input id="o" type="range" min="0.01" max="0.4" step="0.01" value="0.03"><output id="ov"></output></label>
+<label>Parity <select id="p"><option selected>0.1</option><option>0.2</option><option>0.25</option><option>0.33</option><option>0.5</option></select></label>
+<label>Shown at <select id="z"><option value="fit">Fit to width (chat preview)</option><option value="1">1x (as pasted at CSS size)</option><option value="0.5">0.5x</option><option value="0.63">0.63x</option><option value="0.75">0.75x</option><option value="1.5">1.5x</option><option value="2" selected>2x (exported PNG, as copied)</option></select></label>
 <label>Re-encode <select id="t"><option value="image/png">PNG</option><option value="image/jpeg|0.85">JPEG 85</option><option value="image/jpeg|0.6">JPEG 60</option><option value="image/webp|0.75">WebP 75</option></select></label>
 <label><input id="dark" type="checkbox"> Dark page</label>
 <span id="status"></span>
@@ -71,7 +71,7 @@ async function draw() {
   $('ov').textContent = Math.round(opacity * 100) + '%';
   document.body.classList.toggle('dark', $('dark').checked);
   const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{6})"/.exec(e.svg)?.[1] ?? '#1B2433';
-  const { svg, grid } = await addSourceStrip(e.svg, e.source, { module: m, parity, ink, opacity });
+  const { svg, grid } = await addSourceStrip(e.svg, e.source, { module: m, parity, ink, opacity, scale: 2 });
   const size = /width="([\\d.]+)" height="([\\d.]+)"/.exec(svg);
   const w = Math.ceil(+size[1]), h = Math.ceil(+size[2]);
   const img = new Image();

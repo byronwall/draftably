@@ -240,25 +240,29 @@ export function stripRects(g: StripGrid, x: number, y: number, m: number) {
 }
 
 /**
- * Add the strip below an exported SVG drawing. The drawing grows by the band height plus a gap
- * above it and a quiet zone below it; the first full-size rect is taken as the background.
+ * Add the strip at the bottom of an exported SVG drawing. `scale` is the export's image px per
+ * CSS px: the band snaps to that pixel grid, so a lossless copy keeps every module sharp. The
+ * drawing grows by the band plus a small gap and quiet zone; drawings put labels in their bottom
+ * padding, so the band cannot share it. The first full-size rect is taken as the background.
  */
 export async function addSourceStrip(
   svg: string,
   source: string,
-  opts: StripOptions & { ink: string; opacity: number },
+  opts: StripOptions & { ink: string; opacity: number; scale?: number },
 ) {
   const vb = /viewBox="(-?[\d.]+) (-?[\d.]+) ([\d.]+) ([\d.]+)"/.exec(svg);
   if (!vb) throw Error('The SVG has no viewBox.');
   const [vx, vy, vw, vh] = vb.slice(1).map(Number);
+  const k = opts.scale ?? 2;
+  const snap = (v: number) => Math.round(v * k) / k;
   const m = opts.module;
-  const margin = 40;
-  const g = await encodeStrip(source, Math.floor((vw - 2 * margin) / m), opts.parity);
-  const gap = Math.max(8, 3 * m);
-  const quiet = Math.max(12, 3 * m);
-  const top = vy + vh + gap;
-  const nh = vh + gap + g.rows * m + quiet;
-  const x = vx + (vw - g.cols * m) / 2;
+  const pad = Math.max(0, -vx);
+  const g = await encodeStrip(source, Math.floor((vw - 2 * pad) / m), opts.parity);
+  const gap = Math.max(2, 3 * m);
+  const quiet = Math.max(2, 3 * m);
+  const top = vy + snap(vh + gap);
+  const nh = snap(Math.max(vh, top - vy + g.rows * m + quiet));
+  const x = vx + snap((vw - g.cols * m) / 2);
   const band = `<g data-draftably-strip="1" fill="${opts.ink}" fill-opacity="${opts.opacity}" shape-rendering="crispEdges">${stripRects(g, x, top, m)}</g>`;
   const grown = svg
     .replace(vb[0], `viewBox="${vx} ${vy} ${vw} ${nh}"`)
@@ -267,7 +271,12 @@ export async function addSourceStrip(
       new RegExp(`(<rect x="${vx}" y="${vy}" width="${vw}") height="${vh}"`),
       `$1 height="${nh}"`,
     );
-  return { svg: grown.replace(/<\/svg>\s*$/, `${band}</svg>`), grid: g };
+  return {
+    svg: grown.replace(/<\/svg>\s*$/, `${band}</svg>`),
+    grid: g,
+    grew: nh - vh,
+    top: top - vy,
+  };
 }
 
 // --- Decode from pixels ---
@@ -412,7 +421,7 @@ export async function decodeStrip(px: Pixels, parity: number): Promise<StripRead
     }
     return r;
   };
-  const N = pick(Math.max(5, Math.floor((ex - ox) / 12) | 1), (ex - ox) / 1.2, n =>
+  const N = pick(Math.max(5, Math.floor((ex - ox) / 12) | 1), (ex - ox) / 0.9, n =>
     power(clockRow(Math.min(y1, Math.floor(y0 + (0.5 * (ex - ox)) / n))), n, ex - ox),
   );
   const leftScore = (m: number, n: number) => {
