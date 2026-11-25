@@ -199,7 +199,7 @@ function codeMarkup(
       );
   });
   // Named ranges: bands under the text and bars in the left margin; their tags go on top.
-  const marks = rangeMarks(code, laid, look, r.w, c.fill);
+  const marks = rangeMarks(code, laid, look, c.fill);
   for (const m of marks) out.push(rangeMarkup(m, r));
   if (laid.caption)
     out.push(
@@ -231,7 +231,7 @@ function codeMarkup(
     }
     if (row.wraps)
       out.push(
-        `<path d="${wrapMarkPath(r.x + r.w - laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
+        `<path d="${wrapMarkPath(r.x + laid.right + laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
       );
   });
   if (laid.moreShown)
@@ -261,7 +261,7 @@ function rangeMarkup(m: RangeMark, r: Rect) {
   );
 }
 
-/** A range's label: a tag in its band's color at the right margin. */
+/** A range's label: a tag in its band's color in the label column. */
 function tagMarkup(m: RangeMark, r: Rect, look: ResolvedAppearance) {
   const t = m.tag!,
     fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';

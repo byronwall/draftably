@@ -291,7 +291,10 @@ range df.row lines=3
 ### Line ranges
 
 `range` names lines of a code node. The range draws a band behind the lines, a bar in the left
-margin and its label in the right margin. It never changes the node's size or the layout.
+margin and its label in a label column on the right. Code never runs under a label: when a range
+has a label, the node grows by the widest label (up to about 170px; a longer one ends with `…`),
+and every label starts at the same x, level with its range's first line. A range without a label
+never changes the node's size or the layout.
 
 ```draft
 node report "Orders report" color=blue
@@ -325,7 +328,8 @@ Then use it:
 - An edge to a range meets the node's left or right side at the range's middle line. `to=` and
   `from=` take `left` or `right` only.
 - `color=` picks the family (default `amber`). The label is optional.
-- Ranges may nest or overlap: bands blend, bars stand side by side and labels stack.
+- Ranges may nest or overlap: bands blend, bars stand side by side, and a label whose row another
+  label holds moves down to the next free row.
 - In a state, the listed ranges stay in focus and the node's other ranges fade. A change mark
   (`+range`, `-range`, `~range`) draws the range in green, red or amber.
 - When you delete a code node in the viewer, its ranges go too, with every line that names them.
