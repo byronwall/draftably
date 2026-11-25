@@ -1,0 +1,18 @@
+{
+  "name": "@draftably/service",
+  "private": true,
+  "type": "module",
+  "description": "The hosted Draftably render service: GET image URLs, a keyed REST API and an MCP server, in one Cloudflare Worker.",
+  "scripts": {
+    "dev": "pnpm --dir ../.. runtime:build && wrangler dev",
+    "deploy": "pnpm --dir ../.. runtime:build && wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@draftably/runtime": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261109.1",
+    "wrangler": "4.167.0"
+  }
+}

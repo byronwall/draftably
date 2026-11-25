@@ -109,6 +109,9 @@ Commands:
                             state mentions; a group's members move to its container.
   mv <file> <old> <new>     Rename an id everywhere it is used.
                             set, rm and mv rewrite the file through the formatter, then check it.
+  url <file> [--png]        Print an image URL that draws the file on the hosted render
+       [--base <url>]       service: SVG, or PNG with --png. The URL holds the source.
+                            --base points it at another server, such as a local one.
   extract <image>           Print the .draft source embedded in a PNG, SVG or PDF export.
        [--write <file>]     Save it instead of printing it.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
@@ -653,6 +656,18 @@ export async function main(argv: string[]): Promise<number> {
         fs.writeFileSync(path.resolve(out), bytes);
         const n = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`;
         console.log(`Wrote ${out} (${n(pages, 'page')}, ${n(inputs.length, 'diagram')}).`);
+        return 0;
+      }
+      case 'url': {
+        const { imageUrl, SERVICE_URL } = await import('../lib/render-url');
+        const source = await read(file);
+        console.log(
+          await imageUrl(
+            source,
+            flag('--png') ? 'png' : 'svg',
+            option(rest, '--base') ?? SERVICE_URL,
+          ),
+        );
         return 0;
       }
       case 'extract': {
