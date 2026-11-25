@@ -9,6 +9,7 @@ Start with a complete diagram, then change it to explain your system. Each recip
 | Which message happens next?          | [An exchange between services](/docs/recipes#exchange-between-services)      |
 | What does this change add or remove? | [A proposed architecture change](/docs/recipes#proposed-architecture-change) |
 | Which lines of code cause this?      | [Code behind a step](/docs/recipes#code-behind-a-step)                       |
+| What did this query return?          | [A query and its result](/docs/recipes#query-and-its-result)                 |
 
 Edit the source beside each drawing. Select **Playground** to keep working, or copy the source into a `.draft` file.
 Edits made on this docs page are temporary. [Save, share and reopen](#saving) explains how to keep them.
@@ -183,6 +184,43 @@ node sql "orders_report.sql" shape=code src="queries/orders_report.sql#L12-L20" 
 
 For a larger example, open [Why the orders report is slow](/play?example=code-review). [Code](#code)
 lists every option.
+
+## Query and its result
+
+Put a query beside the rows it returned. `table=on` draws the result as a light table: the header
+is muted with a rule under it, number columns align right, and there are no cell borders. Paste
+the result as your database printed it. Markdown and psql tables work, and their pipes and dashed
+rules are not drawn.
+
+```draft
+diagram "Which accounts are slipping" version=1
+node sql "slipping_accounts.sql" shape=code lang=sql <<SQL
+SELECT account, orders_30d, prior_30d,
+       round(100.0 * (orders_30d - prior_30d) / prior_30d, 1) AS change
+FROM account_orders
+ORDER BY change;
+SQL
+node result "Result · 4 rows" shape=code table=on numbers=on <<ROWS
+ account    | orders_30d | prior_30d | change
+------------+------------+-----------+--------
+ Harbor Co  |         12 |        41 | -70.7%
+ Brightline |         30 |        52 | -42.3%
+ Kestrel    |         19 |        24 | -20.8%
+ Atlas      |         64 |        58 | +10.3%
+(4 rows)
+ROWS
+range sql.order lines=4 color=amber
+range result.slipping lines=2-3 color=red
+edge sorts sql.order -> result.slipping "sorted by change"
+```
+
+**Try it:** change `lines=2-3` to `lines=2-4` to flag Kestrel too. The header is line 1, and the
+dashed rule is not counted. In the Editor, double-click the table to edit its cells: `Tab` moves
+to the next cell, `Enter` to the next row, and a paste from a spreadsheet fills the cells from the
+caret.
+
+For a larger example, open [Which accounts are slipping](/play?example=slipping-accounts).
+[Code tables](#code) lists every rule for reading a pasted table.
 
 ## Refine and share a recipe
 

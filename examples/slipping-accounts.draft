@@ -1,0 +1,31 @@
+diagram "Which accounts are slipping" version=1
+subtitle "The weekly query, and the rows it returned"
+
+# Code tables: a query beside its result, drawn with table=on, with numbers aligned right and ranges on the rows that matter.
+
+node sql "slipping_accounts.sql" shape=code lang=sql <<SQL
+SELECT account, plan,
+       orders_30d,
+       orders_prior_30d AS prior_30d,
+       round(100.0 * (orders_30d - orders_prior_30d)
+             / orders_prior_30d, 1) AS change
+FROM account_orders
+WHERE plan <> 'free'
+ORDER BY change;
+SQL
+node result "Result · 6 rows" shape=code table=on numbers=on <<ROWS
+| account    | plan | orders_30d | prior_30d | change |
+|------------|------|-----------:|----------:|-------:|
+| Harbor Co  | pro  |         12 |        41 | -70.7% |
+| Brightline | team |         30 |        52 | -42.3% |
+| Kestrel    | pro  |         19 |        24 | -20.8% |
+| Northwind  | team |         88 |        90 |  -2.2% |
+| Atlas      | pro  |         64 |        58 | +10.3% |
+| Quarry Ltd | team |        140 |       112 | +25.0% |
+ROWS
+
+range sql.order lines=8 color=amber
+range result.slipping lines=2-3 color=red
+
+edge sorts sql.order -> result.slipping "sorted by change"
+note "Two accounts lost over 40% of their orders. Call them this week." near=result side=below
