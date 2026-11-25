@@ -4,6 +4,7 @@
  */
 import { runtimeVersion } from '@draftably/runtime';
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
+import { dated } from './mermaid';
 import { draw, drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 
 export interface Env {
@@ -39,7 +40,9 @@ async function imageResponse(segment: string, format: Format, opts: DrawOptions)
   try {
     if (segment.length > MAX_SEGMENT)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
-    return image(await draw(await decodeSource(segment), format, opts), format);
+    const source = await decodeSource(segment);
+    const body = await draw(source, format, opts);
+    return image(body, format, 200, dated(source, opts.type) ? 'public, max-age=86400' : IMMUTABLE);
   } catch (error) {
     if (!(error instanceof SourceError)) throw error;
     return image(await errorImage(error.message, format), format, 400, 'public, max-age=60');

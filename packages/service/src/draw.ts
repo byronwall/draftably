@@ -41,7 +41,10 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
     throw new SourceError('scheme must be light or dark.');
   const scale = Number(get('scale') ?? 2);
   if (![1, 2, 3, 4].includes(scale)) throw new SourceError('scale must be 1, 2, 3 or 4.');
-  return { type: get('type'), scheme, scale };
+  const type = get('type') || null;
+  if (type && type !== 'draftably' && type !== 'mermaid')
+    throw new SourceError('type must be draftably or mermaid.');
+  return { type, scheme, scale };
 }
 
 /** Draw `source` as SVG, or throw a SourceError with the first diagnostic. */

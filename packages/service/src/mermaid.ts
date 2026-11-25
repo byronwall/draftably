@@ -3,6 +3,7 @@
  * place of JSDOM. Mermaid's parser reads a few browser globals, so the first call installs a
  * small window; the isolate never renders HTML with it.
  */
+import { CSSStyleDeclaration } from 'cssstyle';
 import { parseHTML } from 'linkedom';
 import { detectSource } from '../../../src/import/detect';
 import type { ParseFlowResult } from '../../../src/import/mermaid-facade';
@@ -13,12 +14,40 @@ export type SourceType = 'draftably' | 'mermaid';
 let parse: ((source: string) => Promise<ParseFlowResult>) | undefined;
 let doc: Document | undefined;
 
-/** The source's language: `type` when given, else Mermaid when it looks like Mermaid. */
-export function sourceType(source: string, type?: string | null): SourceType {
-  if (type === 'mermaid' || type === 'draftably') return type;
-  if (type) throw new SourceError('type must be draftably or mermaid.');
-  const found = detectSource(source);
-  return found.status === 'detected' && found.format === 'mermaid' ? 'mermaid' : 'draftably';
+/**
+ * The source's language and the text to read: `type` when given, else Mermaid when it looks like
+ * Mermaid. A Markdown document with one ```mermaid fence gives that fence's text, as the CLI's
+ * import does.
+ */
+export function sourceType(
+  source: string,
+  type?: string | null,
+): { type: SourceType; text: string } {
+  if (type === 'draftably') return { type, text: source };
+  if (type && type !== 'mermaid') throw new SourceError('type must be draftably or mermaid.');
+  const found = detectSource(source, type ? { format: 'mermaid' } : {});
+  if (found.status === 'detected' && (type || found.format === 'mermaid')) {
+    // An explicit type keeps the whole text, unless it is one fence in Markdown.
+    const fenced = type ? detectSource(source) : found;
+    const text =
+      fenced.status === 'detected' && fenced.via === 'fence' && fenced.format === 'mermaid'
+        ? fenced.source
+        : found.source;
+    return { type: 'mermaid', text };
+  }
+  return { type: 'draftably', text: source };
+}
+
+/**
+ * Whether the image depends on today's date: a Mermaid gantt chart, whose dates without a year,
+ * or relative to today, import differently tomorrow. Its image is cached for a day, not a year.
+ */
+export const dated = (source: string, type?: string | null) =>
+  sourceType(source, type).type === 'mermaid' && /^\s*gantt\b/m.test(source);
+
+/** Mermaid's `box` parser tests a color with `new Option().style`; this is JSDOM's own parser. */
+class Option {
+  style = new CSSStyleDeclaration();
 }
 
 /** Draftably source for a Mermaid diagram, with the importer's warnings. */
@@ -29,15 +58,13 @@ export async function fromMermaid(source: string) {
   ]);
   if (!doc) {
     const { window, document } = parseHTML('<!doctype html><html><body></body></html>');
-    // Mermaid's `box` parser tests a color with `new Option()`.
-    Object.assign(globalThis, { window, document, Option: window.Option });
+    Object.assign(globalThis, { window, document, Option });
+    Object.assign(window, { Option });
     doc = document as unknown as Document;
   }
   parse ??= createMermaidFlowParser(async () => (await import('mermaid')).default);
-  const found = detectSource(source, { format: 'mermaid' });
-  if (found.status !== 'detected') throw new SourceError('This is not a Mermaid diagram.');
   // No title: an image heading the user did not write would be noise. Mermaid's own title stays.
-  const result = importMermaidFlow(await parse(found.source), makePlainLabel(doc), '');
+  const result = importMermaidFlow(await parse(source), makePlainLabel(doc), '');
   if (!result.nativeSource || result.status === 'failed') {
     const d = result.diagnostics.find(x => x.severity === 'error') ?? result.diagnostics[0];
     throw new SourceError(d?.message ?? 'The Mermaid diagram could not be converted.');
@@ -50,7 +77,8 @@ export async function fromMermaid(source: string) {
 
 /** Draftably source for `source` in either language. */
 export async function toDraft(source: string, type?: string | null) {
-  return sourceType(source, type) === 'mermaid'
-    ? fromMermaid(source)
+  const found = sourceType(source, type);
+  return found.type === 'mermaid'
+    ? fromMermaid(found.text)
     : { draft: source, warnings: [] as string[] };
 }

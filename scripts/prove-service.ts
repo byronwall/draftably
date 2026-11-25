@@ -252,7 +252,7 @@ for (const [n, { name, source }] of mermaid.entries()) {
   const body = await res.text();
   const want = draft
     ? await renderSvg(draft, {
-        links: { mode: 'safe', baseUrl: webLinkBase(draft) },
+        links: webLinks(draft),
         limits: { maxSourceBytes: 64 * 1024 },
       })
     : undefined;
@@ -275,6 +275,41 @@ console.log(
     `), ${mm.rejected} refused by both, ${mm.failed.length} wrong.`,
 );
 for (const f of mm.failed) console.log('  ' + f);
+// Two shapes from Codex round 1: a sequence with a box (Mermaid checks its color with
+// `new Option()`), and a Markdown file with one mermaid fence.
+for (const [name, source] of [
+  ['sequence box', 'sequenceDiagram\n  box Client\n  participant a\n  end\n  a->>a: check\n'],
+  ['markdown fence', '# Notes\n\n```mermaid\nflowchart LR\n  A-->B\n```\n'],
+]) {
+  // .mmd is Mermaid by its name; the .md file is found by its fence, as `draftably import` does.
+  const file = path.join(
+    dir,
+    `extra-${name.replace(' ', '-')}.${name === 'markdown fence' ? 'md' : 'mmd'}`,
+  );
+  fs.writeFileSync(file, source);
+  const draft = (await cli('import', file, '--accept-lossy')).stdout.replace(
+    /^diagram "[^"]*"/,
+    'diagram ""',
+  );
+  const want = await renderSvg(draft, {
+    links: webLinks(draft),
+    limits: { maxSourceBytes: 64 * 1024 },
+  });
+  const got = await fetch(`${base}/svg/${await encodeSource(source)}`);
+  assert.equal(got.status, 200, `${name}: ${got.status}`);
+  assert.equal(
+    await got.text(),
+    want.ok ? want.value.svg : '',
+    `${name} differs from draftably import`,
+  );
+}
+const gantt = mermaid.find(m => /^\s*gantt\b/m.test(m.source))!;
+const ganttRes = await fetch(`${base}/svg/${await encodeSource(gantt.source)}`);
+assert.equal(ganttRes.headers.get('Cache-Control'), 'public, max-age=86400');
+console.log(
+  'Mermaid extras: a boxed sequence and a fenced Markdown file draw as draftably import does; a gantt chart is cached for a day.',
+);
+
 // Detection: each input both sides draw gives the same image with no ?type= at all.
 let detected = 0;
 for (const { source } of mermaid.filter((_, n) => drawnMermaid.has(n))) {

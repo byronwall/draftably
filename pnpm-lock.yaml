@@ -193,6 +193,9 @@ importers:
       '@resvg/resvg-wasm':
         specifier: 2.6.2
         version: 2.6.2
+      cssstyle:
+        specifier: 4.6.0
+        version: 4.6.0
       linkedom:
         specifier: 0.18.12
         version: 0.18.12

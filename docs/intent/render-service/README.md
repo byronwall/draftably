@@ -244,6 +244,10 @@ resources.
 - With Mermaid the bundle is 16.5 MB, 3.7 MB gzipped. Locally the first request to a new
   isolate took 16 ms and the first Mermaid PNG 160 ms, so Mermaid stays in the one Worker.
 
+- A Mermaid gantt chart can depend on today's date (dates without a year) and on the time zone
+  (the Worker runs in UTC; the CLI uses the machine's zone). Its image is cached for a day, not a
+  year.
+
 ## Open questions
 
 - Prices for credit packs. The numbers above are placeholders.
