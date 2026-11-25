@@ -1,5 +1,5 @@
 /** SHA-256 prefix of the metric table and its four WOFF2 files, in declared face order. */
-export const fontMetricsVersion = '637d9aa4846a';
+export const fontMetricsVersion = '5a92f575520a';
 
 export const FACES = {
   'sans-500': {

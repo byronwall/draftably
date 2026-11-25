@@ -937,3 +937,8 @@
   stroke: color-mix(in srgb, var(--accent) 55%, transparent);
   stroke-width: 1;
 }
+
+/* Code reads as typed: `==` stays two characters, never a programming ligature. */
+.code-body text {
+  font-variant-ligatures: none;
+}

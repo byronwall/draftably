@@ -49,7 +49,9 @@ FACES = [
     ("inter-latin-500-normal", "Inter", "Medium", 500, ["calt"]),
     ("inter-latin-600-normal", "Inter", "SemiBold", 600, ["calt"]),
     ("source-serif-4-latin-600-normal", "Source Serif 4", "SemiBold", 600, ["liga"]),
-    ("jetbrains-mono-latin-500-normal", "JetBrains Mono", "Medium", 500, ["calt"]),
+    # Code reads as typed, so the mono face keeps no ligature features (calt, liga, dlig, clig,
+    # rlig): `==`, `!=`, `>=` and `->` stay two characters in every export.
+    ("jetbrains-mono-latin-500-normal", "JetBrains Mono", "Medium", 500, []),
 ]
 
 
