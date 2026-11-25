@@ -93,7 +93,8 @@ export function rsDecode(msg: Uint8Array, nsym: number) {
   // Chien search.
   const rev = [...loc].reverse();
   const pos: number[] = [];
-  for (let i = 0; i < msg.length; i++) if (polyEval(rev, pow2(i)) === 0) pos.push(msg.length - 1 - i);
+  for (let i = 0; i < msg.length; i++)
+    if (polyEval(rev, pow2(i)) === 0) pos.push(msg.length - 1 - i);
   if (pos.length !== errs) return -1;
   // Forney.
   const coef = pos.map(p => msg.length - 1 - p);
@@ -306,10 +307,25 @@ export async function decodeStrip(px: Pixels, parity: number): Promise<StripRead
   const noise = Math.max(rowDev(H - 1), rowDev(H - 2));
   const k = Math.max(0.6, 4 * noise);
   // Band rows: the first run of busy rows above the quiet zone.
-  let y1 = H - 1;
-  while (y1 > 0 && rowDev(y1) <= k) y1--;
-  let y0 = y1;
-  while (y0 > 0 && rowDev(y0 - 1) > k) y0--;
+  // Skip short runs of busy rows (compression noise) until a band at least 3 rows tall. Climb
+  // only while rows stay near the band's own level, so noise in the gap above does not join the
+  // band to the drawing.
+  let y1 = H;
+  let y0 = H;
+  while (y0 > 2) {
+    y1 = y0 - 1;
+    while (y1 > 0 && rowDev(y1) <= k) y1--;
+    y0 = y1;
+    const level: number[] = [rowDev(y1)];
+    while (y0 > 0) {
+      const v = rowDev(y0 - 1);
+      const sorted = [...level].sort((a, b) => a - b);
+      if (v <= k || (level.length >= 3 && v < 0.4 * sorted[sorted.length >> 1])) break;
+      level.push(v);
+      y0--;
+    }
+    if (y1 - y0 >= 2) break;
+  }
   if (y1 - y0 < 2) return { source: null, why: 'no band' };
   // JPEG ringing makes the rows next to the band busy too: trim rows under half the band's level.
   const rd: number[] = [];
@@ -385,11 +401,19 @@ export async function decodeStrip(px: Pixels, parity: number): Promise<StripRead
     const mean = p.reduce((a, b) => a + b, 0) / p.length;
     return p.map(v => v - mean);
   };
-  const top: number[] = [];
-  for (let x = x0; x <= x1; x++) top.push(dev(x, y0));
-  const topC = centered(top);
+  // Read the clock on the row where each candidate pitch puts its center.
+  const rowsC = new Map<number, number[]>();
+  const clockRow = (y: number) => {
+    let r = rowsC.get(y);
+    if (!r) {
+      const row: number[] = [];
+      for (let x = x0; x <= x1; x++) row.push(dev(x, y));
+      rowsC.set(y, (r = centered(row)));
+    }
+    return r;
+  };
   const N = pick(Math.max(5, Math.floor((ex - ox) / 12) | 1), (ex - ox) / 1.2, n =>
-    power(topC, n, ex - ox),
+    power(clockRow(Math.min(y1, Math.floor(y0 + (0.5 * (ex - ox)) / n))), n, ex - ox),
   );
   const leftScore = (m: number, n: number) => {
     const px = (ex - ox) / n;
@@ -456,7 +480,8 @@ export async function decodeStrip(px: Pixels, parity: number): Promise<StripRead
   }
   const thr = (onS + offS) / (2 * (M - 1));
   const on = new Uint8Array(N * M);
-  for (let r = 0; r < M; r++) for (let c = 0; c < N; c++) on[r * N + c] = sample(c, r) > thr ? 1 : 0;
+  for (let r = 0; r < M; r++)
+    for (let c = 0; c < N; c++) on[r * N + c] = sample(c, r) > thr ? 1 : 0;
   const g = { cols: N, rows: M, on };
   const total = capacity(N, M);
   const stream = new Uint8Array(total);
