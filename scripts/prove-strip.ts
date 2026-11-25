@@ -118,7 +118,11 @@ for (const m of MODULES)
         ink,
         opacity,
       });
-      const grid = g0!;
+      if (!g0) {
+        notes.push(`${d.name}: too narrow for a strip`);
+        continue;
+      }
+      const grid = g0;
       bands.push(grid.rows * m);
       grows.push(grew);
       const size = /width="([\d.]+)" height="([\d.]+)"/.exec(svg)!;

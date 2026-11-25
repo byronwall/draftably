@@ -17,7 +17,9 @@
 // Format 2: a 24-bit length and a CRC-32 of the source in the header.
 const MAGIC = 0xd8;
 /** Below this many columns the clocks and guards leave too little room: export without a strip. */
-const MIN_COLS = 64;
+const MIN_COLS = 65;
+/** Past this width the slow search for a resized band's pitch costs too much; lossless only. */
+const SEARCH_MAX = 6000;
 
 const CRC = Array.from({ length: 256 }, (_, n) => {
   let c = n;
@@ -227,6 +229,7 @@ export interface StripOptions {
 
 /** Lay out `source` as a grid `cols` modules across, or null when that is too narrow. */
 export async function encodeStrip(source: string, cols: number, parity: number) {
+  if (cols % 2 === 0) cols--;
   if (cols < MIN_COLS) return null;
   const text = new TextEncoder().encode(source);
   const packed = await pipe(text, new CompressionStream('deflate-raw'));
@@ -242,7 +245,6 @@ export async function encodeStrip(source: string, cols: number, parity: number) 
   const data = new Uint8Array(head.length + packed.length);
   data.set(head);
   data.set(packed, head.length);
-  if (cols % 2 === 0) cols--;
   let rows = 3;
   while (dataBytes(capacity(cols, rows), parity) < data.length) rows += 2;
   const total = capacity(cols, rows);
@@ -280,8 +282,8 @@ export async function addSourceStrip(
   const k = opts.scale ?? 2;
   const snap = (v: number) => Math.round(v * k) / k;
   const m = opts.module;
-  const pad = Math.max(0, -vx);
-  const g = await encodeStrip(source, Math.floor((vw - 2 * pad) / m), opts.parity);
+  const margin = Math.min(16, vw / 10);
+  const g = await encodeStrip(source, Math.floor((vw - 2 * margin) / m), opts.parity);
   if (!g) return { svg, grid: null, grew: 0, top: vh };
   const gap = Math.max(2, 3 * m);
   const quiet = Math.max(2, 3 * m);
@@ -398,7 +400,7 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
     while (y1 > floor && rowDev(y1) <= k) y1--;
     y0 = y1;
     const level: number[] = [rowDev(y1)];
-    while (y0 > 0) {
+    while (y0 > floor) {
       const v = rowDev(y0 - 1);
       const sorted = [...level].sort((a, b) => a - b);
       if (v <= k || (level.length >= 3 && v < 0.4 * sorted[sorted.length >> 1])) break;
@@ -420,7 +422,7 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
     return s / (y1 - y0 + 1);
   };
   const cols = Array.from({ length: W }, (_, x) => colDev(x));
-  const ck = Math.max(...cols) * 0.25;
+  const ck = cols.reduce((a, b) => Math.max(a, b), 0) * 0.25;
   let x0 = 0;
   while (x0 < W && cols[x0] <= ck) x0++;
   let x1 = W - 1;
@@ -436,6 +438,94 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
       ty * ((1 - tx) * dev(xf, yf + 1) + tx * dev(xf + 1, yf + 1))
     );
   };
+  /** Sample the N×M grid inside the given edges and decode it. */
+  const finish = async (
+    ox: number,
+    ex: number,
+    oy: number,
+    ey: number,
+    N: number,
+    M: number,
+  ): Promise<StripRead> => {
+    const px1 = (ex - ox) / N;
+    const py1 = (ey - oy) / M;
+    const sample = (c: number, r: number) => {
+      const cx = ox + (c + 0.5) * px1;
+      const cy = oy + (r + 0.5) * py1;
+      if (px1 < 3 || py1 < 3) return bilinear(cx, cy);
+      const hx = Math.max(0.5, 0.25 * px1);
+      const hy = Math.max(0.5, 0.25 * py1);
+      let s = 0;
+      let n = 0;
+      for (let y = Math.round(cy - hy); y <= Math.round(cy + hy - 0.01); y++)
+        for (let x = Math.round(cx - hx); x <= Math.round(cx + hx - 0.01); x++)
+          if (x >= 0 && y >= 0 && x < W && y < H) {
+            s += dev(x, y);
+            n++;
+          }
+      return n ? s / n : 0;
+    };
+    let onS = 0;
+    let offS = 0;
+    for (let r = 1; r < M; r++) {
+      onS += sample(N - 1, r);
+      offS += sample(N - 2, r);
+    }
+    const thr = (onS + offS) / (2 * (M - 1));
+    const on = new Uint8Array(N * M);
+    for (let r = 0; r < M; r++)
+      for (let c = 0; c < N; c++) on[r * N + c] = sample(c, r) > thr ? 1 : 0;
+    const g = { cols: N, rows: M, on };
+    const total = capacity(N, M);
+    const stream = new Uint8Array(total);
+    let bit = 0;
+    for (let c = 1; c < N - 2; c++)
+      for (let r = 1; r < M; r++, bit++) {
+        if (bit >= total * 8) break;
+        const v = on[r * N + c] ^ whiten(c, r);
+        if (v) stream[bit >> 3] |= 1 << (7 - (bit & 7));
+      }
+    const read = deinterleave(stream, parity);
+    if (!read) return { source: null, grid: g, why: 'too many errors' };
+    const d = read.data;
+    if (d[0] !== MAGIC) return { source: null, grid: g, why: 'bad header' };
+    const len = (d[1] << 16) | (d[2] << 8) | d[3];
+    const sum = ((d[4] << 24) | (d[5] << 16) | (d[6] << 8) | d[7]) >>> 0;
+    if (8 + len > d.length) return { source: null, grid: g, why: 'bad length' };
+    try {
+      const text = await pipe(d.subarray(8, 8 + len), new DecompressionStream('deflate-raw'));
+      // Reed–Solomon can settle on a different valid codeword: only the checksum proves the text.
+      if (crc32(text) !== sum) return { source: null, grid: g, why: 'checksum mismatch' };
+      return { source: new TextDecoder().decode(text), grid: g, fixed: read.fixed };
+    } catch {
+      return { source: null, grid: g, why: 'inflate failed' };
+    }
+  };
+
+  // Fast path for a lossless copy: count the clock's runs along the top row and the left column.
+  const runs = (vals: number[]) => {
+    const top = vals.reduce((a, b) => Math.max(a, b), 0);
+    let n = 0;
+    let on = false;
+    for (const v of vals) {
+      if (!on && v > top * 0.5) n++;
+      on = v > top * 0.5;
+    }
+    return n;
+  };
+  const topRow: number[] = [];
+  for (let x = x0; x <= x1; x++) topRow.push(dev(x, y0));
+  const fastN = 2 * runs(topRow) - 1;
+  const leftCol: number[] = [];
+  for (let y = y0; y <= y1; y++) leftCol.push(dev(x0, y));
+  const fastM = 2 * runs(leftCol) - 1;
+  if (fastN >= MIN_COLS && fastM >= 3) {
+    const read = await finish(x0, x1 + 1, y0, y1 + 1, fastN, fastM);
+    if (read.source !== null) return read;
+  }
+  // A resized band: search for its pitch, but only where the top row alternates like a clock.
+  if (x1 - x0 > SEARCH_MAX || runs(topRow) < 16) return { source: null, why: 'no band' };
+
   // Grid edges (pixel boundaries) and size: pick the column count whose clock row scores best,
   // then the row count from the left clock, then nudge each edge to subpixel.
   let ox = x0;
@@ -538,57 +628,5 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
         }
     }
   }
-  const px1 = (ex - ox) / N;
-  const py1 = (ey - oy) / M;
-  const sample = (c: number, r: number) => {
-    const cx = ox + (c + 0.5) * px1;
-    const cy = oy + (r + 0.5) * py1;
-    if (px1 < 3 || py1 < 3) return bilinear(cx, cy);
-    const hx = Math.max(0.5, 0.25 * px1);
-    const hy = Math.max(0.5, 0.25 * py1);
-    let s = 0;
-    let n = 0;
-    for (let y = Math.round(cy - hy); y <= Math.round(cy + hy - 0.01); y++)
-      for (let x = Math.round(cx - hx); x <= Math.round(cx + hx - 0.01); x++)
-        if (x >= 0 && y >= 0 && x < W && y < H) {
-          s += dev(x, y);
-          n++;
-        }
-    return n ? s / n : 0;
-  };
-  let onS = 0;
-  let offS = 0;
-  for (let r = 1; r < M; r++) {
-    onS += sample(N - 1, r);
-    offS += sample(N - 2, r);
-  }
-  const thr = (onS + offS) / (2 * (M - 1));
-  const on = new Uint8Array(N * M);
-  for (let r = 0; r < M; r++)
-    for (let c = 0; c < N; c++) on[r * N + c] = sample(c, r) > thr ? 1 : 0;
-  const g = { cols: N, rows: M, on };
-  const total = capacity(N, M);
-  const stream = new Uint8Array(total);
-  let bit = 0;
-  for (let c = 1; c < N - 2; c++)
-    for (let r = 1; r < M; r++, bit++) {
-      if (bit >= total * 8) break;
-      const v = on[r * N + c] ^ whiten(c, r);
-      if (v) stream[bit >> 3] |= 1 << (7 - (bit & 7));
-    }
-  const read = deinterleave(stream, parity);
-  if (!read) return { source: null, grid: g, why: 'too many errors' };
-  const d = read.data;
-  if (d[0] !== MAGIC) return { source: null, grid: g, why: 'bad header' };
-  const len = (d[1] << 16) | (d[2] << 8) | d[3];
-  const sum = ((d[4] << 24) | (d[5] << 16) | (d[6] << 8) | d[7]) >>> 0;
-  if (8 + len > d.length) return { source: null, grid: g, why: 'bad length' };
-  try {
-    const text = await pipe(d.subarray(8, 8 + len), new DecompressionStream('deflate-raw'));
-    // Reed–Solomon can settle on a different valid codeword: only the checksum proves the text.
-    if (crc32(text) !== sum) return { source: null, grid: g, why: 'checksum mismatch' };
-    return { source: new TextDecoder().decode(text), grid: g, fixed: read.fixed };
-  } catch {
-    return { source: null, grid: g, why: 'inflate failed' };
-  }
+  return finish(ox, ex, oy, ey, N, M);
 }

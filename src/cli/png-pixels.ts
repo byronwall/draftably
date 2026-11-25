@@ -34,6 +34,7 @@ function read(b: Buffer): Pixels | null {
   let palette: Buffer | undefined;
   let trns: Buffer | undefined;
   const idat: Buffer[] = [];
+  let ended = false;
   while (at + 12 <= b.length) {
     const len = b.readUInt32BE(at);
     if (at + 12 + len > b.length) return null;
@@ -48,9 +49,14 @@ function read(b: Buffer): Pixels | null {
     } else if (kind === 'PLTE') palette = d;
     else if (kind === 'tRNS') trns = d;
     else if (kind === 'IDAT') idat.push(d);
-    else if (kind === 'IEND') break;
+    else if (kind === 'IEND') {
+      ended = len === 0;
+      break;
+    }
     at += 12 + len;
   }
+  // A file cut short is not a complete image.
+  if (!ended) return null;
   const ch = CHANNELS[type];
   if (!ch || !DEPTHS[type].includes(depth) || laced || !w || !h || (type === 3 && !palette))
     return null;
