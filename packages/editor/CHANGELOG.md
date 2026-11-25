@@ -1,5 +1,22 @@
 # @draftably/editor
 
+## 0.9.0
+
+### Minor Changes
+
+- c34d585: Add table=on to code nodes: a header rule, aligned columns and right-aligned number columns, with no boxed cells.
+- 4073fa0: Add timelines: `layout <group> timeline` places nodes on a real date axis as rows in bands, with open, unknown-start and partial-step spans, milestone rules, a today rule, a generated legend and an optional zoom panel. A timeline sits beside ordinary boxes, and lines join its rows to them.
+
+  Mermaid `gantt` charts and dated `timeline` charts now import as native timelines: `draftably import`, `draftably migrate` and the `@draftably/mermaid` drop-in keep Mermaid's computed dates and draw `after` dependencies as arrows.
+
+### Patch Changes
+
+- 3f77d2b: PNG and PDF exports draw arrows, geometric shapes, box drawing and check marks (→ ← ◆ ◇ ✓) instead of empty boxes. The bundled fonts now carry these symbols.
+- caca35c: `vary` ranks a much tighter variant with no more bends and shorter lines first, so two groups feeding one get the stacked compound flow; the editor's **Compare** cards also name a narrower or wider drawing.
+- 6c536fe: Code nodes draw the characters as typed: `==`, `!=`, `>=` and `->` no longer turn into ligatures in the viewer, SVG, PNG or PDF.
+- b7f43ad: A group whose title needs a wider frame than its content now centers the content, so the left and right insets match. Before, all the extra width went to the right side.
+- 443cceb: A code range's label no longer covers code. When a range has a label, the code node keeps a label column on its right: the code wraps before it, and every label starts at the same x, level with its range's first line. Labels on next-door or shared lines stack onto free rows, and a label longer than about 170px ends with `…`.
+
 ## 0.8.0
 
 ### Minor Changes
