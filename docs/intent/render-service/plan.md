@@ -16,7 +16,7 @@ names the check that proves it, at the scope the product works on.
 
 ## Before slice 1 (Byron)
 
-- Confirm the account is on Workers Paid in the Cloudflare dashboard.
+- Done 2026-11-24: the account is on Workers Paid (dashboard, Workers plans page).
 - Decide when to move `draftably.dev` DNS to Cloudflare. Slices 1 to 3 do not need it.
 
 ## Slice 1: GET SVG

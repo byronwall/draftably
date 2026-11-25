@@ -45,8 +45,8 @@ Stripe fees will be larger than Cloudflare's. One credit pack sale of $5 costs a
 The same $5 buys about 1.6 M uncached renders of Cloudflare CPU.
 
 What the $5 plan does not cover: the `draftably.dev` DNS zone must be on Cloudflare for a custom
-domain. That is free (see [Domain](#domain)). Confirm in the dashboard that the account is on
-Workers Paid; `wrangler whoami` does not show the plan.
+domain. That is free (see [Domain](#domain)). The dashboard showed on 2026-11-24 that the
+account is on Workers Paid and has no domains yet; its one Worker is `context-recorder-cloud`.
 
 ## Domain
 
