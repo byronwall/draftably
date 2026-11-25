@@ -97,9 +97,39 @@ interface CheckoutEvent {
 }
 
 /** `POST /stripe/webhook`: add a paid pack's credits once. */
+/** The body as text, or null past `max` bytes. */
+async function readLimited(req: Request, max: number) {
+  const reader = req.body?.getReader();
+  if (!reader) return '';
+  const parts: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.length;
+    if (size > max) {
+      await reader.cancel();
+      return null;
+    }
+    parts.push(value);
+  }
+  const bytes = new Uint8Array(size);
+  let at = 0;
+  for (const p of parts) {
+    bytes.set(p, at);
+    at += p.length;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
 export async function handleWebhook(req: Request, env: StripeEnv) {
   if (!env.STRIPE_WEBHOOK_SECRET) return new Response('Paid credits are off.', { status: 404 });
-  const body = await req.text();
+  // Nothing is read until the request looks signed, and then at most 256 KB: the endpoint is
+  // public, and a Stripe event is a few KB.
+  if (!/(?:^|,)t=\d+/.test(req.headers.get('Stripe-Signature') ?? ''))
+    return new Response('Bad signature.', { status: 400 });
+  const body = await readLimited(req, 256 * 1024);
+  if (body === null) return new Response('Too large.', { status: 413 });
   if (
     !(await verifySignature(body, req.headers.get('Stripe-Signature'), env.STRIPE_WEBHOOK_SECRET))
   )

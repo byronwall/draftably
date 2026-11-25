@@ -692,6 +692,8 @@ if (!remote) {
     assert.equal((await hook(other, sign(other))).status, 200);
   }
   assert.equal(bought(), 25000);
+  assert.equal((await hook('{}', '')).status, 400);
+  assert.equal((await hook('x'.repeat(300 * 1024), sign('x'))).status, 413);
   // The grant is spent before bought credits.
   sql(`UPDATE accounts SET grant_left = 1 WHERE id = 'poor'`);
   await post('/v1/render', KEYS.poor, { code: checkout + '\n# grant\n', format: 'svg' });
@@ -699,7 +701,7 @@ if (!remote) {
   await post('/v1/render', KEYS.poor, { code: checkout + '\n# bought\n', format: 'svg' });
   assert.equal(bought(), 24999);
   console.log(
-    'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; unrelated and unknown-account sessions got 200 and no credits; wrong or 10-minute-old signatures got 400; the grant is spent first.',
+    'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; unrelated and unknown-account sessions got 200 and no credits; an unsigned post got 400 and a 300 KB one 413; wrong or 10-minute-old signatures got 400; the grant is spent first.',
   );
 }
 
