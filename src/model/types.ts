@@ -141,7 +141,7 @@ export interface EdgeLayout {
    * Set by the compiler for a forward line in a `flow` scope: its route planned from the ranks.
    * The quick router takes it as it is when it clears every box.
    */
-  plan?: { points: Point[]; fromOffset: number; toOffset: number };
+  plan?: { points: Point[]; fromOffset: number; toOffset: number; bus?: true };
 }
 
 /**
@@ -213,8 +213,10 @@ export interface NodeStyle {
   color: ColorKey;
   /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
   shade?: Shade;
-  /** A mind-map topic below the first level: with no shade, a pale card of its family. */
+  /** A mind-map topic below the first level, or a vacant role: with no shade, a pale card. */
   card?: boolean;
+  /** `role=`: an org chart's assistant, or an open role drawn dashed with faded text. */
+  role?: 'assistant' | 'vacant';
   icon: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;

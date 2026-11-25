@@ -31,6 +31,7 @@ import {
   statement,
   statements,
 } from './source-edits';
+import { authoredLabel } from './orgchart';
 import {
   DSL_SHAPES,
   layoutParent,
@@ -350,10 +351,14 @@ export function translateEdit(input: EditInput): EditResult {
   ];
   for (const o of added) {
     const type = after.graph.groups.includes(o as never) ? 'group' : 'node';
+    // A copy of an assistant or a vacant role keeps its role, and the label as written.
+    const role = after.styles[o.id]?.role,
+      title = authoredLabel(o.title, role === 'vacant');
     const code = (o as DiagramNode).code,
-      id = fresh(o.title, code ? (code.table ? 'table' : 'code') : type);
+      id = fresh(title, code ? (code.table ? 'table' : 'code') : type);
     ids.set(o.id, id);
-    const s = statement(type, [bare(id), ...(code && !o.title ? [] : [quoted(o.title)])]);
+    const s = statement(type, [bare(id), ...(code && !title ? [] : [quoted(title)])]);
+    if (type === 'node' && role) setAttr(s, 'role', bare(role));
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
@@ -369,7 +374,8 @@ export function translateEdit(input: EditInput): EditResult {
     const old = objectsOf(before).find(x => x.id === o.id)!,
       s = declaration(source, o.id);
     if (!s) continue;
-    if (o.title !== old.title) s.args[1] = quoted(o.title);
+    if (o.title !== old.title)
+      s.args[1] = quoted(authoredLabel(o.title, after.styles[o.id]?.role === 'vacant'));
     if (o.icon !== old.icon) setAttr(s, 'icon', o.icon ? bare(o.icon) : undefined);
     const pos = (o as DiagramNode).iconPos;
     if (s.command === 'node' && pos !== (old as DiagramNode).iconPos)
@@ -428,9 +434,10 @@ export function translateEdit(input: EditInput): EditResult {
     setAttr(s, 'from', cfg?.fromSide && cfg.fromSide !== 'auto' ? bare(cfg.fromSide) : undefined);
     setAttr(s, 'to', cfg?.toSide && cfg.toSide !== 'auto' ? bare(cfg.toSide) : undefined);
   };
-  // Both ends topics of one mind map: a line there with no written end is a branch.
+  // Both ends topics of one mind map or people of one org chart: a line there with no written
+  // end is a branch or a reporting line.
   const objects = new Map(scene.model.objects.map(o => [o.id, o])),
-    maps = scene.model.layouts.filter(l => l.mindmap).map(l => l.scope),
+    maps = scene.model.layouts.filter(l => l.mindmap || l.orgchart).map(l => l.scope),
     inMap = (e: DiagramEdge) =>
       maps.some(
         m => layoutParent(objects, sid(e.from)) === m && layoutParent(objects, sid(e.to)) === m,
@@ -464,7 +471,14 @@ export function translateEdit(input: EditInput): EditResult {
       setAttr(
         s,
         'head',
-        !ends ? undefined : e.head ? bare(e.head) : old && inMap(e) ? bare('arrow') : undefined,
+        !ends
+          ? undefined
+          : // A copied branch or reporting line draws headless as a plain line again.
+            e.head && !(e.branch && e.head === 'none')
+            ? bare(e.head)
+            : old && inMap(e)
+              ? bare('arrow')
+              : undefined,
       );
     if (!ends || !old || old.tail !== e.tail)
       setAttr(s, 'tail', ends && e.tail ? bare(e.tail) : undefined);

@@ -228,15 +228,25 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
     }
     return obstacles;
   };
+  const buses = new Set(edges.filter(e => e.cfg.plan?.bus).map(e => e.id));
   const metrics = (rs: Route[]): RouteMetrics => {
     let crossings = 0,
       shared = 0,
       lanePairs = 0,
       laneDeficit = 0,
       minGap = Infinity;
+    // Lines of one org-chart bus share a stem and a bar and never cross once they part
+    // (`orgPlans`). They stay as planned, so leaving their meets out changes no choice.
+    const fixed = (r: Route) => state.fixedPlans.has(r.id) && buses.has(r.id),
+      start = (r: Route) => r.points[0];
     for (let i = 0; i < rs.length; i++) {
-      const used = rs.slice(0, i),
-        c = conflicts(rs[i].points, used),
+      const r = rs[i],
+        used = rs
+          .slice(0, i)
+          .filter(
+            q => !fixed(r) || !fixed(q) || start(q).x !== start(r).x || start(q).y !== start(r).y,
+          ),
+        c = conflicts(r.points, used),
         p = parallelConflicts(rs[i].points, used, s.edgeGap);
       crossings += c.crossings;
       shared += c.shared;

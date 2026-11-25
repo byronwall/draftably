@@ -100,16 +100,28 @@ const PLAIN: StatusPaint = { opacity: 1, strike: false };
 /** Focus weight: a node border, and 0.5 more than a connection's line. */
 const FOCUS_WIDTH = 2.4;
 
-/** The paint for a change status, with an emphasis state's weight or fade on top. */
-export function statusPaint(look: ResolvedAppearance, status?: Status, spot?: Spot): StatusPaint {
-  const p = changePaint(look, status);
+/**
+ * The paint for a change status, with an emphasis state's weight or fade on top. A vacant role
+ * (`role=vacant`) draws dashed with faded text, unless its change already sets those.
+ */
+export function statusPaint(
+  look: ResolvedAppearance,
+  status?: Status,
+  spot?: Spot,
+  vacant?: boolean,
+): StatusPaint {
+  const change = changePaint(look, status),
+    p = vacant
+      ? { ...change, dash: change.dash ?? '6 4', inkFade: change.inkFade ?? VACANT_FADE }
+      : change;
   if (spot === 'focus' || spot === 'ring')
     return { ...p, width: Math.max(p.width ?? 0, FOCUS_WIDTH), halo: spot === 'ring' };
   if (spot === 'dim') return { ...p, opacity: Math.min(p.opacity, CONTEXT_FADE) };
   return p;
 }
 
-const CONTEXT_FADE = 0.45;
+const CONTEXT_FADE = 0.45,
+  VACANT_FADE = 0.7;
 
 function changePaint(look: ResolvedAppearance, status?: Status): StatusPaint {
   const stroke = status && HUES[status] ? strokeOf(look, status) : undefined;

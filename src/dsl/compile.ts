@@ -63,6 +63,7 @@ import {
 } from './frame';
 import { projectScene } from './project';
 import { arrangeMindmap, withMindmaps } from './mindmap';
+import { arrangeOrgchart, chartEdges, orgPlans, withOrgcharts } from './orgchart';
 import { legendNotes, settleLegendShades } from './legend-notes';
 import {
   DslError,
@@ -163,7 +164,7 @@ const round = (n: number) => Math.round(n);
 
 /** `files` holds the text of the files `src=` names; see `CodeFiles`. */
 export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
-  const m = withMindmaps(parseModel(source, files));
+  const m = withOrgcharts(withMindmaps(parseModel(source, files)));
   return withIcons(await compileFit(m), m);
 }
 
@@ -248,7 +249,7 @@ async function compileFit(m: Model): Promise<Scene> {
   });
   // A stated direction holds, so fit= can only fold. Say so when that leaves the drawing much
   // wider than the target; taller is fine in a page column.
-  if (root.direction !== 'auto' && aspectOf(best.scene) > target * 1.5)
+  if (root.direction !== 'auto' && !root.orgchart && aspectOf(best.scene) > target * 1.5)
     best.scene.diagnostics.push({
       level: 'warning',
       code: 'fit-direction',
@@ -308,7 +309,11 @@ function fitVariants(root: ModelLayout) {
   const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
     { label: `as written (${reads(root)})`, layout: {} },
   ];
-  if (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine)
+  // An org chart meets fit= itself, by stacking rows of leaves (`arrangeOrgchart`).
+  if (
+    (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine) ||
+    root.orgchart
+  )
     return out;
   // A stated direction holds, so the search has only folding left to try.
   const directions = root.direction === 'auto' ? (['right', 'down'] as const) : [root.direction];
@@ -330,7 +335,7 @@ function fitVariants(root: ModelLayout) {
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
 export function checkSource(source: string, files?: CodeFiles): Scene {
-  const m = withMindmaps(parseModel(source, files));
+  const m = withOrgcharts(withMindmaps(parseModel(source, files)));
   const flat = dissolved(m);
   return withOldOrder(
     sequenced(withSoftGroups(ownLabels(layoutModel(widestLabels(flat)), flat), m)),
@@ -1036,10 +1041,34 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
         .map(e => (cross.has(e.id) ? { ...e, directed: false } : e)),
     },
   };
+  let drawn: Map<string, { w: number; h: number }> | undefined;
+  const stacked = new Set<string>();
   for (const l of engines) {
     if (l.mindmap) {
       const scope = l.scope === 'root' ? undefined : alias.get(l.scope);
       doc = arrangeMindmap(doc, scope, alias.get(l.mindmap)!, axisOf(l) === 'down');
+      continue;
+    }
+    if (l.orgchart) {
+      const scope = l.scope === 'root' ? undefined : alias.get(l.scope),
+        aides = new Set(m.objects.filter(o => o.role === 'assistant').map(o => alias.get(o.id)!));
+      // An org chart is placed by its people's drawn size: a stacked column is tighter than a
+      // slot's spill allows.
+      drawn ??= new Map(
+        layoutModel({ ...m, hints: m.hints.filter(h => h.type === 'size') }).objects.map(o => [
+          alias.get(o.id)!,
+          { w: o.w, h: o.h },
+        ]),
+      );
+      const placed = arrangeOrgchart(doc, scope, alias.get(l.orgchart.root)!, {
+        leaves: l.orgchart.leaves,
+        fit: l.fit,
+        assistants: aides,
+        sizes: drawn,
+        clearance: m.routing.clearance ?? 10,
+      });
+      doc = placed.doc;
+      for (const id of placed.stacked) stacked.add(original.get(id)!);
       continue;
     }
     const settings = LayoutLab.settings({
@@ -1063,13 +1092,18 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
     });
     doc = result.document;
   }
-  return new Map(
+  const out = new Map(
     Object.entries(doc.layout.nodes).map(([id, r]) => [
       original.get(id) ?? id,
       { x: r.x, y: r.y, w: r.w, h: r.h },
     ]),
   );
+  if (stacked.size) orgStacked.set(out, stacked);
+  return out;
 }
+
+/** The org-chart managers whose leaves stack, by the arrangement that placed them. */
+const orgStacked = new WeakMap<Map<string, Pos & Size>, Set<string>>();
 
 /** Object ids in file order, each scope's children reordered by its `order` line. */
 function authoredOrder(m: Model): string[] {
@@ -3126,6 +3160,8 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
   const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
+    onChart = onChartEdges(m),
+    inChart = chartEdges(m),
     planned = layoutPass(unrefined, arranged),
     // Which groups fold is decided on the arrangement before refinements too, so a stay or pin
     // never folds or unfolds a group.
@@ -3136,9 +3172,10 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
       // A line a timeline draws on its chart takes no routing channel.
+      // Nor does a line inside an org chart: its people stay where the chart puts them.
       planChannels(
         plain.objects,
-        m.edges.filter(e => !onChartEdges(m).has(e.id)),
+        m.edges.filter(e => !onChart.has(e.id) && !inChart.has(e.id)),
         m.routing,
       ),
       area(plain.objects),
@@ -3625,7 +3662,8 @@ function layoutPass(
       const look = (n: Item) => (slots ? n : (leaves.get(n.id)?.look ?? n));
       /** Offset down from the slot's top that lines a node up with the rest of its row. */
       const rowTop = new Map<string, number>();
-      if (governing?.engine && axis === 'down' && !slots) {
+      // An org chart lines its rows up by their drawn boxes already (`arrangeOrgchart`).
+      if (governing?.engine && !governing.orgchart && axis === 'down' && !slots) {
         // Nodes only: a group's frame is sized to its content and keeps its place. Two slots
         // share a row when they overlap down the page by over half the shorter one; the row's
         // top is the highest centred top in it.
@@ -3642,12 +3680,14 @@ function layoutPass(
       }
       return new Map(
         list.map(n => {
-          const l = look(n);
+          const l = look(n),
+            // An org chart placed each drawn box's center on its slot's center as arranged.
+            slot = (governing?.orgchart && !slots && arranged?.get(n.id)) || n;
           return [
             n.id,
             {
-              x: centre.x ? (n.w - l.w) / 2 : 0,
-              y: rowTop.get(n.id) ?? (centre.y ? (n.h - l.h) / 2 : 0),
+              x: centre.x ? (slot.w - l.w) / 2 : 0,
+              y: rowTop.get(n.id) ?? (centre.y ? (slot.h - l.h) / 2 : 0),
               w: l.w,
               h: l.h,
             },
@@ -3685,7 +3725,12 @@ function layoutPass(
                 axisOf(governing),
                 // A mind map reads out from its middle both ways: a cross-link between two
                 // topics must not shift the columns it spans.
-                governing.mindmap ? with_.filter(r => offTree.has(`${r.a}\0${r.b}`)) : with_,
+                // An org chart's bars sit in its gaps as placed: its dotted lines find their own room.
+                governing.orgchart
+                  ? []
+                  : governing.mindmap
+                    ? with_.filter(r => offTree.has(`${r.a}\0${r.b}`))
+                    : with_,
               )
             : baseLayout(list, layout, pairs, with_, lines, spacing);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
@@ -3792,15 +3837,18 @@ function layoutPass(
     // An engine spaces ranks by its rank gap and neighbours by its node gap.
     const spill = !leaves.size
         ? { w: 0, h: 0 }
-        : governing?.engine
-          ? (() => {
-              const along = spillOf(governing.engine.params.rankGap ?? 52),
-                across = spillOf(governing.engine.params.nodeGap ?? 24);
-              return axisOf(governing) === 'right'
-                ? { w: along, h: across }
-                : { w: across, h: along };
-            })()
-          : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
+        : // An org chart centers each slot on its drawn box, which may spill any amount.
+          governing?.orgchart
+          ? { w: Infinity, h: Infinity }
+          : governing?.engine
+            ? (() => {
+                const along = spillOf(governing.engine.params.rankGap ?? 52),
+                  across = spillOf(governing.engine.params.nodeGap ?? 24);
+                return axisOf(governing) === 'right'
+                  ? { w: along, h: across }
+                  : { w: across, h: along };
+              })()
+            : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
       diagnosed = diagnostics.length;
     let laid = lay(spill);
     if (
@@ -4118,6 +4166,8 @@ function layoutPass(
   };
   place('root', { x: 0, y: 0 }, 0);
   const plans = planCorridors(corridorScopes, objects, ranking, immediate, spacing);
+  for (const [id, plan] of orgPlans(m, objects, arranged && orgStacked.get(arranged)))
+    plans.set(id, plan);
   const lanes = wrapLanes(
     folds,
     m.edges,

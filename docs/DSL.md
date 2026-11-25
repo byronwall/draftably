@@ -43,7 +43,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`          | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `was-order m2 m1`                   | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                   | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`, `icon=`, `icon-pos=left\|top` ([Icons](#icons)). A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                       |
+| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`, `icon=`, `icon-pos=left\|top` ([Icons](#icons)), `role=assistant\|vacant` ([Org charts](#org-charts)). A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                 |
 | `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`, `icon=` in the title band. A `<<TAG` body lists its members, one per line; see [Database tables](#database-tables). See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                  |
 | `theme name`                        | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`                | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -58,6 +58,7 @@ and groups. References may point to later lines.
 | `layout group cells`                | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `layout group table`                | The group's members as database rows: a key glyph, the column name and its type. See [Database tables](#database-tables).                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `layout scope mindmap root=id`      | A mind map: `id` in the middle and its branches to the left and right. `direction=down` puts them above and below. See [Mind maps](#mind-maps).                                                                                                                                                                                                                                                                                                                                                                                           |
+| `layout scope orgchart root=id`     | An org chart: `id` at the top and each manager's reports on one bus below. `leaves=auto\|stack\|split\|row`, `fit=`. See [Org charts](#org-charts).                                                                                                                                                                                                                                                                                                                                                                                       |
 | `layout scope engine=name`          | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `layout root … fit=slide`           | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                                                                                                                        |
 | `routing`                           | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -1136,6 +1137,61 @@ rose, and the other branch keeps its color.
 
 `check` reports a mind map with no `root=`, and a `root=` that names no node.
 
+## Org charts
+
+An org chart is plain nodes and edges with one layout line. The person named by `root=` sits at
+the top. Each manager's reports hang below on one bus: a stem from the middle of the manager, one
+bar, and a drop to each report. People at one level line up.
+
+```draft
+node ceo "Dana Ruiz\nCEO"
+node ea "Sam Ito\nExecutive assistant" role=assistant
+node cto "Priya Nair\nCTO" color=blue
+node cfo "Hannah Kim\nCFO" color=amber
+node sec "Head of Security" color=blue role=vacant
+node web "Noah Fox\nEM, Web" color=blue
+node web1 "Sara Diaz\nEngineer" color=blue
+node web2 "Omar Aziz\nEngineer" color=blue
+node web3 "Lena Vogt\nEngineer" color=blue
+
+edge r1 ceo -> ea
+edge r2 ceo -> cto
+edge r3 ceo -> cfo
+edge r4 cto -> sec
+edge r5 cto -> web
+edge r6 web -> web1
+edge r7 web -> web2
+edge r8 web -> web3
+
+layout root orgchart root=ceo
+```
+
+**Try it:** add `leaves=stack` to the layout line. The three engineers move from a row into a
+column right of Noah's stem, and the chart gets narrower.
+
+- **Reporting lines:** an edge with no label, `kind=`, `head=`, `tail=` or `directed=` is a
+  reporting line. The tree follows reporting lines down from `root=`. They draw with no arrowhead.
+  Put the name on the first line of the label and the title after `\n`.
+- **Leaves:** a manager whose reports have no reports of their own can stack them.
+  `leaves=stack` puts them in one column right of the stem, `leaves=split` in two columns either
+  side of it (for three or more), and `leaves=row` keeps them side by side. The default,
+  `leaves=auto`, keeps rows until the chart is wider than `fit=` asks for (2:1 without `fit=`),
+  then stacks the widest rows first.
+- **Assistants:** `role=assistant` on a report with no reports of its own places it beside the
+  manager's stem, above the other reports.
+- **Open roles:** `role=vacant` draws a dashed outline, a pale card and faded text. A label with
+  one line gets "Open role" as its second line. It works in any layout, not only an org chart.
+- **Dotted lines:** an edge with a label or `kind=`, or one more edge into a person who already
+  has a manager, draws as written but moves no one. Write a dotted-line report as
+  `edge dot pm -> web "partners with" kind=async`, and add a `legend line dashed` row for it.
+- **Off the tree:** a person that no reporting line reaches from the root sits in a row below the
+  chart.
+- **Groups:** `layout g orgchart root=id` draws an org chart inside group `g`. The root must be a
+  member of `g`. An org chart always reads down, so it takes no `direction=`.
+
+`check` reports an org chart with no `root=`, a `root=` that names no node, and a `role=` other
+than `assistant` or `vacant`.
+
 ## Change marks
 
 To show what changed between two versions, write one file and mark the lines that differ, as in a
@@ -1431,18 +1487,18 @@ A scope takes one `layout` line. Each line here is a separate choice:
 Start with `compound-flow` if the drawing has groups, and `layered` if it has none. Change the
 engine only when you can name what is wrong with the drawing.
 
-| Engine            | Name in the Editor | Use it when                                                                                                                                                                             | Example                                  |
-| ----------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `compound-flow`   | Compound flow      | The drawing has groups and reads in one direction. It orders groups by all their connections and packs them tight. The first engine to try for groups.                                  | Web, service and data tiers              |
-| `layered`         | Layered + fold     | The drawing reads in one direction. It puts objects in ranks and reduces crossings. A long run folds into rows, and `fold=never` keeps one row. The first engine to try without groups. | A seven-step pipeline in a slide         |
-| `tree`            | Subtree tree       | Each object has one parent. It centers parents next to their children and gives each subtree its own space. `root=` names the top object.                                               | An org chart                             |
-| `grid`            | Soft grid          | Objects have few connections or none. It packs them into a block that follows `aspect`. Many lines take long routes through a grid.                                                     | Nine services with no lines between them |
-| `boundary-align`  | Boundary alignment | Straight lines between groups matter more than size. It lines up connected objects across groups, so the groups move apart and the drawing grows.                                       | A few groups with many links between     |
-| `compound-spring` | Compound spring    | Packed groups read as a long strip, and you want a shape nearer a square. It relaxes groups by the connections of their members. It follows `aspect`.                                   | Groups for a page or a square slide      |
-| `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                               | A data platform with many sources        |
-| `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                            | Services that call each other            |
-| `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                 | A map of related topics                  |
-| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Tidy**. See [Layout tools](#layout-tools).       | A flow with one long line                |
+| Engine            | Name in the Editor | Use it when                                                                                                                                                                             | Example                                                    |
+| ----------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `compound-flow`   | Compound flow      | The drawing has groups and reads in one direction. It orders groups by all their connections and packs them tight. The first engine to try for groups.                                  | Web, service and data tiers                                |
+| `layered`         | Layered + fold     | The drawing reads in one direction. It puts objects in ranks and reduces crossings. A long run folds into rows, and `fold=never` keeps one row. The first engine to try without groups. | A seven-step pipeline in a slide                           |
+| `tree`            | Subtree tree       | Each object has one parent. It centers parents next to their children and gives each subtree its own space. `root=` names the top object.                                               | A tree of parts; for people, see [Org charts](#org-charts) |
+| `grid`            | Soft grid          | Objects have few connections or none. It packs them into a block that follows `aspect`. Many lines take long routes through a grid.                                                     | Nine services with no lines between them                   |
+| `boundary-align`  | Boundary alignment | Straight lines between groups matter more than size. It lines up connected objects across groups, so the groups move apart and the drawing grows.                                       | A few groups with many links between                       |
+| `compound-spring` | Compound spring    | Packed groups read as a long strip, and you want a shape nearer a square. It relaxes groups by the connections of their members. It follows `aspect`.                                   | Groups for a page or a square slide                        |
+| `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                               | A data platform with many sources                          |
+| `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                            | Services that call each other                              |
+| `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                 | A map of related topics                                    |
+| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Tidy**. See [Layout tools](#layout-tools).       | A flow with one long line                                  |
 
 `compound-flow`, `boundary-align` and `compound-spring` differ only when a scope holds groups.
 Without groups, those three, `flow` and `tidy` often draw almost the same result, because each
@@ -1954,6 +2010,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Order saga](https://draftably.dev/app/?example=order-saga): Event-driven services around a broker. Dashed lines are asynchronous events.
 - [Observability stack](https://draftably.dev/app/?example=observability-stack): Telemetry flows from instrumented services through collectors into storage and tools.
 - [Launch plan](https://draftably.dev/app/?example=launch-plan): A mind map: three colored branches round the root, a cross-link and a topic beside the tree.
+- [Org chart](https://draftably.dev/app/?example=org-chart): 23 people on five levels, with an assistant, an open role, stacked engineers and a dotted line.
 
 ### Architecture
 

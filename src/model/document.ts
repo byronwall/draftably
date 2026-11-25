@@ -303,6 +303,7 @@ export function normalize(input: unknown): Diagram {
       color: style.color || 'auto',
       ...(style.shade !== undefined ? { shade: style.shade } : {}),
       ...(style.card === true ? { card: true } : {}),
+      ...(style.role === 'assistant' || style.role === 'vacant' ? { role: style.role } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
       ...(STATUSES.includes(style.status) && style.status !== 'same'
         ? { status: style.status }
@@ -398,6 +399,22 @@ export function normalize(input: unknown): Diagram {
       if (cfg.lane.face === true) next.lane.face = true;
     }
     if (cfg.flow === 'right' || cfg.flow === 'down') next.flow = cfg.flow;
+    // A planned route, such as an org chart's bus: the router takes it only while it still fits.
+    const plan = cfg.plan;
+    if (
+      plan &&
+      Array.isArray(plan.points) &&
+      plan.points.length >= 2 &&
+      plan.points.every((p: Raw) => finite(p?.x) && finite(p?.y)) &&
+      finite(plan.fromOffset) &&
+      finite(plan.toOffset)
+    )
+      next.plan = {
+        points: plan.points.map((p: Raw) => ({ x: p.x, y: p.y })),
+        fromOffset: plan.fromOffset,
+        toOffset: plan.toOffset,
+        ...(plan.bus === true ? { bus: true as const } : {}),
+      };
     out.layout.edges[e.id] = next;
   }
 

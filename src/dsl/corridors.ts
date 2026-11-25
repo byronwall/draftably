@@ -17,6 +17,8 @@ export interface Planned {
   points: Point[];
   fromOffset: number;
   toOffset: number;
+  /** An org chart's reporting line: the lines from one point are one bus (`orgPlans`). */
+  bus?: true;
 }
 
 /**
