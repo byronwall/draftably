@@ -25,7 +25,7 @@ const FACES = {
 let chars = '';
 for (let c = 32; c < 127; c++) chars += String.fromCharCode(c);
 for (let c = 160; c < 256; c++) chars += String.fromCharCode(c);
-chars += '‘’“”–—…•→←×≤≥≠·€';
+chars += '‘’“”–—…•→←×≤≥≠·€↑↓↔◆◇■□●○▲▼✓✗';
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
