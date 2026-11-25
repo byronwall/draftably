@@ -28,3 +28,7 @@ import { DraftablyEdge } from '@draftably/react/flow';
 
 <ReactFlow nodes={nodes} edges={edges} edgeTypes={{ draftably: DraftablyEdge }} />;
 ```
+
+## License
+
+[FSL-1.1-MIT](https://github.com/byronwall/draftably/blob/main/LICENSE) © Byron Wall

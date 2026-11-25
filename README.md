@@ -183,4 +183,4 @@ using `pnpm draftably open`.
 
 ## License
 
-[MIT](LICENSE) © Byron Wall
+[FSL-1.1-MIT](LICENSE) © Byron Wall

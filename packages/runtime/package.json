@@ -4,7 +4,7 @@
   "private": false,
   "description": "Portable native Draftably SVG rendering, validation, and optional viewer.",
   "type": "module",
-  "license": "MIT",
+  "license": "FSL-1.1-MIT",
   "sideEffects": [
     "**/*.css",
     "./dist/element.js"
