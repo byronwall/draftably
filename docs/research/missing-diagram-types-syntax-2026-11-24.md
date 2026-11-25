@@ -23,17 +23,17 @@ Four existing parts decide most of the choices below.
   center node in the middle and balances its branches left and right. It runs when the layout
   intent has a start with `placement: 'center'`. No DSL word reaches it yet.
 
-## One rule for two of the three
+## A new rule for tables
 
-Database tables and mind maps want the same thing: many short members, written as text, that
-still become real nodes. One rule covers both:
+A table has many short members that should still be real nodes. One rule covers that:
 
 > **A heredoc body on a group lists its members, one per line. The group's `layout` line decides
 > how they draw.**
 
 Each body line compiles to an ordinary node with the id `group.name`. Edges, notes, states,
 change marks, colors and links then work on members with no new code. The body is only shorter
-input. This reuses the heredoc parser, and it lifts the "a group takes no body" error.
+input. This reuses the heredoc parser, and it lifts the "a group takes no body" error. Only tables
+use it for now.
 
 ## 1. Database tables
 
@@ -182,53 +182,173 @@ the subset.
 | ---------------------------------------------- | ------------------: |
 | A. `node` and `edge` lines, `layout … mindmap` |            about 41 |
 | B. A `parent=` attribute on each `node`        |            about 21 |
-| C. An indented outline in a group body         |    about 21, no ids |
+| C. An indented outline in a group body         |            about 21 |
 
-| Option     | Paste an outline (Markdown bullets, Mermaid `mindmap`) | Edges and notes from a topic to other boxes | Ids survive a rename | Main tradeoff                                         |
-| ---------- | -----------------------------------------------------: | ------------------------------------------: | -------------------: | ----------------------------------------------------- |
-| A. Edges   |                                                      2 |                                          10 |                   10 | Exact, but twice the lines and hard to read as a tree |
-| B. parent= |                                                      3 |                                          10 |                   10 | One new attribute; still one `node` line per topic    |
-| C. Outline |                                                     10 |                                           7 |                    5 | Reads like notes; ids come from the text by default   |
+**Choice:** A. A mind map is a layout, not a new way to write nodes. Plain nodes and edges plus
+one new layout word cover it. The two-sided tree layout already exists, so the language gains
+only `layout root mindmap root=<id>`.
 
-- C scores lower on ids because a topic's default id is a slug of its text: renaming "Marketing"
-  changes `plan.marketing` and breaks an edge that names it. An optional `{id}` at the end of a
-  line fixes this where it matters, and `check` names the unknown id with a suggestion.
-- The layout is the same for all three, so it does not decide the choice: `layout g mindmap`
-  sets the body's first line as the center and calls the existing `bilateralTarget`.
-- "Indentation means nothing" stays true for the file. Inside a body, indentation is the body's
-  own format, as it already is for code.
+An outline (C) was considered and dropped (Byron, 2026-11-24). It only saves lines. Against it:
+a second way to write the same nodes, ids made from topic text that break on a rename, and Editor
+edits that must rewrite indented text. Pasting Markdown bullets or a Mermaid `mindmap` stays
+possible through `draftably import`, which writes plain nodes and edges. If edge lines get
+tedious, `parent=` (B) can come later as one attribute.
 
-**Choice:** C, on the same group-body rule as tables. A and B keep working, since body lines are
-ordinary nodes.
+- `layout root mindmap root=launch` puts `launch` in the center and calls the existing
+  `bilateralTarget`, which balances first-level branches left and right. `layout g mindmap` works
+  on a group too, so a mind map can sit inside a larger drawing.
+- Each first-level branch takes its own color family in turn. A topic with `color=` keeps its own,
+  and its children inherit it.
+- Branch lines draw with no head, since a mind map has no reading direction. A line with `kind=`
+  or a label, or one that leaves the map, draws as a normal edge.
+- **Watch:** curved, tapered branches are a new edge style in both the canvas and SVG paths.
+  Start with the existing rounded lines if that is too large for the first slice.
+
+## Samples
+
+Each sample is a complete file in the proposed syntax. None compiles yet. Every icon name in them
+exists in Lucide or the Iconify `logos` set today.
+
+### Icons: checkout on AWS
 
 ```draft
-group plan "Launch plan" <<M
-  Launch plan
-    Marketing
-      Blog post
-      Show HN {hn}
-    Engineering
-      Docs site
-      Pricing page
-    Support
-      FAQ
-M
-layout plan mindmap
+diagram "Checkout on AWS" version=1
+subtitle "Orders persist before payment is authorized"
 
-node forum "Community forum"
-edge hn-forum plan.hn -> forum "links to"
+group clients "Customers" color=blue
+node web "Web app" in=clients icon=monitor
+node mobile "Mobile app" in=clients icon=smartphone
+
+group aws "AWS us-east-1" color=slate icon=logos:aws
+node gw "API Gateway" in=aws icon=logos:aws-api-gateway icon-pos=top
+node orders "Orders" in=aws icon=logos:aws-lambda icon-pos=top
+node queue "Order events" in=aws icon=logos:aws-sqs icon-pos=top
+node table "Orders table" in=aws icon=logos:aws-dynamodb icon-pos=top color=violet
+
+node stripe "Stripe" icon=logos:stripe
+node mailer "Receipt mailer" icon=mail
+
+legend violet "Data stores" icon=database
+legend line dashed "Background work"
+
+edge e1 web -> gw "HTTPS"
+edge e2 mobile -> gw "HTTPS"
+edge e3 gw -> orders "create order"
+edge e4 orders -> table "persist"
+edge e5 orders -> stripe "authorize"
+edge e6 orders -> queue "order.created" kind=async
+edge e7 queue -> mailer "send receipt" kind=async
+
+layout root flow fit=slide
 ```
 
-- The one line at the least indent is the center. Each deeper line is a child of the line above
-  it with less indent. Markdown bullets (`-`, `*`) are allowed and dropped.
-- Lines are undirected edges with no head (`directed=false`), drawn as curves that taper from
-  the center. Each first-level branch takes its own color family in turn, unless the line says
-  `color=`.
-- Ids: `plan.launch-plan`, `plan.marketing`, `plan.blog-post`, and `plan.hn` from `{hn}`.
-- `import mindmap.mmd` and `migrate` can convert Mermaid `mindmap` fences into this, since that
-  format is also an indented outline.
-- **Watch:** curved, tapered branches are a new edge style in both the canvas and SVG paths.
-  Start with the existing rounded orthogonal lines if that is too large for the first slice.
+- A bare name (`monitor`, `mail`) is a Lucide icon in the box's text color, so it follows the theme.
+- `logos:` names are vendor logos in their own colors.
+- `icon-pos=top` draws the tile look; without it the icon sits small before the label.
+
+### Database tables: billing schema
+
+```draft
+diagram "Billing schema" version=1
+subtitle "Invoices belong to an org; lines name a product"
+
+group orgs "orgs" color=teal icon=building-2 <<T
+  id          uuid         pk
+  name        text         nn
+  plan        text
+T
+layout orgs table
+
+group users "users" color=blue icon=user <<T
+  id          uuid         pk
+  email       text         uk nn
+  org_id      uuid         fk -> orgs.id
+T
+layout users table
+
+group invoices "invoices" color=amber icon=receipt <<T
+  id          uuid         pk
+  org_id      uuid         fk -> orgs.id
+  issued_at   timestamptz  nn
++ due_at      timestamptz
+  total_cents bigint
+T
+layout invoices table
+
+group lines "invoice_lines" color=amber <<T
+  id          uuid         pk
+  invoice_id  uuid         fk -> invoices.id
+  product_id  uuid         fk -> products.id
+  qty         int          nn
+T
+layout lines table
+
+group products "products" color=violet <<T
+  id          uuid         pk
+  sku         text         uk
+T
+layout products table
+
+# Replaces the line that `-> invoices.id` draws, to add a label and different ends:
+edge has-lines lines.invoice_id -> invoices.id tail=one-or-many head=one "has"
+
+note "due_at is new in this release." near=invoices.due_at side=right
+legend line solid "Foreign key"
+
+layout root engine=layered direction=right
+```
+
+- Each row is `name  type  marks  -> table.column`. Marks are `pk`, `fk`, `uk`, `nn`.
+- `-> orgs.id` draws a line with a crow's foot for "many" at this end and a bar for "one" at the
+  other.
+- Rows are real nodes (`invoices.due_at`), so `note near=`, `edge` and `state` can name them.
+- `+` before a row marks an added column in a change diagram, as `+node` does today.
+
+### Mind map: launch plan
+
+```draft
+diagram "Launch plan" version=1
+subtitle "Four workstreams for the 1.0 launch"
+
+node launch "Launch 1.0"
+node mk "Marketing" color=rose
+node blog "Blog post"
+node hn "Show HN"
+node video "Demo video"
+node eng "Engineering" color=teal
+node docs "Docs site"
+node pricing "Pricing page"
+node load "Load test"
+node sup "Support" color=amber
+node faq "FAQ"
+node status "Status page"
+
+edge b1 launch -> mk
+edge b2 mk -> blog
+edge b3 mk -> hn
+edge b4 mk -> video
+edge b5 launch -> eng
+edge b6 eng -> docs
+edge b7 eng -> pricing
+edge b8 eng -> load
+edge b9 launch -> sup
+edge b10 sup -> faq
+edge b11 sup -> status
+
+node forum "Community forum" icon=message-circle
+edge e1 hn -> forum "links to"
+edge e2 docs -> blog "linked from" kind=async
+
+note "Docs must ship before Show HN." near=docs side=below
+state critical "Critical path" launch eng docs hn
+
+layout root mindmap root=launch
+```
+
+- `forum` is not reachable from `launch` through branch lines, so the layout places it beside the
+  map, and `e1` draws as a normal edge with its label.
+- `e2` joins two topics across branches. It has `kind=async`, so it draws dashed and does not
+  change the tree.
 
 ## Summary
 
@@ -236,10 +356,10 @@ edge hn-forum plan.hn -> forum "links to"
 | --------- | --------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
 | Tables    | Group body, one column per line; SQL importer | Group bodies, `layout g table`, 5 crow's-feet ends | Heredoc parser, cells, line ends, cell-to-cell routing, change marks  |
 | Icons     | Lucide by default, any Iconify set by prefix  | `icon=`, `icon-pos=`                               | Node label measurement, SVG path drawing, autocomplete, `check` hints |
-| Mind maps | Group body as an indented outline             | Group bodies, `layout g mindmap`, `{id}`           | Heredoc parser, `bilateralTarget`, undirected edges, family colors    |
+| Mind maps | Plain nodes and edges                         | `layout g mindmap root=`                           | `bilateralTarget`, tree topology, family colors                       |
 
 Suggested order: icons first (smallest, and the largest visible change), then group bodies with
-tables, then mind maps on the same body rule.
+tables, then mind maps.
 
 ## Sources
 

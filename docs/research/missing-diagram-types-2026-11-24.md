@@ -85,7 +85,7 @@ missing; **no** = no reasonable way.
 | ERD with keys and cardinality       | 16    | Lucid, Eraser, Whimsical, D2, Mermaid, Visio, GoJS, JointJS+ | partial   | Key glyphs, typed columns, crow's feet, table-to-table routing   |
 | Cloud / network architecture, icons | 15    | Lucid, Eraser, Ilograph, IcePanel, Miro, Visio, D2, Mermaid  | partial   | Icons in boxes; groups and edges already work                    |
 | UML class                           | 14    | Lucid, Visio, draw.io, PlantUML, Mermaid, D2, GoJS, yFiles   | partial   | Name/fields/methods compartments, visibility, stereotypes        |
-| Mind map                            | 14    | Whimsical, Miro, FigJam, Lucid, Creately, Mermaid, PlantUML  | partial   | Two-sided and radial layout, curved branches, outline syntax     |
+| Mind map                            | 14    | Whimsical, Miro, FigJam, Lucid, Creately, Mermaid, PlantUML  | partial   | Two-sided and radial layout, curved branches                     |
 | Org chart                           | 13    | Lucid, Visio, Creately, GoJS, yFiles                         | yes       | Photo or role card; tree engine draws it                         |
 | BPMN                                | 11    | Lucid, Visio, Miro, Eraser, JointJS+, yFiles                 | partial   | Event, gateway, task, data-object shapes on lanes                |
 | Wireframe / UI mockup               | 11    | Whimsical, Lucid, Cacoo, PlantUML Salt, FigJam               | no        | A UI widget set; poor fit for a graph tool                       |
@@ -120,7 +120,7 @@ diagrams. Each factor is 1–5. Out-of-scope rows (charts, floor plans) are left
 | ---- | --------------------------------- | ------- | ---- | --- | ----- | ----------------------------------------------------------------------------------------------- |
 | 1    | ERD with keys and crow's feet     | 5       | 5    | 5   | 125   | Every dev tool has it; schemas are text already; `cells` and row edges do half the work today   |
 | 2    | Architecture icons                | 5       | 5    | 4   | 100   | The biggest look gap with Eraser, Ilograph, IcePanel; one attribute; asset bundling is the cost |
-| 3    | Mind map                          | 5       | 3    | 5   | 75    | An outline is the natural text form; reuses `tree`; needs a two-sided layout                    |
+| 3    | Mind map                          | 5       | 3    | 5   | 75    | Plain nodes and edges plus one layout word; the two-sided tree already exists                   |
 | 4    | UML class                         | 5       | 3    | 5   | 75    | Compartments are cells; inheritance and composition marks already exist                         |
 | 5    | C4 kinds and views                | 3       | 4    | 4   | 48    | What the paid architecture tools sell; builds on groups and `state`                             |
 | 6    | UML state machine                 | 4       | 3    | 4   | 48    | Start/end pseudo-states and guards; groups give composite states                                |
