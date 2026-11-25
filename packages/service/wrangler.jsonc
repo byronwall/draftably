@@ -19,8 +19,8 @@
     { "name": "ANON_LIMIT", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } },
     // Calls per API key, a guard against a runaway agent loop rather than a price limit.
     { "name": "KEY_LIMIT", "namespace_id": "1003", "simple": { "limit": 600, "period": 60 } },
-    // Sign-in emails, keyed by IP and by address, so the form can't flood an inbox.
-    { "name": "LOGIN_LIMIT", "namespace_id": "1005", "simple": { "limit": 5, "period": 60 } },
+    // Sign-in emails per IP. The per-address cap is a count in D1.
+    { "name": "LOGIN_LIMIT", "namespace_id": "1005", "simple": { "limit": 10, "period": 60 } },
   ],
   // Cloudflare Email Service sends the sign-in links. draftably.dev must be onboarded as a sending
   // domain first.
@@ -53,11 +53,11 @@
           "namespace_id": "1004",
           "simple": { "limit": 100000, "period": 60 },
         },
-        // High enough for the proof's sign-ins, low enough for it to reach the 429.
+        // High enough for the proof's sign-ins.
         {
           "name": "LOGIN_LIMIT",
           "namespace_id": "1006",
-          "simple": { "limit": 20, "period": 60 },
+          "simple": { "limit": 1000, "period": 60 },
         },
       ],
       // Locally, wrangler writes each sent email to a file and logs its path.

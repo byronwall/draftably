@@ -6,6 +6,7 @@ import {
   cleanEmail,
   createKey,
   endSession,
+  loginTokenEmail,
   revokeKey,
   sendLoginLink,
   sessionAccount,
@@ -156,14 +157,11 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     const email = cleanEmail(String((await req.formData()).get('email') ?? ''));
     if (!email) return loginForm('<p><b>That is not an email address.</b></p>', 400);
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-    const [byIp, byEmail] = await Promise.all([
-      env.LOGIN_LIMIT.limit({ key: `ip:${ip}` }),
-      env.LOGIN_LIMIT.limit({ key: `email:${email}` }),
-    ]);
-    if (!byIp.success || !byEmail.success)
-      return failed('Too many sign-in emails. Wait a minute, then try again.', 429);
+    const tooMany = () =>
+      failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
+    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany();
     try {
-      await sendLoginLink(env, email, url.origin);
+      if (!(await sendLoginLink(env, email, url.origin))) return tooMany();
     } catch (error) {
       console.error('sign-in email failed', error);
       return failed('We could not send the email. Try again later.', 503);
@@ -180,11 +178,15 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       : new Response('Sign out with the button on /account.', { status: 405 });
   if (path === '/auth/verify') {
     // Mail scanners open GET links, so only the button's POST spends the token.
+    // The page names the account, so a person who opens someone else's link sees whose it is.
     if (req.method !== 'POST') {
       const token = url.searchParams.get('token') ?? '';
+      const email = await loginTokenEmail(env.DB, token);
+      if (!email) return failed('This sign-in link was used already or has expired.');
       return page(
         'Sign in',
-        `<h1>Sign in to Draftably</h1><form method="post" action="/auth/verify"><input type="hidden" name="token" value="${esc(token)}"><button class="primary">Sign in</button></form>`,
+        `<h1>Sign in to Draftably</h1><p>Sign in as <b>${esc(email)}</b>?</p>
+<form method="post" action="/auth/verify"><input type="hidden" name="token" value="${esc(token)}"><button class="primary">Sign in</button></form>`,
       );
     }
     const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));

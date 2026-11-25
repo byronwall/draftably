@@ -128,10 +128,12 @@ the same email sign-in and maps a sign-in to the same account row.
 (the Worker's `send_email` binding; no other account or key). The link is good for 15 minutes.
 It opens a page with one "Sign in" button, because mail scanners fetch GET links; only the POST
 spends the token. The form always says "check your email", so it does not tell which addresses
-have accounts. A rate limit per IP and per address stops it from flooding an inbox. After
-sign-in the page shows the credit balance and lets the user create and revoke keys. There is no
-other sign-in and no outside identity provider. If Email Service fails us, Resend is the
-fallback: the send call becomes one `fetch` with a secret.
+have accounts. A rate limit per IP, and a cap of 5 links per address in 15 minutes (counted in
+D1), stop it from flooding an inbox. The verify page names the address, so a person who opens
+someone else's link sees whose account it is. After sign-in the page shows the credit balance
+and lets the user create and revoke keys. There is no other sign-in and no outside identity
+provider. If Email Service fails us, Resend is the fallback: the send call becomes one `fetch`
+with a secret.
 
 ## Credits
 

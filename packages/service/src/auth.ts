@@ -7,7 +7,7 @@ export interface AuthEnv {
   /** Cloudflare Email Service; sends the sign-in links. */
   EMAIL: SendEmail;
   EMAIL_FROM: string;
-  /** Sign-in emails, per address and per IP. */
+  /** Sign-in emails per IP. The per-address cap is in D1 (`sendLoginLink`). */
   LOGIN_LIMIT: RateLimit;
 }
 
@@ -88,6 +88,8 @@ export async function sessionAccount(req: Request, db: D1Database) {
 }
 
 const LINK_MINUTES = 15;
+/** Links one address may get in 15 minutes (a link's life), so the form can't flood an inbox. */
+const MAX_LINKS = 5;
 
 /** A plausible address, lowercased, or null. The mail server decides the rest. */
 export const cleanEmail = (raw: string) => {
@@ -95,13 +97,23 @@ export const cleanEmail = (raw: string) => {
   return email.length <= 254 && /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(email) ? email : null;
 };
 
-/** Mail a one-use sign-in link to `email`. Only the token's hash is stored. */
+/**
+ * Mail a one-use sign-in link to `email`. Only the token's hash is stored. False, and nothing
+ * sent, when the address already got `MAX_LINKS` links that have not expired. The cap is one
+ * statement, so it holds across Cloudflare locations and parallel requests.
+ */
 export async function sendLoginLink(env: AuthEnv, email: string, origin: string) {
   const token = randomToken(32);
+  const now = new Date().toISOString();
   const expires = new Date(Date.now() + LINK_MINUTES * 60_000).toISOString();
-  await env.DB.prepare(`INSERT INTO login_tokens (hash, email, expires_at) VALUES (?1, ?2, ?3)`)
-    .bind(await sha256(token), email, expires)
-    .run();
+  const [, added] = await env.DB.batch([
+    env.DB.prepare(`DELETE FROM login_tokens WHERE expires_at <= ?1`).bind(now),
+    env.DB.prepare(
+      `INSERT INTO login_tokens (hash, email, expires_at) SELECT ?1, ?2, ?3
+       WHERE (SELECT count(*) FROM login_tokens WHERE email = ?2) < ?4`,
+    ).bind(await sha256(token), email, expires, MAX_LINKS),
+  ]);
+  if (!added.meta.changes) return false;
   const link = `${origin}/auth/verify?token=${token}`;
   await env.EMAIL.send({
     to: email,
@@ -110,6 +122,18 @@ export async function sendLoginLink(env: AuthEnv, email: string, origin: string)
     text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
     html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
   });
+  return true;
+}
+
+/** The address a sign-in token is for, if it can still be used. Spends nothing. */
+export async function loginTokenEmail(db: D1Database, token: string) {
+  const row = await db
+    .prepare(
+      `SELECT email FROM login_tokens WHERE hash = ?1 AND used_at IS NULL AND expires_at > ?2`,
+    )
+    .bind(await sha256(token), new Date().toISOString())
+    .first<{ email: string }>();
+  return row?.email ?? null;
 }
 
 /** Spend a sign-in token: its email if it is known, unused and unexpired; else null. */

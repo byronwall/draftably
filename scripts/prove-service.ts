@@ -601,7 +601,9 @@ if (!remote) {
   // A GET, as a mail scanner sends, shows the button and leaves the token unspent.
   const scan = await fetch(`${base}/auth/verify?token=${link}`);
   assert.equal(scan.status, 200);
-  assert.match(await scan.text(), new RegExp(`name="token" value="${link}"`));
+  const scanned = await scan.text();
+  assert.match(scanned, /Sign in as <b>proof@example\.com<\/b>/);
+  assert.match(scanned, new RegExp(`name="token" value="${link}"`));
   const signIn = await verify(link);
   assert.equal(signIn.status, 303);
   assert.equal(signIn.headers.get('Location'), '/account');
@@ -610,6 +612,7 @@ if (!remote) {
   assert.equal(page.status, 200);
   assert.match(await page.text(), /Signed in as <b>proof@example\.com<\/b>/);
   assert.equal((await verify(link)).status, 400, 'a used link signed in again');
+  assert.equal((await fetch(`${base}/auth/verify?token=${link}`)).status, 400);
   const stale = await mailLink('proof@example.com');
   const staleHash = createHash('sha256').update(stale).digest('hex');
   sql(`UPDATE login_tokens SET expires_at = '2000-01-01' WHERE hash = '${staleHash}'`);
@@ -618,12 +621,16 @@ if (!remote) {
   assert.equal((await verify(await mailLink('proof@example.com'))).status, 303);
   assert.equal(sql(`SELECT count(*) AS n FROM accounts WHERE email = 'proof@example.com'`)[0].n, 1);
   assert.equal((await form('/login', { email: 'not an email' })).status, 400);
-  let limited = 0;
-  for (let i = 0; i < 25 && !limited; i++)
-    if ((await form('/login', { email: 'flood@example.com' })).status === 429) limited = i + 1;
-  assert.ok(limited, 'the sign-in form never hit its limit');
+  // An address gets at most 5 links in 15 minutes, whatever the IP.
+  for (let i = 0; i < 5; i++) await mailLink('flood@example.com');
+  const flood = await form('/login', { email: 'flood@example.com' });
+  assert.equal(flood.status, 429);
+  assert.equal(
+    sql(`SELECT count(*) AS n FROM login_tokens WHERE email = 'flood@example.com'`)[0].n,
+    5,
+  );
   console.log(
-    `Email sign-in: a GET leaves the link unspent; its POST signs in once, to one account per address; a used, expired or unknown token gets 400; the form hit 429 after ${limited} more sends.`,
+    `Email sign-in: a GET leaves the link unspent; its POST signs in once, to one account per address; the page names the account; a used, expired or unknown token gets 400; a 6th link to one address in 15 minutes gets 429 and sends nothing.`,
   );
 
   // MCP: the same key, stateless JSON-RPC. render_diagram returns the same PNG as /v1/render.
