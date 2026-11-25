@@ -107,8 +107,9 @@ GET  /v1/balance                                     → {credits, grant, resets
 
 ### MCP server
 
-`/mcp`, Streamable HTTP, made with `createMcpHandler` from the `agents` SDK. It is stateless, so
-it needs no Durable Object. (`McpAgent` is deprecated.) Tools:
+`/mcp`, Streamable HTTP, made with the MCP SDK's `WebStandardStreamableHTTPServerTransport` in
+stateless mode: one server per request, so it needs no Durable Object and none of the `agents`
+SDK's dependencies. Tools:
 
 | Tool               | Input                     | Output                                                    | Credits |
 | ------------------ | ------------------------- | --------------------------------------------------------- | ------: |

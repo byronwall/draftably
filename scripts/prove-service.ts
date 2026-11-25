@@ -581,6 +581,55 @@ if (!remote) {
   console.log(
     'API: validate, convert (= draftably import), REST = GET bytes, 401 without or with a bad key, /account sends you to GitHub.',
   );
+
+  // MCP: the same key, stateless JSON-RPC. render_diagram returns the same PNG as /v1/render.
+  let rpcId = 0;
+  const rpc = async (method: string, params: object = {}, key: string | null = KEYS.rich) => {
+    const res = await fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json, text/event-stream',
+        ...(key ? { Authorization: `Bearer ${key}` } : {}),
+      },
+      body: JSON.stringify({ jsonrpc: '2.0', id: ++rpcId, method, params }),
+    });
+    return { status: res.status, body: res.status === 200 ? await res.json() : undefined };
+  };
+  const init = await rpc('initialize', {
+    protocolVersion: '2025-06-18',
+    capabilities: {},
+    clientInfo: { name: 'prove-service', version: '1' },
+  });
+  assert.equal(init.body.result.serverInfo.name, 'draftably');
+  const tools = (await rpc('tools/list')).body.result.tools.map((t: { name: string }) => t.name);
+  assert.deepEqual(tools.sort(), [
+    'convert_mermaid',
+    'image_url',
+    'language_guide',
+    'render_diagram',
+    'validate_diagram',
+  ]);
+  const call = async (name: string, args: object) =>
+    (await rpc('tools/call', { name, arguments: args })).body.result;
+  const guideText = (await call('language_guide', {})).content[0].text;
+  assert.equal(guideText, fs.readFileSync('skills/draftably/SKILL.md', 'utf8'));
+  const drawnMcp = await call('render_diagram', { code: checkout, format: 'png', scale: 2 });
+  assert.equal(drawnMcp.content[0].type, 'image');
+  assert.ok(
+    Buffer.from(drawnMcp.content[0].data, 'base64').equals(restBytes),
+    'MCP PNG differs from /v1/render',
+  );
+  const badMcp = await call('render_diagram', { code: 'node a "unclosed' });
+  assert.equal(badMcp.isError, true);
+  const validMcp = (await call('validate_diagram', { code: checkout })).content[0].text;
+  assert.match(validMcp, /^valid/);
+  const convMcp = (await call('convert_mermaid', { code: flow.source })).content[0].text;
+  assert.equal(convMcp.split('\n# Warnings:')[0], conv.draft);
+  assert.equal((await rpc('tools/list', {}, null)).status, 401);
+  console.log(
+    `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key.`,
+  );
 }
 
 // The same URL twice: the second answer comes from the edge cache.
