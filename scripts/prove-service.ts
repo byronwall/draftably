@@ -4,9 +4,8 @@
  * for the same source, byte for byte; sources the runtime rejects must come back as a 400 error
  * image. Cycles through the three URL encodings (pako:, Kroki zlib, plain base64url).
  *
- * `--base https://api.draftably.dev` checks a deployed service instead and also requires the
- * second request for a URL to be an edge-cache hit. Local workerd, like workers.dev, never stores
- * cache entries, so the local run skips that check.
+ * The same URL twice must give an edge-cache hit the second time. `--base
+ * https://api.draftably.dev` runs it all against a deployed service instead.
  */
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
@@ -100,19 +99,16 @@ console.log(
 for (const f of tally.failed) console.log('  ' + f);
 
 // The same URL twice: the second answer comes from the edge cache.
-const url = `${base}/svg/${await encodeSource(`web -> api -> db # ${Date.now()}`)}`;
+const fresh = fs.readFileSync('examples/checkout.draft', 'utf8') + `\n# ${Date.now()}\n`;
+const url = `${base}/svg/${await encodeSource(fresh)}`;
 const first = await fetch(url);
 await new Promise(r => setTimeout(r, 500)); // cache.put runs in waitUntil, after the answer
 const second = await fetch(url);
 assert.equal(first.headers.get('X-Draftably-Cache'), 'miss');
-if (remote) assert.equal(second.headers.get('X-Draftably-Cache'), 'hit');
+assert.equal(second.headers.get('X-Draftably-Cache'), 'hit');
 assert.equal(await first.text(), await second.text());
 assert.equal((await fetch(`${base}/svg/pako:@@@`)).status, 400);
 
-console.log(
-  remote
-    ? 'Cache: the second request was a hit. Bad encoding: 400.'
-    : 'Cache: skipped (local workerd stores nothing). Bad encoding: 400.',
-);
+console.log('Cache: the second request was a hit. Bad encoding: 400.');
 stop();
 process.exit(tally.failed.length ? 1 : 0);

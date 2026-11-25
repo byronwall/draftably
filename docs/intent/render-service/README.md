@@ -230,9 +230,8 @@ resources.
 
 ## Findings while building
 
-- Local `workerd` stores nothing in `caches.default`, even with `"cache": { "enabled": true }`, the
-  same as `workers.dev`. Edge caching starts when `api.draftably.dev` is live.
-  `pnpm prove:service --base <url>` checks the cache hit on a deployed service.
+- The Cache API stores only 200 answers, so error images are drawn again each time; the IP rate
+  limit counts them.
 
 ## Open questions
 
