@@ -5,6 +5,9 @@
  * Worker both use this file, so the two can't disagree. No Node APIs: it runs in Node 22, a
  * browser and a Worker.
  */
+import { readSource } from '../dsl/syntax';
+import { baseUrl } from '../model/link';
+
 export const SERVICE_URL = 'https://api.draftably.dev';
 
 /** The largest source the service decodes, in bytes. */
@@ -97,12 +100,37 @@ export async function decodeSource(segment: string) {
 }
 
 /**
- * The file's own `config link-base=` when it is a web address. The runtime never trusts an
- * authored base; here it is as safe as the absolute links the policy already keeps. A local base
- * (`.`, a folder) means nothing on a hosted image, so those relative links are dropped.
+ * The file's own `config link-base=` (the last one wins, as in the language) when it is a web
+ * address, read by the DSL's own reader. The runtime never trusts an authored base; on a hosted
+ * image it is as safe as the absolute links the policy already keeps. A local base (`.`, a folder)
+ * means nothing there, so those relative links are dropped.
  */
-export const webLinkBase = (source: string) =>
-  /^\s*config\b[^\n]*\blink-base="(https?:\/\/[^"]+)"/m.exec(source)?.[1];
+export function webLinkBase(source: string) {
+  let base: string | undefined;
+  try {
+    for (const line of readSource(source).lines)
+      if (line.kind === 'statement' && line.command === 'config')
+        for (const [key, word] of line.attrs)
+          if (key === 'link-base' && word.quoted) base = word.value;
+  } catch {
+    return undefined; // the renderer reports the syntax error
+  }
+  return base && baseUrl('x', base) ? base : undefined;
+}
+
+/**
+ * The link policy for a hosted drawing of `source`: absolute links as written, relative ones
+ * joined to a web link base the way the CLI's `svgHref` joins them, anything else dropped.
+ */
+export function webLinks(source: string) {
+  const base = webLinkBase(source);
+  return {
+    mode: 'safe' as const,
+    // Footnote and note links go through baseUrl; a trailing slash joins them as a folder.
+    ...(base ? { baseUrl: base.endsWith('/') ? base : base + '/' } : {}),
+    resolve: ({ href }: { href: string }) => (base ? baseUrl(href, base) : null) ?? href,
+  };
+}
 
 /** The service URL that draws `source` as `format`. */
 export async function imageUrl(source: string, format: 'svg' | 'png', base = SERVICE_URL) {

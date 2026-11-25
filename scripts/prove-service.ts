@@ -16,7 +16,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
-import { encodeSource, webLinkBase } from '../src/lib/render-url.ts';
+import { build } from 'esbuild';
+
+// The URL codec and link policy import DSL modules that plain Node can't load, so bundle the
+// same file the Worker bundles.
+const bundled = await build({
+  entryPoints: ['src/lib/render-url.ts'],
+  bundle: true,
+  format: 'esm',
+  platform: 'neutral',
+  write: false,
+});
+const { encodeSource, webLinkBase, webLinks } = (await import(
+  'data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64')
+)) as typeof import('../src/lib/render-url');
 
 const at = process.argv.indexOf('--base');
 const remote = at > 0 ? process.argv[at + 1].replace(/\/$/, '') : undefined;
@@ -86,7 +99,7 @@ for (const [i, file] of files.entries()) {
   }
   const want = await renderSvg(source, {
     colorScheme: scheme,
-    links: { mode: 'safe', baseUrl: webLinkBase(source) },
+    links: webLinks(source),
     limits: { maxSourceBytes: 64 * 1024 },
   });
   if (!want.ok) {
@@ -147,7 +160,7 @@ execFileSync('node', ['scripts/draftably.mjs', '--version'], { stdio: 'ignore' }
 const dir = 'tmp/service-proof';
 fs.rmSync(dir, { recursive: true, force: true });
 fs.mkdirSync(dir, { recursive: true });
-const png = { same: 0, local: 0, sourceBack: 0, failed: [] as string[] };
+const png = { same: 0, local: 0, overCap: 0, sourceBack: 0, failed: [] as string[] };
 /**
  * A file that leans on its folder: `src=` code files, or relative links with no web link-base.
  * The service has neither, so the CLI may draw such a file differently (a link arrow, code text).
@@ -160,7 +173,14 @@ async function checkPng({ file, source, segment }: (typeof drawn)[number], n: nu
     copy = path.join(dir, `${n}.draft`);
   fs.writeFileSync(copy, source); // beside no code files: same as the service sees
   const res = await fetch(`${base}/png/${segment}`);
-  if (res.status !== 200) return void png.failed.push(`${file}: PNG ${res.status}`);
+  if (res.status !== 200) {
+    // Over the pixel cap: refused on purpose, and the CLI's own PNG must be that big.
+    await cli('inspect', copy, '--png', theirs).catch(() => {});
+    const cliPx = fs.existsSync(theirs) ? pixels(fs.readFileSync(theirs)) : undefined;
+    if (res.status === 400 && cliPx && cliPx.w * cliPx.h > 8_000_000) png.overCap++;
+    else png.failed.push(`${file}: PNG ${res.status}`);
+    return;
+  }
   fs.writeFileSync(ours, Buffer.from(await res.arrayBuffer()));
   try {
     await cli('inspect', copy, '--png', theirs);
@@ -175,15 +195,16 @@ async function checkPng({ file, source, segment }: (typeof drawn)[number], n: nu
   else if (local(source)) png.local++;
   else png.failed.push(`${file}: differs from the CLI (${a.w}×${a.h} vs ${b.w}×${b.h})`);
   const back = (await cli('extract', ours)).stdout;
-  if (back === source) png.sourceBack++;
+  if (back === (await cli('extract', theirs)).stdout) png.sourceBack++;
   else png.failed.push(`${file}: extract gave a different source`);
 }
 for (let i = 0; i < drawn.length; i += 8)
   await Promise.all(drawn.slice(i, i + 8).map((d, j) => checkPng(d, i + j)));
 console.log(
   `PNG: ${drawn.length} files: ${png.same} pixel-identical to the CLI, ${png.local} differ only ` +
-    `because they use local files or links, ${png.failed.length} wrong; ` +
-    `${png.sourceBack} read back by extract.`,
+    `because they use local files or links, ${png.overCap} refused as over 8 M pixels, ` +
+    `${png.failed.length} wrong; ` +
+    `${png.sourceBack} read back by extract as the CLI's PNG reads back.`,
 );
 for (const f of png.failed) console.log('  ' + f);
 const huge = await fetch(`${base}/png/${await encodeSource('a -> b')}?scale=9`);

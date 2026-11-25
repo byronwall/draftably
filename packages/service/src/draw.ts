@@ -6,7 +6,9 @@
 import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import wasm from '@resvg/resvg-wasm/index_bg.wasm';
 import { renderSvg } from '@draftably/runtime';
-import { MAX_SOURCE_BYTES, SourceError, webLinkBase } from '../../../src/lib/render-url';
+import { MAX_SOURCE_BYTES, SourceError, webLinks } from '../../../src/lib/render-url';
+import { formatSource } from '../../../src/dsl/syntax';
+import { withSourceStrip } from '../../../src/model/strip';
 import { embedPngSource } from '../../../src/model/embed';
 import { rasterFamilies, scaleSvg, svgSize } from '../../../src/model/raster';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
@@ -22,8 +24,12 @@ export interface DrawOptions {
   scale: number;
 }
 
-/** The most pixels a PNG may have: 16 M, 64 MB of RGBA in a 128 MB isolate. */
-export const MAX_PIXELS = 16_000_000;
+/**
+ * The most pixels a PNG may have. resvg-wasm peaks at about 8.5 bytes a pixel (the pixmap plus
+ * PNG encoding), and wasm memory never shrinks: 8 M pixels is about 70 MB of the isolate's 128 MB,
+ * leaving room for the runtime and Mermaid. The largest example at scale 2 is 7.3 M.
+ */
+export const MAX_PIXELS = 8_000_000;
 
 /** Options from a query string or JSON body, with defaults; anything else is refused. */
 export function drawOptions(get: (key: string) => string | null | undefined): DrawOptions {
@@ -39,7 +45,7 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
 export async function drawSvg(source: string, opts: DrawOptions) {
   const result = await renderSvg(source, {
     colorScheme: opts.scheme,
-    links: { mode: 'safe', baseUrl: webLinkBase(source) },
+    links: webLinks(source),
     limits: { maxSourceBytes: MAX_SOURCE_BYTES },
   });
   if (!result.ok) {
@@ -58,22 +64,34 @@ export async function rasterize(svg: string, scale: number) {
   const { w, h } = svgSize(svg);
   if (w * h * scale * scale > MAX_PIXELS)
     throw new SourceError(
-      `The PNG would be ${w * scale} × ${h * scale} pixels, over the 16 M pixel limit. Use a smaller scale or SVG.`,
+      `The PNG would be ${w * scale} × ${h * scale} pixels, over the ${MAX_PIXELS / 1e6} M pixel limit. Use a smaller scale or SVG.`,
     );
   await (ready ??= initWasm(wasm));
   const r = new Resvg(rasterFamilies(scaleSvg(svg, scale)), {
     font: { fontBuffers: fonts, loadSystemFonts: false, defaultFontFamily: 'Inter' },
   });
-  const png = r.render().asPng();
-  r.free();
-  return png;
+  try {
+    const img = r.render();
+    try {
+      return img.asPng();
+    } finally {
+      img.free();
+    }
+  } finally {
+    r.free();
+  }
 }
 
-/** Draw `source` as `format`. A PNG carries the source, so `draftably open` reads it back. */
+/**
+ * Draw `source` as `format`. A PNG carries the source as `draftably inspect --png` writes it: in
+ * a metadata chunk and in a faint pixel strip below the drawing, so `draftably open` reads it back.
+ */
 export async function draw(source: string, format: Format, opts: DrawOptions) {
   const svg = await drawSvg(source, opts);
   if (format === 'svg') return svg;
-  return embedPngSource(await rasterize(svg, opts.scale), source);
+  const kept = formatSource(source);
+  const png = await rasterize(await withSourceStrip(svg, kept, opts.scale), opts.scale);
+  return embedPngSource(png, kept);
 }
 
 const esc = (s: string) =>

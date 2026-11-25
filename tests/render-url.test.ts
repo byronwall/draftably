@@ -1,7 +1,14 @@
 import { randomBytes } from 'node:crypto';
 import { deflateSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { decodeSource, encodeSource, imageUrl, SourceError } from '../src/lib/render-url';
+import {
+  decodeSource,
+  encodeSource,
+  imageUrl,
+  SourceError,
+  webLinkBase,
+  webLinks,
+} from '../src/lib/render-url';
 
 const src = 'title "Checkout"\nweb -> api: "POST /pay"\napi -> db';
 
@@ -36,6 +43,19 @@ describe('render URLs', () => {
   it('builds the service URL', async () => {
     expect(await imageUrl(src, 'png', 'http://localhost:8787/')).toMatch(
       /^http:\/\/localhost:8787\/png\/pako:[\w-]+$/,
+    );
+  });
+
+  it('reads the last web link-base, joins links as a folder, and drops a bad base', () => {
+    const two =
+      'config link-base="https://a.example/x/"\nconfig link-base="https://b.example/docs"\n';
+    expect(webLinkBase(two)).toBe('https://b.example/docs');
+    expect(webLinks(two).resolve({ href: 'notes' })).toBe('https://b.example/docs/notes');
+    expect(webLinks(two).baseUrl).toBe('https://b.example/docs/');
+    expect(webLinkBase('config link-base="https://bad host"\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="../.."\n')).toBeUndefined();
+    expect(webLinks('node a "A"\n').resolve({ href: 'https://x.example/' })).toBe(
+      'https://x.example/',
     );
   });
 });
