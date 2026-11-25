@@ -8,6 +8,7 @@
  * into the source lines by index and character range, so later layers (token colors, diff line
  * bands, highlighted line ranges) attach to rows without changing the layout.
  */
+import { drawTable, readTable, type Table } from './code-table';
 import { measureText, truncateText, typeProfile, type TypeProfile } from './fonts';
 import type { ResolvedAppearance } from './appearance';
 import type { Spot, Status } from './status';
@@ -33,10 +34,16 @@ export interface CodeBlock {
   /** Named line ranges from `range` statements, in file order. */
   ranges?: CodeRange[];
   /**
-   * The heredoc body an Editor edit wrote, as the file will hold it; `lines` are drawn from it.
-   * Absent once the file is read again.
+   * The heredoc body as the file holds it, tabs and all: what the Editor's text box edits, and
+   * what an edit writes back. `lines` are drawn from it. Absent for `src=` code.
    */
   body?: string[];
+  /** `table=on`: the body read once as a table. The drawing and the Editor both use it. */
+  cells?: Table;
+  /** `tab=`, when it is not the default 4. */
+  tab?: number;
+  /** The file sets `wrap=`, so turning `table=` on or off keeps it. */
+  wrapSet?: boolean;
   /** `src=`: the body was read from this file, relative to the `.draft`. */
   src?: {
     path: string;
@@ -137,260 +144,22 @@ export function codeLines(raw: string[], tab = CODE_TAB): string[] {
   return Number.isFinite(indent) ? lines.map(l => l.slice(indent)) : lines;
 }
 
-/** A number with an optional sign, currency, commas, decimals and short unit: 1,204, $48.2k, 12ms. */
-const NUMBER = /^[-+]?[$€£]?\d[\d,]*(\.\d+)?(%|[A-Za-zµ]{1,3})?$/;
-/** Cells that hold no value; they never stop a column from counting as numbers. */
-const NO_VALUE = /^(-|—|NULL|null|None|NaN|n\/a)?$/;
-/** A rule typed under a header: dashes or equals signs, with `|`, `+` or `:` between columns. */
-const RULE = /^[\s|+:]*[-=]{3,}[\s|+:=-]*$/;
-
-/** A typed rule: dashes or equals signs, or a Markdown row of `---` cells such as `|:-:|--|`. */
-const isRule = (l: string) =>
-  RULE.test(l) || (l.includes('|') && pipeCells(l).every(c => /^:?-+:?$/.test(c)));
-
-/** psql's row count under a result. */
-const FOOTER = /^\(\d+ rows?\)$/;
-
-/** A Markdown or psql row's cells: the outer pipes go, and `|` splits the rest. */
-const pipeCells = (l: string) => {
-  let t = l.trim();
-  // Markdown wraps a row in pipes; psql does not, so its blank first or last field keeps its place.
-  if (t.length > 1 && t.startsWith('|') && /(?<!\\)\|$/.test(t)) t = t.slice(1, -1);
-  return t.split(/(?<!\\)\|/).map(c => c.trim().replace(/\\\|/g, '|'));
-};
+/**
+ * The lines a code node draws from its heredoc body: tabs expanded, dedented, and with
+ * `table=on`, the table as `drawTable` lays it out.
+ */
+export const bodyLines = (raw: string[], table?: boolean, tab = CODE_TAB) =>
+  codeFromBody(raw, !!table, tab).lines;
 
 /**
- * The cells of a table body, by column. When every line holds a `|`, pipes split the cells
- * (Markdown, psql). Otherwise runs of two or more spaces split them when every line gives the
- * same count, and failing that a column break is a run of positions blank in every line. Fewer
- * than two columns: undefined.
+ * A code node's body and the lines it draws, from heredoc text: what the compiler reads from a
+ * file and what an Editor edit writes, so both give the same block.
  */
-export function tableCells(lines: string[]): string[][] | undefined {
-  const rows = lines.filter(l => l.trim());
-  if (rows.length < 2) return undefined;
-  if (rows.every(l => l.includes('|'))) return lines.map(l => (l.trim() ? pipeCells(l) : []));
-  const split = rows.map(l => l.trim().split(/ {2,}/));
-  if (split[0].length > 1 && split.every(c => c.length === split[0].length))
-    return lines.map(l => (l.trim() ? l.trim().split(/ {2,}/) : []));
-  const width = Math.max(...rows.map(l => l.length)),
-    spans: Array<[number, number]> = [];
-  for (let i = 0; i < width; i++) {
-    if (rows.every(l => (l[i] ?? ' ') === ' ')) continue;
-    const last = spans[spans.length - 1];
-    if (last && last[1] === i) last[1] = i + 1;
-    else spans.push([i, i + 1]);
-  }
-  if (spans.length < 2) return undefined;
-  return lines.map(l => (l.trim() ? spans.map(([a, b]) => l.slice(a, b).trim()) : []));
-}
-
-export type Align = 'left' | 'right' | 'center';
-
-/** Right for a column whose cells under the header all hold numbers; left otherwise. */
-export function autoAlign(rows: string[][], n: number): Align[] {
-  const head = rows.findIndex(c => c.length);
-  return Array.from({ length: n }, (_, i) => {
-    const values = rows.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
-    return values.length > 0 && values.every(c => NUMBER.test(c[i])) ? 'right' : 'left';
-  });
-}
-
-const pad = (s: string, w: number, a: Align) =>
-  a === 'right'
-    ? s.padStart(w)
-    : a === 'center'
-      ? s.padStart(s.length + Math.floor((w - s.length) / 2)).padEnd(w)
-      : s.padEnd(w);
-
-/** Rows of cells as lines, each column padded to its widest cell, two spaces apart. */
-function alignRows(rows: string[][], align: Align[]): string[] {
-  const widths = align.map((_, i) => Math.max(...rows.map(c => (c[i] ?? '').length)));
-  return rows.map(c =>
-    c.length
-      ? widths
-          .map((w, i) => pad(c[i] ?? '', w, align[i]))
-          .join('  ')
-          .trimEnd()
-      : '',
-  );
-}
-
-/** A table body read into rows of cells: what `table=on` draws, and what the editor edits. */
-export interface Table {
-  /** The header row first. A blank source line is an empty row. */
-  rows: string[][];
-  align: Align[];
-  /** psql's "(3 rows)" line under the table. */
-  footer?: string;
-  /** Columns a `:` mark in a typed rule aligned, even where numbers would align them the same. */
-  marked?: boolean[];
-}
-
-/**
- * Read a table body. A rule typed under the header (`-----`, `|---|---:|`, `----+----`) is
- * dropped, since the drawing has its own; its `:` marks set the alignment (`---:`, `:---:`).
- * Otherwise a column whose cells under the header are all numbers aligns right. Fewer than two
- * columns: one column of the trimmed lines.
- */
-export function readTable(lines: string[]): Table {
-  const last = lines.findLastIndex(l => l.trim());
-  if (last > 0 && FOOTER.test(lines[last].trim()))
-    return { ...readTable(lines.slice(0, last)), footer: lines[last].trim() };
-  const first = lines.findIndex(l => l.trim()),
-    typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
-    body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
-    // psql's rule joins its columns with `+`: every `|` splits, so blank first and last fields
-    // keep their places.
-    psql =
-      typed.length > 0 &&
-      lines[first + 1].includes('+') &&
-      body.every(l => !l.trim() || l.includes('|')),
-    // A pipe table with a rule is a table even with only its header; one column keeps its lines
-    // as they are, indent and all.
-    rows =
-      (psql
-        ? body.map(l => (l.trim() ? l.split(/(?<!\\)\|/).map(c => c.trim()) : []))
-        : undefined) ??
-      tableCells(body) ??
-      (typed.length && body.every(l => !l.trim() || l.includes('|'))
-        ? body.map(l => (l.trim() ? pipeCells(l) : []))
-        : body.map(l => (l.trim() ? [l] : []))),
-    n = Math.max(1, ...rows.map(c => c.length)),
-    auto = autoAlign(rows, n),
-    align = auto.map((a, i): Align => {
-      const mark = typed.length === n ? typed[i] : '';
-      if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
-      if (mark.endsWith(':')) return 'right';
-      if (mark.startsWith(':')) return 'left';
-      return a;
-    }),
-    marked = align.map((_, i) => typed.length === n && typed[i].includes(':'));
-  return { rows, align, ...(marked.some(Boolean) ? { marked } : {}) };
-}
-
-/**
- * `table=on`: the body as a table with its columns two spaces apart, and psql's footer on its
- * own line under it. A body with fewer than two columns stays as it is.
- */
-export function tableLines(lines: string[]): string[] {
-  const t = readTable(lines),
-    out = t.align.length < 2 ? t.rows.map(r => r[0] ?? '') : alignRows(t.rows, t.align);
-  return t.footer ? [...out, t.footer] : out;
-}
-
-/** Rows as `readTable` gives them, for comparing two reads: n cells each, a blank line empty. */
-const sameRows = (a: string[][], b: string[][], n: number) =>
-  JSON.stringify(a.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : []))) ===
-  JSON.stringify(b.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : [])));
-
-/**
- * A table as body text that `readTable` reads back the same: columns two spaces apart when that
- * reads back cell for cell, and otherwise a Markdown table, with `|` in a cell escaped and a
- * `:---:` rule for the alignment. Every row stays, so a `range` keeps its lines; empty columns at
- * the right go. A psql footer is written as it is given.
- */
-export function writeTable(t: Table): string[] {
-  if (!t.rows.length) return t.footer ? [t.footer] : [];
-  const one = Math.max(1, ...t.rows.map(r => r.length)) === 1;
-  let rows = t.rows.map(r => (one ? [...r] : r.map(c => c.trim())));
-  let n = Math.max(1, ...rows.map(r => r.length));
-  // Empty columns at the right go, but a table stays a table: one column draws as plain lines.
-  while (n > 2 && rows.every(r => !r[n - 1])) n--;
-  // A blank line stays a blank line; a row of empty cells stays a row, and the header always is.
-  rows = rows.map((r, j) =>
-    j === 0 || r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : [],
-  );
-  // One column draws its lines as they are, so an alignment would change nothing.
-  const align: Align[] =
-      n === 1 ? ['left'] : Array.from({ length: n }, (_, i) => t.align[i] ?? 'left'),
-    footer = t.footer ? [t.footer] : [];
-  // One column is its lines as they are; more are aligned, which is also how they draw.
-  const plain = [...(n === 1 ? rows.map(r => r[0] ?? '') : alignRows(rows, align)), ...footer],
-    back = readTable(plain);
-  if (
-    back.align.length === n &&
-    (n === 1 || back.align.every((a, i) => a === align[i])) &&
-    sameRows(back.rows, rows, n) &&
-    JSON.stringify(tableLines(plain)) === JSON.stringify(plain)
-  )
-    return plain;
-  // Each pipe column is its widest cell plus a space either side; the rule's `:` marks sit at
-  // its ends.
-  const cells = rows.map(r => r.map(c => c.replace(/\|/g, '\\|'))),
-    widths = align.map((_, i) => Math.max(3, ...cells.map(r => (r[i] ?? '').length))),
-    line = (r: string[]) =>
-      r.length ? `| ${r.map((c, i) => pad(c, widths[i], align[i])).join(' | ')} |` : '',
-    rule = widths.map((w, i) =>
-      align[i] === 'center'
-        ? `:${'-'.repeat(w)}:`
-        : align[i] === 'right'
-          ? `${'-'.repeat(w + 1)}:`
-          : `:${'-'.repeat(w + 1)}`,
-    );
-  return [line(cells[0]), `|${rule.join('|')}|`, ...cells.slice(1).map(line), ...footer];
-}
-
-/** The lines a code node draws from its heredoc body: tabs expanded, dedented, and a table aligned. */
-export function bodyLines(raw: string[], table?: boolean, tab = CODE_TAB): string[] {
+export function codeFromBody(raw: string[], table: boolean, tab = CODE_TAB) {
   const lines = codeLines(raw, tab);
-  return table ? tableLines(lines) : lines;
-}
-
-/**
- * Cells a spreadsheet copied: tabs between cells and a line per row, with quotes around a cell
- * that holds a tab, a newline or a quote. A tab or newline inside a cell becomes a space.
- */
-export function tsvRows(text: string): string[][] {
-  const src = text.replace(/\r\n?/g, '\n').replace(/\n$/, ''),
-    rows: string[][] = [[]];
-  let cell = '',
-    quoted = false;
-  const end = () => {
-    rows[rows.length - 1].push(cell);
-    cell = '';
-  };
-  for (let i = 0; i < src.length; i++) {
-    const ch = src[i];
-    if (quoted && ch === '"' && src[i + 1] === '"') {
-      cell += '"';
-      i++;
-    } else if (quoted && ch === '"') quoted = false;
-    // A file expands tabs, so a tab inside a cell would move the columns: it becomes a space.
-    else if (quoted) cell += ch === '\n' || ch === '\t' ? ' ' : ch;
-    else if (ch === '"' && !cell) quoted = true;
-    else if (ch === '\t') end();
-    else if (ch === '\n') {
-      end();
-      rows.push([]);
-    } else cell += ch;
-  }
-  end();
-  return rows.map(r => r.map(c => c.trim()));
-}
-
-/**
- * A table pasted as text: cells a spreadsheet copied (tabs, the same count on every row), or a
- * Markdown or psql table with its rule. Anything else is not a table: undefined.
- */
-export function pastedTable(text: string): Table | undefined {
-  const clean = text.replace(/\r\n?/g, '\n').replace(/\n+$/, '');
-  if (clean.includes('\t')) {
-    // A row of only tabs is a blank record, and stays.
-    const rows = tsvRows(clean);
-    if (rows.length > 1 && rows[0].length > 1 && rows.every(r => r.length === rows[0].length))
-      return { rows, align: autoAlign(rows, rows[0].length) };
-  }
-  const lines = clean.split('\n').filter(l => l.trim());
-  // A Markdown or psql table: its rule under the header, and a `|` on every other line but a
-  // psql footer.
-  if (
-    lines.length > 1 &&
-    isRule(lines[1]) &&
-    lines.every((l, i) => i === 1 || l.includes('|') || FOOTER.test(l.trim()))
-  )
-    // Read with its blank lines, as the file would be, so a `range` counts the same lines.
-    return readTable(clean.split('\n'));
-  return undefined;
+  if (!table) return { body: raw, lines };
+  const cells = readTable(lines);
+  return { body: raw, cells, lines: drawTable(cells) };
 }
 
 /** One drawn row: all of a source line, or one piece of a long one. */

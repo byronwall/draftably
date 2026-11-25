@@ -13,7 +13,7 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
-import { bodyLines, CODE_MAX_WIDTH, codeLayout, type CodeBlock } from '../../model/code';
+import { CODE_MAX_WIDTH, codeFromBody, codeLayout, type CodeBlock } from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -83,12 +83,21 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /** Save the open code editor, if any, before another edit or a press on the canvas. */
   const commitCodeEdit = () => saveOpenCode?.();
 
+  /** What the open editor started from: a save is refused when the node changed since. */
+  let codeBase = '';
+  /** A code node's caption, table setting and body, to tell whether it changed. */
+  const codeState = (id: string) => {
+    const node = findNode(s.doc, id);
+    return JSON.stringify([node?.title, node?.code?.table, node?.code?.body ?? node?.code?.lines]);
+  };
+
   function startCodeEdit(id: string) {
     finishInlineEdit(true);
     commitCodeEdit();
     const code = findNode(s.doc, id)?.code;
     if (code?.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
+    codeBase = codeState(id);
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -99,8 +108,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /** A table node from a pasted table's body, at the middle of the view, selected. */
   function addTable(body: string[]) {
     const code: CodeBlock = {
-        lines: bodyLines(body, true),
-        body,
+        ...codeFromBody(body, true),
         table: true,
         wrap: false,
         numbers: false,
@@ -122,26 +130,27 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
 
   /**
    * Close the code editor of node `id`; with `next`, save its caption, table setting and, when it
-   * changed, its body, as one undo step. The node draws from the new body at once.
+   * changed, its body, as one undo step. The node is read from the new body as the compiler
+   * reads a file, so it draws the same before and after the file is saved. A node that changed
+   * since the editor opened (the file was edited elsewhere) is not saved over.
    */
-  function finishCodeEdit(
-    id: string,
-    next?: { body?: string[]; table: boolean; title: string; tab?: number; wrap?: boolean },
-  ) {
+  function finishCodeEdit(id: string, next?: { body?: string[]; table: boolean; title: string }) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
     if (!next) return;
+    if (codeState(id) !== codeBase)
+      return toast('This code changed while you edited it, so your edit was not saved.');
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;
-      const { table: _, ...rest } = node.code;
+      const { table: _, cells: __, ...rest } = node.code,
+        toggled = next.table !== !!node.code.table;
       node.code = {
         ...rest,
         ...(next.table ? { table: true } : {}),
-        ...(next.wrap !== undefined ? { wrap: next.wrap } : {}),
-        ...(next.body
-          ? { body: next.body, lines: bodyLines(next.body, next.table, next.tab) }
-          : {}),
+        // `table=` sets the wrap default, unless the file sets `wrap=`.
+        ...(toggled && !rest.wrapSet ? { wrap: !next.table } : {}),
+        ...codeFromBody(next.body ?? rest.body ?? rest.lines, next.table, rest.tab),
       };
       node.title = next.title;
     });

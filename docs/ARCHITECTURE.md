@@ -89,27 +89,29 @@ Considered and not chosen, with the reason:
 
 Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directly.
 
-| File              | Responsibility                                                                                                      |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `types.ts`        | The `Diagram` document and everything in it.                                                                        |
-| `document.ts`     | `normalize` validates any input (files, storage, clipboard) and migrates v1 files.                                  |
-| `graph.ts`        | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                  |
-| `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given.   |
-| `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                          |
-| `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                    |
-| `rich-text.ts`    | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                          |
-| `link.ts`         | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.       |
-| `status.ts`       | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.                 |
-| `footnote.ts`     | The footnote block between the drawing and the key.                                                                 |
-| `code.ts`         | Code nodes: `codeLayout` sizes, wraps and clips a listing by mono columns. Each row points back to its source line. |
-| `highlight.ts`    | Syntax colors for code nodes: a regex lexer per `lang=`, mapped to each theme's families at 4.5:1 contrast.         |
-| `ranges.ts`       | Named line ranges on a code node: the band, margin bar and label tag (`rangeMarks`), drawn under the text.          |
-| `code-src.ts`     | `src=` on a code node: the path and `#La-Lb` range, `lang=` from the extension, and the placeholder body.           |
-| `appearance.ts`   | Five preset themes, families with numeric shades, `resolveAppearance` and the dark variant (`forScheme`).           |
-| `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).            |
-| `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                   |
-| `static-scene.ts` | A read-only scene for comparison candidates.                                                                        |
-| `samples.ts`      | The example catalog backed by `src/samples/*.json`.                                                                 |
+| File                 | Responsibility                                                                                                                            |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `types.ts`           | The `Diagram` document and everything in it.                                                                                              |
+| `document.ts`        | `normalize` validates any input (files, storage, clipboard) and migrates v1 files.                                                        |
+| `graph.ts`           | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                                        |
+| `edits.ts`           | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given.                         |
+| `geometry.ts`        | Rectangles, rounding and SVG path helpers.                                                                                                |
+| `labels.ts`          | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                                          |
+| `rich-text.ts`       | `[label](href)` links in notes and footnotes, wrapped as plain words wrap.                                                                |
+| `link.ts`            | `href=` kinds (URL, `.draft`, file with `:line:col`), link-base joins, editor URLs and the ↗ mark's position.                             |
+| `status.ts`          | One paint layer for diff marks and emphasis states. `withState` changes paint only, never geometry.                                       |
+| `footnote.ts`        | The footnote block between the drawing and the key.                                                                                       |
+| `code.ts`            | Code nodes: `codeLayout` sizes, wraps and clips a listing by mono columns. Each row points back to its source line.                       |
+| `code-table.ts`      | `table=on` code: `readTable` reads a body once into a `Table`, `drawTable` lays it out, `writeTable` gives text that reads back the same. |
+| `code-table-edit.ts` | The Editor's table edits as pure functions on one `Grid`: cells, rows, columns, alignment, paste, and the psql footer count.              |
+| `highlight.ts`       | Syntax colors for code nodes: a regex lexer per `lang=`, mapped to each theme's families at 4.5:1 contrast.                               |
+| `ranges.ts`          | Named line ranges on a code node: the band, margin bar and label tag (`rangeMarks`), drawn under the text.                                |
+| `code-src.ts`        | `src=` on a code node: the path and `#La-Lb` range, `lang=` from the extension, and the placeholder body.                                 |
+| `appearance.ts`      | Five preset themes, families with numeric shades, `resolveAppearance` and the dark variant (`forScheme`).                                 |
+| `fonts.ts`           | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).                                  |
+| `routes.ts`          | Ports, edge-label placement and the call into the routing engine.                                                                         |
+| `static-scene.ts`    | A read-only scene for comparison candidates.                                                                                              |
+| `samples.ts`         | The example catalog backed by `src/samples/*.json`.                                                                                       |
 
 ## state/ — reactive application state
 

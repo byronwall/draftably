@@ -7,17 +7,8 @@ import { projectScene } from '../src/dsl/project';
 import { formatSource, parseModel, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit, UnsupportedEdit } from '../src/dsl/translate';
 import { resolveAppearance } from '../src/model/appearance';
-import {
-  CODE_ADVANCE,
-  CODE_PAD,
-  CODE_TYPE,
-  codeLayout,
-  pastedTable,
-  readTable,
-  tableLines,
-  writeTable,
-  type CodeBlock,
-} from '../src/model/code';
+import { CODE_ADVANCE, CODE_PAD, CODE_TYPE, codeLayout, type CodeBlock } from '../src/model/code';
+import { pastedTable, tableLines, writeTable } from '../src/model/code-table';
 import { FACES } from '../src/model/fonts';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
@@ -299,127 +290,6 @@ describe('code nodes in a diagram', () => {
 });
 
 describe('editing code tables', () => {
-  const bodies = {
-    ragged: ['name  cat  count', 'apple   fruit   10', 'bread  bakery  4'],
-    blanks: [
-      'user     last_login   orders',
-      'ana      2026-11-02       12',
-      'bo                         0',
-    ],
-    markdown: ['| tier | status | cost |', '|------|:------:|-----:|', '| pro  | ok     | $12  |'],
-    psql: [' id | plan  | seats', '----+-------+-------', '  1 | pro   |    12', '(1 row)'],
-    oneColumn: ['name', 'ana', 'bo'],
-    indented: ['label', '  indentation'],
-  };
-
-  it('writes back a table that draws the same, for every kind of body', () => {
-    for (const [name, body] of Object.entries(bodies))
-      expect(tableLines(writeTable(readTable(body))), name).toEqual(tableLines(body));
-  });
-
-  it('reads back every saved table cell for cell, whatever the cells hold', () => {
-    // Every two-line, three-column Markdown table from these cells: blanks, spaces, pipes, numbers.
-    const values = ['', 'a', 'New York', '12', 'two  spaces', 'a\\|b'],
-      row = (cells: string[]) => `| ${cells.join(' | ')} |`;
-    let checked = 0;
-    for (let k = 0; k < values.length ** 6; k++) {
-      const v = Array.from(
-        { length: 6 },
-        (_, i) => values[Math.floor(k / values.length ** i) % values.length],
-      );
-      const body = [row(v.slice(0, 3)), '|---|---|---|', row(v.slice(3))],
-        saved = writeTable(readTable(body));
-      // A table of only blank cells has nothing to keep.
-      if (v.every(c => !c)) continue;
-      expect(tableLines(saved), body.join('\n')).toEqual(tableLines(body));
-      checked++;
-    }
-    expect(checked).toBe(46655);
-  });
-
-  it('keeps a blank line inside a table, so a range keeps its rows', () => {
-    const body = ['id  name', '1   ana', '', '2   bo', '3   cy'],
-      saved = writeTable(readTable(body));
-    expect(saved[2]).toBe('');
-    expect(tableLines(saved)).toEqual(tableLines(body));
-  });
-
-  it('keeps a chosen alignment and a psql footer, and drops empty columns', () => {
-    const t = readTable(bodies.psql);
-    t.rows.push(['2', 'free', '1']);
-    t.footer = '(2 rows)';
-    t.rows = t.rows.map(r => [...r, '']);
-    t.align = ['left', 'center', 'right', 'left'];
-    const lines = writeTable(t);
-    expect(lines[1]).toMatch(/^\|:-+\|:-+:\|-+:\|$/);
-    expect(lines.at(-1)).toBe('(2 rows)');
-    expect(readTable(lines)).toEqual({
-      rows: [
-        ['id', 'plan', 'seats'],
-        ['1', 'pro', '12'],
-        ['2', 'free', '1'],
-      ],
-      align: ['left', 'center', 'right'],
-      footer: '(2 rows)',
-      marked: [true, true, true],
-    });
-  });
-
-  it('keeps psql blank edge fields, a header-only table, an empty table and one column', () => {
-    const psql = readTable([
-      'id | units | price',
-      '---+-------+------',
-      '   | EUR   |   123',
-      '   | EUR |   ',
-    ]);
-    expect(psql.rows).toEqual([
-      ['id', 'units', 'price'],
-      ['', 'EUR', '123'],
-      ['', 'EUR', ''],
-    ]);
-    // A typed `:` mark is a choice, even where numbers would align the column the same way.
-    expect(readTable(['| id | amount |', '|----|:-------|', '| A  | NULL   |']).marked).toEqual([
-      false,
-      true,
-    ]);
-    expect(pastedTable('| n |\n|---|\n| Ana |\n\n| Bo |')?.rows).toEqual([
-      ['n'],
-      ['Ana'],
-      [],
-      ['Bo'],
-    ]);
-    const headerOnly = writeTable({ rows: [['id', 'name']], align: ['left', 'left'] });
-    expect(readTable(headerOnly).rows).toEqual([['id', 'name']]);
-    expect(writeTable({ rows: [], align: ['right'] })).toEqual([]);
-    const indented = ['label', '  indentation'];
-    expect(writeTable({ rows: indented.map(l => [l]), align: ['center'] })).toEqual(indented);
-  });
-
-  it('reads spreadsheet and Markdown pastes as tables, and nothing else', () => {
-    expect(pastedTable('id\tnote\n1\t"a\tb"\n\t\n2\tok\n')?.rows).toEqual([
-      ['id', 'note'],
-      ['1', 'a b'],
-      ['', ''],
-      ['2', 'ok'],
-    ]);
-    expect(pastedTable('id\tms\n1\t12\n2\t7\n')).toEqual({
-      rows: [
-        ['id', 'ms'],
-        ['1', '12'],
-        ['2', '7'],
-      ],
-      align: ['right', 'right'],
-    });
-    expect(pastedTable(bodies.markdown.join('\n'))?.align).toEqual(['left', 'center', 'right']);
-    expect(pastedTable('id | plan\n----+------\n1 | pro\n(1 row)')?.footer).toBe('(1 row)');
-    expect(pastedTable('id\tplan\n1\t')?.rows).toEqual([
-      ['id', 'plan'],
-      ['1', ''],
-    ]);
-    expect(pastedTable('first step\nsecond step')).toBeUndefined();
-    expect(pastedTable('a\tb')).toBeUndefined();
-  });
-
   it('saves an edited body and the table setting to the source, and only those', () => {
     const save = (
       source: string,
