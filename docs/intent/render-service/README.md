@@ -1,6 +1,6 @@
 # Hosted render service: design
 
-Status: planned (2026-11-24). Nothing is built or deployed. Task: TASK-0080. Build order:
+Status: built, not deployed (2026-11-25). The Worker is in `packages/service`. Task: TASK-0080. Build order:
 [plan.md](plan.md).
 
 ## Goal

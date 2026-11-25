@@ -28,7 +28,13 @@ const SITE: Meta[] = [
     path: '',
     title: 'draftably: diagrams from plain text',
     description:
-      'A text language and CLI for diagrams. Write plain .draft source; draftably lays out the boxes and routes the lines. Drag a box to keep the move.',
+      'A text language and CLI for diagrams, plus a hosted render API and MCP server. Write plain .draft source; draftably lays out the boxes and routes the lines.',
+  },
+  {
+    path: 'pricing',
+    title: 'Pricing · draftably',
+    description:
+      'Image URLs are free with no key. An account gets 1,000 credits a month for the REST API and MCP server; credit packs add more. The CLI and editor stay free.',
   },
   {
     path: 'play',

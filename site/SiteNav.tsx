@@ -8,6 +8,14 @@ const GITHUB = 'https://github.com/byronwall/draftably';
  * pages move with the router; the editor and GitHub are other sites, so their links skip it.
  */
 export function SiteNav(props: { current: 'home' | 'play' | 'docs'; class?: string }) {
+  // Already on the home page: scroll to the section, even when the hash already names it.
+  const jump = (id: string) => (e: MouseEvent) => {
+    const section = document.getElementById(id);
+    if (props.current !== 'home' || !section) return;
+    e.preventDefault();
+    history.replaceState(null, '', `#${id}`);
+    section.scrollIntoView({ behavior: 'instant' });
+  };
   return (
     <nav class={`site-nav ${props.class ?? ''}`} aria-label="Site">
       <A href="/play" aria-current={props.current === 'play' ? 'page' : undefined}>
@@ -16,17 +24,13 @@ export function SiteNav(props: { current: 'home' | 'play' | 'docs'; class?: stri
       <A href="/docs" aria-current={props.current === 'docs' ? 'page' : undefined}>
         Docs
       </A>
+      <a class="site-nav-more" href={`${import.meta.env.BASE_URL}#api`} onClick={jump('api')}>
+        API
+      </a>
       <a
         class="site-nav-more"
         href={`${import.meta.env.BASE_URL}#examples`}
-        onClick={e => {
-          // Already on the page: scroll there, even when the hash is already #examples.
-          const section = document.getElementById('examples');
-          if (props.current !== 'home' || !section) return;
-          e.preventDefault();
-          history.replaceState(null, '', '#examples');
-          section.scrollIntoView({ behavior: 'instant' });
-        }}
+        onClick={jump('examples')}
       >
         Examples
       </a>
