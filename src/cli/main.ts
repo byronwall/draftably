@@ -24,6 +24,7 @@ import { cliVersion, staleSkills } from './skill';
 import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
 import { updateNotice } from './update';
+import { printIcons, useInstalledIconSets } from './icon-sets';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
@@ -119,6 +120,9 @@ Commands:
   docs [topic]              Print the language guide (DSL.md) for this version: its contents,
                             the sections whose heading matches topic (docs legend, docs
                             count), or all of it with docs all.
+  icons <word> [--limit N]  Print icon names for icon= that match word, best first: Lucide
+                            names (bare) and names from any installed @iconify-json/<set>
+                            package (prefix:name). N defaults to 30.
   skill install             Install the agent skill for writing .draft files into
        [--global]           ./.claude/skills/draftably, or ~/.claude/skills with --global.
        [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
@@ -326,6 +330,7 @@ export async function main(argv: string[]): Promise<number> {
     return 0;
   }
   const flag = (name: string) => rest.includes(name);
+  useInstalledIconSets();
   /**
    * The source to embed in an exported image, unless `--no-source` is given, with each `src=`
    * code node's file inlined so the image opens again on its own.
@@ -707,6 +712,15 @@ export async function main(argv: string[]): Promise<number> {
           launch: !args.includes('--no-open'),
         });
         return -1;
+      }
+      case 'icons': {
+        if (!file || file.startsWith('--'))
+          throw new UsageError('icons needs a word: icons database.');
+        const at = rest.indexOf('--limit'),
+          limit = at >= 0 ? Number(rest[at + 1]) : 30;
+        if (!Number.isInteger(limit) || limit < 1)
+          throw new UsageError('--limit needs a whole number above 0.');
+        return await printIcons(file, limit);
       }
       case 'docs': {
         const { docs } = await import('./docs');
