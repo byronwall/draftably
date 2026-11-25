@@ -2,6 +2,7 @@ import { createEffect, For, Match, on, Show, Switch, type JSX } from 'solid-js';
 import * as edits from '../model/edits';
 import {
   ancestors,
+  cellsBandOf,
   descendants,
   findEdge,
   findGroup,
@@ -23,7 +24,17 @@ import {
 import { headOf, MARKERS, tailOf } from '../model/markers';
 import { DSL_SHAPES } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
-import type { ColorKey, Diagram, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
+import type {
+  ColorKey,
+  Diagram,
+  DiagramGroup,
+  DiagramNode,
+  IntentRole,
+  LabelMode,
+  PortSide,
+  ShapeKind,
+} from '../model/types';
+import { IconPicker } from './IconPicker';
 import { runCommand, type CommandId } from '../state/commands';
 import {
   parseTextId,
@@ -516,6 +527,12 @@ function ObjectInspector(props: { id: string }) {
   const style = () => styleOf(s.doc, props.id);
   const shapes = () =>
     s.fileMode() ? SHAPES.filter(s => DSL_SHAPES.includes(s as never)) : SHAPES;
+  // A file's `icon=`: on boxes, pills, circles and text, and on framed groups.
+  const iconable = () =>
+    s.fileMode() &&
+    (container()
+      ? !cellsBandOf(s.doc, props.id) && !(object() as DiagramGroup).frame
+      : ['box', 'pill', 'circle', 'text'].includes(style().shape));
   // A sequence places everything in lanes, so only a participant's size is the file's to set.
   const lanes = () => !!s.doc.layout.sequence;
   return (
@@ -545,6 +562,19 @@ function ObjectInspector(props: { id: string }) {
         <Field label="Color">
           <Swatches selected={style().color} shade={style().shade} group={container()} />
         </Field>
+        <Show when={iconable()}>
+          <Field label="Icon">
+            <IconPicker
+              icon={object().icon}
+              pos={(object() as DiagramNode).iconPos}
+              node={!container()}
+              label={object().title}
+              onChange={(icon, pos) =>
+                s.transact('Edit icon', d => edits.setIcon(d, props.id, icon, pos))
+              }
+            />
+          </Field>
+        </Show>
         <Show when={!container()}>
           <SelectField<ShapeKind>
             label="Shape"

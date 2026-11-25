@@ -170,12 +170,7 @@ export async function compile(source: string, files?: CodeFiles): Promise<Scene>
  * alone. An icon no set has warns, with the closest names; its box keeps the room it reserved.
  */
 async function withIcons(scene: Scene, m: Model): Promise<Scene> {
-  const uses = [
-    ...m.objects.flatMap(o => (o.icon ? [{ name: o.icon, line: o.line, ids: [o.id] }] : [])),
-    ...(m.appearance.legend ?? []).flatMap((e, i) =>
-      e.icon ? [{ name: e.icon, line: m.legendLines[i], ids: [] }] : [],
-    ),
-  ];
+  const uses = iconUses(m);
   if (!uses.length) return scene;
   const icons: Record<string, IconData> = await loadIcons(uses.map(u => u.name)),
     missing = uses.filter(u => !icons[u.name]);
@@ -199,6 +194,33 @@ async function withIcons(scene: Scene, m: Model): Promise<Scene> {
   }
   return { ...scene, icons };
 }
+
+/**
+ * Add icons a worker could not load to a scene, from the sets this thread can read (the editor
+ * reads a local server's installed sets), and drop their warnings. The scene as it was when every
+ * icon is there or none is found.
+ */
+export async function completeIcons(scene: Scene): Promise<Scene> {
+  const uses = iconUses(scene.model).filter(u => !scene.icons?.[u.name]);
+  if (!uses.length) return scene;
+  const found = await loadIcons(uses.map(u => u.name)),
+    names = new Set(Object.keys(found));
+  if (!names.size) return scene;
+  const fixed = new Set(uses.filter(u => names.has(u.name)).map(u => u.line));
+  return {
+    ...scene,
+    icons: { ...scene.icons, ...found },
+    diagnostics: scene.diagnostics.filter(d => d.code !== 'unknown-icon' || !fixed.has(d.line!)),
+  };
+}
+
+/** Each icon a file names, with its line and object. */
+const iconUses = (m: Model) => [
+  ...m.objects.flatMap(o => (o.icon ? [{ name: o.icon, line: o.line, ids: [o.id] }] : [])),
+  ...(m.appearance.legend ?? []).flatMap((e, i) =>
+    e.icon ? [{ name: e.icon, line: m.legendLines[i], ids: [] as string[] }] : [],
+  ),
+];
 
 async function compileFit(m: Model): Promise<Scene> {
   const root = m.layouts.find(l => l.scope === 'root' && l.fit);

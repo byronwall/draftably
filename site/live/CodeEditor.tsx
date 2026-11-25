@@ -36,6 +36,7 @@ import {
   type Token,
 } from '../highlight';
 import { HELP } from './reference';
+import { iconData, iconMarkup, loadIconSet, searchIcons } from '../../src/model/iconify';
 
 /** What the page can do to the editor. */
 export interface EditorApi {
@@ -128,9 +129,39 @@ function declared(text: string) {
   return out;
 }
 
+/** `icon=` names that match what is typed, each shown with its icon. */
+async function iconCompletions(ctx: CompletionContext) {
+  const typed = ctx.matchBefore(/\bicon=[\w:-]*$/);
+  if (!typed) return null;
+  await loadIconSet('lucide');
+  const from = typed.from + 'icon='.length,
+    query = typed.text.slice('icon='.length);
+  return {
+    from,
+    filter: false,
+    options: searchIcons(query, 80).map(label => ({ label, type: 'icon' })),
+  };
+}
+
+/** The icon beside its name in the completion list. */
+const iconOption = {
+  position: 20,
+  render(c: Completion) {
+    if (c.type !== 'icon') return null;
+    const d = iconData(c.label),
+      span = document.createElement('span');
+    span.className = 'cm-icon-preview';
+    // Icon bodies come from the bundled Lucide set.
+    if (d)
+      span.innerHTML = `<svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">${iconMarkup(d, 0, 0, 18, 'currentColor')}</svg>`;
+    return span;
+  },
+};
+
 /** Commands at the start of a line, ids where a statement names objects, and attribute values. */
 function completions() {
   return (ctx: CompletionContext) => {
+    if (ctx.matchBefore(/\bicon=[\w:-]*$/)) return iconCompletions(ctx);
     const word = ctx.matchBefore(/[\w.-]*/);
     if (!word) return null;
     const line = ctx.state.doc.lineAt(ctx.pos);
@@ -150,6 +181,7 @@ function completions() {
     else if (attr === 'color') options = words(COLORS, 'constant');
     else if (attr === 'shape') options = words(DSL_SHAPES, 'constant');
     else if (attr === 'kind') options = words(EDGE_KINDS, 'constant');
+    else if (attr === 'icon-pos') options = words(['left', 'top'], 'constant');
     else if (attr) return null;
     else if (/^\s*theme\s+$/.test(head)) options = words(THEME_IDS, 'constant');
     else {
@@ -274,6 +306,12 @@ const theme = EditorView.theme({
     backgroundColor: 'var(--accent-soft)',
     color: 'var(--text)',
   },
+  '.cm-icon-preview': {
+    display: 'inline-flex',
+    verticalAlign: 'middle',
+    marginRight: '8px',
+    color: 'var(--text)',
+  },
   '.cm-completionDetail': { color: 'var(--muted)', fontStyle: 'normal', marginLeft: '12px' },
   '.cm-diagnostic': { fontFamily: 'var(--font)', fontSize: '12.5px' },
   '.cm-lint-marker': { width: '0.9em', height: '0.9em' },
@@ -322,7 +360,7 @@ export function CodeEditor(props: {
           lintGutter(),
           help,
           EditorView.lineWrapping,
-          autocompletion({ override: [completions()], icons: false }),
+          autocompletion({ override: [completions()], icons: false, addToOptions: [iconOption] }),
           keymap.of([
             ...completionKeymap,
             ...defaultKeymap,

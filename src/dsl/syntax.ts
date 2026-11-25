@@ -255,7 +255,8 @@ function statementOf(
 
 // --- Formatting --------------------------------------------------------------------------------
 
-const BARE = /^[A-Za-z0-9_.+-]+$|^->$/;
+// A `:` stays bare so `icon=logos:aws-lambda` prints as written.
+const BARE = /^[A-Za-z0-9_.+:-]+$|^->$/;
 const printWord = (w: Word) =>
   w.quoted || !BARE.test(w.value) ? JSON.stringify(w.value) : w.value;
 
@@ -703,7 +704,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       );
       if (!w) return {};
       assert(
-        !w.quoted && ICON_NAME.test(w.value),
+        ICON_NAME.test(w.value),
         `Expected icon=<name> such as icon=database or icon=logos:aws-lambda; got ${w.value || 'nothing'}.`,
       );
       assert(

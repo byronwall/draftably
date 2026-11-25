@@ -7,6 +7,7 @@
  * own session. Paths are always relative to the root and never leave it.
  */
 import fs from 'node:fs';
+import { installedIconFile, installedIconPrefixes } from './icon-sets';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import { renderSvg } from '../cli/svg';
@@ -201,6 +202,20 @@ export function createWorkspace(root: string): Workspace {
       const [url, query = ''] = (req.url ?? '').split('?');
       if (url.startsWith('/api/') && !LOCAL_HOST.test(req.headers.host ?? '')) {
         json(res, 403, { error: 'The draftably viewer answers localhost only.' });
+        return true;
+      }
+      // Installed `@iconify-json` sets, so the editor draws the icons the CLI draws.
+      if (url === '/api/icons' && req.method === 'GET') {
+        json(res, 200, installedIconPrefixes(root));
+        return true;
+      }
+      if (url.startsWith('/api/icons/') && req.method === 'GET') {
+        const file = installedIconFile(url.slice('/api/icons/'.length), root);
+        if (!file) json(res, 404, { error: 'No such icon set is installed.' });
+        else {
+          res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-cache' });
+          fs.createReadStream(file).pipe(res);
+        }
         return true;
       }
       if (url === '/api/workspace' && req.method === 'GET') {

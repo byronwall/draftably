@@ -251,6 +251,62 @@ export function searchIcons(query: string, limit = 20, prefix?: string): string[
   return out.slice(0, limit);
 }
 
+/** Icons architecture diagrams use most, for a search with nothing typed yet. */
+const COMMON = [
+  'database',
+  'server',
+  'cloud',
+  'globe',
+  'monitor',
+  'smartphone',
+  'user',
+  'users',
+  'lock',
+  'key-round',
+  'shield',
+  'mail',
+  'inbox',
+  'zap',
+  'cpu',
+  'container',
+  'box',
+  'layers',
+  'bot',
+  'hard-drive',
+  'network',
+  'webhook',
+  'credit-card',
+  'receipt',
+  'file-text',
+  'folder',
+  'settings',
+  'bell',
+  'chart-line',
+  'activity',
+  'clock',
+  'search',
+  'git-branch',
+  'workflow',
+  'message-square',
+  'building-2',
+  'store',
+  'shopping-cart',
+  'truck',
+  'package',
+];
+
+/**
+ * Icons to offer for a box before anything is typed: names its label's words match, then the
+ * common architecture icons.
+ */
+export function starterIcons(label: string, limit = 48): string[] {
+  const out: string[] = [];
+  for (const word of label.toLowerCase().split(/[^a-z0-9]+/))
+    if (word.length > 2) for (const n of searchIcons(word, 3)) if (!out.includes(n)) out.push(n);
+  for (const n of COMMON) if (!out.includes(n) && iconData(n)) out.push(n);
+  return out.slice(0, limit);
+}
+
 /**
  * Up to `max` names close to an unknown one: a name that holds it (`postgres` →
  * `logos:postgresql`), a common word for it (`postgres` → `database`), or a near spelling.

@@ -3,6 +3,7 @@ import { validMark } from './timeline';
 import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
+import { ICON_NAME } from './iconify';
 import {
   defaultAppearance,
   HEX_COLOR,
@@ -173,6 +174,8 @@ export function normalize(input: unknown): Diagram {
         ? { wasCount: n.wasCount }
         : {}),
       ...(typeof n.href === 'string' ? { href: n.href } : {}),
+      ...(typeof n.icon === 'string' && ICON_NAME.test(n.icon) ? { icon: n.icon } : {}),
+      ...(n.iconPos === 'top' ? { iconPos: 'top' as const } : {}),
       ...((Number.isInteger(n.count) && n.count > 1) || typeof n.count === 'string'
         ? { count: n.count }
         : {}),
@@ -190,6 +193,7 @@ export function normalize(input: unknown): Diagram {
       title: g.title,
       ...(typeof g.was === 'string' ? { was: g.was } : {}),
       ...(typeof g.href === 'string' ? { href: g.href } : {}),
+      ...(typeof g.icon === 'string' && ICON_NAME.test(g.icon) ? { icon: g.icon } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
       ...(g.frame === 'soft' || g.frame === 'none' ? { frame: g.frame } : {}),
       ...(Array.isArray(g.hull) &&

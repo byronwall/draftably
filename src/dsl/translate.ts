@@ -312,6 +312,10 @@ export function translateEdit(input: EditInput): EditResult {
       s = declaration(source, o.id);
     if (!s) continue;
     if (o.title !== old.title) s.args[1] = quoted(o.title);
+    if (o.icon !== old.icon) setAttr(s, 'icon', o.icon ? bare(o.icon) : undefined);
+    const pos = (o as DiagramNode).iconPos;
+    if (s.command === 'node' && pos !== (old as DiagramNode).iconPos)
+      setAttr(s, 'icon-pos', pos === 'top' ? bare('top') : undefined);
     if ((o.parentId ?? null) !== (old.parentId ?? null)) {
       setAttr(s, 'in', o.parentId ? bare(sid(o.parentId)) : undefined);
       // Relative preferences are between siblings; the old ones no longer apply.

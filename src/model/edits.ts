@@ -649,6 +649,16 @@ export function setLabelMode(
   }
 }
 
+/** Set or clear an object's `icon=`; a node also takes where it sits (`icon-pos=`). */
+export function setIcon(doc: Diagram, id: string, icon?: string, pos?: 'left' | 'top') {
+  const o: { icon?: string; iconPos?: 'left' | 'top' } | undefined = findObject(doc, id);
+  if (!o) return;
+  if (icon) o.icon = icon;
+  else delete o.icon;
+  if (icon && pos === 'top' && findNode(doc, id)) o.iconPos = 'top';
+  else delete o.iconPos;
+}
+
 export function setParent(doc: Diagram, id: string, parentId: string | null) {
   const n = findObject(doc, id);
   if (!n) return;
