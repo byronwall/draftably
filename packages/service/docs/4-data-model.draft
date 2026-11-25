@@ -1,0 +1,52 @@
+diagram "What D1 stores" version=1
+subtitle "One database holds accounts, keys, sessions and every credit change"
+config link-base="../../.."
+
+group accounts "accounts" color=blue <<T
+  id           text     pk
+  github_id    integer  uk nn
+  login        text     nn
+  grant_left   integer  nn
+  grant_month  text     nn
+  bought       integer  nn
+  created_at   text     nn
+T
+layout accounts table
+
+group keys "keys" color=slate <<T
+  id            text  pk
+  account_id    text  fk -> accounts.id
+  hash          text  nn
+  label         text  nn
+  created_at    text  nn
+  last_used_at  text
+  revoked_at    text
+T
+layout keys table
+
+group ledger "ledger" color=amber <<T
+  id          integer  pk
+  account_id  text     fk -> accounts.id
+  delta       integer  nn
+  reason      text     nn
+  ref         text
+  created_at  text     nn
+T
+layout ledger table
+
+group sessions "sessions" color=slate <<T
+  id          text  pk
+  account_id  text  fk -> accounts.id
+  expires_at  text  nn
+T
+layout sessions table
+
+legend blue "Balance: monthly grant plus bought credits"
+legend amber "History: one row per render or purchase"
+legend slate "Sign-in: hashes only"
+
+note "Only a SHA-256 of the secret is stored. dft_<id>.<secret> is shown once." near=keys.hash side=left
+note "A unique index on ref for purchases adds each Stripe Checkout session once." near=ledger.ref side=below
+note "Spend takes from the grant first. grant_month only moves forward." near=accounts.grant_left side=right
+
+layout root engine=layered direction=right fit=slide

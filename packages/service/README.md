@@ -3,6 +3,19 @@
 One Cloudflare Worker: GET image URLs, a keyed REST API, and the account page. Design and plan:
 [docs/intent/render-service](../../docs/intent/render-service/README.md).
 
+## Diagrams
+
+The `.draft` files in [docs/](docs) show how the service works. Open them with
+`pnpm draftably open packages/service/docs`.
+
+- [1-architecture](docs/1-architecture.draft): the routes, the shared render path, and the
+  Cloudflare and outside services they use. Its states show the free, keyed and purchase paths.
+- [2-render-flow](docs/2-render-flow.draft): the cache, rate limit and credit checks for one render.
+- [3-draw-pipeline](docs/3-draw-pipeline.draft): how `draw()` turns Draftably or Mermaid into SVG
+  or PNG.
+- [4-data-model](docs/4-data-model.draft): the D1 tables.
+- [5-buy-credits](docs/5-buy-credits.draft): sign-in, Stripe Checkout and the webhook.
+
 ## Work on it
 
 ```sh
