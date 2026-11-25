@@ -47,8 +47,11 @@ export class UnsupportedEdit extends Error {}
 /** A pasted or duplicated code node's options and body, as a new statement writes them. */
 function writeCode(s: Statement, code: CodeBlock) {
   if (code.lang) setAttr(s, 'lang', bare(code.lang));
-  // A table's lines run on by default; a plain listing wraps.
-  if (code.wrap === !!code.table) setAttr(s, 'wrap', bare(code.wrap ? 'on' : 'off'));
+  // A table's lines run on by default; a plain listing wraps. A `wrap=` the file set stays.
+  if (code.wrapSet || code.wrap === !!code.table)
+    setAttr(s, 'wrap', bare(code.wrap ? 'on' : 'off'));
+  // The body is written as typed, so its tabs keep the width they were read with.
+  if (code.body && code.tab) setAttr(s, 'tab', bare(code.tab));
   if (code.numbers) setAttr(s, 'numbers', bare('on'));
   if (code.table) setAttr(s, 'table', bare('on'));
   if (code.labels) setAttr(s, 'labels', bare(code.labels));
@@ -397,15 +400,22 @@ export function translateEdit(input: EditInput): EditResult {
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
     const code = (o as DiagramNode).code,
       was = (old as DiagramNode).code;
-    // An Editor edit carries the body it wrote; the drawn lines are not the file's text.
+    // An Editor edit carries the body it wrote. It is written only when the edit changed it, so
+    // a caption edit never writes an older body over a file that changed since.
     const body =
-      code?.body && code.body.join('\n') !== (s.body?.lines ?? []).join('\n')
+      code?.body && code.body.join('\n') !== (was?.body ?? was?.lines ?? []).join('\n')
         ? code.body
         : undefined;
     if (s.command === 'node' && code && was && (code.table !== was.table || body)) {
       if (getAttr(s, 'src'))
         throw new UnsupportedEdit('This code node reads its lines from a file; edit that file.');
       if (code.table !== was.table) setAttr(s, 'table', code.table ? bare('on') : undefined);
+      // The file's heredoc must still be the one the edit started from: a body edited elsewhere
+      // in the meantime is not written over.
+      if (body && was.body && (s.body?.lines ?? []).join('\n') !== was.body.join('\n'))
+        throw new UnsupportedEdit(
+          'This code changed in the file while you edited it, so your edit was not saved.',
+        );
       if (body) writeBody(s, body);
     }
     const span = (o as DiagramNode).span;

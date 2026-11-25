@@ -11,7 +11,7 @@ import { type Tool } from './session/editor';
 import { parseTextId, removeText, TEXT_NAMES } from './session/canvas-text';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
-import { pastedTable, writeTable } from '../model/code';
+import { pastedTable, writeTable } from '../model/code-table';
 import { activeSession } from './active-session';
 import { eventTarget } from './dom-root';
 

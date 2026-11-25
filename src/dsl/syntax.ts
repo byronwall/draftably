@@ -32,7 +32,8 @@ import {
 } from './timeline';
 import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
-import { CODE_MAX_WIDTH, CODE_TAB, codeLines, tableLines, type CodeBlock } from '../model/code';
+import { CODE_MAX_WIDTH, CODE_TAB, codeFromBody, type CodeBlock } from '../model/code';
+import { drawTable, readTable } from '../model/code-table';
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import { ICON_NAME } from '../model/iconify';
@@ -950,10 +951,16 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           const read = ref ? srcBody(src!.value, ref, files?.[ref.path], tab) : undefined,
             lang = attrs.has('lang') ? text(attrs.get('lang')) : ref && langOf(ref.path),
             table = choice('table', 'off', ['on', 'off'] as const) === 'on',
-            lines = read ? read.lines : codeLines(s.body!.lines, tab);
+            // The body is read once: a heredoc keeps its text for the Editor, and a table its cells.
+            cells = read && table && !read.placeholder ? readTable(read.lines) : undefined,
+            body = read
+              ? { lines: cells ? drawTable(cells) : read.lines, ...(cells ? { cells } : {}) }
+              : codeFromBody(s.body!.lines, table, tab);
           return {
-            lines: table && !read?.placeholder ? tableLines(lines) : lines,
+            ...body,
             ...(table ? { table } : {}),
+            ...(tab !== CODE_TAB ? { tab } : {}),
+            ...(attrs.has('wrap') ? { wrapSet: true } : {}),
             ...(choice('labels', 'leader', ['leader', 'inside'] as const) === 'inside'
               ? { labels: 'inside' as const }
               : {}),

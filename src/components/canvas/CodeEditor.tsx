@@ -1,22 +1,19 @@
 import { batch, createMemo, createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
-import { declaration, getAttr } from '../../dsl/source-edits';
-import { readSource } from '../../dsl/syntax';
 import { resolveAppearance } from '../../model/appearance';
-import {
-  CODE_TAB,
-  CODE_TYPE,
-  bodyLines,
-  codeLines,
-  autoAlign,
-  pastedTable,
-  readTable,
-  tsvRows,
-  writeTable,
-  type Align,
-} from '../../model/code';
+import { CODE_TAB, CODE_TYPE, codeLines } from '../../model/code';
 import { detailInk, drawnSwatch } from '../../model/colors';
 import { clamp } from '../../model/geometry';
 import { findNode, objectRect } from '../../model/graph';
+import {
+  alignOf,
+  pastedTable,
+  readTable,
+  tableWidth,
+  tsvRows,
+  writeTable,
+  type Align,
+} from '../../model/code-table';
+import * as edit from '../../model/code-table-edit';
 import { toast } from '../../state/toast';
 import { Icon } from '../Icon';
 import { useDiagramSession } from '../session-context';
@@ -48,67 +45,29 @@ function Editor(props: { id: string }) {
     code = node.code!,
     look = resolveAppearance(s.drawnAppearance()),
     swatch = drawnSwatch(s.doc, look, id, 'node'),
-    muted = detailInk(look, swatch);
+    muted = detailInk(look, swatch),
+    tab = code.tab ?? CODE_TAB,
+    // The body as the file holds it: the text box edits it as it is, tabs and all.
+    raw = code.body ?? code.lines;
 
-  // The body as typed in the file: the text box edits it as it is, tabs and all, and the grid
-  // reads it with the node's own `tab=`, so a Markdown table keeps its `:---:` marks.
-  let raw = code.body ?? code.lines,
-    tab = CODE_TAB,
-    wrapSet = false,
-    file = code.src?.path ?? '';
-  /**
-   * This node as it stands: its declaration in the file when the file is the one drawn, else its
-   * caption and lines. A save is refused when it changed after the editor opened.
-   */
-  const snapshot = () => {
-    const now = findNode(s.doc, id),
-      drawn = JSON.stringify([now?.title, now?.code?.lines]);
-    try {
-      const decl = declaration(readSource(s.currentSource()), id);
-      if (!decl?.body || !now?.code) return { drawn, decl: undefined };
-      const tab = Number(getAttr(decl, 'tab')?.value) || CODE_TAB;
-      // A file that no longer draws this node (another document is open) is not its source.
-      const same =
-        JSON.stringify(bodyLines(decl.body.lines, now.code.table, tab)) ===
-        JSON.stringify(now.code.lines);
-      return {
-        drawn: same ? JSON.stringify([decl.args, decl.attrs, decl.body]) : drawn,
-        decl: same ? decl : undefined,
-      };
-    } catch {
-      return { drawn, decl: undefined };
-    }
-  };
-  const opened = snapshot();
-  if (opened.decl) {
-    tab = Number(getAttr(opened.decl, 'tab')?.value) || CODE_TAB;
-    file ||= String(getAttr(opened.decl, 'src')?.value ?? '');
-    wrapSet = !!getAttr(opened.decl, 'wrap');
-    if (!code.body) raw = opened.decl.body!.lines;
-  }
+  /** Text as a table, read as the file would read it: spreadsheet cells, or tabs expanded. */
+  const asTable = (lines: string[]) =>
+    pastedTable(lines.join('\n')) ?? readTable(codeLines(lines, tab));
 
-  const start = readTable(codeLines(raw, tab));
-  /** Columns aligned on purpose: by a `:` mark, or differently from what their numbers give. */
-  const choices = (t: { rows: string[][]; align: Align[]; marked?: boolean[] }) =>
-    t.align.map((a, i) => !!t.marked?.[i] || a !== autoAlign(t.rows, t.align.length)[i]);
-  let chosen = choices(start);
   const [table, setTable] = createSignal(!!code.table),
-    [rows, setRows] = createSignal(start.rows),
-    [footer, setFooter] = createSignal(start.footer),
-    [align, setAlign] = createSignal<Align[]>(start.align),
+    // The compiler read the table once; the grid edits that read.
+    [grid, setGrid] = createSignal(edit.openGrid(code.cells ?? asTable(raw))),
     [text, setText] = createSignal(raw.join('\n')),
     [title, setTitle] = createSignal(node.title),
     [focus, setFocus] = createSignal({ r: 0, c: 0 }),
     [dirty, setDirty] = createSignal(false);
-  /** Rows the body had, less those deleted; empty rows past these were added and are dropped. */
-  let kept = start.rows.length,
-    /** Rows when the body was read, for the psql footer's count. */
-    read = start.rows.length;
-  /** The psql footer's count when the body was read; rows added or deleted since change it. */
-  let counted = Number(/\d+/.exec(start.footer ?? '')?.[0] ?? 0);
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
-  const width = () => Math.max(1, ...rows().map(r => r.length));
+  const rows = () => grid().table.rows,
+    width = () => tableWidth(grid().table),
+    /** How each column draws now: its chosen alignment, or the one its cells give. */
+    align = createMemo(() => alignOf(grid().table)),
+    footer = () => edit.gridTable(grid()).footer;
   /** Each column's width in characters: its widest cell, and at least three. */
   const colChars = createMemo(() => {
     const all = rows();
@@ -117,22 +76,14 @@ function Editor(props: { id: string }) {
     );
   });
 
-  const edit = (fn: () => void) => {
+  /** Apply one grid edit. */
+  const change = (fn: (g: edit.Grid) => edit.Grid) =>
     batch(() => {
-      fn();
+      setGrid(fn);
       setDirty(true);
     });
-  };
   const setCell = (r: number, c: number, value: string) =>
-    edit(() =>
-      setRows(all => {
-        const next = all.map(row => [...row]);
-        while (next.length <= r) next.push([]);
-        while (next[r].length <= c) next[r].push('');
-        next[r][c] = value;
-        return next;
-      }),
-    );
+    change(g => edit.setCell(g, r, c, value));
 
   const inputAt = (r: number, c: number) =>
     box.querySelector<HTMLInputElement>(`input[data-cell="${r}:${c}"]`);
@@ -152,80 +103,37 @@ function Editor(props: { id: string }) {
     });
   };
 
-  const addRow = (at = rows().length) => {
-    edit(() =>
-      setRows(all => [...all.slice(0, at), Array<string>(width()).fill(''), ...all.slice(at)]),
-    );
-    return at;
-  };
-  const addColumn = (at = width()) => {
-    edit(() => {
-      setRows(all => all.map(row => [...row.slice(0, at), '', ...row.slice(at)]));
-      setAlign(a => [...a.slice(0, at), 'left', ...a.slice(at)]);
-      chosen = [...chosen.slice(0, at), false, ...chosen.slice(at)];
-    });
-    return at;
-  };
+  const addRow = (at = rows().length) => (change(g => edit.addRow(g, at)), at);
+  const addColumn = (at = width()) => (change(g => edit.addColumn(g, at)), at);
   const removeRow = () => {
     const { r, c } = focus();
-    if (r === 0 || rows().length < 2) return;
-    if (r < kept) kept--;
-    edit(() => setRows(all => all.filter((_, i) => i !== r)));
+    change(g => edit.removeRow(g, r));
     go(Math.min(r, rows().length - 1), c);
   };
   const removeColumn = () => {
     const { r, c } = focus();
-    if (width() < 2) return;
-    edit(() => {
-      setRows(all => all.map(row => row.filter((_, i) => i !== c)));
-      setAlign(a => a.filter((_, i) => i !== c));
-      chosen = chosen.filter((_, i) => i !== c);
-    });
+    change(g => edit.removeColumn(g, c));
     go(r, Math.min(c, width() - 1));
   };
-  const alignColumn = (a: Align) =>
-    edit(() => {
-      chosen = chosen.map((x, i) => x || i === focus().c);
-      setAlign(all => all.map((x, i) => (i === focus().c ? a : x)));
-    });
+  const alignColumn = (a: Align) => {
+    const { c } = focus();
+    change(g => edit.setAlign(g, c, a));
+  };
+
+  /** The grid as body text. */
+  const tableBody = () => writeTable(edit.gridTable(grid()));
 
   /** Switch between the cell grid and plain text, carrying the body across. */
   const toggleTable = () => {
-    edit(() => {
+    batch(() => {
       if (table()) setText(tableBody().join('\n'));
-      else {
-        // The text reads as the saved file would: spreadsheet cells, or tabs expanded.
-        const t = pastedTable(text()) ?? readTable(codeLines(text().split('\n'), tab));
-        setRows(t.rows);
-        setAlign(t.align);
-        setFooter(t.footer);
-        kept = read = t.rows.length;
-        counted = Number(/\d+/.exec(t.footer ?? '')?.[0] ?? 0);
-        chosen = choices(t);
-      }
+      else setGrid(edit.openGrid(asTable(text().split('\n'))));
       setTable(!table());
+      setDirty(true);
     });
     // A focus move after the grid or text box draws, not a reactive read.
     // eslint-disable-next-line solid/reactivity
     queueMicrotask(() => (table() ? go(0, 0) : area?.focus()));
-  };
-
-  /**
-   * The grid as body text, without the empty rows the editor added at the end. A column the user
-   * never aligned takes the alignment its numbers give now; a psql footer counts the rows added
-   * or deleted.
-   */
-  const tableBody = () => {
-    const all = rows().slice();
-    while (all.length > Math.max(1, kept) && !all[all.length - 1].some(c => c.trim())) all.pop();
-    const auto = autoAlign(all, align().length),
-      count = counted + all.length - read,
-      note = footer() && `(${count} row${count === 1 ? '' : 's'})`;
-    return writeTable({
-      rows: all,
-      align: align().map((a, i) => (chosen[i] ? a : auto[i])),
-      ...(note ? { footer: note } : {}),
-    });
   };
 
   let closed = false;
@@ -233,34 +141,17 @@ function Editor(props: { id: string }) {
   const close = (save: boolean, refocus = true) => {
     if (closed) return;
     // Only a changed body is written; a caption edit leaves the file's body as it is.
-    const body = dirty()
-      ? table()
-        ? tableBody()
-        : text().replace(/\s+$/, '').split('\n')
-      : undefined;
+    const body = dirty() ? (table() ? tableBody() : text().split('\n')) : undefined;
     closed = true;
-    const changed = dirty() || title().trim() !== node.title,
-      stale = snapshot().drawn !== opened.drawn;
-    if (save && changed && stale)
-      toast('The file changed while you edited this code, so your edit was not saved.');
-    // Turning Table on or off changes the wrap default, unless the file sets `wrap=`.
-    const wrap = !wrapSet && table() !== !!code.table ? { wrap: !table() } : {};
+    const changed = dirty() || title().trim() !== node.title;
     s.finishCodeEdit(
       id,
-      save && changed && !stale
-        ? { body, table: table(), title: title().trim(), tab, ...wrap }
-        : undefined,
+      save && changed ? { body, table: table(), title: title().trim() } : undefined,
     );
     if (refocus) s.focusCanvas();
   };
 
   onMount(() => {
-    if (file) {
-      toast(`This code reads its lines from ${file}. Edit that file instead.`);
-      closed = true;
-      s.finishCodeEdit(id);
-      return;
-    }
     // A save the session asks for, as from an event handler.
     // eslint-disable-next-line solid/reactivity
     s.onCodeSave(() => close(true));
@@ -322,19 +213,7 @@ function Editor(props: { id: string }) {
     if (!/[\t\n]/.test(pasted.replace(/\n+$/, ''))) return;
     e.preventDefault();
     const cells = pastedCells(pasted);
-    edit(() => {
-      setRows(all => {
-        const next = all.map(row => [...row]),
-          n = Math.max(width(), c + Math.max(...cells.map(x => x.length)));
-        cells.forEach((line, i) => {
-          while (next.length <= r + i) next.push([]);
-          line.forEach((v, j) => (next[r + i][c + j] = v.trim()));
-        });
-        return next.map(row => Array.from({ length: n }, (_, j) => row[j] ?? ''));
-      });
-      setAlign(a => Array.from({ length: width() }, (_, j) => a[j] ?? 'left'));
-      chosen = Array.from({ length: width() }, (_, j) => chosen[j] ?? false);
-    });
+    change(g => edit.pasteCells(g, r, c, cells));
     toast(`Pasted ${cells.length} row${cells.length === 1 ? '' : 's'}`);
   };
 
@@ -562,7 +441,7 @@ function Editor(props: { id: string }) {
           </table>
           <Show when={footer()}>
             <div class="code-edit-footer" style={font()}>
-              {tableBody().at(-1)}
+              {footer()}
             </div>
           </Show>
         </Show>
