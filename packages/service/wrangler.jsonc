@@ -6,6 +6,8 @@
   // The slowest example takes about 600 ms; anything far past that is abuse.
   "limits": { "cpu_ms": 5000 },
   "version_metadata": { "binding": "CF_VERSION_METADATA" },
+  // The bundled TrueType fonts load as bytes for resvg.
+  "rules": [{ "type": "Data", "globs": ["**/*.ttf"], "fallthrough": true }],
   "ratelimits": [
     // Anonymous renders per IP; cache hits don't count.
     { "name": "ANON_LIMIT", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } },

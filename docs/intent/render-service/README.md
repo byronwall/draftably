@@ -74,8 +74,8 @@ GET /png/{encoded}[?options]
   plain base64url of the source. Kroki's deflate + base64url decodes the same way.
 - The source language is detected (`src/import/detect.ts`). `?type=mermaid` or `?type=draftably`
   overrides it.
-- Options: `scheme=light|dark`, `scale=1..4` (PNG only, default 2), `bg=<hex>|transparent`
-  (PNG only).
+- Options: `scheme=light|dark`, `scale=1|2|3|4` (PNG only, default 2). No `bg` option: the
+  diagram draws its own paper, so a background color would need a change in the renderer.
 - A Kroki-style alias costs one route and lets Kroki clients work: `GET /{type}/{format}/{encoded}`.
 - URLs over about 8 KB are rejected with a pointer to `POST /v1/render`.
 - No key and no credits. Each IP has a rate limit (start at 60 renders a minute, cache hits not
@@ -90,7 +90,7 @@ output changes only when the runtime changes; the cache key includes the runtime
 ### REST API
 
 ```
-POST /v1/render     {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?, "bg"?}
+POST /v1/render     {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?}
 POST /v1/validate   {"code": "...", "type"?}       → {valid, diagnostics[], summary}
 POST /v1/convert    {"code": "...", "from": "mermaid"} → {draft, diagnostics[]}
 GET  /v1/balance                                     → {credits, grant, resetsAt}
@@ -232,6 +232,10 @@ resources.
 
 - The Cache API stores only 200 answers, so error images are drawn again each time; the IP rate
   limit counts them.
+- The runtime ignores a file's own `config link-base=`. The service passes it on as the link
+  `baseUrl` when it is an http(s) address, so links match the CLI. Relative links under a local
+  base, and `src=` code files, have nothing to point at on a hosted image; those few files draw
+  without the link arrow or the code text.
 
 ## Open questions
 

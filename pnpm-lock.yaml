@@ -187,6 +187,9 @@ importers:
       '@draftably/runtime':
         specifier: workspace:*
         version: link:../runtime
+      '@resvg/resvg-wasm':
+        specifier: 2.6.2
+        version: 2.6.2
     devDependencies:
       '@cloudflare/workers-types':
         specifier: 5.20261109.1
@@ -1243,6 +1246,10 @@ packages:
 
   '@resvg/resvg-js@2.6.2':
     resolution: {integrity: sha512-xBaJish5OeGmniDj9cW5PRa/PtmuVU3ziqrbr5xJj901ZDN4TosrVaNZpEiLZAxdfnhAe7uQ7QFWfjPe9d9K2Q==}
+    engines: {node: '>= 10'}
+
+  '@resvg/resvg-wasm@2.6.2':
+    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
     engines: {node: '>= 10'}
 
   '@rollup/rollup-android-arm-eabi@4.63.6':
@@ -4154,6 +4161,8 @@ snapshots:
       '@resvg/resvg-js-win32-arm64-msvc': 2.6.2
       '@resvg/resvg-js-win32-ia32-msvc': 2.6.2
       '@resvg/resvg-js-win32-x64-msvc': 2.6.2
+
+  '@resvg/resvg-wasm@2.6.2': {}
 
   '@rollup/rollup-android-arm-eabi@4.63.6':
     optional: true

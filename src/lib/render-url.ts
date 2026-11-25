@@ -96,6 +96,14 @@ export async function decodeSource(segment: string) {
   return new TextDecoder().decode(bytes);
 }
 
+/**
+ * The file's own `config link-base=` when it is a web address. The runtime never trusts an
+ * authored base; here it is as safe as the absolute links the policy already keeps. A local base
+ * (`.`, a folder) means nothing on a hosted image, so those relative links are dropped.
+ */
+export const webLinkBase = (source: string) =>
+  /^\s*config\b[^\n]*\blink-base="(https?:\/\/[^"]+)"/m.exec(source)?.[1];
+
 /** The service URL that draws `source` as `format`. */
 export async function imageUrl(source: string, format: 'svg' | 'png', base = SERVICE_URL) {
   if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)

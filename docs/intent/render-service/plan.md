@@ -7,7 +7,7 @@ names the check that proves it, at the scope the product works on.
 | ----: | -------------------------------------------- | ------- |
 |     0 | Spikes: SVG, PNG and Mermaid in `workerd`    | done    |
 |     1 | GET SVG on `workers.dev`                     | built   |
-|     2 | GET PNG                                      | planned |
+|     2 | GET PNG                                      | built   |
 |     3 | Mermaid input                                | planned |
 |     4 | Domain, accounts, keys, REST API, free grant | planned |
 |     5 | MCP server                                   | planned |
@@ -43,7 +43,7 @@ on the deployed Worker).
 
 - Move `rasterFamilies` and the face list into a Node-free module that the CLI and the Worker both
   import.
-- `GET /png/{encoded}` with `scale` and `bg`. Render with `@resvg/resvg-wasm` and the four TTFs
+- `GET /png/{encoded}` with `scale`. Render with `@resvg/resvg-wasm` and the four TTFs
   from `src/cli/fonts`, loaded once per isolate.
 - Embed the source in the PNG the same way the CLI does (`embedPngSource`), so `draftably open`
   reads a downloaded PNG back.

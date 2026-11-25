@@ -8,14 +8,10 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import { embedPngSource } from '../model/embed';
 import { withSourceStrip } from '../model/strip';
-import { fontFiles, rasterFamilies } from './raster-fonts';
+import { rasterFamilies, scaleSvg, svgSize } from '../model/raster';
+import { fontFiles } from './raster-fonts';
 
-/** The width and height an SVG declares on its root, rounded up. */
-export function svgSize(svg: string) {
-  const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg);
-  if (!size) throw Error('The SVG has no size.');
-  return { w: Math.ceil(Number(size[1])), h: Math.ceil(Number(size[2])) };
-}
+export { svgSize };
 
 /** `svg` loaded in resvg with the bundled fonts, each diagram family renamed so resvg finds it. */
 export async function rasterize(svg: string) {
@@ -36,13 +32,7 @@ export async function rasterize(svg: string) {
  */
 export async function writePng(svg: string, out: string, scale = 2, source?: string, strip = true) {
   if (source !== undefined && strip) svg = await withSourceStrip(svg, source, scale);
-  const { w, h } = svgSize(svg);
-  // Scale through the root size, as Chrome's device scale did: the drawing keeps its viewBox.
-  const sized = svg.replace(
-    /width="[\d.]+" height="[\d.]+"/,
-    `width="${w * scale}" height="${h * scale}"`,
-  );
-  const png = (await rasterize(sized)).render().asPng();
+  const png = (await rasterize(scaleSvg(svg, scale))).render().asPng();
   fs.writeFileSync(
     path.resolve(out),
     source === undefined ? png : await embedPngSource(png, source),
