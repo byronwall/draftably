@@ -1,5 +1,20 @@
 # @draftably/vue
 
+## 0.10.0
+
+### Patch Changes
+
+- Updated dependencies [25852bf]
+- Updated dependencies [76fe166]
+- Updated dependencies [bb96cfe]
+- Updated dependencies [61825b7]
+- Updated dependencies [7704141]
+- Updated dependencies [86a9834]
+- Updated dependencies [9e31121]
+- Updated dependencies [dc93b3f]
+  - @draftably/editor@0.10.0
+  - @draftably/runtime@0.10.0
+
 ## 0.9.0
 
 ### Patch Changes

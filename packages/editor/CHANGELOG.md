@@ -1,5 +1,21 @@
 # @draftably/editor
 
+## 0.10.0
+
+### Minor Changes
+
+- 25852bf: PNG exports and copies carry the .draft source as a faint strip of pixels below the drawing, so the source survives sites that strip PNG metadata. Pasting such a PNG into the app, or reading it with the CLI, opens the source from the pixels. Turn it off with --no-source-strip or the export dialog's "Also as a pixel strip" box.
+- 76fe166: Draw database tables: a group body lists its columns, `layout g table` draws keys and types, and `-> table.column` draws a crow's-foot line. Adds the line ends `one`, `many`, `zero-or-one`, `zero-or-many` and `one-or-many`, and `head=`/`tail=` on `legend line`.
+- bb96cfe: Draw mind maps: `layout root mindmap root=<id>` puts a topic in the middle with its branches left and right. Each branch takes a color, branch lines draw without arrowheads, and labelled edges stay as cross-links. `layout <group> mindmap` draws one inside a group.
+- 61825b7: Put icons in boxes: `icon=database` draws a Lucide icon before a node's label, `icon-pos=top` draws it as a large tile over the label, and `icon=` also works on a group's title band and a legend entry. `prefix:name` (`logos:aws-lambda`) reads any installed `@iconify-json/<prefix>` set. One-color icons follow the theme's text color. `draftably icons <word>` finds names, and `check` suggests a close name for an unknown one.
+- 7704141: Edit code tables in the Editor: double-click a code node to edit its body on the canvas. A `table=on` node opens as a grid of cells, with Tab and Enter moving between cells and a spreadsheet paste filling them. Paste spreadsheet cells or a Markdown table on the canvas to add a table node. Code tables also read pasted Markdown and psql tables with their `:---:` alignment and `(3 rows)` footer, the header rule is softer and ends at the last column, and a code caption band has a light tint.
+- 9e31121: Draw org charts: `layout root orgchart root=<id>` places people top down, with one bus line per manager and no arrowheads. Rows of leaf reports stack into columns while the chart is wider than `fit=` asks (`leaves=auto|stack|split|row`). `role=assistant` hangs a report beside its manager's stem, and `role=vacant` draws an open role with a dashed outline.
+- dc93b3f: Code range labels now sit outside the box's right edge, just above a leader from a dot inside the edge, all at the same x. The labels count as part of the node, so layouts, lines and bounds keep clear of them. A line that leaves a labeled range on the right leaves along its leader, and no line crosses a label or a leader. `labels=inside` on the code node keeps the labels in the column inside the box.
+
+### Patch Changes
+
+- 86a9834: Code tables are read once into a table model that the drawing and the Editor share. An alignment you choose in the Editor now stays when the column's values change, and a saved table always reads back to the same cells.
+
 ## 0.9.0
 
 ### Minor Changes
