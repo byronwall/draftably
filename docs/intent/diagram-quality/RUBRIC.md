@@ -206,7 +206,8 @@ same place, symmetric fans.
 
 Container fit: **uneven-padding** (a group's left, right and bottom padding differ by more than
 12px) and **padding-varies** (groups in one drawing use different padding). The top holds the
-title, so it is only compared across groups. Fitting must converge: a fix may not loop between
+title, so it is only compared across groups. A group whose title is wider than its content centers the content: equal left and right
+padding above the bottom padding is not uneven, and its left padding is not compared across groups. Fitting must converge: a fix may not loop between
 parent size and child placement.
 
 Group packing (how members sit inside a group, and groups beside each other): **sparse-group**
