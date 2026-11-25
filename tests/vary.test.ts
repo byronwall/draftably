@@ -238,6 +238,32 @@ node b "Second part" in=req`,
     ]);
   });
 
+  it('offers cells for a group of boxes that no edge ends on', async () => {
+    const lines = [
+      'node a "Start"',
+      'group done "Done"',
+      'node k1 "One" in=done',
+      'node k2 "Two" in=done',
+      'node k3 "Three" in=done',
+      'group busy "Busy"',
+      'node b1 "One" in=busy',
+      'node b2 "Two" in=busy',
+      'node b3 "Three" in=busy',
+      'edge e1 a -> done',
+      'edge e2 a -> b1',
+      'layout done row gap=16',
+    ];
+    const found = (await auto(lines)).filter(f => f.edits[0].kind === 'layout');
+    // `busy` has an edge end in it, so only `done` packs.
+    expect(found.map(f => f.edits)).toEqual([
+      [{ kind: 'layout', scope: 'done', recipe: 'cells', attrs: { columns: '2' } }],
+    ]);
+    const { changes } = applyEdits(lines.join('\n'), found[0].edits);
+    expect(changes).toEqual([
+      { line: 12, before: 'layout done row gap=16', after: 'layout done cells columns=2' },
+    ]);
+  });
+
   it('offers compare panels for a marked file', async () => {
     const found = await auto(['node a "A"', '+node b "B"', '+edge e a -> b']);
     expect(found.map(f => f.edits)).toEqual([

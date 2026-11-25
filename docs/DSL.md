@@ -1658,7 +1658,10 @@ Recommended: v1. Apply: draftably vary plan.draft --apply v1
   - fewer containers: `frame=soft` on leaf groups, then also on groups whose members span more
     than one rank, never on the group that holds most of the drawing. Only groups with no
     `layout` or position lines of their own qualify, so applying one changes only `group`
-    lines.
+    lines;
+  - cells for a list: a group of three or more plain boxes, none of which an edge starts or ends
+    on, packs into `layout groupId cells columns=2` (`done cells columns=2`). Edges still reach
+    the group.
 - `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
   one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
   `--try key` alone uses the steps the Editor's **Compare** offers (`rank-gap` → 28, 52, 88). Keys
