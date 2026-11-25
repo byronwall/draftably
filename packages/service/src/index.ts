@@ -4,7 +4,7 @@
  */
 import { runtimeVersion } from '@draftably/runtime';
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
-import { dated } from './mermaid';
+import { freshness } from './mermaid';
 import { draw, drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 
 export interface Env {
@@ -42,7 +42,7 @@ async function imageResponse(segment: string, format: Format, opts: DrawOptions)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
     const source = await decodeSource(segment);
     const body = await draw(source, format, opts);
-    return image(body, format, 200, dated(source, opts.type) ? 'public, max-age=86400' : IMMUTABLE);
+    return image(body, format, 200, freshness(source, opts.type)?.cacheControl ?? IMMUTABLE);
   } catch (error) {
     if (!(error instanceof SourceError)) throw error;
     return image(await errorImage(error.message, format), format, 400, 'public, max-age=60');
@@ -86,6 +86,11 @@ export default {
     for (const [k, v] of Object.entries(opts)) if (v != null) keyUrl.searchParams.set(k, String(v));
     keyUrl.searchParams.set('v', runtimeVersion);
     keyUrl.searchParams.set('build', env.CF_VERSION_METADATA.id);
+    // A gantt chart can draw differently tomorrow, so its key carries today's date.
+    const day = await decodeSource(route.segment)
+      .then(source => freshness(source, opts.type)?.day)
+      .catch(() => undefined);
+    if (day) keyUrl.searchParams.set('day', day);
     const key = new Request(keyUrl.toString());
     // The DOM lib (for Mermaid's types) hides the Workers-only `caches.default`.
     const cache = (caches as unknown as { default: Cache }).default;

@@ -91,6 +91,8 @@ function signature(source: string): KnownFormat | undefined {
     return 'dot';
   if (
     /^(?:flowchart|graph)\s+(?:TB|TD|BT|LR|RL)\b/.test(head) ||
+    // A bare header: Mermaid draws it top-down. (`graph {` is DOT, caught above.)
+    /^(?:flowchart|graph)[ \t]*(?:;|\r?\n|$)/.test(head) ||
     /^(?:sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|journey|pie|mindmap|timeline|gitGraph|xychart-beta|block-beta|architecture-beta|sankey-beta|quadrantChart|C4Context|C4Container|C4Component|C4Dynamic|C4Deployment)\b/.test(
       head,
     )

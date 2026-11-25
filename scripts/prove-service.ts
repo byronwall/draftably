@@ -280,6 +280,7 @@ for (const f of mm.failed) console.log('  ' + f);
 for (const [name, source] of [
   ['sequence box', 'sequenceDiagram\n  box Client\n  participant a\n  end\n  a->>a: check\n'],
   ['markdown fence', '# Notes\n\n```mermaid\nflowchart LR\n  A-->B\n```\n'],
+  ['bare flowchart', 'flowchart\n  A-->B\n'],
 ]) {
   // .mmd is Mermaid by its name; the .md file is found by its fence, as `draftably import` does.
   const file = path.join(
@@ -305,9 +306,15 @@ for (const [name, source] of [
 }
 const gantt = mermaid.find(m => /^\s*gantt\b/m.test(m.source))!;
 const ganttRes = await fetch(`${base}/svg/${await encodeSource(gantt.source)}`);
-assert.equal(ganttRes.headers.get('Cache-Control'), 'public, max-age=86400');
+const ganttAge = Number(
+  /^public, max-age=(\d+)$/.exec(ganttRes.headers.get('Cache-Control') ?? '')?.[1],
+);
+assert.ok(
+  ganttAge > 0 && ganttAge <= 86400,
+  'a gantt image lasts at most to the next UTC midnight',
+);
 console.log(
-  'Mermaid extras: a boxed sequence and a fenced Markdown file draw as draftably import does; a gantt chart is cached for a day.',
+  'Mermaid extras: a boxed sequence and a fenced Markdown file draw as draftably import does; a bare flowchart header is detected; a gantt chart is cached until the next UTC midnight.',
 );
 
 // Detection: each input both sides draw gives the same image with no ?type= at all.
@@ -320,6 +327,7 @@ for (const { source } of mermaid.filter((_, n) => drawnMermaid.has(n))) {
 console.log(
   `Mermaid detection: ${detected} of ${drawnMermaid.size} drawn the same with no ?type=.`,
 );
+assert.equal(detected, drawnMermaid.size, 'automatic and explicit Mermaid detection disagree');
 
 // The same URL twice: the second answer comes from the edge cache.
 const fresh = fs.readFileSync('examples/checkout.draft', 'utf8') + `\n# ${Date.now()}\n`;

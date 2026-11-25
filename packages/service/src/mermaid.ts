@@ -45,6 +45,17 @@ export function sourceType(
 export const dated = (source: string, type?: string | null) =>
   sourceType(source, type).type === 'mermaid' && /^\s*gantt\b/m.test(source);
 
+/**
+ * For an image that depends on today's date: today's UTC date, for the cache key, and the
+ * Cache-Control that ends at the next UTC midnight, when the drawing may change.
+ */
+export function freshness(source: string, type?: string | null, now = new Date()) {
+  if (!dated(source, type)) return null;
+  const end = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+  const seconds = Math.max(1, Math.floor((end - now.getTime()) / 1000));
+  return { day: now.toISOString().slice(0, 10), cacheControl: `public, max-age=${seconds}` };
+}
+
 /** Mermaid's `box` parser tests a color with `new Option().style`; this is JSDOM's own parser. */
 class Option {
   style = new CSSStyleDeclaration();
