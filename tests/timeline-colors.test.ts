@@ -12,7 +12,8 @@ import { timelineColor } from '../src/model/timeline';
 // Every theme, on the page and inside a group: bars and family-colored text stay readable, and a
 // progress track and a period's wash stay visible but quieter than a bar.
 describe('timeline colors', () => {
-  it('hold their contrast on every theme and backdrop', () => {
+  // Thousands of contrast checks: about 5 s on a CI runner, so it gets a longer timeout.
+  it('hold their contrast on every theme and backdrop', { timeout: 30_000 }, () => {
     for (const theme of THEME_IDS) {
       const look = resolveAppearance({ theme, overrides: {}, colors: [] });
       // The page, the default group fill, and a group of every family at every shade.
