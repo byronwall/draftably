@@ -252,6 +252,24 @@ node b "Second part" in=req`,
     expect(v1.metrics!.width).toBeLessThanOrEqual(v0.metrics!.width);
   });
 
+  it('recommends the tighter compound flow for two groups feeding one (#592)', async () => {
+    const source = fs.readFileSync(
+      'docs/intent/diagram-quality/issues/i592-two-groups-feed/v0.draft',
+      'utf8',
+    );
+    const result = await vary(source, { fit: 'slide' });
+    const [v0, v1] = result.variants;
+    expect(result.recommended).toBe('v1');
+    expect(v1.edits).toEqual([
+      { kind: 'layout', scope: 'root', attrs: { engine: 'compound-flow', direction: null } },
+    ]);
+    expect(v1.metrics!.width).toBeLessThan(v0.metrics!.width);
+    expect(v1.metrics!.length).toBeLessThan(v0.metrics!.length);
+    expect(v1.metrics!.width * v1.metrics!.height).toBeLessThan(
+      v0.metrics!.width * v0.metrics!.height * 0.85,
+    );
+  });
+
   it('offers cells for a group of boxes that no edge ends on', async () => {
     const lines = [
       'node a "Start"',

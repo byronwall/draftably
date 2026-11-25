@@ -20,6 +20,7 @@ const measures = (patch: Partial<Measure> = {}): Measure => ({
   labels: 0,
   bends: 10,
   length: 1000,
+  width: 100,
   area: 10000,
   aspect: 1.5,
   ...patch,
@@ -55,6 +56,11 @@ describe('Compare candidates', () => {
     expect(r.gains).toEqual(['2 fewer crossings', '20% smaller']);
     expect(r.costs).toEqual(['3 more bends']);
     expect(r.defects).toEqual([]);
+  });
+
+  it('reads a narrower drawing as a gain beside area and line length (#592)', () => {
+    const r = readDifference(measures({ width: 83, area: 7900, length: 760 }), measures());
+    expect(r.gains).toEqual(['21% smaller', '17% narrower', '24% shorter lines']);
   });
 
   it('shows a real improvement before a sameness, and drops repeats', () => {
