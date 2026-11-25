@@ -3871,7 +3871,8 @@ function layoutPass(
           ...(layout.columns ? { columns: layout.columns } : {}),
         },
         look,
-        title,
+        // A table's rows reach across `min-width=`, so its frame and rows share one width.
+        layout.table ? Math.max(title, layout.minWidth) : title,
       );
     placeCells(scope, kids, out.boxes);
     cellBands.set(scope, cellsBandFor(look.groupTitle.lineHeight));

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { renderSvg } from '../src/cli/svg';
 import { compareDetailed } from '../src/dsl/compare';
+import { removeIds, renameId } from '../src/cli/edit';
 import { checkSource } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
@@ -71,7 +72,8 @@ describe('database tables', () => {
     expect(bad('x int -> ')).toThrow(/^Line 3: Row x ends with ->/);
     expect(bad('id text')).toThrow(/^Line 3: Duplicate node\/group id t\.id/);
     expect(bad('9x int')).toThrow(/^Line 3: A table row starts with its column name/);
-    expect(bad('x int ->t.id')).toThrow(/^Line 3: Row x needs a space after ->/);
+    expect(bad('x int ->t.id')).toThrow(/^Line 3: Row x needs a space on each side of ->/);
+    expect(bad('x uuid-> t.id')).toThrow(/^Line 3: Row x needs a space on each side of ->/);
     expect(bad('x int -> t')).toThrow(
       /^Line 3: t\.x refers to t, which is not a row: it is a group/,
     );
@@ -91,6 +93,11 @@ describe('database tables', () => {
     const svg = renderSvg(projectScene(scene));
     expect(svg).toContain('>timestamp with time zone</text>');
     expect(svg).toContain('>text uk nn</text>');
+  });
+
+  it('refuses CLI rm and rename that would lose a body or break a ->', () => {
+    expect(() => removeIds(TABLES, ['users'])).toThrow(/users is a table/);
+    expect(() => renameId(TABLES, 'orgs', 'accounts')).toThrow(/orgs is a table/);
   });
 
   it('draws a body without a table layout as plain boxes', () => {

@@ -42,7 +42,7 @@ export function readBodyRows(
     // so a misspelt mark there is an error, not part of the type.
     const cols = text.split(/[ \t]*\t[ \t]*| {2,}/),
       [name, ...words] = (cols.length >= 3 ? cols.slice(0, 2).join(' ') : text).split(/\s+/),
-      end = words.findIndex(w => w.startsWith('->') || isKey(w.toLowerCase())),
+      end = words.findIndex(w => w.includes('->') || isKey(w.toLowerCase())),
       type = words.slice(0, end < 0 ? words.length : end).join(' '),
       rest = [
         ...(end < 0 ? [] : words.slice(end)),
@@ -57,8 +57,11 @@ export function readBodyRows(
     let ref: string | undefined;
     for (let k = 0; k < rest.length; k++) {
       const w = isKey(rest[k].toLowerCase()) ? rest[k].toLowerCase() : rest[k];
-      if (w.startsWith('->') && w !== '->')
-        fail(`Row ${name} needs a space after ->: -> ${w.slice(2)}.`, line);
+      if (w.includes('->') && w !== '->')
+        fail(
+          `Row ${name} needs a space on each side of ->: -> ${w.split('->')[1] || 'table.column'}.`,
+          line,
+        );
       if (w === '->') {
         const target = rest[k + 1];
         if (!target || !REF.test(target) || k + 2 !== rest.length)

@@ -2007,6 +2007,14 @@ function validateReferences(m: Model) {
       e.line,
     );
   // A sequence's participants and a timeline's rows have shapes of their own, not table rows.
+  // A lane is laid out by the lanes; a table goes inside one.
+  const lanes = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'lanes');
+  for (const l of m.layouts)
+    assert(
+      !l.table || !lanes || by.get(l.scope)?.parent !== 'root',
+      `${l.scope} is a lane, and the lanes lay it out. Put the table in a group inside the lane.`,
+      l.line,
+    );
   for (const l of m.layouts)
     assert(
       !l.table ||
