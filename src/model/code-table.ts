@@ -171,6 +171,16 @@ export function writeTable(t: Table): string[] {
   const align = Array.from({ length: n }, (_, i) => t.align[i]),
     table: Table = { rows, align, ...(t.footer ? { footer: t.footer } : {}) },
     footer = t.footer ? [t.footer] : [];
+  // The header: the first row with cells, after any blank lines.
+  const head = rows.findIndex(r => r.length);
+  // One column with a chosen alignment: its lines as they are, with a bare rule under the header
+  // to hold the choice, so an indent survives.
+  if (n === 1 && align[0] && head >= 0) {
+    const mark = align[0] === 'center' ? ':---:' : align[0] === 'right' ? '---:' : ':---',
+      lines = rows.map(r => r[0] ?? '');
+    lines.splice(head + 1, 0, mark);
+    if (same(readTable([...lines, ...footer]), table)) return [...lines, ...footer];
+  }
   if (align.every(a => !a)) {
     const plain = [
       ...(n === 1 ? rows.map(r => r[0] ?? '') : alignRows(rows, alignOf(table))),
@@ -195,12 +205,8 @@ export function writeTable(t: Table): string[] {
             : '-'.repeat(w + 2),
     );
   // The rule goes under the header: the first row with cells, after any blank lines.
-  const head = Math.max(
-      0,
-      cells.findIndex(r => r.length),
-    ),
-    out = cells.map(line);
-  out.splice(head + 1, 0, `|${rule.join('|')}|`);
+  const out = cells.map(line);
+  out.splice(Math.max(0, head) + 1, 0, `|${rule.join('|')}|`);
   return [...out, ...footer];
 }
 

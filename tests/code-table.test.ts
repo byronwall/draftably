@@ -88,6 +88,8 @@ describe('table round trips', () => {
     const one = readTable(['|Amount|', '|---:|', '|4|']);
     expect(one.align).toEqual(['right']);
     expect(readTable(writeTable(one))).toEqual(one);
+    const indented = readTable(['Status', ':---', 'Pending', '  Detail']);
+    expect(readTable(writeTable(indented))).toEqual(indented);
   });
 
   it('reads a heredoc once: its text, its cells and the lines they draw', () => {

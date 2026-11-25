@@ -349,6 +349,19 @@ describe('editing code tables', () => {
         }).source,
       ),
     ).toBe(newer.replace('"a"', '"b"'));
+    // A body edit over a heredoc changed in the file since is refused.
+    const bodyEdit = clone(before);
+    bodyEdit.graph.nodes[0].code = { ...bodyEdit.graph.nodes[0].code!, body: ['editor edit'] };
+    expect(() =>
+      translateEdit({
+        source: readSource(newer),
+        scene,
+        before,
+        after: bodyEdit,
+        label: 'Edit',
+        selection: [],
+      }),
+    ).toThrow(UnsupportedEdit);
     // A file's lines are never written over.
     const file = 'node f shape=code src="a.sql"\n',
       fileScene = checkSource(file, { 'a.sql': { text: 'x\n' } }),

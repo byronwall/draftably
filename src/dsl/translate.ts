@@ -406,6 +406,12 @@ export function translateEdit(input: EditInput): EditResult {
       if (getAttr(s, 'src'))
         throw new UnsupportedEdit('This code node reads its lines from a file; edit that file.');
       if (code.table !== was.table) setAttr(s, 'table', code.table ? bare('on') : undefined);
+      // The file's heredoc must still be the one the edit started from: a body edited elsewhere
+      // in the meantime is not written over.
+      if (body && was.body && (s.body?.lines ?? []).join('\n') !== was.body.join('\n'))
+        throw new UnsupportedEdit(
+          'This code changed in the file while you edited it, so your edit was not saved.',
+        );
       if (body) writeBody(s, body);
     }
     const span = (o as DiagramNode).span;
