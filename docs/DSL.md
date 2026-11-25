@@ -235,7 +235,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 
 | Option       | Default       | Effect                                                                                                        |
 | ------------ | ------------- | ------------------------------------------------------------------------------------------------------------- |
-| `"label"`    | none          | A caption band above the code, like a file tab.                                                               |
+| `"label"`    | none          | A tinted caption band above the code, like a file tab.                                                        |
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
 | `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
 | `table=`     | `off`         | `on` draws the body as a light table. See [Code tables](#code-tables).                                        |

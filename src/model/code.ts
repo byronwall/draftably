@@ -72,6 +72,18 @@ export const CODE_ADVANCE = measureText('M', CODE_TYPE);
 export const CODE_PAD = { x: 12, y: 10 };
 /** The caption band above the code, when the node has a quoted label. */
 export const CAPTION_HEIGHT = 26;
+/**
+ * Opacity of the caption band's tint, the box's stroke color. One value for light and dark, so a
+ * file drawn for both schemes differs in color alone.
+ */
+export const CAPTION_TINT = 0.09;
+
+/** The caption band's tint: `w` wide, `h` tall, its top corners rounded to the box's `radius`. */
+export function captionBandPath(x: number, y: number, w: number, h: number, radius: number) {
+  const k = Math.min(radius, w / 2, h);
+  return `M${x} ${y + h}V${y + k}A${k} ${k} 0 0 1 ${x + k} ${y}H${x + w - k}A${k} ${k} 0 0 1 ${x + w} ${y + k}V${y + h}Z`;
+}
+
 /** Columns between the widest line number and the code. */
 const GUTTER_GAP = 2;
 /** A continuation row starts this many columns past its line's own indent. */

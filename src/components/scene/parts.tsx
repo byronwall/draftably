@@ -3,6 +3,8 @@ import type { ResolvedAppearance, Swatch } from '../../model/appearance';
 import {
   CODE_ADVANCE,
   CODE_TYPE,
+  captionBandPath,
+  CAPTION_TINT,
   codeLayout,
   codeRuns,
   columnX,
@@ -187,6 +189,8 @@ export function CodeBody(props: {
   h: number;
   look: ResolvedAppearance;
   swatch: Swatch;
+  /** The box's corner radius, so the caption tint follows its top corners. */
+  radius: number;
   strike?: boolean;
   fade?: number;
 }) {
@@ -230,6 +234,13 @@ export function CodeBody(props: {
     };
   return (
     <g class="code-body" pointer-events="none">
+      <Show when={laid().caption}>
+        <path
+          d={captionBandPath(0, 0, props.w, laid().caption, props.radius)}
+          fill={props.swatch.stroke}
+          fill-opacity={CAPTION_TINT}
+        />
+      </Show>
       <For each={bands()}>
         {b => <rect x={1} y={b.y} width={props.w - 2} height={b.h} fill={b.fill} />}
       </For>
