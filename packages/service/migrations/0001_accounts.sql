@@ -46,3 +46,5 @@ CREATE TABLE login_tokens (
   expires_at TEXT NOT NULL,
   used_at TEXT
 );
+CREATE INDEX login_tokens_email ON login_tokens(email);
+CREATE INDEX login_tokens_expires ON login_tokens(expires_at);

@@ -46,6 +46,8 @@ button,.button{font:inherit;border:1px solid var(--line);background:var(--card);
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'no-store',
+        // No other site may frame these pages and hide what a button does.
+        'Content-Security-Policy': "frame-ancestors 'none'",
         ...headers,
       },
     },

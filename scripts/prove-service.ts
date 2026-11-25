@@ -601,6 +601,7 @@ if (!remote) {
   // A GET, as a mail scanner sends, shows the button and leaves the token unspent.
   const scan = await fetch(`${base}/auth/verify?token=${link}`);
   assert.equal(scan.status, 200);
+  assert.equal(scan.headers.get('Content-Security-Policy'), "frame-ancestors 'none'");
   const scanned = await scan.text();
   assert.match(scanned, /Sign in as <b>proof@example\.com<\/b>/);
   assert.match(scanned, new RegExp(`name="token" value="${link}"`));

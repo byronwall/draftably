@@ -104,6 +104,7 @@ export const cleanEmail = (raw: string) => {
  */
 export async function sendLoginLink(env: AuthEnv, email: string, origin: string) {
   const token = randomToken(32);
+  const hash = await sha256(token);
   const now = new Date().toISOString();
   const expires = new Date(Date.now() + LINK_MINUTES * 60_000).toISOString();
   const [, added] = await env.DB.batch([
@@ -111,16 +112,21 @@ export async function sendLoginLink(env: AuthEnv, email: string, origin: string)
     env.DB.prepare(
       `INSERT INTO login_tokens (hash, email, expires_at) SELECT ?1, ?2, ?3
        WHERE (SELECT count(*) FROM login_tokens WHERE email = ?2) < ?4`,
-    ).bind(await sha256(token), email, expires, MAX_LINKS),
+    ).bind(hash, email, expires, MAX_LINKS),
   ]);
   if (!added.meta.changes) return false;
   const link = `${origin}/auth/verify?token=${token}`;
-  await env.EMAIL.send({
+  const mail = env.EMAIL.send({
     to: email,
     from: { email: env.EMAIL_FROM, name: 'Draftably' },
     subject: 'Sign in to Draftably',
     text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
     html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
+  });
+  // A failed send must not hold one of the address's links.
+  await mail.catch(async error => {
+    await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
+    throw error;
   });
   return true;
 }
