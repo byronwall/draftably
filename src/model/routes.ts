@@ -19,7 +19,7 @@ import {
 } from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import { codeLayout } from './code';
-import { rangeBand } from './ranges';
+import { drawnRect, rangeLabelBoxes, rangePort } from './ranges';
 import {
   ancestors,
   findEdge,
@@ -643,10 +643,20 @@ function rangeOffset(
   const n = name && node === shown ? findNode(doc, node) : undefined,
     range = n?.code?.ranges?.find(x => x.name === name);
   if (!range || !r) return undefined;
-  const band = rangeBand(codeLayout(n!.code!, n!.title, look, { width: r.w, height: r.h }), range);
-  return band && Math.round(band.y + band.h / 2 - r.h / 2);
+  const at = rangePort(
+    n!.code!,
+    codeLayout(n!.code!, n!.title, look, { width: r.w, height: r.h }),
+    look,
+    range,
+  );
+  return at === undefined ? undefined : at - r.h / 2;
 }
 
+/**
+ * The side a line to the whole of `id` takes when `id` is a code node with range labels outside
+ * its right edge: the one of left, top and bottom that faces `other`, and on the top or bottom
+ * its port's offset to the middle of the drawn box. Undefined otherwise.
+ */
 export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect>) {
   const look = resolveAppearance(doc.appearance),
     { sides, crosses } = cellEnds(doc, vg, all);
@@ -674,7 +684,8 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
   return {
     nodes: [
       ...vg.nodes.map(n => {
-        const r = rects.get(n.id)!,
+        // A code node's lines meet its drawn box; its outside range labels are obstacles below.
+        const r = drawnRect(n, look, rects.get(n.id)!),
           shape = styleOf(doc, n.id).shape;
         // The router keeps ports 12px in from a corner; a marker's thin bar gets room to meet
         // lines at its middle.
@@ -690,6 +701,9 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
         ...(stubParent.has(id) ? { parentId: stubParent.get(id), frame: true } : {}),
       })),
     ],
+    // Outside range labels: no line crosses one. They sit flush on their leaders, so they get no
+    // clearance: a line leaves its range along the leader, just under its label.
+    marks: vg.nodes.flatMap(n => rangeLabelBoxes(n, look, rects.get(n.id)!)),
     // A soft or frameless group has no border for a line to cross or run along.
     groups: vg.groups
       .filter(g => !g.frame)
@@ -743,6 +757,10 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
           ...e,
           from,
           to,
+          ranges: [
+            ...(fromAt !== undefined ? [`${e.from}.${e.fromRange}`] : []),
+            ...(toAt !== undefined ? [`${e.to}.${e.toRange}`] : []),
+          ],
           cfg: laneBends(
             {
               ...doc.layout.edges[e.id],

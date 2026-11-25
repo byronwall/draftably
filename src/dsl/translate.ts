@@ -50,6 +50,7 @@ function writeCode(s: Statement, code: CodeBlock) {
   if (code.wrap === !!code.table) setAttr(s, 'wrap', bare(code.wrap ? 'on' : 'off'));
   if (code.numbers) setAttr(s, 'numbers', bare('on'));
   if (code.table) setAttr(s, 'table', bare('on'));
+  if (code.labels) setAttr(s, 'labels', bare(code.labels));
   if (code.start !== 1) setAttr(s, 'start', bare(code.start));
   if (code.maxWidth !== CODE_MAX_WIDTH) setAttr(s, 'max-width', bare(code.maxWidth));
   writeBody(s, code.body ?? code.lines);

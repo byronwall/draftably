@@ -33,6 +33,8 @@ export interface RouteEdgeInput {
   /** The edge's text. A labelled edge keeps the full port gap in a fan. */
   label?: string;
   cfg: EdgeLayout;
+  /** The code ranges it ends at (`node.range`): their labels block only their text for it. */
+  ranges?: string[];
 }
 
 export interface RouteInput {
@@ -41,6 +43,12 @@ export interface RouteInput {
   edges: RouteEdgeInput[];
   /** Title text drawn outside a group frame (a soft group's): every line keeps clear of it. */
   titles?: Array<Rect & { id: string }>;
+  /**
+   * A code node's outside range labels, with no clearance: each blocks its leader and label
+   * (`x`…`h`). For a line that ends at that range (`id`), only the label text (`text`) blocks,
+   * so the line leaves along its leader but never turns back through its label.
+   */
+  marks?: Array<Rect & { id: string; text: Rect }>;
 }
 
 export interface Route {

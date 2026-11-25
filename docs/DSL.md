@@ -307,6 +307,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
 | `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
 | `table=`     | `off`         | `on` draws the body as a light table. See [Code tables](#code-tables).                                        |
+| `labels=`    | `leader`      | `inside` puts range labels in a column inside the box. See [Line ranges](#line-ranges).                       |
 | `start=`     | `1`           | The first line number. Ranges count from it too.                                                              |
 | `max-width=` | `960`         | The widest the box grows (120–8000 px; 960 is about 130 columns).                                             |
 | `wrap=`      | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
@@ -376,10 +377,14 @@ Paste spreadsheet cells, or a Markdown or psql table, on the canvas to add a tab
 ### Line ranges
 
 `range` names lines of a code node. The range draws a band behind the lines, a bar in the left
-margin and its label in a label column on the right. Code never runs under a label: when a range
-has a label, the node grows by the widest label (up to about 170px; a longer one ends with `…`),
-and every label starts at the same x, level with its range's first line. A range without a label
-never changes the node's size or the layout.
+margin and its label outside the box's right edge. A leader runs from a dot just inside the edge,
+level with the range's first line, and the label sits just above it. Every label starts at the
+same x, and a label longer than about 170px ends with `…`. The labels count as part of the node,
+so layouts, lines and the drawing's bounds keep clear of them. A range without a label never
+changes the node's size or the layout.
+
+`labels=inside` on the code node puts the labels in a column inside the box instead, right of the
+code. The code then wraps before the column. Use it when nothing may sit outside the box.
 
 ```draft
 node report "Orders report" color=blue
@@ -410,8 +415,11 @@ Then use it:
 
 - The ID is `<node>.<name>`, and it works like any ID. An `edge` may start or end on it, a
   `note near=` sits beside its lines, and a `state` may list it.
-- An edge to a range meets the node's left or right side at the range's middle line. `to=` and
-  `from=` take `left` or `right` only.
+- An edge to a range meets the node's left or right side at the range's middle line, or at its
+  label's dot when it has one. On the right side, the line leaves along the label's leader, so the
+  label sits above the line like a line label. `to=` and `from=` take `left` or `right` only.
+- No line crosses a label or a leader: lines meet the drawn box and pass the labels between rows
+  or beyond them.
 - `color=` picks the family (default `amber`). The label is optional.
 - Ranges may nest or overlap: bands blend, bars stand side by side, and a label whose row another
   label holds moves down to the next free row.

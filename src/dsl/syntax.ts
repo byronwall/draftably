@@ -609,7 +609,17 @@ export const DSL_SHAPES: DslShape[] = [
 export const ICON_POSITIONS = ['left', 'top'] as const;
 export type IconPos = (typeof ICON_POSITIONS)[number];
 
-const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'table', 'start', 'max-width', 'src'];
+const CODE_ATTRS = [
+  'lang',
+  'tab',
+  'wrap',
+  'numbers',
+  'table',
+  'labels',
+  'start',
+  'max-width',
+  'src',
+];
 /** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
 export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker' && s !== 'code');
 const FRAMES = ['box', 'soft', 'none'] as const;
@@ -932,6 +942,9 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           return {
             lines: table && !read?.placeholder ? tableLines(lines) : lines,
             ...(table ? { table } : {}),
+            ...(choice('labels', 'leader', ['leader', 'inside'] as const) === 'inside'
+              ? { labels: 'inside' as const }
+              : {}),
             ...(lang && !read?.placeholder ? { lang } : {}),
             wrap: choice('wrap', table ? 'off' : 'on', ['on', 'off'] as const) === 'on',
             numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',

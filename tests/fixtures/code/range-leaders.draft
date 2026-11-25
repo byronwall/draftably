@@ -1,0 +1,27 @@
+node sql "orders_report.sql" shape=code lang=sql numbers=on <<SQL
+SELECT c.name, o.total, i.qty
+FROM customers AS c
+JOIN orders AS o ON o.customer_id = c.id
+JOIN order_items AS i ON i.order_id = o.id
+WHERE o.status = 'open' AND c.region = 'north'
+GROUP BY c.name, o.total, i.qty
+ORDER BY o.total DESC
+LIMIT 50
+SQL
+range sql.scan lines=2 color=blue "full scan"
+range sql.join1 lines=3 color=red "hash join spills"
+range sql.join2 lines=4 color=orange "nested loop, 40k rows"
+range sql.filter lines=5 "filter after join"
+range sql.sort lines=6-7 color=violet "sort + group in temp files"
+node t1 "customers: 2M rows"
+node t2 "work_mem 4MB" color=red
+node t3 "order_items has no index" color=orange
+node t4 "Push filter down" color=amber
+node t5 "Temp disk" color=violet
+node app "Report page"
+edge e0 app -> sql
+edge e1 sql.scan -> t1 "reads"
+edge e2 sql.join1 -> t2 "needs"
+edge e3 sql.join2 -> t3 "probes"
+edge e4 sql.filter -> t4 "fix"
+edge e5 sql.sort -> t5 "writes"

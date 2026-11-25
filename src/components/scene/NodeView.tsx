@@ -11,6 +11,7 @@ import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
 import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
+import { codeLayout } from '../../model/code';
 import { DiagramIcon, SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import {
@@ -79,6 +80,17 @@ export function NodeView(props: NodeViewProps) {
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
   const paint = () => statusPaint(look(), style().status, style().spot);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
+  // A code node's layout box holds its outside label lane; the outline is the drawn box.
+  const box = createMemo(() => {
+    const code = node().code;
+    return code
+      ? {
+          ...props.rect,
+          w: codeLayout(code, node().title, look(), { width: props.rect.w, height: props.rect.h })
+            .frame,
+        }
+      : props.rect;
+  });
   const inside = () => label().mode === 'center' && style().shape !== 'text';
   const ringRadius = () => {
     const { shape } = style(),
@@ -158,7 +170,7 @@ export function NodeView(props: NodeViewProps) {
             <g transform={`translate(${d},${d})`}>
               <ShapeOutline
                 shape={style().shape}
-                rect={props.rect}
+                rect={box()}
                 radius={radius()}
                 attrs={shapeAttrs()}
               />
@@ -172,7 +184,7 @@ export function NodeView(props: NodeViewProps) {
             shape={style().shape === 'text' ? 'box' : style().shape}
             rect={{
               ...props.rect,
-              w: props.rect.w + 2 * HALO_GAP,
+              w: box().w + 2 * HALO_GAP,
               h: props.rect.h + 2 * HALO_GAP,
             }}
             radius={look().radius + HALO_GAP}
@@ -182,7 +194,7 @@ export function NodeView(props: NodeViewProps) {
       </Show>
       <ShapeOutline
         shape={style().shape}
-        rect={props.rect}
+        rect={box()}
         radius={radius()}
         attrs={shapeAttrs()}
         ink={look().text}
@@ -286,7 +298,7 @@ export function NodeView(props: NodeViewProps) {
       </Show>
       <Show when={paint().marker && !node().count}>
         <RemovedMarker
-          x={props.rect.w - MARKER.inset}
+          x={box().w - MARKER.inset}
           y={MARKER.inset}
           ink={color().stroke}
           canvas={look().canvas}
@@ -300,7 +312,7 @@ export function NodeView(props: NodeViewProps) {
           return (
             <g class="count-badge">
               <rect
-                x={props.rect.w - w() + 6}
+                x={box().w - w() + 6}
                 y={-h() / 2}
                 width={w()}
                 height={h()}
@@ -308,7 +320,7 @@ export function NodeView(props: NodeViewProps) {
                 fill={color().stroke}
               />
               <text
-                x={props.rect.w - w() / 2 + 6}
+                x={box().w - w() / 2 + 6}
                 y={0}
                 text-anchor="middle"
                 dominant-baseline="central"
@@ -326,12 +338,10 @@ export function NodeView(props: NodeViewProps) {
       <Show when={node().href}>
         {href => (
           <LinkMarkView
-            mark={linkMark(style().shape, props.rect.w, props.rect.h, badgeWidth())}
+            mark={linkMark(style().shape, box().w, props.rect.h, badgeWidth())}
             href={href()}
             color={
-              linkMark(style().shape, props.rect.w, props.rect.h).inside
-                ? color().ink
-                : look().muted
+              linkMark(style().shape, box().w, props.rect.h).inside ? color().ink : look().muted
             }
             interactive={props.interactive}
           />
@@ -342,13 +352,13 @@ export function NodeView(props: NodeViewProps) {
           id={props.id}
           pinned={!!props.rect.pinned}
           manual={!!props.rect.manual && props.doc.settings.showManual}
-          {...pinSpot(style().shape, props.rect.w, props.rect.h)}
+          {...pinSpot(style().shape, box().w, props.rect.h)}
           color={color().ink}
         />
         <For each={style().shape === 'marker' ? (['bottom'] as Side[]) : SIDES}>
           {side => {
             const p = () =>
-              portPoint(style().shape, { x: 0, y: 0, w: props.rect.w, h: props.rect.h }, side);
+              portPoint(style().shape, { x: 0, y: 0, w: box().w, h: props.rect.h }, side);
             return (
               <circle
                 class="port"

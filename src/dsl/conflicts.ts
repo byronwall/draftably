@@ -13,6 +13,7 @@ import { covers, segments, segmentInside, shrink } from '../model/geometry';
 import { groupHeaderFor } from '../model/labels';
 import { groupTitleInk, labelBoxes } from '../model/label-hits';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
+import { drawnRect } from '../model/ranges';
 import type { Diagram, Point, Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from './compile';
 import { flowSideNotes } from './flow-sides';
@@ -103,7 +104,11 @@ export function findConflicts(
   // A soft or frameless group draws a tint (or nothing) that lines cross freely; `compile`
   // reports a tint over other objects as `soft-overlap`. Only boxes are checked here.
   const tinted = new Set(doc.graph.groups.filter(g => scene.byId.get(g.id)?.frame).map(g => g.id));
-  const boxes = [...rects].filter(([id]) => !tinted.has(id)).map(([id, r]) => ({ id, r }));
+  // A code node's outside range labels are not its box: lines run beside them in the label lane.
+  const nodes = new Map(doc.graph.nodes.map(n => [n.id, n]));
+  const boxes = [...rects]
+    .filter(([id]) => !tinted.has(id))
+    .map(([id, r]) => ({ id, r: nodes.has(id) ? drawnRect(nodes.get(id)!, scene.look, r) : r }));
   const leaves = boxes.filter(b => !groups.has(b.id));
   // A marker takes no room: its bar sits on a seam and runs past the cells on purpose.
   const solid = boxes.filter(b => scene.byId.get(b.id)?.shape !== 'marker');
