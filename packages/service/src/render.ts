@@ -38,7 +38,9 @@ const hex = (buf: ArrayBuffer) =>
 async function cacheKey(origin: string, source: string, format: Format, opts: DrawOptions) {
   const hash = hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)));
   const url = new URL(`/__cache/${format}/${hash}`, origin);
-  for (const [k, v] of Object.entries(opts)) if (v != null) url.searchParams.set(k, String(v));
+  // Scale changes only a PNG; an SVG keyed on it would be drawn and charged twice.
+  for (const [k, v] of Object.entries(opts))
+    if (v != null && !(k === 'scale' && format === 'svg')) url.searchParams.set(k, String(v));
   url.searchParams.set('v', runtimeVersion);
   return new Request(url.toString());
 }
@@ -46,47 +48,67 @@ async function cacheKey(origin: string, source: string, format: Format, opts: Dr
 // The DOM lib (for Mermaid's types) hides the Workers-only `caches.default`.
 const cache = () => (caches as unknown as { default: Cache }).default;
 
-export async function render(
+/** Who pays: the account and the key it called with. */
+export interface Payer {
+  account: string;
+  key: string;
+}
+
+/**
+ * Draw `source`, or take it from the cache. `prepare` turns the image into what the caller sends
+ * (a Response, MCP content) and runs before the credits are taken, so nothing that can fail runs
+ * after the debit; the cache entry is written only after it.
+ */
+export async function render<P>(
   env: { DB: D1Database },
   ctx: ExecutionContext,
   origin: string,
-  source: string,
+  rawSource: string,
   format: Format,
   opts: DrawOptions,
+  prepare: (body: string | Uint8Array, cacheControl: string) => Promise<P>,
   /** Who pays, or nobody for a free anonymous image. */
-  account?: string,
+  payer?: Payer,
   /** Runs on a miss before drawing: the anonymous per-address limit. */
   beforeDraw?: () => Promise<void>,
-): Promise<Drawn> {
+): Promise<Drawn & { out: P }> {
+  // A GET URL's decoder drops a leading byte-order mark; drop it here too, so both hash the same.
+  const source = rawSource.replace(/^\uFEFF/, '');
   if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
     throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
   const key = await cacheKey(origin, source, format, opts);
   const hit = await cache().match(key);
-  if (hit)
-    return {
-      body: format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text(),
-      hit: true,
-      cacheControl: hit.headers.get('Cache-Control') ?? IMMUTABLE,
-    };
+  if (hit) {
+    const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
+    const cacheControl = hit.headers.get('Cache-Control') ?? IMMUTABLE;
+    return { body, hit: true, cacheControl, out: await prepare(body, cacheControl) };
+  }
   await beforeDraw?.();
   const cost = COST[format];
   const outOfCredits = () =>
     new ApiError(402, 'ERR_LIMIT_BALANCE', 'Out of credits. Buy more at /account.');
-  if (account) {
-    const b = await balance(env.DB, account);
+  if (payer) {
+    const b = await balance(env.DB, payer.account);
     if (b.grant + b.bought < cost) throw outOfCredits();
   }
   const body = await draw(source, format, opts);
-  let left: Balance | undefined;
-  if (account) {
-    left = (await spend(env.DB, account, cost, format)) ?? undefined;
-    if (!left) throw outOfCredits();
-  }
   const cacheControl = dated(source, opts.type) ? ONE_DAY : IMMUTABLE;
+  const out = await prepare(body, cacheControl);
+  let left: Balance | undefined;
+  if (payer) {
+    left = (await spend(env.DB, payer.account, cost, format, payer.key)) ?? undefined;
+    if (!left) {
+      const live = await env.DB.prepare(`SELECT 1 FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
+        .bind(payer.key)
+        .first();
+      if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
+      throw outOfCredits();
+    }
+  }
   ctx.waitUntil(
     cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
   );
-  return { body, hit: false, cacheControl, left };
+  return { body, hit: false, cacheControl, left, out };
 }
 
 /**

@@ -9,7 +9,7 @@ import { decodeSource, SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
-import { MAX_SEGMENT, render } from './render';
+import { MAX_SEGMENT, render, type Payer } from './render';
 
 export interface Env extends ApiEnv {
   ANON_LIMIT: RateLimit;
@@ -52,10 +52,10 @@ async function imageResponse(
   segment: string,
   format: Format,
   opts: DrawOptions,
-  account?: string,
+  payer?: Payer,
 ) {
   const anonLimit = async () => {
-    if (account) return;
+    if (payer) return;
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
     if (!(await env.ANON_LIMIT.limit({ key: ip })).success)
       throw new ApiError(
@@ -68,8 +68,21 @@ async function imageResponse(
     if (segment.length > MAX_SEGMENT)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
     const source = await decodeSource(segment);
-    const drawn = await render(env, ctx, origin, source, format, opts, account, anonLimit);
-    const res = image(drawn.body, format, 200, drawn.cacheControl);
+    // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
+    // one. An anonymous answer varies on Authorization for the same reason.
+    const drawn = await render(
+      env,
+      ctx,
+      origin,
+      source,
+      format,
+      opts,
+      async (body, cacheControl) => image(body, format, 200, payer ? 'no-store' : cacheControl),
+      payer,
+      anonLimit,
+    );
+    const res = drawn.out;
+    if (!payer) res.headers.set('Vary', 'Authorization');
     res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
     return res;
   } catch (error) {
@@ -110,8 +123,9 @@ export default {
     if (api) return api;
     const account = await handleAccount(req, env, url);
     if (account) return account;
-    if (req.method !== 'GET' && req.method !== 'HEAD')
-      return new Response('Method not allowed', { status: 405 });
+    // HEAD would draw and charge for a body it never sends.
+    if (req.method !== 'GET')
+      return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
     if (url.pathname === '/')
       return new Response(HOME, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
     if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
@@ -128,10 +142,10 @@ export default {
     }
     // A key spends credits and skips the per-address limit. It is checked before the cache, so a
     // revoked or wrong key is refused even for an image that is already cached.
-    let payer: string | undefined;
+    let payer: Payer | undefined;
     if (req.headers.has('Authorization')) {
       try {
-        payer = (await requireKey(req, env, ctx)).account;
+        payer = await requireKey(req, env, ctx);
       } catch (error) {
         if (!(error instanceof ApiError)) throw error;
         const img = await errorImage(error.message, route.format);

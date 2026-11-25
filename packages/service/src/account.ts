@@ -61,7 +61,12 @@ interface KeyRow {
   last_used_at: string | null;
 }
 
-async function accountPage(env: AuthEnv, account: { id: string; login: string }, newKey?: string) {
+async function accountPage(
+  env: AuthEnv,
+  origin: string,
+  account: { id: string; login: string },
+  newKey?: string,
+) {
   const b = await balance(env.DB, account.id);
   const keys = (
     await env.DB.prepare(
@@ -82,7 +87,7 @@ An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</p></section
 ${
   newKey
     ? `<section><h2>Your new key</h2><p>Copy it now; it is not shown again.</p><pre>${esc(newKey)}</pre>
-<pre>curl -X POST ${'https://api.draftably.dev'}/v1/render \\
+<pre>curl -X POST ${origin}/v1/render \\
   -H "Authorization: Bearer ${esc(newKey)}" \\
   -H "Content-Type: application/json" \\
   -d '{"code": "node a \\"Web\\"\\nnode b \\"API\\"\\nedge e a -> b", "format": "svg"}'</pre></section>`
@@ -139,13 +144,13 @@ export async function handleAccount(req: Request, env: AuthEnv, url: URL) {
   if (req.method === 'POST' && path === '/account/keys') {
     const form = await req.formData();
     const key = await createKey(env.DB, account.id, String(form.get('label') ?? ''));
-    return accountPage(env, account, key);
+    return accountPage(env, url.origin, account, key);
   }
   const revoke = /^\/account\/keys\/([0-9a-f]{12})\/revoke$/.exec(path);
   if (req.method === 'POST' && revoke) {
     await revokeKey(env.DB, account.id, revoke[1]);
     return redirect('/account');
   }
-  if (path === '/account') return accountPage(env, account);
+  if (path === '/account') return accountPage(env, url.origin, account);
   return new Response('Not found', { status: 404 });
 }

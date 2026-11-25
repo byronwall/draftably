@@ -35,7 +35,14 @@ const resetGrant = (db: D1Database, account: string) =>
  * Take `n` credits from the grant first, then bought credits. Returns the balance left, or null
  * when the account can't cover it (nothing is taken then).
  */
-export async function spend(db: D1Database, account: string, n: number, ref: string) {
+export async function spend(
+  db: D1Database,
+  account: string,
+  n: number,
+  ref: string,
+  /** The paying key: the spend fails if it was revoked after the call was let in. */
+  key?: string,
+) {
   const now = new Date().toISOString();
   const [, spent] = await db.batch<{ grant_left: number; bought: number }>([
     resetGrant(db, account),
@@ -45,9 +52,11 @@ export async function spend(db: D1Database, account: string, n: number, ref: str
         `UPDATE accounts
          SET grant_left = max(grant_left - ?1, 0), bought = bought - max(?1 - grant_left, 0)
          WHERE id = ?2 AND grant_left + bought >= ?1
+           AND (?3 IS NULL OR EXISTS (
+             SELECT 1 FROM keys WHERE id = ?3 AND account_id = ?2 AND revoked_at IS NULL))
          RETURNING grant_left, bought`,
       )
-      .bind(n, account),
+      .bind(n, account, key ?? null),
     db
       .prepare(
         `INSERT INTO ledger (account_id, delta, reason, ref, created_at)

@@ -481,6 +481,39 @@ if (!remote) {
   assert.equal(longRes.headers.get('X-Draftably-Url'), null);
   const huge = checkout + '\n#' + 'x'.repeat(66 * 1024);
   assert.equal((await post('/v1/validate', KEYS.rich, { code: huge })).status, 400);
+  // Codex round 2. HEAD never draws. Keyed answers are no-store; anonymous ones vary on the key.
+  const probeUrl = `${base}/svg/${await encodeSource(checkout + '\n# head\n')}`;
+  assert.equal((await fetch(probeUrl, { method: 'HEAD' })).status, 405);
+  const anonAns = await fetch(probeUrl);
+  assert.equal(anonAns.headers.get('Vary'), 'Authorization');
+  const keyedAns = await fetch(probeUrl, { headers: { Authorization: `Bearer ${KEYS.rich}` } });
+  assert.equal(keyedAns.headers.get('Cache-Control'), 'no-store');
+  // Following the service's own URL never charges twice: SVG ignores scale, and a leading BOM is
+  // dropped before hashing, as the URL decoder drops it.
+  const richLeft = async () =>
+    (
+      await (
+        await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+      ).json()
+    ).bought;
+  for (const [what, code, extra] of [
+    ['scale 3 SVG', checkout + '\n# scale\n', { scale: 3 }],
+    ['BOM source', '﻿' + checkout + '\n# bom\n', {}],
+  ] as const) {
+    const first = await post('/v1/render', KEYS.rich, { code, format: 'svg', ...extra });
+    await new Promise(r => setTimeout(r, 300));
+    const before = await richLeft();
+    const again = await fetch(first.headers.get('X-Draftably-Url')!, {
+      headers: { Authorization: `Bearer ${KEYS.rich}` },
+    });
+    assert.equal(again.headers.get('X-Draftably-Cache'), 'hit', `${what}: second fetch missed`);
+    assert.equal(await richLeft(), before, `${what}: charged twice`);
+  }
+  assert.equal((await post('/v1/render', KEYS.rich, null as unknown as object)).status, 400);
+  console.log(
+    'Round 2: HEAD 405; keyed answers no-store, anonymous vary on Authorization; the returned URL is a free cache hit for a scale-3 SVG and a BOM source; a null body gets 400.',
+  );
+
   // Account forms: a POST from another origin is refused; sign-out is POST only.
   const foreign = await fetch(`${base}/account/keys`, {
     method: 'POST',

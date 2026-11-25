@@ -76,6 +76,8 @@ async function body(req: Request) {
   } catch {
     throw new ApiError(400, 'ERR_SOURCE', 'The body must be JSON.');
   }
+  if (!json || typeof json !== 'object' || Array.isArray(json))
+    throw new ApiError(400, 'ERR_SOURCE', 'The body must be a JSON object.');
   const get = (k: string) => (json[k] === undefined || json[k] === null ? null : String(json[k]));
   return { code: checkSource(json.code), get };
 }
@@ -85,7 +87,8 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
   const route = `${req.method} ${url.pathname}`;
   if (!url.pathname.startsWith('/v1/')) return null;
   try {
-    const { account } = await requireKey(req, env, ctx);
+    const who = await requireKey(req, env, ctx);
+    const { account } = who;
     switch (route) {
       case 'GET /v1/balance':
         return Response.json(await balance(env.DB, account));
@@ -95,16 +98,30 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         if (format !== 'svg' && format !== 'png')
           throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
         const opts = drawOptions(get);
-        const drawn = await render(env, ctx, url.origin, code, format, opts, account);
-        const headers: Record<string, string> = {
-          'Content-Type': TYPES[format],
-          'X-Draftably-Cache': drawn.hit ? 'hit' : 'miss',
-        };
-        if (drawn.left)
-          headers['X-Draftably-Credits-Left'] = String(drawn.left.grant + drawn.left.bought);
+        // Everything the answer needs is built before the credits are taken.
         const link = await embedUrl(url.origin, code, format, opts);
-        if (link) headers['X-Draftably-Url'] = link;
-        return new Response(drawn.body, { headers });
+        const drawn = await render(
+          env,
+          ctx,
+          url.origin,
+          code,
+          format,
+          opts,
+          async body => {
+            const headers = new Headers({
+              'Content-Type': TYPES[format],
+              'Cache-Control': 'no-store',
+            });
+            if (link) headers.set('X-Draftably-Url', link);
+            return { body, headers };
+          },
+          who,
+        );
+        const { headers } = drawn.out;
+        headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
+        if (drawn.left)
+          headers.set('X-Draftably-Credits-Left', String(drawn.left.grant + drawn.left.bought));
+        return new Response(drawn.out.body, { headers });
       }
       case 'POST /v1/validate': {
         const { code, get } = await body(req);
