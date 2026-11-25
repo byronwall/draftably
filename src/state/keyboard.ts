@@ -2,8 +2,6 @@
 
 import { setStartOpen, startOpen } from './launch';
 import { isClipboardFragment } from '../model/edits';
-import { pastedTable, writeTable } from '../model/code';
-import { activeSession } from './active-session';
 import { commandEnabled, runCommand, type CommandId } from './commands';
 import { comparison } from './comparison';
 import { importForeignText, importText, insertImage } from './files';
@@ -17,6 +15,7 @@ import {
   handleKeyUp,
   isEditable,
   pasteShapes,
+  pasteTable,
 } from './canvas-keyboard';
 
 export { handleKeyUp };
@@ -98,13 +97,7 @@ export async function handlePaste(e: ClipboardEvent) {
       e.preventDefault();
       throw Error('This text has more than one diagram. Paste one diagram at a time.');
     }
-    // Cells copied from a spreadsheet, or a Markdown or psql table: a table node.
-    const table = pastedTable(text);
-    if (table) {
-      e.preventDefault();
-      activeSession().addTable(writeTable(table));
-      return;
-    }
+    if (pasteTable(e)) return;
     if (text.includes('\n') && !text.startsWith('{')) {
       e.preventDefault();
       openQuickBuild(text);

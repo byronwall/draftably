@@ -52,7 +52,7 @@ function writeCode(s: Statement, code: CodeBlock) {
   if (code.table) setAttr(s, 'table', bare('on'));
   if (code.start !== 1) setAttr(s, 'start', bare(code.start));
   if (code.maxWidth !== CODE_MAX_WIDTH) setAttr(s, 'max-width', bare(code.maxWidth));
-  writeBody(s, code.lines);
+  writeBody(s, code.body ?? code.lines);
 }
 
 /** A code statement's heredoc body: its tag kept, unless a line of the code would close it. */
@@ -344,16 +344,16 @@ export function translateEdit(input: EditInput): EditResult {
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
     const code = (o as DiagramNode).code,
       was = (old as DiagramNode).code;
-    if (
-      s.command === 'node' &&
-      code &&
-      was &&
-      (code.table !== was.table || code.lines.join('\n') !== was.lines.join('\n'))
-    ) {
+    // An Editor edit carries the body it wrote; the drawn lines are not the file's text.
+    const body =
+      code?.body && code.body.join('\n') !== (s.body?.lines ?? []).join('\n')
+        ? code.body
+        : undefined;
+    if (s.command === 'node' && code && was && (code.table !== was.table || body)) {
       if (getAttr(s, 'src'))
         throw new UnsupportedEdit('This code node reads its lines from a file; edit that file.');
       if (code.table !== was.table) setAttr(s, 'table', code.table ? bare('on') : undefined);
-      if (code.lines.join('\n') !== was.lines.join('\n')) writeBody(s, code.lines);
+      if (body) writeBody(s, body);
     }
     const span = (o as DiagramNode).span;
     if (s.command === 'node' && span !== (old as DiagramNode).span)

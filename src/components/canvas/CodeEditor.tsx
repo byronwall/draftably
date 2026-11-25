@@ -1,8 +1,9 @@
-import { batch, createMemo, createSignal, For, Index, onMount, Show } from 'solid-js';
+import { batch, createMemo, createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
 import { declaration, getAttr } from '../../dsl/source-edits';
 import { readSource } from '../../dsl/syntax';
 import { resolveAppearance } from '../../model/appearance';
 import {
+  CODE_TAB,
   CODE_TYPE,
   codeLines,
   pastedTable,
@@ -24,7 +25,12 @@ import { useDiagramSession } from '../session-context';
  */
 export function CodeEditor() {
   const s = useDiagramSession();
-  return <Show when={s.codeEditId()}>{id => <Editor id={id()} />}</Show>;
+  // Keyed: another node's editor is a new editor, never this one's draft under a new id.
+  return (
+    <Show when={s.codeEditId()} keyed>
+      {id => <Editor id={id} />}
+    </Show>
+  );
 }
 
 /** Spreadsheet cells, or the rows of a Markdown or psql table, from pasted text. */
@@ -49,26 +55,31 @@ function Editor(props: { id: string }) {
     swatch = drawnSwatch(s.doc, look, id, 'node'),
     muted = detailInk(look, swatch);
 
-  // The body as typed in the file, so a Markdown table keeps its `:---:` alignment marks.
-  let raw = code.lines,
-    file = '';
+  // The body as typed in the file, so a Markdown table keeps its `:---:` alignment marks, read
+  // with the node's own `tab=`.
+  let raw = code.body ?? code.lines,
+    tab = CODE_TAB,
+    file = code.src?.path ?? '';
   try {
     const decl = declaration(readSource(s.currentSource()), id);
-    file = String(getAttr(decl!, 'src')?.value ?? '');
-    if (decl?.body) raw = codeLines(decl.body.lines);
+    file ||= String(getAttr(decl!, 'src')?.value ?? '');
+    tab = Number(getAttr(decl!, 'tab')?.value) || CODE_TAB;
+    if (decl?.body && !code.body) raw = codeLines(decl.body.lines, tab);
   } catch {
     // An unsaved or unparsable source: edit the lines the canvas draws.
   }
 
   const start = readTable(raw);
   const [table, setTable] = createSignal(!!code.table),
-    [rows, setRows] = createSignal(start.rows.filter((r, i) => i === 0 || r.length)),
+    [rows, setRows] = createSignal(start.rows),
+    [footer, setFooter] = createSignal(start.footer),
     [align, setAlign] = createSignal<Align[]>(start.align),
     [text, setText] = createSignal(raw.join('\n')),
     [title, setTitle] = createSignal(node.title),
     [focus, setFocus] = createSignal({ r: 0, c: 0 }),
     [dirty, setDirty] = createSignal(false);
-  const footer = start.footer;
+  /** Rows the body had; empty rows past these are ones the editor added and the save drops. */
+  let kept = start.rows.length;
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
   const width = () => Math.max(1, ...rows().map(r => r.length));
@@ -149,11 +160,13 @@ function Editor(props: { id: string }) {
   /** Switch between the cell grid and plain text, carrying the body across. */
   const toggleTable = () => {
     edit(() => {
-      if (table()) setText(writeTable({ rows: rows(), align: align(), footer }).join('\n'));
+      if (table()) setText(tableBody().join('\n'));
       else {
         const t = readTable(text().split('\n'));
-        setRows(t.rows.filter((r, i) => i === 0 || r.length));
+        setRows(t.rows);
         setAlign(t.align);
+        setFooter(t.footer);
+        kept = t.rows.length;
       }
       setTable(!table());
     });
@@ -162,16 +175,27 @@ function Editor(props: { id: string }) {
     queueMicrotask(() => (table() ? go(0, 0) : area?.focus()));
   };
 
+  /** The grid as body text, without the empty rows the editor added at the end. */
+  const tableBody = () => {
+    const all = rows().slice();
+    while (all.length > Math.max(1, kept) && !all[all.length - 1].some(c => c.trim())) all.pop();
+    return writeTable({ rows: all, align: align(), footer: footer() });
+  };
+
   let closed = false;
   const close = (save: boolean) => {
     if (closed) return;
     closed = true;
-    const lines = table()
-      ? writeTable({ rows: rows(), align: align(), footer })
-      : text().replace(/\s+$/, '').split('\n');
+    // Only a changed body is written; a caption edit leaves the file's body as it is.
+    const body = dirty()
+      ? table()
+        ? tableBody()
+        : text().replace(/\s+$/, '').split('\n')
+      : undefined;
     const changed = dirty() || title().trim() !== node.title;
     s.finishCodeEdit(
-      save && changed ? { lines, table: table(), title: title().trim() } : undefined,
+      id,
+      save && changed ? { body, table: table(), title: title().trim(), tab } : undefined,
     );
     s.focusCanvas();
   };
@@ -180,9 +204,12 @@ function Editor(props: { id: string }) {
     if (file) {
       toast(`This code reads its lines from ${file}. Edit that file instead.`);
       closed = true;
-      s.finishCodeEdit();
+      s.finishCodeEdit(id);
       return;
     }
+    // A save the session asks for, as from an event handler.
+    // eslint-disable-next-line solid/reactivity
+    s.onCodeSave(() => close(true));
     if (table()) go(rows().length > 1 ? 1 : 0, 0);
     else {
       area?.focus();
@@ -288,6 +315,10 @@ function Editor(props: { id: string }) {
       minW: r.w * scale,
       scale,
     };
+  });
+
+  onCleanup(() => {
+    if (!closed) s.onCodeSave(undefined);
   });
 
   // Keep focus moves inside the editor; leaving it saves, like a title edit.
@@ -472,9 +503,9 @@ function Editor(props: { id: string }) {
               </Index>
             </tbody>
           </table>
-          <Show when={footer}>
+          <Show when={footer()}>
             <div class="code-edit-footer" style={font()}>
-              {`(${rows().length - 1} row${rows().length === 2 ? '' : 's'})`}
+              {tableBody().at(-1)}
             </div>
           </Show>
         </Show>

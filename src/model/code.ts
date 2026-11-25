@@ -32,6 +32,11 @@ export interface CodeBlock {
   sourceLine: number;
   /** Named line ranges from `range` statements, in file order. */
   ranges?: CodeRange[];
+  /**
+   * The heredoc body an Editor edit wrote, as the file will hold it; `lines` are drawn from it.
+   * Absent once the file is read again.
+   */
+  body?: string[];
   /** `src=`: the body was read from this file, relative to the `.draft`. */
   src?: {
     path: string;
@@ -151,9 +156,9 @@ const pipeCells = (l: string) =>
   l
     .trim()
     .replace(/^\|/, '')
-    .replace(/\|$/, '')
-    .split('|')
-    .map(c => c.trim());
+    .replace(/(?<!\\)\|$/, '')
+    .split(/(?<!\\)\|/)
+    .map(c => c.trim().replace(/\\\|/g, '|'));
 
 /**
  * The cells of a table body, by column. When every line holds a `|`, pipes split the cells
@@ -233,7 +238,8 @@ export function readTable(lines: string[]): Table {
   const first = lines.findIndex(l => l.trim()),
     typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
     body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
-    rows = tableCells(body) ?? body.map(l => (l.trim() ? [l.trim()] : [])),
+    // One column keeps its lines as they are, indent and all.
+    rows = tableCells(body) ?? body.map(l => (l.trim() ? [l] : [])),
     n = Math.max(1, ...rows.map(c => c.length)),
     auto = autoAlign(rows, n),
     align = auto.map((a, i): Align => {
@@ -251,53 +257,65 @@ export function readTable(lines: string[]): Table {
  * own line under it. A body with fewer than two columns stays as it is.
  */
 export function tableLines(lines: string[]): string[] {
-  const t = readTable(lines);
-  if (t.align.length < 2) {
-    const body = t.footer
-        ? lines.slice(
-            0,
-            lines.findLastIndex(l => l.trim()),
-          )
-        : lines,
-      typed = body.findIndex(l => l.trim());
-    // A one-column body keeps its lines; only a typed rule under its header goes.
-    const kept =
-      typed >= 0 && isRule(body[typed + 1] ?? '') ? body.filter((_, i) => i !== typed + 1) : body;
-    return t.footer ? [...kept, t.footer] : kept;
-  }
-  return [...alignRows(t.rows, t.align), ...(t.footer ? [t.footer] : [])];
+  const t = readTable(lines),
+    out = t.align.length < 2 ? t.rows.map(r => r[0] ?? '') : alignRows(t.rows, t.align);
+  return t.footer ? [...out, t.footer] : out;
 }
 
+/** Rows as `readTable` gives them, for comparing two reads: n cells each, a blank line empty. */
+const sameRows = (a: string[][], b: string[][], n: number) =>
+  JSON.stringify(a.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : []))) ===
+  JSON.stringify(b.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : [])));
+
 /**
- * A table as body text that `readTable` reads back the same: columns two spaces apart, or a
- * Markdown table with a `:---:` rule when an alignment differs from the one numbers would give.
- * Empty rows and empty trailing columns go; a psql footer counts the rows again.
+ * A table as body text that `readTable` reads back the same: columns two spaces apart when that
+ * reads back cell for cell, and otherwise a Markdown table, with `|` in a cell escaped and a
+ * `:---:` rule for the alignment. Every row stays, so a `range` keeps its lines; empty columns at
+ * the right go. A psql footer counts the rows again.
  */
 export function writeTable(t: Table): string[] {
-  const clean = (c: string) => c.replace(/\s+/g, ' ').trim();
-  let rows = t.rows.map(r => r.map(clean)).filter((r, i) => i === 0 || r.some(Boolean));
+  const one = Math.max(1, ...t.rows.map(r => r.length)) === 1;
+  let rows = t.rows.map(r => (one ? [...r] : r.map(c => c.trim())));
   let n = Math.max(1, ...rows.map(r => r.length));
-  while (n > 1 && rows.every(r => !r[n - 1])) n--;
-  rows = rows.map(r => Array.from({ length: n }, (_, i) => r[i] ?? ''));
+  // Empty columns at the right go, but a table stays a table: one column draws as plain lines.
+  while (n > 2 && rows.every(r => !r[n - 1])) n--;
+  // A blank line stays a blank line; a row of empty cells stays a row, and the header always is.
+  rows = rows.map((r, j) =>
+    j === 0 || r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : [],
+  );
   const align = Array.from({ length: n }, (_, i) => t.align[i] ?? 'left'),
-    footer = t.footer && `(${rows.length - 1} row${rows.length === 2 ? '' : 's'})`;
-  if (n === 1) return [...rows.map(r => r[0]), ...(footer ? [footer] : [])];
-  const auto = autoAlign(rows, n);
-  if (align.every((a, i) => a === auto[i]))
-    return [...alignRows(rows, align), ...(footer ? [footer] : [])];
+    count = rows.slice(1).filter(r => r.length).length,
+    footer = t.footer ? [`(${count} row${count === 1 ? '' : 's'})`] : [];
+  // One column is its lines as they are; more are aligned, which is also how they draw.
+  const plain = [...(n === 1 ? rows.map(r => r[0] ?? '') : alignRows(rows, align)), ...footer],
+    back = readTable(plain);
+  if (
+    back.align.length === n &&
+    back.align.every((a, i) => a === align[i]) &&
+    sameRows(back.rows, rows, n) &&
+    JSON.stringify(tableLines(plain)) === JSON.stringify(plain)
+  )
+    return plain;
   // Each pipe column is its widest cell plus a space either side; the rule's `:` marks sit at
   // its ends.
-  const widths = align.map((_, i) => Math.max(3, ...rows.map(r => r[i].length))),
-    line = (r: string[]) => `| ${r.map((c, i) => pad(c, widths[i], align[i])).join(' | ')} |`,
+  const cells = rows.map(r => r.map(c => c.replace(/\|/g, '\\|'))),
+    widths = align.map((_, i) => Math.max(3, ...cells.map(r => (r[i] ?? '').length))),
+    line = (r: string[]) =>
+      r.length ? `| ${r.map((c, i) => pad(c, widths[i], align[i])).join(' | ')} |` : '',
     rule = widths.map((w, i) =>
       align[i] === 'center'
         ? `:${'-'.repeat(w)}:`
         : align[i] === 'right'
           ? `${'-'.repeat(w + 1)}:`
           : `:${'-'.repeat(w + 1)}`,
-    ),
-    out = [line(rows[0]), `|${rule.join('|')}|`, ...rows.slice(1).map(line)];
-  return [...out, ...(footer ? [footer] : [])];
+    );
+  return [line(cells[0]), `|${rule.join('|')}|`, ...cells.slice(1).map(line), ...footer];
+}
+
+/** The lines a code node draws from its heredoc body: tabs expanded, dedented, and a table aligned. */
+export function bodyLines(raw: string[], table?: boolean, tab = CODE_TAB): string[] {
+  const lines = codeLines(raw, tab);
+  return table ? tableLines(lines) : lines;
 }
 
 /**
@@ -315,7 +333,12 @@ export function pastedTable(text: string): Table | undefined {
     if (rows.every(r => r.length === rows[0].length))
       return { rows, align: autoAlign(rows, rows[0].length) };
   }
-  if (lines.every(l => l.includes('|') || FOOTER.test(l.trim())) && isRule(lines[1]))
+  // A Markdown or psql table: its rule under the header, and a `|` on every other line but a
+  // psql footer.
+  if (
+    isRule(lines[1]) &&
+    lines.every((l, i) => i === 1 || l.includes('|') || FOOTER.test(l.trim()))
+  )
     return readTable(lines);
   return undefined;
 }

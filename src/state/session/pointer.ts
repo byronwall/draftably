@@ -256,6 +256,11 @@ export function createPointer(
       s.finishInlineEdit(true);
       return;
     }
+    // A press on the canvas saves the open code editor, as it saves a title.
+    if (s.codeEditId()) {
+      s.commitCodeEdit();
+      return;
+    }
     s.options.onInteract?.();
     const pos = s.screenToWorld(e.clientX, e.clientY);
     s.setPointer(pos);

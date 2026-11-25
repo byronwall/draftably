@@ -13,7 +13,7 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
-import { CODE_MAX_WIDTH, codeLayout, tableLines, type CodeBlock } from '../../model/code';
+import { bodyLines, CODE_MAX_WIDTH, codeLayout, type CodeBlock } from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -77,9 +77,18 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
 
   /** The code node whose body is open in the code or table editor. */
   const [codeEditId, setCodeEditId] = createSignal<string | null>(null);
+  /** Saves the open code editor's draft; the editor sets it while it is open. */
+  let saveOpenCode: (() => void) | undefined;
+  const onCodeSave = (fn: (() => void) | undefined) => (saveOpenCode = fn);
+  /** Save the open code editor, if any, before another edit or a press on the canvas. */
+  const commitCodeEdit = () => saveOpenCode?.();
 
   function startCodeEdit(id: string) {
     finishInlineEdit(true);
+    commitCodeEdit();
+    const code = findNode(s.doc, id)?.code;
+    if (code?.src)
+      return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -87,10 +96,11 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     });
   }
 
-  /** A table node from pasted cells, at the middle of the view, selected. */
-  function addTable(lines: string[]) {
+  /** A table node from a pasted table's body, at the middle of the view, selected. */
+  function addTable(body: string[]) {
     const code: CodeBlock = {
-        lines,
+        lines: bodyLines(body, true),
+        body,
         table: true,
         wrap: false,
         numbers: false,
@@ -98,11 +108,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
         maxWidth: CODE_MAX_WIDTH,
         sourceLine: 0,
       },
-      laid = codeLayout(
-        { ...code, lines: tableLines(lines) },
-        '',
-        resolveAppearance(s.doc.appearance),
-      );
+      laid = codeLayout(code, '', resolveAppearance(s.doc.appearance));
     let id = '';
     s.transact('Paste table', d => {
       id = edits.addNode(d, { style: { shape: 'code' }, w: laid.w, h: laid.h }, s.canvasCenter());
@@ -114,17 +120,28 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     return id;
   }
 
-  /** Close the code editor; with `next`, save its body, caption and table setting as one step. */
-  function finishCodeEdit(next?: { lines: string[]; table: boolean; title: string }) {
-    const id = codeEditId();
-    if (!id) return;
-    setCodeEditId(null);
+  /**
+   * Close the code editor of node `id`; with `next`, save its caption, table setting and, when it
+   * changed, its body, as one undo step. The node draws from the new body at once.
+   */
+  function finishCodeEdit(
+    id: string,
+    next?: { body?: string[]; table: boolean; title: string; tab?: number },
+  ) {
+    if (codeEditId() === id) setCodeEditId(null);
+    saveOpenCode = undefined;
     if (!next) return;
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
-      if (!node?.code) return;
+      if (!node?.code || node.code.src) return;
       const { table: _, ...rest } = node.code;
-      node.code = { ...rest, lines: next.lines, ...(next.table ? { table: true } : {}) };
+      node.code = {
+        ...rest,
+        ...(next.table ? { table: true } : {}),
+        ...(next.body
+          ? { body: next.body, lines: bodyLines(next.body, next.table, next.tab) }
+          : {}),
+      };
       node.title = next.title;
     });
   }
@@ -710,6 +727,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     codeEditId,
     startCodeEdit,
     finishCodeEdit,
+    commitCodeEdit,
+    onCodeSave,
     addTable,
     addNode,
     addEdge,

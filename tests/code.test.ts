@@ -307,6 +307,7 @@ describe('editing code tables', () => {
     markdown: ['| tier | status | cost |', '|------|:------:|-----:|', '| pro  | ok     | $12  |'],
     psql: [' id | plan  | seats', '----+-------+-------', '  1 | pro   |    12', '(1 row)'],
     oneColumn: ['name', 'ana', 'bo'],
+    indented: ['label', '  indentation'],
   };
 
   it('writes back a table that draws the same, for every kind of body', () => {
@@ -314,9 +315,36 @@ describe('editing code tables', () => {
       expect(tableLines(writeTable(readTable(body))), name).toEqual(tableLines(body));
   });
 
-  it('keeps a chosen alignment, drops empty rows and columns, and recounts a psql footer', () => {
+  it('reads back every saved table cell for cell, whatever the cells hold', () => {
+    // Every two-line, three-column Markdown table from these cells: blanks, spaces, pipes, numbers.
+    const values = ['', 'a', 'New York', '12', 'two  spaces', 'a\\|b'],
+      row = (cells: string[]) => `| ${cells.join(' | ')} |`;
+    let checked = 0;
+    for (let k = 0; k < values.length ** 6; k++) {
+      const v = Array.from(
+        { length: 6 },
+        (_, i) => values[Math.floor(k / values.length ** i) % values.length],
+      );
+      const body = [row(v.slice(0, 3)), '|---|---|---|', row(v.slice(3))],
+        saved = writeTable(readTable(body));
+      // A table of only blank cells has nothing to keep.
+      if (v.every(c => !c)) continue;
+      expect(tableLines(saved), body.join('\n')).toEqual(tableLines(body));
+      checked++;
+    }
+    expect(checked).toBe(46655);
+  });
+
+  it('keeps a blank line inside a table, so a range keeps its rows', () => {
+    const body = ['id  name', '1   ana', '', '2   bo', '3   cy'],
+      saved = writeTable(readTable(body));
+    expect(saved[2]).toBe('');
+    expect(tableLines(saved)).toEqual(tableLines(body));
+  });
+
+  it('keeps a chosen alignment, drops empty columns, and recounts a psql footer', () => {
     const t = readTable(bodies.psql);
-    t.rows.push(['2', 'free', '1'], ['', '', ''], []);
+    t.rows.push(['2', 'free', '1']);
     t.rows = t.rows.map(r => [...r, '']);
     t.align = ['left', 'center', 'right', 'left'];
     const lines = writeTable(t);
@@ -343,37 +371,61 @@ describe('editing code tables', () => {
       align: ['right', 'right'],
     });
     expect(pastedTable(bodies.markdown.join('\n'))?.align).toEqual(['left', 'center', 'right']);
+    expect(pastedTable('id | plan\n----+------\n1 | pro\n(1 row)')?.footer).toBe('(1 row)');
+    expect(pastedTable('id\tplan\n1\t')?.rows).toEqual([
+      ['id', 'plan'],
+      ['1', ''],
+    ]);
     expect(pastedTable('first step\nsecond step')).toBeUndefined();
     expect(pastedTable('a\tb')).toBeUndefined();
   });
 
-  it('saves an edited body and the table setting to the source', () => {
-    const source = 'node q "Result" shape=code <<SQL\nid  ms\n1   12\nSQL\n',
-      scene = checkSource(source),
-      before = projectScene(scene),
-      after = clone(before),
-      node = after.graph.nodes.find(n => n.id === 'q')!;
-    node.code = {
-      ...node.code!,
-      table: true,
-      lines: writeTable(pastedTable('id\tms\n1\t12\n2\t7')!),
+  it('saves an edited body and the table setting to the source, and only those', () => {
+    const save = (
+      source: string,
+      edit: (code: CodeBlock, node: Diagram['graph']['nodes'][0]) => void,
+    ) => {
+      const scene = checkSource(source),
+        before = projectScene(scene),
+        after = clone(before),
+        node = after.graph.nodes[0];
+      edit(node.code!, node);
+      return printSource(
+        translateEdit({
+          source: readSource(source),
+          scene,
+          before,
+          after,
+          label: 'Edit',
+          selection: [],
+        }).source,
+      );
     };
-    const out = printSource(
-      translateEdit({
-        source: readSource(source),
-        scene,
-        before,
-        after,
-        label: 'Edit',
-        selection: ['q'],
-      }).source,
-    );
-    expect(out).toBe('node q "Result" shape=code table=on <<SQL\nid  ms\n 1  12\n 2   7\nSQL\n');
+    // A pasted table, turned on.
+    const pasted = writeTable(pastedTable('id\tms\n1\t12\n2\t7')!);
+    expect(
+      save('node q "Result" shape=code <<SQL\nid  ms\n1   12\nSQL\n', c => {
+        c.table = true;
+        c.body = pasted;
+      }),
+    ).toBe('node q "Result" shape=code table=on <<SQL\nid  ms\n 1  12\n 2   7\nSQL\n');
+    // Table off: the body the text box showed is written, though the drawn lines match it.
+    const md = 'node t shape=code table=on <<T\n|id|name|\n|---|---|\n|1|ana|\nT\n';
+    expect(
+      save(md, c => {
+        delete c.table;
+        c.body = ['id  name', ' 1  ana'];
+      }),
+    ).toBe('node t shape=code <<T\nid  name\n 1  ana\nT\n');
+    // A caption edit alone leaves the body, its tabs and the tab width as they are.
+    const tabbed = 'node c "a" shape=code tab=8 <<C\nx\n\ty\nC\n';
+    expect(save(tabbed, (_, n) => (n.title = 'b'))).toBe(tabbed.replace('"a"', '"b"'));
+    // A file's lines are never written over.
     const file = 'node f shape=code src="a.sql"\n',
       fileScene = checkSource(file, { 'a.sql': { text: 'x\n' } }),
       was = projectScene(fileScene),
       edited = clone(was);
-    edited.graph.nodes[0].code = { ...edited.graph.nodes[0].code!, lines: ['y'] };
+    edited.graph.nodes[0].code = { ...edited.graph.nodes[0].code!, body: ['y'] };
     expect(() =>
       translateEdit({
         source: readSource(file),
