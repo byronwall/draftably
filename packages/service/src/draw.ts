@@ -11,6 +11,7 @@ import { formatSource } from '../../../src/dsl/syntax';
 import { withSourceStrip } from '../../../src/model/strip';
 import { embedPngSource } from '../../../src/model/embed';
 import { rasterFamilies, scaleSvg, svgSize } from '../../../src/model/raster';
+import { toDraft } from './mermaid';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
 import sans600 from '../../../src/cli/fonts/inter-latin-600-normal.ttf';
 import serif600 from '../../../src/cli/fonts/source-serif-4-latin-600-normal.ttf';
@@ -19,6 +20,8 @@ import mono500 from '../../../src/cli/fonts/jetbrains-mono-latin-500-normal.ttf'
 export type Format = 'svg' | 'png';
 
 export interface DrawOptions {
+  /** The source language; detected when not given. */
+  type?: string | null;
   scheme: 'light' | 'dark';
   /** PNG only: pixels per SVG unit. */
   scale: number;
@@ -38,7 +41,7 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
     throw new SourceError('scheme must be light or dark.');
   const scale = Number(get('scale') ?? 2);
   if (![1, 2, 3, 4].includes(scale)) throw new SourceError('scale must be 1, 2, 3 or 4.');
-  return { scheme, scale };
+  return { type: get('type'), scheme, scale };
 }
 
 /** Draw `source` as SVG, or throw a SourceError with the first diagnostic. */
@@ -87,13 +90,15 @@ export async function rasterize(svg: string, scale: number) {
 }
 
 /**
- * Draw `source` as `format`. A PNG carries the source as `draftably inspect --png` writes it: in
- * a metadata chunk and in a faint pixel strip below the drawing, so `draftably open` reads it back.
+ * Draw `source` (Draftably or Mermaid) as `format`. A PNG carries the Draftably source as
+ * `draftably inspect --png` writes it: in a metadata chunk and in a faint pixel strip below the
+ * drawing, so `draftably open` reads it back, also for a Mermaid input.
  */
 export async function draw(source: string, format: Format, opts: DrawOptions) {
-  const svg = await drawSvg(source, opts);
+  const { draft } = await toDraft(source, opts.type);
+  const svg = await drawSvg(draft, opts);
   if (format === 'svg') return svg;
-  const kept = formatSource(source);
+  const kept = formatSource(draft);
   // Check the size before the strip: building the strip for a huge drawing costs memory too.
   checkPixels(svg, opts.scale);
   const png = await rasterize(await withSourceStrip(svg, kept, opts.scale), opts.scale);

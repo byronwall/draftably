@@ -8,7 +8,7 @@ names the check that proves it, at the scope the product works on.
 |     0 | Spikes: SVG, PNG and Mermaid in `workerd`    | done    |
 |     1 | GET SVG on `workers.dev`                     | built   |
 |     2 | GET PNG                                      | built   |
-|     3 | Mermaid input                                | planned |
+|     3 | Mermaid input                                | built   |
 |     4 | Domain, accounts, keys, REST API, free grant | planned |
 |     5 | MCP server                                   | planned |
 |     6 | Paid credits through Stripe                  | planned |

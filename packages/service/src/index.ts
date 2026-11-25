@@ -52,6 +52,8 @@ GET /svg/{encoded}   SVG drawing of a Draftably diagram
 GET /png/{encoded}   PNG drawing, with the source embedded; ?scale=1|2|3|4 (default 2)
                      {encoded} = "pako:" + base64url(zlib(source)), as mermaid.ink, or
                      base64url(source). Make one with: draftably url <file.draft>
+                     The source is Draftably or Mermaid (flowchart, sequence, gantt,
+                     timeline); ?type=mermaid|draftably skips the guess.
                      ?scheme=light|dark
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
@@ -82,7 +84,8 @@ export default {
     keyUrl.searchParams.set('v', runtimeVersion);
     keyUrl.searchParams.set('build', env.CF_VERSION_METADATA.id);
     const key = new Request(keyUrl.toString());
-    const cache = caches.default;
+    // The DOM lib (for Mermaid's types) hides the Workers-only `caches.default`.
+    const cache = (caches as unknown as { default: Cache }).default;
     const hit = await cache.match(key);
     if (hit) {
       const res = new Response(hit.body, hit);
