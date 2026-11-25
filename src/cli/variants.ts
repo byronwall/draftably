@@ -201,6 +201,8 @@ export interface Shape {
   ranks: number;
   /** Every node has at most one incoming connection and there is one start. */
   tree: boolean;
+  /** One unbranched chain of two or more connections: one in and one out at every step. */
+  chain: boolean;
   /** Mean edge label length, in characters. */
   labels: number;
   /** The scope the variants arrange: `root`, or a group given with `--scope`. */
@@ -267,6 +269,8 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
   const { depth, cyclic } = depths(edges);
   const ranks = Math.max(0, ...nodes.map(n => depth.get(n.id) ?? 1));
   const starts = nodes.filter(n => !incoming.get(n.id)).length;
+  const outgoing = new Map<string, number>();
+  for (const e of edges) outgoing.set(e.source, (outgoing.get(e.source) ?? 0) + 1);
   const root = m.layouts.find(l => l.scope === scope);
   const labelled = edges.filter(e => e.label);
   return {
@@ -274,6 +278,11 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
     groups: m.objects.filter(o => o.type === 'group' && !o.frame && members.has(o.id)).length,
     ranks,
     tree: !cyclic && starts === 1 && nodes.every(n => (incoming.get(n.id) ?? 0) <= 1),
+    chain:
+      !cyclic &&
+      edges.length >= 2 &&
+      ranks === edges.length + 1 &&
+      nodes.every(n => (incoming.get(n.id) ?? 0) <= 1 && (outgoing.get(n.id) ?? 0) <= 1),
     labels: labelled.length
       ? labelled.reduce((sum, e) => sum + e.label.length, 0) / labelled.length
       : 0,
@@ -379,6 +388,12 @@ export function suggestions(
     out.push({
       edits: [layout({ engine: 'compound-flow', direction: null })],
       why: 'keep the groups, rank them by their connections',
+    });
+  // An unbranched chain through groups draws as one straight line when it reads across.
+  if (shape.groups && shape.chain && !(engine === 'compound-flow' && lead === 'right'))
+    out.push({
+      edits: [layout({ engine: 'compound-flow', direction: 'right' })],
+      why: `an unbranched chain of ${shape.ranks} steps through groups, on one straight line`,
     });
   if (shape.groups)
     out.push({
@@ -751,10 +766,12 @@ export async function draw(source: string): Promise<Drawn> {
     { vg, rects } = visibleRects(doc),
     { routes, result } = computeRoutes(doc, vg, rects, { previous: [] });
   // A soft group drawn in pieces no longer reads as one group, so it counts against a variant
-  // even though `check` only notes it.
+  // even though `check` only notes it. `fit-direction` only says the stated direction keeps the
+  // drawing wide; the measured aspect already ranks that, so it does not count twice.
   const warnings =
-    scene.diagnostics.filter(d => d.level === 'warning' || d.code === 'soft-split').length +
-    findConflicts(scene, doc, rects, routes).length;
+    scene.diagnostics.filter(
+      d => (d.level === 'warning' && d.code !== 'fit-direction') || d.code === 'soft-split',
+    ).length + findConflicts(scene, doc, rects, routes).length;
   const onChart = timelineRoutes(doc, rects),
     drawnBends = onChart.reduce((n, r) => n + r.points.length - 2, 0),
     drawnLength = onChart.reduce(
@@ -922,7 +939,7 @@ const movedFrom = (base: Drawn['centers'], next: Drawn['centers']) => {
 
 // --- Ranking -----------------------------------------------------------------------------------
 
-const area = (m: Metrics) => m.width * m.height;
+const area = (m: Pick<Metrics, 'width' | 'height'>) => m.width * m.height;
 
 /** Sort keys for a preference, most important first. Warnings always come first. */
 function keys(m: Metrics, goal: Goal): number[] {
@@ -972,7 +989,8 @@ const TIGHTER = 0.85,
  * them, no wider (within 5%) and at most half as large again. A straight line reads better than
  * a shape closer to the target, so this holds even when the aspect moves away from `--fit`.
  */
-export const straighter = (m: Metrics, base: Metrics) =>
+type Shaped = Pick<Metrics, 'bends' | 'width' | 'height'>;
+export const straighter = (m: Shaped, base: Shaped) =>
   base.bends - m.bends >= 2 &&
   m.bends * 2 <= base.bends &&
   m.width <= base.width * 1.05 &&
@@ -1130,12 +1148,14 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     }
   }
   const better = (v: Variant) => improves(v.metrics!, v0.metrics!, goal.fit);
-  if (ranked)
-    found.sort(
-      (a, b) =>
-        Number(better(b.variant)) - Number(better(a.variant)) ||
-        compareKeys(keys(a.variant.metrics!, goal), keys(b.variant.metrics!, goal)),
-    );
+  // Among better variants, one that removes the file's avoidable bends comes first, even when
+  // another is closer to `--fit`.
+  const straight = (v: Variant) => better(v) && straighter(v.metrics!, v0.metrics!);
+  const order = (a: Variant, b: Variant) =>
+    Number(better(b)) - Number(better(a)) ||
+    Number(straight(b)) - Number(straight(a)) ||
+    compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal));
+  if (ranked) found.sort((a, b) => order(a.variant, b.variant));
   const kept = found.slice(0, limit);
   kept.forEach((f, i) => {
     f.variant.id = `v${i + 1}`;
@@ -1151,7 +1171,7 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
   const pick = kept
     .map(f => f.variant)
     .filter(v => better(v) && !v.tags.some(t => t.startsWith('same as')))
-    .sort((a, b) => compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal)))[0];
+    .sort(order)[0];
   const recommended = pick?.id ?? 'v0';
   variants.find(v => v.id === recommended)!.tags.unshift('recommended');
   return {
