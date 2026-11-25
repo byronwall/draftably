@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { deflateSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { decodeSource, encodeSource, imageUrl, SourceError } from '../src/lib/render-url';
@@ -22,6 +23,14 @@ describe('render URLs', () => {
     const bomb = deflateSync('a -> b\n'.repeat(20_000)).toString('base64url');
     await expect(decodeSource('pako:' + bomb)).rejects.toBeInstanceOf(SourceError);
     await expect(decodeSource('pako:not*base64')).rejects.toBeInstanceOf(SourceError);
+  });
+
+  it('refuses a URL the service would refuse', async () => {
+    await expect(imageUrl('#' + 'x'.repeat(65 * 1024), 'svg')).rejects.toBeInstanceOf(SourceError);
+    const noisy = Array.from({ length: 300 }, () => `# ${randomBytes(24).toString('hex')}`).join(
+      '\n',
+    );
+    await expect(imageUrl(noisy, 'svg')).rejects.toThrow(/POST \/v1\/render/);
   });
 
   it('builds the service URL', async () => {

@@ -10,6 +10,9 @@ export const SERVICE_URL = 'https://api.draftably.dev';
 /** The largest source the service decodes, in bytes. */
 export const MAX_SOURCE_BYTES = 64 * 1024;
 
+/** The longest encoded source a GET URL may carry; longer sources go through POST. */
+export const MAX_SEGMENT = 8 * 1024;
+
 function toBase64Url(bytes: Uint8Array) {
   let bin = '';
   for (let i = 0; i < bytes.length; i += 0x8000)
@@ -95,5 +98,14 @@ export async function decodeSource(segment: string) {
 
 /** The service URL that draws `source` as `format`. */
 export async function imageUrl(source: string, format: 'svg' | 'png', base = SERVICE_URL) {
-  return `${base.replace(/\/$/, '')}/${format}/${await encodeSource(source)}`;
+  if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
+    throw new SourceError(
+      `The source is over ${MAX_SOURCE_BYTES / 1024} KB, so the service refuses it.`,
+    );
+  const segment = await encodeSource(source);
+  if (segment.length > MAX_SEGMENT)
+    throw new SourceError(
+      `The encoded source is ${segment.length} characters, over the ${MAX_SEGMENT} a URL may carry. Use POST /v1/render.`,
+    );
+  return `${base.replace(/\/$/, '')}/${format}/${segment}`;
 }

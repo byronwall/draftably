@@ -3,14 +3,18 @@
  * same image for one runtime version; the edge cache keys on both.
  */
 import { renderSvg, runtimeVersion } from '@draftably/runtime';
-import { decodeSource, MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
+import {
+  decodeSource,
+  MAX_SEGMENT,
+  MAX_SOURCE_BYTES,
+  SourceError,
+} from '../../../src/lib/render-url';
 
 export interface Env {
   ANON_LIMIT: RateLimit;
+  /** Changes on every deploy, so a deploy that draws differently starts a fresh cache. */
+  CF_VERSION_METADATA: WorkerVersionMetadata;
 }
-
-/** The longest image URL path accepted; longer sources go through POST. */
-const MAX_URL = 8 * 1024;
 
 export type Format = 'svg';
 
@@ -62,7 +66,9 @@ export function errorSvg(message: string) {
   );
 }
 
-const IMMUTABLE = 'public, max-age=31536000, immutable';
+// The public URL carries no version, so a browser may keep it for a day, not a year. The edge
+// cache keys on the deploy, so it never serves an image an older deploy drew.
+const IMMUTABLE = 'public, max-age=86400';
 
 function image(body: BodyInit, type: string, status = 200, cache = IMMUTABLE) {
   return new Response(body, {
@@ -84,7 +90,7 @@ function parseImagePath(path: string): { format: Format; segment: string } | nul
 
 async function imageResponse(segment: string, opts: ImageOptions) {
   try {
-    if (segment.length > MAX_URL)
+    if (segment.length > MAX_SEGMENT)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
     const svg = await drawSvg(await decodeSource(segment), opts);
     return image(svg, 'image/svg+xml; charset=utf-8');
@@ -132,6 +138,7 @@ export default {
     const keyUrl = new URL(url.pathname, url.origin);
     keyUrl.searchParams.set('scheme', opts.scheme);
     keyUrl.searchParams.set('v', runtimeVersion);
+    keyUrl.searchParams.set('build', env.CF_VERSION_METADATA.id);
     const key = new Request(keyUrl.toString());
     const cache = caches.default;
     const hit = await cache.match(key);
