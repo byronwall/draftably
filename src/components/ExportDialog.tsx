@@ -213,6 +213,20 @@ export function ExportDialog() {
                   />
                   Include .draft source
                 </label>
+                <Show when={exportKind() !== 'svg'}>
+                  <label
+                    classList={{ disabled: !exportLook().source }}
+                    title="A faint band of pixels below the PNG. It keeps the source when a site strips PNG metadata, as long as the image is not resized."
+                  >
+                    <input
+                      type="checkbox"
+                      checked={exportLook().source && exportLook().strip}
+                      disabled={!exportLook().source}
+                      onChange={e => setExportLook({ strip: e.currentTarget.checked })}
+                    />
+                    Also as a pixel strip
+                  </label>
+                </Show>
               </Show>
             </div>
             <p class="export-size">

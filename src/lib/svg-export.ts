@@ -104,6 +104,10 @@ export function fileName(title: string, extension: string) {
 export const downloadText = (text: string, name: string, type: string) =>
   downloadBlob(new Blob([text], { type }), name);
 
+/** The scale a `w`×`h` drawing rasterizes at: `scale`, lowered to stay within canvas limits. */
+export const pngScale = (w: number, h: number, scale: number) =>
+  Math.min(scale, 8192 / Math.max(w, h), Math.sqrt(24e6 / (w * h)));
+
 /** Rasterize an SVG string at `scale` (2× unless given), within browser canvas limits. */
 export async function svgToPng(svg: string, scale = 2): Promise<Blob> {
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
@@ -125,7 +129,7 @@ export async function svgToPng(svg: string, scale = 2): Promise<Blob> {
       window.clearTimeout(timer);
     }
     const { naturalWidth: w, naturalHeight: h } = image;
-    const k = Math.min(scale, 8192 / Math.max(w, h), Math.sqrt(24e6 / (w * h)));
+    const k = pngScale(w, h, scale);
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.round(w * k));
     canvas.height = Math.max(1, Math.round(h * k));

@@ -261,7 +261,8 @@ export async function addSourceStrip(
   const gap = Math.max(2, 3 * m);
   const quiet = Math.max(2, 3 * m);
   const top = vy + snap(vh + gap);
-  const nh = snap(Math.max(vh, top - vy + g.rows * m + quiet));
+  // A whole CSS height: renderers round the root size, which would shift a fractional drawing.
+  const nh = Math.ceil(Math.max(vh, top - vy + g.rows * m + quiet));
   const x = vx + snap((vw - g.cols * m) / 2);
   const band = `<g data-draftably-strip="1" fill="${opts.ink}" fill-opacity="${opts.opacity}" shape-rendering="crispEdges">${stripRects(g, x, top, m)}</g>`;
   const grown = svg
@@ -277,6 +278,24 @@ export async function addSourceStrip(
     grew: nh - vh,
     top: top - vy,
   };
+}
+
+/**
+ * The strip exports carry: one image pixel per module at the export's `scale`, 3% ink and light
+ * parity. A lossless PNG file or clipboard copy keeps every module; a resize does not.
+ */
+export const EXPORT_STRIP = { opacity: 0.03, parity: 0.1 };
+
+/** `svg` with `source` drawn as a strip below it, for a PNG at `scale` image px per CSS px. */
+export async function withSourceStrip(svg: string, source: string, scale: number) {
+  const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{3,8})"/.exec(svg)?.[1] ?? '#1B2433';
+  const { svg: out } = await addSourceStrip(svg, source, {
+    module: 1 / scale,
+    scale,
+    ink,
+    ...EXPORT_STRIP,
+  });
+  return out;
 }
 
 // --- Decode from pixels ---
@@ -296,11 +315,15 @@ export interface StripRead {
   why?: string;
 }
 
-export async function decodeStrip(px: Pixels, parity: number): Promise<StripRead> {
+export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Promise<StripRead> {
   const { width: W, height: H, data } = px;
   const lum = new Float32Array(W * H);
-  for (let i = 0; i < W * H; i++)
-    lum[i] = 0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2];
+  // Composite over white, so a transparent export reads as it shows on a light page.
+  for (let i = 0; i < W * H; i++) {
+    const a = data[i * 4 + 3] / 255;
+    lum[i] =
+      a * (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) + (1 - a) * 255;
+  }
   const xa = Math.floor(W * 0.03);
   const xb = Math.ceil(W * 0.97);
   const bottom: number[] = [];
