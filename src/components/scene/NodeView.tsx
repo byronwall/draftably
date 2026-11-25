@@ -1,5 +1,5 @@
 import { createMemo, For, Match, Show, Switch } from 'solid-js';
-import { findNode, isCell, isOpenCell, styleOf } from '../../model/graph';
+import { findNode, isCell, isOpenCell, isTableRow, styleOf } from '../../model/graph';
 import { brokenRectPath } from '../../model/geometry';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
@@ -13,7 +13,15 @@ import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { DiagramIcon, SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { CodeBody, NodeTitle, pinSpot, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
+import {
+  CodeBody,
+  NodeTitle,
+  pinSpot,
+  PositionBadge,
+  RemovedMarker,
+  ResizeHandles,
+  TableRowText,
+} from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
 
@@ -249,14 +257,33 @@ export function NodeView(props: NodeViewProps) {
           />
         )}
       </Show>
-      <NodeTitle
-        label={label()}
-        look={look()}
-        fill={inside() ? color().ink : look().text}
-        detailFill={inside() ? detailInk(look(), color()) : look().muted}
-        strike={paint().strike}
-        fade={paint().inkFade}
-      />
+      <Show
+        when={isTableRow(props.doc, props.id) && node().row}
+        fallback={
+          <NodeTitle
+            label={label()}
+            look={look()}
+            fill={inside() ? color().ink : look().text}
+            detailFill={inside() ? detailInk(look(), color()) : look().muted}
+            strike={paint().strike}
+            fade={paint().inkFade}
+          />
+        }
+      >
+        {row => (
+          <TableRowText
+            name={node().title}
+            row={row()}
+            w={props.rect.w}
+            h={props.rect.h}
+            look={look()}
+            fill={color().ink}
+            muted={detailInk(look(), color())}
+            strike={paint().strike}
+            fade={paint().inkFade}
+          />
+        )}
+      </Show>
       <Show when={paint().marker && !node().count}>
         <RemovedMarker
           x={props.rect.w - MARKER.inset}

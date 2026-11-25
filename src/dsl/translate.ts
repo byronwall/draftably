@@ -136,6 +136,51 @@ function rejectUnsupported(before: Diagram, after: Diagram) {
     throw new UnsupportedEdit('Label positions are not saved to diagram files yet.');
   if (!same(before.layout.intent, after.layout.intent))
     throw new UnsupportedEdit('Start and end preferences are not saved to diagram files yet.');
+  // A table's rows and the lines their `->` draws live in its body: the Editor leaves them be,
+  // unless the whole table goes.
+  const groupsAfter = new Set(after.graph.groups.map(g => g.id)),
+    goneWith = (row: string) => {
+      const p = before.graph.nodes.find(n => n.id === row)?.parentId;
+      return !!p && !groupsAfter.has(p);
+    },
+    body = (what: string, row: string) =>
+      new UnsupportedEdit(
+        `${what} comes from the body of ${before.graph.nodes.find(n => n.id === row)?.parentId}; edit the body in the source.`,
+      );
+  for (const n of before.graph.nodes) {
+    if (!n.row) continue;
+    const now = after.graph.nodes.find(x => x.id === n.id);
+    // A row may move among its table's rows, which writes an `order` line, but keeps its size.
+    const [a, b] = [before.layout.nodes[n.id], after.layout.nodes[n.id]];
+    if (
+      !now
+        ? !goneWith(n.id)
+        : !same(n, now) ||
+          !same(before.styles[n.id], after.styles[n.id]) ||
+          a?.w !== b?.w ||
+          a?.h !== b?.h ||
+          !!a?.pinned !== !!b?.pinned
+    )
+      throw body(`Row ${n.id}`, n.id);
+  }
+  // A copied table would lose its body, so tables are copied in the source.
+  const rowsBefore = new Set(before.graph.nodes.map(n => n.id));
+  const edgesBefore = new Set(before.graph.edges.map(e => e.id));
+  if (
+    after.graph.nodes.some(n => n.row && !rowsBefore.has(n.id)) ||
+    after.graph.edges.some(e => e.inferred && !edgesBefore.has(e.id))
+  )
+    throw new UnsupportedEdit('A table is copied in the source: copy its group and body there.');
+  for (const e of before.graph.edges) {
+    if (!e.inferred) continue;
+    const now = after.graph.edges.find(x => x.id === e.id);
+    if (
+      !now
+        ? !goneWith(e.from)
+        : !same(e, now) || !same(before.layout.edges[e.id], after.layout.edges[e.id])
+    )
+      throw body(`The line from ${e.from} to ${e.to}`, e.from);
+  }
   for (const n of after.graph.nodes) {
     const style = after.styles[n.id];
     if (n.image || style?.shape === 'image' || style?.shape === 'icon' || style?.icon)

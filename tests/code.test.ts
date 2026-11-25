@@ -77,7 +77,9 @@ describe('code node source', () => {
       /^Line 2: The body opened by <<SQL has no closing line/,
     );
     expect(() => parseModel('node c "C" shape=code')).toThrow(/A code node needs a body/);
-    expect(() => parseModel('node c "C" <<X\nx\nX')).toThrow(/Only a code node takes a body/);
+    expect(() => parseModel('node c "C" <<X\nx\nX')).toThrow(
+      /Only a code node or a group takes a body/,
+    );
     expect(() => parseModel('node c "C" lang=sql')).toThrow(/lang= belongs on a code node/);
     // A body on any other statement would swallow the lines after it.
     expect(() =>

@@ -35,8 +35,16 @@ import {
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
-import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
+import {
+  cellsBandOf,
+  isCell,
+  isOpenCell,
+  isTableRow,
+  shownTimelines,
+  styleOf,
+} from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
+import { rowParts, type TableRow } from '../model/table';
 import { ICONS } from '../model/icons';
 import { iconAt } from '../model/iconify';
 import {
@@ -154,6 +162,30 @@ const CODE_CSS = 'text.code-text{font-variant-ligatures:none}';
 const strikeAttr = (p: StatusPaint) =>
   (p.strike ? ' text-decoration="line-through"' : '') +
   (p.inkFade ? ` fill-opacity="${p.inkFade}"` : '');
+
+/** A table row's key glyph, name and muted type, as the canvas's `TableRowText` draws them. */
+function rowMarkup(
+  name: string,
+  row: TableRow,
+  r: Rect,
+  look: ResolvedAppearance,
+  ink: string,
+  muted: string,
+  p: StatusPaint,
+) {
+  const parts = rowParts(row, r.w, r.h, look),
+    g = parts.glyph,
+    t = parts.type;
+  return (
+    (g
+      ? `<path d="${g.d}" transform="translate(${r.x + g.x},${r.y + g.y}) scale(${g.scale})" fill="none" stroke="${row.keys.includes('pk') ? ink : muted}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"${p.inkFade ? ` stroke-opacity="${p.inkFade}"` : ''}/>`
+      : '') +
+    `<text x="${r.x + parts.name.x}" y="${r.y + parts.name.y}" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>${esc(name)}</text>` +
+    (t
+      ? `<text x="${r.x + t.x}" y="${r.y + t.y}" text-anchor="end" dominant-baseline="central" ${font(look.detail)} fill="${muted}"${p.inkFade ? ` fill-opacity="${p.inkFade}"` : ''}>${esc(t.text)}</text>`
+      : '')
+  );
+}
 
 /** The removed marker on a shape's top-right corner. */
 const cornerMarker = (p: StatusPaint, r: Rect, ink: string, canvas: string) =>
@@ -553,14 +585,16 @@ function sceneMarkup(
             : '',
           n.code
             ? codeMarkup(n, r, look, c, p, radius)
-            : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
-              label.lines
-                .map(
-                  (line, i) =>
-                    `<tspan x="${r.x + label.x}" y="${r.y + label.y + label.offsets[i]}"${line.detail ? ` ${detail}` : ''}>${esc(line.text)}</tspan>`,
-                )
-                .join('') +
-              '</text>',
+            : isTableRow(doc, n.id) && n.row
+              ? rowMarkup(n.title, n.row, r, look, c.ink, detailInk(look, c), p)
+              : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
+                label.lines
+                  .map(
+                    (line, i) =>
+                      `<tspan x="${r.x + label.x}" y="${r.y + label.y + label.offsets[i]}"${line.detail ? ` ${detail}` : ''}>${esc(line.text)}</tspan>`,
+                  )
+                  .join('') +
+                '</text>',
           n.icon && label.icon
             ? iconAt(
                 doc.icons,

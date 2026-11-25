@@ -84,6 +84,11 @@ export function removeIds(source: string, ids: string[]) {
   for (const target of ids) {
     const { doc, s, id } = find(next, target);
     if (isEdge(s)) removeEdge(doc, id);
+    else if (s.body && s.command === 'group')
+      throw new DslError(
+        `${id} is a table: its rows live in its body. Remove its group line and body in the source.`,
+        s.line,
+      );
     else {
       const parent = getAttr(s, 'in');
       for (const member of statements(doc))
@@ -99,7 +104,17 @@ export function removeIds(source: string, ids: string[]) {
 /** Rename an id everywhere it is used: declarations, edges, `in=`, refinements and states. */
 export function renameId(source: string, from: string, to: string) {
   if (!ID.test(to)) throw new DslError(`${to} is not a valid id.`);
-  const { doc } = find(source, from);
+  const { doc, s: own } = find(source, from);
+  // A table's rows and every `->` to them spell its id inside a body, which this rename can't reach.
+  const model = parseModel(source);
+  if (
+    (own.command === 'group' && own.body) ||
+    model.objects.some(o => o.row?.ref === from || o.row?.ref?.startsWith(from + '.'))
+  )
+    throw new DslError(
+      `${from} is a table or a row a table's -> names. Rename it in the source, with its body and every -> to it.`,
+      own.line,
+    );
   if (declaration(doc, to) || edgeStatement(doc, to)) throw new DslError(`${to} is already used.`);
   for (const s of statements(doc)) {
     // Labels and other text are quoted; ids never are.

@@ -18,6 +18,7 @@ import {
   type Statement,
   type Word,
 } from './syntax';
+import { readBodyRows } from './table-rows';
 
 const DECLARATIONS = ['node', 'group', 'edge'];
 
@@ -79,6 +80,54 @@ const nodesOf = (m: Model) => m.objects.filter(o => o.type === 'node');
 const isSequence = (m: Model) =>
   m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
 
+/** A body row's line with a change mark in place of its first two spaces, or before it. */
+const markRow = (raw: string, mark: '+' | '-' | '~') =>
+  raw.startsWith('  ') ? `${mark}${raw.slice(1)}` : `${mark} ${raw.trimStart()}`;
+
+/**
+ * A group body that holds both versions: each row the newer body has, marked `+` when the older
+ * one lacks it and `~` when its type, marks or `->` changed, and each row only the older body had,
+ * marked `-` after the row that preceded it there. Rows match by name. A mark can't carry a row's
+ * old type or place, so those come back in `unshown`.
+ */
+function mergeBody(group: string, before: string[], after: string[]) {
+  const rows = (lines: string[]) =>
+      new Map(
+        readBodyRows(lines, 0, (message, line) => {
+          throw new DslError(message, line);
+        }).map(r => [r.line, r] as const),
+      ),
+    [olds, news] = [rows(before), rows(after)],
+    oldByName = new Map([...olds.values()].map(r => [r.name, r])),
+    newNames = new Set([...news.values()].map(r => r.name)),
+    unshown: string[] = [];
+  const out = after.map((raw, i) => {
+    const row = news.get(i),
+      prior = row && oldByName.get(row.name);
+    if (!row) return { name: undefined, raw };
+    if (!prior) return { name: row.name, raw: markRow(raw, '+') };
+    const changed = (['type', 'keys', 'ref'] as const).filter(
+      k => JSON.stringify(prior.row[k]) !== JSON.stringify(row.row[k]),
+    );
+    if (!changed.length) return { name: row.name, raw };
+    unshown.push(`${group}.${row.name} (${changed.map(k => (k === 'ref' ? '->' : k)).join(', ')})`);
+    return { name: row.name, raw: markRow(raw, '~') };
+  });
+  const order = (m: Map<number, { name: string }>, keep: Set<string>) =>
+    [...m.values()].map(r => r.name).filter(n => keep.has(n));
+  const oldNames = new Set(oldByName.keys());
+  if (order(olds, newNames).join('\0') !== order(news, oldNames).join('\0'))
+    unshown.push(`${group} row order`);
+  let anchor = -1;
+  before.forEach((raw, i) => {
+    const row = olds.get(i);
+    if (!row) return;
+    if (newNames.has(row.name)) anchor = out.findIndex(o => o.name === row.name);
+    else out.splice(++anchor, 0, { name: undefined, raw: markRow(raw, '-') });
+  });
+  return { lines: out.map(o => o.raw), unshown };
+}
+
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
 /**
@@ -95,7 +144,16 @@ export function compareDetailed(before: string, after: string) {
   const docs = [readSource(before), readSource(after)];
   for (const doc of docs)
     for (const s of doc.lines)
-      if (s.kind === 'statement' && (s.mark || s.command === 'was-order'))
+      if (
+        s.kind === 'statement' &&
+        (s.mark ||
+          s.command === 'was-order' ||
+          (s.command === 'group' &&
+            s.body &&
+            readBodyRows(s.body.lines, s.line + 1, (m, l) => {
+              throw new DslError(m, l);
+            }).some(r => r.mark)))
+      )
         throw new DslError('Compare plain files; this one already has change marks.', s.line);
   const [old, next] = [parseModel(docs[0]), parseModel(docs[1])];
   // Marks carry a label, a shape and a count. They can't say that a message changed kind or
@@ -115,6 +173,20 @@ export function compareDetailed(before: string, after: string) {
         typed.line,
       );
   }
+  // A row is a body line in one file and a node line in the other only through a rewrite that
+  // a mark can't follow, so say so instead of drawing two copies.
+  for (const [a, b] of [
+    [old, next],
+    [next, old],
+  ])
+    for (const o of a.objects) {
+      const twin = b.objects.find(x => x.id === o.id);
+      if (o.row && twin && !twin.row)
+        throw new DslError(
+          `A comparison can't show ${o.id} turning between a table row and a node line. Compare versions that write it the same way.`,
+          twin.line,
+        );
+    }
   const [was, now] = [old, next].map(
     m =>
       new Map<string, ModelObject | ModelEdge>([
@@ -162,16 +234,45 @@ export function compareDetailed(before: string, after: string) {
       if (own) spares.set(line.args[0].value, (args[0].value = spare('edge:', args[0].value)));
       for (const i of [1, 3]) args[i].value = movedNodes.get(args[i].value) ?? args[i].value;
     } else if (own) args[0].value = movedNodes.get(args[0].value)!;
-    return { ...line, args, mark: '-', comment: undefined };
+    return {
+      ...line,
+      args,
+      mark: '-',
+      comment: undefined,
+      ...(line.command === 'group' && line.body
+        ? {
+            body: {
+              ...line.body,
+              lines: mergeBody(line.args[0].value, line.body.lines, []).lines,
+            },
+          }
+        : {}),
+    };
   };
 
   const out: SourceLine[] = [],
     unshown: string[] = [];
-  for (const line of docs[1].lines) {
-    if (line.kind !== 'statement' || !DECLARATIONS.includes(line.command)) {
-      out.push(line);
+  for (const raw of docs[1].lines) {
+    if (raw.kind !== 'statement' || !DECLARATIONS.includes(raw.command)) {
+      out.push(raw);
       continue;
     }
+    // A table's rows carry their own marks inside its body. A body the newer file dropped stays,
+    // its rows marked removed.
+    const olderGroup =
+        raw.command === 'group'
+          ? docs[0].lines.find(
+              (l): l is Statement =>
+                l.kind === 'statement' && l.command === 'group' && keyOf(l) === keyOf(raw),
+            )
+          : undefined,
+      shell = raw.body ?? olderGroup?.body,
+      body =
+        raw.command === 'group' && shell
+          ? mergeBody(raw.args[0].value, olderGroup?.body?.lines ?? [], raw.body?.lines ?? [])
+          : undefined,
+      line = body ? { ...raw, body: { ...shell!, lines: body.lines } } : raw;
+    if (body) unshown.push(...body.unshown);
     const prior = was.get(keyOf(line));
     if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
     else if (meaning(prior) !== meaning(now.get(keyOf(line))!)) {
@@ -180,15 +281,12 @@ export function compareDetailed(before: string, after: string) {
           'shape' in prior
             ? pastNode(prior, now.get(keyOf(line)) as ModelObject)
             : { words: [], drawn: [] },
-        attrs = attrChanges(
-          docs[0].lines.find(
-            (l): l is Statement =>
-              l.kind === 'statement' &&
-              DECLARATIONS.includes(l.command) &&
-              keyOf(l) === keyOf(line),
-          )!,
-          line,
-        ).filter(k => !drawn.includes(k));
+        // A row of an older table body has no statement of its own.
+        older = docs[0].lines.find(
+          (l): l is Statement =>
+            l.kind === 'statement' && DECLARATIONS.includes(l.command) && keyOf(l) === keyOf(line),
+        ),
+        attrs = (older ? attrChanges(older, line) : []).filter(k => !drawn.includes(k));
       if (attrs.length) unshown.push(`${line.args[0].value} (${attrs.join(', ')})`);
       out.push({
         ...line,
@@ -232,6 +330,15 @@ export function compareDetailed(before: string, after: string) {
     }
     out.splice(anchor + 1, 0, removed);
     anchor += 1;
+  }
+  // A row's `->` line has no mark of its own: a changed or dropped one draws as it is now.
+  const sameEnds = (a?: ModelEdge, b?: ModelEdge) =>
+    a?.source === b?.source && a?.target === b?.target;
+  for (const e of [...old.edges, ...next.edges]) {
+    if (!e.inferred) continue;
+    const [o, n] = [old, next].map(m => m.edges.find(x => x.id === e.id)),
+      rowIn = (m: Model) => m.objects.some(x => x.id === e.source);
+    if (rowIn(old) && rowIn(next) && !sameEnds(o, n)) unshown.push(e.id);
   }
   const [gone, kept] = [undeclared(docs[0].lines), undeclared(out)];
   for (const [text, name] of [...gone, ...kept])

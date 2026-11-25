@@ -19,6 +19,7 @@ import { codeColors, codeTokens, coloredRuns } from '../../model/highlight';
 import { BAND_OPACITY, rangeMarks } from '../../model/ranges';
 import { truncateText } from '../../model/fonts';
 import type { NodeLabel } from '../../model/labels';
+import { rowParts, type TableRow } from '../../model/table';
 import { markerMarkup } from '../../model/legend';
 import type { Rect } from '../../model/types';
 import { SceneGlyph } from '../Icon';
@@ -64,6 +65,73 @@ export function NodeTitle(props: {
         )}
       </For>
     </text>
+  );
+}
+
+/**
+ * A table row: a key glyph, the column name at the left and its type at the right in `muted`.
+ * The SVG renderer's `rowMarkup` draws the same parts.
+ */
+export function TableRowText(props: {
+  name: string;
+  row: TableRow;
+  w: number;
+  h: number;
+  look: ResolvedAppearance;
+  fill: string;
+  muted: string;
+  strike?: boolean;
+  fade?: number;
+}) {
+  const parts = () => rowParts(props.row, props.w, props.h, props.look),
+    t = () => props.look.title,
+    d = () => props.look.detail;
+  return (
+    <g class="table-row" pointer-events="none" fill-opacity={props.fade}>
+      <Show when={parts().glyph}>
+        {g => (
+          <path
+            d={g().d}
+            transform={`translate(${g().x},${g().y}) scale(${g().scale})`}
+            fill="none"
+            stroke={props.row.keys.includes('pk') ? props.fill : props.muted}
+            stroke-opacity={props.fade}
+            stroke-width={2.2}
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        )}
+      </Show>
+      <text
+        class="node-title"
+        x={parts().name.x}
+        y={parts().name.y}
+        font-size={String(t().size)}
+        font-weight={String(t().weight)}
+        font-family={t().family}
+        fill={props.fill}
+        text-decoration={props.strike ? 'line-through' : undefined}
+        dominant-baseline="central"
+      >
+        {props.name}
+      </text>
+      <Show when={parts().type}>
+        {type => (
+          <text
+            x={type().x}
+            y={type().y}
+            font-size={String(d().size)}
+            font-weight={String(d().weight)}
+            font-family={d().family}
+            fill={props.muted}
+            text-anchor="end"
+            dominant-baseline="central"
+          >
+            {type().text}
+          </text>
+        )}
+      </Show>
+    </g>
   );
 }
 

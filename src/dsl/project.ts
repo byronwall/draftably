@@ -34,6 +34,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   doc.id = 'draft-file';
   doc.appearance = clone(scene.model.appearance);
   const cells = new Set(scene.model.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope)),
+    tables = new Set(scene.model.layouts.filter(l => l.table).map(l => l.scope)),
     band = cellsBandFor(scene.look.groupTitle.lineHeight);
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
@@ -55,6 +56,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.titleLines ? { titleLines: o.titleLines } : {}),
       ...(o.lifeline ? { lifeline: o.lifeline } : {}),
       ...(o.code ? { code: clone(o.code) } : {}),
+      ...(o.row ? { row: clone(o.row) } : {}),
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);
@@ -63,6 +65,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
         padding: GROUP_INSET,
         manualSize: true,
         ...(cells.has(o.id) ? { cellsBand: band } : {}),
+        ...(tables.has(o.id) ? { table: true as const } : {}),
         ...(scene.cells.has(o.id) ? { cellsChrome: clone(scene.cells.get(o.id)!) } : {}),
       });
     } else {
@@ -105,6 +108,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.status ? { status: e.status } : {}),
       ...(e.fromRange ? { fromRange: e.fromRange } : {}),
       ...(e.toRange ? { toRange: e.toRange } : {}),
+      ...(e.inferred ? { inferred: true as const } : {}),
     });
     set(doc.layout.edges, e.id, {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),

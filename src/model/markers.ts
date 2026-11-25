@@ -14,6 +14,12 @@ export const MARKERS = [
   'open-diamond',
   'circle',
   'cross',
+  // Crow's feet: how many rows at this end, for database tables.
+  'one',
+  'many',
+  'zero-or-one',
+  'zero-or-many',
+  'one-or-many',
 ] as const;
 export type EndMarker = (typeof MARKERS)[number];
 
@@ -30,6 +36,10 @@ export interface MarkerShape {
 }
 
 const DIAMOND = 'M1 4.5L7.5 1L14 4.5L7.5 8Z';
+/** Crow's-feet parts, 12 high, centred on y=6: a foot whose toes touch the end at `x`, a bar at `x`, and an open ring from `x`. */
+const foot = (x: number) => `M${x - 10} 6L${x} 1M${x - 10} 6L${x} 11`,
+  bar = (x: number) => `M${x} 1V11`,
+  ring = (x: number) => `M${x} 6a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0Z`;
 
 /** Each marker points along +x, in drawing units. `arrow` is the original open chevron. */
 export const MARKER_SHAPES: Record<Exclude<EndMarker, 'none'>, MarkerShape> = {
@@ -48,6 +58,12 @@ export const MARKER_SHAPES: Record<Exclude<EndMarker, 'none'>, MarkerShape> = {
   },
   // Set back from the end, with the line running on through it.
   cross: { w: 9, h: 9, x: 10.5, d: 'M1 1L8 8M8 1L1 8', fill: 'none', stop: 0 },
+  // The line runs on to the end through each crow's foot; a ring hides the line under it.
+  one: { w: 13, h: 12, x: 13, d: bar(5) + bar(9), fill: 'none', stop: 0 },
+  many: { w: 13, h: 12, x: 13, d: foot(13), fill: 'none', stop: 0 },
+  'zero-or-one': { w: 15, h: 12, x: 15, d: ring(1) + bar(12), fill: 'surface', stop: 0 },
+  'zero-or-many': { w: 21, h: 12, x: 21, d: ring(1) + foot(21), fill: 'surface', stop: 0 },
+  'one-or-many': { w: 17, h: 12, x: 17, d: bar(4) + foot(17), fill: 'none', stop: 0 },
 };
 
 export const MARKER_STROKE = 1.5;
