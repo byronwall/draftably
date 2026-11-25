@@ -6,7 +6,7 @@ names the check that proves it, at the scope the product works on.
 | Slice | What lands                                   | Status  |
 | ----: | -------------------------------------------- | ------- |
 |     0 | Spikes: SVG, PNG and Mermaid in `workerd`    | done    |
-|     1 | GET SVG on `workers.dev`                     | planned |
+|     1 | GET SVG on `workers.dev`                     | built   |
 |     2 | GET PNG                                      | planned |
 |     3 | Mermaid input                                | planned |
 |     4 | Domain, accounts, keys, REST API, free grant | planned |

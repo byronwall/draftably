@@ -212,6 +212,18 @@ Prints the `.draft` source embedded in a PNG, SVG or PDF export, or saves it wit
 when the file has no source. For a PDF with several diagrams, name one:
 `draftably extract diagrams.pdf#architecture.draft`.
 
+## url
+
+```sh
+draftably url architecture.draft
+draftably url architecture.draft --png
+```
+
+Prints an image URL on the hosted render service, `https://api.draftably.dev`, that draws the file.
+The URL holds the source, so it works in Markdown, an `<img>` tag or an agent's reply with no upload
+and no key. `--png` asks for a PNG instead of an SVG. `--base <url>` points the URL at another
+server, such as `pnpm service:dev` on your machine.
+
 ## docs
 
 ```sh

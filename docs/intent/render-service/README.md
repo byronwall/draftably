@@ -228,9 +228,13 @@ resources.
 - **Render time.** `renderSvg` from the runtime bundle in Node, 36 files in `examples/`, second
   pass: p50 11 ms, p90 377 ms, max 633 ms (`observability-stack.draft`).
 
+## Findings while building
+
+- The Cache API stores only 200 answers, so error images are drawn again each time; the IP rate
+  limit counts them.
+
 ## Open questions
 
 - Startup time with Mermaid bundled. Workers allow 1 s. If the measured startup is high, move
   Mermaid import into a second Worker behind a service binding.
-- Whether `caches.default` works on `workers.dev`, or only after the zone moves.
 - Prices for credit packs. The numbers above are placeholders.
