@@ -71,7 +71,7 @@ export function handleCanvasKey(e: KeyboardEvent, closeMenu?: () => boolean): bo
       return (e.preventDefault(), activeSession().cancelLayout(), true);
     if (activeSession().layoutPreview())
       return (e.preventDefault(), activeSession().discardPreview(), true);
-    if (activeSession().inlineEditId()) return true;
+    if (activeSession().inlineEditId() || activeSession().codeEditId()) return true;
     if (closeMenu?.()) return (e.preventDefault(), true);
     e.preventDefault();
     activeSession().cancelGesture();

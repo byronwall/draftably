@@ -7,6 +7,7 @@ import { GroupView } from '../scene/GroupView';
 import { NodeChrome, NodeView } from '../scene/NodeView';
 import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
 import { replyPair } from '../../model/status';
+import { CodeEditor } from './CodeEditor';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Frame } from './Frame';
@@ -296,6 +297,7 @@ export function Canvas(props: CanvasProps) {
         </div>
       </Show>
       <InlineEditor />
+      <CodeEditor />
       <StateBar />
       <ZoomControls />
       <TimelineDeck />

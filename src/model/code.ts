@@ -157,40 +157,28 @@ export function tableCells(lines: string[]): string[][] | undefined {
   return lines.map(l => (l.trim() ? spans.map(([a, b]) => l.slice(a, b).trim()) : []));
 }
 
-/**
- * `table=on`: the body as a table with its columns two spaces apart. A rule typed under the
- * header (`-----`, `|---|---:|`, `----+----`) is dropped, since the drawing has its own; its
- * `:` marks set the alignment (`---:`, `:---:`). Otherwise a column whose cells under the header are all numbers
- * aligns right.
- */
-export function tableLines(lines: string[]): string[] {
-  // psql ends with a "(3 rows)" line: keep it as it is, outside the columns.
-  const last = lines.findLastIndex(l => l.trim());
-  if (last > 0 && FOOTER.test(lines[last].trim()))
-    return [...tableLines(lines.slice(0, last)), lines[last].trim()];
-  const first = lines.findIndex(l => l.trim()),
-    typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
-    body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
-    cells = tableCells(body);
-  if (!cells) return body;
-  const n = Math.max(...cells.map(c => c.length)),
-    head = cells.findIndex(c => c.length),
-    widths = Array.from({ length: n }, (_, i) => Math.max(...cells.map(c => (c[i] ?? '').length))),
-    align = widths.map((_, i) => {
-      const mark = typed.length === n ? typed[i] : '';
-      if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
-      if (mark.endsWith(':')) return 'right';
-      if (mark.startsWith(':')) return 'left';
-      const values = cells.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
-      return values.length > 0 && values.every(c => NUMBER.test(c[i])) ? 'right' : 'left';
-    }),
-    pad = (s: string, w: number, a: string) =>
-      a === 'right'
-        ? s.padStart(w)
-        : a === 'center'
-          ? s.padStart(s.length + Math.floor((w - s.length) / 2)).padEnd(w)
-          : s.padEnd(w);
-  return cells.map(c =>
+export type Align = 'left' | 'right' | 'center';
+
+/** Right for a column whose cells under the header all hold numbers; left otherwise. */
+function autoAlign(rows: string[][], n: number): Align[] {
+  const head = rows.findIndex(c => c.length);
+  return Array.from({ length: n }, (_, i) => {
+    const values = rows.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
+    return values.length > 0 && values.every(c => NUMBER.test(c[i])) ? 'right' : 'left';
+  });
+}
+
+const pad = (s: string, w: number, a: Align) =>
+  a === 'right'
+    ? s.padStart(w)
+    : a === 'center'
+      ? s.padStart(s.length + Math.floor((w - s.length) / 2)).padEnd(w)
+      : s.padEnd(w);
+
+/** Rows of cells as lines, each column padded to its widest cell, two spaces apart. */
+function alignRows(rows: string[][], align: Align[]): string[] {
+  const widths = align.map((_, i) => Math.max(...rows.map(c => (c[i] ?? '').length)));
+  return rows.map(c =>
     c.length
       ? widths
           .map((w, i) => pad(c[i] ?? '', w, align[i]))
@@ -198,6 +186,115 @@ export function tableLines(lines: string[]): string[] {
           .trimEnd()
       : '',
   );
+}
+
+/** A table body read into rows of cells: what `table=on` draws, and what the editor edits. */
+export interface Table {
+  /** The header row first. A blank source line is an empty row. */
+  rows: string[][];
+  align: Align[];
+  /** psql's "(3 rows)" line under the table. */
+  footer?: string;
+}
+
+/**
+ * Read a table body. A rule typed under the header (`-----`, `|---|---:|`, `----+----`) is
+ * dropped, since the drawing has its own; its `:` marks set the alignment (`---:`, `:---:`).
+ * Otherwise a column whose cells under the header are all numbers aligns right. Fewer than two
+ * columns: one column of the trimmed lines.
+ */
+export function readTable(lines: string[]): Table {
+  const last = lines.findLastIndex(l => l.trim());
+  if (last > 0 && FOOTER.test(lines[last].trim()))
+    return { ...readTable(lines.slice(0, last)), footer: lines[last].trim() };
+  const first = lines.findIndex(l => l.trim()),
+    typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
+    body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
+    rows = tableCells(body) ?? body.map(l => (l.trim() ? [l.trim()] : [])),
+    n = Math.max(1, ...rows.map(c => c.length)),
+    auto = autoAlign(rows, n),
+    align = auto.map((a, i): Align => {
+      const mark = typed.length === n ? typed[i] : '';
+      if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
+      if (mark.endsWith(':')) return 'right';
+      if (mark.startsWith(':')) return 'left';
+      return a;
+    });
+  return { rows, align };
+}
+
+/**
+ * `table=on`: the body as a table with its columns two spaces apart, and psql's footer on its
+ * own line under it. A body with fewer than two columns stays as it is.
+ */
+export function tableLines(lines: string[]): string[] {
+  const t = readTable(lines);
+  if (t.align.length < 2) {
+    const body = t.footer
+        ? lines.slice(
+            0,
+            lines.findLastIndex(l => l.trim()),
+          )
+        : lines,
+      typed = body.findIndex(l => l.trim());
+    // A one-column body keeps its lines; only a typed rule under its header goes.
+    const kept =
+      typed >= 0 && isRule(body[typed + 1] ?? '') ? body.filter((_, i) => i !== typed + 1) : body;
+    return t.footer ? [...kept, t.footer] : kept;
+  }
+  return [...alignRows(t.rows, t.align), ...(t.footer ? [t.footer] : [])];
+}
+
+/**
+ * A table as body text that `readTable` reads back the same: columns two spaces apart, or a
+ * Markdown table with a `:---:` rule when an alignment differs from the one numbers would give.
+ * Empty rows and empty trailing columns go; a psql footer counts the rows again.
+ */
+export function writeTable(t: Table): string[] {
+  const clean = (c: string) => c.replace(/\s+/g, ' ').trim();
+  let rows = t.rows.map(r => r.map(clean)).filter((r, i) => i === 0 || r.some(Boolean));
+  let n = Math.max(1, ...rows.map(r => r.length));
+  while (n > 1 && rows.every(r => !r[n - 1])) n--;
+  rows = rows.map(r => Array.from({ length: n }, (_, i) => r[i] ?? ''));
+  const align = Array.from({ length: n }, (_, i) => t.align[i] ?? 'left'),
+    footer = t.footer && `(${rows.length - 1} row${rows.length === 2 ? '' : 's'})`;
+  if (n === 1) return [...rows.map(r => r[0]), ...(footer ? [footer] : [])];
+  const auto = autoAlign(rows, n);
+  if (align.every((a, i) => a === auto[i]))
+    return [...alignRows(rows, align), ...(footer ? [footer] : [])];
+  // Each pipe column is its widest cell plus a space either side; the rule's `:` marks sit at
+  // its ends.
+  const widths = align.map((_, i) => Math.max(3, ...rows.map(r => r[i].length))),
+    line = (r: string[]) => `| ${r.map((c, i) => pad(c, widths[i], align[i])).join(' | ')} |`,
+    rule = widths.map((w, i) =>
+      align[i] === 'center'
+        ? `:${'-'.repeat(w)}:`
+        : align[i] === 'right'
+          ? `${'-'.repeat(w + 1)}:`
+          : `:${'-'.repeat(w + 1)}`,
+    ),
+    out = [line(rows[0]), `|${rule.join('|')}|`, ...rows.slice(1).map(line)];
+  return [...out, ...(footer ? [footer] : [])];
+}
+
+/**
+ * A table pasted as text: cells a spreadsheet copied (tabs, the same count on every line), or a
+ * Markdown or psql table with its rule. Anything else is not a table: undefined.
+ */
+export function pastedTable(text: string): Table | undefined {
+  const lines = text
+    .replace(/\r/g, '')
+    .split('\n')
+    .filter(l => l.trim());
+  if (lines.length < 2) return undefined;
+  if (lines.every(l => l.includes('\t'))) {
+    const rows = lines.map(l => l.split('\t').map(c => c.trim()));
+    if (rows.every(r => r.length === rows[0].length))
+      return { rows, align: autoAlign(rows, rows[0].length) };
+  }
+  if (lines.every(l => l.includes('|') || FOOTER.test(l.trim())) && isRule(lines[1]))
+    return readTable(lines);
+  return undefined;
 }
 
 /** One drawn row: all of a source line, or one piece of a long one. */

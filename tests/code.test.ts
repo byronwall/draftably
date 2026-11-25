@@ -12,7 +12,10 @@ import {
   CODE_PAD,
   CODE_TYPE,
   codeLayout,
+  pastedTable,
+  readTable,
   tableLines,
+  writeTable,
   type CodeBlock,
 } from '../src/model/code';
 import { FACES } from '../src/model/fonts';
@@ -290,5 +293,96 @@ describe('code nodes in a diagram', () => {
       scene.byId.get('yaml')!.code!.lines,
     );
     expect(() => run(d => (d.styles.yaml.shape = 'box'))).toThrow(UnsupportedEdit);
+  });
+});
+
+describe('editing code tables', () => {
+  const bodies = {
+    ragged: ['name  cat  count', 'apple   fruit   10', 'bread  bakery  4'],
+    blanks: [
+      'user     last_login   orders',
+      'ana      2026-11-02       12',
+      'bo                         0',
+    ],
+    markdown: ['| tier | status | cost |', '|------|:------:|-----:|', '| pro  | ok     | $12  |'],
+    psql: [' id | plan  | seats', '----+-------+-------', '  1 | pro   |    12', '(1 row)'],
+    oneColumn: ['name', 'ana', 'bo'],
+  };
+
+  it('writes back a table that draws the same, for every kind of body', () => {
+    for (const [name, body] of Object.entries(bodies))
+      expect(tableLines(writeTable(readTable(body))), name).toEqual(tableLines(body));
+  });
+
+  it('keeps a chosen alignment, drops empty rows and columns, and recounts a psql footer', () => {
+    const t = readTable(bodies.psql);
+    t.rows.push(['2', 'free', '1'], ['', '', ''], []);
+    t.rows = t.rows.map(r => [...r, '']);
+    t.align = ['left', 'center', 'right', 'left'];
+    const lines = writeTable(t);
+    expect(lines[1]).toMatch(/^\|:-+\|:-+:\|-+:\|$/);
+    expect(lines.at(-1)).toBe('(2 rows)');
+    expect(readTable(lines)).toEqual({
+      rows: [
+        ['id', 'plan', 'seats'],
+        ['1', 'pro', '12'],
+        ['2', 'free', '1'],
+      ],
+      align: ['left', 'center', 'right'],
+      footer: '(2 rows)',
+    });
+  });
+
+  it('reads spreadsheet and Markdown pastes as tables, and nothing else', () => {
+    expect(pastedTable('id\tms\n1\t12\n2\t7\n')).toEqual({
+      rows: [
+        ['id', 'ms'],
+        ['1', '12'],
+        ['2', '7'],
+      ],
+      align: ['right', 'right'],
+    });
+    expect(pastedTable(bodies.markdown.join('\n'))?.align).toEqual(['left', 'center', 'right']);
+    expect(pastedTable('first step\nsecond step')).toBeUndefined();
+    expect(pastedTable('a\tb')).toBeUndefined();
+  });
+
+  it('saves an edited body and the table setting to the source', () => {
+    const source = 'node q "Result" shape=code <<SQL\nid  ms\n1   12\nSQL\n',
+      scene = checkSource(source),
+      before = projectScene(scene),
+      after = clone(before),
+      node = after.graph.nodes.find(n => n.id === 'q')!;
+    node.code = {
+      ...node.code!,
+      table: true,
+      lines: writeTable(pastedTable('id\tms\n1\t12\n2\t7')!),
+    };
+    const out = printSource(
+      translateEdit({
+        source: readSource(source),
+        scene,
+        before,
+        after,
+        label: 'Edit',
+        selection: ['q'],
+      }).source,
+    );
+    expect(out).toBe('node q "Result" shape=code table=on <<SQL\nid  ms\n 1  12\n 2   7\nSQL\n');
+    const file = 'node f shape=code src="a.sql"\n',
+      fileScene = checkSource(file, { 'a.sql': { text: 'x\n' } }),
+      was = projectScene(fileScene),
+      edited = clone(was);
+    edited.graph.nodes[0].code = { ...edited.graph.nodes[0].code!, lines: ['y'] };
+    expect(() =>
+      translateEdit({
+        source: readSource(file),
+        scene: fileScene,
+        before: was,
+        after: edited,
+        label: 'Edit',
+        selection: [],
+      }),
+    ).toThrow(UnsupportedEdit);
   });
 });

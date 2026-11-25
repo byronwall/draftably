@@ -13,6 +13,7 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
+import { CODE_MAX_WIDTH, codeLayout, tableLines, type CodeBlock } from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -67,7 +68,65 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   s.onSourceIdMap(mapId => {
     const id = s.inlineEditId();
     if (id) s.setInlineEditId(mapId(id));
+    const code = codeEditId();
+    if (code) setCodeEditId(mapId(code));
   });
+
+  // --- Code and table editing ------------------------------------------------------------------
+
+  /** The code node whose body is open in the code or table editor. */
+  const [codeEditId, setCodeEditId] = createSignal<string | null>(null);
+
+  function startCodeEdit(id: string) {
+    finishInlineEdit(true);
+    batch(() => {
+      s.setConnectFrom(null);
+      s.setSelection([id]);
+      setCodeEditId(id);
+    });
+  }
+
+  /** A table node from pasted cells, at the middle of the view, selected. */
+  function addTable(lines: string[]) {
+    const code: CodeBlock = {
+        lines,
+        table: true,
+        wrap: false,
+        numbers: false,
+        start: 1,
+        maxWidth: CODE_MAX_WIDTH,
+        sourceLine: 0,
+      },
+      laid = codeLayout(
+        { ...code, lines: tableLines(lines) },
+        '',
+        resolveAppearance(s.doc.appearance),
+      );
+    let id = '';
+    s.transact('Paste table', d => {
+      id = edits.addNode(d, { style: { shape: 'code' }, w: laid.w, h: laid.h }, s.canvasCenter());
+      const node = findNode(d, id)!;
+      node.title = '';
+      node.code = code;
+    });
+    s.setSelection([id]);
+    return id;
+  }
+
+  /** Close the code editor; with `next`, save its body, caption and table setting as one step. */
+  function finishCodeEdit(next?: { lines: string[]; table: boolean; title: string }) {
+    const id = codeEditId();
+    if (!id) return;
+    setCodeEditId(null);
+    if (!next) return;
+    s.transact(next.table ? 'Edit table' : 'Edit code', d => {
+      const node = findNode(d, id);
+      if (!node?.code) return;
+      const { table: _, ...rest } = node.code;
+      node.code = { ...rest, lines: next.lines, ...(next.table ? { table: true } : {}) };
+      node.title = next.title;
+    });
+  }
 
   function startInlineEdit(id: string) {
     const text = parseTextId(id) && textValue(s.doc, id);
@@ -82,8 +141,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     }
     const entity = findNode(s.doc, id) ?? findGroup(s.doc, id) ?? findEdge(s.doc, id);
     if (!entity) return;
-    // A code node's body is edited in the source, not on the canvas.
-    if ('code' in entity && entity.code) return;
+    // A code node's body opens in the code editor: a cell grid for a table.
+    if ('code' in entity && entity.code) return startCodeEdit(id);
     finishInlineEdit(true);
     batch(() => {
       s.setConnectFrom(null);
@@ -622,6 +681,10 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     setTool,
     startInlineEdit,
     finishInlineEdit,
+    codeEditId,
+    startCodeEdit,
+    finishCodeEdit,
+    addTable,
     addNode,
     addEdge,
     completeConnection,
