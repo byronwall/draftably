@@ -13,8 +13,6 @@ import { MAX_SEGMENT, render, type Payer } from './render';
 
 export interface Env extends ApiEnv {
   ANON_LIMIT: RateLimit;
-  /** Changes on every deploy, so a deploy that draws differently starts a fresh cache. */
-  CF_VERSION_METADATA: WorkerVersionMetadata;
 }
 
 const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };

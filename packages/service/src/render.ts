@@ -10,17 +10,22 @@
  * lets only as many through as the balance covers, and the rest get 402 after drawing.
  */
 import { runtimeVersion } from '@draftably/runtime';
-import { encodeSource, MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
+import {
+  encodeSource,
+  MAX_SEGMENT,
+  MAX_SOURCE_BYTES,
+  SourceError,
+} from '../../../src/lib/render-url';
 import { balance, COST, spend, type Balance } from './credits';
 import { draw, type DrawOptions, type Format } from './draw';
 import { ApiError } from './errors';
-import { dated } from './mermaid';
+import { freshness } from './mermaid';
 
-/** The longest GET path segment accepted; longer sources go through POST. */
-export const MAX_SEGMENT = 8 * 1024;
+export { MAX_SEGMENT };
 
-const IMMUTABLE = 'public, max-age=31536000, immutable';
-const ONE_DAY = 'public, max-age=86400';
+// The public URL carries no version, so a browser may keep it for a day, not a year. The edge
+// cache keys on the deploy, so it never serves an image an older deploy drew.
+const IMMUTABLE = 'public, max-age=86400';
 
 export interface Drawn {
   body: string | Uint8Array;
@@ -35,13 +40,23 @@ const hex = (buf: ArrayBuffer) =>
   [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 
 /** The cache key for an image: on this service's own origin, so the Cache API accepts it. */
-async function cacheKey(origin: string, source: string, format: Format, opts: DrawOptions) {
+async function cacheKey(
+  origin: string,
+  build: string,
+  source: string,
+  format: Format,
+  opts: DrawOptions,
+) {
   const hash = hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)));
   const url = new URL(`/__cache/${format}/${hash}`, origin);
   // Scale changes only a PNG; an SVG keyed on it would be drawn and charged twice.
   for (const [k, v] of Object.entries(opts))
     if (v != null && !(k === 'scale' && format === 'svg')) url.searchParams.set(k, String(v));
   url.searchParams.set('v', runtimeVersion);
+  url.searchParams.set('build', build);
+  // A gantt chart can draw differently tomorrow, so its key carries today's date.
+  const day = freshness(source, opts.type)?.day;
+  if (day) url.searchParams.set('day', day);
   return new Request(url.toString());
 }
 
@@ -60,7 +75,7 @@ export interface Payer {
  * after the debit; the cache entry is written only after it.
  */
 export async function render<P>(
-  env: { DB: D1Database },
+  env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
   ctx: ExecutionContext,
   origin: string,
   rawSource: string,
@@ -76,7 +91,7 @@ export async function render<P>(
   const source = rawSource.replace(/^\uFEFF/, '');
   if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
     throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
-  const key = await cacheKey(origin, source, format, opts);
+  const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
   const hit = await cache().match(key);
   if (hit) {
     const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
@@ -92,7 +107,7 @@ export async function render<P>(
     if (b.grant + b.bought < cost) throw outOfCredits();
   }
   const body = await draw(source, format, opts);
-  const cacheControl = dated(source, opts.type) ? ONE_DAY : IMMUTABLE;
+  const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
   const out = await prepare(body, cacheControl);
   let left: Balance | undefined;
   if (payer) {

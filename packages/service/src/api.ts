@@ -16,6 +16,8 @@ export { ApiError, errorJson };
 
 export interface ApiEnv extends AuthEnv {
   KEY_LIMIT: RateLimit;
+  /** Changes on every deploy; the render cache keys on it. */
+  CF_VERSION_METADATA: WorkerVersionMetadata;
 }
 
 export const sourceError = (e: SourceError) => {
