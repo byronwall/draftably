@@ -79,7 +79,8 @@ GET /png/{encoded}[?options]
 - A Kroki-style alias costs one route and lets Kroki clients work: `GET /{type}/{format}/{encoded}`.
 - URLs over about 8 KB are rejected with a pointer to `POST /v1/render`.
 - No key and no credits. Each IP has a rate limit (start at 60 renders a minute, cache hits not
-  counted). A key in `Authorization` or `?key=` lifts the limit and spends credits.
+  counted). A key in `Authorization` lifts the limit and spends credits. There is no `?key=`: a URL
+  pasted into public Markdown would leak it.
 - A bad source returns a small SVG or PNG that shows the first diagnostic, with HTTP 400. An image
   tag then shows the error instead of a broken icon.
 

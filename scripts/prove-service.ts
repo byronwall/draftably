@@ -7,8 +7,13 @@
  * Then PNG: each file's `/png/` answer must have the same pixels as `draftably inspect --png`
  * (the CLI, resvg-js) and carry the source that `draftably extract` reads back.
  *
+ * Then Mermaid: every Mermaid input in the repo must draw the same as `draftably import`. Then
+ * the REST API on a fresh local D1: parallel spends can't overdraw, a failed render refunds,
+ * REST and GET give the same bytes, and calls without a valid key get 401.
+ *
  * The same URL twice must give an edge-cache hit the second time. `--base
- * https://api.draftably.dev` runs it all against a deployed service instead.
+ * https://api.draftably.dev` checks a deployed service instead: 10 files, SVG and PNG, and the
+ * cache, which stays under its 60-a-minute address limit.
  */
 import assert from 'node:assert/strict';
 import { execFile, execFileSync, spawn } from 'node:child_process';
@@ -16,6 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 
 // The URL codec and link policy import DSL modules that plain Node can't load, so bundle the
@@ -36,6 +42,38 @@ const remote = at > 0 ? process.argv[at + 1].replace(/\/$/, '') : undefined;
 const PORT = 8787 + Math.floor(Math.random() * 1000);
 const base = remote ?? `http://127.0.0.1:${PORT}`;
 const { renderSvg } = await import('../packages/runtime/dist/index.js');
+
+// A fresh local D1 with two accounts: `poor` holds 20 credits, `rich` 100,000. Their keys are
+// fixtures for this proof only; the database lives in packages/service/.wrangler.
+const KEYS = {
+  poor: 'dft_aaaaaaaaaaaa.proof-secret-poor-0123456789',
+  rich: 'dft_bbbbbbbbbbbb.proof-secret-rich-0123456789',
+};
+const d1 = (...args: string[]) =>
+  execFileSync('pnpm', ['exec', 'wrangler', 'd1', ...args, '--local', '--env', 'proof'], {
+    cwd: 'packages/service',
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+const sql = (command: string) =>
+  JSON.parse(d1('execute', 'DB', '--json', '--command', command))[0].results as Record<
+    string,
+    number
+  >[];
+if (!remote) {
+  fs.rmSync('packages/service/.wrangler/state/v3/d1', { recursive: true, force: true });
+  d1('migrations', 'apply', 'DB');
+  const month = new Date().toISOString().slice(0, 7),
+    now = new Date().toISOString();
+  const hash = (key: string) => createHash('sha256').update(key.split('.')[1]).digest('hex');
+  sql(
+    `INSERT INTO accounts (id, github_id, login, grant_left, grant_month, bought, created_at) VALUES
+     ('poor', 1, 'poor', 20, '${month}', 0, '${now}'), ('rich', 2, 'rich', 0, '${month}', 100000, '${now}');
+     INSERT INTO keys (id, account_id, hash, label, created_at) VALUES
+     ('aaaaaaaaaaaa', 'poor', '${hash(KEYS.poor)}', 'proof', '${now}'),
+     ('bbbbbbbbbbbb', 'rich', '${hash(KEYS.rich)}', 'proof', '${now}');`,
+  );
+}
 
 const dev = remote
   ? undefined
@@ -81,7 +119,11 @@ const forms = [
   { name: 'plain', encode: async (s: string) => b64url(new TextEncoder().encode(s)) },
 ];
 
-const files = execFileSync('git', ['ls-files', '*.draft'], { encoding: 'utf8' }).trim().split('\n');
+// A deployed service has the 60-a-minute address limit, so a remote run checks 10 files.
+const files = execFileSync('git', ['ls-files', '*.draft'], { encoding: 'utf8' })
+  .trim()
+  .split('\n')
+  .slice(0, remote ? 10 : undefined);
 const tally = { same: 0, rejected: 0, tooLong: 0, failed: [] as string[] };
 /** Files both sides draw, for the PNG pass: name, source and the URL segment used. */
 const drawn: { file: string; source: string; segment: string }[] = [];
@@ -235,7 +277,7 @@ for (const [n, m] of [
     mermaid.push({ name: `import-mermaid.test.ts #${n + 1}`, source: m[1] });
 const drawnMermaid = new Set<number>();
 const mm = { same: 0, rejected: 0, failed: [] as string[], families: {} as Record<string, number> };
-for (const [n, { name, source }] of mermaid.entries()) {
+for (const [n, { name, source }] of (remote ? [] : mermaid).entries()) {
   const file = path.join(dir, `m${n}.mmd`);
   fs.writeFileSync(file, source);
   const family = /^\s*(?:---[\s\S]*?---\s*)?(\w+)/.exec(source)?.[1] ?? '?';
@@ -328,6 +370,113 @@ console.log(
   `Mermaid detection: ${detected} of ${drawnMermaid.size} drawn the same with no ?type=.`,
 );
 assert.equal(detected, drawnMermaid.size, 'automatic and explicit Mermaid detection disagree');
+
+// The REST API and credits, local only (the accounts are fixtures).
+if (!remote) {
+  const post = (path: string, key: string | undefined, body: object) =>
+    fetch(`${base}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(key ? { Authorization: `Bearer ${key}` } : {}),
+      },
+      body: JSON.stringify(body),
+    });
+  const checkout = fs.readFileSync('examples/checkout.draft', 'utf8');
+
+  // 50 parallel renders against 20 credits: exactly 20 succeed, and the ledger agrees.
+  const race = await Promise.all(
+    Array.from({ length: 50 }, (_, n) =>
+      post('/v1/render', KEYS.poor, { code: checkout + `\n# ${n}\n`, format: 'svg' }).then(
+        r => r.status,
+      ),
+    ),
+  );
+  const ok = race.filter(s => s === 200).length,
+    broke = race.filter(s => s === 402).length;
+  const bal = await (
+    await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.poor}` } })
+  ).json();
+  const ledger = sql(
+    `SELECT sum(delta) AS total, count(*) AS rows FROM ledger WHERE account_id = 'poor'`,
+  )[0];
+  assert.equal(ok, 20);
+  assert.equal(broke, 30);
+  assert.equal(bal.grant + bal.bought, 0);
+  assert.equal(ledger.total, -20);
+  console.log(
+    `Credits: 50 parallel renders on 20 credits: ${ok} drawn, ${broke} refused with 402; balance 0; ledger -20 in ${ledger.rows} rows.`,
+  );
+
+  // The REST answer and the anonymous URL give the same bytes, and the REST answer names that URL.
+  const rest = await post('/v1/render', KEYS.rich, { code: checkout, format: 'png', scale: 2 });
+  const restBytes = Buffer.from(await rest.arrayBuffer());
+  const urlBytes = Buffer.from(
+    await (await fetch(rest.headers.get('X-Draftably-Url')! + '?scale=2')).arrayBuffer(),
+  );
+  assert.equal(rest.status, 200);
+  assert.ok(restBytes.equals(urlBytes), 'REST and GET PNG differ');
+  const restSvg = await (
+    await post('/v1/render', KEYS.rich, { code: checkout, format: 'svg' })
+  ).text();
+  assert.equal(restSvg, await (await fetch(`${base}/svg/${await encodeSource(checkout)}`)).text());
+
+  // A keyed image URL spends credits (2 for PNG); a failed render costs nothing.
+  const before = (
+    await (
+      await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+    ).json()
+  ).bought;
+  const keyed = await fetch(`${base}/png/${await encodeSource(checkout + '\n# keyed\n')}`, {
+    headers: { Authorization: `Bearer ${KEYS.rich}` },
+  });
+  const bad = await post('/v1/render', KEYS.rich, { code: 'node a "unclosed', format: 'svg' });
+  const badBody = await bad.json();
+  const after = (
+    await (
+      await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+    ).json()
+  ).bought;
+  assert.equal(keyed.status, 200);
+  assert.equal(bad.status, 400);
+  assert.equal(badBody.error.code, 'ERR_SOURCE');
+  assert.equal(before - after, 2);
+  console.log(
+    `Keyed PNG URL cost 2 credits; a bad source got 400 ${badBody.error.code} and its credit back.`,
+  );
+
+  // Validate, convert, and auth.
+  const valid = await (await post('/v1/validate', KEYS.rich, { code: checkout })).json();
+  const invalid = await (
+    await post('/v1/validate', KEYS.rich, { code: 'node a "unclosed' })
+  ).json();
+  assert.equal(valid.valid, true);
+  assert.equal(invalid.valid, false);
+  const flow = mermaid[[...drawnMermaid][0]];
+  const conv = await (await post('/v1/convert', KEYS.rich, { code: flow.source })).json();
+  const cliDraft = (
+    await cli('import', path.join(dir, `m${[...drawnMermaid][0]}.mmd`), '--accept-lossy')
+  ).stdout;
+  assert.equal(conv.draft, cliDraft.replace(/^diagram "m\d+"/, 'diagram ""'));
+  assert.equal((await post('/v1/render', undefined, { code: checkout })).status, 401);
+  assert.equal(
+    (await post('/v1/render', 'dft_aaaaaaaaaaaa.wrong-secret-0123456789abc', { code: checkout }))
+      .status,
+    401,
+  );
+  const login = await fetch(`${base}/login`, { redirect: 'manual' });
+  assert.match(
+    login.headers.get('Location')!,
+    /^https:\/\/github\.com\/login\/oauth\/authorize\?client_id=proof-client-id/,
+  );
+  assert.equal(
+    (await fetch(`${base}/account`, { redirect: 'manual' })).headers.get('Location'),
+    '/login',
+  );
+  console.log(
+    'API: validate, convert (= draftably import), REST = GET bytes, 401 without or with a bad key, /account sends you to GitHub.',
+  );
+}
 
 // The same URL twice: the second answer comes from the edge cache.
 const fresh = fs.readFileSync('examples/checkout.draft', 'utf8') + `\n# ${Date.now()}\n`;
