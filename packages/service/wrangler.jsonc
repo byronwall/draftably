@@ -31,6 +31,8 @@
   ],
   // The GitHub OAuth app's client ID. The secret goes in with `wrangler secret put
   // GITHUB_CLIENT_SECRET`, and in .dev.vars for local work.
+  // Paid credits: `wrangler secret put STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. With no key
+  // the account page offers no packs.
   "vars": { "GITHUB_CLIENT_ID": "" },
   "env": {
     // `pnpm prove:service` renders every .draft in the repo from one address, and fires parallel
@@ -57,7 +59,11 @@
           "migrations_dir": "migrations",
         },
       ],
-      "vars": { "GITHUB_CLIENT_ID": "proof-client-id" },
+      "vars": {
+        "GITHUB_CLIENT_ID": "proof-client-id",
+        // A fixture for the webhook signature check; this env is never deployed.
+        "STRIPE_WEBHOOK_SECRET": "whsec_proof_fixture",
+      },
     },
   },
 }

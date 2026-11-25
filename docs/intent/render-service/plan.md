@@ -3,16 +3,16 @@
 Design: [README.md](README.md). Each slice ships alone and is usable when it lands. Each slice
 names the check that proves it, at the scope the product works on.
 
-| Slice | What lands                                   | Status  |
-| ----: | -------------------------------------------- | ------- |
-|     0 | Spikes: SVG, PNG and Mermaid in `workerd`    | done    |
-|     1 | GET SVG on `workers.dev`                     | built   |
-|     2 | GET PNG                                      | built   |
-|     3 | Mermaid input                                | built   |
-|     4 | Domain, accounts, keys, REST API, free grant | built   |
-|     5 | MCP server                                   | built   |
-|     6 | Paid credits through Stripe                  | planned |
-|     7 | OAuth for MCP connectors                     | later   |
+| Slice | What lands                                   | Status |
+| ----: | -------------------------------------------- | ------ |
+|     0 | Spikes: SVG, PNG and Mermaid in `workerd`    | done   |
+|     1 | GET SVG on `workers.dev`                     | built  |
+|     2 | GET PNG                                      | built  |
+|     3 | Mermaid input                                | built  |
+|     4 | Domain, accounts, keys, REST API, free grant | built  |
+|     5 | MCP server                                   | built  |
+|     6 | Paid credits through Stripe                  | built  |
+|     7 | OAuth for MCP connectors                     | later  |
 
 ## Before slice 1 (Byron)
 

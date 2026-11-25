@@ -11,8 +11,9 @@ import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { MAX_SEGMENT, render, type Payer } from './render';
 import { handleMcp } from './mcp';
+import { handleWebhook, type StripeEnv } from './stripe';
 
-export interface Env extends ApiEnv {
+export interface Env extends ApiEnv, StripeEnv {
   ANON_LIMIT: RateLimit;
 }
 
@@ -113,7 +114,8 @@ GET  /v1/balance     -> {grant, bought, resetsAt}
 /mcp                 MCP server (Streamable HTTP) with the same key: render_diagram,
                      validate_diagram, convert_mermaid, image_url, language_guide.
 
-/account             Sign in with GitHub, see credits, make API keys. 1,000 free credits a month.
+/account             Sign in with GitHub, see credits, make API keys, buy credits.
+                     1,000 free credits a month.
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
 `;
@@ -121,6 +123,7 @@ Version ${runtimeVersion}. Language: https://draftably.dev/docs
 export default {
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
+    if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
     const api = (await handleApi(req, env, ctx, url)) ?? (await handleMcp(req, env, ctx, url));
     if (api) return api;
     const account = await handleAccount(req, env, url);

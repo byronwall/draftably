@@ -13,6 +13,7 @@ import {
   type AuthEnv,
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
+import { checkoutUrl, PACKS, type StripeEnv } from './stripe';
 
 const esc = (s: string) =>
   s.replace(
@@ -62,10 +63,11 @@ interface KeyRow {
 }
 
 async function accountPage(
-  env: AuthEnv,
+  env: AuthEnv & StripeEnv,
   origin: string,
   account: { id: string; login: string },
   newKey?: string,
+  bought = false,
 ) {
   const b = await balance(env.DB, account.id);
   const keys = (
@@ -84,6 +86,16 @@ async function accountPage(
 <div class="big">${(b.grant + b.bought).toLocaleString('en-US')}</div>
 <p class="muted">${b.grant.toLocaleString('en-US')} left in this month's free ${MONTHLY_GRANT.toLocaleString('en-US')} (resets ${b.resetsAt}) · ${b.bought.toLocaleString('en-US')} bought.
 An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</p></section>
+${bought ? '<p><b>Thanks.</b> Your credits appear here once Stripe confirms the payment, usually within seconds.</p>' : ''}
+${
+  env.STRIPE_SECRET_KEY
+    ? `<section><h2>Buy credits</h2><p class="muted">Bought credits never expire. The monthly grant is spent first.</p>
+${PACKS.map(
+  p => `<form method="post" action="/account/buy" style="display:inline-block;margin-right:8px"><input type="hidden" name="pack" value="${p.id}">
+<button class="primary">${p.credits.toLocaleString('en-US')} credits · $${(p.cents / 100).toFixed(2)}</button></form>`,
+).join('')}</section>`
+    : ''
+}
 ${
   newKey
     ? `<section><h2>Your new key</h2><p>Copy it now; it is not shown again.</p><pre>${esc(newKey)}</pre>
@@ -110,7 +122,7 @@ ${
 }
 
 /** `/login`, `/logout`, `/auth/github/callback` and `/account*`. Null for other paths. */
-export async function handleAccount(req: Request, env: AuthEnv, url: URL) {
+export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url: URL) {
   const path = url.pathname;
   const ours =
     path === '/login' ||
@@ -146,11 +158,17 @@ export async function handleAccount(req: Request, env: AuthEnv, url: URL) {
     const key = await createKey(env.DB, account.id, String(form.get('label') ?? ''));
     return accountPage(env, url.origin, account, key);
   }
+  if (req.method === 'POST' && path === '/account/buy') {
+    const form = await req.formData();
+    const to = await checkoutUrl(env, account.id, String(form.get('pack') ?? ''), url.origin);
+    return to ? redirect(to) : new Response('No such pack.', { status: 400 });
+  }
   const revoke = /^\/account\/keys\/([0-9a-f]{12})\/revoke$/.exec(path);
   if (req.method === 'POST' && revoke) {
     await revokeKey(env.DB, account.id, revoke[1]);
     return redirect('/account');
   }
-  if (path === '/account') return accountPage(env, url.origin, account);
+  if (path === '/account')
+    return accountPage(env, url.origin, account, undefined, url.searchParams.has('bought'));
   return new Response('Not found', { status: 404 });
 }

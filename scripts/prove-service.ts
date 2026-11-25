@@ -21,7 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { build } from 'esbuild';
 
 // The URL codec and link policy import DSL modules that plain Node can't load, so bundle the
@@ -635,6 +635,39 @@ if (!remote) {
   );
   console.log(
     `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405; image_url refuses a source over 64 KB.`,
+  );
+
+  // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.
+  const event = JSON.stringify({
+    type: 'checkout.session.completed',
+    data: {
+      object: {
+        id: 'cs_proof_1',
+        payment_status: 'paid',
+        metadata: { account: 'poor', credits: '25000' },
+      },
+    },
+  });
+  const sign = (body: string, t = Math.floor(Date.now() / 1000), secret = 'whsec_proof_fixture') =>
+    `t=${t},v1=${createHmac('sha256', secret).update(`${t}.${body}`).digest('hex')}`;
+  const hook = (body: string, sig: string) =>
+    fetch(`${base}/stripe/webhook`, { method: 'POST', headers: { 'Stripe-Signature': sig }, body });
+  const bought = () => sql(`SELECT bought FROM accounts WHERE id = 'poor'`)[0].bought;
+  assert.equal((await hook(event, sign(event))).status, 200);
+  assert.equal(bought(), 25000);
+  assert.equal((await hook(event, sign(event))).status, 200);
+  assert.equal(bought(), 25000, 'a repeated event added credits again');
+  assert.equal((await hook(event, sign(event, undefined, 'whsec_wrong'))).status, 400);
+  assert.equal((await hook(event, sign(event, Math.floor(Date.now() / 1000) - 600))).status, 400);
+  assert.equal(sql(`SELECT count(*) AS n FROM ledger WHERE reason = 'purchase'`)[0].n, 1);
+  // The grant is spent before bought credits.
+  sql(`UPDATE accounts SET grant_left = 1 WHERE id = 'poor'`);
+  await post('/v1/render', KEYS.poor, { code: checkout + '\n# grant\n', format: 'svg' });
+  assert.equal(bought(), 25000);
+  await post('/v1/render', KEYS.poor, { code: checkout + '\n# bought\n', format: 'svg' });
+  assert.equal(bought(), 24999);
+  console.log(
+    'Stripe: a signed event added 25,000 credits once (sent twice); wrong or 10-minute-old signatures got 400; the grant is spent first.',
   );
 }
 
