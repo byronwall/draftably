@@ -8,9 +8,9 @@ import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/
 import { validate, runtimeVersion } from '@draftably/runtime';
 import { z } from 'zod';
 import guide from '../../../skills/draftably/SKILL.md';
-import { SourceError } from '../../../src/lib/render-url';
+import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { ApiError, checkSource, errorJson, requireKey, type ApiEnv } from './api';
-import { drawOptions } from './draw';
+import { DEFAULT_FORMAT, drawOptions } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
 
@@ -44,7 +44,7 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
       inputSchema: {
         code,
         type,
-        format: z.enum(['png', 'svg']).default('png'),
+        format: z.enum(['png', 'svg']).default(DEFAULT_FORMAT),
         scheme: z.enum(['light', 'dark']).optional(),
         scale: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
       },
@@ -97,7 +97,7 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
     async ({ code, type }) => {
       try {
         const { draft, warnings } = await toDraft(checkSource(code), type);
-        const result = await validate(draft);
+        const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
         const lines = [
           ...warnings.map(w => `warning: ${w}`),
           ...result.diagnostics.map(
