@@ -43,11 +43,11 @@ and groups. References may point to later lines.
 | `compare "before" "after"`          | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `was-order m2 m1`                   | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                   | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`. A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                                                                        |
-| `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`, `icon=`, `icon-pos=left\|top` ([Icons](#icons)). A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                       |
+| `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`, `icon=` in the title band. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `theme name`                        | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`                | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `legend family "meaning"`           | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw) and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                                                                                                |
+| `legend family "meaning"`           | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw), an optional `icon=`, and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                                                                          |
 | `note "text"`                       | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                                                                                                                       |
 | `range node.name lines=a-b "label"` | Names lines of a code node: a tinted band, a bar and a label. `match="pattern" span=n` instead of `lines=`, `color=`. See [Line ranges](#line-ranges).                                                                                                                                                                                                                                                                                                                                                                                    |
 | `footnote 1 "text"`                 | An entry in the block under the drawing, above the legend. The marker (`1`, `a`, `*`) is optional; a label points at it as `[1]`. Text takes `[label](href)` links. See [Footnotes](#footnotes).                                                                                                                                                                                                                                                                                                                                          |
@@ -192,6 +192,44 @@ same way. It never changes the link.
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds. When there is no real number to show, give a
 letter or short word instead: `count=N` draws `×N`, and `count=many` draws `×many`.
+
+### Icons
+
+`icon=database` puts an icon in a box. A bare name is a [Lucide](https://lucide.dev/icons) icon,
+the set draftably ships. `prefix:name` names an icon in any other
+[Iconify](https://icon-sets.iconify.design) set, such as `logos:aws-lambda` or `ph:cloud`. Install
+that set in the project first: `pnpm add -D @iconify-json/logos`. The CLI and `draftably open`
+read the installed `@iconify-json/<prefix>` packages and never fetch icons from the network.
+
+```draft
+group aws "AWS us-east-1" color=slate icon=cloud
+node web "Web app" icon=monitor
+node api "Orders API" in=aws icon=zap icon-pos=top
+node db "Orders DB" in=aws icon=database color=violet
+legend violet "Data stores" icon=database
+edge e1 web -> api "HTTPS"
+edge e2 api -> db "persist"
+```
+
+- On a node, the icon sits before the label at the label's line height. `icon-pos=top` draws it
+  large over the label instead, the tile look of cloud architecture diagrams. Boxes, pills,
+  circles and text take an icon; a diamond and a code node do not.
+- On a boxed group, the icon replaces the frame mark in the title band. On a legend entry, it
+  sits after the swatch.
+- A one-color icon, such as every Lucide icon, draws in the box's text color, so it follows the
+  theme and dark pages. A color logo keeps its own colors.
+- An icon has the same size in every theme, so a theme never moves a box. The Editor,
+  `inspect --svg`, PNG and PDF draw the same icon in the same place. An export holds only the path
+  data of the icons it uses, so `extract` gives back a file that draws the same.
+- To find a name, run `draftably icons <word>`, search in the Inspector's **Icon** field (it
+  writes `icon=` for you), or type `icon=` in the live editor for a list with pictures. `check`
+  warns about an unknown name and suggests close ones: `icon=postgres` suggests `database`, and
+  `logos:postgresql` when the `logos` set is installed. A box with an unknown icon keeps the
+  icon's room and draws a dashed square there.
+
+Brand logos are trademarks of their owners, even in a set whose files are public domain. The AWS,
+Google Cloud and Azure icon terms give no right to bundle their icons in a tool, so draftably
+does not ship vendor logos. It draws them when a project installs a set that has them.
 
 ## Code
 
@@ -1560,6 +1598,7 @@ draftably open --status                    # running editors: URL, folder, versi
 draftably vary --help                      # any command's options; --version for the version
 draftably skill install                    # agent skill into ./.claude/skills/draftably
 draftably docs legend                      # one section of this guide; docs alone lists them
+draftably icons database                   # icon names for icon= that match a word
 ```
 
 `compare` needs a second version of the file, here `new.draft`.
@@ -1780,6 +1819,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 ### Architecture
 
 - [Checkout architecture](https://draftably.dev/app/?example=checkout): Two levels: a platform group holds the API and a nested group of domain services.
+- [Checkout on AWS](https://draftably.dev/app/?example=checkout-icons): Cloud services as icon tiles: icon-pos=top in the AWS group, small icons before the label elsewhere.
 - [RAG support assistant](https://draftably.dev/app/?example=rag-assistant): Two levels: the platform contains a retrieval subsystem and a generation subsystem.
 - [Monorepo packages](https://draftably.dev/app/?example=monorepo-packages): A dependency graph grouped by workspace folder, with a nested group for shared UI.
 - [Data lakehouse](https://draftably.dev/app/?example=data-lakehouse): Medallion layers as containers between external sources and consumers.

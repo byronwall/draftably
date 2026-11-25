@@ -1,0 +1,31 @@
+diagram "Checkout on AWS" version=1
+subtitle "Orders persist before payment is authorized"
+
+# Cloud services as icon tiles: icon-pos=top in the AWS group, small icons before the label elsewhere.
+# A bare icon name is a Lucide icon. It draws in the box's text color, so it follows the theme.
+group clients "Customers" color=blue icon=users
+node web "Web app" in=clients icon=monitor
+node mobile "Mobile app" in=clients icon=smartphone
+
+group aws "AWS us-east-1" color=slate icon=cloud
+node gw "API Gateway" in=aws icon=network icon-pos=top
+node orders "Orders" in=aws icon=zap icon-pos=top
+node queue "Order events" in=aws icon=inbox icon-pos=top
+node table "Orders table" in=aws icon=database icon-pos=top color=violet
+
+node stripe "Stripe" icon=credit-card
+node mailer "Receipt mailer" icon=mail
+
+legend blue "Customer apps" icon=monitor
+legend violet "Data stores" icon=database
+legend line dashed "Background work"
+
+edge e1 web -> gw "HTTPS"
+edge e2 mobile -> gw "HTTPS"
+edge e3 gw -> orders "create order"
+edge e4 orders -> table "persist"
+edge e5 orders -> stripe "authorize"
+edge e6 orders -> queue "order.created" kind=async
+edge e7 queue -> mailer "send receipt" kind=async
+
+layout root flow fit=slide
