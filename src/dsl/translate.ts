@@ -165,7 +165,11 @@ function rejectUnsupported(before: Diagram, after: Diagram) {
   }
   // A copied table would lose its body, so tables are copied in the source.
   const rowsBefore = new Set(before.graph.nodes.map(n => n.id));
-  if (after.graph.nodes.some(n => n.row && !rowsBefore.has(n.id)))
+  const edgesBefore = new Set(before.graph.edges.map(e => e.id));
+  if (
+    after.graph.nodes.some(n => n.row && !rowsBefore.has(n.id)) ||
+    after.graph.edges.some(e => e.inferred && !edgesBefore.has(e.id))
+  )
     throw new UnsupportedEdit('A table is copied in the source: copy its group and body there.');
   for (const e of before.graph.edges) {
     if (!e.inferred) continue;

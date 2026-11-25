@@ -1506,8 +1506,11 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
 function addRowEdges(m: Model) {
   const by = new Map(m.objects.map(o => [o.id, o])),
     edgeIds = new Map(m.edges.map(e => [e.id, e])),
-    written = new Set(
-      m.edges.flatMap(e => [`${e.source}\0${e.target}`, `${e.target}\0${e.source}`]),
+    written = new Map(
+      m.edges.flatMap(e => [
+        [`${e.source}\0${e.target}`, e] as const,
+        [`${e.target}\0${e.source}`, e] as const,
+      ]),
     ),
     sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
   for (const o of m.objects) {
@@ -1520,7 +1523,16 @@ function addRowEdges(m: Model) {
         o.line,
       );
     if (ref === o.id) throw new DslError(`${o.id} refers to itself.`, o.line);
-    if (written.has(`${o.id}\0${ref}`)) continue;
+    // In a change diagram, an added or removed written edge means the `->` line is the other
+    // version's line: removed where the edge is added, added where it is removed.
+    const over = written.get(`${o.id}\0${ref}`),
+      swap =
+        over?.status === 'added' && o.status !== 'added'
+          ? 'removed'
+          : over?.status === 'removed' && o.status !== 'removed'
+            ? 'added'
+            : undefined;
+    if (over && (!swap || over.id === `${o.id}.fk`)) continue;
     if (sequence)
       throw new DslError(
         `A sequence diagram draws its messages from edge lines. Remove -> ${ref} from ${o.id}, or write an edge.`,
@@ -1542,7 +1554,11 @@ function addRowEdges(m: Model) {
       to: 'auto',
       head: 'one',
       tail: 'many',
-      ...(o.status === 'added' || o.status === 'removed' ? { status: o.status } : {}),
+      ...(swap
+        ? { status: swap }
+        : o.status === 'added' || o.status === 'removed'
+          ? { status: o.status }
+          : {}),
       inferred: true,
       line: o.line,
     };
@@ -1983,6 +1999,23 @@ function validateReferences(m: Model) {
     );
   });
   const edgeIds = new Set(m.edges.map(e => e.id));
+  // A table row and an edge never share an id: the Editor holds both in one set.
+  for (const e of m.edges)
+    assert(
+      !by.get(e.id)?.row,
+      `Edge ${e.id} has the id of a table row. Give the edge another id.`,
+      e.line,
+    );
+  // A sequence's participants and a timeline's rows have shapes of their own, not table rows.
+  for (const l of m.layouts)
+    assert(
+      !l.table ||
+        !m.layouts.some(
+          r => r.scope === 'root' && (r.algorithm === 'sequence' || r.algorithm === 'timeline'),
+        ),
+      `A table can't sit in a ${m.layouts.find(r => r.scope === 'root')?.algorithm} diagram. Remove layout ${l.scope} table.`,
+      l.line,
+    );
   for (const s of m.appearance.states ?? [])
     for (const x of s.ids) {
       const line = m.stateLines.get(`${s.id}:${x}`)!;

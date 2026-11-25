@@ -109,10 +109,22 @@ describe('database tables', () => {
     expect(merged).toContain(
       '- email   text  uk nn\n~ org_id  bigint  fk -> orgs.id\n+ plan    text\n',
     );
-    expect(unshown).toEqual([]);
+    expect(unshown).toEqual(['users.org_id (type)']);
     const m = parseModel(merged);
     expect(m.objects.find(o => o.id === 'users.email')!.status).toBe('removed');
     expect(m.objects.find(o => o.id === 'users.plan')!.status).toBe('added');
+  });
+
+  it('swaps a removed written edge for the -> line it covered, and leaves code bodies as written', () => {
+    const plain = TABLES.replace('+ org_id', '  org_id'),
+      override = 'edge e users.org_id -> orgs.id "uses"\n',
+      code = 'node q shape=code <<SQL\nconsole.log(x);\nSQL\n';
+    const { merged } = compareDetailed(plain + override + code, plain);
+    expect(merged).toContain('-edge e users.org_id -> orgs.id "uses"');
+    expect(merged).toContain('-node q shape=code <<SQL\nconsole.log(x);\nSQL');
+    const edges = parseModel(merged).edges;
+    expect(edges.find(e => e.id === 'users.org_id.fk')!.status).toBe('added');
+    expect(edges.find(e => e.id === 'e')!.status).toBe('removed');
   });
 
   it('keeps body rows and their lines read-only in the Editor, but lets the whole table go', () => {

@@ -87,9 +87,10 @@ const markRow = (raw: string, mark: '+' | '-' | '~') =>
 /**
  * A group body that holds both versions: each row the newer body has, marked `+` when the older
  * one lacks it and `~` when its type, marks or `->` changed, and each row only the older body had,
- * marked `-` after the row that preceded it there. Rows match by name.
+ * marked `-` after the row that preceded it there. Rows match by name. A mark can't carry a row's
+ * old type or place, so those come back in `unshown`.
  */
-function mergeBody(before: string[], after: string[]): string[] {
+function mergeBody(group: string, before: string[], after: string[]) {
   const rows = (lines: string[]) =>
       new Map(
         readBodyRows(lines, 0, (message, line) => {
@@ -98,21 +99,25 @@ function mergeBody(before: string[], after: string[]): string[] {
       ),
     [olds, news] = [rows(before), rows(after)],
     oldByName = new Map([...olds.values()].map(r => [r.name, r])),
-    newNames = new Set([...news.values()].map(r => r.name));
+    newNames = new Set([...news.values()].map(r => r.name)),
+    unshown: string[] = [];
   const out = after.map((raw, i) => {
     const row = news.get(i),
       prior = row && oldByName.get(row.name);
-    return {
-      name: row?.name,
-      raw: !row
-        ? raw
-        : !prior
-          ? markRow(raw, '+')
-          : JSON.stringify(prior.row) !== JSON.stringify(row.row)
-            ? markRow(raw, '~')
-            : raw,
-    };
+    if (!row) return { name: undefined, raw };
+    if (!prior) return { name: row.name, raw: markRow(raw, '+') };
+    const changed = (['type', 'keys', 'ref'] as const).filter(
+      k => JSON.stringify(prior.row[k]) !== JSON.stringify(row.row[k]),
+    );
+    if (!changed.length) return { name: row.name, raw };
+    unshown.push(`${group}.${row.name} (${changed.map(k => (k === 'ref' ? '->' : k)).join(', ')})`);
+    return { name: row.name, raw: markRow(raw, '~') };
   });
+  const order = (m: Map<number, { name: string }>, keep: Set<string>) =>
+    [...m.values()].map(r => r.name).filter(n => keep.has(n));
+  const oldNames = new Set(oldByName.keys());
+  if (order(olds, newNames).join('\0') !== order(news, oldNames).join('\0'))
+    unshown.push(`${group} row order`);
   let anchor = -1;
   before.forEach((raw, i) => {
     const row = olds.get(i);
@@ -120,7 +125,7 @@ function mergeBody(before: string[], after: string[]): string[] {
     if (newNames.has(row.name)) anchor = out.findIndex(o => o.name === row.name);
     else out.splice(++anchor, 0, { name: undefined, raw: markRow(raw, '-') });
   });
-  return out.map(o => o.raw);
+  return { lines: out.map(o => o.raw), unshown };
 }
 
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
@@ -168,6 +173,20 @@ export function compareDetailed(before: string, after: string) {
         typed.line,
       );
   }
+  // A row is a body line in one file and a node line in the other only through a rewrite that
+  // a mark can't follow, so say so instead of drawing two copies.
+  for (const [a, b] of [
+    [old, next],
+    [next, old],
+  ])
+    for (const o of a.objects) {
+      const twin = b.objects.find(x => x.id === o.id);
+      if (o.row && twin && !twin.row)
+        throw new DslError(
+          `A comparison can't show ${o.id} turning between a table row and a node line. Compare versions that write it the same way.`,
+          twin.line,
+        );
+    }
   const [was, now] = [old, next].map(
     m =>
       new Map<string, ModelObject | ModelEdge>([
@@ -220,7 +239,14 @@ export function compareDetailed(before: string, after: string) {
       args,
       mark: '-',
       comment: undefined,
-      ...(line.body ? { body: { ...line.body, lines: mergeBody(line.body.lines, []) } } : {}),
+      ...(line.command === 'group' && line.body
+        ? {
+            body: {
+              ...line.body,
+              lines: mergeBody(line.args[0].value, line.body.lines, []).lines,
+            },
+          }
+        : {}),
     };
   };
 
@@ -231,23 +257,22 @@ export function compareDetailed(before: string, after: string) {
       out.push(raw);
       continue;
     }
-    // A table's rows carry their own marks inside its body.
-    const olderGroup = raw.body
-        ? docs[0].lines.find(
-            (l): l is Statement =>
-              l.kind === 'statement' && l.command === 'group' && keyOf(l) === keyOf(raw),
-          )
-        : undefined,
-      line =
-        raw.command === 'group' && raw.body
-          ? {
-              ...raw,
-              body: {
-                ...raw.body,
-                lines: mergeBody(olderGroup?.body?.lines ?? [], raw.body.lines),
-              },
-            }
-          : raw;
+    // A table's rows carry their own marks inside its body. A body the newer file dropped stays,
+    // its rows marked removed.
+    const olderGroup =
+        raw.command === 'group'
+          ? docs[0].lines.find(
+              (l): l is Statement =>
+                l.kind === 'statement' && l.command === 'group' && keyOf(l) === keyOf(raw),
+            )
+          : undefined,
+      shell = raw.body ?? olderGroup?.body,
+      body =
+        raw.command === 'group' && shell
+          ? mergeBody(raw.args[0].value, olderGroup?.body?.lines ?? [], raw.body?.lines ?? [])
+          : undefined,
+      line = body ? { ...raw, body: { ...shell!, lines: body.lines } } : raw;
+    if (body) unshown.push(...body.unshown);
     const prior = was.get(keyOf(line));
     if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
     else if (meaning(prior) !== meaning(now.get(keyOf(line))!)) {

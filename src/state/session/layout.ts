@@ -59,6 +59,7 @@ const engineName = (id: string) => LayoutLab.algorithms.find(a => a.id === id)?.
 const SHAPED_BY_CONTENT: Record<string, string> = {
   sequence: 'Sequence diagrams follow message order.',
   cells: 'Cells follow their columns and spans.',
+  table: 'Tables follow their rows.',
   timeline: 'Timelines place each row by its dates.',
 };
 

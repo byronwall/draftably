@@ -26,7 +26,6 @@ import {
   findNode,
   isCell,
   isCollapsed,
-  isTableRow,
   styleOf,
   type VisibleEdge,
   type VisibleGraph,
@@ -595,7 +594,10 @@ function cellEnds(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
         ...(near(r.x, g.x) ? (['left'] as const) : []),
         ...(near(r.x + r.w, g.x + g.w) ? (['right'] as const) : []),
         // A table's rows are met from the left or right, never below the last one.
-        ...(r.y + r.h > g.y + g.h - 0.5 && !isTableRow(doc, id) ? (['bottom'] as const) : []),
+        ...(r.y + r.h > g.y + g.h - 0.5 &&
+        !doc.layout.containers[findNode(doc, id)?.parentId ?? '']?.table
+          ? (['bottom'] as const)
+          : []),
       ];
       if (free.length) {
         sides.set(e.id, { ...sides.get(e.id), [end]: facing(r, free, centre(o)) });
