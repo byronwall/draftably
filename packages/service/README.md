@@ -14,6 +14,32 @@ For sign-in locally, put the GitHub OAuth app's secret in `packages/service/.dev
 (`GITHUB_CLIENT_SECRET=...`) and its client ID in `vars` in `wrangler.jsonc`. The proof needs
 neither; it seeds a local D1 with two fixture accounts.
 
+## Connect an MCP client
+
+The server is at `/mcp` (Streamable HTTP) and takes the same key as the REST API.
+
+```sh
+claude mcp add --transport http draftably https://api.draftably.dev/mcp \
+  --header "Authorization: Bearer dft_..."
+```
+
+Other clients take a JSON block like this:
+
+```json
+{
+  "mcpServers": {
+    "draftably": {
+      "type": "http",
+      "url": "https://api.draftably.dev/mcp",
+      "headers": { "Authorization": "Bearer dft_..." }
+    }
+  }
+}
+```
+
+Tools: `render_diagram` (PNG as an image, or SVG; 2 or 1 credits), `validate_diagram`,
+`convert_mermaid`, `image_url` and `language_guide` (the agent skill), all free but the first.
+
 ## First deploy
 
 Run these once, from `packages/service`:
