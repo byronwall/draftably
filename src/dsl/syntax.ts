@@ -1270,7 +1270,9 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
             !args[1].quoted && LEGEND_LINES.includes(style),
             `Expected legend line ${LEGEND_LINES.join('|')} "meaning".`,
           );
-          once(`legend:line:${style}:${attrs.get('head')?.value}:${attrs.get('tail')?.value}`);
+          once(
+            `legend:line:${style}:${choice('head', 'none', MARKERS)}:${choice('tail', 'none', MARKERS)}`,
+          );
           assert(text(args[2]).trim(), 'A legend entry needs its meaning in quotes.');
           const head = choice('head', 'none', MARKERS),
             tail = choice('tail', 'none', MARKERS);
@@ -1485,8 +1487,8 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
     }
   }
 
-  addRowEdges(m);
   if (m.objects.length > 500) throw new DslError('Limit: 500 nodes and groups.');
+  addRowEdges(m);
   if (m.edges.length > 1200) throw new DslError('Limit: 1,200 edges.');
   // A timeline's bands draw as headings in its gutter, not as frames, so they are never scopes.
   for (const l of m.layouts)
@@ -1502,27 +1504,35 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
  * A written `edge` between the same two rows, either way round, replaces it.
  */
 function addRowEdges(m: Model) {
-  const ids = new Set(m.objects.map(o => o.id)),
+  const by = new Map(m.objects.map(o => [o.id, o])),
+    edgeIds = new Map(m.edges.map(e => [e.id, e])),
     written = new Set(
       m.edges.flatMap(e => [`${e.source}\0${e.target}`, `${e.target}\0${e.source}`]),
-    );
+    ),
+    sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
   for (const o of m.objects) {
     const ref = o.row?.ref;
     if (!ref) continue;
-    if (!ids.has(ref))
+    const target = by.get(ref);
+    if (target?.type !== 'node')
       throw new DslError(
-        `${o.id} refers to ${ref}, which is not a node. Name a row of a table: -> table.column.`,
+        `${o.id} refers to ${ref}, which is not ${target ? 'a row: it is a group' : 'a node'}. Name a row of a table: -> table.column.`,
         o.line,
       );
     if (ref === o.id) throw new DslError(`${o.id} refers to itself.`, o.line);
     if (written.has(`${o.id}\0${ref}`)) continue;
-    const id = `${o.id}.fk`;
-    if (m.edges.some(e => e.id === id))
+    if (sequence)
       throw new DslError(
-        `Edge ${id} is the line ${o.id} draws to ${ref}; give the written edge another id.`,
-        m.edges.find(e => e.id === id)!.line,
+        `A sequence diagram draws its messages from edge lines. Remove -> ${ref} from ${o.id}, or write an edge.`,
+        o.line,
       );
-    m.edges.push({
+    const id = `${o.id}.fk`;
+    if (edgeIds.has(id) || by.has(id))
+      throw new DslError(
+        `${o.id} draws a line to ${ref} with the id ${id}, which a ${by.has(id) ? 'node or group' : 'written edge'} already has. Rename that one.`,
+        o.line,
+      );
+    const e: ModelEdge = {
       id,
       source: o.id,
       target: ref,
@@ -1535,7 +1545,10 @@ function addRowEdges(m: Model) {
       ...(o.status === 'added' || o.status === 'removed' ? { status: o.status } : {}),
       inferred: true,
       line: o.line,
-    });
+    };
+    m.edges.push(e);
+    edgeIds.set(id, e);
+    if (m.edges.length > 1200) throw new DslError('Limit: 1,200 edges.');
   }
 }
 

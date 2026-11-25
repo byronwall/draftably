@@ -40,14 +40,14 @@ export function readBodyRows(
     }
     // With two or more spaces between columns, the third column on holds only marks and `->`,
     // so a misspelt mark there is an error, not part of the type.
-    const cols = text.split(/\t+| {2,}/),
+    const cols = text.split(/[ \t]*\t[ \t]*| {2,}/),
       [name, ...words] = (cols.length >= 3 ? cols.slice(0, 2).join(' ') : text).split(/\s+/),
-      end = words.findIndex(w => w === '->' || isKey(w.toLowerCase())),
+      end = words.findIndex(w => w.startsWith('->') || isKey(w.toLowerCase())),
       type = words.slice(0, end < 0 ? words.length : end).join(' '),
       rest = [
         ...(end < 0 ? [] : words.slice(end)),
         ...(cols.length >= 3 ? cols.slice(2).join(' ').split(/\s+/) : []),
-      ].map(w => (isKey(w.toLowerCase()) ? w.toLowerCase() : w));
+      ];
     if (!NAME.test(name))
       fail(
         `A table row starts with its column name (letters, digits, _ or -); got ${name}. Write name  type  [pk|fk|uk|nn]  [-> table.column].`,
@@ -56,7 +56,9 @@ export function readBodyRows(
     const keys: TableKey[] = [];
     let ref: string | undefined;
     for (let k = 0; k < rest.length; k++) {
-      const w = rest[k];
+      const w = isKey(rest[k].toLowerCase()) ? rest[k].toLowerCase() : rest[k];
+      if (w.startsWith('->') && w !== '->')
+        fail(`Row ${name} needs a space after ->: -> ${w.slice(2)}.`, line);
       if (w === '->') {
         const target = rest[k + 1];
         if (!target || !REF.test(target) || k + 2 !== rest.length)
@@ -69,8 +71,9 @@ export function readBodyRows(
           `Unknown key mark ${w} on row ${name}; a row's marks are pk, fk, uk and nn, after its type and before -> table.column.`,
           line,
         );
-      if (keys.includes(w)) fail(`Row ${name} has ${w} twice.`, line);
-      keys.push(w);
+      const key = w as TableKey;
+      if (keys.includes(key)) fail(`Row ${name} has ${w} twice.`, line);
+      keys.push(key);
     }
     out.push({
       name,

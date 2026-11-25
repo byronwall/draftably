@@ -150,9 +150,23 @@ function rejectUnsupported(before: Diagram, after: Diagram) {
   for (const n of before.graph.nodes) {
     if (!n.row) continue;
     const now = after.graph.nodes.find(x => x.id === n.id);
-    if (!now ? !goneWith(n.id) : !same(n, now) || !same(before.styles[n.id], after.styles[n.id]))
+    // A row may move among its table's rows, which writes an `order` line, but keeps its size.
+    const [a, b] = [before.layout.nodes[n.id], after.layout.nodes[n.id]];
+    if (
+      !now
+        ? !goneWith(n.id)
+        : !same(n, now) ||
+          !same(before.styles[n.id], after.styles[n.id]) ||
+          a?.w !== b?.w ||
+          a?.h !== b?.h ||
+          !!a?.pinned !== !!b?.pinned
+    )
       throw body(`Row ${n.id}`, n.id);
   }
+  // A copied table would lose its body, so tables are copied in the source.
+  const rowsBefore = new Set(before.graph.nodes.map(n => n.id));
+  if (after.graph.nodes.some(n => n.row && !rowsBefore.has(n.id)))
+    throw new UnsupportedEdit('A table is copied in the source: copy its group and body there.');
   for (const e of before.graph.edges) {
     if (!e.inferred) continue;
     const now = after.graph.edges.find(x => x.id === e.id);

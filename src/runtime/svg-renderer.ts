@@ -35,7 +35,14 @@ import {
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
-import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
+import {
+  cellsBandOf,
+  isCell,
+  isOpenCell,
+  isTableRow,
+  shownTimelines,
+  styleOf,
+} from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { rowParts, type TableRow } from '../model/table';
 import { ICONS } from '../model/icons';
@@ -578,7 +585,7 @@ function sceneMarkup(
             : '',
           n.code
             ? codeMarkup(n, r, look, c, p, radius)
-            : n.row && isCell(doc, n.id)
+            : isTableRow(doc, n.id) && n.row
               ? rowMarkup(n.title, n.row, r, look, c.ink, detailInk(look, c), p)
               : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
                 label.lines

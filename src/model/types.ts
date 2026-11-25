@@ -177,6 +177,8 @@ export interface ContainerLayout {
   manualSize: boolean;
   /** Set for a `cells` group: its members touch, under a title band this tall. */
   cellsBand?: number;
+  /** Set for a `layout g table` group: its cells are database rows. */
+  table?: true;
   /** A byte or bit layout's extra marks, relative to the group's top-left corner. */
   cellsChrome?: CellsChrome;
 }

@@ -46,6 +46,12 @@ export const isOpenCell = (doc: Diagram, id: string) =>
 export const isCell = (doc: Diagram, id: string) =>
   cellsBandOf(doc, findNode(doc, id)?.parentId) !== undefined;
 
+/** Whether a node is a database row of a `layout g table` group, drawn with its key and type. */
+export const isTableRow = (doc: Diagram, id: string) => {
+  const n = findNode(doc, id);
+  return !!n?.row && !!doc.layout.containers[n.parentId ?? '']?.table;
+};
+
 export function childrenOf(doc: Diagram, parentId: string | null | undefined) {
   const parent = parentId || null;
   return [...doc.graph.groups, ...doc.graph.nodes].filter(n => (n.parentId || null) === parent);

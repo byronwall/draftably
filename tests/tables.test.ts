@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { renderSvg } from '../src/cli/svg';
+import { compareDetailed } from '../src/dsl/compare';
 import { checkSource } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
@@ -70,6 +71,15 @@ describe('database tables', () => {
     expect(bad('x int -> ')).toThrow(/^Line 3: Row x ends with ->/);
     expect(bad('id text')).toThrow(/^Line 3: Duplicate node\/group id t\.id/);
     expect(bad('9x int')).toThrow(/^Line 3: A table row starts with its column name/);
+    expect(bad('x int ->t.id')).toThrow(/^Line 3: Row x needs a space after ->/);
+    expect(bad('x int -> t')).toThrow(
+      /^Line 3: t\.x refers to t, which is not a row: it is a group/,
+    );
+    expect(() => parseModel(`group t "t" <<T\n  id  uuid \t pk\nT\n`)).not.toThrow();
+    // The generated id `t.x.fk` must not be taken by anything else.
+    expect(() =>
+      parseModel(`group t "t" <<T\n  id uuid pk\n  x uuid -> t.id\nT\nnode t.x.fk "taken"\n`),
+    ).toThrow(/^Line 3: t\.x draws a line to t\.id with the id t\.x\.fk/);
   });
 
   it('lays a table out as one column of rows with one width', () => {
@@ -81,6 +91,28 @@ describe('database tables', () => {
     const svg = renderSvg(projectScene(scene));
     expect(svg).toContain('>timestamp with time zone</text>');
     expect(svg).toContain('>text uk nn</text>');
+  });
+
+  it('draws a body without a table layout as plain boxes', () => {
+    const source = TABLES.replace('layout users table', 'layout users cells'),
+      svg = renderSvg(projectScene(checkSource(source)));
+    expect(svg).not.toContain('>text uk nn</text>');
+    expect(svg).toContain('>email</tspan>');
+  });
+
+  it('compares two versions row by row inside a table body', () => {
+    const older = TABLES,
+      newer = TABLES.replace('  email   text  uk nn\n', '')
+        .replace('+ org_id  uuid  fk -> orgs.id', '  org_id  bigint  fk -> orgs.id')
+        .replace('  created timestamp', '  plan    text\n  created timestamp');
+    const { merged, unshown } = compareDetailed(older.replace('+ org_id', '  org_id'), newer);
+    expect(merged).toContain(
+      '- email   text  uk nn\n~ org_id  bigint  fk -> orgs.id\n+ plan    text\n',
+    );
+    expect(unshown).toEqual([]);
+    const m = parseModel(merged);
+    expect(m.objects.find(o => o.id === 'users.email')!.status).toBe('removed');
+    expect(m.objects.find(o => o.id === 'users.plan')!.status).toBe('added');
   });
 
   it('keeps body rows and their lines read-only in the Editor, but lets the whole table go', () => {

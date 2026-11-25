@@ -1,5 +1,5 @@
 import { createMemo, For, Match, Show, Switch } from 'solid-js';
-import { findNode, isCell, isOpenCell, styleOf } from '../../model/graph';
+import { findNode, isCell, isOpenCell, isTableRow, styleOf } from '../../model/graph';
 import { brokenRectPath } from '../../model/geometry';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
@@ -258,7 +258,7 @@ export function NodeView(props: NodeViewProps) {
         )}
       </Show>
       <Show
-        when={cell() && node().row}
+        when={isTableRow(props.doc, props.id) && node().row}
         fallback={
           <NodeTitle
             label={label()}

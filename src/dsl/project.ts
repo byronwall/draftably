@@ -34,6 +34,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   doc.id = 'draft-file';
   doc.appearance = clone(scene.model.appearance);
   const cells = new Set(scene.model.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope)),
+    tables = new Set(scene.model.layouts.filter(l => l.table).map(l => l.scope)),
     band = cellsBandFor(scene.look.groupTitle.lineHeight);
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
@@ -64,6 +65,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
         padding: GROUP_INSET,
         manualSize: true,
         ...(cells.has(o.id) ? { cellsBand: band } : {}),
+        ...(tables.has(o.id) ? { table: true as const } : {}),
         ...(scene.cells.has(o.id) ? { cellsChrome: clone(scene.cells.get(o.id)!) } : {}),
       });
     } else {

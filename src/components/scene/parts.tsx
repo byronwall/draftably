@@ -95,6 +95,7 @@ export function TableRowText(props: {
             transform={`translate(${g().x},${g().y}) scale(${g().scale})`}
             fill="none"
             stroke={props.row.keys.includes('pk') ? props.fill : props.muted}
+            stroke-opacity={props.fade}
             stroke-width={2.2}
             stroke-linecap="round"
             stroke-linejoin="round"
