@@ -55,4 +55,7 @@ five gaps, with syntax sketches for each.
 [Syntax options](missing-diagram-types-syntax-2026-11-24.md) compares syntax for the three types
 Byron picked: tables, icons (Lucide by default, any Iconify set by prefix) and mind maps.
 
+[Org charts](org-charts-2026-11-24.md) draws a 23-person org chart with today's `tree` engine, lists
+nine problems, and proposes an `orgchart` layout with compact leaves, roles, cards and CSV import.
+
 Status: research only. Nothing is planned yet (TASK-0081).
