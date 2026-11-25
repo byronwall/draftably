@@ -19,6 +19,9 @@ import mono500 from '../../../src/cli/fonts/jetbrains-mono-latin-500-normal.ttf'
 
 export type Format = 'svg' | 'png';
 
+/** The format when a call names none: PNG, which an agent can look at. REST and MCP share it. */
+export const DEFAULT_FORMAT: Format = 'png';
+
 export interface DrawOptions {
   /** The source language; detected when not given. */
   type?: string | null;

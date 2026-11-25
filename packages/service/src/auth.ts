@@ -44,7 +44,9 @@ export async function revokeKey(db: D1Database, account: string, id: string) {
 export async function keyAccount(req: Request, db: D1Database, ctx: ExecutionContext) {
   const header = req.headers.get('Authorization');
   if (!header) return undefined;
-  const m = /^Bearer dft_([0-9a-f]{12})\.([\w-]{20,64})$/.exec(header.trim());
+  // The scheme is case-insensitive (RFC 9110); the key itself is matched exactly.
+  const token = /^bearer\s+(\S+)$/i.exec(header.trim())?.[1] ?? '';
+  const m = /^dft_([0-9a-f]{12})\.([\w-]{20,64})$/.exec(token);
   if (!m) return null;
   const row = await db
     .prepare(`SELECT account_id, hash FROM keys WHERE id = ?1 AND revoked_at IS NULL`)

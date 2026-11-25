@@ -7,7 +7,7 @@ import { validate } from '@draftably/runtime';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { keyAccount, type AuthEnv } from './auth';
 import { balance } from './credits';
-import { drawOptions, type Format } from './draw';
+import { DEFAULT_FORMAT, drawOptions, type Format } from './draw';
 import { ApiError, errorJson } from './errors';
 import { sourceType, toDraft } from './mermaid';
 import { embedUrl, render } from './render';
@@ -96,7 +96,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         return Response.json(await balance(env.DB, account));
       case 'POST /v1/render': {
         const { code, get } = await body(req);
-        const format = (get('format') ?? 'svg') as Format;
+        const format = (get('format') ?? DEFAULT_FORMAT) as Format;
         if (format !== 'svg' && format !== 'png')
           throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
         const opts = drawOptions(get);
@@ -137,7 +137,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
             diagnostics: [{ severity: 'error', message: error.message }],
           });
         }
-        const result = await validate(draft);
+        const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
         const diagnostics = [
           ...warnings.map(message => ({ severity: 'warning', message })),
           ...result.diagnostics.map(d => ({

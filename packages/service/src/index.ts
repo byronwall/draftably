@@ -87,7 +87,7 @@ async function imageResponse(
     if (error instanceof ApiError)
       return image(await errorImage(error.message, format), format, error.status, 'no-store');
     if (!(error instanceof SourceError)) throw error;
-    return image(await errorImage(error.message, format), format, 400, 'public, max-age=60');
+    return image(await errorImage(error.message, format), format, 400, 'no-store');
   }
 }
 

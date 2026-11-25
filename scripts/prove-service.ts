@@ -510,8 +510,27 @@ if (!remote) {
     assert.equal(await richLeft(), before, `${what}: charged twice`);
   }
   assert.equal((await post('/v1/render', KEYS.rich, null as unknown as object)).status, 400);
+  // Round 3: an explicit type shares the detected image's cache entry; the scheme is
+  // case-insensitive; REST with no format gives a PNG, as MCP does.
+  const typed = await post('/v1/render', KEYS.rich, {
+    code: checkout + '\n# typed\n',
+    format: 'svg',
+    type: 'draftably',
+  });
+  await new Promise(r => setTimeout(r, 300));
+  const detectedHit = await fetch(`${base}/svg/${await encodeSource(checkout + '\n# typed\n')}`, {
+    headers: { Authorization: `Bearer ${KEYS.rich}` },
+  });
+  assert.equal(typed.status, 200);
+  assert.equal(detectedHit.headers.get('X-Draftably-Cache'), 'hit');
+  const lower = await fetch(`${base}/v1/balance`, {
+    headers: { Authorization: `bearer ${KEYS.rich}` },
+  });
+  assert.equal(lower.status, 200);
+  const noFormat = await post('/v1/render', KEYS.rich, { code: checkout + '\n# default\n' });
+  assert.equal(noFormat.headers.get('Content-Type'), 'image/png');
   console.log(
-    'Round 2: HEAD 405; keyed answers no-store, anonymous vary on Authorization; the returned URL is a free cache hit for a scale-3 SVG and a BOM source; a null body gets 400.',
+    'Round 2: HEAD 405; keyed answers no-store, anonymous vary on Authorization; the returned URL is a free cache hit for a scale-3 SVG and a BOM source; a null body gets 400. Round 3: ?type=draftably shares the detected entry; lowercase bearer works; REST defaults to PNG.',
   );
 
   // Account forms: a POST from another origin is refused; sign-out is POST only.

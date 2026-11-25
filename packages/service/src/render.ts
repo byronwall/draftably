@@ -19,7 +19,7 @@ import {
 import { balance, COST, spend, type Balance } from './credits';
 import { draw, type DrawOptions, type Format } from './draw';
 import { ApiError } from './errors';
-import { freshness } from './mermaid';
+import { freshness, sourceType } from './mermaid';
 
 export { MAX_SEGMENT };
 
@@ -51,7 +51,10 @@ async function cacheKey(
   const url = new URL(`/__cache/${format}/${hash}`, origin);
   // Scale changes only a PNG; an SVG keyed on it would be drawn and charged twice.
   for (const [k, v] of Object.entries(opts))
-    if (v != null && !(k === 'scale' && format === 'svg')) url.searchParams.set(k, String(v));
+    if (v != null && k !== 'type' && !(k === 'scale' && format === 'svg'))
+      url.searchParams.set(k, String(v));
+  // The language the source was read as, not how the caller named it.
+  url.searchParams.set('type', sourceType(source, opts.type).type);
   url.searchParams.set('v', runtimeVersion);
   url.searchParams.set('build', build);
   // A gantt chart can draw differently tomorrow, so its key carries today's date.
@@ -95,7 +98,8 @@ export async function render<P>(
   const hit = await cache().match(key);
   if (hit) {
     const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
-    const cacheControl = hit.headers.get('Cache-Control') ?? IMMUTABLE;
+    // A dated image's lifetime is counted again: it still ends at the next UTC midnight.
+    const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
     return { body, hit: true, cacheControl, out: await prepare(body, cacheControl) };
   }
   await beforeDraw?.();
