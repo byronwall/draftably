@@ -44,7 +44,7 @@ and groups. References may point to later lines.
 | `was-order m2 m1`                   | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `subtitle "text"`                   | One short line under the title: the takeaway in about 10 words. At most one. A longer one wraps.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `node id "label"`                   | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker\|code`, `href=`, `count=`, `icon=`, `icon-pos=left\|top` ([Icons](#icons)). A code node takes a `<<TAG` body or `src=`; see [Code](#code).                                                                                                                                                                                                                                                                                                       |
-| `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`, `icon=` in the title band. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                                                                                                           |
+| `group id "label"`                  | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`, `icon=` in the title band. A `<<TAG` body lists its members, one per line; see [Database tables](#database-tables). See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                                                                  |
 | `theme name`                        | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `theme-color family`                | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `legend family "meaning"`           | One entry of the key: a swatch of `family` (`shade=` optional; by default the shade its nodes draw), an optional `icon=`, and what it means. `legend line dashed\|solid "meaning"` explains a line style. See [Legend](#legend).                                                                                                                                                                                                                                                                                                          |
@@ -56,6 +56,7 @@ and groups. References may point to later lines.
 | `layout root lanes`                 | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `layout root sequence`              | A sequence diagram: nodes are participants, edges are messages in file order. `activations=on` draws activation bars. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                        |
 | `layout group cells`                | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `layout group table`                | The group's members as database rows: a key glyph, the column name and its type. See [Database tables](#database-tables).                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `layout scope engine=name`          | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `layout root … fit=slide`           | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                                                                                                                        |
 | `routing`                           | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -565,6 +566,11 @@ edge is-digital product -> digital head=none tail=open-triangle
 | `open-diamond`  | A hollow diamond    | Aggregation, at the owner.        |
 | `circle`        | A solid circle      | An end that stops at a port.      |
 | `cross`         | A cross on the line | A path that stops.                |
+| `one`           | Two bars            | Exactly one row.                  |
+| `many`          | A crow's foot       | Many rows.                        |
+| `zero-or-one`   | A ring and a bar    | At most one row.                  |
+| `zero-or-many`  | A ring and a foot   | Any number of rows.               |
+| `one-or-many`   | A bar and a foot    | At least one row.                 |
 
 `tail=arrow` gives a two-ended arrow. `head=none` hides the head but keeps a directed relation:
 the edge still ranks layout, so `directed=false` and `head=none` are different things. Use
@@ -579,7 +585,10 @@ The line stops at the back of a solid or hollow mark, so no line runs through it
 fills with the canvas color. Labels keep off marks. Marks survive formatting, visual edits and
 SVG export, and they work on sequence messages.
 
-The set stays small on purpose. Crow's feet and cardinality are not part of it.
+The last five are crow's feet for database tables: each says how many rows sit at its end. A
+table row's `-> table.column` draws `tail=many head=one` for you; see
+[Database tables](#database-tables). The line runs on to the end through a crow's foot, and a ring
+fills with the canvas color.
 
 ## Sequence diagrams
 
@@ -1003,21 +1012,8 @@ edge hit cache -> cp "cached prefix"
   **Span** field writes `span=`.
 - Cells are nodes, so colors, links, `count=` and change marks work on them.
 
-A table of a database entity, with a line from one row to another table's row:
-
-```draft
-group accounts "accounts" color=blue
-layout accounts cells columns=2
-node accounts.id "id" in=accounts
-node accounts.id_t "uuid" in=accounts
-group invoices "invoices" color=teal
-layout invoices cells columns=2
-node invoices.id "id" in=invoices
-node invoices.id_t "uuid" in=invoices
-node invoices.account "account_id" in=invoices
-node invoices.account_t "uuid" in=invoices
-edge invoice_account invoices.account -> accounts.id
-```
+For a table of a database entity, use [Database tables](#database-tables): a group body is
+shorter, and it draws keys, types and crow's feet.
 
 ### Byte and bit layouts
 
@@ -1044,6 +1040,50 @@ node chunk.crc "CRC" in=chunk span=4
 - `unit-width=` sets the width of one unit in pixels: 48 for bytes and 24 for bits by default.
   Titles wrap to fit their field, so give one-bit flags short titles.
 - Markers do not apply to byte or bit layouts.
+
+## Database tables
+
+A group's `<<TAG` body lists its members, one per line, and `layout group table` draws them as a
+database table: a key glyph, the column name, and the type in a muted column at the right.
+
+```draft
+group orgs "orgs" color=teal <<T
+  id    uuid  pk
+  name  text  nn
+T
+layout orgs table
+
+group users "users" color=blue <<T
+  id      uuid  pk
+  email   text  uk nn
+  org_id  uuid  fk -> orgs.id
+T
+layout users table
+```
+
+**Try it:** add `+ plan  text` as a new line in the orgs body. The row draws as added.
+
+- A row is `name  type  [pk|fk|uk|nn]…  [-> table.column]`. The name is the first word. The type
+  is every word after it up to the first mark or `->`, so `timestamp with time zone` is one type.
+  With two or more spaces (or a tab) between columns, the third column holds only marks and `->`,
+  so `check` reports a misspelt mark there. Blank lines and lines that start with `#` are skipped.
+- `pk` draws a key and `fk` (or a `->`) draws a link in the glyph column. `uk` and `nn` follow the
+  type, as `text uk nn`.
+- Each row is an ordinary node with the id `table.name`, such as `users.org_id`. `edge`,
+  `note near=` and `state` accept it, and a `size` line sets its size.
+- A leading `+`, `-` or `~` and a space is a change mark on that row, as on a statement.
+- `-> orgs.id` draws a line from the row to the row it names, with `tail=many head=one`: many rows
+  here to one there. Its id is the row's id and `.fk`, as `users.org_id.fk`, since a node and an
+  edge never share an id. `check` reports a `->` to a node that does not exist.
+- A written `edge` between the same two rows, either way round, replaces that line. Use it for a
+  label or other ends:
+  `edge member users.org_id -> orgs.id tail=zero-or-many head=one "belongs to"`.
+- A table is a one-column [cells](#cells) group, so a line meets a row on its left or right side,
+  rows stay in their place, and dragging a row among the others writes an `order` line.
+- In the Editor, a row and the line its `->` draws are read-only: edit the body in the source.
+  Deleting the whole table works.
+- A group body works without `layout group table`; its members then draw as plain boxes, laid out
+  by the group's layout.
 
 ## Change marks
 
@@ -1298,9 +1338,10 @@ family (`shade=` picks one) and its meaning. With no `shade=`, the swatch draws 
 family's nodes draw: 500 when a node names the family, or the member card's 50 (950 in
 Blueprint) when the family's nodes all inherit it from a group. `legend line dashed "meaning"` and
 `legend line solid "meaning"` add a short line in that style and its meaning, for files whose
-dashed lines say something. The viewer, `inspect --svg` and exports draw the key under the
+dashed lines say something. `head=` and `tail=` on a line row draw those [line ends](#line-ends),
+as `legend line solid "many to one" tail=many head=one`. The viewer, `inspect --svg` and exports draw the key under the
 drawing, left to right, and start a new row only when the next entry would pass the drawing's
-width. Each family and shade, and each line style, may appear once. A legend never moves anything.
+width. Each family and shade, and each line style with its ends, may appear once. A legend never moves anything.
 
 A key must explain everything it colors. `check` warns when a file has a legend and an accent
 family in the drawing has no row (`legend-missing`; `slate` and `stone` need none), and when a
@@ -1895,7 +1936,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 
 ### Tables and byte layouts
 
-- [Billing schema](https://draftably.dev/app/?example=billing-schema): Each entity is a group of cells in two columns, and foreign keys join rows.
+- [Billing schema](https://draftably.dev/app/?example=billing-schema): Database tables: each group's body lists its columns, and `-> table.column` draws a crow's-foot line.
 - [Store domain model](https://draftably.dev/app/?example=store-domain): Composition, aggregation, inheritance and two-way links, drawn as line ends.
 - [PNG file layout](https://draftably.dev/app/?example=png-file): A byte layout: each group of cells uses `unit=byte`, so a field's width is its size.
 - [TCP header](https://draftably.dev/app/?example=tcp-header): A bit layout: `unit=bit` with 32 columns, fields sized in bits, and options of variable length.
@@ -1956,6 +1997,7 @@ Edits made in the Editor are written back to the file as readable statements:
 | Pin or unpin (**P**)                   | `pin` at its position; unpinning leaves a soft `stay`.              |
 | Resize a shape or container            | `size`, or `min-width`/`min-height` on the container's `layout`.    |
 | Drag a cell among its group's cells    | The group's `order` line. **Span** in Inspector writes `span=`.     |
+| Edit a table row or its `->` line      | Refused: edit the group's body in the source.                       |
 | Add, rename, connect, delete, recolor  | `node`, `group` and `edge` declarations, with IDs from the label.   |
 | Color family or shade in Inspector     | `color=` and `shade=` on the declaration.                           |
 | Theme or padding in **Appearance**     | The `theme` line; preset changes drop built-in `theme-color` lines. |
