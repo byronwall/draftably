@@ -978,7 +978,8 @@
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
-.code-edit-chip:disabled {
+.code-edit-chip:disabled,
+.code-edit-seg button:disabled {
   opacity: 0.4;
   cursor: default;
 }

@@ -152,13 +152,12 @@ const isRule = (l: string) =>
 const FOOTER = /^\(\d+ rows?\)$/;
 
 /** A Markdown or psql row's cells: the outer pipes go, and `|` splits the rest. */
-const pipeCells = (l: string) =>
-  l
-    .trim()
-    .replace(/^\|/, '')
-    .replace(/(?<!\\)\|$/, '')
-    .split(/(?<!\\)\|/)
-    .map(c => c.trim().replace(/\\\|/g, '|'));
+const pipeCells = (l: string) => {
+  let t = l.trim();
+  // Markdown wraps a row in pipes; psql does not, so its blank first or last field keeps its place.
+  if (t.length > 1 && t.startsWith('|') && /(?<!\\)\|$/.test(t)) t = t.slice(1, -1);
+  return t.split(/(?<!\\)\|/).map(c => c.trim().replace(/\\\|/g, '|'));
+};
 
 /**
  * The cells of a table body, by column. When every line holds a `|`, pipes split the cells
@@ -188,7 +187,7 @@ export function tableCells(lines: string[]): string[][] | undefined {
 export type Align = 'left' | 'right' | 'center';
 
 /** Right for a column whose cells under the header all hold numbers; left otherwise. */
-function autoAlign(rows: string[][], n: number): Align[] {
+export function autoAlign(rows: string[][], n: number): Align[] {
   const head = rows.findIndex(c => c.length);
   return Array.from({ length: n }, (_, i) => {
     const values = rows.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
@@ -238,8 +237,13 @@ export function readTable(lines: string[]): Table {
   const first = lines.findIndex(l => l.trim()),
     typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
     body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
-    // One column keeps its lines as they are, indent and all.
-    rows = tableCells(body) ?? body.map(l => (l.trim() ? [l] : [])),
+    // A pipe table with a rule is a table even with only its header; one column keeps its lines
+    // as they are, indent and all.
+    rows =
+      tableCells(body) ??
+      (typed.length && body.every(l => !l.trim() || l.includes('|'))
+        ? body.map(l => (l.trim() ? pipeCells(l) : []))
+        : body.map(l => (l.trim() ? [l] : []))),
     n = Math.max(1, ...rows.map(c => c.length)),
     auto = autoAlign(rows, n),
     align = auto.map((a, i): Align => {
@@ -271,9 +275,10 @@ const sameRows = (a: string[][], b: string[][], n: number) =>
  * A table as body text that `readTable` reads back the same: columns two spaces apart when that
  * reads back cell for cell, and otherwise a Markdown table, with `|` in a cell escaped and a
  * `:---:` rule for the alignment. Every row stays, so a `range` keeps its lines; empty columns at
- * the right go. A psql footer counts the rows again.
+ * the right go. A psql footer is written as it is given.
  */
 export function writeTable(t: Table): string[] {
+  if (!t.rows.length) return t.footer ? [t.footer] : [];
   const one = Math.max(1, ...t.rows.map(r => r.length)) === 1;
   let rows = t.rows.map(r => (one ? [...r] : r.map(c => c.trim())));
   let n = Math.max(1, ...rows.map(r => r.length));
@@ -283,15 +288,16 @@ export function writeTable(t: Table): string[] {
   rows = rows.map((r, j) =>
     j === 0 || r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : [],
   );
-  const align = Array.from({ length: n }, (_, i) => t.align[i] ?? 'left'),
-    count = rows.slice(1).filter(r => r.length).length,
-    footer = t.footer ? [`(${count} row${count === 1 ? '' : 's'})`] : [];
+  // One column draws its lines as they are, so an alignment would change nothing.
+  const align: Align[] =
+      n === 1 ? ['left'] : Array.from({ length: n }, (_, i) => t.align[i] ?? 'left'),
+    footer = t.footer ? [t.footer] : [];
   // One column is its lines as they are; more are aligned, which is also how they draw.
   const plain = [...(n === 1 ? rows.map(r => r[0] ?? '') : alignRows(rows, align)), ...footer],
     back = readTable(plain);
   if (
     back.align.length === n &&
-    back.align.every((a, i) => a === align[i]) &&
+    (n === 1 || back.align.every((a, i) => a === align[i])) &&
     sameRows(back.rows, rows, n) &&
     JSON.stringify(tableLines(plain)) === JSON.stringify(plain)
   )
@@ -319,23 +325,54 @@ export function bodyLines(raw: string[], table?: boolean, tab = CODE_TAB): strin
 }
 
 /**
- * A table pasted as text: cells a spreadsheet copied (tabs, the same count on every line), or a
+ * Cells a spreadsheet copied: tabs between cells and a line per row, with quotes around a cell
+ * that holds a tab, a newline or a quote. A tab or newline inside a cell becomes a space.
+ */
+export function tsvRows(text: string): string[][] {
+  const src = text.replace(/\r\n?/g, '\n').replace(/\n$/, ''),
+    rows: string[][] = [[]];
+  let cell = '',
+    quoted = false;
+  const end = () => {
+    rows[rows.length - 1].push(cell);
+    cell = '';
+  };
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i];
+    if (quoted && ch === '"' && src[i + 1] === '"') {
+      cell += '"';
+      i++;
+    } else if (quoted && ch === '"') quoted = false;
+    // A file expands tabs, so a tab inside a cell would move the columns: it becomes a space.
+    else if (quoted) cell += ch === '\n' || ch === '\t' ? ' ' : ch;
+    else if (ch === '"' && !cell) quoted = true;
+    else if (ch === '\t') end();
+    else if (ch === '\n') {
+      end();
+      rows.push([]);
+    } else cell += ch;
+  }
+  end();
+  return rows.map(r => r.map(c => c.trim()));
+}
+
+/**
+ * A table pasted as text: cells a spreadsheet copied (tabs, the same count on every row), or a
  * Markdown or psql table with its rule. Anything else is not a table: undefined.
  */
 export function pastedTable(text: string): Table | undefined {
-  const lines = text
-    .replace(/\r/g, '')
-    .split('\n')
-    .filter(l => l.trim());
-  if (lines.length < 2) return undefined;
-  if (lines.every(l => l.includes('\t'))) {
-    const rows = lines.map(l => l.split('\t').map(c => c.trim()));
-    if (rows.every(r => r.length === rows[0].length))
+  const clean = text.replace(/\r\n?/g, '\n').replace(/\n+$/, '');
+  if (clean.includes('\t')) {
+    // A row of only tabs is a blank record, and stays.
+    const rows = tsvRows(clean);
+    if (rows.length > 1 && rows[0].length > 1 && rows.every(r => r.length === rows[0].length))
       return { rows, align: autoAlign(rows, rows[0].length) };
   }
+  const lines = clean.split('\n').filter(l => l.trim());
   // A Markdown or psql table: its rule under the header, and a `|` on every other line but a
   // psql footer.
   if (
+    lines.length > 1 &&
     isRule(lines[1]) &&
     lines.every((l, i) => i === 1 || l.includes('|') || FOOTER.test(l.trim()))
   )

@@ -6,8 +6,10 @@ import {
   CODE_TAB,
   CODE_TYPE,
   codeLines,
+  autoAlign,
   pastedTable,
   readTable,
+  tsvRows,
   writeTable,
   type Align,
 } from '../../model/code';
@@ -34,15 +36,7 @@ export function CodeEditor() {
 }
 
 /** Spreadsheet cells, or the rows of a Markdown or psql table, from pasted text. */
-function pastedCells(text: string): string[][] {
-  const table = pastedTable(text);
-  if (table) return table.rows;
-  return text
-    .replace(/\r/g, '')
-    .replace(/\n+$/, '')
-    .split('\n')
-    .map(l => l.split('\t'));
-}
+const pastedCells = (text: string) => pastedTable(text)?.rows ?? tsvRows(text);
 
 function Editor(props: { id: string }) {
   const s = useDiagramSession();
@@ -55,21 +49,27 @@ function Editor(props: { id: string }) {
     swatch = drawnSwatch(s.doc, look, id, 'node'),
     muted = detailInk(look, swatch);
 
-  // The body as typed in the file, so a Markdown table keeps its `:---:` alignment marks, read
-  // with the node's own `tab=`.
+  // The body as typed in the file: the text box edits it as it is, tabs and all, and the grid
+  // reads it with the node's own `tab=`, so a Markdown table keeps its `:---:` marks.
   let raw = code.body ?? code.lines,
     tab = CODE_TAB,
+    wrapSet = false,
     file = code.src?.path ?? '';
+  /** The file when the editor opened: a save over a file changed since then is refused. */
+  const opened = s.currentSource();
   try {
-    const decl = declaration(readSource(s.currentSource()), id);
+    const decl = declaration(readSource(opened), id);
     file ||= String(getAttr(decl!, 'src')?.value ?? '');
     tab = Number(getAttr(decl!, 'tab')?.value) || CODE_TAB;
-    if (decl?.body && !code.body) raw = codeLines(decl.body.lines, tab);
+    wrapSet = !!getAttr(decl!, 'wrap');
+    if (decl?.body && !code.body) raw = decl.body.lines;
   } catch {
     // An unsaved or unparsable source: edit the lines the canvas draws.
   }
 
-  const start = readTable(raw);
+  const start = readTable(codeLines(raw, tab));
+  /** Columns whose alignment differs from the one numbers give: the user's own choice. */
+  let chosen = start.align.map((a, i) => a !== autoAlign(start.rows, start.align.length)[i]);
   const [table, setTable] = createSignal(!!code.table),
     [rows, setRows] = createSignal(start.rows),
     [footer, setFooter] = createSignal(start.footer),
@@ -80,6 +80,8 @@ function Editor(props: { id: string }) {
     [dirty, setDirty] = createSignal(false);
   /** Rows the body had; empty rows past these are ones the editor added and the save drops. */
   let kept = start.rows.length;
+  /** The psql footer's count when the body was read; rows added or deleted since change it. */
+  let counted = Number(/\d+/.exec(start.footer ?? '')?.[0] ?? 0);
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
   const width = () => Math.max(1, ...rows().map(r => r.length));
@@ -136,6 +138,7 @@ function Editor(props: { id: string }) {
     edit(() => {
       setRows(all => all.map(row => [...row.slice(0, at), '', ...row.slice(at)]));
       setAlign(a => [...a.slice(0, at), 'left', ...a.slice(at)]);
+      chosen = [...chosen.slice(0, at), false, ...chosen.slice(at)];
     });
     return at;
   };
@@ -151,22 +154,29 @@ function Editor(props: { id: string }) {
     edit(() => {
       setRows(all => all.map(row => row.filter((_, i) => i !== c)));
       setAlign(a => a.filter((_, i) => i !== c));
+      chosen = chosen.filter((_, i) => i !== c);
     });
     go(r, Math.min(c, width() - 1));
   };
   const alignColumn = (a: Align) =>
-    edit(() => setAlign(all => all.map((x, i) => (i === focus().c ? a : x))));
+    edit(() => {
+      chosen = chosen.map((x, i) => x || i === focus().c);
+      setAlign(all => all.map((x, i) => (i === focus().c ? a : x)));
+    });
 
   /** Switch between the cell grid and plain text, carrying the body across. */
   const toggleTable = () => {
     edit(() => {
       if (table()) setText(tableBody().join('\n'));
       else {
-        const t = readTable(text().split('\n'));
+        // The text reads as the saved file would: spreadsheet cells, or tabs expanded.
+        const t = pastedTable(text()) ?? readTable(codeLines(text().split('\n'), tab));
         setRows(t.rows);
         setAlign(t.align);
         setFooter(t.footer);
         kept = t.rows.length;
+        counted = Number(/\d+/.exec(t.footer ?? '')?.[0] ?? 0);
+        chosen = t.align.map((a, i) => a !== autoAlign(t.rows, t.align.length)[i]);
       }
       setTable(!table());
     });
@@ -175,29 +185,48 @@ function Editor(props: { id: string }) {
     queueMicrotask(() => (table() ? go(0, 0) : area?.focus()));
   };
 
-  /** The grid as body text, without the empty rows the editor added at the end. */
+  /**
+   * The grid as body text, without the empty rows the editor added at the end. A column the user
+   * never aligned takes the alignment its numbers give now; a psql footer counts the rows added
+   * or deleted.
+   */
   const tableBody = () => {
     const all = rows().slice();
     while (all.length > Math.max(1, kept) && !all[all.length - 1].some(c => c.trim())) all.pop();
-    return writeTable({ rows: all, align: align(), footer: footer() });
+    const auto = autoAlign(all, align().length),
+      count = counted + all.length - kept,
+      note = footer() && `(${count} row${count === 1 ? '' : 's'})`;
+    return writeTable({
+      rows: all,
+      align: align().map((a, i) => (chosen[i] ? a : auto[i])),
+      ...(note ? { footer: note } : {}),
+    });
   };
 
   let closed = false;
-  const close = (save: boolean) => {
+  /** Close the editor. `refocus`: give the canvas the keyboard; a focus-out save leaves it be. */
+  const close = (save: boolean, refocus = true) => {
     if (closed) return;
-    closed = true;
     // Only a changed body is written; a caption edit leaves the file's body as it is.
     const body = dirty()
       ? table()
         ? tableBody()
         : text().replace(/\s+$/, '').split('\n')
       : undefined;
-    const changed = dirty() || title().trim() !== node.title;
+    closed = true;
+    const changed = dirty() || title().trim() !== node.title,
+      stale = s.currentSource() !== opened;
+    if (save && changed && stale)
+      toast('The file changed while you edited this code, so your edit was not saved.');
+    // Turning Table on or off changes the wrap default, unless the file sets `wrap=`.
+    const wrap = !wrapSet && table() !== !!code.table ? { wrap: !table() } : {};
     s.finishCodeEdit(
       id,
-      save && changed ? { body, table: table(), title: title().trim(), tab } : undefined,
+      save && changed && !stale
+        ? { body, table: table(), title: title().trim(), tab, ...wrap }
+        : undefined,
     );
-    s.focusCanvas();
+    if (refocus) s.focusCanvas();
   };
 
   onMount(() => {
@@ -327,7 +356,8 @@ function Editor(props: { id: string }) {
     if (next && box.contains(next)) return;
     // eslint-disable-next-line solid/reactivity
     queueMicrotask(() => {
-      if (!box.contains((box.getRootNode() as Document | ShadowRoot).activeElement)) close(true);
+      if (!box.contains((box.getRootNode() as Document | ShadowRoot).activeElement))
+        close(true, false);
     });
   };
   const keep = (e: MouseEvent) => e.preventDefault();
@@ -390,7 +420,8 @@ function Editor(props: { id: string }) {
               {a => (
                 <button
                   type="button"
-                  aria-pressed={align()[focus().c] === a}
+                  aria-pressed={width() > 1 && align()[focus().c] === a}
+                  disabled={width() < 2}
                   aria-label={`Align column ${a}`}
                   title={`Align column ${a}`}
                   onClick={() => alignColumn(a)}

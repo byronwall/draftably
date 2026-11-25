@@ -342,9 +342,10 @@ describe('editing code tables', () => {
     expect(tableLines(saved)).toEqual(tableLines(body));
   });
 
-  it('keeps a chosen alignment, drops empty columns, and recounts a psql footer', () => {
+  it('keeps a chosen alignment and a psql footer, and drops empty columns', () => {
     const t = readTable(bodies.psql);
     t.rows.push(['2', 'free', '1']);
+    t.footer = '(2 rows)';
     t.rows = t.rows.map(r => [...r, '']);
     t.align = ['left', 'center', 'right', 'left'];
     const lines = writeTable(t);
@@ -361,7 +362,27 @@ describe('editing code tables', () => {
     });
   });
 
+  it('keeps psql blank edge fields, a header-only table, an empty table and one column', () => {
+    expect(
+      readTable(['id | units | price', '---+-------+------', '   | EUR   |   123']).rows,
+    ).toEqual([
+      ['id', 'units', 'price'],
+      ['', 'EUR', '123'],
+    ]);
+    const headerOnly = writeTable({ rows: [['id', 'name']], align: ['left', 'left'] });
+    expect(readTable(headerOnly).rows).toEqual([['id', 'name']]);
+    expect(writeTable({ rows: [], align: ['right'] })).toEqual([]);
+    const indented = ['label', '  indentation'];
+    expect(writeTable({ rows: indented.map(l => [l]), align: ['center'] })).toEqual(indented);
+  });
+
   it('reads spreadsheet and Markdown pastes as tables, and nothing else', () => {
+    expect(pastedTable('id\tnote\n1\t"a\tb"\n\t\n2\tok\n')?.rows).toEqual([
+      ['id', 'note'],
+      ['1', 'a b'],
+      ['', ''],
+      ['2', 'ok'],
+    ]);
     expect(pastedTable('id\tms\n1\t12\n2\t7\n')).toEqual({
       rows: [
         ['id', 'ms'],

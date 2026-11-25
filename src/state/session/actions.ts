@@ -126,7 +126,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
    */
   function finishCodeEdit(
     id: string,
-    next?: { body?: string[]; table: boolean; title: string; tab?: number },
+    next?: { body?: string[]; table: boolean; title: string; tab?: number; wrap?: boolean },
   ) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
@@ -138,6 +138,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
       node.code = {
         ...rest,
         ...(next.table ? { table: true } : {}),
+        ...(next.wrap !== undefined ? { wrap: next.wrap } : {}),
         ...(next.body
           ? { body: next.body, lines: bodyLines(next.body, next.table, next.tab) }
           : {}),
