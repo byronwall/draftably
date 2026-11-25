@@ -135,6 +135,8 @@ export type LegendLine = (typeof LEGEND_LINES)[number];
  */
 export interface LegendEntry {
   family?: string;
+  /** An icon drawn after the swatch, by Iconify name. */
+  icon?: string;
   line?: LegendLine;
   message?: MessageKind;
   /** An activation bar, which a sequence with `activations=on` adds a row for. */

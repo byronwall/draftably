@@ -7,7 +7,7 @@ import { truncateText } from '../../model/fonts';
 import { groupTitleLines } from '../../model/labels';
 import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
-import { SceneGlyph } from '../Icon';
+import { DiagramIcon, SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import { PIN_SIZE, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
@@ -149,7 +149,24 @@ export function GroupView(props: GroupViewProps) {
         fill="transparent"
       />
       <Show when={!cells()}>
-        <SceneGlyph name="group" x={12} y={band() - 6.5} size={13} color={color().ink} />
+        <Show
+          when={group().icon}
+          fallback={
+            <SceneGlyph name="group" x={12} y={band() - 6.5} size={13} color={color().ink} />
+          }
+        >
+          {name => (
+            <DiagramIcon
+              icons={props.doc.icons}
+              name={name()}
+              x={11}
+              y={band() - 8}
+              size={16}
+              ink={color().ink}
+              uid={`icon-${props.id}`}
+            />
+          )}
+        </Show>
       </Show>
       <text
         class="group-title"

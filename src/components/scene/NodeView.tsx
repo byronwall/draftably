@@ -11,7 +11,7 @@ import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
 import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
-import { SceneGlyph } from '../Icon';
+import { DiagramIcon, SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import { CodeBody, NodeTitle, pinSpot, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 
@@ -232,6 +232,19 @@ export function NodeView(props: NodeViewProps) {
             swatch={color()}
             strike={paint().strike}
             fade={paint().inkFade}
+          />
+        )}
+      </Show>
+      <Show when={node().icon ? label().icon : undefined}>
+        {box => (
+          <DiagramIcon
+            icons={props.doc.icons}
+            name={node().icon!}
+            x={box().x}
+            y={box().y}
+            size={box().size}
+            ink={inside() ? color().ink : look().text}
+            uid={`${props.idPrefix ?? ''}icon-${props.id}`}
           />
         )}
       </Show>

@@ -351,7 +351,7 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
           footnoteMarkup(theme, frame.foot, frame.foot.x, frame.foot.y, href =>
             exportHref(activeSession(), href),
           ) +
-          legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y);
+          legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y, activeSession().doc.icons);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,

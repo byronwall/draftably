@@ -3,7 +3,7 @@ import { GROUP_TITLE_CHROME } from '../dsl/frame';
 import { measureText, truncateText, wrapLines, type TypeProfile } from './fonts';
 import { rectUnion } from './geometry';
 import type { Diagram, LabelMode, Rect, ShapeKind } from './types';
-import { styleOf } from './graph';
+import { findNode, styleOf } from './graph';
 
 /**
  * Room for a shape's title. Every size, wrap and overflow decision goes through these functions,
@@ -16,20 +16,44 @@ export interface TitleArea {
   maxHeight: number;
 }
 
+/**
+ * A node's icon has one size in every theme, so colors never move a box. Before the title it is
+ * `ICON_SIZE` square, `ICON_GAP` from the text; with `icon-pos=top` it is an `ICON_TILE` square,
+ * `ICON_TILE_GAP` over the text.
+ */
+export const ICON_SIZE = 18,
+  ICON_GAP = 8,
+  ICON_TILE = 32,
+  ICON_TILE_GAP = 6;
+/** Width an icon before the title takes from the line. */
+export const ICON_ROOM = ICON_SIZE + ICON_GAP;
+/** Height a tile icon adds over the title. */
+export const ICON_TILE_ROOM = ICON_TILE + ICON_TILE_GAP;
+
+/** Line width an object's icon takes from its title: only an icon before the title takes any. */
+export const iconRoom = (o: { icon?: string; iconPos?: string }) =>
+  o.icon && o.iconPos !== 'top' ? ICON_ROOM : 0;
+
+/** Height an object's icon adds over its title: only a tile icon adds any. */
+export const iconLift = (o: { icon?: string; iconPos?: string }) =>
+  o.icon && o.iconPos === 'top' ? ICON_TILE_ROOM : 0;
+
+/** `icon`: true for the editor's glyph inside a box, or the width an icon before the title takes. */
 export function titleArea(
   shape: ShapeKind,
   w: number,
   h: number,
   r: ResolvedAppearance,
-  icon = false,
+  icon: boolean | number = false,
 ): TitleArea {
+  const room = icon === true ? 30 : icon || 0;
   // A diamond's text block sits in its middle: at 45% of its height the outline is 55% wide.
   if (shape === 'diamond') return { width: Math.max(40, w * 0.55), maxHeight: h * 0.45 };
   // An ellipse is 71% wide at 70% of its height.
-  if (shape === 'circle') return { width: Math.max(40, w * 0.7), maxHeight: h * 0.7 };
+  if (shape === 'circle') return { width: Math.max(40, w * 0.7 - room), maxHeight: h * 0.7 };
   const padY = shape === 'text' ? Math.min(r.paddingY, 11) : r.paddingY;
   return {
-    width: Math.max(40, w - 2 * r.paddingX - (icon ? 30 : 0) - (shape === 'pill' ? 8 : 0)),
+    width: Math.max(40, w - 2 * r.paddingX - room - (shape === 'pill' ? 8 : 0)),
     maxHeight: h - 2 * padY,
   };
 }
@@ -128,6 +152,8 @@ export interface NodeLabel {
   offsets: number[];
   mode: LabelMode;
   leader: boolean;
+  /** The node's `icon=` square, relative to the shape's top-left corner. */
+  icon?: { x: number; y: number; size: number };
 }
 
 /** Where a shape's title is drawn, relative to the shape. */
@@ -141,12 +167,17 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
       : 'center');
   const look = resolveAppearance(doc.appearance);
   const iconInside = mode === 'center' && !!style.icon && ['box', 'pill'].includes(style.shape);
-  let x = r.w / 2 + (iconInside ? 15 : 0),
-    y = r.h / 2,
+  // A file's `icon=` sits before the title, or as a tile over it (`icon-pos=top`).
+  const node = findNode(doc, id),
+    named = mode === 'center' && node?.icon ? node : undefined,
+    room = named ? iconRoom(named) : 0,
+    lift = named ? iconLift(named) : 0;
+  let x = r.w / 2 + (iconInside ? 15 : room / 2),
+    y = r.h / 2 + lift / 2,
     width =
       cfg.width ||
       (style.shape === 'diamond' && diamondMeasure(title, Math.min(r.w, r.h), look)) ||
-      titleArea(style.shape, r.w, r.h, look, iconInside).width;
+      titleArea(style.shape, r.w, r.h, look, iconInside || room).width;
   if (mode !== 'center') width = cfg.width || Math.max(142, r.w);
   // A code node draws its caption itself, in its own band.
   const lines = style.shape === 'code' ? [] : wrapTitle(title, width, look),
@@ -162,15 +193,30 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
     x += cfg.dx || 0;
     y += cfg.dy || 0;
   }
+  const offsets = lineOffsets(lines, look);
+  let icon: NodeLabel['icon'];
+  if (node?.icon && !named)
+    // A label outside the shape leaves the shape to the icon.
+    icon = { x: r.w / 2 - ICON_TILE / 2, y: r.h / 2 - ICON_TILE / 2, size: ICON_TILE };
+  else if (lift) icon = { x: x - ICON_TILE / 2, y: y - height / 2 - lift, size: ICON_TILE };
+  else if (room) {
+    const text = Math.max(0, ...lines.map(l => measureText(l.text, lineType(l, look))));
+    icon = {
+      x: x - text / 2 - ICON_ROOM,
+      y: y + (offsets[0] ?? 0) - ICON_SIZE / 2,
+      size: ICON_SIZE,
+    };
+  }
   return {
     x,
     y,
     width,
     height,
     lines,
-    offsets: lineOffsets(lines, look),
+    offsets,
     mode,
     leader: cfg.leader ?? mode === 'detached',
+    ...(icon ? { icon } : {}),
   };
 }
 

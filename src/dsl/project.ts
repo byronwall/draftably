@@ -45,6 +45,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.wasShape !== undefined ? { wasShape: o.wasShape } : {}),
       ...(o.wasCount !== undefined ? { wasCount: o.wasCount } : {}),
       ...(o.href !== undefined ? { href: o.href } : {}),
+      ...(o.icon ? { icon: o.icon } : {}),
+      ...(o.iconPos ? { iconPos: o.iconPos } : {}),
       ...(o.count !== undefined ? { count: o.count } : {}),
       ...(o.span !== undefined ? { span: o.span } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
@@ -125,6 +127,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
         .map(g => g.id),
     ),
   );
+  if (scene.icons) doc.icons = scene.icons;
   doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id) && !bands.has(id));
   doc.settings = clone(view.settings ?? DEFAULT_SETTINGS);
   // The file decides routing, and its root engine recipe is what layout tools start from.

@@ -35,6 +35,7 @@ import { EDITORS } from '../model/link';
 import { CODE_MAX_WIDTH, CODE_TAB, codeLines, tableLines, type CodeBlock } from '../model/code';
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
+import { ICON_NAME } from '../model/iconify';
 import type { Status } from '../model/status';
 import type {
   ColorKey,
@@ -314,6 +315,10 @@ export interface ModelObject {
   wasCount?: number | string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
+  /** An icon by Iconify name: a bare name is Lucide (`database`), `prefix:name` another set. */
+  icon?: string;
+  /** Nodes only: `top` draws the icon large over the label; omitted means before the label. */
+  iconPos?: IconPos;
   /**
    * Nodes only: how many things this one box stands for, drawn as a stack with a badge. A short
    * symbol such as `N` or `many` stands for an unknown number.
@@ -591,6 +596,10 @@ export const DSL_SHAPES: DslShape[] = [
   'code',
 ];
 /** Attributes only a code node takes. */
+/** Where a node's icon sits: before the label (the default) or large above it. */
+export const ICON_POSITIONS = ['left', 'top'] as const;
+export type IconPos = (typeof ICON_POSITIONS)[number];
+
 const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'table', 'start', 'max-width', 'src'];
 /** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
 export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker' && s !== 'code');
@@ -684,6 +693,25 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       const value = (attrs.get(key)?.value ?? fallback) as T;
       assert(choices.includes(value), `Expected ${key}=${choices.join('|')}; got ${value}.`);
       return value;
+    };
+    // `icon=database` (Lucide) or `icon=prefix:name` (any Iconify set); `icon-pos=` places it.
+    const iconOf = (shape?: string) => {
+      const w = attrs.get('icon');
+      assert(
+        !attrs.has('icon-pos') || w,
+        'icon-pos= places an icon. Add icon=<name>, or remove icon-pos=.',
+      );
+      if (!w) return {};
+      assert(
+        !w.quoted && ICON_NAME.test(w.value),
+        `Expected icon=<name> such as icon=database or icon=logos:aws-lambda; got ${w.value || 'nothing'}.`,
+      );
+      assert(
+        shape !== 'diamond' && shape !== 'code' && shape !== 'marker',
+        `A ${shape} takes no icon. Remove icon=, or use another shape.`,
+      );
+      const pos = choice('icon-pos', 'left', ICON_POSITIONS);
+      return { icon: w.value, ...(pos === 'top' ? { iconPos: pos } : {}) };
     };
     const shadeOf = (w: Word) => {
       const n = Number(w.value);
@@ -866,9 +894,11 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                 'href',
                 'count',
                 'span',
+                'icon',
+                'icon-pos',
                 ...TIMELINE_ATTRS,
               ]
-            : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
+            : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold', 'icon'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -931,6 +961,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
+          ...iconOf(command === 'node' ? (attrs.get('shape')?.value ?? 'box') : 'group'),
           ...(attrs.has('count') ? { count: countOf('count', 2) } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
@@ -1210,7 +1241,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           break;
         }
         count(2);
-        allow(['shade']);
+        allow(['shade', 'icon']);
         const family = args[0].value;
         assert(
           !args[0].quoted && FAMILY.test(family) && family !== 'auto',
@@ -1223,6 +1254,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           family,
           label: text(args[1]),
           ...(shade !== undefined ? { shade } : {}),
+          ...iconOf(),
         });
         m.legendLines.push(line);
         break;
