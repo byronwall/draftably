@@ -52,4 +52,7 @@ is a quick survey weighted to paid tools (Lucidchart, Eraser, IcePanel, Ilograph
 ranks ERD tables with crow's feet, architecture icons, mind maps, UML class and C4 views as the top
 five gaps, with syntax sketches for each.
 
+[Syntax options](missing-diagram-types-syntax-2026-11-24.md) compares syntax for the three types
+Byron picked: tables, icons (Lucide by default, any Iconify set by prefix) and mind maps.
+
 Status: research only. Nothing is planned yet (TASK-0081).

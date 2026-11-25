@@ -134,6 +134,9 @@ diagrams. Each factor is 1–5. Out-of-scope rows (charts, floor plans) are left
 
 ## Top five: syntax sketches
 
+Byron picked tables, icons and mind maps. [Syntax options](missing-diagram-types-syntax-2026-11-24.md)
+compares the options for those three and replaces sketches 1–3 below.
+
 These are sketches to react to, not designs. Each names the engine parts it would reuse.
 
 ### 1. ERD: `layout g table`
