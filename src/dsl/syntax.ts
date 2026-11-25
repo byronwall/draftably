@@ -345,6 +345,10 @@ export interface ModelObject {
   when?: TimelineWhen;
   /** A member a group's body lists: its type, key marks and the row it refers to. */
   row?: TableRow;
+  /** Set by `withMindmaps` on every topic below the root: the family of its mind-map branch. */
+  branch?: string;
+  /** Set by `withMindmaps` below the first level: drawn as a pale card of `branch`. */
+  card?: true;
   line: number;
 }
 
@@ -364,10 +368,16 @@ export interface ModelEdge {
   directed?: false;
   /** `head=`: the mark at the target end, when it isn't the plain arrow. */
   head?: EndMarker;
+  /** Set by `withMindmaps`: a mind-map branch line, drawn with no head. */
+  branch?: true;
   /** `tail=`: the mark at the source end, when it has one. */
   tail?: EndMarker;
   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
   constraint?: false;
+  /** Set by `withMindmaps`: a mind-map cross-link with an end the tree does not reach. */
+  offTree?: true;
+  /** `kind=`, `head=`, `tail=` or `directed=` is written, so a mind map never makes it a branch. */
+  styled?: true;
   /** Sequence diagrams: `message=`, or `action` for an `action` line. */
   message?: MessageKind;
   /** `answers=`: the earlier message a reply answers. */
@@ -395,6 +405,8 @@ export interface ModelLayout {
   algorithm: Algorithm;
   /** Set when the scope is arranged by a layout engine instead of a built-in recipe. */
   engine?: EngineRecipe;
+  /** `mindmap`: the center topic. The scope is a tree engine run with this node in the middle. */
+  mindmap?: string;
   direction: 'auto' | 'right' | 'down';
   /** `cells` only: columns in each row of the grid; one row or column without it. */
   columns?: number;
@@ -1086,6 +1098,9 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           ...(choice('constraint', 'true', ['true', 'false']) === 'false'
             ? { constraint: false as const }
             : {}),
+          ...(['kind', 'head', 'tail', 'directed'].some(k => attrs.has(k))
+            ? { styled: true as const }
+            : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
           line,
@@ -1147,8 +1162,18 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           'min-height',
           ...(scope === 'root' ? ['fit'] : []),
         ];
-        let engine: EngineRecipe | undefined;
-        if (named !== undefined) {
+        let engine: EngineRecipe | undefined, mindmap: string | undefined;
+        if (named === undefined && args[1]?.value === 'mindmap' && !args[1].quoted) {
+          // A mind map is the tree engine with its root in the middle; see `src/dsl/mindmap.ts`.
+          count(2);
+          allow(['root', ...common]);
+          assert(
+            attrs.has('root'),
+            `A mind map needs its center topic: layout ${scope} mindmap root=<node id>.`,
+          );
+          mindmap = id(attrs.get('root'));
+          engine = { algorithm: 'tree', params: { rootId: mindmap } };
+        } else if (named !== undefined) {
           count(1);
           assert(
             ENGINES.includes(named),
@@ -1177,10 +1202,10 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         }
         // `table` is one column of cells, each a database row.
         const table = !named && args[1]?.value === 'table',
-          algorithm = (named ? 'flow' : table ? 'cells' : args[1]?.value) as Algorithm;
+          algorithm = (named || mindmap ? 'flow' : table ? 'cells' : args[1]?.value) as Algorithm;
         assert(
           ['flow', 'row', 'column', 'lanes', 'sequence', 'cells', 'timeline'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline, cells or table, or engine=.`,
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline, cells, table or mindmap, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
@@ -1194,11 +1219,12 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           scope,
           algorithm,
           ...(engine ? { engine } : {}),
+          ...(mindmap ? { mindmap } : {}),
           direction: table
             ? 'down'
             : choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           ...(table ? { table: true as const, columns: 1 } : {}),
-          fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          fold: named || mindmap ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
           ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
           ...(choice('activations', 'off', ['on', 'off'] as const) === 'on'
             ? { activations: true as const }
@@ -2073,6 +2099,15 @@ function validateReferences(m: Model) {
       exists(root, l.line);
       assert(by.get(root)!.type === 'node', `The tree root ${root} must be a node.`, l.line);
     }
+    // The root is one of the scope's own members: the layout places members, not their contents.
+    if (l.mindmap)
+      assert(
+        parentOf(l.mindmap) === l.scope,
+        l.scope === 'root'
+          ? `The mind map's root ${l.mindmap} must be a top-level node: remove its in=.`
+          : `The mind map's root ${l.mindmap} must be a member of ${l.scope}: give it in=${l.scope}.`,
+        l.line,
+      );
   }
   for (const h of m.hints) {
     // A timeline orders its bands, and a band its rows, by the model's own parents.

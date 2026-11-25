@@ -244,6 +244,7 @@ export function normalize(input: unknown): Diagram {
       ...(e.directed !== false && MARKERS.includes(e.tail) && e.tail !== 'none'
         ? { tail: e.tail }
         : {}),
+      ...(e.branch === true ? { branch: true } : {}),
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
       ...(e.message === 'action' || MESSAGE_KINDS.includes(e.message)
@@ -301,6 +302,7 @@ export function normalize(input: unknown): Diagram {
       shape: (style.shape as ShapeKind) || 'box',
       color: style.color || 'auto',
       ...(style.shade !== undefined ? { shade: style.shade } : {}),
+      ...(style.card === true ? { card: true } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
       ...(STATUSES.includes(style.status) && style.status !== 'same'
         ? { status: style.status }

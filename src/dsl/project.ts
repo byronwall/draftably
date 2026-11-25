@@ -19,6 +19,7 @@ export type ViewState = Partial<Pick<Diagram, 'settings' | 'camera' | 'theme' | 
 function resolveColor(scene: Scene, o: SceneObject): ColorKey {
   for (let x: SceneObject | undefined = o; x; x = scene.byId.get(x.parent))
     if (x.color !== 'auto') return x.color;
+    else if (x.branch) return x.branch as ColorKey;
   return 'auto';
 }
 
@@ -86,6 +87,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       // A cell is drawn on the neutral surface under its group's band unless it names a color.
       color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
+      ...(o.card ? { card: true } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
     });
@@ -99,7 +101,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       label: e.label,
       ...(e.was !== undefined ? { was: e.was } : {}),
       directed: e.directed !== false,
-      ...(e.head ? { head: e.head } : {}),
+      ...(e.branch ? { head: 'none' as const, branch: true } : e.head ? { head: e.head } : {}),
       ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
@@ -141,6 +143,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   if (root) doc.settings.direction = root.direction === 'down' ? 'DOWN' : 'RIGHT';
   if (root?.engine)
     Object.assign(doc.settings, { algorithm: root.engine.algorithm }, root.engine.params);
+  // Layout tools rebuild a root mind map the way the file draws it: root in the middle.
+  if (root?.mindmap) doc.layout.intent = { start: { id: root.mindmap, placement: 'center' } };
   if (view.camera) doc.camera = { ...view.camera };
   if (view.theme) doc.theme = view.theme;
   return doc;

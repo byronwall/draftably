@@ -289,7 +289,9 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
     scope,
     ...(root && ['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine
       ? { fixed: root.algorithm }
-      : {}),
+      : root?.mindmap
+        ? { fixed: 'mindmap' }
+        : {}),
     layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
     ...(root?.engine ? { engine: root.engine.algorithm } : {}),
     direction: root?.direction ?? 'auto',
@@ -507,7 +509,9 @@ export function sweep(shape: Shape, axes: Axis[]): Array<Pick<Variant, 'edits' |
   const count = axes.reduce((n, a) => n * a.values.length, 1);
   if (count > 12) throw Error(`That sweep has ${count} variants. Keep it to 12 or fewer.`);
   const layoutKeys = axes.filter(a => !ROUTING_PARAMS[a.key]);
-  if (layoutKeys.length && shape.fixed && shape.fixed !== 'lanes')
+  // A mind map reads either way, so it may vary its direction.
+  const turns = shape.fixed === 'mindmap' && layoutKeys.every(a => a.key === 'direction');
+  if (layoutKeys.length && shape.fixed && shape.fixed !== 'lanes' && !turns)
     throw Error(`The ${shape.scope} scope uses ${shape.fixed}; only routing settings vary there.`);
   const needsEngine =
     layoutKeys.some(a => a.key !== 'direction') &&

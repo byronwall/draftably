@@ -52,8 +52,9 @@ function gapNotes(m: Model): Diagnostic[] {
     out: Diagnostic[] = [];
   if (legend.length) {
     const named = new Set(legend.map(e => e.family)),
+      // A mind-map topic's color marks its branch, which the branch topic itself names.
       unnamed = m.objects.filter(
-        o => o.color !== 'auto' && !NEUTRALS.has(o.color) && !named.has(o.color),
+        o => o.color !== 'auto' && !o.branch && !NEUTRALS.has(o.color) && !named.has(o.color),
       ),
       families = [...new Set(unnamed.map(o => o.color))];
     if (families.length)
@@ -93,7 +94,8 @@ export function legendShade(m: Model, family: string): Shade {
     for (let p = byId.get(byId.get(id)?.parent ?? ''); p; p = byId.get(p.parent))
       if (p.color !== 'auto') return p;
   };
-  const nodes = m.objects.filter(o => o.type === 'node');
+  // A mind-map topic's color marks its branch, not a legend row.
+  const nodes = m.objects.filter(o => o.type === 'node' && !o.branch);
   if (nodes.some(o => o.color === family)) return NODE_SHADE;
   const members = nodes.filter(o => o.color === 'auto' && frameOf(o.id)?.color === family);
   const quiet = members.every(o => {
@@ -112,7 +114,7 @@ export function settleLegendShades(m: Model) {
 function shadeNotes(m: Model): Diagnostic[] {
   return (m.appearance.legend ?? []).flatMap((e, i) => {
     if (!e.family) return [];
-    const nodes = m.objects.filter(o => o.type === 'node' && o.color === e.family),
+    const nodes = m.objects.filter(o => o.type === 'node' && !o.branch && o.color === e.family),
       shade = e.shade ?? NODE_SHADE,
       used = [...new Set(nodes.map(o => o.shade ?? NODE_SHADE))].sort((a, b) => a - b);
     if (!nodes.length || used.includes(shade)) return [];
