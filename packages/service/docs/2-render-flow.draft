@@ -26,7 +26,7 @@ edge e1 req -> key
 edge e2 key -> hit
 edge e3 hit -> free "yes"
 edge e4 hit -> payer "no"
-edge e5 payer -> anon "no"
+edge e5 payer -> anon "no" from=right
 edge e6 payer -> bal "yes"
 edge e7 anon -> draw "yes"
 edge e8 bal -> draw "yes"

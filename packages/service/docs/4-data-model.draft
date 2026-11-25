@@ -1,11 +1,10 @@
 diagram "What D1 stores" version=1
-subtitle "One database holds accounts, keys, sessions and every credit change"
+subtitle "One database holds accounts, keys, sign-ins and every credit change"
 config link-base="../../.."
 
 group accounts "accounts" color=blue <<T
   id           text     pk
-  github_id    integer  uk nn
-  login        text     nn
+  email        text     uk nn
   grant_left   integer  nn
   grant_month  text     nn
   bought       integer  nn
@@ -40,6 +39,14 @@ group sessions "sessions" color=slate <<T
   expires_at  text  nn
 T
 layout sessions table
+
+group login_tokens "login_tokens" color=slate <<T
+  hash        text  pk
+  email       text  nn
+  expires_at  text  nn
+  used_at     text
+T
+layout login_tokens table
 
 legend blue "Balance: monthly grant plus bought credits"
 legend amber "History: one row per render or purchase"

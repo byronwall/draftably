@@ -22,10 +22,10 @@ node draw "draw()\nMermaid, SVG, PNG" in=worker href="packages/service/src/draw.
 group cf "Cloudflare bindings" frame=soft color=violet
 node cache "Edge cache\nCache API" in=cf icon=hard-drive
 node d1 "D1 database\naccounts, keys, ledger" in=cf icon=database
-node limits "Rate limits\nper IP, per key" in=cf icon=gauge
+node limits "Rate limits\nper IP, per key, sign-in" in=cf icon=gauge
+node email "Email Service\nsign-in links" in=cf icon=mail
 
 group ext "Outside services" frame=soft color=teal
-node github "GitHub OAuth" in=ext icon=github
 node stripe "Stripe Checkout" in=ext icon=credit-card
 
 legend blue "Callers"
@@ -53,7 +53,7 @@ edge c_draw render -> draw "on a miss"
 edge c_spend render -> d1 "guarded spend"
 edge c_anon render -> limits "per IP or key"
 
-edge a_gh account -> github "sign in" kind=async
+edge a_mail account -> email "sign-in link" kind=async
 edge a_buy account -> stripe "Checkout session"
 edge a_d1 account -> d1 "keys, balance"
 edge s_hook stripe -> webhook "paid event" kind=async constraint=false
@@ -61,7 +61,7 @@ edge s_d1 webhook -> d1 "add credits once"
 
 state get "Free image URL" img images render cache draw limits
 state keyed "Keyed render (REST or MCP)" agent mcpc api mcp auth render cache draw d1 limits
-state buy "Buy credits" person account stripe webhook d1 github
+state buy "Buy credits" person account stripe webhook d1 email
 
 layout root engine=compound-flow fit=slide
 layout routes column gap=24

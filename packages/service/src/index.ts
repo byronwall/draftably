@@ -114,7 +114,7 @@ GET  /v1/balance     -> {grant, bought, resetsAt}
 /mcp                 MCP server (Streamable HTTP) with the same key: render_diagram,
                      validate_diagram, convert_mermaid, image_url, language_guide.
 
-/account             Sign in with GitHub, see credits, make API keys, buy credits.
+/account             Sign in by email, see credits, make API keys, buy credits.
                      1,000 free credits a month.
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs

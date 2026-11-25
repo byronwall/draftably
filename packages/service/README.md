@@ -23,9 +23,9 @@ pnpm service:dev        # wrangler dev on http://localhost:8787
 pnpm prove:service      # every .draft and Mermaid input in the repo, PNG pixels, credits, API
 ```
 
-For sign-in locally, put the GitHub OAuth app's secret in `packages/service/.dev.vars`
-(`GITHUB_CLIENT_SECRET=...`) and its client ID in `vars` in `wrangler.jsonc`. The proof needs
-neither; it seeds a local D1 with two fixture accounts.
+Sign-in sends a one-use link by email through Cloudflare Email Service (the `EMAIL` binding).
+Locally, `wrangler dev` sends nothing: it writes each email to a file and logs the file's path, so
+open the link from there. The proof reads the link the same way.
 
 ## Connect an MCP client
 
@@ -60,17 +60,17 @@ Run these once, from `packages/service`:
 1. `pnpm exec wrangler d1 create draftably-service`, then put the printed `database_id` into
    `wrangler.jsonc`.
 2. `pnpm exec wrangler d1 migrations apply DB --remote`.
-3. Make a GitHub OAuth app (GitHub → Settings → Developer settings → OAuth Apps). Homepage
-   `https://api.draftably.dev`, callback `https://api.draftably.dev/auth/github/callback`. Put its
-   client ID in `vars.GITHUB_CLIENT_ID`, then `pnpm exec wrangler secret put GITHUB_CLIENT_SECRET`.
-4. Add `draftably.dev` to Cloudflare and move its nameservers there. Copy the GitHub Pages
+3. Add `draftably.dev` to Cloudflare and move its nameservers there. Copy the GitHub Pages
    records first, so the landing page keeps working.
+4. Onboard `draftably.dev` as a sending domain in Email Service (dashboard → Compute → Email
+   Service → Email Sending). It adds the SPF and DKIM records. Sign-in mail comes from
+   `vars.EMAIL_FROM` (`login@draftably.dev`). Email Service is in beta, and a new account starts
+   with a small daily quota.
 5. Add the route to `wrangler.jsonc`:
    `"routes": [{ "pattern": "api.draftably.dev", "custom_domain": true }]`.
 6. `pnpm service:deploy`, then `pnpm prove:service --base https://api.draftably.dev`.
 
-Before step 4 the Worker still runs on `draftably-api.<account>.workers.dev`; set the OAuth
-callback to that host until then.
+Sign-in does not work before step 4, because Email Service sends only from an onboarded domain.
 
 ## Later deploys
 

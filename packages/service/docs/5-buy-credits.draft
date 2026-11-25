@@ -4,15 +4,16 @@ config link-base="../../.."
 
 node user "Person" icon=user
 node page "Account page" href="packages/service/src/account.ts"
-node gh "GitHub OAuth" icon=github
+node mail "Email Service" icon=mail
 node stripe "Stripe" icon=credit-card
 node hook "Webhook\n/stripe/webhook" href="packages/service/src/stripe.ts"
 node db "D1" icon=database
 
-edge m1 user -> page "Sign in with GitHub" message=call
-edge m2 page -> gh "authorize, then trade the code" message=call
-edge m3 gh -> page "user id and login" answers=m2
-action a1 page "Upsert account, start a 30-day session"
+edge m1 user -> page "Email address" message=call
+edge m2 page -> mail "Send a one-use link\n15 min, hash stored" message=send
+edge m3 mail -> user "Sign-in link" message=send
+edge m3b user -> page "Open link, press Sign in\nPOST spends the token" message=call
+action a1 page "Upsert account by email, start a 30-day session"
 edge m4 user -> page "Buy 25,000 credits" message=call
 edge m5 page -> stripe "Create Checkout session\nmetadata: account, credits" message=call
 edge m6 stripe -> page "Checkout URL" answers=m5
@@ -24,11 +25,12 @@ edge m10 hook -> db "Ledger row + bought += credits\none batch, unique ref" mess
 edge m11 hook -> stripe "200, also for a repeat" message=reply
 edge m12 stripe -> user "Back to /account?bought=1" message=outcome
 
-phase p1 "Sign in" m1 m2 m3 a1
+phase p1 "Sign in" m1 m2 m3 m3b a1
 phase p2 "Checkout" m4 m5 m6 m7 m8
 phase p3 "Fulfil" m9 a2 m10 m11 m12
 
 footnote 1 "Packs show only when STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET are both set. Prices are placeholders."
 footnote 2 "A repeated event finds the ledger ref already there, so the credits are added once."
+footnote 3 "The link opens a page with one button. Mail scanners fetch GET links, so only the POST uses the token."
 
 layout root sequence
