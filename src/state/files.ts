@@ -442,21 +442,24 @@ const svgDims = (svg: string) => {
 };
 
 /**
- * The SVG a PNG export rasterizes: `svg` with the strip below it when the look carries source
- * and the strip. The strip's modules are one image pixel, so it needs the scale the PNG really
- * uses and a canvas of whole pixels at that scale; a drawing past the canvas limits gets a
- * fractional scale and keeps only the metadata chunk.
+ * The SVG a PNG export rasterizes, and the scale it rasterizes at: `svg` with the strip below it
+ * when the look carries source and the strip. The strip's modules are one image pixel at the
+ * scale the canvas really uses, and its rows can lower that scale for a drawing at the canvas
+ * limits, so the two settle together.
  */
 export async function pngSvg(svg: string, look: ExportLook) {
   const source = exportSource(look),
-    scale = look.scale;
-  if (source === undefined || !look.strip) return svg;
-  const drawn = await withSourceStrip(svg, source, scale),
-    grown = svgDims(drawn),
-    whole = (v: number) => Math.abs(v * scale - Math.round(v * scale)) < 1e-6;
-  return grown && pngScale(grown.w, grown.h, scale) >= scale && whole(grown.w) && whole(grown.h)
-    ? drawn
-    : svg;
+    dims = svgDims(svg);
+  let scale = dims ? pngScale(dims.w, dims.h, look.scale) : look.scale;
+  if (source === undefined || !look.strip || !dims) return { svg, scale };
+  for (let i = 0; i < 8; i++) {
+    const drawn = await withSourceStrip(svg, source, scale),
+      grown = svgDims(drawn)!,
+      next = pngScale(grown.w, grown.h, look.scale);
+    if (next >= scale - 1e-12) return { svg: drawn, scale };
+    scale = next;
+  }
+  return { svg, scale };
 }
 
 /**
@@ -465,9 +468,8 @@ export async function pngSvg(svg: string, look: ExportLook) {
  */
 async function pngOf(svg: string, look: ExportLook) {
   const source = exportSource(look),
-    scale = look.scale;
-  svg = await pngSvg(svg, look);
-  const png = await svgToPng(svg, scale);
+    raster = await pngSvg(svg, look);
+  const png = await svgToPng(raster.svg, raster.scale);
   if (source === undefined) return png;
   const bytes = await embedPngSource(new Uint8Array(await png.arrayBuffer()), source);
   return new Blob([bytes as BlobPart], { type: 'image/png' });

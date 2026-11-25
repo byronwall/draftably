@@ -108,6 +108,19 @@ export const downloadText = (text: string, name: string, type: string) =>
 export const pngScale = (w: number, h: number, scale: number) =>
   Math.min(scale, 8192 / Math.max(w, h), Math.sqrt(24e6 / (w * h)));
 
+/**
+ * The canvas a `w`×`h` drawing rasterizes to at `scale`: the clamped scale `k` and whole-pixel
+ * sides. The drawing is drawn at exactly `k`, so a clamped scale stretches nothing.
+ */
+export function pngCanvas(w: number, h: number, scale: number) {
+  const k = pngScale(w, h, scale);
+  return {
+    k,
+    width: Math.max(1, Math.ceil(w * k - 1e-6)),
+    height: Math.max(1, Math.ceil(h * k - 1e-6)),
+  };
+}
+
 /** Rasterize an SVG string at `scale` (2× unless given), within browser canvas limits. */
 export async function svgToPng(svg: string, scale = 2): Promise<Blob> {
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
@@ -129,11 +142,11 @@ export async function svgToPng(svg: string, scale = 2): Promise<Blob> {
       window.clearTimeout(timer);
     }
     const { naturalWidth: w, naturalHeight: h } = image;
-    const k = pngScale(w, h, scale);
+    const { k, width, height } = pngCanvas(w, h, scale);
     const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(w * k));
-    canvas.height = Math.max(1, Math.round(h * k));
-    canvas.getContext('2d')!.drawImage(image, 0, 0, canvas.width, canvas.height);
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d')!.drawImage(image, 0, 0, w * k, h * k);
     return await new Promise((resolve, reject) =>
       canvas.toBlob(
         b => (b ? resolve(b) : reject(Error('PNG conversion failed. Export SVG instead.'))),

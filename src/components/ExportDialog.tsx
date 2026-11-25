@@ -13,6 +13,7 @@ import {
   setExportLook,
   type ExportKind,
 } from '../state/files';
+import { pngCanvas } from '../lib/svg-export';
 import { workspace } from '../state/launch';
 import { closeDialog } from '../state/ui';
 import { IconButton, tip } from './controls';
@@ -91,16 +92,18 @@ export function ExportDialog() {
     onCleanup(() => url && URL.revokeObjectURL(url));
     return url;
   });
-  // A PNG's size includes the source strip below the drawing.
-  const [rasterSvg] = createResource(
+  // A PNG's size: the canvas it really draws, with the source strip and any clamped scale.
+  const [raster] = createResource(
     () => ({ v: svg(), look: exportLook(), kind: exportKind() }),
-    ({ v, look, kind }) => (kind === 'svg' || !v ? v : pngSvg(v, look)),
+    ({ v, look, kind }) => (kind === 'svg' || !v ? { svg: v, scale: 1 } : pngSvg(v, look)),
   );
   const size = () => {
-    const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(rasterSvg.latest ?? svg()) ?? [];
+    const r = raster.latest,
+      [, w, h] = /width="([\d.]+)" height="([\d.]+)"/.exec(r?.svg ?? svg()) ?? [];
     if (!w) return '';
-    const k = exportKind() === 'svg' ? 1 : exportLook().scale;
-    return `${Math.round(+w * k)} × ${Math.round(+h * k)} px`;
+    if (exportKind() === 'svg') return `${Math.round(+w)} × ${Math.round(+h)} px`;
+    const c = pngCanvas(+w, +h, r?.scale ?? exportLook().scale);
+    return `${c.width} × ${c.height} px`;
   };
 
   const action = () =>

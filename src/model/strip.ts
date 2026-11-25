@@ -375,17 +375,24 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   };
   const xa = Math.floor(W * 0.03);
   const xb = Math.ceil(W * 0.97);
+  // The background from the second-to-last row: a canvas rounded up to whole pixels can leave
+  // the last row partly drawn.
   const bottom: number[] = [];
-  for (let x = xa; x < xb; x++) bottom.push(lumAt((H - 1) * W + x), lumAt((H - 2) * W + x));
+  for (let x = xa; x < xb; x++) bottom.push(lumAt((H - 2) * W + x));
   bottom.sort((a, b) => a - b);
   const bg = bottom[bottom.length >> 1];
   const dev = (x: number, y: number) => Math.abs(lumAt(y * W + x) - bg);
+  // A row's mean deviation from a sample of at most about 2000 pixels across: enough to tell band
+  // rows from blank ones, and cheap on a wide image. An odd stride, so it never lines up with the
+  // clock's two-module period.
+  const stride = Math.floor((xb - xa) / 2000) | 1;
   const rowDev = (y: number) => {
     let s = 0;
-    for (let x = xa; x < xb; x++) s += dev(x, y);
-    return s / (xb - xa);
+    let n = 0;
+    for (let x = xa; x < xb; x += stride, n++) s += dev(x, y);
+    return s / n;
   };
-  const noise = Math.max(rowDev(H - 1), rowDev(H - 2));
+  const noise = Math.min(rowDev(H - 1), rowDev(H - 2));
   const k = Math.max(0.6, 4 * noise);
   // Band rows: the first run of busy rows above the quiet zone.
   // Skip short runs of busy rows (compression noise) until a band at least 3 rows tall. Climb
@@ -400,11 +407,13 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
     while (y1 > floor && rowDev(y1) <= k) y1--;
     y0 = y1;
     const level: number[] = [rowDev(y1)];
-    while (y0 > floor) {
+    // Only the bottom of the band must lie in the searched rows; a tall band climbs past them.
+    // The band's level is the median of its first rows, so the climb stays cheap.
+    while (y0 > 0) {
       const v = rowDev(y0 - 1);
       const sorted = [...level].sort((a, b) => a - b);
       if (v <= k || (level.length >= 3 && v < 0.4 * sorted[sorted.length >> 1])) break;
-      level.push(v);
+      if (level.length < 64) level.push(v);
       y0--;
     }
     if (y1 - y0 >= 2) break;
@@ -416,10 +425,12 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   const mid = [...rd].sort((a, b) => a - b)[rd.length >> 1];
   while (y0 < y1 && rowDev(y0) < 0.5 * mid) y0++;
   while (y1 > y0 && rowDev(y1) < 0.5 * mid) y1--;
+  const yStride = Math.floor((y1 - y0 + 1) / 2000) | 1;
   const colDev = (x: number) => {
     let s = 0;
-    for (let y = y0; y <= y1; y++) s += dev(x, y);
-    return s / (y1 - y0 + 1);
+    let n = 0;
+    for (let y = y0; y <= y1; y += yStride, n++) s += dev(x, y);
+    return s / n;
   };
   const cols = Array.from({ length: W }, (_, x) => colDev(x));
   const ck = cols.reduce((a, b) => Math.max(a, b), 0) * 0.25;
@@ -427,7 +438,7 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   while (x0 < W && cols[x0] <= ck) x0++;
   let x1 = W - 1;
   while (x1 > 0 && cols[x1] <= ck) x1--;
-  if (x1 - x0 < MIN_COLS) return { source: null, why: 'no band' };
+  if (x1 - x0 + 1 < MIN_COLS) return { source: null, why: 'no band' };
   const bilinear = (x: number, y: number) => {
     const xf = Math.min(W - 2, Math.max(0, Math.floor(x - 0.5)));
     const yf = Math.min(H - 2, Math.max(0, Math.floor(y - 0.5)));
