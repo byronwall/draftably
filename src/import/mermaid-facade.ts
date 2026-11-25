@@ -191,14 +191,16 @@ export function restoreEntitySpelling(value: string): string {
 
 /**
  * Use an unattached HTML template only. Its content is inert and is never adopted into the page.
- * Caller supplies the browser document or the dedicated worker's JSDOM document.
+ * Caller supplies the browser document, the dedicated worker's JSDOM document, or linkedom's.
  * Markdown markers deliberately remain visible; native Markdown rendering is not assumed.
  */
 export function makePlainLabel(document: Document): (value: string) => string {
   return value => {
     const template = document.createElement('template');
     template.innerHTML = restoreEntitySpelling(value).replace(/<br\s*\/?>/gi, '\n');
-    return template.content.textContent ?? '';
+    // linkedom (the render service's DOM) keeps template text on the element, and its
+    // fragment's textContent is null; browsers and JSDOM keep it in `content`.
+    return template.content.textContent ?? template.textContent ?? '';
   };
 }
 

@@ -237,8 +237,17 @@ resources.
   base, and `src=` code files, have nothing to point at on a hosted image; those few files draw
   without the link arrow or the code text.
 
+- linkedom keeps a `<template>`'s text on the element, not in `content`, so imported labels came
+  out blank until `makePlainLabel` fell back to the element's text.
+- The importer refuses Mermaid frontmatter (`---` / `title:` / `---`), and so does the service.
+  Agents often write it; 9 of the repo's 15 `.mmd` files have it.
+- With Mermaid the bundle is 16.5 MB, 3.7 MB gzipped. Locally the first request to a new
+  isolate took 16 ms and the first Mermaid PNG 160 ms, so Mermaid stays in the one Worker.
+
+- A Mermaid gantt chart can depend on today's date (dates without a year) and on the time zone
+  (the Worker runs in UTC; the CLI uses the machine's zone). Its image is cached for a day, not a
+  year.
+
 ## Open questions
 
-- Startup time with Mermaid bundled. Workers allow 1 s. If the measured startup is high, move
-  Mermaid import into a second Worker behind a service binding.
 - Prices for credit packs. The numbers above are placeholders.

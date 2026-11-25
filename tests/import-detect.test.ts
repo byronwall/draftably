@@ -34,4 +34,10 @@ describe('diagram import detection', () => {
     expect(detectSource(text + '~~~dot\ndigraph {a->b}\n~~~').status).toBe('choose-fence');
     expect(detectSource(fence + 'd2\na -> b').status).toBe('unknown');
   });
+
+  it('reads a bare flowchart or graph header as Mermaid, and graph { as DOT', () => {
+    expect(detectSource('flowchart\n  A-->B')).toMatchObject({ format: 'mermaid' });
+    expect(detectSource('graph\n  A-->B')).toMatchObject({ format: 'mermaid' });
+    expect(detectSource('graph {\n  a -- b\n}')).toMatchObject({ format: 'dot' });
+  });
 });

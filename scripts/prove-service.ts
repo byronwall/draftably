@@ -211,6 +211,124 @@ const huge = await fetch(`${base}/png/${await encodeSource('a -> b')}?scale=9`);
 assert.equal(huge.status, 400);
 assert.equal(huge.headers.get('Content-Type'), 'image/png');
 
+// Mermaid: every Mermaid input in the repo (.mmd files, ```mermaid fences, the importer tests'
+// sources) drawn by the service must equal `draftably import` drawn by the runtime.
+const mermaid: { name: string; source: string }[] = [];
+for (const f of execFileSync('git', ['ls-files', '*.mmd'], { encoding: 'utf8' }).trim().split('\n'))
+  mermaid.push({ name: f, source: fs.readFileSync(f, 'utf8') });
+for (const f of execFileSync('git', ['grep', '-l', '^```mermaid', '--', '*.md'], {
+  encoding: 'utf8',
+})
+  .trim()
+  .split('\n'))
+  for (const [n, m] of [
+    ...fs.readFileSync(f, 'utf8').matchAll(/^```mermaid\n([\s\S]*?)^```/gm),
+  ].entries())
+    mermaid.push({ name: `${f} fence ${n + 1}`, source: m[1] });
+const tests = fs.readFileSync('tests/import-mermaid.test.ts', 'utf8');
+for (const [n, m] of [
+  ...tests.matchAll(
+    /[`'](\s*(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b(?:[^`'\\]|\\.)*?)[`']/g,
+  ),
+].entries())
+  if (!m[1].includes('${') && m[1].includes('\n'))
+    mermaid.push({ name: `import-mermaid.test.ts #${n + 1}`, source: m[1] });
+const drawnMermaid = new Set<number>();
+const mm = { same: 0, rejected: 0, failed: [] as string[], families: {} as Record<string, number> };
+for (const [n, { name, source }] of mermaid.entries()) {
+  const file = path.join(dir, `m${n}.mmd`);
+  fs.writeFileSync(file, source);
+  const family = /^\s*(?:---[\s\S]*?---\s*)?(\w+)/.exec(source)?.[1] ?? '?';
+  let draft: string | undefined;
+  try {
+    draft = (await cli('import', file, '--accept-lossy')).stdout.replace(
+      new RegExp(`^diagram "m${n}"`),
+      'diagram ""',
+    );
+  } catch {
+    // the CLI refuses it; the service must too
+  }
+  const res = await fetch(`${base}/svg/${await encodeSource(source)}?type=mermaid`);
+  const body = await res.text();
+  const want = draft
+    ? await renderSvg(draft, {
+        links: webLinks(draft),
+        limits: { maxSourceBytes: 64 * 1024 },
+      })
+    : undefined;
+  if (!want?.ok) {
+    if (res.status === 400) {
+      mm.rejected++;
+      if (process.argv.includes('--verbose')) console.log(`  refused: ${name}`);
+    } else mm.failed.push(`${name}: the CLI refuses it, the service gave ${res.status}`);
+  } else if (res.status === 200 && body === want.value.svg) {
+    mm.same++;
+    drawnMermaid.add(n);
+    mm.families[family] = (mm.families[family] ?? 0) + 1;
+  } else mm.failed.push(`${name}: ${res.status}, differs from draftably import`);
+}
+console.log(
+  `Mermaid: ${mermaid.length} inputs: ${mm.same} identical to draftably import (` +
+    Object.entries(mm.families)
+      .map(([k, v]) => `${k} ${v}`)
+      .join(', ') +
+    `), ${mm.rejected} refused by both, ${mm.failed.length} wrong.`,
+);
+for (const f of mm.failed) console.log('  ' + f);
+// Two shapes from Codex round 1: a sequence with a box (Mermaid checks its color with
+// `new Option()`), and a Markdown file with one mermaid fence.
+for (const [name, source] of [
+  ['sequence box', 'sequenceDiagram\n  box Client\n  participant a\n  end\n  a->>a: check\n'],
+  ['markdown fence', '# Notes\n\n```mermaid\nflowchart LR\n  A-->B\n```\n'],
+  ['bare flowchart', 'flowchart\n  A-->B\n'],
+]) {
+  // .mmd is Mermaid by its name; the .md file is found by its fence, as `draftably import` does.
+  const file = path.join(
+    dir,
+    `extra-${name.replace(' ', '-')}.${name === 'markdown fence' ? 'md' : 'mmd'}`,
+  );
+  fs.writeFileSync(file, source);
+  const draft = (await cli('import', file, '--accept-lossy')).stdout.replace(
+    /^diagram "[^"]*"/,
+    'diagram ""',
+  );
+  const want = await renderSvg(draft, {
+    links: webLinks(draft),
+    limits: { maxSourceBytes: 64 * 1024 },
+  });
+  const got = await fetch(`${base}/svg/${await encodeSource(source)}`);
+  assert.equal(got.status, 200, `${name}: ${got.status}`);
+  assert.equal(
+    await got.text(),
+    want.ok ? want.value.svg : '',
+    `${name} differs from draftably import`,
+  );
+}
+const gantt = mermaid.find(m => /^\s*gantt\b/m.test(m.source))!;
+const ganttRes = await fetch(`${base}/svg/${await encodeSource(gantt.source)}`);
+const ganttAge = Number(
+  /^public, max-age=(\d+)$/.exec(ganttRes.headers.get('Cache-Control') ?? '')?.[1],
+);
+assert.ok(
+  ganttAge > 0 && ganttAge <= 86400,
+  'a gantt image lasts at most to the next UTC midnight',
+);
+console.log(
+  'Mermaid extras: a boxed sequence and a fenced Markdown file draw as draftably import does; a bare flowchart header is detected; a gantt chart is cached until the next UTC midnight.',
+);
+
+// Detection: each input both sides draw gives the same image with no ?type= at all.
+let detected = 0;
+for (const { source } of mermaid.filter((_, n) => drawnMermaid.has(n))) {
+  const seg = await encodeSource(source);
+  const auto = await (await fetch(`${base}/svg/${seg}`)).text();
+  if (auto === (await (await fetch(`${base}/svg/${seg}?type=mermaid`)).text())) detected++;
+}
+console.log(
+  `Mermaid detection: ${detected} of ${drawnMermaid.size} drawn the same with no ?type=.`,
+);
+assert.equal(detected, drawnMermaid.size, 'automatic and explicit Mermaid detection disagree');
+
 // The same URL twice: the second answer comes from the edge cache.
 const fresh = fs.readFileSync('examples/checkout.draft', 'utf8') + `\n# ${Date.now()}\n`;
 const url = `${base}/svg/${await encodeSource(fresh)}`;
@@ -226,4 +344,4 @@ assert.equal((await fetch(`${url}?scheme=`)).status, 400);
 
 console.log('Cache: the second request was a hit. Bad encoding: 400.');
 stop();
-process.exit(tally.failed.length || png.failed.length ? 1 : 0);
+process.exit(tally.failed.length || png.failed.length || mm.failed.length ? 1 : 0);
