@@ -70,7 +70,7 @@ export function loadIconSet(prefix: string): Promise<IconSet | null> {
   let p = loading.get(prefix);
   if (!p) {
     p = (async () => {
-      let set: IconSet | null = null;
+      let set: IconSet | null;
       try {
         set =
           prefix === DEFAULT_SET

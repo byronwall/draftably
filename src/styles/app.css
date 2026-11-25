@@ -370,6 +370,11 @@ a.button {
   min-width: 0;
 }
 
+.icon-slot {
+  width: 22px;
+  height: 22px;
+}
+
 .icon-current .icon-name {
   flex: 1;
   min-width: 0;

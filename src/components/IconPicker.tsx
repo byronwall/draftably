@@ -43,7 +43,9 @@ export function IconPicker(props: {
       <Show when={props.icon}>
         {icon => (
           <div class="icon-current">
-            <IconPreview name={icon()} size={22} />
+            <Show when={ready()} fallback={<span class="icon-slot" />}>
+              <IconPreview name={icon()} size={22} />
+            </Show>
             <span class="icon-name" title={icon()}>
               {icon()}
             </span>
