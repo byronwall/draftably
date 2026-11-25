@@ -508,8 +508,16 @@ content area.
   a [Lucide](https://lucide.dev/icons) icon; it draws in the box's text color in every theme.
   `icon-pos=top` draws a large tile over the label, for the service boxes of a cloud diagram. Run
   `npx draftably icons <word>` to find a name; `check` warns `unknown-icon` and suggests close
-  names. `prefix:name` (`logos:aws-lambda`) works only when that `@iconify-json/<prefix>` package
-  is installed in the project, so prefer Lucide names. Give every box in a row an icon or none.
+  names. Give every box in a row an icon or none.
+- Draftably ships Lucide only: it cannot bundle AWS, Google Cloud or Azure logos. For vendor
+  logos, install an Iconify set in the folder that holds the `.draft` (or one above it) with
+  `pnpm add -D @iconify-json/logos` (or `npm install --save-dev`; run `npm init -y` first if there
+  is no `package.json`). Ask the user before you add a dependency. Then write the prefix:
+  `icon=logos:aws-lambda`, `icon=logos:aws-s3`, `icon=logos:google-cloud`,
+  `icon=logos:microsoft-azure`; `npx draftably icons aws` lists the names. `@iconify-json/simple-icons`
+  gives one-color brand marks that follow the theme (`simple-icons:googlecloud`). Without the set
+  installed, `check` warns and the box draws a dashed square, so prefer a Lucide noun when you
+  cannot install one.
 - When a box names real code, a file or a page, link it: `href="src/orders/service.ts"`. Write
   file paths from the repository root (relative links start at the git root of the `.draft`), and
   add `:42` to open at a line. Use the URL as it is for anything on the web, such as a GitHub link.

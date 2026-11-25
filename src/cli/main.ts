@@ -330,7 +330,10 @@ export async function main(argv: string[]): Promise<number> {
     return 0;
   }
   const flag = (name: string) => rest.includes(name);
-  useInstalledIconSets();
+  // Icon sets installed in the working folder, or beside the file the command names.
+  useInstalledIconSets(
+    file && !file.startsWith('-') ? [process.cwd(), path.dirname(path.resolve(file))] : undefined,
+  );
   /**
    * The source to embed in an exported image, unless `--no-source` is given, with each `src=`
    * code node's file inlined so the image opens again on its own.

@@ -197,9 +197,8 @@ letter or short word instead: `count=N` draws `×N`, and `count=many` draws `×m
 
 `icon=database` puts an icon in a box. A bare name is a [Lucide](https://lucide.dev/icons) icon,
 the set draftably ships. `prefix:name` names an icon in any other
-[Iconify](https://icon-sets.iconify.design) set, such as `logos:aws-lambda` or `ph:cloud`. Install
-that set in the project first: `pnpm add -D @iconify-json/logos`. The CLI and `draftably open`
-read the installed `@iconify-json/<prefix>` packages and never fetch icons from the network.
+[Iconify](https://icon-sets.iconify.design) set, such as `logos:aws-lambda` or `ph:cloud`, once
+that set is installed (see [More icon sets](#more-icon-sets)). Nothing is fetched from the network.
 
 ```draft
 group aws "AWS us-east-1" color=slate icon=cloud
@@ -227,9 +226,39 @@ edge e2 api -> db "persist"
   `logos:postgresql` when the `logos` set is installed. A box with an unknown icon keeps the
   icon's room and draws a dashed square there.
 
-Brand logos are trademarks of their owners, even in a set whose files are public domain. The AWS,
-Google Cloud and Azure icon terms give no right to bundle their icons in a tool, so draftably
-does not ship vendor logos. It draws them when a project installs a set that has them.
+#### More icon sets
+
+Draftably ships Lucide only. Cloud vendor logos (AWS, Google Cloud, Azure) are trademarks, and
+their icon terms give no right to bundle them in a tool, so draftably cannot ship them. Install
+an [Iconify](https://icon-sets.iconify.design) set yourself, and draftably reads it from disk:
+
+1. In the folder that holds your `.draft` files (or any folder above it), install the set as a
+   dev dependency. With no `package.json` there, run `npm init -y` first.
+
+   ```bash
+   pnpm add -D @iconify-json/logos          # or: npm install --save-dev @iconify-json/logos
+   ```
+
+2. Find names in it: `draftably icons aws` prints `logos:aws`, `logos:aws-s3`,
+   `logos:aws-ec2` and more. The Inspector's **Icon** search lists the set's icons too.
+3. Write the name with its prefix: `icon=logos:aws-lambda`.
+
+| Set                          | Prefix          | What it has                                                                                                                                                          |
+| ---------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@iconify-json/logos`        | `logos:`        | Color logos: 65 AWS services (`aws-lambda`, `aws-s3`, `aws-dynamodb`, `aws-sqs`), `google-cloud`, `google-cloud-run`, `microsoft-azure`, `kubernetes`, `postgresql`. |
+| `@iconify-json/simple-icons` | `simple-icons:` | One-color brand marks, so they follow the theme like Lucide: `simple-icons:amazonwebservices`, `simple-icons:googlecloud`, `simple-icons:stripe`.                    |
+| `@iconify-json/ph`           | `ph:`           | Phosphor: general icons in six weights (`ph:cloud`, `ph:cloud-duotone`).                                                                                             |
+| `@iconify-json/tabler`       | `tabler:`       | A larger set of stroke icons in the Lucide style.                                                                                                                    |
+
+- The CLI looks in `node_modules/@iconify-json` of the working folder, the `.draft` file's
+  folder, and each folder above them. `draftably open` looks from the folder it serves.
+- `logos` has few Google Cloud and Azure service icons. For a service it lacks, use a Lucide noun
+  (`database`, `server`, `zap`) and name the service in the label.
+- An exported SVG, PNG or PDF carries the icons it uses, so it draws the same on a machine
+  without the set. To draw the `.draft` file again there, install the set there too; until then
+  `check` warns `unknown-icon` and the box draws a dashed square.
+- The official AWS, Google Cloud and Azure icon downloads are SVG files, not Iconify sets.
+  Draftably does not read icon files.
 
 ## Code
 
