@@ -106,13 +106,19 @@ for (const m of MODULES)
     let overlaps = 0;
     for (const d of svgs) {
       const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{6})"/.exec(d.svg)?.[1] ?? '#1B2433';
-      const { svg, grid, grew, top } = await addSourceStrip(d.svg, d.source, {
+      const {
+        svg,
+        grid: g0,
+        grew,
+        top,
+      } = await addSourceStrip(d.svg, d.source, {
         scale: BASE,
         module: m,
         parity: PARITY,
         ink,
         opacity,
       });
+      const grid = g0!;
       bands.push(grid.rows * m);
       grows.push(grew);
       const size = /width="([\d.]+)" height="([\d.]+)"/.exec(svg)!;

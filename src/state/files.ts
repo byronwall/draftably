@@ -164,9 +164,14 @@ export async function importText(text: string, name = '') {
 }
 
 /** Embed an image as a new shape, or replace the image in an existing one. */
-export async function insertImage(file: File, replaceId: string | null = null) {
+export async function insertImage(
+  file: File,
+  replaceId: string | null = null,
+  /** The caller already looked for draftably source in the image. */
+  probed = false,
+) {
   // A draftably export opens as the diagram it was drawn from.
-  if (!replaceId && (await openImageSource(file))) return;
+  if (!replaceId && !probed && (await openImageSource(file))) return;
   if (!IMAGE_TYPES.test(file.type))
     throw Error(
       'Use a PNG, JPEG, WebP, or GIF image. SVG files are imported only as editable diagrams.',
@@ -211,7 +216,7 @@ export async function insertImage(file: File, replaceId: string | null = null) {
 export async function openFile(file: File | undefined, replaceImageId: string | null = null) {
   if (!file) return;
   if (!replaceImageId && (await openImageSource(file))) return;
-  if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId);
+  if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId, !replaceImageId);
   if (file.size > 24 * 1024 * 1024) throw Error('Use a diagram smaller than 24 MB.');
   const text = await file.text();
   const detected = detectSource(text, { filename: file.name });
@@ -437,27 +442,31 @@ const svgDims = (svg: string) => {
 };
 
 /**
+ * The SVG a PNG export rasterizes: `svg` with the strip below it when the look carries source
+ * and the strip. The strip's modules are one image pixel, so it needs the scale the PNG really
+ * uses and a canvas of whole pixels at that scale; a drawing past the canvas limits gets a
+ * fractional scale and keeps only the metadata chunk.
+ */
+export async function pngSvg(svg: string, look: ExportLook) {
+  const source = exportSource(look),
+    scale = look.scale;
+  if (source === undefined || !look.strip) return svg;
+  const drawn = await withSourceStrip(svg, source, scale),
+    grown = svgDims(drawn),
+    whole = (v: number) => Math.abs(v * scale - Math.round(v * scale)) < 1e-6;
+  return grown && pngScale(grown.w, grown.h, scale) >= scale && whole(grown.w) && whole(grown.h)
+    ? drawn
+    : svg;
+}
+
+/**
  * `svg` as a PNG at the look's scale, carrying the file's source when the look keeps it: in a
  * metadata chunk, and in a pixel strip below the drawing unless the look turns it off.
  */
 async function pngOf(svg: string, look: ExportLook) {
-  const source = exportSource(look);
-  let scale = look.scale;
-  if (source !== undefined && look.strip) {
-    // The strip's modules are one image pixel, so draw it at the scale the PNG will really use.
-    const dims = svgDims(svg);
-    if (dims) {
-      let drawn = svg;
-      for (let i = 0; i < 3; i++) {
-        drawn = await withSourceStrip(svg, source, scale);
-        const grown = svgDims(drawn)!,
-          k = pngScale(grown.w, grown.h, look.scale);
-        if (k >= scale) break;
-        scale = k;
-      }
-      svg = drawn;
-    }
-  }
+  const source = exportSource(look),
+    scale = look.scale;
+  svg = await pngSvg(svg, look);
   const png = await svgToPng(svg, scale);
   if (source === undefined) return png;
   const bytes = await embedPngSource(new Uint8Array(await png.arrayBuffer()), source);

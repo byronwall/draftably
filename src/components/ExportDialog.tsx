@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
+import { createMemo, createResource, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
 import type { PdfPage } from '../cli/pdf';
 import {
   copyImage,
@@ -8,6 +8,7 @@ import {
   exportPdf,
   exportSvg,
   pdfFiles,
+  pngSvg,
   setExportKind,
   setExportLook,
   type ExportKind,
@@ -90,8 +91,13 @@ export function ExportDialog() {
     onCleanup(() => url && URL.revokeObjectURL(url));
     return url;
   });
+  // A PNG's size includes the source strip below the drawing.
+  const [rasterSvg] = createResource(
+    () => ({ v: svg(), look: exportLook(), kind: exportKind() }),
+    ({ v, look, kind }) => (kind === 'svg' || !v ? v : pngSvg(v, look)),
+  );
   const size = () => {
-    const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(svg()) ?? [];
+    const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(rasterSvg.latest ?? svg()) ?? [];
     if (!w) return '';
     const k = exportKind() === 'svg' ? 1 : exportLook().scale;
     return `${Math.round(+w * k)} × ${Math.round(+h * k)} px`;

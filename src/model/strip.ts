@@ -2,7 +2,7 @@
  * Source strip: the .draft source drawn as a thin band of square modules below the drawing, so
  * the source survives sites that strip PNG metadata, resize the image or recompress it as JPEG.
  *
- * Bytes: [0xD7, length hi, length lo, deflate-raw(source)...], split into Reed–Solomon blocks
+ * Bytes: [0xD8, 24-bit length, CRC-32 of the source, deflate-raw(source)...], in Reed–Solomon blocks
  * (GF(256), parity ≈ `parity` of each block) and interleaved byte by byte across the blocks.
  *
  * Grid, N columns × M rows, both odd:
@@ -14,7 +14,21 @@
  * samples each module, so it does not depend on the image's size.
  */
 
-const MAGIC = 0xd7;
+// Format 2: a 24-bit length and a CRC-32 of the source in the header.
+const MAGIC = 0xd8;
+/** Below this many columns the clocks and guards leave too little room: export without a strip. */
+const MIN_COLS = 64;
+
+const CRC = Array.from({ length: 256 }, (_, n) => {
+  let c = n;
+  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+  return c >>> 0;
+});
+const crc32 = (bytes: Uint8Array) => {
+  let c = ~0;
+  for (const b of bytes) c = CRC[(c ^ b) & 255] ^ (c >>> 8);
+  return ~c >>> 0;
+};
 
 // --- GF(256) and Reed–Solomon (polynomials highest degree first) ---
 
@@ -211,10 +225,20 @@ export interface StripOptions {
   parity: number;
 }
 
-/** Lay out `source` as a grid that fits `width` modules across. */
+/** Lay out `source` as a grid `cols` modules across, or null when that is too narrow. */
 export async function encodeStrip(source: string, cols: number, parity: number) {
-  const packed = await pipe(new TextEncoder().encode(source), new CompressionStream('deflate-raw'));
-  const head = Uint8Array.of(MAGIC, packed.length >> 8, packed.length & 255);
+  if (cols < MIN_COLS) return null;
+  const text = new TextEncoder().encode(source);
+  const packed = await pipe(text, new CompressionStream('deflate-raw'));
+  const n = packed.length;
+  const sum = crc32(text);
+  const head = Uint8Array.of(
+    MAGIC,
+    n >> 16,
+    (n >> 8) & 255,
+    n & 255,
+    ...[24, 16, 8, 0].map(s => (sum >>> s) & 255),
+  );
   const data = new Uint8Array(head.length + packed.length);
   data.set(head);
   data.set(packed, head.length);
@@ -258,6 +282,7 @@ export async function addSourceStrip(
   const m = opts.module;
   const pad = Math.max(0, -vx);
   const g = await encodeStrip(source, Math.floor((vw - 2 * pad) / m), opts.parity);
+  if (!g) return { svg, grid: null, grew: 0, top: vh };
   const gap = Math.max(2, 3 * m);
   const quiet = Math.max(2, 3 * m);
   const top = vy + snap(vh + gap);
@@ -286,9 +311,29 @@ export async function addSourceStrip(
  */
 export const EXPORT_STRIP = { opacity: 0.03, parity: 0.1 };
 
-/** `svg` with `source` drawn as a strip below it, for a PNG at `scale` image px per CSS px. */
+/**
+ * The strip's ink: black on a light background, white on a dark one. A transparent export has no
+ * background rect and reads as on white, so it gets black.
+ */
+function stripInk(svg: string) {
+  const vb = /viewBox="(-?[\d.]+) (-?[\d.]+) ([\d.]+) ([\d.]+)"/.exec(svg);
+  const bg = vb
+    ? new RegExp(
+        `<rect x="${vb[1]}" y="${vb[2]}" width="${vb[3]}" height="${vb[4]}" fill="#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})"`,
+      ).exec(svg)?.[1]
+    : undefined;
+  if (!bg) return '#000000';
+  const hex = bg.length === 3 ? [...bg].map(c => c + c).join('') : bg;
+  const [r, g, b] = [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16));
+  return 0.299 * r + 0.587 * g + 0.114 * b > 128 ? '#000000' : '#FFFFFF';
+}
+
+/**
+ * `svg` with `source` drawn as a strip below it, for a PNG at `scale` image px per CSS px. A
+ * drawing too narrow for a strip comes back unchanged.
+ */
 export async function withSourceStrip(svg: string, source: string, scale: number) {
-  const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{3,8})"/.exec(svg)?.[1] ?? '#1B2433';
+  const ink = stripInk(svg);
   const { svg: out } = await addSourceStrip(svg, source, {
     module: 1 / scale,
     scale,
@@ -317,20 +362,22 @@ export interface StripRead {
 
 export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Promise<StripRead> {
   const { width: W, height: H, data } = px;
-  const lum = new Float32Array(W * H);
-  // Composite over white, so a transparent export reads as it shows on a light page.
-  for (let i = 0; i < W * H; i++) {
+  if (W < MIN_COLS || H < 8) return { source: null, why: 'too small' };
+  // Luminance composited over white, so a transparent export reads as it shows on a light page.
+  // Read on demand: a large image with no strip only has its bottom rows scanned.
+  const lumAt = (i: number) => {
     const a = data[i * 4 + 3] / 255;
-    lum[i] =
-      a * (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) + (1 - a) * 255;
-  }
+    return (
+      a * (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) + (1 - a) * 255
+    );
+  };
   const xa = Math.floor(W * 0.03);
   const xb = Math.ceil(W * 0.97);
   const bottom: number[] = [];
-  for (let x = xa; x < xb; x++) bottom.push(lum[(H - 1) * W + x], lum[(H - 2) * W + x]);
+  for (let x = xa; x < xb; x++) bottom.push(lumAt((H - 1) * W + x), lumAt((H - 2) * W + x));
   bottom.sort((a, b) => a - b);
   const bg = bottom[bottom.length >> 1];
-  const dev = (x: number, y: number) => Math.abs(lum[y * W + x] - bg);
+  const dev = (x: number, y: number) => Math.abs(lumAt(y * W + x) - bg);
   const rowDev = (y: number) => {
     let s = 0;
     for (let x = xa; x < xb; x++) s += dev(x, y);
@@ -342,11 +389,13 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   // Skip short runs of busy rows (compression noise) until a band at least 3 rows tall. Climb
   // only while rows stay near the band's own level, so noise in the gap above does not join the
   // band to the drawing.
+  // The band sits at the bottom: search only the last rows, so other images fail fast.
+  const floor = Math.max(1, H - 800);
   let y1 = H;
   let y0 = H;
-  while (y0 > 2) {
+  while (y0 > floor) {
     y1 = y0 - 1;
-    while (y1 > 0 && rowDev(y1) <= k) y1--;
+    while (y1 > floor && rowDev(y1) <= k) y1--;
     y0 = y1;
     const level: number[] = [rowDev(y1)];
     while (y0 > 0) {
@@ -376,6 +425,7 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   while (x0 < W && cols[x0] <= ck) x0++;
   let x1 = W - 1;
   while (x1 > 0 && cols[x1] <= ck) x1--;
+  if (x1 - x0 < MIN_COLS) return { source: null, why: 'no band' };
   const bilinear = (x: number, y: number) => {
     const xf = Math.min(W - 2, Math.max(0, Math.floor(x - 0.5)));
     const yf = Math.min(H - 2, Math.max(0, Math.floor(y - 0.5)));
@@ -477,6 +527,8 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
           const before = score();
           const e = { ox, ex, oy, ey };
           e[k] += d;
+          // A pitch under half a pixel cannot be a band; never score it.
+          if ((e.ex - e.ox) / N < 0.5 || (e.ey - e.oy) / M < 0.5) continue;
           ({ ox, ex, oy, ey } = e);
           if (score() > before + 1e-9) moved = true;
           else {
@@ -528,9 +580,13 @@ export async function decodeStrip(px: Pixels, parity = EXPORT_STRIP.parity): Pro
   if (!read) return { source: null, grid: g, why: 'too many errors' };
   const d = read.data;
   if (d[0] !== MAGIC) return { source: null, grid: g, why: 'bad header' };
-  const len = (d[1] << 8) | d[2];
+  const len = (d[1] << 16) | (d[2] << 8) | d[3];
+  const sum = ((d[4] << 24) | (d[5] << 16) | (d[6] << 8) | d[7]) >>> 0;
+  if (8 + len > d.length) return { source: null, grid: g, why: 'bad length' };
   try {
-    const text = await pipe(d.subarray(3, 3 + len), new DecompressionStream('deflate-raw'));
+    const text = await pipe(d.subarray(8, 8 + len), new DecompressionStream('deflate-raw'));
+    // Reed–Solomon can settle on a different valid codeword: only the checksum proves the text.
+    if (crc32(text) !== sum) return { source: null, grid: g, why: 'checksum mismatch' };
     return { source: new TextDecoder().decode(text), grid: g, fixed: read.fixed };
   } catch {
     return { source: null, grid: g, why: 'inflate failed' };
