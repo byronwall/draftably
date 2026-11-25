@@ -17,6 +17,8 @@ const root = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
 const outAt = args.indexOf('--out');
 const out = outAt >= 0 ? args.splice(outAt, 2)[1] : 'tmp/strip';
+const pngOnly = args.includes('--png');
+if (pngOnly) args.splice(args.indexOf('--png'), 1);
 const setAt = args.indexOf('--set');
 const only = setAt >= 0 ? args.splice(setAt, 2)[1] : '';
 const files = args.length
@@ -29,7 +31,7 @@ const files = args.length
 const MODULES = only ? [Number(only.split(':')[0])] : [1, 1.5, 2, 3];
 const OPACITY = only ? [Number(only.split(':')[1])] : [0.06, 0.1, 0.16, 0.25, 0.4];
 const PARITY = only.split(':')[2] ? Number(only.split(':')[2]) : 0.25;
-const TRANSFORMS = [
+const LOSSY = [
   { name: 'png 2x', scale: 2, type: 'image/png' },
   { name: 'png 1x', scale: 1, type: 'image/png' },
   { name: 'jpeg85 1x', scale: 1, type: 'image/jpeg', q: 0.85 },
@@ -40,6 +42,15 @@ const TRANSFORMS = [
   { name: 'jpeg80 .75x', scale: 0.75, type: 'image/jpeg', q: 0.8 },
   { name: 'png .5x', scale: 0.5, type: 'image/png' },
 ];
+// Lossless copies: export, copy-and-paste, and screenshots of the drawing shown at any zoom.
+const PNG = [2, 1.5, 1, 0.75, 0.63, 0.5, 0.4].map(scale => ({
+  name: `png ${scale}x`,
+  scale,
+  type: 'image/png',
+}));
+const TRANSFORMS: { name: string; scale: number; type: string; q?: number }[] = pngOnly
+  ? PNG
+  : LOSSY;
 
 const decoder =
   stripTypeScriptTypes(fs.readFileSync(path.join(root, 'src/model/strip.ts'), 'utf8')).replace(
@@ -78,7 +89,7 @@ for (const m of MODULES)
   for (const opacity of OPACITY) {
     const pass = TRANSFORMS.map(() => 0);
     const notes: string[] = [];
-    let bandPx = 0;
+    const bands: number[] = [];
     for (const d of svgs) {
       const ink = /<text[^>]* fill="(#[0-9A-Fa-f]{6})"/.exec(d.svg)?.[1] ?? '#1B2433';
       const { svg, grid } = await addSourceStrip(d.svg, d.source, {
@@ -87,7 +98,7 @@ for (const m of MODULES)
         ink,
         opacity,
       });
-      bandPx = Math.max(bandPx, grid.rows * m);
+      bands.push(grid.rows * m);
       const size = /width="([\d.]+)" height="([\d.]+)"/.exec(svg)!;
       const w = Math.ceil(Number(size[1]));
       const h = Math.ceil(Number(size[2]));
@@ -156,11 +167,12 @@ for (const m of MODULES)
         else notes.push(`${d.name} ${TRANSFORMS[i].name}: ${r.why}`);
       });
     }
-    const row = `| ${m} | ${opacity} | ${bandPx} | ${pass.map(p => `${p}/${svgs.length}`).join(' | ')} |`;
+    bands.sort((x, y) => x - y);
+    const row = `| ${m} | ${opacity} | ${PARITY} | ${bands[bands.length >> 1]} / ${bands[bands.length - 1]} | ${pass.map(p => `${p}/${svgs.length}`).join(' | ')} |`;
     rows.push(row);
     console.log(row, notes.length ? `\n    ${notes.join('\n    ')}` : '');
   }
 await browser.close();
-const head = `| module px | opacity | max band px | ${TRANSFORMS.map(t => t.name).join(' | ')} |\n|${' --- |'.repeat(TRANSFORMS.length + 3)}`;
+const head = `| module px | opacity | parity | band px median / max | ${TRANSFORMS.map(t => t.name).join(' | ')} |\n|${' --- |'.repeat(TRANSFORMS.length + 4)}`;
 fs.writeFileSync(path.join(out, 'results.md'), `${head}\n${rows.join('\n')}\n`);
 console.log(`\n${head}\n${rows.join('\n')}`);

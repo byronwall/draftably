@@ -49,10 +49,10 @@ main{padding:16px;overflow-x:auto}
 </style></head><body>
 <header>
 <label>Example <select id="ex">${examples.map((e, i) => `<option value="${i}"${e.name === 'checkout' ? ' selected' : ''}>${e.name}</option>`).join('')}</select></label>
-<label>Module <input id="m" type="range" min="1.5" max="4" step="0.5" value="2.5"><output id="mv"></output></label>
-<label>Opacity <input id="o" type="range" min="0.03" max="0.4" step="0.01" value="0.16"><output id="ov"></output></label>
-<label>Parity <select id="p"><option>0.25</option><option selected>0.33</option><option>0.5</option></select></label>
-<label>Shown at <select id="z"><option value="fit">Fit to width (chat preview)</option><option value="1" selected>1x (as pasted at CSS size)</option><option value="0.5">0.5x</option><option value="0.75">0.75x</option><option value="2">2x (full export pixels)</option></select></label>
+<label>Module <input id="m" type="range" min="1" max="4" step="0.25" value="2"><output id="mv"></output></label>
+<label>Opacity <input id="o" type="range" min="0.01" max="0.4" step="0.01" value="0.05"><output id="ov"></output></label>
+<label>Parity <select id="p"><option selected>0.2</option><option>0.25</option><option>0.33</option><option>0.5</option></select></label>
+<label>Shown at <select id="z"><option value="fit">Fit to width (chat preview)</option><option value="1" selected>1x (as pasted at CSS size)</option><option value="0.5">0.5x</option><option value="0.63">0.63x</option><option value="0.75">0.75x</option><option value="1.5">1.5x</option><option value="2">2x (full export pixels)</option></select></label>
 <label>Re-encode <select id="t"><option value="image/png">PNG</option><option value="image/jpeg|0.85">JPEG 85</option><option value="image/jpeg|0.6">JPEG 60</option><option value="image/webp|0.75">WebP 75</option></select></label>
 <label><input id="dark" type="checkbox"> Dark page</label>
 <span id="status"></span>
