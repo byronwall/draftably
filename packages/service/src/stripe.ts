@@ -10,6 +10,10 @@ export interface StripeEnv {
   STRIPE_WEBHOOK_SECRET?: string;
 }
 
+/** Paid credits are on only with both secrets: a sale the webhook can't fulfil is never offered. */
+export const paidCreditsOn = (env: StripeEnv) =>
+  !!(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
+
 /** Credit packs. Prices are placeholders until Byron sets them. */
 export const PACKS = [
   { id: 'small', credits: 25_000, cents: 500 },
@@ -19,7 +23,7 @@ export const PACKS = [
 /** A Checkout session for `pack`; returns the URL to send the buyer to. */
 export async function checkoutUrl(env: StripeEnv, account: string, packId: string, origin: string) {
   const pack = PACKS.find(p => p.id === packId);
-  if (!pack || !env.STRIPE_SECRET_KEY) return null;
+  if (!pack || !paidCreditsOn(env)) return null;
   const form = new URLSearchParams({
     mode: 'payment',
     success_url: `${origin}/account?bought=1`,
@@ -98,7 +102,10 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
     return new Response('Bad signature.', { status: 400 });
   const event = JSON.parse(body) as CheckoutEvent;
   const s = event.data.object;
-  if (event.type !== 'checkout.session.completed' || s.payment_status !== 'paid')
+  // A card pays at once (completed, paid); a delayed method such as a bank debit completes unpaid
+  // and pays later (async_payment_succeeded). Either way the session ID keeps it to one credit.
+  const paidEvents = ['checkout.session.completed', 'checkout.session.async_payment_succeeded'];
+  if (!paidEvents.includes(event.type) || s.payment_status !== 'paid')
     return new Response('Ignored.');
   const account = s.metadata?.account,
     credits = Number(s.metadata?.credits);

@@ -13,7 +13,7 @@ import {
   type AuthEnv,
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
-import { checkoutUrl, PACKS, type StripeEnv } from './stripe';
+import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
 
 const esc = (s: string) =>
   s.replace(
@@ -88,7 +88,7 @@ async function accountPage(
 An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</p></section>
 ${bought ? '<p><b>Thanks.</b> Your credits appear here once Stripe confirms the payment, usually within seconds.</p>' : ''}
 ${
-  env.STRIPE_SECRET_KEY
+  paidCreditsOn(env)
     ? `<section><h2>Buy credits</h2><p class="muted">Bought credits never expire. The monthly grant is spent first.</p>
 ${PACKS.map(
   p => `<form method="post" action="/account/buy" style="display:inline-block;margin-right:8px"><input type="hidden" name="pack" value="${p.id}">
