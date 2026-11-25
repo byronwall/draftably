@@ -356,6 +356,64 @@ a.button {
   box-shadow: 0 0 0 1px var(--line-strong);
 }
 
+/* An icon picker: the chosen icon, where it sits, and a search over the installed sets. */
+.icon-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.icon-current {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.icon-slot {
+  width: 22px;
+  height: 22px;
+}
+
+.icon-current .icon-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+  gap: 2px;
+  max-height: 176px;
+  overflow-y: auto;
+}
+
+.icon-grid button {
+  display: grid;
+  place-items: center;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.icon-grid button:hover {
+  background: var(--hover);
+}
+
+.icon-grid button.selected {
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+
 /* --- Form controls ---------------------------------------------------------------------------- */
 
 :where(input:not([type='checkbox'], [type='range']), select, textarea) {

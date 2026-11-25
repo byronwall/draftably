@@ -10,6 +10,7 @@ import type { CodeBlock } from './code';
 import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
 import type { PlacedTimeline } from './timeline';
+import type { IconData } from './iconify';
 
 export type ShapeKind =
   | 'box'
@@ -38,6 +39,10 @@ export interface DiagramNode {
   wasCount?: number | string;
   /** A link to open from exported drawings. */
   href?: string;
+  /** An icon by Iconify name (`database`, `logos:aws-lambda`); its data is in `Diagram.icons`. */
+  icon?: string;
+  /** `top` draws the icon large over the title; omitted means before the title. */
+  iconPos?: 'left' | 'top';
   /** How many things this box stands for, or a symbol such as `N`; drawn as a stack with a badge. */
   count?: number | string;
   /** A cell's columns (or units), or `var` for a field of variable length. */
@@ -57,6 +62,8 @@ export interface DiagramGroup {
   was?: string;
   /** A link to open from exported drawings. */
   href?: string;
+  /** An icon drawn in the title band, by Iconify name; its data is in `Diagram.icons`. */
+  icon?: string;
   parentId?: string;
   /** `soft` draws a tint behind the members instead of a frame; `none` draws nothing. */
   frame?: 'soft' | 'none';
@@ -297,6 +304,8 @@ export interface Diagram {
   theme: Theme;
   /** Diagram theme, overrides and color definitions. Saved with the diagram. */
   appearance: DiagramAppearance;
+  /** Data of the icons the diagram uses, by name, as the compiler found them. */
+  icons?: Record<string, IconData>;
 }
 
 export type NodeGeometry = Record<string, NodeLayout>;

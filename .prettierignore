@@ -17,3 +17,4 @@ docs/intent/**/assets/pro-results/**
 docs/evaluations/agent-diagrams/bare/
 docs/evaluations/agent-diagrams/reference/
 site/public/evaluations/agent-diagrams/
+src/assets/icons/lucide.json

@@ -9,6 +9,7 @@ import {
   tailOf,
   type EndMarker,
 } from './markers';
+import { iconAt, type IconData } from './iconify';
 import { MARKER, statusLabel, statusPaint, statusSwatch, type StatusCount } from './status';
 
 const esc = (s: string) =>
@@ -22,9 +23,15 @@ export const markerMarkup = (x: number, y: number, ink: string, canvas: string, 
 /** Space between entries that share a row. */
 const GAP = 24;
 
-/** Width of a row's swatch: a message's line is longer, for the marks at its ends. */
+/** Size of an entry's icon, drawn after its swatch. */
+const LEGEND_ICON = 14;
+
+/** Width of a row's swatch: a message's line is longer, for the marks at its ends. An icon
+ * follows the swatch. */
 const swatchW = (e?: LegendEntry) =>
-  e?.caption ? -8 : e?.message && e.message !== 'action' ? 28 : 16;
+  e?.caption
+    ? -8
+    : (e?.message && e.message !== 'action' ? 28 : 16) + (e?.icon ? LEGEND_ICON + 6 : 0);
 
 /** Width of one entry: its swatch, the gap after it, and its label. */
 const entryW = (look: ResolvedAppearance, label: string, e?: LegendEntry) =>
@@ -92,8 +99,17 @@ export function legendSize(
 
 export type LegendLayout = ReturnType<typeof legendSize>;
 
-/** SVG markup for the key laid out by `legendSize`, with its top-left corner at (x, y). */
-export function legendMarkup(look: ResolvedAppearance, key: LegendLayout, x: number, y: number) {
+/**
+ * SVG markup for the key laid out by `legendSize`, with its top-left corner at (x, y). `icons`
+ * holds the data of the icons entries name.
+ */
+export function legendMarkup(
+  look: ResolvedAppearance,
+  key: LegendLayout,
+  x: number,
+  y: number,
+  icons?: Record<string, IconData>,
+) {
   const { row } = key,
     { family, size, weight } = look.annotation;
   return key.items
@@ -130,6 +146,16 @@ export function legendMarkup(look: ResolvedAppearance, key: LegendLayout, x: num
           ) +
           (p.marker ? markerMarkup(left + 16, top + (row - 12) / 2, c.stroke, look.canvas, 4) : '');
       }
+      if (e.legend?.icon)
+        swatch += iconAt(
+          icons,
+          e.legend.icon,
+          left + swatchW(e.legend) - LEGEND_ICON,
+          mid - LEGEND_ICON / 2,
+          LEGEND_ICON,
+          look.text,
+          `legend-icon-${e.x}-${e.y}`,
+        );
       return (
         swatch +
         `<text x="${left + swatchW(e.legend) + 8}" y="${mid}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${esc(e.label)}</text>`

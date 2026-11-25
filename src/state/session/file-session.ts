@@ -16,7 +16,14 @@
  */
 import { batch, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
-import { checkSource, compile, type Diagnostic, type Scene } from '../../dsl/compile';
+import {
+  checkSource,
+  compile,
+  completeIcons,
+  type Diagnostic,
+  type Scene,
+} from '../../dsl/compile';
+import { setIconSource, type IconSet } from '../../model/iconify';
 import { projectScene } from '../../dsl/project';
 import { DslError, printSource, readSource } from '../../dsl/syntax';
 import {
@@ -48,6 +55,27 @@ import { type EditKind } from './document';
 import { toast, type ToastAction } from '../toast';
 import type { DocumentPart } from './document';
 import type { CanvasTextPart } from './canvas-text';
+
+/**
+ * Read icon sets the local server has installed (`/api/icons`), so a served file draws the
+ * `prefix:name` icons the CLI draws. Only the CLI's own server answers; elsewhere this is Lucide.
+ */
+async function useServedIconSets() {
+  try {
+    const res = await fetch('./api/icons');
+    if (!res.ok) return;
+    const prefixes: string[] = await res.json();
+    setIconSource({
+      load: async prefix =>
+        prefixes.includes(prefix)
+          ? ((await (await fetch(`./api/icons/${prefix}`)).json()) as IconSet)
+          : undefined,
+      list: () => prefixes,
+    });
+  } catch {
+    // Lucide still draws.
+  }
+}
 
 export interface FileSessionInfo {
   name: string;
@@ -277,7 +305,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     const view = viewState();
     let scene: Scene;
     try {
-      scene = await runShared({ kind: 'compile', source, files });
+      // The worker reads Lucide only; a set the local server has fills in here.
+      scene = await completeIcons(await runShared({ kind: 'compile', source, files }));
     } catch {
       return { scene: await compile(source, files) };
     }
@@ -793,6 +822,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       return false;
     }
     document.title = `${file} · draftably`;
+    await useServedIconSets();
     await begin(info);
     listen();
     return true;

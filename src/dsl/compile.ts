@@ -28,7 +28,17 @@ import {
   textHeight,
   titleHeight,
   wrapTitle,
+  iconLift,
+  iconRoom,
 } from '../model/labels';
+import {
+  loadAllIconSets,
+  loadIcons,
+  loadIconSet,
+  splitIcon,
+  suggestIcons,
+  type IconData,
+} from '../model/iconify';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { layoutTimeline, onChartEdges } from './timeline';
 import type { PlacedTimeline, TimelinePlan } from '../model/timeline';
@@ -135,6 +145,8 @@ export interface Scene {
   sequence?: SequenceLayout;
   /** Timelines: each timeline scope's drawing as one display list (`dsl/timeline.ts`). */
   timelines?: PlacedTimeline[];
+  /** Data of the icons the file names, by name; set by `compile`. */
+  icons?: Record<string, IconData>;
 }
 
 type Item = ModelObject & { w: number; h: number };
@@ -149,8 +161,69 @@ const round = (n: number) => Math.round(n);
 
 /** `files` holds the text of the files `src=` names; see `CodeFiles`. */
 export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
-  const m = parseModel(source, files),
-    root = m.layouts.find(l => l.scope === 'root' && l.fit);
+  const m = parseModel(source, files);
+  return withIcons(await compileFit(m), m);
+}
+
+/**
+ * The scene with the data of every icon the file names, so each renderer draws from the diagram
+ * alone. An icon no set has warns, with the closest names; its box keeps the room it reserved.
+ */
+async function withIcons(scene: Scene, m: Model): Promise<Scene> {
+  const uses = iconUses(m);
+  if (!uses.length) return scene;
+  const icons: Record<string, IconData> = await loadIcons(uses.map(u => u.name)),
+    missing = uses.filter(u => !icons[u.name]);
+  if (missing.length) await loadAllIconSets();
+  for (const u of missing) {
+    const { prefix, icon } = splitIcon(u.name),
+      near = suggestIcons(u.name).map(n => `\`${n}\``);
+    scene.diagnostics.push({
+      level: 'warning',
+      code: 'unknown-icon',
+      message:
+        ((await loadIconSet(prefix))
+          ? `No icon \`${icon}\` in ${prefix}.`
+          : `No icon set \`${prefix}\` is installed. Add it with \`pnpm add -D @iconify-json/${prefix}\`.`) +
+        (near.length
+          ? ` Did you mean ${near.join(' or ')}?`
+          : ' Run `draftably icons <word>` to search.'),
+      line: u.line,
+      ids: u.ids,
+    });
+  }
+  return { ...scene, icons };
+}
+
+/**
+ * Add icons a worker could not load to a scene, from the sets this thread can read (the editor
+ * reads a local server's installed sets), and drop their warnings. The scene as it was when every
+ * icon is there or none is found.
+ */
+export async function completeIcons(scene: Scene): Promise<Scene> {
+  const uses = iconUses(scene.model).filter(u => !scene.icons?.[u.name]);
+  if (!uses.length) return scene;
+  const found = await loadIcons(uses.map(u => u.name)),
+    names = new Set(Object.keys(found));
+  if (!names.size) return scene;
+  const fixed = new Set(uses.filter(u => names.has(u.name)).map(u => u.line));
+  return {
+    ...scene,
+    icons: { ...scene.icons, ...found },
+    diagnostics: scene.diagnostics.filter(d => d.code !== 'unknown-icon' || !fixed.has(d.line!)),
+  };
+}
+
+/** Each icon a file names, with its line and object. */
+const iconUses = (m: Model) => [
+  ...m.objects.flatMap(o => (o.icon ? [{ name: o.icon, line: o.line, ids: [o.id] }] : [])),
+  ...(m.appearance.legend ?? []).flatMap((e, i) =>
+    e.icon ? [{ name: e.icon, line: m.legendLines[i], ids: [] as string[] }] : [],
+  ),
+];
+
+async function compileFit(m: Model): Promise<Scene> {
+  const root = m.layouts.find(l => l.scope === 'root' && l.fit);
   if (!root?.fit) return compileModel(m);
   // `fit=`: lay the drawing out each way it can read and fold, and keep the one whose shape is
   // closest to the target. The file as written goes first, so it wins a tie.
@@ -294,9 +367,10 @@ const SEQ_TOP = 24,
  */
 function participantWidth(o: SceneObject, look: ResolvedAppearance) {
   const text = Math.ceil(measureText(o.label, look.title));
-  if (o.label.includes('\n') || titleArea(o.shape, o.w, o.h, look).width < text) return o.w;
+  if (o.label.includes('\n') || titleArea(o.shape, o.w, o.h, look, iconRoom(o)).width < text)
+    return o.w;
   let w = SEQ_MIN_W;
-  while (w < o.w && titleArea(o.shape, w, o.h, look).width < text) w += 4;
+  while (w < o.w && titleArea(o.shape, w, o.h, look, iconRoom(o)).width < text) w += 4;
   return Math.min(w, o.w);
 }
 
@@ -307,8 +381,10 @@ function participantWidth(o: SceneObject, look: ResolvedAppearance) {
 function participantHeader(o: SceneObject, look: ResolvedAppearance): SceneObject {
   const w = participantWidth(o, look);
   if (o.shape !== 'box' && o.shape !== 'pill') return { ...o, w };
-  const lines = wrapTitle(o.label, titleArea(o.shape, w, o.h, look).width, look),
-    h = Math.ceil(textHeight(lines, look) + 2 * Math.min(look.paddingY, SEQ_HEADER_PAD));
+  const lines = wrapTitle(o.label, titleArea(o.shape, w, o.h, look, iconRoom(o)).width, look),
+    h = Math.ceil(
+      textHeight(lines, look) + iconLift(o) + 2 * Math.min(look.paddingY, SEQ_HEADER_PAD),
+    );
   return { ...o, w, h: Math.min(o.h, h) };
 }
 
@@ -1130,7 +1206,8 @@ function fitWidth(o: ModelObject, base: { w: number; h: number }, look: Resolved
       ...rows.map((l, i) => measureText(l, type(i))),
     );
   let w = base.w;
-  while (titleArea(o.shape, w, base.h, look).width < need && w < base.w * MAX_GROW) w += 4;
+  while (titleArea(o.shape, w, base.h, look, iconRoom(o)).width < need && w < base.w * MAX_GROW)
+    w += 4;
   return Math.min(w, base.w * MAX_GROW);
 }
 
@@ -1155,8 +1232,9 @@ export function leafSize(
   const base = defaultShapeSize(o.shape);
   if (o.shape === 'diamond') return diamondSize(o, size, base, look);
   const w = size?.width ?? fitWidth(o, base, look);
-  const area = titleArea(o.shape, w, size?.height ?? base.h, look),
-    text = textHeight(wrapTitle(o.label, area.width, look), look);
+  // An icon before the title narrows its line; a tile icon over it adds to its height.
+  const area = titleArea(o.shape, w, size?.height ?? base.h, look, iconRoom(o)),
+    text = textHeight(wrapTitle(o.label, area.width, look), look) + iconLift(o);
   if (size?.height !== undefined)
     return { w, h: size.height, overflow: text > area.maxHeight + 0.5 };
   return {

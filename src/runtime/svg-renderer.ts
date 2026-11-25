@@ -38,6 +38,7 @@ import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
 import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
+import { iconAt } from '../model/iconify';
 import {
   edgeLabelLines,
   edgeLabelType,
@@ -405,7 +406,17 @@ function sceneMarkup(
           `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${cells ? Math.min(4, look.radius) : Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
           cells
             ? ''
-            : `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+            : g.icon
+              ? iconAt(
+                  doc.icons,
+                  g.icon,
+                  r.x + 11,
+                  r.y + band - 8,
+                  16,
+                  c.ink,
+                  `${opts.idPrefix ?? ''}icon-${g.id}`,
+                )
+              : `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
           ...cellsChromeMarkup(doc, look, g.id, r),
           ...title.map(
             (line, i) =>
@@ -550,6 +561,17 @@ function sceneMarkup(
                 )
                 .join('') +
               '</text>',
+          n.icon && label.icon
+            ? iconAt(
+                doc.icons,
+                n.icon,
+                r.x + label.icon.x,
+                r.y + label.icon.y,
+                label.icon.size,
+                ink,
+                `${opts.idPrefix ?? ''}icon-${n.id}`,
+              )
+            : '',
           badge
             ? `<rect x="${r.x + r.w - bw + 6}" y="${r.y - bh / 2}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="${c.stroke}"/>` +
               `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
@@ -718,7 +740,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
     );
   });
   out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));
-  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y, doc.icons));
   out.push(noteMarkup(look, frame.notes, writeHref(opts)));
   out.push('</svg>\n');
   return out.join('\n');
@@ -865,7 +887,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   });
   // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
   out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));
-  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y, doc.icons));
   out.push(noteMarkup(look, frame.notes, writeHref(opts)));
   out.push('</svg>\n');
   return out.join('\n');
