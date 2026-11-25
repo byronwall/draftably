@@ -57,6 +57,7 @@ and groups. References may point to later lines.
 | `layout root sequence`              | A sequence diagram: nodes are participants, edges are messages in file order. `activations=on` draws activation bars. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                                                                                                                                                                                                        |
 | `layout group cells`                | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `layout group table`                | The group's members as database rows: a key glyph, the column name and its type. See [Database tables](#database-tables).                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `layout scope mindmap root=id`      | A mind map: `id` in the middle and its branches to the left and right. `direction=down` puts them above and below. See [Mind maps](#mind-maps).                                                                                                                                                                                                                                                                                                                                                                                           |
 | `layout scope engine=name`          | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `layout root … fit=slide`           | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also tries folding on and off and, unless the line sets `direction=`, the other reading direction. It keeps the closest and says which in an `info` note.                                                                                                                                                                                                                                                                        |
 | `routing`                           | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -307,6 +308,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
 | `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
 | `table=`     | `off`         | `on` draws the body as a light table. See [Code tables](#code-tables).                                        |
+| `labels=`    | `leader`      | `inside` puts range labels in a column inside the box. See [Line ranges](#line-ranges).                       |
 | `start=`     | `1`           | The first line number. Ranges count from it too.                                                              |
 | `max-width=` | `960`         | The widest the box grows (120–8000 px; 960 is about 130 columns).                                             |
 | `wrap=`      | `on`          | `on` continues a long line on the next row, with a hanging indent and ↩. `off` cuts it with `…`.              |
@@ -376,10 +378,14 @@ Paste spreadsheet cells, or a Markdown or psql table, on the canvas to add a tab
 ### Line ranges
 
 `range` names lines of a code node. The range draws a band behind the lines, a bar in the left
-margin and its label in a label column on the right. Code never runs under a label: when a range
-has a label, the node grows by the widest label (up to about 170px; a longer one ends with `…`),
-and every label starts at the same x, level with its range's first line. A range without a label
-never changes the node's size or the layout.
+margin and its label outside the box's right edge. A leader runs from a dot just inside the edge,
+level with the range's first line, and the label sits just above it. Every label starts at the
+same x, and a label longer than about 170px ends with `…`. The labels count as part of the node,
+so layouts, lines and the drawing's bounds keep clear of them. A range without a label never
+changes the node's size or the layout.
+
+`labels=inside` on the code node puts the labels in a column inside the box instead, right of the
+code. The code then wraps before the column. Use it when nothing may sit outside the box.
 
 ```draft
 node report "Orders report" color=blue
@@ -410,8 +416,11 @@ Then use it:
 
 - The ID is `<node>.<name>`, and it works like any ID. An `edge` may start or end on it, a
   `note near=` sits beside its lines, and a `state` may list it.
-- An edge to a range meets the node's left or right side at the range's middle line. `to=` and
-  `from=` take `left` or `right` only.
+- An edge to a range meets the node's left or right side at the range's middle line, or at its
+  label's dot when it has one. On the right side, the line leaves along the label's leader, so the
+  label sits above the line like a line label. `to=` and `from=` take `left` or `right` only.
+- No line crosses a label or a leader: lines meet the drawn box and pass the labels between rows
+  or beyond them.
 - `color=` picks the family (default `amber`). The label is optional.
 - Ranges may nest or overlap: bands blend, bars stand side by side, and a label whose row another
   label holds moves down to the next free row.
@@ -1084,6 +1093,48 @@ layout users table
   Deleting the whole table works.
 - A group body works without `layout group table`; its members then draw as plain boxes, laid out
   by the group's layout.
+
+## Mind maps
+
+A mind map is plain nodes and edges with one layout line. The root topic sits in the middle, and
+its branches spread out to the left and right, balanced by size.
+
+```draft
+node launch "Launch 1.0"
+node mk "Marketing"
+node blog "Blog post"
+node hn "Show HN"
+node eng "Engineering"
+node docs "Docs site"
+
+edge b1 launch -> mk
+edge b2 mk -> blog
+edge b3 mk -> hn
+edge b4 launch -> eng
+edge b5 eng -> docs
+
+layout root mindmap root=launch
+```
+
+**Try it:** add `color=rose` to `eng`. Engineering and its topics change from their given color to
+rose, and the other branch keeps its color.
+
+- **Branches:** an edge with no label, `kind=`, `head=`, `tail=` or `directed=` is a branch line.
+  The tree follows branch lines forward from `root=`. Branch lines draw with no arrowhead.
+- **Colors:** each first-level topic takes the next color family in turn, and the topics under it
+  draw as pale cards of the same family. A topic with `color=` keeps it, and the topics under it
+  take it. The root keeps the neutral surface. Branch colors need no `legend` row.
+- **Cross-links:** an edge with a label or `kind=`, or one more edge into a topic that already has
+  a branch, draws as written but does not move the topics. An edge to an object outside the map
+  is a normal edge.
+- **Off the tree:** a topic that no branch line reaches from the root sits past the outermost
+  topics, on the side of the topic it links to. A topic with no link to the tree sits below the
+  map.
+- **Groups:** `layout g mindmap root=id` draws a mind map inside group `g`, so a map can sit in a
+  larger drawing. The root must be a member of `g`. The topics are the scope's own members: a
+  group in a map is one topic, and an edge to something inside it is a normal edge.
+
+`check` reports a mind map with no `root=`, and a `root=` that names no node.
 
 ## Change marks
 
@@ -1902,6 +1953,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [CI/CD pipeline](https://draftably.dev/app/?example=ci-cd-pipeline): One level of containers: each stage is a group, jobs run inside it.
 - [Order saga](https://draftably.dev/app/?example=order-saga): Event-driven services around a broker. Dashed lines are asynchronous events.
 - [Observability stack](https://draftably.dev/app/?example=observability-stack): Telemetry flows from instrumented services through collectors into storage and tools.
+- [Launch plan](https://draftably.dev/app/?example=launch-plan): A mind map: three colored branches round the root, a cross-link and a topic beside the tree.
 
 ### Architecture
 

@@ -7,6 +7,8 @@ import { DEFAULT_SETTINGS, emptyDiagram } from '../model/document';
 import { clone } from '../model/geometry';
 import { timelineRoutes, frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
+import { drawnRect } from '../model/ranges';
+import { resolveAppearance } from '../model/appearance';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
 import { cellsBandFor } from './cells';
@@ -19,6 +21,7 @@ export type ViewState = Partial<Pick<Diagram, 'settings' | 'camera' | 'theme' | 
 function resolveColor(scene: Scene, o: SceneObject): ColorKey {
   for (let x: SceneObject | undefined = o; x; x = scene.byId.get(x.parent))
     if (x.color !== 'auto') return x.color;
+    else if (x.branch) return x.branch as ColorKey;
   return 'auto';
 }
 
@@ -86,6 +89,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       // A cell is drawn on the neutral surface under its group's band unless it names a color.
       color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
+      ...(o.card ? { card: true } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
     });
@@ -99,7 +103,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       label: e.label,
       ...(e.was !== undefined ? { was: e.was } : {}),
       directed: e.directed !== false,
-      ...(e.head ? { head: e.head } : {}),
+      ...(e.branch ? { head: 'none' as const, branch: true } : e.head ? { head: e.head } : {}),
       ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
@@ -141,6 +145,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   if (root) doc.settings.direction = root.direction === 'down' ? 'DOWN' : 'RIGHT';
   if (root?.engine)
     Object.assign(doc.settings, { algorithm: root.engine.algorithm }, root.engine.params);
+  // Layout tools rebuild a root mind map the way the file draws it: root in the middle.
+  if (root?.mindmap) doc.layout.intent = { start: { id: root.mindmap, placement: 'center' } };
   if (view.camera) doc.camera = { ...view.camera };
   if (view.theme) doc.theme = view.theme;
   return doc;
@@ -209,8 +215,12 @@ export function measured(
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId ?? 'root']),
   );
+  // A code node measures as its drawn box: its outside range labels are not the node.
+  const look = resolveAppearance(doc.appearance),
+    nodes = new Map(doc.graph.nodes.map(n => [n.id, n]));
   return {
     nodes: [...rects]
+      .map(([id, r]) => [id, drawnRect(nodes.get(id), look, r)] as const)
       .map(([id, r]) => ({ id, parent: parent.get(id)!, x: r.x, y: r.y, w: r.w, h: r.h }))
       .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
     routes: routes

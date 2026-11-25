@@ -3,6 +3,8 @@ import { SculptLab } from '../../engines/sculpt-engine';
 import { center } from '../../model/geometry';
 import { findNode, isGroup, onTimeline, styleOf } from '../../model/graph';
 import { portPoint, sideToward, SIDE_VECTORS } from '../../model/routes';
+import { drawnRect } from '../../model/ranges';
+import { resolveAppearance } from '../../model/appearance';
 import type { NodeLayout, Side } from '../../model/types';
 import { roundedPath } from '../../model/geometry';
 import { useDiagramSession } from '../session-context';
@@ -52,7 +54,12 @@ function ConnectionPreview() {
     const from = s.connectFrom(),
       b = s.pointer();
     if (!from || !b || !findNode(s.doc, from.id)) return null;
-    const r = s.geometry(from.id),
+    // A code node's lines meet its drawn box, not the lane its range labels take.
+    const r = drawnRect(
+        findNode(s.doc, from.id),
+        resolveAppearance(s.doc.appearance),
+        s.geometry(from.id),
+      ),
       side: Side = from.side === 'auto' ? sideToward(r, b) : from.side,
       a = portPoint(styleOf(s.doc, from.id).shape, r, side),
       points =
@@ -89,7 +96,15 @@ function QuickAddButtons() {
           {side => {
             const k = () => s.doc.camera.k;
             const at = () => {
-              const p = portPoint(styleOf(s.doc, id()).shape, s.geometry(id()), side),
+              const p = portPoint(
+                  styleOf(s.doc, id()).shape,
+                  drawnRect(
+                    findNode(s.doc, id()),
+                    resolveAppearance(s.doc.appearance),
+                    s.geometry(id()),
+                  ),
+                  side,
+                ),
                 v = SIDE_VECTORS[side];
               return { x: p.x + (v.x * 26) / k(), y: p.y + (v.y * 26) / k() };
             };

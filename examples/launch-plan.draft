@@ -1,0 +1,43 @@
+diagram "Launch plan" version=1
+subtitle "Three workstreams for the 1.0 launch"
+
+# A mind map: plain nodes and edges, drawn out both ways from the root topic in the middle.
+# Each first-level branch takes a color, and its topics inherit it. A line with a label or kind=
+# is a cross-link, and a topic off the tree sits beside the topic it links to.
+
+node launch "Launch 1.0"
+node mk "Marketing" color=rose
+node blog "Blog post"
+node hn "Show HN"
+node video "Demo video"
+node eng "Engineering" color=teal
+node docs "Docs site"
+node pricing "Pricing page"
+node load "Load test"
+node sup "Support" color=amber
+node faq "FAQ"
+node status "Status page"
+
+edge b1 launch -> mk
+edge b2 mk -> blog
+edge b3 mk -> hn
+edge b4 mk -> video
+edge b5 launch -> eng
+edge b6 eng -> docs
+edge b7 eng -> pricing
+edge b8 eng -> load
+edge b9 launch -> sup
+edge b10 sup -> faq
+edge b11 sup -> status
+
+node forum "Community forum" icon=message-circle
+edge e1 hn -> forum "links to"
+edge e2 docs -> blog "linked from" kind=async
+
+note "Docs must ship before Show HN." near=docs side=above
+legend line solid "Part of"
+legend line dashed "Cross-link"
+
+state critical "Critical path" launch eng docs hn
+
+layout root mindmap root=launch

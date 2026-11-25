@@ -25,6 +25,11 @@ export interface CodeBlock {
   numbers: boolean;
   /** `table=on`: line 1 is a header, drawn muted with a rule under it, and the columns align. */
   table?: boolean;
+  /**
+   * `labels=inside`: range labels sit in a column inside the box. By default they sit outside
+   * its right edge, each on a leader line from a dot just inside the edge.
+   */
+  labels?: 'inside';
   /** `start=`: the first line's number. */
   start: number;
   /** `max-width=`: the widest the box grows before lines wrap or clip. */
@@ -56,8 +61,8 @@ export interface CodeBlock {
 /**
  * A named run of body lines (`range sql.copy1 lines=3-6`): a tinted band behind them, a bar in
  * the left margin and an optional label. Its ID is `<node>.<name>`, which edges, notes and states
- * name like any object. A label widens the node by the label column (`labelColumn`); a range
- * without one never changes the node's size.
+ * name like any object. Labels add a lane to the node's layout box (`labelColumn`): outside the
+ * drawn box by default, inside it with `labels=inside`. A range without a label adds nothing.
  */
 export interface CodeRange {
   name: string;
@@ -107,10 +112,16 @@ const TABLE_GAP = 6;
 const MIN_WIDTH = 80;
 /** A range label's padding inside its tag, and the widest a tag grows before its text truncates. */
 export const TAG_PAD = 4;
+/** The narrowest tag: room for an ellipsis. */
+const MIN_TAG = 2 * TAG_PAD + 16;
 const TAG_MAX = 168;
-/** The label column's gap from the box's right edge, and from the code before it. */
+/** `labels=inside`: the label column's gap from the box's right edge, and from the code. */
 const TAG_INSET = 6;
 const TAG_GAP = 12;
+/** By default: the leader from the dot inside the right edge to a label outside it. */
+export const LEADER = 18;
+/** The dot's center, this far inside the box's right edge: on the border, clear of wrap marks. */
+export const LEADER_DOT = 0;
 
 /**
  * The label column of a code node whose ranges have labels: the widest tag, capped at
@@ -206,10 +217,15 @@ export interface CodeLayout {
   rule?: number;
   /** x where the rule ends: the table's last column, or the right padding when that is nearer. */
   ruleEnd?: number;
+  /** Width of the drawn box. `w` adds the outside label lane, when there is one. */
+  frame: number;
   /** Right edge of the code column, from the box's left edge: the wrap marks sit just past it. */
   right: number;
-  /** The range label column, when a range has a label: its left edge and its width. */
-  tags?: { x: number; w: number };
+  /**
+   * The range label column, when a range has a label: its left edge and its width. `outside`:
+   * past the drawn box, each label on a leader.
+   */
+  tags?: { x: number; w: number; outside?: boolean };
 }
 
 const columns = (s: string) => s.length;
@@ -267,21 +283,42 @@ export function codeLayout(
     longest = Math.max(...lines.map(columns)),
     captionW = caption ? measureText(caption, look.annotation) + 2 * CODE_PAD.x : 0,
     column = labelColumn(code, look),
-    // The label column takes the right padding's place: the code ends a gap before it.
-    extra = column ? column + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
+    inside = code.labels === 'inside',
+    // Inside, the label column takes the right padding's place: the code ends a gap before it.
+    // Outside, a lane right of the box holds the leaders and labels.
+    extra = column && inside ? column + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
+    narrowest = Math.ceil(2 * CODE_PAD.x + gutterW + extra + 8 * adv),
     natural = Math.ceil(
       Math.max(MIN_WIDTH, captionW, 2 * CODE_PAD.x + gutterW + extra + longest * adv + 0.01),
     ),
-    w =
-      size.width ??
-      Math.min(
-        natural,
-        Math.max(code.maxWidth, Math.ceil(2 * CODE_PAD.x + gutterW + extra + 8 * adv)),
-      ),
+    // The layout box: the drawn box and the outside lane. A given width is the layout box's,
+    // so the lane counts in every layout, route and bounds. A narrow width gives up label width
+    // first, and never squeezes the drawn box below the narrowest one natural sizing gives, so
+    // laying a node out again at its own measured width changes nothing.
+    fitted = Math.min(natural, Math.max(code.maxWidth, narrowest)),
+    least = Math.min(natural, narrowest),
+    outTag =
+      column && !inside
+        ? size.width === undefined
+          ? column
+          : Math.max(Math.min(MIN_TAG, column), Math.min(column, size.width - LEADER - least))
+        : 0,
+    lane = outTag ? LEADER + outTag : 0,
+    frame =
+      size.width === undefined
+        ? fitted
+        : lane || (column && inside)
+          ? Math.max(least, size.width - lane)
+          : size.width,
+    w = frame + lane,
     // A given width too narrow for both keeps half its code area for the code.
-    room = w - 2 * CODE_PAD.x - gutterW,
-    tagW = column && Math.max(2 * TAG_PAD + 8, Math.min(column, room / 2 - TAG_INSET - TAG_GAP)),
-    reserve = tagW ? tagW + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
+    room = frame - 2 * CODE_PAD.x - gutterW,
+    tagW =
+      column &&
+      (inside
+        ? Math.max(Math.min(MIN_TAG, column), Math.min(column, room / 2 - TAG_INSET - TAG_GAP))
+        : outTag),
+    reserve = tagW && inside ? tagW + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
     // A small tolerance, so rounding a fitted width never costs the last column.
     cols = Math.max(4, Math.floor((room - reserve) / adv + 0.05));
   const rows: CodeRow[] = [],
@@ -328,7 +365,10 @@ export function codeLayout(
     rule = gap && head ? head.y + lh + gap / 2 : undefined;
   return {
     ...(rule !== undefined
-      ? { rule, ruleEnd: Math.min(w - CODE_PAD.x - reserve, CODE_PAD.x + gutterW + longest * adv) }
+      ? {
+          rule,
+          ruleEnd: Math.min(frame - CODE_PAD.x - reserve, CODE_PAD.x + gutterW + longest * adv),
+        }
       : {}),
     w,
     h: size.height ?? auto,
@@ -342,8 +382,15 @@ export function codeLayout(
     moreY,
     moreShown,
     long,
-    right: w - CODE_PAD.x - reserve,
-    ...(tagW ? { tags: { x: w - TAG_INSET - tagW, w: tagW } } : {}),
+    frame,
+    right: frame - CODE_PAD.x - reserve,
+    ...(tagW
+      ? {
+          tags: inside
+            ? { x: frame - TAG_INSET - tagW, w: tagW }
+            : { x: frame + LEADER, w: tagW, outside: true },
+        }
+      : {}),
   };
 }
 

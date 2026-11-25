@@ -5,16 +5,16 @@ import { renderSvg } from '../src/cli/svg';
 import { checkSource } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { resolveAppearance } from '../src/model/appearance';
-import { codeLayout, columnX } from '../src/model/code';
+import { CODE_TYPE, codeLayout, columnX } from '../src/model/code';
 import { placeNotes } from '../src/model/note';
-import { rangeBand, rangeMarks, rangeRect } from '../src/model/ranges';
+import { rangeBand, rangeMarks, rangePort, rangeRect } from '../src/model/ranges';
 import { withState } from '../src/model/status';
 import { visibleRects } from '../src/dsl/project';
 import { nestedQuantifier, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit } from '../src/dsl/translate';
 import * as edits from '../src/model/edits';
 import { clone } from '../src/model/geometry';
-import type { Diagram } from '../src/model/types';
+import type { Diagram, Rect } from '../src/model/types';
 
 /** Apply an editor edit and return the source it writes, compiled again to prove it parses. */
 function edit(source: string, fn: (d: Diagram) => void) {
@@ -75,16 +75,20 @@ describe('code ranges', () => {
     );
   });
 
-  it('end an edge at the range middle line, on the left or right side', () => {
-    const doc = projectScene(checkSource(fixture)),
-      { rects } = visibleRects(doc),
-      look = resolveAppearance(doc.appearance),
-      range = rangeRect(doc, look, rects, 'sql.copy1')!,
-      route = canonicalGeometry(doc).routes.find(r => r.id === 'e1')!,
-      end = route.points[route.points.length - 1],
-      sql = rects.get('sql')!;
-    expect([sql.x, sql.x + sql.w]).toContain(end.x);
-    expect(Math.abs(end.y - (range.y + range.h / 2))).toBeLessThanOrEqual(1);
+  it('end an edge on the left or right side, level with the range label or its middle line', () => {
+    for (const source of [fixture, fixture.replace(/^(range .*?) "[^"]*"$/gm, '$1')]) {
+      const doc = projectScene(checkSource(source)),
+        { rects } = visibleRects(doc),
+        look = resolveAppearance(doc.appearance),
+        node = doc.graph.nodes.find(n => n.id === 'sql')!,
+        sql = rects.get('sql')!,
+        laid = codeLayout(node.code!, node.title, look, { width: sql.w, height: sql.h }),
+        range = node.code!.ranges!.find(r => r.name === 'copy1')!,
+        route = canonicalGeometry(doc).routes.find(r => r.id === 'e1')!,
+        end = route.points[route.points.length - 1];
+      expect([sql.x, sql.x + sql.w]).toContain(end.x);
+      expect(Math.abs(end.y - (sql.y + rangePort(node.code!, laid, look, range)!))).toBeLessThan(1);
+    }
   });
 
   it('place a note beside its range', () => {
@@ -199,67 +203,174 @@ describe('code ranges', () => {
   });
 });
 
-/** The tags of a one-node code diagram, with the right edge of every row's text. */
-function tags(source: string) {
+/** The ranges' marks of a diagram's one code node, with its layout and every route. */
+function marks(source: string) {
   const doc = projectScene(checkSource(source)),
     look = resolveAppearance(doc.appearance),
+    { rects } = visibleRects(doc),
     node = doc.graph.nodes.find(n => n.code)!,
-    r = visibleRects(doc).rects.get(node.id)!,
+    r = rects.get(node.id)!,
     laid = codeLayout(node.code!, node.title, look, { width: r.w, height: r.h }),
+    routes = canonicalGeometry(doc).routes,
     textRight = Math.max(...laid.rows.map(row => columnX(laid, row.col + row.to - row.from))),
-    marks = rangeMarks(node.code!, laid, look, '#fff');
-  return { w: r.w, laid, textRight, tags: marks.map(m => ({ ...m.tag!, y: m.tag!.y })) };
+    all = rangeMarks(node.code!, laid, look, '#fff');
+  return { doc, r, laid, routes, textRight, marks: all, tags: all.flatMap(m => m.tag ?? []) };
 }
 
-const listing = (lines: string[], ranges: string[]) =>
-  ['node sql "q" shape=code numbers=on <<SQL', ...lines, 'SQL', ...ranges].join('\n');
+const listing = (lines: string[], ranges: string[], attrs = '') =>
+  [`node sql "q" shape=code numbers=on${attrs} <<SQL`, ...lines, 'SQL', ...ranges].join('\n');
+
+const overlap = (a: Rect, b: Rect) =>
+  a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
 
 describe('range labels', () => {
-  it('sit in one column right of every row of code, whatever the label or line length', () => {
-    const lines = ["WHERE status = 'open' AND region = 'north'", 'ORDER BY total', 'x'];
+  const lines = ["WHERE status = 'open' AND region = 'north'", 'ORDER BY total', 'x'];
+
+  it('sit outside the drawn box on a leader, in one column, whatever the label or line', () => {
     for (const label of ['x', 'the slow row', 'a much longer label for this range'])
       for (const line of [1, 2, 3]) {
-        const t = tags(listing(lines, [`range sql.a lines=${line} "${label}"`]));
-        expect(t.tags[0].x).toBeGreaterThanOrEqual(t.textRight);
-        expect(t.tags[0].x).toBe(t.laid.tags!.x);
-        expect(t.tags[0].x + t.tags[0].w).toBeLessThanOrEqual(t.w);
+        const m = marks(listing(lines, [`range sql.a lines=${line} "${label}"`])),
+          [tag] = m.tags,
+          lead = m.marks[0].leader!;
+        expect(tag.x).toBe(m.laid.tags!.x);
+        expect(tag.x).toBeGreaterThan(m.laid.frame);
+        // The node's layout box holds the label, so layouts, routes and bounds count it.
+        expect(tag.x + tag.w).toBeLessThanOrEqual(m.r.w);
+        // The dot is inside the drawn box; the label sits just above its leader.
+        expect(lead.x1).toBeLessThanOrEqual(m.laid.frame);
+        expect(tag.y + tag.h).toBeLessThanOrEqual(lead.y + 1);
       }
-    // A fixed width narrower than the code wraps the code before the column; it never covers it.
-    const narrow = tags(
-      listing(lines, ['range sql.a lines=1 "the slow row"', 'size sql width=220 height=240']),
+  });
+
+  it('with labels=inside, sit in a column right of every row of code', () => {
+    for (const label of ['x', 'a much longer label for this range']) {
+      const m = marks(listing(lines, [`range sql.a lines=1 "${label}"`], ' labels=inside'));
+      expect(m.laid.frame).toBe(m.r.w);
+      expect(m.tags[0].x).toBeGreaterThanOrEqual(m.textRight);
+      expect(m.marks[0].leader).toBeUndefined();
+    }
+    const narrow = marks(
+      listing(
+        lines,
+        ['range sql.a lines=1 "the slow row"', 'size sql width=220 height=240'],
+        ' labels=inside',
+      ),
     );
-    expect(narrow.w).toBe(220);
     expect(narrow.laid.long.length).toBeGreaterThan(0);
+    // A width too narrow for the code and the column keeps the code clear of the label.
+    const tight = marks(
+      listing(
+        ['SELECT name'],
+        ['range sql.a lines=1 "projection"', 'size sql width=85 height=auto'],
+        ' labels=inside',
+      ),
+    );
+    expect(tight.tags[0].x).toBeGreaterThanOrEqual(tight.textRight);
     expect(narrow.tags[0].x).toBeGreaterThanOrEqual(narrow.textRight);
   });
 
-  it('of ranges on next-door rows take their own rows and never overlap', () => {
-    const t = tags(
-      listing(
-        ['SELECT a', 'FROM t', 'WHERE x', 'ORDER BY a'],
-        ['range sql.a lines=2 "first"', 'range sql.b lines=3 color=red "second"'],
-      ),
-    );
-    const [a, b] = t.tags;
-    expect(a.x).toBe(b.x);
-    expect(a.y + a.h).toBeLessThanOrEqual(b.y);
-    // Two ranges on the same single line stack onto the next row instead of covering each other.
-    const same = tags(
-      listing(
-        ['SELECT a', 'FROM t', 'WHERE x'],
-        ['range sql.a lines=2 "first"', 'range sql.b lines=2 color=red "second"'],
-      ),
-    ).tags;
-    expect(same[0].y + same[0].h).toBeLessThanOrEqual(same[1].y);
+  it('of ranges on next-door or shared rows never overlap', () => {
+    for (const attrs of ['', ' labels=inside']) {
+      const next = marks(
+        listing(
+          ['SELECT a', 'FROM t', 'WHERE x', 'ORDER BY a'],
+          ['range sql.a lines=2 "first"', 'range sql.b lines=3 color=red "second"'],
+          attrs,
+        ),
+      ).tags;
+      expect(next[0].x).toBe(next[1].x);
+      expect(overlap(next[0], next[1])).toBe(false);
+      const same = marks(
+        listing(
+          ['SELECT a', 'FROM t', 'WHERE x'],
+          ['range sql.a lines=2 "first"', 'range sql.b lines=2 color=red "second"'],
+          attrs,
+        ),
+      ).tags;
+      expect(overlap(same[0], same[1])).toBe(false);
+    }
   });
 
-  it('truncate a long label to the column and keep the box a sane width', () => {
+  it('truncate a long label and keep the box a sane width', () => {
     const long = 'this label goes on and on far past what any margin column should hold',
-      short = tags(listing(['SELECT a'], ['range sql.a lines=1 "slow"'])),
-      t = tags(listing(['SELECT a'], [`range sql.a lines=1 "${long}"`]));
-    expect(t.tags[0].text.endsWith('…')).toBe(true);
-    expect(t.tags[0].x).toBeGreaterThanOrEqual(t.textRight);
-    expect(t.tags[0].x + t.tags[0].w).toBeLessThanOrEqual(t.w);
-    expect(t.w - short.w).toBeLessThanOrEqual(180);
+      short = marks(listing(['SELECT a'], ['range sql.a lines=1 "slow"'])),
+      m = marks(listing(['SELECT a'], [`range sql.a lines=1 "${long}"`]));
+    expect(m.tags[0].text.endsWith('…')).toBe(true);
+    expect(m.tags[0].x + m.tags[0].w).toBeLessThanOrEqual(m.r.w);
+    expect(m.r.w - short.r.w).toBeLessThanOrEqual(180);
+  });
+
+  it('share a leader with the lines that leave their ranges, and no line crosses a label', () => {
+    const source = readFileSync(path.join(__dirname, 'fixtures/code/range-leaders.draft'), 'utf8'),
+      m = marks(source),
+      // The label's text: its tag down to just above the leader a line may run along.
+      abs = (t: Rect) => ({ ...t, x: m.r.x + t.x, y: m.r.y + t.y, h: t.h - 2 });
+    expect(m.tags).toHaveLength(5);
+    for (let i = 0; i < m.tags.length; i++)
+      for (let j = i + 1; j < m.tags.length; j++) expect(overlap(m.tags[i], m.tags[j])).toBe(false);
+    for (const mark of m.marks) {
+      const e = m.doc.graph.edges.find(x => x.fromRange === mark.range.name)!,
+        start = m.routes.find(x => x.id === e.id)!.points[0];
+      // The line leaves the drawn box level with the range's leader.
+      expect([m.r.x, m.r.x + m.laid.frame]).toContain(start.x);
+      expect(start.y).toBeCloseTo(m.r.y + mark.leader!.y, 0);
+    }
+    // No route runs through a label, and the line to the whole node keeps off the label side.
+    for (const route of m.routes)
+      for (const [a, b] of route.points.slice(1).map((p, i) => [route.points[i], p]))
+        for (const t of m.tags) {
+          const seg = {
+            x: Math.min(a.x, b.x),
+            y: Math.min(a.y, b.y),
+            w: Math.abs(a.x - b.x) || 0.01,
+            h: Math.abs(a.y - b.y) || 0.01,
+          };
+          expect(overlap(seg, abs(t)), `${route.id} crosses ${t.text}`).toBe(false);
+        }
+    const into = m.routes.find(x => x.id === 'e0')!.points.at(-1)!;
+    expect(into.x).toBeLessThan(m.r.x + m.laid.frame);
+  });
+
+  it('keep a moved label tied to its range: the dot stays on the line, the leader bends', () => {
+    for (const lines of [
+      ['ABCD', 'EFGH'],
+      ['ABCD', 'EFGH', 'IJKL'],
+    ]) {
+      const last = lines.length,
+        m = marks(
+          listing(lines, [
+            `range sql.a lines=${last} "first"`,
+            `range sql.b lines=${last} color=red "second"`,
+          ]),
+        ),
+        row = m.laid.rows[last - 1];
+      expect(overlap(m.tags[0], m.tags[1])).toBe(false);
+      for (const mark of m.marks) {
+        // Both dots sit on the range's own line, whatever row the label took.
+        expect(mark.leader!.y1).toBeGreaterThan(row.y);
+        expect(mark.leader!.y1).toBeLessThan(row.y + CODE_TYPE.lineHeight);
+      }
+    }
+  });
+
+  it('lay out again at their own width without change, and never squeeze the box under the code', () => {
+    const look = resolveAppearance(projectScene(checkSource('node a "A"')).appearance);
+    for (const source of [
+      listing(['ABCD', 'EFGH'], ['range sql.a lines=1 "check"']),
+      listing(lines, ['range sql.a lines=1 "x"']),
+      listing(lines, ['range sql.a lines=1 "a much longer label for this range"']),
+    ]) {
+      const node = projectScene(checkSource(source)).graph.nodes.find(n => n.code)!,
+        first = codeLayout(node.code!, node.title, look),
+        again = codeLayout(node.code!, node.title, look, { width: first.w, height: first.h });
+      expect(again.frame).toBe(first.frame);
+      expect(again.tags).toEqual(first.tags);
+    }
+    const m = marks(
+      listing(['ABCD'], ['range sql.a lines=1 "label"', 'size sql width=40 height=auto']),
+    );
+    expect(m.tags[0].x).toBeGreaterThan(m.laid.frame);
+    expect(m.laid.frame).toBeGreaterThanOrEqual(m.textRight);
+    expect(m.tags[0].x + m.tags[0].w).toBeLessThanOrEqual(m.r.w);
   });
 });

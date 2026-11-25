@@ -86,6 +86,8 @@ export interface DiagramEdge {
   directed: boolean;
   /** The mark at the target end, when it isn't the plain arrow; see `headOf`. */
   head?: EndMarker;
+  /** A mind-map branch line: drawn with no head, which the source does not say. */
+  branch?: boolean;
   /** The mark at the source end, when it has one; see `tailOf`. */
   tail?: EndMarker;
   emphasis: boolean;
@@ -211,6 +213,8 @@ export interface NodeStyle {
   color: ColorKey;
   /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
   shade?: Shade;
+  /** A mind-map topic below the first level: with no shade, a pale card of its family. */
+  card?: boolean;
   icon: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;

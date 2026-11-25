@@ -78,6 +78,11 @@ export function tidy(ctx: Context) {
         return false;
       if (!validPath(r.points, e, r.fromSide, r.toSide, obsOf(e))) return false;
       if (steps(r.points) > steps(state.routes[i].points)) return false;
+      // An end at a code range stays level with the range's line.
+      const was = state.routes[i].points,
+        moved = (a: Point, b: Point) => Math.abs(a.x - b.x) > EPS || Math.abs(a.y - b.y) > EPS;
+      if (e.cfg.fromAt !== undefined && moved(r.points[0], was[0])) return false;
+      if (e.cfg.toAt !== undefined && moved(r.points.at(-1)!, was.at(-1)!)) return false;
     }
     const m0 = metrics(state.routes),
       m1 = metrics(next);

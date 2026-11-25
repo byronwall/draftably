@@ -24,11 +24,11 @@ const DECLARATIONS = ['node', 'group', 'edge'];
 
 /**
  * What makes a declaration `~`: every parsed field but its line, so new fields count by default.
- * Code counts by the lines it draws, not by the heredoc's text: re-indenting a body changes
- * nothing a reader sees.
+ * `styled` only says an attribute is written, which draws nothing by itself. Code counts by the
+ * lines it draws, not by the heredoc's text: re-indenting a body changes nothing a reader sees.
  */
 const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) =>
-  JSON.stringify(fields, (key, value) => {
+  JSON.stringify({ ...fields, styled: undefined }, (key, value) => {
     if (key !== 'code' || !value) return value;
     const { body: _b, cells: _c, tab: _t, ...drawn } = value;
     return drawn;
