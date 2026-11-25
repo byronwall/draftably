@@ -119,14 +119,16 @@ export function readTable(lines: string[]): Table {
     // psql's rule joins its columns with `+`: every `|` splits, so blank first and last fields
     // keep their places.
     psql = typed.length > 0 && lines[first + 1].includes('+') && piped,
-    rows = psql
+    read = psql
       ? body.map(l => (l.trim() ? l.split(/(?<!\\)\|/).map(c => c.trim()) : []))
       : (tableCells(body) ??
         // A pipe table with a rule is a table even with only its header.
         (typed.length && piped
           ? body.map(l => (l.trim() ? pipeCells(l) : []))
           : body.map(l => (l.trim() ? [l] : [])))),
-    n = Math.max(1, ...rows.map(c => c.length)),
+    n = Math.max(1, ...read.map(c => c.length)),
+    // A short row gets empty cells, so every row of cells is as wide as the table.
+    rows = read.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : r)),
     align = Array.from({ length: n }, (_, i): Align | undefined => {
       const mark = typed.length === n ? typed[i] : '';
       if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
@@ -165,8 +167,8 @@ export function writeTable(t: Table): string[] {
   const n = tableWidth({ rows });
   // A blank line stays a blank line, and a row of empty cells stays a row.
   rows = rows.map(r => (r.length ? Array.from({ length: n }, (_, i) => r[i] ?? '') : []));
-  // One column draws its lines as they are, so an alignment would change nothing.
-  const align = Array.from({ length: n }, (_, i) => (n === 1 ? undefined : t.align[i])),
+  // A chosen alignment is kept even on one column, so it holds if a column is added later.
+  const align = Array.from({ length: n }, (_, i) => t.align[i]),
     table: Table = { rows, align, ...(t.footer ? { footer: t.footer } : {}) },
     footer = t.footer ? [t.footer] : [];
   if (align.every(a => !a)) {

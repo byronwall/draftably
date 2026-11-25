@@ -330,6 +330,25 @@ describe('editing code tables', () => {
     // A caption edit alone leaves the body, its tabs and the tab width as they are.
     const tabbed = 'node c "a" shape=code tab=8 <<C\nx\n\ty\nC\n';
     expect(save(tabbed, (_, n) => (n.title = 'b'))).toBe(tabbed.replace('"a"', '"b"'));
+    // A caption edit made while the file changed underneath never writes the old body back.
+    const older = 'node c "a" shape=code <<C\nold\nC\n',
+      scene = checkSource(older),
+      before = projectScene(scene),
+      after = clone(before);
+    after.graph.nodes[0].title = 'b';
+    const newer = 'node c "a" shape=code <<C\nnew\nC\n';
+    expect(
+      printSource(
+        translateEdit({
+          source: readSource(newer),
+          scene,
+          before,
+          after,
+          label: 'Edit',
+          selection: [],
+        }).source,
+      ),
+    ).toBe(newer.replace('"a"', '"b"'));
     // A file's lines are never written over.
     const file = 'node f shape=code src="a.sql"\n',
       fileScene = checkSource(file, { 'a.sql': { text: 'x\n' } }),

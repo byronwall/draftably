@@ -66,7 +66,7 @@ function Editor(props: { id: string }) {
   const rows = () => grid().table.rows,
     width = () => tableWidth(grid().table),
     /** How each column draws now: its chosen alignment, or the one its cells give. */
-    align = () => alignOf(grid().table),
+    align = createMemo(() => alignOf(grid().table)),
     footer = () => edit.gridTable(grid()).footer;
   /** Each column's width in characters: its widest cell, and at least three. */
   const colChars = createMemo(() => {

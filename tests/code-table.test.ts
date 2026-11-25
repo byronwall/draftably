@@ -80,6 +80,16 @@ describe('table round trips', () => {
     expect(writeTable({ rows: [], align: [] })).toEqual([]);
   });
 
+  it('pads ragged rows when read, and keeps a one-column alignment', () => {
+    expect(readTable(['|id|qty|', '|--|--|', '|1|']).rows).toEqual([
+      ['id', 'qty'],
+      ['1', ''],
+    ]);
+    const one = readTable(['|Amount|', '|---:|', '|4|']);
+    expect(one.align).toEqual(['right']);
+    expect(readTable(writeTable(one))).toEqual(one);
+  });
+
   it('reads a heredoc once: its text, its cells and the lines they draw', () => {
     const raw = ['| n | ms |', '|---|---:|', '| a | 1 |'],
       code = codeFromBody(raw, true);
@@ -136,6 +146,15 @@ describe('table edits', () => {
     const saved = readTable(writeTable(edit.gridTable(g)));
     expect(saved.align).toEqual([undefined, 'left']);
     expect(tableLines(writeTable(edit.gridTable(g)))[1]).toBe(' 7  5');
+  });
+
+  it('keeps every body row when a row is inserted above an empty one', () => {
+    let g = edit.openGrid(readTable(['id | v', '---+---', '1  | a', '   |  ', '(2 rows)']));
+    g = edit.addRow(g, 1);
+    g = edit.setCell(g, 1, 0, '0');
+    const t = edit.gridTable(g);
+    expect(t.rows).toHaveLength(4);
+    expect(t.footer).toBe('(3 rows)');
   });
 
   it('pastes cells from the caret, adding rows, columns and footer rows', () => {

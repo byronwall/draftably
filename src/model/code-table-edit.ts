@@ -52,16 +52,20 @@ export function addRow(g: Grid, at = g.table.rows.length): Grid {
       rows: [...rows.slice(0, at), Array<string>(tableWidth(g.table)).fill(''), ...rows.slice(at)],
     },
     1,
+    // A row inserted among the body's rows pushes them on: they all stay.
+    at < g.kept ? g.kept + 1 : g.kept,
   );
 }
 
 /** An empty column at `at`, following its cells' alignment. A blank line stays blank. */
 export function addColumn(g: Grid, at = tableWidth(g.table)): Grid {
-  const { rows, align } = g.table;
-  return next(g, {
-    rows: rows.map(row => (row.length ? [...row.slice(0, at), '', ...row.slice(at)] : row)),
-    align: [...align.slice(0, at), undefined, ...align.slice(at)],
-  });
+  const { rows, align } = g.table,
+    out = next(g, {
+      rows: rows.map(row => (row.length ? [...row.slice(0, at), '', ...row.slice(at)] : row)),
+      align: [...align.slice(0, at), undefined, ...align.slice(at)],
+    });
+  // A column inserted among the body's columns pushes them on: they all stay.
+  return at < g.cols ? { ...out, cols: g.cols + 1 } : out;
 }
 
 /** Delete row `r`; the header stays. */

@@ -88,7 +88,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /** A code node's caption, table setting and body, to tell whether it changed. */
   const codeState = (id: string) => {
     const node = findNode(s.doc, id);
-    return JSON.stringify([node?.title, node?.code?.table, node?.code?.body ?? node?.code?.lines]);
+    const code = node?.code;
+    return JSON.stringify([node?.title, code?.table, code?.tab, code?.body ?? code?.lines]);
   };
 
   function startCodeEdit(id: string) {
@@ -143,8 +144,11 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;
-      const { table: _, cells: __, ...rest } = node.code,
-        toggled = next.table !== !!node.code.table;
+      node.title = next.title;
+      const toggled = next.table !== !!node.code.table;
+      // A caption edit leaves the code block as it is.
+      if (!next.body && !toggled) return;
+      const { table: _, cells: __, ...rest } = node.code;
       node.code = {
         ...rest,
         ...(next.table ? { table: true } : {}),
@@ -152,7 +156,6 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
         ...(toggled && !rest.wrapSet ? { wrap: !next.table } : {}),
         ...codeFromBody(next.body ?? rest.body ?? rest.lines, next.table, rest.tab),
       };
-      node.title = next.title;
     });
   }
 
