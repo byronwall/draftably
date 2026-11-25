@@ -3160,6 +3160,8 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
   const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
+    onChart = onChartEdges(m),
+    inChart = chartEdges(m),
     planned = layoutPass(unrefined, arranged),
     // Which groups fold is decided on the arrangement before refinements too, so a stay or pin
     // never folds or unfolds a group.
@@ -3173,7 +3175,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       // Nor does a line inside an org chart: its people stay where the chart puts them.
       planChannels(
         plain.objects,
-        m.edges.filter(e => !onChartEdges(m).has(e.id) && !chartEdges(m).has(e.id)),
+        m.edges.filter(e => !onChart.has(e.id) && !inChart.has(e.id)),
         m.routing,
       ),
       area(plain.objects),
@@ -3678,12 +3680,14 @@ function layoutPass(
       }
       return new Map(
         list.map(n => {
-          const l = look(n);
+          const l = look(n),
+            // An org chart placed each drawn box's center on its slot's center as arranged.
+            slot = (governing?.orgchart && !slots && arranged?.get(n.id)) || n;
           return [
             n.id,
             {
-              x: centre.x ? (n.w - l.w) / 2 : 0,
-              y: rowTop.get(n.id) ?? (centre.y ? (n.h - l.h) / 2 : 0),
+              x: centre.x ? (slot.w - l.w) / 2 : 0,
+              y: rowTop.get(n.id) ?? (centre.y ? (slot.h - l.h) / 2 : 0),
               w: l.w,
               h: l.h,
             },

@@ -562,7 +562,7 @@ function sceneMarkup(
         : full,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),
-      p = statusPaint(look, style.status, style.spot, style.vacant),
+      p = statusPaint(look, style.status, style.spot, style.role === 'vacant'),
       radius = isCell(doc, n.id) ? 0 : look.radius,
       label = nodeLabel(doc, n.id, n.title, r),
       inside = label.mode === 'center' && style.shape !== 'text',

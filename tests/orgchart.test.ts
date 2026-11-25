@@ -109,7 +109,7 @@ describe('layout … orgchart', () => {
     const { doc } = await routed(sample),
       sec = doc.graph.nodes.find(n => n.id === 'sec')!;
     expect(sec.title).toBe('Head of Security\nOpen role');
-    expect(doc.styles.sec.vacant).toBe(true);
+    expect(doc.styles.sec.role).toBe('vacant');
   });
 
   const small = (extra: string, line = 'layout root orgchart root=m leaves=row') =>
@@ -195,6 +195,73 @@ describe('layout … orgchart', () => {
       }).source,
     );
     expect(out).toMatch(/node open-seat(-\d)? "Open seat" role=vacant/);
+  });
+
+  it('pastes a report as a reporting line, and keeps an assistant and written text', async () => {
+    const source = [
+      'node m "Manager"',
+      'node p "Director\\nEngineering\\nOpen role" role=vacant',
+      'node x "Pat" role=assistant',
+      'edge e m -> p',
+      'edge f m -> x',
+      'layout root orgchart root=m',
+    ].join('\n');
+    const scene = await compile(source),
+      before = normalize(structuredClone(projectScene(scene))),
+      after: Diagram = structuredClone(before);
+    for (const id of ['p', 'x']) {
+      const n = after.graph.nodes.find(n => n.id === id)!;
+      after.graph.nodes.push({ ...structuredClone(n), id: `${id}2` });
+      after.styles[`${id}2`] = structuredClone(after.styles[id]);
+      after.layout.nodes[`${id}2`] = {
+        ...after.layout.nodes[id],
+        x: after.layout.nodes[id].x + 400,
+      };
+    }
+    const e = after.graph.edges.find(e => e.id === 'f')!;
+    after.graph.edges.push({ ...structuredClone(e), id: 'f2', to: 'x2' });
+    const out = printSource(
+      translateEdit({
+        source: readSource(source),
+        scene,
+        before,
+        after,
+        label: 'Paste',
+        selection: [],
+      }).source,
+    );
+    expect(out).toContain('"Director\\nEngineering\\nOpen role" role=vacant');
+    expect(out).toMatch(/node pat(-\d)? "Pat" role=assistant/);
+    expect(out).not.toMatch(/head=none/);
+  });
+
+  it('keeps the bus into short stacked cards under a wide clearance', async () => {
+    const c = await routed(
+      [
+        'theme drafting padding-y=4',
+        'node m "Manager"',
+        ...['a', 'b', 'c'].map(id => `node ${id} "${id}"`),
+        'edge ea m -> a\nedge eb m -> b\nedge ec m -> c',
+        'routing clearance=30',
+        'layout root orgchart root=m leaves=stack',
+      ].join('\n'),
+    );
+    expect(c.routes.filter(r => r.blocked)).toEqual([]);
+    expect(tops(c, ['ea', 'eb', 'ec'])).toEqual(['left', 'left', 'left']);
+  });
+
+  it('lines a row up by its tops when one card is taller', async () => {
+    const c = await routed(small('theme ink').replace('node a "A"', 'node a "A" role=vacant'));
+    expect(c.at('a').y).toBe(c.at('b').y);
+  });
+
+  it('refuses an org chart directly on a lane', () => {
+    expect(() =>
+      parseModel(
+        'group g "Lane"\nnode m "M" in=g\nnode a "A" in=g\nedge e m -> a\n' +
+          'layout root lanes\nlayout g orgchart root=m',
+      ),
+    ).toThrow(/is a lane/);
   });
 
   it('drops the layout line when its root is deleted', () => {

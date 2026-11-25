@@ -351,14 +351,14 @@ export function translateEdit(input: EditInput): EditResult {
   ];
   for (const o of added) {
     const type = after.graph.groups.includes(o as never) ? 'group' : 'node';
-    // A copy of a vacant role stays one, with the label as written.
-    const vacant = !!after.styles[o.id]?.vacant,
-      title = authoredLabel(o.title, vacant);
+    // A copy of an assistant or a vacant role keeps its role, and the label as written.
+    const role = after.styles[o.id]?.role,
+      title = authoredLabel(o.title, role === 'vacant');
     const code = (o as DiagramNode).code,
       id = fresh(title, code ? (code.table ? 'table' : 'code') : type);
     ids.set(o.id, id);
     const s = statement(type, [bare(id), ...(code && !title ? [] : [quoted(title)])]);
-    if (type === 'node' && vacant) setAttr(s, 'role', bare('vacant'));
+    if (type === 'node' && role) setAttr(s, 'role', bare(role));
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
@@ -375,7 +375,7 @@ export function translateEdit(input: EditInput): EditResult {
       s = declaration(source, o.id);
     if (!s) continue;
     if (o.title !== old.title)
-      s.args[1] = quoted(authoredLabel(o.title, after.styles[o.id]?.vacant));
+      s.args[1] = quoted(authoredLabel(o.title, after.styles[o.id]?.role === 'vacant'));
     if (o.icon !== old.icon) setAttr(s, 'icon', o.icon ? bare(o.icon) : undefined);
     const pos = (o as DiagramNode).iconPos;
     if (s.command === 'node' && pos !== (old as DiagramNode).iconPos)
@@ -471,7 +471,14 @@ export function translateEdit(input: EditInput): EditResult {
       setAttr(
         s,
         'head',
-        !ends ? undefined : e.head ? bare(e.head) : old && inMap(e) ? bare('arrow') : undefined,
+        !ends
+          ? undefined
+          : // A copied branch or reporting line draws headless as a plain line again.
+            e.head && !(e.branch && e.head === 'none')
+            ? bare(e.head)
+            : old && inMap(e)
+              ? bare('arrow')
+              : undefined,
       );
     if (!ends || !old || old.tail !== e.tail)
       setAttr(s, 'tail', ends && e.tail ? bare(e.tail) : undefined);

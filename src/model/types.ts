@@ -215,8 +215,8 @@ export interface NodeStyle {
   shade?: Shade;
   /** A mind-map topic below the first level, or a vacant role: with no shade, a pale card. */
   card?: boolean;
-  /** `role=vacant`: an open role, drawn with a dashed outline and faded text. */
-  vacant?: boolean;
+  /** `role=`: an org chart's assistant, or an open role drawn dashed with faded text. */
+  role?: 'assistant' | 'vacant';
   icon: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;

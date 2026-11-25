@@ -19,8 +19,7 @@ import type { Planned } from './corridors';
 import type { Diagram } from '../model/types';
 
 /** Space between sibling blocks and between stacked leaves. */
-const GAP = 24,
-  STACK = 12;
+const GAP = 24;
 
 /**
  * Space between levels, and from the stem to a column beside it. Both leave the router's
@@ -29,6 +28,8 @@ const GAP = 24,
 const gapsFor = (clearance: number) => ({
   rank: Math.max(56, 2 * clearance + 16),
   indent: Math.max(20, clearance + 8),
+  // A line into a stacked leaf runs at its middle, at least `clearance` past its neighbours.
+  stack: Math.max(12, clearance),
 });
 type Gaps = ReturnType<typeof gapsFor>;
 
@@ -39,9 +40,11 @@ export const OPEN_ROLE = 'Open role';
 export const vacantLabel = (label: string) =>
   label.includes('\n') ? label : `${label}\n${OPEN_ROLE}`;
 
-/** The label as written, from the one a vacant role draws. */
-export const authoredLabel = (title: string, vacant: boolean | undefined) =>
-  vacant && title.endsWith(`\n${OPEN_ROLE}`) ? title.slice(0, -OPEN_ROLE.length - 1) : title;
+/** The label as written, from the one a vacant role draws: `vacantLabel` undone. */
+export const authoredLabel = (title: string, vacant: boolean | undefined) => {
+  const [first, ...rest] = title.split('\n');
+  return vacant && rest.length === 1 && rest[0] === OPEN_ROLE ? first : title;
+};
 
 /**
  * A copy of `m` with what its org charts draw: reporting lines with no head, dotted lines that
@@ -75,10 +78,10 @@ export function withOrgcharts(m: Model): Model {
       // edge under its old and new ID.
       if (tree.has(e) || (plainEdge(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
       else if (inside(e.source) && inside(e.target)) {
-        e.constraint = false;
         // In a comparison, a reporting line that moved to another manager is still one: it
         // draws with no head, though only the tree places people.
-        if (plainEdge({ ...e, constraint: undefined }) && e.status) e.head = 'none';
+        if (plainEdge(e) && e.status) e.head = 'none';
+        e.constraint = false;
       }
     }
   }
@@ -251,7 +254,7 @@ function place(
   below: (id: string) => string[],
   side: (id: string) => string[],
   modes: Map<string, Mode>,
-  { rank, indent }: Gaps,
+  { rank, indent, stack }: Gaps,
 ): Map<string, Box> {
   const mode = (id: string) => modes.get(id) ?? 'row';
   // Depth of each person placed in a row, and the room each depth needs.
@@ -262,7 +265,7 @@ function place(
     depth.set(id, d);
     tall[d] = Math.max(tall[d] ?? 0, by.get(id)!.h);
     const a = side(id);
-    if (a.length) aides[d] = Math.max(aides[d] ?? 0, columnHeight(pairs(a), by) + rank / 2);
+    if (a.length) aides[d] = Math.max(aides[d] ?? 0, columnHeight(pairs(a), by, stack) + rank / 2);
     if (mode(id) === 'row') for (const k of below(id)) walk(k, d + 1);
     // A column of leaves starts on the next level, even when no row sits there.
     else tall[d + 1] ??= 0;
@@ -289,7 +292,7 @@ function place(
         lo = Math.min(lo, x - w / 2);
         hi = Math.max(hi, x + w / 2);
       });
-      y += Math.max(...row.map(k => by.get(k)!.h)) + STACK;
+      y += Math.max(...row.map(k => by.get(k)!.h)) + stack;
     }
     const ks = below(id),
       first = tops[d + 1];
@@ -304,7 +307,7 @@ function place(
           lo = Math.min(lo, x - w / 2);
           hi = Math.max(hi, x + w / 2);
         });
-        y += Math.max(...row.map(k => by.get(k)!.h)) + STACK;
+        y += Math.max(...row.map(k => by.get(k)!.h)) + stack;
       }
       return { lo, hi };
     }
@@ -344,9 +347,9 @@ function pairs(ids: string[]): string[][] {
   return out;
 }
 
-/** The height of rows of people, `STACK` apart. */
-const columnHeight = (rows: string[][], by: Map<string, Box>) =>
-  rows.reduce((n, row) => n + Math.max(...row.map(k => by.get(k)!.h)) + STACK, -STACK);
+/** The height of rows of people, `stack` apart. */
+const columnHeight = (rows: string[][], by: Map<string, Box>, stack: number) =>
+  rows.reduce((n, row) => n + Math.max(...row.map(k => by.get(k)!.h)) + stack, -stack);
 
 /**
  * Reporting lines as planned routes on the final boxes: a stem down from each manager's middle,

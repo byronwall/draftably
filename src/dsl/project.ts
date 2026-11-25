@@ -90,7 +90,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       ...(o.card ? { card: true } : {}),
-      ...(o.role === 'vacant' ? { vacant: true } : {}),
+      ...(o.role ? { role: o.role } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
     });

@@ -2101,6 +2101,12 @@ function validateReferences(m: Model) {
     );
   for (const l of m.layouts)
     assert(
+      !l.orgchart || !lanes || by.get(l.scope)?.parent !== 'root',
+      `${l.scope} is a lane, and the lanes lay it out. Put the org chart in a group inside the lane.`,
+      l.line,
+    );
+  for (const l of m.layouts)
+    assert(
       !l.table ||
         !m.layouts.some(
           r => r.scope === 'root' && (r.algorithm === 'sequence' || r.algorithm === 'timeline'),

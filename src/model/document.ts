@@ -303,7 +303,7 @@ export function normalize(input: unknown): Diagram {
       color: style.color || 'auto',
       ...(style.shade !== undefined ? { shade: style.shade } : {}),
       ...(style.card === true ? { card: true } : {}),
-      ...(style.vacant === true ? { vacant: true } : {}),
+      ...(style.role === 'assistant' || style.role === 'vacant' ? { role: style.role } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
       ...(STATUSES.includes(style.status) && style.status !== 'same'
         ? { status: style.status }
