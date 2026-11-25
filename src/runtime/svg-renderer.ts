@@ -144,6 +144,8 @@ const writeHref = (opts: SvgOptions) =>
 /** Hover for links, which a browser applies to an SVG opened on its own. */
 const LINK_CSS =
   'a.link{cursor:pointer}a.link:hover .shape{stroke-width:2.4px}a.link:hover .link-mark{stroke-width:2px}';
+/** Code reads as typed: `==` stays two characters, never a programming ligature (#629). */
+const CODE_CSS = 'text.code-text{font-variant-ligatures:none}';
 
 /** A status's title marks: strike and ink fade, as attributes on a text element. */
 const strikeAttr = (p: StatusPaint) =>
@@ -240,11 +242,11 @@ function codeMarkup(
     );
   if (numbers.length)
     out.push(
-      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${muted}">${numbers.join('')}</text>`,
+      `<text class="code-text" dominant-baseline="central" ${font(CODE_TYPE)} fill="${muted}">${numbers.join('')}</text>`,
     );
   if (spans.length)
     out.push(
-      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
+      `<text class="code-text" dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
     );
   for (const m of marks) if (m.tag) out.push(tagMarkup(m, r, look));
   return out.join('');
@@ -628,13 +630,14 @@ function openSvg(
     // A sequence says itself in words when the host gives no description.
     description = opts.description ?? sequenceDescription(doc),
     css = LINK_CSS.replace(/a\.link/g, `#${prefix}-svg a.link`),
+    codeCss = `#${prefix}-svg ${CODE_CSS}`,
     out = new SvgChunks(opts.maxOutputBytes);
   out.push(
     `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title id="${prefix}-title">${esc(opts.title ?? doc.title)}</title>`,
     description ? `<desc id="${prefix}-description">${esc(description)}</desc>` : '',
     opts.metadata ?? '',
-    `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}</style>` +
+    `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}${doc.graph.nodes.some(n => n.code) ? codeCss : ''}</style>` +
       markers +
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
