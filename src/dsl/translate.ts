@@ -8,7 +8,7 @@
  * file cannot express are rejected outright.
  */
 import { DEFAULT_THEME, type ColorDefinition, type DiagramAppearance } from '../model/appearance';
-import { findNode, isCell, selectionRoots } from '../model/graph';
+import { findNode, isCell, onTimeline, selectionRoots } from '../model/graph';
 import { groupHeaderFor } from '../model/labels';
 import { CODE_MAX_WIDTH, type CodeBlock } from '../model/code';
 import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
@@ -776,6 +776,9 @@ function placeSelection(
 
   const placed: string[] = [];
   for (const id of roots) {
+    // A timeline row, band or milestone is placed and sized by its dates; a rename or other edit
+    // to it writes no position or size.
+    if (onTimeline(after, id)) continue;
     const noted = notes.length;
     const sourceId = sid(id),
       compiled = scene.byId.get(id),

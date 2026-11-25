@@ -19,6 +19,7 @@ import { noteMarkup, placeNotes } from '../model/note';
 import { detailInk, drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
+import { timelineOrigin, timelineSvg } from '../model/timeline';
 import {
   CODE_ADVANCE,
   captionBandPath,
@@ -34,7 +35,7 @@ import {
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
 import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
-import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
+import { cellsBandOf, isCell, isOpenCell, shownTimelines, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import {
@@ -145,6 +146,8 @@ const writeHref = (opts: SvgOptions) =>
 /** Hover for links, which a browser applies to an SVG opened on its own. */
 const LINK_CSS =
   'a.link{cursor:pointer}a.link:hover .shape{stroke-width:2.4px}a.link:hover .link-mark{stroke-width:2px}';
+/** Code reads as typed: `==` stays two characters, never a programming ligature (#629). */
+const CODE_CSS = 'text.code-text{font-variant-ligatures:none}';
 
 /** A status's title marks: strike and ink fade, as attributes on a text element. */
 const strikeAttr = (p: StatusPaint) =>
@@ -206,7 +209,7 @@ function codeMarkup(
       );
   });
   // Named ranges: bands under the text and bars in the left margin; their tags go on top.
-  const marks = rangeMarks(code, laid, look, r.w, c.fill);
+  const marks = rangeMarks(code, laid, look, c.fill);
   for (const m of marks) out.push(rangeMarkup(m, r));
   if (laid.caption)
     out.push(
@@ -238,7 +241,7 @@ function codeMarkup(
     }
     if (row.wraps)
       out.push(
-        `<path d="${wrapMarkPath(r.x + r.w - laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
+        `<path d="${wrapMarkPath(r.x + laid.right + laid.gutter / 2, r.y + row.y)}" fill="none" stroke="${muted}" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>`,
       );
   });
   if (laid.moreShown)
@@ -247,11 +250,11 @@ function codeMarkup(
     );
   if (numbers.length)
     out.push(
-      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${muted}">${numbers.join('')}</text>`,
+      `<text class="code-text" dominant-baseline="central" ${font(CODE_TYPE)} fill="${muted}">${numbers.join('')}</text>`,
     );
   if (spans.length)
     out.push(
-      `<text dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
+      `<text class="code-text" dominant-baseline="central" ${font(CODE_TYPE)} fill="${c.ink}"${strikeAttr(p)}>${spans.join('')}</text>`,
     );
   for (const m of marks) if (m.tag) out.push(tagMarkup(m, r, look));
   return out.join('');
@@ -268,7 +271,7 @@ function rangeMarkup(m: RangeMark, r: Rect) {
   );
 }
 
-/** A range's label: a tag in its band's color at the right margin. */
+/** A range's label: a tag in its band's color in the label column. */
 function tagMarkup(m: RangeMark, r: Rect, look: ResolvedAppearance) {
   const t = m.tag!,
     fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';
@@ -357,6 +360,9 @@ function sceneMarkup(
     routes = shared ? shared.filter(r => kept.has(r.id)) : routesOf(doc);
   const out = new SvgChunks(opts.maxOutputBytes),
     diff = isDiff(doc);
+  // Timeline rows draw as the timeline's marks, not as boxes.
+  const timelines = shownTimelines(doc),
+    onTimeline = new Set(timelines.flatMap(t => t.ids));
   const backdrop = sequenceBackdrop(doc, look);
   out.push(...backdrop.panel);
   for (const g of vg.groups) {
@@ -424,6 +430,36 @@ function sceneMarkup(
       ),
     );
   }
+  for (const t of timelines) {
+    const o = timelineOrigin(t, rects.get(t.scope));
+    out.push(
+      `<g transform="translate(${o.x},${o.y})">`,
+      timelineSvg(
+        look,
+        t,
+        // Bands first, rows over them: a click on a row reaches the row, elsewhere the band.
+        [
+          ...doc.graph.groups
+            .filter(g => (g.parentId ?? 'root') === t.scope && g.id !== t.scope)
+            .map(g => g.id),
+          ...t.ids,
+        ].flatMap(id => {
+          const r = rects.get(id);
+          return r && r.w > 1 ? [{ id, rect: { ...r, x: r.x - o.x, y: r.y - o.y } }] : [];
+        }),
+        // A row or band with href= links from its whole area, as a box links from its shape.
+        (id, markup) =>
+          linked(
+            [...doc.graph.nodes, ...doc.graph.groups].find(n => n.id === id)?.href,
+            [markup],
+            opts,
+          ).join(''),
+        // A timeline in a group draws on the group's fill, so its marks measure against that.
+        t.scope === 'root' ? look.canvas : drawnSwatch(doc, look, t.scope, 'group').fill,
+      ),
+      '</g>',
+    );
+  }
   // Phases go over the groups' column bands, faint enough that both read where they cross.
   out.push(...backdrop.phases);
   // Sequence participants' lifelines, under the message lines.
@@ -471,6 +507,7 @@ function sceneMarkup(
     out.push('</g>');
   }
   for (const n of vg.nodes) {
+    if (onTimeline.has(n.id)) continue;
     const r = rects.get(n.id)!,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),
@@ -601,13 +638,14 @@ function openSvg(
     // A sequence says itself in words when the host gives no description.
     description = opts.description ?? sequenceDescription(doc),
     css = LINK_CSS.replace(/a\.link/g, `#${prefix}-svg a.link`),
+    codeCss = `#${prefix}-svg ${CODE_CSS}`,
     out = new SvgChunks(opts.maxOutputBytes);
   out.push(
     `<svg xmlns="http://www.w3.org/2000/svg" id="${prefix}-svg" role="img" aria-labelledby="${prefix}-title${description ? ` ${prefix}-description` : ''}" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title id="${prefix}-title">${esc(opts.title ?? doc.title)}</title>`,
     description ? `<desc id="${prefix}-description">${esc(description)}</desc>` : '',
     opts.metadata ?? '',
-    `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}</style>` +
+    `<defs><style${opts.styleNonce ? ` nonce="${esc(opts.styleNonce)}"` : ''}>${opts.fontCss ?? ''}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? css : ''}${doc.graph.nodes.some(n => n.code) ? codeCss : ''}</style>` +
       markers +
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,

@@ -301,6 +301,11 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
   const children = new Map<string, SceneObject[]>();
   for (const o of scene.objects) children.set(o.parent, [...(children.get(o.parent) ?? []), o]);
   const pinned = new Set(scene.model.hints.flatMap(h => (h.type === 'pin' ? [h.id] : [])));
+  // A timeline places its rows by date: its group is one box, and nothing inside it takes a stay.
+  const timelines = new Set(
+    scene.model.layouts.filter(l => l.algorithm === 'timeline').map(l => l.scope),
+  );
+  const dated = (o: SceneObject) => timelines.has(o.parent);
   const fitted = new Map<string, Rect>(),
     header = (o: SceneObject) => groupHeaderFor(scene.look, o.titleLines);
   const fit = (o: SceneObject): Rect => {
@@ -308,20 +313,22 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
     if (known) return known;
     const r = after.layout.nodes[o.id] ?? o,
       kids = (children.get(o.id) ?? []).map(fit);
-    const rect = kids.length
-      ? (() => {
-          const x0 = Math.min(...kids.map(k => k.x)),
-            y0 = Math.min(...kids.map(k => k.y)),
-            x1 = Math.max(...kids.map(k => k.x + k.w)),
-            y1 = Math.max(...kids.map(k => k.y + k.h));
-          return {
-            x: x0 - GROUP_INSET,
-            y: y0 - header(o),
-            w: x1 - x0 + 2 * GROUP_INSET,
-            h: y1 - y0 + header(o) + GROUP_INSET,
-          };
-        })()
-      : { x: r.x, y: r.y, w: o.w, h: o.h };
+    const rect = timelines.has(o.id)
+      ? { x: r.x, y: r.y, w: o.w, h: o.h }
+      : kids.length
+        ? (() => {
+            const x0 = Math.min(...kids.map(k => k.x)),
+              y0 = Math.min(...kids.map(k => k.y)),
+              x1 = Math.max(...kids.map(k => k.x + k.w)),
+              y1 = Math.max(...kids.map(k => k.y + k.h));
+            return {
+              x: x0 - GROUP_INSET,
+              y: y0 - header(o),
+              w: x1 - x0 + 2 * GROUP_INSET,
+              h: y1 - y0 + header(o) + GROUP_INSET,
+            };
+          })()
+        : { x: r.x, y: r.y, w: o.w, h: o.h };
     fitted.set(o.id, rect);
     return rect;
   };
@@ -329,7 +336,7 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
 
   const placed: string[] = [];
   for (const o of scene.objects) {
-    if (pinned.has(o.id)) continue;
+    if (pinned.has(o.id) || dated(o)) continue;
     const r = fitted.get(o.id)!,
       origin =
         o.parent === 'root'

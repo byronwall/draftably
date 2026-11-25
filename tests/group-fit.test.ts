@@ -45,10 +45,13 @@ function paddings(scene: Scene) {
 const geometry = (scene: Scene) => scene.objects.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
 
 describe('group fit', () => {
-  // Swim lanes and a sequence's bands span the whole drawing by design, so they are not fitted
-  // to their content.
+  // Swim lanes and a sequence's bands span the whole drawing by design, and a timeline's rows and
+  // bands span its whole axis, so they are not fitted to their content.
   const files = readdirSync(examples).filter(
-    f => f.endsWith('.draft') && !/^layout root (lanes|sequence)/m.test(read(f)),
+    f =>
+      f.endsWith('.draft') &&
+      !/^layout root (lanes|sequence)/m.test(read(f)) &&
+      !/^layout \S+ timeline/m.test(read(f)),
   );
 
   // A routing channel (src/dsl/channels.ts) is two standoffs plus an edge gap per extra line on
@@ -59,7 +62,12 @@ describe('group fit', () => {
   it.each(files)('%s fits every group to its content with one inset', async file => {
     const scene = await compile(read(file));
     for (const p of paddings(scene)) {
-      expect(p.left === GROUP_INSET || channel(p.left), `${p.id} left ${p.left}`).toBe(true);
+      // A title wider than the content centers it, so both side insets grow by the same amount.
+      const centered = p.left > GROUP_INSET && Math.abs(p.left - p.right) <= 1;
+      expect(
+        p.left === GROUP_INSET || channel(p.left) || centered,
+        `${p.id} left ${p.left} right ${p.right}`,
+      ).toBe(true);
       expect(p.bottom === GROUP_INSET || channel(p.bottom), `${p.id} bottom ${p.bottom}`).toBe(
         true,
       );
@@ -95,12 +103,31 @@ describe('group fit', () => {
     }
   });
 
-  it('widens a group for a short title wider than its content', async () => {
+  it('widens a group for a short title wider than its content, and centers the content', async () => {
     const scene = await compile(`group g "Payments and refunds"\nnode a "A" in=g\n`);
     const [p] = paddings(scene);
     expect(p.w).toBe(p.titleRoom);
     expect(p.w).toBeGreaterThan(scene.byId.get('a')!.w + 2 * GROUP_INSET);
-    expect([p.left, p.bottom]).toEqual([24, 24]);
+    expect(p.left).toBeGreaterThan(GROUP_INSET);
+    expect(Math.abs(p.left - p.right)).toBeLessThanOrEqual(1);
+    expect(p.bottom).toBe(GROUP_INSET);
+  });
+
+  it('centers a column under a wrapped title that needs a wider frame (#591)', async () => {
+    const scene = await compile(
+      [
+        'group sample "Second batch · Use yellow-triangle-collection.txt"',
+        'node a "Circle\\nTiny shapes" in=sample',
+        'node b "Square" in=sample',
+        'node c "Triangle" in=sample',
+        'layout sample column gap=12',
+        '',
+      ].join('\n'),
+    );
+    const [p] = paddings(scene);
+    expect(scene.byId.get('sample')!.titleLines).toBeGreaterThan(1);
+    expect(p.left).toBeGreaterThan(GROUP_INSET);
+    expect(Math.abs(p.left - p.right)).toBeLessThanOrEqual(1);
   });
 
   it('wraps a long title and grows the header instead of the width', async () => {

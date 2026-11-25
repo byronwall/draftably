@@ -4,6 +4,7 @@
  * comments and unrelated lines are kept.
  */
 import {
+  settleTimelines,
   bare,
   declaration,
   edgeStatement,
@@ -64,8 +65,14 @@ export function setFields(source: string, target: string, fields: string[]) {
       );
     }
   }
-  return check(printSource(doc));
+  return check(printSource(settled(doc)));
 }
+
+/** Every CLI edit keeps the timeline rule, as editor edits do (`settleTimelines`). */
+const settled = <T extends Parameters<typeof settleTimelines>[0]>(doc: T) => (
+  settleTimelines(doc),
+  doc
+);
 
 /**
  * Remove nodes, groups or edges by id. A node takes its edges, refinements and `phase` and `state`
@@ -84,7 +91,7 @@ export function removeIds(source: string, ids: string[]) {
       removeWhere(doc, x => x === s);
       removeReferences(doc, id);
     }
-    next = printSource(doc);
+    next = printSource(settled(doc));
   }
   return check(next);
 }
@@ -100,7 +107,7 @@ export function renameId(source: string, from: string, to: string) {
     for (const key of ['in', 'root', 'answers', 'near'])
       if (getAttr(s, key)?.value === from) setAttr(s, key, bare(to));
   }
-  return check(printSource(doc));
+  return check(printSource(settled(doc)));
 }
 
 /** The edited source, refused if it no longer parses. */

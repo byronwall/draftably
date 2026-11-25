@@ -5,7 +5,7 @@
  */
 import { DEFAULT_SETTINGS, emptyDiagram } from '../model/document';
 import { clone } from '../model/geometry';
-import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
+import { timelineRoutes, frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
@@ -115,8 +115,17 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     });
   }
   if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
+  if (scene.timelines?.length) doc.layout.timelines = clone(scene.timelines);
   const groups = new Set(doc.graph.groups.map(g => g.id));
-  doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id));
+  // A timeline band never collapses on its own, so a restored view drops it.
+  const bands = new Set(
+    (scene.timelines ?? []).flatMap(t =>
+      doc.graph.groups
+        .filter(g => (g.parentId ?? 'root') === t.scope && g.id !== t.scope)
+        .map(g => g.id),
+    ),
+  );
+  doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id) && !bands.has(id));
   doc.settings = clone(view.settings ?? DEFAULT_SETTINGS);
   // The file decides routing, and its root engine recipe is what layout tools start from.
   doc.settings.routing = { ...DEFAULT_SETTINGS.routing, ...scene.model.routing };
@@ -183,8 +192,13 @@ export function canonicalGeometry(doc: Diagram): CanonicalGeometry {
 export function measured(
   doc: Diagram,
   rects: Map<string, Rect>,
-  routes: Array<{ id: string; points: Array<{ x: number; y: number }> }>,
+  drawn: Array<{ id: string; points: Array<{ x: number; y: number }> }>,
 ): CanonicalGeometry {
+  // A timeline's own lines are drawn without the router; they belong to the geometry all the same.
+  const routes = [
+    ...drawn,
+    ...timelineRoutes(doc, rects).map(r => ({ id: r.id, points: r.points })),
+  ];
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId ?? 'root']),
   );

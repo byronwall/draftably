@@ -211,9 +211,7 @@ export function CodeBody(props: {
       return band ? [{ ...band, fill: colors()[t.line as 'added'].fill }] : [];
     }),
   );
-  const ranges = createMemo(() =>
-    rangeMarks(props.code, laid(), props.look, props.w, props.swatch.fill),
-  );
+  const ranges = createMemo(() => rangeMarks(props.code, laid(), props.look, props.swatch.fill));
   const bandInk = (line: number) => {
     const t = tokens()?.[line]?.line;
     return t === 'added' || t === 'removed' ? colors()[t].ink : undefined;
@@ -377,7 +375,7 @@ export function CodeBody(props: {
       <For each={laid().rows.filter(r => r.wraps)}>
         {row => (
           <path
-            d={wrapMarkPath(props.w - laid().gutter / 2, row.y)}
+            d={wrapMarkPath(laid().right + laid().gutter / 2, row.y)}
             fill="none"
             stroke={muted()}
             stroke-width={1.1}

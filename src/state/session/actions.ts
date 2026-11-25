@@ -25,6 +25,7 @@ import {
   isCollapsed,
   isEdge,
   isGroup,
+  onTimeline,
   selectionRoots,
 } from '../../model/graph';
 import { loadSample } from '../../model/samples';
@@ -185,6 +186,15 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   // --- Creating objects ------------------------------------------------------------------------
 
   function addNode(partial: edits.NewNode = {}, at: Point = s.canvasCenter(), edit = false) {
+    // A timeline or one of its bands has no room for an undated box; a row is a dated source line.
+    const parent = partial.parentId ?? 'root';
+    if (
+      s.doc.layout.timelines?.some(t => t.scope === parent) ||
+      (parent !== 'root' && onTimeline(s.doc, parent))
+    ) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return '';
+    }
     let id = '';
     s.transact('Add shape', d => {
       id = edits.addNode(d, partial, at);
@@ -229,6 +239,14 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     if (ids[0] && isEdge(s.doc, ids[0]) && !from && !sibling && !at) return insertStep(ids[0]);
     const source = from || ids.find(id => findNode(s.doc, id)) || null,
       container = ids.find(id => findGroup(s.doc, id));
+    // A timeline places rows by their dates, so a box can't be added beside or inside one; a
+    // new row is a dated line in the source.
+    const dated = (id: string | null | undefined) =>
+      !!id && (onTimeline(s.doc, id) || !!s.doc.layout.timelines?.some(t => t.scope === id));
+    if (dated(source) || (!source && dated(container))) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return;
+    }
     let parentId: string | null | undefined;
     let target = at;
     if (target) {
@@ -240,6 +258,12 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
       const p = s.doc.layout.nodes[container],
         pad = edits.containerPadding(s.doc, container);
       target = { x: p.x + pad + 82, y: p.y + pad + 56 };
+    }
+    // With nothing to grow from, the new shape lands in its drop target or the root: never in a
+    // timeline or a band.
+    if (!source && dated(parentId ?? 'root')) {
+      toast('Timelines place rows by their dates. Add a row as a dated line in the source.');
+      return;
     }
     let id = '';
     s.transact(sibling ? 'Add sibling branch' : 'Add connected shape', d => {
@@ -441,6 +465,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     id = selectionRoots(s.doc, s.selection()).find(id => isGroup(s.doc, id)),
   ) {
     if (!id || !isGroup(s.doc, id)) return;
+    // A band's rows are drawn by its timeline, so a band never collapses on its own.
+    if (onTimeline(s.doc, id)) return;
     const before = frameRect(s.doc, s.geometry, id);
     // A file never stores which containers are collapsed: there it is a view, like the camera,
     // and needs no translation, recompile or save.

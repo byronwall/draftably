@@ -6,6 +6,7 @@
  * comments, IDs and refinements. Everything here is deterministic: the same source gives the same
  * variants, in the same order, with the same numbers.
  */
+import { timelineRoutes } from '../model/graph';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from '../dsl/compile';
@@ -28,7 +29,8 @@ import { renderSvg } from './svg';
 
 /** One change to the source: attributes to set (a value) or remove (null) on one statement. */
 export type Edit =
-  | { kind: 'layout'; scope: string; attrs: Record<string, string | null> }
+  /** A `recipe` (such as `cells`) replaces the line's recipe or engine and its settings. */
+  | { kind: 'layout'; scope: string; recipe?: string; attrs: Record<string, string | null> }
   | { kind: 'routing'; attrs: Record<string, string | null> }
   | { kind: 'compare'; attrs: Record<string, string | null> }
   /** Attributes on a group's declaration, such as `frame=soft`. */
@@ -96,8 +98,12 @@ export const fitError = (m: Pick<Metrics, 'width' | 'height'>, fit: Fit) =>
 /** Settings a built-in recipe keeps when an engine replaces it. */
 const KEPT = ['direction', 'fold', 'min-width', 'min-height'];
 
-function merged(s: Statement, attrs: Record<string, string | null>): Statement {
+function merged(s: Statement, attrs: Record<string, string | null>, recipe?: string): Statement {
   const next: Statement = { ...s, args: [...s.args], attrs: [...s.attrs] };
+  if (recipe) {
+    next.args = [next.args[0], bare(recipe)];
+    next.attrs = [];
+  }
   // An engine replaces a built-in recipe (`layout root flow gap=48`): drop the recipe and its gap.
   if ('engine' in attrs && s.command === 'layout' && s.args.length > 1) {
     next.args = next.args.slice(0, 1);
@@ -154,7 +160,8 @@ export function applyEdits(source: string, edits: Edit[]) {
         : edit.kind === 'group'
           ? declaration(doc, edit.id)
           : statements(doc).find(s => s.command === edit.kind);
-    if (existing) replace(existing, merged(existing, edit.attrs));
+    const recipe = edit.kind === 'layout' ? edit.recipe : undefined;
+    if (existing) replace(existing, merged(existing, edit.attrs, recipe));
     // A missing group has nothing to change; layout, routing and compare lines are added.
     else if (edit.kind !== 'group') {
       const next =
@@ -162,7 +169,9 @@ export function applyEdits(source: string, edits: Edit[]) {
           ? // Without an engine a layout line needs a recipe; `flow` is the one with a direction.
             fresh(
               'layout',
-              edit.attrs.engine ? [bare(edit.scope)] : [bare(edit.scope), bare('flow')],
+              edit.attrs.engine && !recipe
+                ? [bare(edit.scope)]
+                : [bare(edit.scope), bare(recipe ?? 'flow')],
               edit.attrs,
             )
           : fresh(edit.kind, [], edit.attrs);
@@ -192,6 +201,8 @@ export interface Shape {
   ranks: number;
   /** Every node has at most one incoming connection and there is one start. */
   tree: boolean;
+  /** One unbranched chain of two or more connections: one in and one out at every step. */
+  chain: boolean;
   /** Mean edge label length, in characters. */
   labels: number;
   /** The scope the variants arrange: `root`, or a group given with `--scope`. */
@@ -258,6 +269,8 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
   const { depth, cyclic } = depths(edges);
   const ranks = Math.max(0, ...nodes.map(n => depth.get(n.id) ?? 1));
   const starts = nodes.filter(n => !incoming.get(n.id)).length;
+  const outgoing = new Map<string, number>();
+  for (const e of edges) outgoing.set(e.source, (outgoing.get(e.source) ?? 0) + 1);
   const root = m.layouts.find(l => l.scope === scope);
   const labelled = edges.filter(e => e.label);
   return {
@@ -265,11 +278,16 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
     groups: m.objects.filter(o => o.type === 'group' && !o.frame && members.has(o.id)).length,
     ranks,
     tree: !cyclic && starts === 1 && nodes.every(n => (incoming.get(n.id) ?? 0) <= 1),
+    chain:
+      !cyclic &&
+      edges.length >= 2 &&
+      ranks === edges.length + 1 &&
+      nodes.every(n => (incoming.get(n.id) ?? 0) <= 1 && (outgoing.get(n.id) ?? 0) <= 1),
     labels: labelled.length
       ? labelled.reduce((sum, e) => sum + e.label.length, 0) / labelled.length
       : 0,
     scope,
-    ...(root && ['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine
+    ...(root && ['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine
       ? { fixed: root.algorithm }
       : {}),
     layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
@@ -290,7 +308,13 @@ export const titleOf = (edits: Edit[]) =>
     .map(e =>
       e.kind === 'drop'
         ? `no line ${e.line}`
-        : (e.kind === 'group' ? `${e.id} ` : e.kind === 'compare' ? 'compare ' : '') +
+        : (e.kind === 'group'
+            ? `${e.id} `
+            : e.kind === 'compare'
+              ? 'compare '
+              : e.kind === 'layout' && e.recipe
+                ? `${e.scope} ${e.recipe} `
+                : '') +
           Object.entries(e.attrs)
             .map(([k, v]) =>
               v === null ? `no ${k}` : k === 'engine' || k === 'direction' ? v : `${k}=${v}`,
@@ -364,6 +388,12 @@ export function suggestions(
     out.push({
       edits: [layout({ engine: 'compound-flow', direction: null })],
       why: 'keep the groups, rank them by their connections',
+    });
+  // An unbranched chain through groups draws as one straight line when it reads across.
+  if (shape.groups && shape.chain && !(engine === 'compound-flow' && lead === 'right'))
+    out.push({
+      edits: [layout({ engine: 'compound-flow', direction: 'right' })],
+      why: `an unbranched chain of ${shape.ranks} steps through groups, on one straight line`,
     });
   if (shape.groups)
     out.push({
@@ -544,6 +574,8 @@ const target = (e: AttrEdit) =>
  * - **Fewer containers:** soften leaf groups and groups whose members span more than one rank,
  *   never the group that holds most of the drawing. Only groups with no `layout` or position
  *   lines of their own qualify, so applying it changes only `group` lines.
+ * - **Cells for a list:** a group of three or more plain boxes, none an edge end, packs into
+ *   `cells columns=2`; edges still reach the group. Its own `layout` line changes, or one is added.
  */
 export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
   const m = scene.model,
@@ -568,7 +600,25 @@ export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
           why: `${compare ? 'compare' : 'change marks as'} panels ${direction === 'right' ? 'side by side' : 'stacked'}`,
         });
   const root = m.layouts.find(l => l.scope === 'root');
-  if (root && ['lanes', 'sequence'].includes(root.algorithm)) return out;
+  if (root && ['lanes', 'sequence', 'timeline'].includes(root.algorithm)) return out;
+  const ends = new Set(m.edges.flatMap(e => [e.source, e.target])),
+    hinted = new Set(m.hints.flatMap(h => ('ids' in h ? h.ids : [h.id]))),
+    plain = (o: (typeof m.objects)[number]) =>
+      o.type === 'node' &&
+      !o.code &&
+      (o.shape === 'box' || o.shape === 'pill') &&
+      !ends.has(o.id) &&
+      !hinted.has(o.id);
+  for (const g of m.objects) {
+    if (g.type !== 'group' || g.frame) continue;
+    const own = m.layouts.find(l => l.scope === g.id),
+      kids = m.objects.filter(o => o.parent === g.id);
+    if (own?.algorithm === 'cells' || kids.length < 3 || !kids.every(plain)) continue;
+    out.push({
+      edits: [{ kind: 'layout', scope: g.id, recipe: 'cells', attrs: { columns: '2' } }],
+      why: `pack the ${kids.length} boxes in ${g.id}, none an edge end, into a grid`,
+    });
+  }
   const groups = m.objects.filter(o => o.type === 'group'),
     nodes = m.objects.filter(o => o.type === 'node'),
     parent = new Map(m.objects.map(o => [o.id, o.parent]));
@@ -716,10 +766,22 @@ export async function draw(source: string): Promise<Drawn> {
     { vg, rects } = visibleRects(doc),
     { routes, result } = computeRoutes(doc, vg, rects, { previous: [] });
   // A soft group drawn in pieces no longer reads as one group, so it counts against a variant
-  // even though `check` only notes it.
+  // even though `check` only notes it. `fit-direction` only says the stated direction keeps the
+  // drawing wide; the measured aspect already ranks that, so it does not count twice.
   const warnings =
-    scene.diagnostics.filter(d => d.level === 'warning' || d.code === 'soft-split').length +
-    findConflicts(scene, doc, rects, routes).length;
+    scene.diagnostics.filter(
+      d => (d.level === 'warning' && d.code !== 'fit-direction') || d.code === 'soft-split',
+    ).length + findConflicts(scene, doc, rects, routes).length;
+  const onChart = timelineRoutes(doc, rects),
+    drawnBends = onChart.reduce((n, r) => n + r.points.length - 2, 0),
+    drawnLength = onChart.reduce(
+      (n, r) =>
+        n +
+        r.points
+          .slice(1)
+          .reduce((m, p, i) => m + Math.hypot(p.x - r.points[i].x, p.y - r.points[i].y), 0),
+      0,
+    );
   const svg = renderSvg(doc);
   const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg)!;
   const c = centers(rects);
@@ -728,8 +790,9 @@ export async function draw(source: string): Promise<Drawn> {
       width: Math.round(Number(size[1])),
       height: Math.round(Number(size[2])),
       crossings: result.report.crossings,
-      bends: result.report.bends,
-      length: Math.round(result.report.length),
+      // A timeline's own lines are drawn without the router, so their bends and length add here.
+      bends: result.report.bends + drawnBends,
+      length: Math.round(result.report.length + drawnLength),
       warnings,
     },
     routes,
@@ -876,7 +939,7 @@ const movedFrom = (base: Drawn['centers'], next: Drawn['centers']) => {
 
 // --- Ranking -----------------------------------------------------------------------------------
 
-const area = (m: Metrics) => m.width * m.height;
+const area = (m: Pick<Metrics, 'width' | 'height'>) => m.width * m.height;
 
 /** Sort keys for a preference, most important first. Warnings always come first. */
 function keys(m: Metrics, goal: Goal): number[] {
@@ -906,16 +969,21 @@ export function improves(m: Metrics, base: Metrics, fit?: Fit) {
   if (straighter(m, base)) return true;
   if (!fit) return area(m) <= area(base) && (fewer || area(m) < area(base));
   const [now, was] = [fitError(m, fit), fitError(base, fit)];
-  // A much tighter drawing with no more bends and shorter lines may drift a little off the shape.
-  const tighter =
-    area(m) <= area(base) * TIGHTER &&
-    m.bends <= base.bends &&
-    m.length <= base.length &&
-    now <= was + TIGHTER_DRIFT;
   return (
-    tighter || (area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05))
+    tighter(m, base, fit) ||
+    (area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05))
   );
 }
+
+/**
+ * Whether `m` is much tighter than `base`: at most 85% of the area, no more bends and no longer
+ * lines. With `--fit` it may drift a little off the shape.
+ */
+export const tighter = (m: Metrics, base: Metrics, fit?: Fit) =>
+  area(m) <= area(base) * TIGHTER &&
+  m.bends <= base.bends &&
+  m.length <= base.length &&
+  (!fit || fitError(m, fit) <= fitError(base, fit) + TIGHTER_DRIFT);
 
 /** A variant this much smaller (by area) counts as tighter, and may move this far off `--fit`. */
 const TIGHTER = 0.85,
@@ -926,7 +994,8 @@ const TIGHTER = 0.85,
  * them, no wider (within 5%) and at most half as large again. A straight line reads better than
  * a shape closer to the target, so this holds even when the aspect moves away from `--fit`.
  */
-export const straighter = (m: Metrics, base: Metrics) =>
+type Shaped = Pick<Metrics, 'bends' | 'width' | 'height'>;
+export const straighter = (m: Shaped, base: Shaped) =>
   base.bends - m.bends >= 2 &&
   m.bends * 2 <= base.bends &&
   m.width <= base.width * 1.05 &&
@@ -1084,12 +1153,16 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     }
   }
   const better = (v: Variant) => improves(v.metrics!, v0.metrics!, goal.fit);
-  if (ranked)
-    found.sort(
-      (a, b) =>
-        Number(better(b.variant)) - Number(better(a.variant)) ||
-        compareKeys(keys(a.variant.metrics!, goal), keys(b.variant.metrics!, goal)),
-    );
+  // Among better variants, one that removes the file's avoidable bends or packs it much tighter
+  // with shorter lines comes first, even when another is closer to `--fit`.
+  const straight = (v: Variant) =>
+    better(v) &&
+    (straighter(v.metrics!, v0.metrics!) || tighter(v.metrics!, v0.metrics!, goal.fit));
+  const order = (a: Variant, b: Variant) =>
+    Number(better(b)) - Number(better(a)) ||
+    Number(straight(b)) - Number(straight(a)) ||
+    compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal));
+  if (ranked) found.sort((a, b) => order(a.variant, b.variant));
   const kept = found.slice(0, limit);
   kept.forEach((f, i) => {
     f.variant.id = `v${i + 1}`;
@@ -1105,7 +1178,7 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
   const pick = kept
     .map(f => f.variant)
     .filter(v => better(v) && !v.tags.some(t => t.startsWith('same as')))
-    .sort((a, b) => compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal)))[0];
+    .sort(order)[0];
   const recommended = pick?.id ?? 'v0';
   variants.find(v => v.id === recommended)!.tags.unshift('recommended');
   return {

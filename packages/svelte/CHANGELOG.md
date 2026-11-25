@@ -1,5 +1,19 @@
 # @draftably/svelte
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [3f77d2b]
+- Updated dependencies [caca35c]
+- Updated dependencies [c34d585]
+- Updated dependencies [6c536fe]
+- Updated dependencies [b7f43ad]
+- Updated dependencies [4073fa0]
+- Updated dependencies [443cceb]
+  - @draftably/runtime@0.9.0
+  - @draftably/editor@0.9.0
+
 ## 0.8.0
 
 ### Patch Changes

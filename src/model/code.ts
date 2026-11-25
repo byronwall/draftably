@@ -8,7 +8,7 @@
  * into the source lines by index and character range, so later layers (token colors, diff line
  * bands, highlighted line ranges) attach to rows without changing the layout.
  */
-import { measureText, typeProfile, type TypeProfile } from './fonts';
+import { measureText, truncateText, typeProfile, type TypeProfile } from './fonts';
 import type { ResolvedAppearance } from './appearance';
 import type { Spot, Status } from './status';
 
@@ -44,7 +44,8 @@ export interface CodeBlock {
 /**
  * A named run of body lines (`range sql.copy1 lines=3-6`): a tinted band behind them, a bar in
  * the left margin and an optional label. Its ID is `<node>.<name>`, which edges, notes and states
- * name like any object. A range never changes the node's size.
+ * name like any object. A label widens the node by the label column (`labelColumn`); a range
+ * without one never changes the node's size.
  */
 export interface CodeRange {
   name: string;
@@ -92,6 +93,28 @@ const HANG = 2;
 const TABLE_GAP = 6;
 /** The narrowest box. */
 const MIN_WIDTH = 80;
+/** A range label's padding inside its tag, and the widest a tag grows before its text truncates. */
+export const TAG_PAD = 4;
+const TAG_MAX = 168;
+/** The label column's gap from the box's right edge, and from the code before it. */
+const TAG_INSET = 6;
+const TAG_GAP = 12;
+
+/**
+ * The label column of a code node whose ranges have labels: the widest tag, capped at
+ * `TAG_MAX`. The code never enters this column, so a label covers no code whatever its text or
+ * the length of the line beside it. Undefined when no range has a label.
+ */
+function labelColumn(code: CodeBlock, look: ResolvedAppearance) {
+  const labels = (code.ranges ?? []).flatMap(r => (r.label ? [r.label] : []));
+  if (!labels.length) return undefined;
+  const widest = Math.max(...labels.map(l => measureText(l, look.annotation)));
+  return Math.ceil(Math.min(TAG_MAX, widest + 2 * TAG_PAD));
+}
+
+/** A range label's text, truncated to the tag width the layout gives it. */
+export const tagText = (label: string, layout: CodeLayout, look: ResolvedAppearance) =>
+  truncateText(label, layout.tags!.w - 2 * TAG_PAD, look.annotation);
 
 /** Expand tabs to `tab` columns, drop trailing spaces, drop blank lines at both ends, dedent. */
 export function codeLines(raw: string[], tab = CODE_TAB): string[] {
@@ -341,6 +364,10 @@ export interface CodeLayout {
   rule?: number;
   /** x where the rule ends: the table's last column, or the right padding when that is nearer. */
   ruleEnd?: number;
+  /** Right edge of the code column, from the box's left edge: the wrap marks sit just past it. */
+  right: number;
+  /** The range label column, when a range has a label: its left edge and its width. */
+  tags?: { x: number; w: number };
 }
 
 const columns = (s: string) => s.length;
@@ -397,14 +424,24 @@ export function codeLayout(
     band = caption ? CAPTION_HEIGHT : 0,
     longest = Math.max(...lines.map(columns)),
     captionW = caption ? measureText(caption, look.annotation) + 2 * CODE_PAD.x : 0,
+    column = labelColumn(code, look),
+    // The label column takes the right padding's place: the code ends a gap before it.
+    extra = column ? column + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
     natural = Math.ceil(
-      Math.max(MIN_WIDTH, captionW, 2 * CODE_PAD.x + gutterW + longest * adv + 0.01),
+      Math.max(MIN_WIDTH, captionW, 2 * CODE_PAD.x + gutterW + extra + longest * adv + 0.01),
     ),
     w =
       size.width ??
-      Math.min(natural, Math.max(code.maxWidth, Math.ceil(2 * CODE_PAD.x + gutterW + 8 * adv))),
+      Math.min(
+        natural,
+        Math.max(code.maxWidth, Math.ceil(2 * CODE_PAD.x + gutterW + extra + 8 * adv)),
+      ),
+    // A given width too narrow for both keeps half its code area for the code.
+    room = w - 2 * CODE_PAD.x - gutterW,
+    tagW = column && Math.max(2 * TAG_PAD + 8, Math.min(column, room / 2 - TAG_INSET - TAG_GAP)),
+    reserve = tagW ? tagW + TAG_INSET + TAG_GAP - CODE_PAD.x : 0,
     // A small tolerance, so rounding a fitted width never costs the last column.
-    cols = Math.max(4, Math.floor((w - 2 * CODE_PAD.x - gutterW) / adv + 0.05));
+    cols = Math.max(4, Math.floor((room - reserve) / adv + 0.05));
   const rows: CodeRow[] = [],
     long: number[] = [],
     top = band + CODE_PAD.y,
@@ -449,7 +486,7 @@ export function codeLayout(
     rule = gap && head ? head.y + lh + gap / 2 : undefined;
   return {
     ...(rule !== undefined
-      ? { rule, ruleEnd: Math.min(w - CODE_PAD.x, CODE_PAD.x + gutterW + longest * adv) }
+      ? { rule, ruleEnd: Math.min(w - CODE_PAD.x - reserve, CODE_PAD.x + gutterW + longest * adv) }
       : {}),
     w,
     h: size.height ?? auto,
@@ -463,6 +500,8 @@ export function codeLayout(
     moreY,
     moreShown,
     long,
+    right: w - CODE_PAD.x - reserve,
+    ...(tagW ? { tags: { x: w - TAG_INSET - tagW, w: tagW } } : {}),
   };
 }
 

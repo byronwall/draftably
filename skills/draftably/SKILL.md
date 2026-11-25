@@ -47,7 +47,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
    what wins a tie. When a variant is close, `--from v2` tries small changes around it.
    `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
-   as panels, and to soften groups (`frame=soft`) for fewer containers.
+   as panels, to soften groups (`frame=soft`) for fewer containers, and to pack a group of boxes
+   with no edges of their own into `cells columns=2`.
    **For a crossing** (`check --metrics` warns `Edges a and b cross.`): first put boxes in the order of the
    boxes they connect to (`node` line order or an `order` line), then try
    `--try ordering=stable,crossings` or `--try crossing-penalty=360,900`. Some crossings cannot be
@@ -71,7 +72,9 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    crossings, detours, stranded nodes and an aspect far from the target. Fix what it names, or run
    `vary --fit slide`, and compare the metrics line before and after. With `direction=` on the
    `layout root` line, it also notes `direction-bends` when the other direction removes most
-   bends, with both sizes; take it unless the direction is deliberate. A `crossing-penalty` above
+   bends, with both sizes; take it unless the direction is deliberate. Without `direction=`, a
+   chain through groups gets the same note for `engine=compound-flow direction=right` when that
+   draws it straight. A `crossing-penalty` above
    the default can buy long detours: `crossing-detour` names the line and what one crossing saves.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
@@ -94,7 +97,8 @@ engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1
    comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
    edits; `format --drop-stale --write` removes those lines.
 10. **Move from Mermaid:** `npx draftably migrate docs/` lists the Markdown `mermaid` fences a
-    run would rewrite as `draft` fences (flowcharts and sequences only; other charts stay) and
+    run would rewrite as `draft` fences (flowcharts, sequences, gantt charts and dated timelines;
+    other charts stay) and
     the importer's warnings. Add `--write` to apply, and `--accept-lossy` for fences with
     warnings. `import chart.mmd --output chart.draft` converts one Mermaid, DOT or D2 file.
 
@@ -237,6 +241,22 @@ Good defaults:
   waits on whom, and give each call its reply.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
+- Things placed in time (bug history, releases, an incident): `layout <group> timeline
+today=DATE`, or `layout root timeline` for the whole drawing. Each node in the group is a row:
+  `at=DATE` for a point, `from=DATE to=DATE` for a span (`to=open` runs to `today`,
+  `from=?DATE` means it began before DATE, `steps=D1,D2` marks partial steps). Groups inside
+  the timeline are bands. `milestone id "v2.0" at=DATE in=<timeline>` draws a release rule
+  across every band; `from=`/`to=` on a milestone shades a period (a freeze). Row text: `key=`,
+  `detail=`, `tag=`, `start-label=`, `end-label=` (`=date` or `=duration` print them for you).
+  `progress=40` fills part of a bar; `to=+3d|+2w|+1m` ends a span by duration.
+  `headers="Name|Owner"` heads the columns. `scale=ordinal` spaces dates evenly and labels the
+  gaps (an event history, like a Mermaid timeline).
+  `zoom=START..END` adds an enlarged detail panel for a crowded stretch; bands wholly inside it
+  move there. Edges from rows to boxes outside the timeline route normally (a fix to the code
+  it touched); an edge between two rows draws on the chart as a dated elbow arrow. An edge can't
+  end on a milestone, so make a release a point row when the graph needs it. No
+  `near`/`pin`/`size` on rows; dates place them.
+  **Fits** elapsed time and durations. **Doesn't fit** order alone; use `sequence`.
 - One object made of parts, a table, or a list of boxes with no edges of their own:
   `layout groupId cells` (see Cells). **Fits** a request body, a record, a schema, a checklist.
   **Doesn't fit** steps that happen in order; those are nodes and edges.
@@ -290,7 +310,8 @@ Ranges:
 - `lines=3-5` counts body lines from 1 (or `start=`). `match="regex" span=n` finds the first
   matching line and survives edits; write each backslash twice in the pattern.
 - `sql.scan1` works in `edge` (it meets the node's left or right side), `note near=` and `state`,
-  and takes change marks (`+range`). A range never moves anything.
+  and takes change marks (`+range`). A label adds a label column to the right of the code, so the
+  node grows by the widest label; keep labels short. A range without a label moves nothing.
 
 Read code from its file with `src=` instead of pasting a copy:
 

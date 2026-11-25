@@ -308,7 +308,10 @@ Paste spreadsheet cells, or a Markdown or psql table, on the canvas to add a tab
 ### Line ranges
 
 `range` names lines of a code node. The range draws a band behind the lines, a bar in the left
-margin and its label in the right margin. It never changes the node's size or the layout.
+margin and its label in a label column on the right. Code never runs under a label: when a range
+has a label, the node grows by the widest label (up to about 170px; a longer one ends with `…`),
+and every label starts at the same x, level with its range's first line. A range without a label
+never changes the node's size or the layout.
 
 ```draft
 node report "Orders report" color=blue
@@ -342,7 +345,8 @@ Then use it:
 - An edge to a range meets the node's left or right side at the range's middle line. `to=` and
   `from=` take `left` or `right` only.
 - `color=` picks the family (default `amber`). The label is optional.
-- Ranges may nest or overlap: bands blend, bars stand side by side and labels stack.
+- Ranges may nest or overlap: bands blend, bars stand side by side, and a label whose row another
+  label holds moves down to the next free row.
 - In a state, the listed ranges stay in focus and the node's other ranges fade. A change mark
   (`+range`, `-range`, `~range`) draws the range in green, red or amber.
 - When you delete a code node in the viewer, its ranges go too, with every line that names them.
@@ -733,6 +737,137 @@ layout root sequence
 
 Outside a sequence, a message ID in `near=` is an error. If a node and a message share an ID, the
 note goes beside the node.
+
+## Timelines
+
+A timeline places things on a real date axis: when each bug arrived and when it was fixed, a
+roadmap, a release history, an incident. Equal time takes equal width. A timeline is a group like
+any other, so it sits in the same drawing as boxes, code and lines, and lines join its rows to them.
+
+```draft
+group history "Bug history"
+layout history timeline today=2025-11-23
+
+group open "Still open" in=history color=red
+group fixed "Fixed" in=history color=teal
+milestone v2 "v2.0.0" at=2025-11-03 in=history
+
+node b6 "Mixed number comparison fails" in=open key=B6 from=2025-02-27 to=open detail="#142"
+node c2 "Divide by zero returned NaN" in=fixed key=C2 from=?2025-11-03 to=2025-11-16 steps=2025-11-04 end-label="#538"
+
+node planner "Query planner"
+edge fix c2 -> planner "fixed by"
+```
+
+**Try it:** add `zoom=2025-11-03..2025-11-23` to the layout line. The fixed band moves to a detail
+panel about 19 times wider per day, under an overview with the window shaded.
+
+Pick `timeline` when elapsed time matters: how long, how far apart, what overlapped. Pick
+`sequence` when only the order of messages matters, and `scale=ordinal` (below) for a history
+where the order of dates matters more than the gaps between them.
+
+### What each mark means
+
+| Mark                                               | Means                             | Written as                                |
+| -------------------------------------------------- | --------------------------------- | ----------------------------------------- |
+| Bar with a ring at the left and a dot at the right | A span with a known start and end | `from=DATE to=DATE`                       |
+| Bar ending in an arrowhead at Today                | Still going                       | `to=open`, with `today=` on the layout    |
+| Dotted lead-in with a chevron                      | Began some time before this date  | `from=?DATE`                              |
+| Hollow circles on a bar                            | Partial steps                     | `steps=DATE,DATE`                         |
+| Solid part over a lighter track                    | How much is done                  | `progress=40`                             |
+| Dot with a hollow center                           | One day, a point in time          | `at=DATE`                                 |
+| Dashed rule with a tag above the axis              | A release or other milestone      | `milestone id "v2" at=DATE`               |
+| Pale wash with a tag above the axis                | A period, such as a freeze        | `milestone id "Freeze" from=DATE to=DATE` |
+| Dark solid rule                                    | Today                             | `today=DATE`                              |
+| Elbow arrow between two rows                       | This, then that                   | `edge e a -> b` between rows              |
+
+The legend under the timeline lists only the marks the drawing uses.
+
+### Rows
+
+Each node in the timeline is a row: `at=DATE` for a point, or `from=DATE to=DATE` for a span. Dates
+are `YYYY-MM-DD`.
+
+- `to=+3d`, `to=+2w` or `to=+1m` ends a span by duration from `from=`. A month keeps the day of the
+  month (January 31 plus one month is February 28).
+- `key=` adds an ID column, bold in the row's color. `detail=` adds a second line under the name.
+  `tag=` adds a column after the name, such as an owner or a platform.
+- `end-label=` puts text beside the end, such as the fixing PR. `start-label=` puts text at the
+  start: above a bar, or to the left of a point. The words `date` and `duration` print the date or
+  the span's length for you: `end-label=duration` gives "3 weeks", and an open span adds "so far"
+  ("2 months so far").
+- A span too short to show as a bar (one day on a long axis) draws as a point.
+
+### Bands and color
+
+- A group directly inside a timeline is a band. Its title heads its rows, and its color is its rows'
+  default. Bands with `color=auto` take blue, teal, orange, violet, rose, green, amber and red in
+  turn. A row's own `color=` wins.
+- Rows keep file order. `order <timeline> band1 band2` orders the bands, and `order <band> row1
+row2` the rows in one band.
+- `headers="Workstream|Owner"` on the layout line heads the name column and the tag column.
+- Bars keep 3:1 contrast and band titles 4.5:1 on the page or the group that holds the timeline,
+  in every theme.
+
+### Milestones and periods
+
+- `milestone id "v2.0.0" at=DATE in=<timeline>` draws a dashed rule through every band, with its
+  tag above the axis.
+- `milestone id "Code freeze" from=DATE to=DATE in=<timeline>` shades a period through every band.
+- Tags that would touch move up a rail. A milestone takes no row, so a line cannot end on one. To
+  connect a release, write it as a point row (`at=`) in a band of its own.
+- `today=DATE` draws Today's rule and ends `to=open` spans. Give a fixed date, so the drawing is
+  the same every time it renders.
+
+### The axis: zoom and ordinal scale
+
+- Ticks (days, weeks, months, quarters or years) come from the span and the width, so their labels
+  never collide. `width=` sets the axis width (880 by default).
+- `zoom=START..END` adds a detail panel for a crowded stretch. A band whose dates all fall in the
+  window moves to the detail panel, under an overview of the whole history with the window shaded.
+  The detail heading states how much wider it is.
+- `scale=ordinal` gives every distinct date one equal step and labels each gap with its length
+  ("8 years"). Use it for an event history, as a Mermaid `timeline` draws one. Years written as
+  January 1st read as years.
+
+### Lines
+
+- A line from a row to something outside the timeline is routed like any other line. A row's box
+  spans the whole timeline, so the line leaves past every bar and label.
+- A line between two rows of one timeline draws on the chart: from the first row's end, down or up
+  to the second row, then across into its start. Its label sits beside the arrow, clear of other
+  arrows and marks.
+
+### From Mermaid
+
+`draftably import plan.mmd` and `draftably migrate` convert Mermaid `gantt` and `timeline` charts to
+native timelines, and the `@draftably/mermaid` drop-in draws them with Draftably.
+
+| Mermaid                                         | Native                                                                 |
+| ----------------------------------------------- | ---------------------------------------------------------------------- |
+| `section Build`                                 | A band                                                                 |
+| `Task :a1, 2025-01-06, 10d`                     | A row with the dates Mermaid computed (`excludes` and `after` applied) |
+| `after a1`                                      | The same dates, and a drawn arrow from `a1`                            |
+| `done` · `crit` · `active`                      | `progress=100` · `color=red` · not drawn                               |
+| `:milestone`                                    | A point row (`at=`) on the day Mermaid centers it                      |
+| `:vert`                                         | A milestone rule                                                       |
+| `timeline` periods (`2004 : Facebook : Google`) | `scale=ordinal`, one point row per event                               |
+
+A Mermaid timeline whose periods are not dates (`Industry 4.0`) stays Mermaid: write each period as
+a year, `YYYY-MM` or `YYYY-MM-DD` to convert it. Times of day round to whole days, and
+`axisFormat` and `tickInterval` give way to the native ticks.
+
+### What check reports
+
+- A node in a timeline with no date, a date that is not a real `YYYY-MM-DD` day, a span that ends
+  before it starts, `steps=` outside its span, and `to=open` without `today=`.
+- A date on a node outside a timeline, and a band with no rows.
+- `near`, `nudge`, `stay`, `pin`, `size` and `align` on a row: dates place it.
+- A timeline under `layout root lanes` or `layout root sequence`, and `compare` on a file with a
+  timeline.
+
+In the viewer, rows and bands select but don't drag. Drag the timeline's frame to move the whole
+timeline, and double-click a row or band title to rename it.
 
 ## Cells
 
@@ -1534,17 +1669,26 @@ Recommended: v1. Apply: draftably vary plan.draft --apply v1
   mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
 - **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
   counts as better than the file when it has fewer warnings and no more crossings, or when it
-  has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
+  has no more warnings, crossings or area and less of one; those come first. Among them, a
+  variant that removes at least two bends and half of them, no wider (within 5%), or one that
+  takes at most 85% of the area with no more bends and shorter lines, comes first even when its
+  aspect is farther from `--fit`. Then fewest warnings, crossings, area and bends.
+  `fit-direction` does not count as a warning here: the aspect already ranks it. `--limit N` keeps
   N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
 - **Recommended** is the first variant better than the file, or `v0` when none is.
 - **From the file itself**, the suggestions also try:
+  - for one unbranched chain through groups, `compound-flow right`, which draws it as one
+    straight line;
   - dropping the refinement lines `check` blames for drawing conflicts, so layout places those
     objects (`no line 15`);
   - for a file with change marks or a `compare` line, panels side by side and stacked;
   - fewer containers: `frame=soft` on leaf groups, then also on groups whose members span more
     than one rank, never on the group that holds most of the drawing. Only groups with no
     `layout` or position lines of their own qualify, so applying one changes only `group`
-    lines.
+    lines;
+  - cells for a list: a group of three or more plain boxes, none of which an edge starts or ends
+    on, packs into `layout groupId cells columns=2` (`done cells columns=2`). Edges still reach
+    the group.
 - `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
   one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
   `--try key` alone uses the steps the Editor's **Compare** offers (`rank-gap` → 28, 52, 88). Keys
@@ -1622,6 +1766,12 @@ the file the other way. If that removes at least two bends and half of them, wit
 crossings and shorter lines, it notes `direction-bends` with both sizes. Change the direction to
 take it, or keep it when the direction is deliberate.
 
+When the `layout root` line sets no direction and the drawing is one unbranched chain through
+groups (one line in and one out at each step), `check --metrics` also draws it as
+`engine=compound-flow direction=right`. If that removes at least two bends and half of them, no
+wider (within 5%) and with shorter lines, it notes `direction-bends` with that line and both
+sizes.
+
 When a `routing` line sets `crossing-penalty` above the default (360), `check --metrics` also
 draws the file at the default. If one line then loses a long detour (at least 200px and 40% of
 its length) for a crossing more, it notes `crossing-detour` with that line's length and bends both
@@ -1666,6 +1816,13 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 - [Webhook delivery with one retry](https://draftably.dev/app/?example=webhook-delivery): A sequence of sends: no sender waits, one message gets two replies, and actions show each side's own work.
 - [How a label reaches the page](https://draftably.dev/app/?example=label-history): A sequence whose labels point at footnotes; each footnote links its PR.
 - [How a request is built](https://draftably.dev/app/?example=prompt-request): The request is one group of touching cells, and a marker shows the cache point.
+
+### Timelines
+
+- [Example project bugs](https://draftably.dev/app/?example=bug-timeline): Open bugs run to today, release rules cross every band, and a detail panel enlarges three crowded weeks.
+- [Search rewrite roadmap](https://draftably.dev/app/?example=roadmap): Progress, durations, a holiday freeze and dependency arrows, beside a box the plan depends on.
+- [Number formatting](https://draftably.dev/app/?example=release-investigation): A timeline beside code: rows say when, lines say where each fix lives.
+- [A short history of the web](https://draftably.dev/app/?example=company-history): An ordinal timeline: one step per date, with every gap labeled.
 
 ### Tables and byte layouts
 
@@ -1818,7 +1975,7 @@ where they go.
 
 **Compare alternatives** opens on the current drawing and up to three others. Every engine runs, and
 drawings that match the current one or each other are left out. Each card says what it gains and
-costs against the current drawing, from its crossings, area, line length and bends, and a drawing
+costs against the current drawing, from its crossings, area, width, line length and bends, and a drawing
 with a blocked line or an overlap comes last. Those numbers are a guide: look at the drawing. **More**
 shows every other result, including any that failed. The sliders button holds the method list,
 parameter grids, cameras and export. For connections, **Compare** tries `clearance=4`, `clearance=22`

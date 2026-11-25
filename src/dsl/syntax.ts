@@ -22,6 +22,14 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import {
+  checkWhen,
+  readTimelineOptions,
+  readWhen,
+  TIMELINE_ATTRS,
+  type TimelineOptions,
+  type TimelineWhen,
+} from './timeline';
 import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
 import { CODE_MAX_WIDTH, CODE_TAB, codeLines, tableLines, type CodeBlock } from '../model/code';
@@ -285,7 +293,7 @@ export const formatSource = (source: string) => printSource(readSource(source));
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
 /** `cells` lays a group's members edge to edge as one object: a sequence, table or byte layout. */
-export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells';
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells' | 'timeline';
 
 export interface ModelObject {
   id: string;
@@ -325,6 +333,8 @@ export interface ModelObject {
   /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
    * field of variable length in a byte or bit layout. */
   span?: number | 'var';
+  /** Timeline nodes: the dates and row text that place them; `milestone` lines set `milestone`. */
+  when?: TimelineWhen;
   line: number;
 }
 
@@ -383,6 +393,8 @@ export interface ModelLayout {
   ruler?: boolean;
   /** `sequence` only: draw a bar on a participant's lifeline while it is at work on a call. */
   activations?: true;
+  /** `timeline` only: today, the zoom window and the axis width. */
+  timeline?: TimelineOptions;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
   /** Root only: the image shape to aim for; compile tries direction and folding to get closest. */
@@ -432,6 +444,8 @@ export const POSITION_HINTS: HintType[] = ['near', 'nudge', 'stay', 'pin'];
 export interface Model {
   title: string;
   objects: ModelObject[];
+  /** Set by the compiler: the frameless groups it took out for layout. Timelines read their bands here. */
+  dissolvedGroups?: ModelObject[];
   edges: ModelEdge[];
   layouts: ModelLayout[];
   hints: Hint[];
@@ -852,6 +866,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                 'href',
                 'count',
                 'span',
+                ...TIMELINE_ATTRS,
               ]
             : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
         );
@@ -929,6 +944,27 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                   attrs.get('span')!.value === 'var' ? ('var' as const) : num('span', 1, 1, 4096),
               }
             : {}),
+          ...(command === 'node' && readWhen(attrs, fail) ? { when: readWhen(attrs, fail) } : {}),
+          line,
+        });
+        break;
+      }
+      case 'milestone': {
+        // A dated rule across every band of a timeline. It shares the node id namespace.
+        count(2);
+        allow(['at', 'from', 'to', 'in']);
+        const oid = id(args[0]);
+        assert(oid !== 'root', 'root is reserved for the outer layout scope.');
+        assert(!objectIds.has(oid), `Duplicate node/group id ${oid}.`);
+        objectIds.add(oid);
+        m.objects.push({
+          id: oid,
+          type: 'node',
+          label: label(args[1], `Milestone ${oid}`),
+          parent: attrs.has('in') ? id(attrs.get('in')) : 'root',
+          color: 'auto',
+          shape: 'box',
+          when: readWhen(attrs, fail, true) ?? fail('A milestone takes one date: at=YYYY-MM-DD.'),
           line,
         });
         break;
@@ -1072,14 +1108,15 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                   'gap',
                   ...(recipe === 'flow' ? ['fold'] : []),
                   ...(recipe === 'sequence' ? ['activations'] : []),
+                  ...(recipe === 'timeline' ? ['today', 'zoom', 'width', 'scale', 'headers'] : []),
                   ...common,
                 ],
           );
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence or cells, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells', 'timeline'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline or cells, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
@@ -1099,6 +1136,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           ...(choice('activations', 'off', ['on', 'off'] as const) === 'on'
             ? { activations: true as const }
             : {}),
+          ...(algorithm === 'timeline' ? { timeline: readTimelineOptions(attrs, fail) } : {}),
           ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
           ...(attrs.has('unit')
             ? {
@@ -1374,6 +1412,10 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
 
   if (m.objects.length > 500) throw new DslError('Limit: 500 nodes and groups.');
   if (m.edges.length > 1200) throw new DslError('Limit: 1,200 edges.');
+  // A timeline's bands draw as headings in its gutter, not as frames, so they are never scopes.
+  for (const l of m.layouts)
+    if (l.algorithm === 'timeline')
+      for (const o of m.objects) if (o.type === 'group' && o.parent === l.scope) o.frame = 'none';
   validateReferences(m);
   return m;
 }
@@ -1587,6 +1629,92 @@ function validateReferences(m: Model) {
       );
       assert(!o.frame, `${o.id} is a lane, so it needs its frame; remove frame=.`, o.line);
     }
+  // Timelines: each member of a timeline scope is a dated row, a band (a group directly inside
+  // it) holds rows, and nothing in it is placed by hand. Everything else is an ordinary object.
+  const timelines = new Map(
+    m.layouts.filter(l => l.algorithm === 'timeline').map(l => [l.scope, l] as const),
+  );
+  const timelineOf = (id: string): string | undefined => {
+    const o = by.get(id);
+    if (!o) return;
+    if (timelines.has(o.parent)) return o.parent;
+    const band = by.get(o.parent);
+    if (band?.type === 'group' && timelines.has(band.parent)) return band.parent;
+  };
+  for (const o of m.objects) {
+    const scope = timelineOf(o.id);
+    if (o.type === 'group') {
+      if (!scope) continue;
+      assert(
+        timelines.has(o.parent) && !timelines.has(o.id),
+        `${o.id} sits in a band of timeline ${scope}; a band holds rows, not groups.`,
+        o.line,
+      );
+      assert(
+        m.objects.some(x => x.parent === o.id),
+        `Band ${o.id} has no rows, so it has nothing to draw. Put a row in=${o.id} or remove the band.`,
+        o.line,
+      );
+      continue;
+    }
+    if (!scope) {
+      assert(
+        !o.when,
+        o.when?.milestone
+          ? `Milestone ${o.id} needs a timeline: put it in= a group with layout <group> timeline.`
+          : `${o.id} has a date but sits in no timeline. Put it in= a group with layout <group> timeline, or remove at=, from= and to=.`,
+        o.line,
+      );
+      continue;
+    }
+    assert(
+      o.when,
+      `${o.id} is a row of timeline ${scope}, so it needs at=DATE, or from= and to=.`,
+      o.line,
+    );
+    assert(
+      !o.status && o.was === undefined,
+      `${o.id} is a timeline row; a row can't carry a change mark or was= yet.`,
+      o.line,
+    );
+    assert(
+      !o.when!.milestone || timelines.has(o.parent),
+      `Milestone ${o.id} crosses every band: put it in=${scope}, not in a band.`,
+      o.line,
+    );
+    checkWhen(o.when!, timelines.get(scope)!.timeline?.today, msg => {
+      throw new DslError(msg, o.line);
+    });
+  }
+  for (const e of m.edges)
+    assert(
+      !by.get(e.source)?.when?.milestone && !by.get(e.target)?.when?.milestone,
+      `${e.id} ends on a milestone, which is a rule, not a box. Connect a row instead.`,
+      e.line,
+    );
+  for (const h of m.hints) {
+    const row = [...('id' in h ? [h.id] : []), ...(h.type === 'align' ? h.ids : [])].find(id =>
+      timelineOf(id),
+    );
+    assert(
+      !row,
+      `${row} is a timeline row, placed by its dates; remove this ${h.type} line.`,
+      h.line,
+    );
+  }
+  if (timelines.size && m.appearance.compare)
+    assert(
+      false,
+      "A comparison can't show changes inside a timeline yet. Remove the compare line or the timeline.",
+      [...timelines.values()][0].line,
+    );
+  const rootRecipe = m.layouts.find(l => l.scope === 'root')?.algorithm;
+  if (timelines.size && (rootRecipe === 'lanes' || rootRecipe === 'sequence'))
+    assert(
+      false,
+      `A ${rootRecipe} diagram places every node itself, so it can't hold a timeline. Draw the timeline in its own file, or use a flow.`,
+      m.layouts.find(l => l.scope === 'root')!.line,
+    );
   // Sequence: participants and messages only.
   const sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
   if (sequence)
@@ -1774,7 +1902,23 @@ function validateReferences(m: Model) {
     }
   }
   for (const h of m.hints) {
-    if (h.type === 'order') {
+    // A timeline orders its bands, and a band its rows, by the model's own parents.
+    const timelineScope = (id: string) =>
+      m.layouts.some(l => l.algorithm === 'timeline' && l.scope === id);
+    const inTimeline =
+      h.type === 'order' &&
+      (timelineScope(h.scope) || timelineScope(by.get(h.scope)?.parent ?? ''));
+    if (h.type === 'order' && inTimeline) {
+      assert(new Set(h.ids).size === h.ids.length, 'Duplicate member in order.', h.line);
+      for (const id of h.ids) {
+        exists(id, h.line);
+        assert(
+          by.get(id)!.parent === h.scope,
+          `${id} is not a direct child of ${h.scope}.`,
+          h.line,
+        );
+      }
+    } else if (h.type === 'order') {
       scope(h.scope, h.line);
       framed(h.scope, h.line, 'layout');
       for (const id of h.ids) {

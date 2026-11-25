@@ -35,8 +35,8 @@ Commands:
                             Convert a text diagram to a new .draft file, or print native source.
                             Warnings require --accept-lossy. The input stays unchanged.
   migrate <file|folder|glob>…
-       [--write]            Rewrite \`\`\`mermaid fences that hold a flowchart or sequence diagram
-       [--accept-lossy]     in Markdown files as \`\`\`draft fences. Other Mermaid charts stay. Prints
+       [--write]            Rewrite \`\`\`mermaid fences that hold a flowchart, sequence, gantt or
+       [--accept-lossy]     timeline in Markdown files as \`\`\`draft fences. Other Mermaid charts stay. Prints
                             each file's fences and the importer's warnings without changing
                             anything; --write rewrites the files. A fence with warnings stays
                             Mermaid unless --accept-lossy. A folder searches its .md and .mdx files.

@@ -1,0 +1,33 @@
+diagram "Number formatting: which bugs shipped, and where the fixes live"
+subtitle "The timeline says when. The boxes say where in the code."
+
+# A timeline beside ordinary boxes: rows say when, lines say where in the code each fix lives.
+
+group history "Bug history"
+layout history timeline today=2025-11-23 width=640
+
+group open "Still open" in=history color=red
+group fixed "Fixed in November" in=history color=teal
+
+milestone v100 "v1.0.0" at=2025-03-02 in=history
+milestone v200 "v2.0.0" at=2025-11-03 in=history
+milestone v210 "v2.1.0" at=2025-11-13 in=history
+
+node b3 "Trim keeps tabs and newlines" in=open key=B3 from=2025-02-13 to=open detail="#118 CSV import"
+node b6 "Mixed number comparison fails" in=open key=B6 from=2025-02-27 to=open detail="#142 number formatting"
+node c2 "Divide by zero returned NaN" in=fixed key=C2 from=?2025-11-03 to=2025-11-16 steps=2025-11-04,2025-11-05 end-label="#538"
+node c4 "Defaults ignored in filters" in=fixed key=C4 from=?2025-11-03 to=2025-11-11 end-label="#521"
+
+group code "Where it lives"
+node csv "CSV import" in=code
+node fmt "format.ts" in=code shape=code lang=ts <<TS
+export function compareAmount(a: string, b: string) {
+  return decimal(a).cmp(decimal(b));
+}
+TS
+node planner "Query planner" in=code
+
+edge e1 b3 -> csv "introduced in"
+edge e2 b6 -> fmt "compare path"
+edge e3 c2 -> planner "fixed by #538"
+edge e4 c4 -> planner "fixed by #521"

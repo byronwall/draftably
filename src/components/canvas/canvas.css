@@ -1129,3 +1129,22 @@
 .code-edit-hint kbd {
   font-size: inherit;
 }
+
+/* Timeline rows and bands: the hit area doubles as the hover and selection highlight. */
+.timeline-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.timeline-row:hover {
+  fill: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.timeline-hit.selected {
+  fill: color-mix(in srgb, var(--accent) 11%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 55%, transparent);
+  stroke-width: 1;
+}
+
+/* Code reads as typed: `==` stays two characters, never a programming ligature. */
+.code-body text {
+  font-variant-ligatures: none;
+}

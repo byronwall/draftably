@@ -42,7 +42,7 @@ const ROWS: [string, string, string][] = [
   ],
   ['Focus on one path', 'Draw a second diagram', 'Add a state line'],
   ['Edit by hand', 'In text', 'In text or on the canvas'],
-  ['Diagram kinds', 'Many, including pie and Gantt', 'Flows, sequences, lanes, grids'],
+  ['Diagram kinds', 'Many, including pie and Gantt', 'Flows, sequences, lanes, timelines, grids'],
 ];
 
 /** Mermaid users see their own source drawn, and the two ways to switch. */
@@ -68,8 +68,9 @@ export function Mermaid() {
       <div class="switch-body">
         <div class="switch-text">
           <p class="switch-lead">
-            Keep your Mermaid. The drop-in draws flowcharts and sequences with Draftably and hands
-            every other chart to Mermaid, so nothing on your page goes blank.
+            Keep your Mermaid. The drop-in draws flowcharts, sequences, gantt charts and timelines
+            with Draftably and hands every other chart to Mermaid, so nothing on your page goes
+            blank.
           </p>
           <div class="switch-routes">
             <div>

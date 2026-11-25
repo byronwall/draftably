@@ -5,9 +5,9 @@ import { renderSvg } from '../src/cli/svg';
 import { checkSource } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { resolveAppearance } from '../src/model/appearance';
-import { codeLayout } from '../src/model/code';
+import { codeLayout, columnX } from '../src/model/code';
 import { placeNotes } from '../src/model/note';
-import { rangeBand, rangeRect } from '../src/model/ranges';
+import { rangeBand, rangeMarks, rangeRect } from '../src/model/ranges';
 import { withState } from '../src/model/status';
 import { visibleRects } from '../src/dsl/project';
 import { nestedQuantifier, printSource, readSource } from '../src/dsl/syntax';
@@ -50,14 +50,15 @@ const code = (extra = '') =>
   ].join('\n');
 
 describe('code ranges', () => {
-  it('never move a box or a line: geometry matches the file without its range lines', () => {
+  it('without labels, never move a box or a line: geometry matches the file without them', () => {
+    const unlabeled = fixture.replace(/^(range .*?) "[^"]*"$/gm, '$1');
     const bare = fixture
       .split('\n')
       .filter(l => !l.startsWith('range '))
       .join('\n')
       // The note and edge then name the node instead of its ranges.
       .replace(/sql\.copy\d/g, 'sql');
-    const doc = projectScene(checkSource(fixture)),
+    const doc = projectScene(checkSource(unlabeled)),
       plain = projectScene(checkSource(bare));
     expect(canonicalGeometry(doc).nodes).toEqual(canonicalGeometry(plain).nodes);
     // Ranges alone, with nothing pointing at them, change no route either.
@@ -65,7 +66,7 @@ describe('code ranges', () => {
       withRanges =
         only +
         '\n' +
-        fixture
+        unlabeled
           .split('\n')
           .filter(l => l.startsWith('range '))
           .join('\n');
@@ -195,5 +196,70 @@ describe('code ranges', () => {
   it('take a change mark', () => {
     const doc = projectScene(checkSource(code('~range sql.a lines=11-11 "changed"')));
     expect(doc.graph.nodes.find(n => n.id === 'sql')!.code!.ranges![0].status).toBe('changed');
+  });
+});
+
+/** The tags of a one-node code diagram, with the right edge of every row's text. */
+function tags(source: string) {
+  const doc = projectScene(checkSource(source)),
+    look = resolveAppearance(doc.appearance),
+    node = doc.graph.nodes.find(n => n.code)!,
+    r = visibleRects(doc).rects.get(node.id)!,
+    laid = codeLayout(node.code!, node.title, look, { width: r.w, height: r.h }),
+    textRight = Math.max(...laid.rows.map(row => columnX(laid, row.col + row.to - row.from))),
+    marks = rangeMarks(node.code!, laid, look, '#fff');
+  return { w: r.w, laid, textRight, tags: marks.map(m => ({ ...m.tag!, y: m.tag!.y })) };
+}
+
+const listing = (lines: string[], ranges: string[]) =>
+  ['node sql "q" shape=code numbers=on <<SQL', ...lines, 'SQL', ...ranges].join('\n');
+
+describe('range labels', () => {
+  it('sit in one column right of every row of code, whatever the label or line length', () => {
+    const lines = ["WHERE status = 'open' AND region = 'north'", 'ORDER BY total', 'x'];
+    for (const label of ['x', 'the slow row', 'a much longer label for this range'])
+      for (const line of [1, 2, 3]) {
+        const t = tags(listing(lines, [`range sql.a lines=${line} "${label}"`]));
+        expect(t.tags[0].x).toBeGreaterThanOrEqual(t.textRight);
+        expect(t.tags[0].x).toBe(t.laid.tags!.x);
+        expect(t.tags[0].x + t.tags[0].w).toBeLessThanOrEqual(t.w);
+      }
+    // A fixed width narrower than the code wraps the code before the column; it never covers it.
+    const narrow = tags(
+      listing(lines, ['range sql.a lines=1 "the slow row"', 'size sql width=220 height=240']),
+    );
+    expect(narrow.w).toBe(220);
+    expect(narrow.laid.long.length).toBeGreaterThan(0);
+    expect(narrow.tags[0].x).toBeGreaterThanOrEqual(narrow.textRight);
+  });
+
+  it('of ranges on next-door rows take their own rows and never overlap', () => {
+    const t = tags(
+      listing(
+        ['SELECT a', 'FROM t', 'WHERE x', 'ORDER BY a'],
+        ['range sql.a lines=2 "first"', 'range sql.b lines=3 color=red "second"'],
+      ),
+    );
+    const [a, b] = t.tags;
+    expect(a.x).toBe(b.x);
+    expect(a.y + a.h).toBeLessThanOrEqual(b.y);
+    // Two ranges on the same single line stack onto the next row instead of covering each other.
+    const same = tags(
+      listing(
+        ['SELECT a', 'FROM t', 'WHERE x'],
+        ['range sql.a lines=2 "first"', 'range sql.b lines=2 color=red "second"'],
+      ),
+    ).tags;
+    expect(same[0].y + same[0].h).toBeLessThanOrEqual(same[1].y);
+  });
+
+  it('truncate a long label to the column and keep the box a sane width', () => {
+    const long = 'this label goes on and on far past what any margin column should hold',
+      short = tags(listing(['SELECT a'], ['range sql.a lines=1 "slow"'])),
+      t = tags(listing(['SELECT a'], [`range sql.a lines=1 "${long}"`]));
+    expect(t.tags[0].text.endsWith('…')).toBe(true);
+    expect(t.tags[0].x).toBeGreaterThanOrEqual(t.textRight);
+    expect(t.tags[0].x + t.tags[0].w).toBeLessThanOrEqual(t.w);
+    expect(t.w - short.w).toBeLessThanOrEqual(180);
   });
 });
