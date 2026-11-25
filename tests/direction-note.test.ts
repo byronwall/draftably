@@ -9,6 +9,7 @@ group first "First collection"
 node b "Middle" in=first
 group last "Additional collection"
 node c "Finish" in=last
+size b width=100 height=72
 edge ab a -> b
 edge bc b -> c kind=async
 layout root engine=compound-flow direction=down fit=slide`;

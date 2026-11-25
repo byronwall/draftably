@@ -3371,6 +3371,15 @@ function layoutPass(
                   ),
                   title = titleFit(o.label, inner, look);
                 if (title.lines > 1) titleLines.set(o.id, title.lines);
+                // A title wider than the content centers the content, so both side insets match.
+                const spare = Math.floor(Math.max(0, title.w - inner) / 2);
+                if (spare)
+                  for (const k of children.get(o.id) ?? []) {
+                    const l = local.get(k.id),
+                      b = bases.get(k.id);
+                    if (l) local.set(k.id, { x: l.x + spare, y: l.y });
+                    if (b) bases.set(k.id, { x: b.x + spare, y: b.y });
+                  }
                 return {
                   w: Math.max(inner, title.w),
                   h: Math.max(
