@@ -63,6 +63,16 @@ describe('layout … orgchart', () => {
     expect(doc.graph.edges.find(e => e.id === 'dot')!.dashed).toBe(true);
   });
 
+  it('keeps the bus through a JSON round trip', async () => {
+    const { doc, routes } = await routed(sample),
+      again = normalize(JSON.parse(JSON.stringify(doc))),
+      { vg, rects } = visibleRects(again),
+      back = computeRoutes(again, vg, rects, { previous: [] }).routes,
+      start = (rs: typeof routes, id: string) => rs.find(r => r.id === id)!.points[0];
+    for (const e of doc.graph.edges.filter(e => e.branch))
+      expect(start(back, e.id)).toEqual(start(routes, e.id));
+  });
+
   it('hangs an assistant off the stem, above the other reports', async () => {
     const { routes, at } = await routed(sample),
       ceo = at('ceo'),
