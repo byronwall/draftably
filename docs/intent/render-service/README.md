@@ -79,7 +79,8 @@ GET /png/{encoded}[?options]
 - A Kroki-style alias costs one route and lets Kroki clients work: `GET /{type}/{format}/{encoded}`.
 - URLs over about 8 KB are rejected with a pointer to `POST /v1/render`.
 - No key and no credits. Each IP has a rate limit (start at 60 renders a minute, cache hits not
-  counted). A key in `Authorization` or `?key=` lifts the limit and spends credits.
+  counted). A key in `Authorization` lifts the limit and spends credits. There is no `?key=`: a URL
+  pasted into public Markdown would leak it.
 - A bad source returns a small SVG or PNG that shows the first diagnostic, with HTTP 400. An image
   tag then shows the error instead of a broken icon.
 
@@ -141,7 +142,7 @@ only sign-in. The users are developers and agents, and it needs no email sending
 ```sql
 accounts (id, github_id UNIQUE, login, grant_left, grant_month, bought, created_at)
 keys     (id, account_id, hash, label, created_at, last_used_at, revoked_at)
-ledger   (id, account_id, delta, reason, ref, created_at)  -- render, grant, purchase, refund
+ledger   (id, account_id, delta, reason, ref, created_at)  -- render, purchase
 ```
 
 A spend is one statement, so two parallel calls cannot overdraw:
@@ -154,9 +155,14 @@ WHERE id = ?2 AND grant_left + bought >= ?1
 RETURNING grant_left, bought;
 ```
 
-No row back means `ERR_LIMIT_BALANCE`. The Worker spends before it renders and refunds on a render
-error, so a slow render can't run on credit it doesn't have. The ledger row is written in the same
-`batch()`.
+No row back means `ERR_LIMIT_BALANCE`. The Worker checks the balance, draws, and only then runs
+the spend, so a render that fails or is cut off at the CPU limit costs nothing and there is no
+refund path. Parallel renders can all pass the check; the guarded spend lets through only what the
+balance covers. The ledger row is written in the same `batch()`. The grant reset only moves
+`grant_month` forward, so a slow request from last month can't reset this month's grant.
+
+GET image URLs, `/v1/render` and the MCP tool share one cache keyed by the source's hash, the
+format, the checked options and the runtime version, so a cached image is free on all three.
 
 ## Decisions
 

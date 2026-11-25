@@ -9,7 +9,7 @@ names the check that proves it, at the scope the product works on.
 |     1 | GET SVG on `workers.dev`                     | built   |
 |     2 | GET PNG                                      | built   |
 |     3 | Mermaid input                                | built   |
-|     4 | Domain, accounts, keys, REST API, free grant | planned |
+|     4 | Domain, accounts, keys, REST API, free grant | built   |
 |     5 | MCP server                                   | planned |
 |     6 | Paid credits through Stripe                  | planned |
 |     7 | OAuth for MCP connectors                     | later   |
@@ -78,7 +78,7 @@ the count, and list each family (flowchart, sequence, timeline) separately.
   `packages/service/migrations`.
 - GitHub sign-in, the account page, key create and revoke.
 - `POST /v1/render`, `/v1/validate`, `/v1/convert`, `GET /v1/balance`. Free monthly grant of
-  1,000 credits. The spend runs as one statement before the render; a failed render refunds.
+  1,000 credits. The balance is checked, the image drawn, then the spend runs as one guarded statement.
 - A key on a GET URL spends credits and skips the IP limit.
 
 **Proof.** A test against local D1 fires 50 parallel renders at an account with 20 credits. Exactly
