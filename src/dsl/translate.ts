@@ -31,6 +31,7 @@ import {
   statement,
   statements,
 } from './source-edits';
+import { authoredLabel } from './orgchart';
 import {
   DSL_SHAPES,
   layoutParent,
@@ -350,10 +351,14 @@ export function translateEdit(input: EditInput): EditResult {
   ];
   for (const o of added) {
     const type = after.graph.groups.includes(o as never) ? 'group' : 'node';
+    // A copy of a vacant role stays one, with the label as written.
+    const vacant = !!after.styles[o.id]?.vacant,
+      title = authoredLabel(o.title, vacant);
     const code = (o as DiagramNode).code,
-      id = fresh(o.title, code ? (code.table ? 'table' : 'code') : type);
+      id = fresh(title, code ? (code.table ? 'table' : 'code') : type);
     ids.set(o.id, id);
-    const s = statement(type, [bare(id), ...(code && !o.title ? [] : [quoted(o.title)])]);
+    const s = statement(type, [bare(id), ...(code && !title ? [] : [quoted(title)])]);
+    if (type === 'node' && vacant) setAttr(s, 'role', bare('vacant'));
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
@@ -369,7 +374,8 @@ export function translateEdit(input: EditInput): EditResult {
     const old = objectsOf(before).find(x => x.id === o.id)!,
       s = declaration(source, o.id);
     if (!s) continue;
-    if (o.title !== old.title) s.args[1] = quoted(o.title);
+    if (o.title !== old.title)
+      s.args[1] = quoted(authoredLabel(o.title, after.styles[o.id]?.vacant));
     if (o.icon !== old.icon) setAttr(s, 'icon', o.icon ? bare(o.icon) : undefined);
     const pos = (o as DiagramNode).iconPos;
     if (s.command === 'node' && pos !== (old as DiagramNode).iconPos)

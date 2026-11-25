@@ -141,7 +141,7 @@ export interface EdgeLayout {
    * Set by the compiler for a forward line in a `flow` scope: its route planned from the ranks.
    * The quick router takes it as it is when it clears every box.
    */
-  plan?: { points: Point[]; fromOffset: number; toOffset: number };
+  plan?: { points: Point[]; fromOffset: number; toOffset: number; bus?: true };
 }
 
 /**

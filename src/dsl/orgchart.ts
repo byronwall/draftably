@@ -14,25 +14,34 @@
  *   rows until the drawing is wider than `fit=` asks for (2:1 without it), then stacks the widest
  *   rows first.
  */
-import {
-  FITS,
-  layoutParent,
-  type Fit,
-  type Model,
-  type ModelObject,
-  type OrgLeaves,
-} from './syntax';
+import { FITS, layoutParent, type Fit, type Model, type OrgLeaves } from './syntax';
 import type { Planned } from './corridors';
 import type { Diagram } from '../model/types';
 
-/** Space between sibling blocks, between levels, between stacked leaves, and stem to column. */
+/** Space between sibling blocks and between stacked leaves. */
 const GAP = 24,
-  RANK = 56,
-  STACK = 12,
-  INDENT = 20;
+  STACK = 12;
+
+/**
+ * Space between levels, and from the stem to a column beside it. Both leave the router's
+ * clearance round every box, so it keeps the planned bus.
+ */
+const gapsFor = (clearance: number) => ({
+  rank: Math.max(56, 2 * clearance + 16),
+  indent: Math.max(20, clearance + 8),
+});
+type Gaps = ReturnType<typeof gapsFor>;
 
 /** The detail line a vacant role draws when its label has none. */
-const OPEN_ROLE = 'Open role';
+export const OPEN_ROLE = 'Open role';
+
+/** A label as a vacant role draws it: "Open role" on a second line when it has only one. */
+export const vacantLabel = (label: string) =>
+  label.includes('\n') ? label : `${label}\n${OPEN_ROLE}`;
+
+/** The label as written, from the one a vacant role draws. */
+export const authoredLabel = (title: string, vacant: boolean | undefined) =>
+  vacant && title.endsWith(`\n${OPEN_ROLE}`) ? title.slice(0, -OPEN_ROLE.length - 1) : title;
 
 /**
  * A copy of `m` with what its org charts draw: reporting lines with no head, dotted lines that
@@ -49,7 +58,8 @@ export function withOrgcharts(m: Model): Model {
         ? {
             ...o,
             card: true as const,
-            label: o.label.includes('\n') ? o.label : `${o.label}\n${OPEN_ROLE}`,
+            label: vacantLabel(o.label),
+            ...(o.was !== undefined ? { was: vacantLabel(o.was) } : {}),
           }
         : { ...o },
     ),
@@ -64,10 +74,30 @@ export function withOrgcharts(m: Model): Model {
       // An edge that repeats a reporting line's two ends is one too, as when compare holds an
       // edge under its old and new ID.
       if (tree.has(e) || (plainEdge(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
-      else if (inside(e.source) && inside(e.target)) e.constraint = false;
+      else if (inside(e.source) && inside(e.target)) {
+        e.constraint = false;
+        // In a comparison, a reporting line that moved to another manager is still one: it
+        // draws with no head, though only the tree places people.
+        if (plainEdge({ ...e, constraint: undefined }) && e.status) e.head = 'none';
+      }
     }
   }
   return out;
+}
+
+/** Edges with both ends among one org chart's people. */
+export function chartEdges(m: Model): Set<string> {
+  const charts = m.layouts.filter(l => l.orgchart).map(l => l.scope);
+  if (!charts.length) return new Set();
+  const by = new Map(m.objects.map(o => [o.id, o]));
+  return new Set(
+    m.edges
+      .filter(e => {
+        const a = layoutParent(by, e.source);
+        return charts.includes(a) && a === layoutParent(by, e.target);
+      })
+      .map(e => e.id),
+  );
 }
 
 const plainEdge = (e: Model['edges'][number]) =>
@@ -98,27 +128,40 @@ function reportingTree(m: Model, inside: (id: string) => boolean, root: string) 
 type Box = { id: string; x: number; y: number; w: number; h: number };
 type Mode = 'row' | 'stack' | 'split';
 
+/** How an org chart is placed: see `arrangeOrgchart`. */
+export interface OrgOptions {
+  leaves: OrgLeaves;
+  fit: Fit | undefined;
+  /** Ids in `doc` with `role=assistant`. */
+  assistants: Set<string>;
+  /** Each member's drawn size, where it differs from its slot in `doc`. */
+  sizes: Map<string, { w: number; h: number }>;
+  /** The router's clearance round boxes. */
+  clearance: number;
+}
+
 /**
  * Place an org chart's people top down. `scope` and `root` are ids in `doc`; an unset scope is the
- * whole drawing. `assistants` are ids in `doc` with `role=assistant`. Reporting lines are the
- * edges marked `branch`.
+ * whole drawing. Reporting lines are the edges marked `branch`, and each manager's reports are in
+ * id order: the compiler's ids sort in authored order. People are placed by their drawn size, and
+ * each slot is centered on its drawn box. Also returns the managers whose leaves stack, which
+ * feed each leaf from the stem's side (`orgPlans`).
  */
 export function arrangeOrgchart(
   doc: Diagram,
   scope: string | undefined,
   root: string,
-  leaves: OrgLeaves,
-  fit: Fit | undefined,
-  assistants: Set<string>,
-): Diagram {
+  { leaves, fit, assistants, sizes, clearance }: OrgOptions,
+): { doc: Diagram; stacked: Set<string> } {
   const parent = new Map(
       [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId || undefined]),
     ),
     items: Box[] = [...parent.keys()]
       .filter(id => parent.get(id) === scope)
-      .map(id => ({ id, ...doc.layout.nodes[id] })),
-    by = new Map(items.map(p => [p.id, p]));
-  if (!by.has(root)) return doc;
+      .map(id => ({ id, ...doc.layout.nodes[id], ...sizes.get(id) })),
+    by = new Map(items.map(p => [p.id, p])),
+    gaps = gapsFor(clearance);
+  if (!by.has(root)) return { doc, stacked: new Set() };
   const kids = new Map<string, string[]>(),
     seen = new Set([root]);
   // Breadth first, so a person hangs off the nearest route from the top.
@@ -135,6 +178,7 @@ export function arrangeOrgchart(
         q.push(k);
       }
   }
+  for (const ks of kids.values()) ks.sort();
   const reports = (id: string) => kids.get(id) ?? [],
     aside = (id: string) => assistants.has(id) && !reports(id).length,
     side = (id: string) => reports(id).filter(aside),
@@ -149,7 +193,20 @@ export function arrangeOrgchart(
   if (leaves === 'stack' || leaves === 'split')
     for (const id of leafy)
       modes.set(id, leaves === 'stack' ? 'stack' : below(id).length >= 3 ? 'split' : 'row');
-  let at = place(root, by, below, side, modes);
+  // A person the tree misses sits in a row below the chart.
+  const whole = (m: Map<string, Mode>) => {
+    const at = place(root, by, below, side, m, gaps),
+      placed = [...at.values()],
+      top = Math.max(...placed.map(p => p.y + p.h)) + gaps.rank;
+    let x = Math.min(...placed.map(p => p.x));
+    for (const p of items)
+      if (!at.has(p.id)) {
+        at.set(p.id, { ...p, x, y: top });
+        x += p.w + GAP;
+      }
+    return at;
+  };
+  let at = whole(modes);
   if (leaves === 'auto') {
     // Stack the widest rows of leaves first, while that brings the shape nearer the target.
     const target = fit ? FITS[fit] : FITS.wide,
@@ -157,36 +214,27 @@ export function arrangeOrgchart(
       width = (id: string) => below(id).reduce((n, k) => n + by.get(k)!.w + GAP, -GAP);
     for (const id of [...leafy].sort((a, b) => width(b) - width(a))) {
       if (aspect([...at.values()]) <= target) break;
-      const next = place(root, by, below, side, new Map([...modes, [id, compact(id)]]));
+      const next = whole(new Map([...modes, [id, compact(id)]]));
       if (off(next) >= off(at)) continue;
       modes.set(id, compact(id));
       at = next;
     }
   }
-  // A person the tree misses sits in a row below the chart.
-  const rest = items.filter(p => !at.has(p.id));
-  if (rest.length) {
-    const placed = [...at.values()],
-      top = Math.max(...placed.map(p => p.y + p.h)) + RANK;
-    let x = Math.min(...placed.map(p => p.x));
-    for (const p of rest) {
-      at.set(p.id, { ...p, x, y: top });
-      x += p.w + GAP;
-    }
-  }
-  // Move each member, and everything inside a group member with it.
+  // Move each member's slot onto its drawn box's center, and everything inside a group with it.
   const owner = (id: string | undefined): string | undefined =>
     id === undefined || by.has(id) ? id : owner(parent.get(id));
   const nodes = { ...doc.layout.nodes };
   for (const p of items) {
     const c = at.get(p.id)!,
-      dx = c.x - p.x,
-      dy = c.y - p.y;
+      slot = doc.layout.nodes[p.id],
+      dx = c.x + c.w / 2 - (slot.x + slot.w / 2),
+      dy = c.y + c.h / 2 - (slot.y + slot.h / 2);
     for (const id of parent.keys())
       if (owner(id) === p.id)
         nodes[id] = { ...nodes[id], x: nodes[id].x + dx, y: nodes[id].y + dy };
   }
-  return { ...doc, layout: { ...doc.layout, nodes } };
+  const stacked = new Set([...modes].filter(([, m]) => m !== 'row').map(([id]) => id));
+  return { doc: { ...doc, layout: { ...doc.layout, nodes } }, stacked };
 }
 
 const aspect = (bs: Box[]) =>
@@ -203,6 +251,7 @@ function place(
   below: (id: string) => string[],
   side: (id: string) => string[],
   modes: Map<string, Mode>,
+  { rank, indent }: Gaps,
 ): Map<string, Box> {
   const mode = (id: string) => modes.get(id) ?? 'row';
   // Depth of each person placed in a row, and the room each depth needs.
@@ -213,7 +262,7 @@ function place(
     depth.set(id, d);
     tall[d] = Math.max(tall[d] ?? 0, by.get(id)!.h);
     const a = side(id);
-    if (a.length) aides[d] = Math.max(aides[d] ?? 0, columnHeight(pairs(a), by) + RANK / 2);
+    if (a.length) aides[d] = Math.max(aides[d] ?? 0, columnHeight(pairs(a), by) + rank / 2);
     if (mode(id) === 'row') for (const k of below(id)) walk(k, d + 1);
     // A column of leaves starts on the next level, even when no row sits there.
     else tall[d + 1] ??= 0;
@@ -221,7 +270,7 @@ function place(
   walk(root, 0);
   const tops = [0];
   for (let d = 1; d < tall.length; d++)
-    tops[d] = tops[d - 1] + tall[d - 1] + RANK + (aides[d - 1] ?? 0);
+    tops[d] = tops[d - 1] + tall[d - 1] + rank + (aides[d - 1] ?? 0);
   // Centers across, relative to each manager's center, and each block's extent.
   const rel = new Map<string, { x: number; y: number }>();
   function block(id: string): { lo: number; hi: number } {
@@ -231,11 +280,11 @@ function place(
     let lo = -b.w / 2,
       hi = b.w / 2;
     // Assistants beside the stem: right, then left, a row at a time.
-    let y = floor + RANK / 2;
+    let y = floor + rank / 2;
     for (const row of pairs(side(id))) {
       row.forEach((k, i) => {
         const w = by.get(k)!.w,
-          x = i ? -(INDENT + w / 2) : INDENT + w / 2;
+          x = i ? -(indent + w / 2) : indent + w / 2;
         rel.set(k, { x, y });
         lo = Math.min(lo, x - w / 2);
         hi = Math.max(hi, x + w / 2);
@@ -250,7 +299,7 @@ function place(
       for (const row of rows) {
         row.forEach((k, i) => {
           const w = by.get(k)!.w,
-            x = i ? -(INDENT + w / 2) : INDENT + w / 2;
+            x = i ? -(indent + w / 2) : indent + w / 2;
           rel.set(k, { x, y });
           lo = Math.min(lo, x - w / 2);
           hi = Math.max(hi, x + w / 2);
@@ -302,9 +351,10 @@ const columnHeight = (rows: string[][], by: Map<string, Box>) =>
 /**
  * Reporting lines as planned routes on the final boxes: a stem down from each manager's middle,
  * one bar for a row of reports and a drop to each, or a short run off the stem into the near side
- * of an assistant or a stacked leaf. The router keeps a plan that clears every box.
+ * of an assistant or a stacked leaf. `stacked` holds the managers whose leaves `arrangeOrgchart`
+ * stacked. The router keeps a plan that clears every box, and counts the lines of one bus as one.
  */
-export function orgPlans(m: Model, boxes: Array<Box & Pick<ModelObject, 'role'>>) {
+export function orgPlans(m: Model, boxes: Box[], stacked: Set<string> = new Set()) {
   const plans = new Map<string, Planned>(),
     at = new Map(boxes.map(b => [b.id, b])),
     by = new Map(m.objects.map(o => [o.id, o]));
@@ -327,14 +377,13 @@ export function orgPlans(m: Model, boxes: Array<Box & Pick<ModelObject, 'role'>>
           e => by.get(e.target)?.role === 'assistant' && !reports.has(e.target),
         ),
         rows = kids.filter(e => !aides.includes(e)),
-        stacked = new Set(rows.map(e => Math.round(box(e).y))).size > 1,
         over = Math.max(foot, ...aides.map(e => box(e).y + box(e).h)),
         bar = (over + Math.min(...rows.map(e => box(e).y))) / 2;
       for (const e of kids) {
         const r = at.get(e.target)!,
           mid = r.x + r.w / 2;
         let points;
-        if (aides.includes(e) || stacked) {
+        if (aides.includes(e) || stacked.has(boss)) {
           const y = r.y + r.h / 2,
             x = mid > stem ? r.x : r.x + r.w;
           points = [
@@ -358,6 +407,7 @@ export function orgPlans(m: Model, boxes: Array<Box & Pick<ModelObject, 'role'>>
           points: points.map(p => ({ x: hundredths(p.x), y: hundredths(p.y) })),
           fromOffset: 0,
           toOffset: 0,
+          bus: true,
         });
       }
     }

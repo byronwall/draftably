@@ -6,6 +6,9 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
 import { removeReferences } from '../src/dsl/source-edits';
 import { computeRoutes } from '../src/model/routes';
+import { translateEdit } from '../src/dsl/translate';
+import { normalize } from '../src/model/document';
+import type { Diagram } from '../src/model/types';
 
 const sample = fs.readFileSync(path.join(__dirname, '../examples/org-chart.draft'), 'utf8');
 
@@ -107,6 +110,91 @@ describe('layout … orgchart', () => {
       sec = doc.graph.nodes.find(n => n.id === 'sec')!;
     expect(sec.title).toBe('Head of Security\nOpen role');
     expect(doc.styles.sec.vacant).toBe(true);
+  });
+
+  const small = (extra: string, line = 'layout root orgchart root=m leaves=row') =>
+    [
+      'node m "Manager"',
+      'node a "A"',
+      'node b "B"',
+      'edge ea m -> a',
+      'edge eb m -> b',
+      extra,
+      line,
+    ].join('\n');
+  const tops = (c: Awaited<ReturnType<typeof routed>>, ids: string[]) =>
+    ids.map(id => c.routes.find(r => r.id === id)!.toSide);
+
+  it('keeps stacked leaves apart when a theme draws them larger', async () => {
+    const { scene } = await routed(
+      [
+        'theme fieldnotes',
+        'node r "Root"',
+        ...['a', 'b', 'a1', 'a2', 'a3', 'b1', 'b2'].map(id => `node ${id} "Person ${id}"`),
+        'edge e1 r -> a\nedge e2 r -> b\nedge e3 a -> a1\nedge e4 a -> a2\nedge e5 a -> a3',
+        'edge e6 b -> b1\nedge e7 b1 -> b2',
+        'layout root orgchart root=r leaves=stack',
+      ].join('\n'),
+    );
+    expect(scene.diagnostics.filter(d => d.code === 'node-overlap')).toEqual([]);
+  });
+
+  it('keeps a row a row when one report is nudged', async () => {
+    const c = await routed(small('nudge a dx=0 dy=8'));
+    expect(tops(c, ['ea', 'eb'])).toEqual(['top', 'top']);
+  });
+
+  it('keeps the bus under a wide routing clearance', async () => {
+    for (const leaves of ['row', 'stack']) {
+      const c = await routed(
+        small('routing clearance=30', `layout root orgchart root=m leaves=${leaves}`),
+      );
+      const m = c.at('m');
+      for (const id of ['ea', 'eb'])
+        expect(c.routes.find(r => r.id === id)!.points[0]).toEqual({
+          x: m.x + m.w / 2,
+          y: m.y + m.h,
+        });
+    }
+  });
+
+  it('orders reports as order says, and lets a dotted line move no one', async () => {
+    const ordered = await routed(small('order root m b a'));
+    expect(ordered.at('b').x).toBeLessThan(ordered.at('a').x);
+    const inGroup = (extra: string) =>
+      routed(
+        [
+          'group g "Team"',
+          ...['m', 'a', 'b', 'c'].map(id => `node ${id} "Person ${id}" in=g`),
+          'edge ea m -> a\nedge eb m -> b\nedge ec m -> c',
+          extra,
+          'layout g orgchart root=m leaves=row',
+        ].join('\n'),
+      );
+    const plain = await inGroup(''),
+      dotted = await inGroup('edge dot c -> a kind=async');
+    for (const id of ['m', 'a', 'b', 'c']) expect(dotted.at(id).y).toBe(plain.at(id).y);
+  });
+
+  it('copies a vacant role as one, with its label as written', async () => {
+    const source = 'node m "Manager"\nnode b "Open seat" role=vacant\nedge e m -> b';
+    const scene = await compile(source),
+      before = normalize(structuredClone(projectScene(scene))),
+      after: Diagram = structuredClone(before);
+    after.graph.nodes.push({ ...structuredClone(after.graph.nodes[1]), id: 'copy' });
+    after.styles.copy = structuredClone(after.styles.b);
+    after.layout.nodes.copy = { ...after.layout.nodes.b, x: after.layout.nodes.b.x + 300 };
+    const out = printSource(
+      translateEdit({
+        source: readSource(source),
+        scene,
+        before,
+        after,
+        label: 'Paste',
+        selection: [],
+      }).source,
+    );
+    expect(out).toMatch(/node open-seat(-\d)? "Open seat" role=vacant/);
   });
 
   it('drops the layout line when its root is deleted', () => {

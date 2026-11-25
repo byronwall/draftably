@@ -63,7 +63,7 @@ import {
 } from './frame';
 import { projectScene } from './project';
 import { arrangeMindmap, withMindmaps } from './mindmap';
-import { arrangeOrgchart, orgPlans, withOrgcharts } from './orgchart';
+import { arrangeOrgchart, chartEdges, orgPlans, withOrgcharts } from './orgchart';
 import { legendNotes, settleLegendShades } from './legend-notes';
 import {
   DslError,
@@ -1041,6 +1041,8 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
         .map(e => (cross.has(e.id) ? { ...e, directed: false } : e)),
     },
   };
+  let drawn: Map<string, { w: number; h: number }> | undefined;
+  const stacked = new Set<string>();
   for (const l of engines) {
     if (l.mindmap) {
       const scope = l.scope === 'root' ? undefined : alias.get(l.scope);
@@ -1050,14 +1052,23 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
     if (l.orgchart) {
       const scope = l.scope === 'root' ? undefined : alias.get(l.scope),
         aides = new Set(m.objects.filter(o => o.role === 'assistant').map(o => alias.get(o.id)!));
-      doc = arrangeOrgchart(
-        doc,
-        scope,
-        alias.get(l.orgchart.root)!,
-        l.orgchart.leaves,
-        l.fit,
-        aides,
+      // An org chart is placed by its people's drawn size: a stacked column is tighter than a
+      // slot's spill allows.
+      drawn ??= new Map(
+        layoutModel({ ...m, hints: m.hints.filter(h => h.type === 'size') }).objects.map(o => [
+          alias.get(o.id)!,
+          { w: o.w, h: o.h },
+        ]),
       );
+      const placed = arrangeOrgchart(doc, scope, alias.get(l.orgchart.root)!, {
+        leaves: l.orgchart.leaves,
+        fit: l.fit,
+        assistants: aides,
+        sizes: drawn,
+        clearance: m.routing.clearance ?? 10,
+      });
+      doc = placed.doc;
+      for (const id of placed.stacked) stacked.add(original.get(id)!);
       continue;
     }
     const settings = LayoutLab.settings({
@@ -1081,13 +1092,18 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
     });
     doc = result.document;
   }
-  return new Map(
+  const out = new Map(
     Object.entries(doc.layout.nodes).map(([id, r]) => [
       original.get(id) ?? id,
       { x: r.x, y: r.y, w: r.w, h: r.h },
     ]),
   );
+  if (stacked.size) orgStacked.set(out, stacked);
+  return out;
 }
+
+/** The org-chart managers whose leaves stack, by the arrangement that placed them. */
+const orgStacked = new WeakMap<Map<string, Pos & Size>, Set<string>>();
 
 /** Object ids in file order, each scope's children reordered by its `order` line. */
 function authoredOrder(m: Model): string[] {
@@ -3154,9 +3170,10 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots 
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
       // A line a timeline draws on its chart takes no routing channel.
+      // Nor does a line inside an org chart: its people stay where the chart puts them.
       planChannels(
         plain.objects,
-        m.edges.filter(e => !onChartEdges(m).has(e.id)),
+        m.edges.filter(e => !onChartEdges(m).has(e.id) && !chartEdges(m).has(e.id)),
         m.routing,
       ),
       area(plain.objects),
@@ -3643,7 +3660,8 @@ function layoutPass(
       const look = (n: Item) => (slots ? n : (leaves.get(n.id)?.look ?? n));
       /** Offset down from the slot's top that lines a node up with the rest of its row. */
       const rowTop = new Map<string, number>();
-      if (governing?.engine && axis === 'down' && !slots) {
+      // An org chart lines its rows up by their drawn boxes already (`arrangeOrgchart`).
+      if (governing?.engine && !governing.orgchart && axis === 'down' && !slots) {
         // Nodes only: a group's frame is sized to its content and keeps its place. Two slots
         // share a row when they overlap down the page by over half the shorter one; the row's
         // top is the highest centred top in it.
@@ -3815,15 +3833,18 @@ function layoutPass(
     // An engine spaces ranks by its rank gap and neighbours by its node gap.
     const spill = !leaves.size
         ? { w: 0, h: 0 }
-        : governing?.engine
-          ? (() => {
-              const along = spillOf(governing.engine.params.rankGap ?? 52),
-                across = spillOf(governing.engine.params.nodeGap ?? 24);
-              return axisOf(governing) === 'right'
-                ? { w: along, h: across }
-                : { w: across, h: along };
-            })()
-          : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
+        : // An org chart centers each slot on its drawn box, which may spill any amount.
+          governing?.orgchart
+          ? { w: Infinity, h: Infinity }
+          : governing?.engine
+            ? (() => {
+                const along = spillOf(governing.engine.params.rankGap ?? 52),
+                  across = spillOf(governing.engine.params.nodeGap ?? 24);
+                return axisOf(governing) === 'right'
+                  ? { w: along, h: across }
+                  : { w: across, h: along };
+              })()
+            : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
       diagnosed = diagnostics.length;
     let laid = lay(spill);
     if (
@@ -4141,7 +4162,8 @@ function layoutPass(
   };
   place('root', { x: 0, y: 0 }, 0);
   const plans = planCorridors(corridorScopes, objects, ranking, immediate, spacing);
-  for (const [id, plan] of orgPlans(m, objects)) plans.set(id, plan);
+  for (const [id, plan] of orgPlans(m, objects, arranged && orgStacked.get(arranged)))
+    plans.set(id, plan);
   const lanes = wrapLanes(
     folds,
     m.edges,

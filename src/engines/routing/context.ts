@@ -228,18 +228,19 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
     }
     return obstacles;
   };
+  const buses = new Set(edges.filter(e => e.cfg.plan?.bus).map(e => e.id));
   const metrics = (rs: Route[]): RouteMetrics => {
     let crossings = 0,
       shared = 0,
       lanePairs = 0,
       laneDeficit = 0,
       minGap = Infinity;
-    const fixed = (r: Route) => state.fixedPlans.has(r.id),
+    // Lines of one org-chart bus share a stem and a bar and never cross once they part
+    // (`orgPlans`). They stay as planned, so leaving their meets out changes no choice.
+    const fixed = (r: Route) => state.fixedPlans.has(r.id) && buses.has(r.id),
       start = (r: Route) => r.points[0];
     for (let i = 0; i < rs.length; i++) {
       const r = rs[i],
-        // Two planned routes from one point are one fan, such as an org chart's bus: where they
-        // part is a branch, not a crossing. Neither moves, so leaving it out changes no choice.
         used = rs
           .slice(0, i)
           .filter(
