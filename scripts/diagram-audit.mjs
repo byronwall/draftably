@@ -918,8 +918,12 @@ function measure(file) {
               Math.min(sg.to, st.to) - Math.max(sg.from, st.from) > 20,
           ),
       );
+    // A title wider than the content widens the frame and centers the content (#591). Equal
+    // left and right insets above the bottom one are that centering, not uneven padding.
+    pad.centered =
+      Math.abs(pad.left - pad.right) <= 12 && Math.min(pad.left, pad.right) > pad.bottom + 12;
     pads.push(pad);
-    const sides3 = ['left', 'right', 'bottom']
+    const sides3 = (pad.centered ? ['left', 'right'] : ['left', 'right', 'bottom'])
       .filter(side => !pad.channel[side] || pad[side] <= 24)
       .map(side => pad[side]);
     if (sides3.length && Math.max(...sides3) - Math.min(...sides3) > 12) {
@@ -927,7 +931,9 @@ function measure(file) {
     }
   }
   for (const side of ['left', 'top']) {
-    const values = pads.filter(p => !p.channel[side]).map(p => p[side]);
+    const values = pads
+      .filter(p => !p.channel[side] && !(side === 'left' && p.centered))
+      .map(p => p[side]);
     if (values.length > 1 && Math.max(...values) - Math.min(...values) > 8) {
       note(
         'padding-varies',
