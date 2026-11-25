@@ -1,5 +1,24 @@
 # @draftably/markdown
 
+## 0.3.0
+
+### Minor Changes
+
+- 4073fa0: Add timelines: `layout <group> timeline` places nodes on a real date axis as rows in bands, with open, unknown-start and partial-step spans, milestone rules, a today rule, a generated legend and an optional zoom panel. A timeline sits beside ordinary boxes, and lines join its rows to them.
+
+  Mermaid `gantt` charts and dated `timeline` charts now import as native timelines: `draftably import`, `draftably migrate` and the `@draftably/mermaid` drop-in keep Mermaid's computed dates and draw `after` dependencies as arrows.
+
+### Patch Changes
+
+- Updated dependencies [3f77d2b]
+- Updated dependencies [caca35c]
+- Updated dependencies [c34d585]
+- Updated dependencies [6c536fe]
+- Updated dependencies [b7f43ad]
+- Updated dependencies [4073fa0]
+- Updated dependencies [443cceb]
+  - @draftably/runtime@0.9.0
+
 ## 0.2.6
 
 ### Patch Changes
