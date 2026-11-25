@@ -7,18 +7,15 @@
 import { runtimeVersion } from '@draftably/runtime';
 import { decodeSource, SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
-import { ApiError, handleApi, paidDraw, requireKey, type ApiEnv } from './api';
-import { freshness } from './mermaid';
-import { draw, drawOptions, errorImage, type DrawOptions, type Format } from './draw';
+import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
+import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
+import { MAX_SEGMENT, render } from './render';
 
 export interface Env extends ApiEnv {
   ANON_LIMIT: RateLimit;
   /** Changes on every deploy, so a deploy that draws differently starts a fresh cache. */
   CF_VERSION_METADATA: WorkerVersionMetadata;
 }
-
-/** The longest image URL path accepted; longer sources go through POST. */
-const MAX_URL = 8 * 1024;
 
 const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };
 // The public URL carries no version, so a browser may keep it for a day, not a year. The edge
@@ -43,22 +40,38 @@ function parseImagePath(path: string): { format: Format; segment: string } | nul
   return m ? { format: m[1] as Format, segment: m[2] } : null;
 }
 
-/** Draw an image URL, for free or, with `account`, for credits. Errors come back as images. */
+/**
+ * Draw an image URL, for free or, with `account`, for credits; errors come back as images. The
+ * per-address limit applies only to anonymous misses.
+ */
 async function imageResponse(
+  req: Request,
   env: Env,
+  ctx: ExecutionContext,
+  origin: string,
   segment: string,
   format: Format,
   opts: DrawOptions,
   account?: string,
 ) {
+  const anonLimit = async () => {
+    if (account) return;
+    const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+    if (!(await env.ANON_LIMIT.limit({ key: ip })).success)
+      throw new ApiError(
+        429,
+        'ERR_LIMIT_BURST',
+        'Too many renders from this address. Wait a minute, or use an API key.',
+      );
+  };
   try {
-    if (segment.length > MAX_URL)
+    if (segment.length > MAX_SEGMENT)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
     const source = await decodeSource(segment);
-    const body = account
-      ? (await paidDraw(env, account, source, format, opts)).body
-      : await draw(source, format, opts);
-    return image(body, format, 200, freshness(source, opts.type)?.cacheControl ?? IMMUTABLE);
+    const drawn = await render(env, ctx, origin, source, format, opts, account, anonLimit);
+    const res = image(drawn.body, format, 200, drawn.cacheControl);
+    res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
+    return res;
   } catch (error) {
     if (error instanceof ApiError)
       return image(await errorImage(error.message, format), format, error.status, 'no-store');
@@ -105,8 +118,7 @@ export default {
     const route = parseImagePath(url.pathname);
     if (!route) return new Response('Not found', { status: 404 });
 
-    // Options are checked before the cache, so a bad one never matches a good image. The key
-    // holds only what changes the image: the path, the checked options, the version.
+    // Options are checked first, so a bad one never matches a cached image.
     let opts: DrawOptions;
     try {
       opts = drawOptions(k => url.searchParams.get(k));
@@ -114,20 +126,8 @@ export default {
       if (!(error instanceof SourceError)) throw error;
       return image(await errorImage(error.message, route.format), route.format, 400, 'no-store');
     }
-    const keyUrl = new URL(url.pathname, url.origin);
-    for (const [k, v] of Object.entries(opts)) if (v != null) keyUrl.searchParams.set(k, String(v));
-    keyUrl.searchParams.set('v', runtimeVersion);
-    const key = new Request(keyUrl.toString());
-    // The DOM lib (for Mermaid's types) hides the Workers-only `caches.default`.
-    const cache = (caches as unknown as { default: Cache }).default;
-    const hit = await cache.match(key);
-    if (hit) {
-      const res = new Response(hit.body, hit);
-      res.headers.set('X-Draftably-Cache', 'hit');
-      return res;
-    }
-
-    // A key spends credits and skips the per-address limit; a bad key is refused, not ignored.
+    // A key spends credits and skips the per-address limit. It is checked before the cache, so a
+    // revoked or wrong key is refused even for an image that is already cached.
     let payer: string | undefined;
     if (req.headers.has('Authorization')) {
       try {
@@ -137,16 +137,7 @@ export default {
         const img = await errorImage(error.message, route.format);
         return image(img, route.format, error.status, 'no-store');
       }
-    } else if (
-      !(await env.ANON_LIMIT.limit({ key: req.headers.get('CF-Connecting-IP') ?? 'local' })).success
-    ) {
-      const msg = 'Too many renders from this address. Wait a minute, or use an API key.';
-      return image(await errorImage(msg, route.format), route.format, 429, 'no-store');
     }
-
-    const res = await imageResponse(env, route.segment, route.format, opts, payer);
-    if (res.status === 200) ctx.waitUntil(cache.put(key, res.clone()));
-    res.headers.set('X-Draftably-Cache', 'miss');
-    return res;
+    return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);
   },
 } satisfies ExportedHandler<Env>;

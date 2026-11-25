@@ -26,7 +26,7 @@ CREATE TABLE ledger (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   account_id TEXT NOT NULL REFERENCES accounts(id),
   delta INTEGER NOT NULL,
-  reason TEXT NOT NULL, -- render, refund, purchase
+  reason TEXT NOT NULL, -- render, purchase
   ref TEXT,
   created_at TEXT NOT NULL
 );

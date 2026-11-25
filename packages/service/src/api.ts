@@ -1,37 +1,24 @@
 /**
  * The keyed REST API. Bodies follow the Mermaid API (`{code, format}`), so an agent that knows
- * one knows the other. Every call needs a key; renders spend credits, everything else is free.
+ * one knows the other. Every call needs a key; renders that miss the cache spend credits,
+ * everything else is free.
  */
 import { validate } from '@draftably/runtime';
-import { imageUrl, SourceError } from '../../../src/lib/render-url';
+import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { keyAccount, type AuthEnv } from './auth';
-import { balance, COST, refund, spend } from './credits';
-import { draw, drawOptions, type DrawOptions, type Format } from './draw';
+import { balance } from './credits';
+import { drawOptions, type Format } from './draw';
+import { ApiError, errorJson } from './errors';
 import { sourceType, toDraft } from './mermaid';
+import { embedUrl, render } from './render';
+
+export { ApiError, errorJson };
 
 export interface ApiEnv extends AuthEnv {
   KEY_LIMIT: RateLimit;
 }
 
-/** One error shape for every route. */
-export class ApiError extends Error {
-  constructor(
-    readonly status: number,
-    readonly code: string,
-    message: string,
-    readonly line?: number,
-  ) {
-    super(message);
-  }
-}
-
-export const errorJson = (e: ApiError) =>
-  Response.json(
-    { error: { code: e.code, message: e.message, ...(e.line ? { line: e.line } : {}) } },
-    { status: e.status, headers: { 'Access-Control-Allow-Origin': '*' } },
-  );
-
-const sourceError = (e: SourceError) => {
+export const sourceError = (e: SourceError) => {
   const line = /^line (\d+): /.exec(e.message);
   return new ApiError(400, 'ERR_SOURCE', e.message, line ? Number(line[1]) : undefined);
 };
@@ -50,42 +37,47 @@ export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContex
   return who;
 }
 
-/**
- * Draw for a paying account: spend first, so a slow render can't run on credit the account
- * doesn't have, and refund when the drawing fails.
- */
-export async function paidDraw(
-  env: ApiEnv,
-  account: string,
-  source: string,
-  format: Format,
-  opts: DrawOptions,
-) {
-  const left = await spend(env.DB, account, COST[format], format);
-  if (!left) throw new ApiError(402, 'ERR_LIMIT_BALANCE', 'Out of credits. Buy more at /account.');
-  try {
-    return { body: await draw(source, format, opts), left };
-  } catch (error) {
-    await refund(env.DB, account, COST[format], format);
-    throw error;
-  }
+/** The diagram source a call may send: the same 64 KB the renderer takes, for every route. */
+export function checkSource(code: unknown): string {
+  if (typeof code !== 'string' || !code.trim())
+    throw new ApiError(400, 'ERR_SOURCE', 'code must be the diagram source.');
+  if (new TextEncoder().encode(code).length > MAX_SOURCE_BYTES)
+    throw new ApiError(400, 'ERR_SOURCE', `The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
+  return code;
 }
 
 const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };
+const MAX_BODY = 256 * 1024;
 
+/** The JSON body, read with a byte count so a missing Content-Length can't buffer more. */
 async function body(req: Request) {
-  if (Number(req.headers.get('Content-Length') ?? 0) > 256 * 1024)
-    throw new ApiError(413, 'ERR_SOURCE', 'The request is over 256 KB.');
+  const reader = req.body?.getReader();
+  const parts: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const chunk = reader ? await reader.read() : { done: true as const, value: undefined };
+    if (chunk.done) break;
+    size += chunk.value.length;
+    if (size > MAX_BODY) {
+      await reader!.cancel();
+      throw new ApiError(413, 'ERR_SOURCE', 'The request is over 256 KB.');
+    }
+    parts.push(chunk.value);
+  }
+  const bytes = new Uint8Array(size);
+  let at = 0;
+  for (const p of parts) {
+    bytes.set(p, at);
+    at += p.length;
+  }
   let json: Record<string, unknown>;
   try {
-    json = await req.json();
+    json = JSON.parse(new TextDecoder().decode(bytes));
   } catch {
     throw new ApiError(400, 'ERR_SOURCE', 'The body must be JSON.');
   }
-  if (typeof json.code !== 'string' || !json.code.trim())
-    throw new ApiError(400, 'ERR_SOURCE', 'code must be the diagram source.');
   const get = (k: string) => (json[k] === undefined || json[k] === null ? null : String(json[k]));
-  return { code: json.code, get };
+  return { code: checkSource(json.code), get };
 }
 
 /** `/v1/*`. Returns null for a path that isn't an API route. */
@@ -102,14 +94,17 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         const format = (get('format') ?? 'svg') as Format;
         if (format !== 'svg' && format !== 'png')
           throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
-        const { body: image, left } = await paidDraw(env, account, code, format, drawOptions(get));
-        return new Response(image, {
-          headers: {
-            'Content-Type': TYPES[format],
-            'X-Draftably-Credits-Left': String(left.grant + left.bought),
-            'X-Draftably-Url': await imageUrl(code, format, url.origin),
-          },
-        });
+        const opts = drawOptions(get);
+        const drawn = await render(env, ctx, url.origin, code, format, opts, account);
+        const headers: Record<string, string> = {
+          'Content-Type': TYPES[format],
+          'X-Draftably-Cache': drawn.hit ? 'hit' : 'miss',
+        };
+        if (drawn.left)
+          headers['X-Draftably-Credits-Left'] = String(drawn.left.grant + drawn.left.bought);
+        const link = await embedUrl(url.origin, code, format, opts);
+        if (link) headers['X-Draftably-Url'] = link;
+        return new Response(drawn.body, { headers });
       }
       case 'POST /v1/validate': {
         const { code, get } = await body(req);
@@ -134,7 +129,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         ];
         return Response.json({
           valid: result.ok,
-          type: sourceType(code, get('type')),
+          type: sourceType(code, get('type')).type,
           diagnostics,
         });
       }

@@ -74,7 +74,7 @@ async function accountPage(env: AuthEnv, account: { id: string; login: string },
   return page(
     'Account',
     `<h1>Draftably render service</h1>
-<p class="muted">Signed in as <b>${esc(account.login)}</b> · <a href="/logout">Sign out</a></p>
+<p class="muted">Signed in as <b>${esc(account.login)}</b> · <form method="post" action="/logout" style="display:inline"><button>Sign out</button></form></p>
 <section><h2>Credits</h2>
 <div class="big">${(b.grant + b.bought).toLocaleString('en-US')}</div>
 <p class="muted">${b.grant.toLocaleString('en-US')} left in this month's free ${MONTHLY_GRANT.toLocaleString('en-US')} (resets ${b.resetsAt}) · ${b.bought.toLocaleString('en-US')} bought.
@@ -107,8 +107,21 @@ ${
 /** `/login`, `/logout`, `/auth/github/callback` and `/account*`. Null for other paths. */
 export async function handleAccount(req: Request, env: AuthEnv, url: URL) {
   const path = url.pathname;
+  const ours =
+    path === '/login' ||
+    path === '/logout' ||
+    path.startsWith('/auth/') ||
+    path.startsWith('/account');
+  if (!ours) return null;
+  // Every change is a POST from this site's own pages. A browser always sends Origin on a POST,
+  // so a form on another origin, even a sibling subdomain, is refused.
+  if (req.method === 'POST' && req.headers.get('Origin') !== url.origin)
+    return new Response('This form must be sent from this site.', { status: 403 });
   if (path === '/login') return startSignIn(env, url.origin);
-  if (path === '/logout') return redirect('/', await endSession(req, env.DB));
+  if (path === '/logout')
+    return req.method === 'POST'
+      ? redirect('/', await endSession(req, env.DB))
+      : new Response('Sign out with the button on /account.', { status: 405 });
   if (path === '/auth/github/callback') {
     const done = await finishSignIn(req, env);
     if ('error' in done)

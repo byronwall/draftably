@@ -21,7 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { build } from 'esbuild';
 
 // The URL codec and link policy import DSL modules that plain Node can't load, so bundle the
@@ -44,24 +44,30 @@ const base = remote ?? `http://127.0.0.1:${PORT}`;
 const { renderSvg } = await import('../packages/runtime/dist/index.js');
 
 // A fresh local D1 with two accounts: `poor` holds 20 credits, `rich` 100,000. Their keys are
-// fixtures for this proof only; the database lives in packages/service/.wrangler.
+// fixtures for this proof only. Its state lives in its own folder, so a run never touches the
+// database `pnpm service:dev` uses.
+const STATE = '.wrangler/proof-state';
 const KEYS = {
   poor: 'dft_aaaaaaaaaaaa.proof-secret-poor-0123456789',
   rich: 'dft_bbbbbbbbbbbb.proof-secret-rich-0123456789',
 };
 const d1 = (...args: string[]) =>
-  execFileSync('pnpm', ['exec', 'wrangler', 'd1', ...args, '--local', '--env', 'proof'], {
-    cwd: 'packages/service',
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  execFileSync(
+    'pnpm',
+    ['exec', 'wrangler', 'd1', ...args, '--local', '--env', 'proof', '--persist-to', STATE],
+    {
+      cwd: 'packages/service',
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    },
+  );
 const sql = (command: string) =>
   JSON.parse(d1('execute', 'DB', '--json', '--command', command))[0].results as Record<
     string,
     number
   >[];
 if (!remote) {
-  fs.rmSync('packages/service/.wrangler/state/v3/d1', { recursive: true, force: true });
+  fs.rmSync(path.join('packages/service', STATE), { recursive: true, force: true });
   d1('migrations', 'apply', 'DB');
   const month = new Date().toISOString().slice(0, 7),
     now = new Date().toISOString();
@@ -84,6 +90,8 @@ const dev = remote
         'wrangler',
         'dev',
         '--local',
+        '--persist-to',
+        STATE,
         '--env',
         'proof',
         '--port',
@@ -442,7 +450,52 @@ if (!remote) {
   assert.equal(badBody.error.code, 'ERR_SOURCE');
   assert.equal(before - after, 2);
   console.log(
-    `Keyed PNG URL cost 2 credits; a bad source got 400 ${badBody.error.code} and its credit back.`,
+    `Keyed PNG URL cost 2 credits; a bad source got 400 ${badBody.error.code} and cost nothing.`,
+  );
+
+  // One cache for every interface: a cached image is free over REST even with no credits left,
+  // and a supplied key is checked before the cache, so a wrong key fails on a warm image too.
+  const warm = await post('/v1/render', KEYS.poor, { code: checkout, format: 'svg' });
+  assert.equal(warm.status, 200, 'a cached image should be free at 0 credits');
+  assert.equal(warm.headers.get('X-Draftably-Cache'), 'hit');
+  const wrongKey = await fetch(`${base}/svg/${await encodeSource(checkout)}`, {
+    headers: { Authorization: 'Bearer dft_aaaaaaaaaaaa.wrong-secret-0123456789abc' },
+  });
+  assert.equal(wrongKey.status, 401);
+  // The URL REST returns carries the options and draws the same bytes.
+  const dark = await post('/v1/render', KEYS.rich, {
+    code: checkout,
+    format: 'svg',
+    scheme: 'dark',
+  });
+  const darkUrl = dark.headers.get('X-Draftably-Url')!;
+  assert.match(darkUrl, /\?scheme=dark$/);
+  assert.equal(await dark.text(), await (await fetch(darkUrl)).text());
+  // A source too long for a URL renders, with no URL offered; one over 64 KB is refused everywhere.
+  const long =
+    checkout +
+    '\n' +
+    Array.from({ length: 300 }, () => `# ${randomBytes(24).toString('hex')}`).join('\n');
+  const longRes = await post('/v1/render', KEYS.rich, { code: long, format: 'svg' });
+  assert.equal(longRes.status, 200);
+  assert.equal(longRes.headers.get('X-Draftably-Url'), null);
+  const huge = checkout + '\n#' + 'x'.repeat(66 * 1024);
+  assert.equal((await post('/v1/validate', KEYS.rich, { code: huge })).status, 400);
+  // Account forms: a POST from another origin is refused; sign-out is POST only.
+  const foreign = await fetch(`${base}/account/keys`, {
+    method: 'POST',
+    headers: {
+      Origin: 'https://evil.example',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'label=x',
+    redirect: 'manual',
+  });
+  assert.equal(foreign.status, 403);
+  assert.equal((await fetch(`${base}/logout`, { redirect: 'manual' })).status, 405);
+  console.log(
+    'One cache: a cached image is free over REST at 0 credits; a wrong key gets 401 on a warm URL; ' +
+      'the REST URL keeps ?scheme=dark; a long source gets no URL; 66 KB is refused; foreign POST 403.',
   );
 
   // Validate, convert, and auth.

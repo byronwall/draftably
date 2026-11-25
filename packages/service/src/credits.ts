@@ -26,7 +26,8 @@ const nextMonth = (d = new Date()) =>
 const resetGrant = (db: D1Database, account: string) =>
   db
     .prepare(
-      `UPDATE accounts SET grant_left = ?1, grant_month = ?2 WHERE id = ?3 AND grant_month <> ?2`,
+      // Only forward: a request that read last month's date can't reset this month's grant.
+      `UPDATE accounts SET grant_left = ?1, grant_month = ?2 WHERE id = ?3 AND grant_month < ?2`,
     )
     .bind(MONTHLY_GRANT, month(), account);
 
@@ -56,18 +57,6 @@ export async function spend(db: D1Database, account: string, n: number, ref: str
   ]);
   const row = spent.results[0];
   return row ? { grant: row.grant_left, bought: row.bought, resetsAt: nextMonth() } : null;
-}
-
-/** Give back `n` credits after a render failed. They go to bought credits, which never expire. */
-export async function refund(db: D1Database, account: string, n: number, ref: string) {
-  await db.batch([
-    db.prepare(`UPDATE accounts SET bought = bought + ?1 WHERE id = ?2`).bind(n, account),
-    db
-      .prepare(
-        `INSERT INTO ledger (account_id, delta, reason, ref, created_at) VALUES (?1, ?2, 'refund', ?3, ?4)`,
-      )
-      .bind(account, n, ref, new Date().toISOString()),
-  ]);
 }
 
 export async function balance(db: D1Database, account: string): Promise<Balance> {
