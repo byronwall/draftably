@@ -62,6 +62,7 @@ import {
   contentOrigin,
 } from './frame';
 import { projectScene } from './project';
+import { arrangeMindmap, withMindmaps } from './mindmap';
 import { legendNotes, settleLegendShades } from './legend-notes';
 import {
   DslError,
@@ -162,7 +163,7 @@ const round = (n: number) => Math.round(n);
 
 /** `files` holds the text of the files `src=` names; see `CodeFiles`. */
 export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
-  const m = parseModel(source, files);
+  const m = withMindmaps(parseModel(source, files));
   return withIcons(await compileFit(m), m);
 }
 
@@ -329,7 +330,7 @@ function fitVariants(root: ModelLayout) {
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
 export function checkSource(source: string, files?: CodeFiles): Scene {
-  const m = parseModel(source, files);
+  const m = withMindmaps(parseModel(source, files));
   const flat = dissolved(m);
   return withOldOrder(
     sequenced(withSoftGroups(ownLabels(layoutModel(widestLabels(flat)), flat), m)),
@@ -947,7 +948,8 @@ const NEUTRALS = new Set(['slate', 'stone']);
  */
 function paletteNotes(m: Model): Diagnostic[] {
   const notes: Diagnostic[] = [];
-  const named = m.objects.filter(o => o.color !== 'auto');
+  // A mind map's branch colors mark branches, not roles, so they are left out.
+  const named = m.objects.filter(o => o.color !== 'auto' && !o.branch);
   // Neutrals frame things; only accent families compete for meaning.
   const families = [...new Set(named.map(o => o.color))].filter(f => !NEUTRALS.has(f));
   if (families.length > MANY_FAMILIES)
@@ -1020,11 +1022,26 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
   // names; only the file steers layout.
   const alias = new Map(authoredOrder(m).map((id, i) => [id, `o${String(i).padStart(6, '0')}`])),
     original = new Map([...alias].map(([id, a]) => [a, id]));
-  const loose = new Set(m.edges.filter(e => e.constraint === false).map(e => e.id));
+  const loose = new Set(m.edges.filter(e => e.constraint === false).map(e => e.id)),
+    cross = new Set(m.edges.filter(e => e.offTree).map(e => e.id));
   let doc = renamed(projectScene(plain), alias);
-  // `constraint=false` edges are drawn, but the engines neither rank nor pull by them.
-  doc = { ...doc, graph: { ...doc.graph, edges: doc.graph.edges.filter(e => !loose.has(e.id)) } };
+  // `constraint=false` edges are drawn, but the engines neither rank nor pull by them. A mind-map
+  // link to a topic off the tree stays as an undirected link, so the topic sits beside its end.
+  doc = {
+    ...doc,
+    graph: {
+      ...doc.graph,
+      edges: doc.graph.edges
+        .filter(e => !loose.has(e.id) || cross.has(e.id))
+        .map(e => (cross.has(e.id) ? { ...e, directed: false } : e)),
+    },
+  };
   for (const l of engines) {
+    if (l.mindmap) {
+      const scope = l.scope === 'root' ? undefined : alias.get(l.scope);
+      doc = arrangeMindmap(doc, scope, alias.get(l.mindmap)!, axisOf(l) === 'down');
+      continue;
+    }
     const settings = LayoutLab.settings({
       ...doc.settings,
       algorithm: l.engine!.algorithm,
@@ -3571,6 +3588,12 @@ function layoutPass(
       const r = labelRoom(a, b, e.label, ref);
       return [{ a, b, w: Math.max(r.w, own.w - LABEL_RUN), h: Math.max(r.h, own.h - LABEL_RUN) }];
     });
+    // In a mind map only a link out to a topic off the tree crosses a gap that may widen.
+    const offTree = new Set(
+      m.edges
+        .filter(e => e.offTree)
+        .map(e => `${immediate(e.source, scope)}\0${immediate(e.target, scope)}`),
+    );
     const governing = arranged && governingLayout(m, scope),
       pack = packEngine(scope),
       packGaps = pack ? { node: pack.nodeGap, rank: pack.rankGap, group: groupGap } : undefined,
@@ -3656,7 +3679,14 @@ function layoutPass(
               anchor,
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
-            ? fromEngine(list, arranged!, axisOf(governing), with_)
+            ? fromEngine(
+                list,
+                arranged!,
+                axisOf(governing),
+                // A mind map reads out from its middle both ways: a cross-link between two
+                // topics must not shift the columns it spans.
+                governing.mindmap ? with_.filter(r => offTree.has(`${r.a}\0${r.b}`)) : with_,
+              )
             : baseLayout(list, layout, pairs, with_, lines, spacing);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
       // whose labels have nowhere else to go widen.

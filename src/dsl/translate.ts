@@ -33,6 +33,7 @@ import {
 } from './source-edits';
 import {
   DSL_SHAPES,
+  layoutParent,
   POSITION_HINTS,
   THEME_ATTRS,
   type NearSide,
@@ -245,7 +246,9 @@ export function translateEdit(input: EditInput): EditResult {
   const writeColor = (s: Statement, id: string, editorParent: string | null) => {
     const color = after.styles[id]?.color;
     if (!color) return;
-    if (color === 'auto' || color === autoColor(editorParent)) {
+    // A mind-map topic draws its branch's color, not its frame's, so the frame's is written out.
+    const topic = !!scene.byId.get(sid(id))?.branch;
+    if (color === 'auto' || (!topic && color === autoColor(editorParent))) {
       setAttr(s, 'color', undefined);
       explicit.delete(sid(id));
     } else {
@@ -414,7 +417,14 @@ export function translateEdit(input: EditInput): EditResult {
     setAttr(s, 'from', cfg?.fromSide && cfg.fromSide !== 'auto' ? bare(cfg.fromSide) : undefined);
     setAttr(s, 'to', cfg?.toSide && cfg.toSide !== 'auto' ? bare(cfg.toSide) : undefined);
   };
-  const writeEdge = (e: DiagramEdge, s: Statement) => {
+  // Both ends topics of one mind map: a line there with no written end is a branch.
+  const objects = new Map(scene.model.objects.map(o => [o.id, o])),
+    maps = scene.model.layouts.filter(l => l.mindmap).map(l => l.scope),
+    inMap = (e: DiagramEdge) =>
+      maps.some(
+        m => layoutParent(objects, sid(e.from)) === m && layoutParent(objects, sid(e.to)) === m,
+      );
+  const writeEdge = (e: DiagramEdge, s: Statement, old?: DiagramEdge) => {
     // An action has its own line: its participant and its label. A self-message turns into one,
     // and back, when its kind changes.
     if (e.message === 'action') {
@@ -432,9 +442,21 @@ export function translateEdit(input: EditInput): EditResult {
         bare(sid(id) + (range && has(id, range) ? '.' + range : ''));
     s.args = [s.args[0], end(e.from, e.fromRange), bare('->'), end(e.to, e.toRange)];
     if (e.label) s.args.push(quoted(e.label));
-    setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
-    setAttr(s, 'head', e.head ? bare(e.head) : undefined);
-    setAttr(s, 'tail', e.tail ? bare(e.tail) : undefined);
+    // An end the edit left alone keeps what the line says: in a mind map a written `head=arrow`
+    // or `directed=true` is what keeps the line out of the tree. An undirected line or a message
+    // has no ends to mark, so it drops them.
+    const ends = e.directed !== false && !e.message;
+    if (!old || old.directed !== e.directed || e.message)
+      setAttr(s, 'directed', e.directed === false && !e.message ? bare('false') : undefined);
+    // In a mind map a plain line is a branch, drawn with no head, so a chosen arrow is written out.
+    if (!ends || !old || old.head !== e.head)
+      setAttr(
+        s,
+        'head',
+        !ends ? undefined : e.head ? bare(e.head) : old && inMap(e) ? bare('arrow') : undefined,
+      );
+    if (!ends || !old || old.tail !== e.tail)
+      setAttr(s, 'tail', ends && e.tail ? bare(e.tail) : undefined);
     const kind = getAttr(s, 'kind')?.value;
     // A kind of message draws its own dashes, so it never takes `kind=` beside it.
     if (e.message) setAttr(s, 'kind', undefined);
@@ -483,7 +505,7 @@ export function translateEdit(input: EditInput): EditResult {
       else insertAfter(source, s, isDeclaration);
     } else if (!same(old, e) || !same(before.layout.edges[e.id], after.layout.edges[e.id])) {
       const s = edgeStatement(source, e.id);
-      if (s) writeEdge(e, s);
+      if (s) writeEdge(e, s, old);
     }
   }
 

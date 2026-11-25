@@ -23,7 +23,9 @@ import { readBodyRows } from './table-rows';
 const DECLARATIONS = ['node', 'group', 'edge'];
 
 /** What makes a declaration `~`: every parsed field but its line, so new fields count by default. */
-const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) => JSON.stringify(fields);
+const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) =>
+  // `styled` only says an attribute is written, which draws nothing by itself.
+  JSON.stringify({ ...fields, styled: undefined });
 
 /** A statement's content, whatever its comment or the order of its attributes. */
 const content = (s: Statement) =>

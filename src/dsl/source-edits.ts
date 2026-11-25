@@ -114,6 +114,12 @@ export function removeReferences(doc: SourceDoc, id: string) {
     if (s.command === 'layout' || s.command === 'order') return s.args[0]?.value === id;
     return false;
   });
+  // A layout that names the object as its root: a mind map with no center goes back to the
+  // default layout, and a tree engine picks its own root.
+  const rooted = (s: Statement) =>
+    s.command === 'layout' && s.attrs.some(([k, w]) => k === 'root' && w.value === id);
+  removeWhere(doc, s => rooted(s) && s.args[1]?.value === 'mindmap');
+  for (const s of statements(doc).filter(rooted)) s.attrs = s.attrs.filter(([k]) => k !== 'root');
   for (const s of statements(doc))
     if (s.command === 'order' || s.command === 'align')
       s.args = s.args.filter((w, i) => i === 0 || w.value !== id);

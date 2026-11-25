@@ -505,14 +505,17 @@ function RecipeControls() {
     <Show when={!s.rebuildBlocked() && shape()}>
       {current => (
         <>
-          <RangeField
-            label="Gap"
-            min={8}
-            max={120}
-            step={4}
-            value={current().gap ?? 28}
-            onChange={gap => void s.previewShape({ gap })}
-          />
+          {/* A mind map spaces its topics itself and takes no gap. */}
+          <Show when={current().recipe !== 'mindmap'}>
+            <RangeField
+              label="Gap"
+              min={8}
+              max={120}
+              step={4}
+              value={current().gap ?? 28}
+              onChange={gap => void s.previewShape({ gap })}
+            />
+          </Show>
           <Show when={current().recipe === 'flow'}>
             <SelectField
               label="Long runs"
