@@ -276,8 +276,13 @@ function parseColors(svg) {
   const re =
     /<(?:rect|path|ellipse|circle)[^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*stroke="#[0-9A-Fa-f]{6}"[^>]*\/>\s*(?:<svg[\s\S]*?<\/svg>\s*)?<text[^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>(?:<tspan[^>]*>)?([^<]*)/g;
   let m;
-  while ((m = re.exec(svg)))
+  while ((m = re.exec(svg))) {
+    // A legend swatch is followed by its label, which sits on the canvas beside it.
+    const box = m[0].match(/^<rect[^>]* x="([-\d.]+)"[^>]* width="([\d.]+)"/),
+      at = m[0].match(/<text[^>]* x="([-\d.]+)"/);
+    if (box && at && +at[1] > +box[1] + +box[2]) continue;
     pairs.push({ fill: m[1], ink: m[2], text: m[3], ratio: +contrast(m[1], m[2]).toFixed(2) });
+  }
   const connection = svg.match(/<path d="M[^"]+" fill="none" stroke="(#[0-9A-Fa-f]{6})"/)?.[1];
   return {
     canvas,

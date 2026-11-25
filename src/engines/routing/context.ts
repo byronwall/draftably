@@ -234,9 +234,18 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
       lanePairs = 0,
       laneDeficit = 0,
       minGap = Infinity;
+    const fixed = (r: Route) => state.fixedPlans.has(r.id),
+      start = (r: Route) => r.points[0];
     for (let i = 0; i < rs.length; i++) {
-      const used = rs.slice(0, i),
-        c = conflicts(rs[i].points, used),
+      const r = rs[i],
+        // Two planned routes from one point are one fan, such as an org chart's bus: where they
+        // part is a branch, not a crossing. Neither moves, so leaving it out changes no choice.
+        used = rs
+          .slice(0, i)
+          .filter(
+            q => !fixed(r) || !fixed(q) || start(q).x !== start(r).x || start(q).y !== start(r).y,
+          ),
+        c = conflicts(r.points, used),
         p = parallelConflicts(rs[i].points, used, s.edgeGap);
       crossings += c.crossings;
       shared += c.shared;
