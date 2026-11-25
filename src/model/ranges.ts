@@ -1,13 +1,16 @@
 /**
  * How a code node draws its named ranges (`range sql.copy1 lines=3-6`): a band behind the lines,
- * a bar in the left margin and a label tag in the label column on the right. Every mark sits
- * inside the box. The label column belongs to `codeLayout`, so code never runs under a tag and
- * every tag starts at the same x, whatever its text or the line beside it. The canvas and
+ * a bar in the left margin and a label. By default the label sits outside the box's right edge, on
+ * a leader from a dot just inside it; with `labels=inside` it sits in a column inside the box. The
+ * label lane belongs to `codeLayout` and counts in the node's layout box, so code never runs under
+ * a tag, layouts and routes keep clear of it, and every tag starts at the same x. The canvas and
  * `renderSvg` both draw from `rangeMarks`, so the viewer and every export agree.
  */
 import { ensureContrast, swatchFor, type ResolvedAppearance } from './appearance';
 import {
   CODE_TYPE,
+  LEADER,
+  LEADER_DOT,
   TAG_PAD,
   codeLayout,
   tagText,
@@ -18,6 +21,8 @@ import {
 import { measureText } from './fonts';
 import type { Diagram, Rect } from './types';
 
+/** Radius of an outside label's leader dot. */
+export const LEADER_DOT_R = 2.25;
 /** Opacity of a band, so overlapping bands blend into a deeper tint. */
 export const BAND_OPACITY = 0.7;
 /** Bar width, and the step between the bars of nested or overlapping ranges. */
@@ -44,6 +49,76 @@ export interface RangeMark {
   opacity: number;
   /** The label tag: its box and the text's right edge, from the box's top-left corner. */
   tag?: { x: number; y: number; w: number; h: number; text: string; ink: string };
+  /**
+   * An outside label's leader: a dot at (`x1`, `y1`) just inside the box on the range's first
+   * row, a line out to `bend`, across to the label's row `y` when the label moved off the range's
+   * row, and under the label to `x2`. A line that leaves the range on the right starts at the
+   * box's edge level with the dot.
+   */
+  leader?: { x1: number; y1: number; bend: number; x2: number; y: number };
+}
+
+/**
+ * The box a code node draws, in diagram coordinates: its layout rect without the lane its outside
+ * range labels take. Lines meet this box, and only it counts as the node a line may not cross.
+ */
+export function drawnRect(
+  n: Diagram['graph']['nodes'][number] | undefined,
+  look: ResolvedAppearance,
+  r: Rect,
+) {
+  if (!n?.code) return r;
+  const laid = codeLayout(n.code, n.title, look, { width: r.w, height: r.h });
+  return laid.frame === r.w ? r : { ...r, w: laid.frame };
+}
+
+/**
+ * A code node's outside range labels, in diagram coordinates, for the router: each blocks from the
+ * drawn box's edge to its label's end, down to its leader, so no line crosses a leader or a label.
+ * `text` is the label alone: it blocks a line that leaves along this range's own leader.
+ */
+export function rangeLabelBoxes(
+  n: Diagram['graph']['nodes'][number],
+  look: ResolvedAppearance,
+  r: Rect,
+): Array<Rect & { id: string; text: Rect }> {
+  if (!n.code?.ranges?.some(x => x.label)) return [];
+  const laid = codeLayout(n.code, n.title, look, { width: r.w, height: r.h });
+  if (!laid.tags?.outside) return [];
+  return rangeMarks(n.code, laid, look, '#fff').flatMap(m => {
+    const t = m.tag,
+      l = m.leader;
+    if (!t || !l) return [];
+    return [
+      {
+        id: `${n.id}.${m.range.name}`,
+        x: r.x + laid.frame,
+        y: r.y + Math.min(t.y, l.y1),
+        w: t.x + t.w - laid.frame,
+        h: Math.max(l.y, l.y1) + 1 - Math.min(t.y, l.y1),
+        text: { x: r.x + t.x, y: r.y + t.y, w: t.w, h: l.y - 1 - t.y },
+      },
+    ];
+  });
+}
+
+/**
+ * Where a line to a range meets its node, from the box's top: level with an outside label's
+ * leader, so the line runs on from it, or else at the middle of the range's band.
+ */
+export function rangePort(
+  code: CodeBlock,
+  laid: CodeLayout,
+  look: ResolvedAppearance,
+  range: CodeRange,
+) {
+  const band = rangeBand(laid, range);
+  if (!band) return undefined;
+  const leader =
+    laid.tags?.outside && range.label
+      ? rangeMarks(code, laid, look, '#fff').find(m => m.range === range)?.leader
+      : undefined;
+  return leader ? leader.y1 : band.y + band.h / 2;
 }
 
 /** The rows of a range that the layout shows, as a band; undefined when all are cut off. */
@@ -98,20 +173,47 @@ export function rangeMarks(
         tw = measureText(text, tagType) + 2 * TAG_PAD,
         th = CODE_TYPE.lineHeight - 1,
         first = laid.rows.findIndex(row => row.line >= r.from),
-        // The tag takes the range's first row; a row another tag holds passes it to the next
-        // free row, so tags of ranges on the same or next-door lines stack instead of covering
-        // each other.
-        at = laid.rows.findIndex((_, i) => i >= first && !usedRows.has(i)),
-        row = at < 0 ? first : at;
+        // The tag takes the range's first row. A row another tag holds passes it to the next free
+        // row below, or failing that above, so tags of ranges on the same or next-door lines
+        // stack instead of covering each other.
+        order = [
+          ...[...laid.rows.keys()].filter(i => i >= first),
+          ...[...laid.rows.keys()].filter(i => i < first).reverse(),
+        ],
+        row = order.find(i => !usedRows.has(i)) ?? first;
       usedRows.add(row);
-      mark.tag = {
-        x: laid.tags.x,
-        y: laid.rows[row].y + 0.5,
-        w: tw,
-        h: th,
-        text,
-        ink: ensureContrast(swatchFor(look, family, look.dark ? 100 : 800).fill, bandFill, 4.5),
-      };
+      const y = laid.rows[row].y + 0.5,
+        ink = swatchFor(look, family, look.dark ? 100 : 800).fill;
+      if (laid.tags.outside) {
+        // Outside, the label sits just above its leader, which runs from the dot under the text:
+        // nothing covers the line, and a line that leaves the range on the right runs on from it.
+        // A tag moved off its range's row keeps its dot on the range: the leader bends to it.
+        const lead = Math.round(y + th / 2),
+          anchor = Math.round(laid.rows[first].y + 0.5 + th / 2);
+        mark.leader = {
+          x1: laid.frame - LEADER_DOT,
+          y1: anchor,
+          bend: laid.frame + LEADER / 2,
+          x2: laid.tags.x + tw,
+          y: lead,
+        };
+        mark.tag = {
+          x: laid.tags.x,
+          y: lead - th + 1,
+          w: tw,
+          h: th,
+          text,
+          ink: ensureContrast(ink, look.canvas, 4.5),
+        };
+      } else
+        mark.tag = {
+          x: laid.tags.x,
+          y,
+          w: tw,
+          h: th,
+          text,
+          ink: ensureContrast(ink, bandFill, 4.5),
+        };
     }
     return [mark];
   });

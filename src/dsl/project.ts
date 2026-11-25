@@ -7,6 +7,8 @@ import { DEFAULT_SETTINGS, emptyDiagram } from '../model/document';
 import { clone } from '../model/geometry';
 import { timelineRoutes, frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
+import { drawnRect } from '../model/ranges';
+import { resolveAppearance } from '../model/appearance';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
 import { cellsBandFor } from './cells';
@@ -213,8 +215,12 @@ export function measured(
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId ?? 'root']),
   );
+  // A code node measures as its drawn box: its outside range labels are not the node.
+  const look = resolveAppearance(doc.appearance),
+    nodes = new Map(doc.graph.nodes.map(n => [n.id, n]));
   return {
     nodes: [...rects]
+      .map(([id, r]) => [id, drawnRect(nodes.get(id), look, r)] as const)
       .map(([id, r]) => ({ id, parent: parent.get(id)!, x: r.x, y: r.y, w: r.w, h: r.h }))
       .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
     routes: routes

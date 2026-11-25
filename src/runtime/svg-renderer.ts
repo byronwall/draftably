@@ -34,7 +34,7 @@ import {
   wrapMarkPath,
 } from '../model/code';
 import { codeColors, codeTokens, coloredRuns } from '../model/highlight';
-import { BAND_OPACITY, rangeMarks, type RangeMark } from '../model/ranges';
+import { BAND_OPACITY, LEADER_DOT_R, rangeMarks, type RangeMark } from '../model/ranges';
 import {
   cellsBandOf,
   isCell,
@@ -231,23 +231,23 @@ function codeMarkup(
   // The caption band takes a light tint of the stroke, so it reads apart from the code.
   if (laid.caption)
     out.push(
-      `<path d="${captionBandPath(r.x, r.y, r.w, laid.caption, radius)}" fill="${c.stroke}" fill-opacity="${CAPTION_TINT}"/>`,
+      `<path d="${captionBandPath(r.x, r.y, laid.frame, laid.caption, radius)}" fill="${c.stroke}" fill-opacity="${CAPTION_TINT}"/>`,
     );
   // Added and removed diff lines: a band behind every row of the line.
   tokens?.forEach((t, line) => {
     const band = (t.line === 'added' || t.line === 'removed') && lineBand(laid, line);
     if (band)
       out.push(
-        `<rect x="${r.x + 1}" y="${r.y + band.y}" width="${r.w - 2}" height="${band.h}" fill="${colors[t.line as 'added'].fill}"/>`,
+        `<rect x="${r.x + 1}" y="${r.y + band.y}" width="${laid.frame - 2}" height="${band.h}" fill="${colors[t.line as 'added'].fill}"/>`,
       );
   });
   // Named ranges: bands under the text and bars in the left margin; their tags go on top.
   const marks = rangeMarks(code, laid, look, c.fill);
-  for (const m of marks) out.push(rangeMarkup(m, r));
+  for (const m of marks) out.push(rangeMarkup(m, r, laid.frame));
   if (laid.caption)
     out.push(
-      `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
-      `<text x="${r.x + laid.gutter}" y="${r.y + laid.caption / 2}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(n.title, r.w - 2 * laid.gutter, look.annotation))}</text>`,
+      `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + laid.frame}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
+      `<text x="${r.x + laid.gutter}" y="${r.y + laid.caption / 2}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(n.title, laid.frame - 2 * laid.gutter, look.annotation))}</text>`,
     );
   if (laid.rule !== undefined)
     out.push(
@@ -294,23 +294,27 @@ function codeMarkup(
 }
 
 /** A range's band and its bar in the left margin. */
-function rangeMarkup(m: RangeMark, r: Rect) {
+function rangeMarkup(m: RangeMark, r: Rect, frame: number) {
   const fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';
   return (
     `<g class="code-range"${fade}>` +
-    `<rect x="${r.x + 1}" y="${r.y + m.y}" width="${r.w - 2}" height="${m.h}" fill="${m.band}" fill-opacity="${BAND_OPACITY}"/>` +
+    `<rect x="${r.x + 1}" y="${r.y + m.y}" width="${frame - 2}" height="${m.h}" fill="${m.band}" fill-opacity="${BAND_OPACITY}"/>` +
     `<line x1="${r.x + m.barX}" y1="${r.y + m.y}" x2="${r.x + m.barX}" y2="${r.y + m.y + m.h}" stroke="${m.bar}" stroke-width="${m.barW}"${m.dash ? ` stroke-dasharray="${m.dash}"` : ''}/>` +
     '</g>'
   );
 }
 
-/** A range's label: a tag in its band's color in the label column. */
+/** A range's label: a tag in its band's color, outside on a leader or in the inside column. */
 function tagMarkup(m: RangeMark, r: Rect, look: ResolvedAppearance) {
   const t = m.tag!,
+    l = m.leader,
     fade = m.opacity < 1 ? ` opacity="${m.opacity}"` : '';
   return (
     `<g class="code-range-tag"${fade}>` +
-    `<rect x="${r.x + t.x}" y="${r.y + t.y}" width="${t.w}" height="${t.h}" rx="3" fill="${m.band}"/>` +
+    (l
+      ? `<path d="M${r.x + l.x1},${r.y + l.y1}H${r.x + l.bend}V${r.y + l.y}H${r.x + l.x2}" fill="none" stroke="${m.bar}" stroke-width="1.25"/>` +
+        `<circle cx="${r.x + l.x1}" cy="${r.y + l.y1}" r="${LEADER_DOT_R}" fill="${m.bar}"/>`
+      : `<rect x="${r.x + t.x}" y="${r.y + t.y}" width="${t.w}" height="${t.h}" rx="3" fill="${m.band}"/>`) +
     `<text x="${r.x + t.x + t.w / 2}" y="${r.y + t.y + t.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${t.ink}">${esc(t.text)}</text>` +
     '</g>'
   );
@@ -551,7 +555,11 @@ function sceneMarkup(
   }
   for (const n of vg.nodes) {
     if (onTimeline.has(n.id)) continue;
-    const r = rects.get(n.id)!,
+    // A code node's layout box holds its outside label lane; the outline is the drawn box.
+    const full = rects.get(n.id)!,
+      r = n.code
+        ? { ...full, w: codeLayout(n.code, n.title, look, { width: full.w, height: full.h }).frame }
+        : full,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),
       p = statusPaint(look, style.status, style.spot),
@@ -584,7 +592,7 @@ function sceneMarkup(
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
           n.code
-            ? codeMarkup(n, r, look, c, p, radius)
+            ? codeMarkup(n, full, look, c, p, radius)
             : isTableRow(doc, n.id) && n.row
               ? rowMarkup(n.title, n.row, r, look, c.ink, detailInk(look, c), p)
               : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +

@@ -16,7 +16,7 @@ import {
 } from '../../model/code';
 import { detailInk } from '../../model/colors';
 import { codeColors, codeTokens, coloredRuns } from '../../model/highlight';
-import { BAND_OPACITY, rangeMarks } from '../../model/ranges';
+import { BAND_OPACITY, LEADER_DOT_R, rangeMarks } from '../../model/ranges';
 import { truncateText } from '../../model/fonts';
 import type { NodeLabel } from '../../model/labels';
 import { rowParts, type TableRow } from '../../model/table';
@@ -302,13 +302,13 @@ export function CodeBody(props: {
     <g class="code-body" pointer-events="none">
       <Show when={laid().caption}>
         <path
-          d={captionBandPath(0, 0, props.w, laid().caption, props.radius)}
+          d={captionBandPath(0, 0, laid().frame, laid().caption, props.radius)}
           fill={props.swatch.stroke}
           fill-opacity={CAPTION_TINT}
         />
       </Show>
       <For each={bands()}>
-        {b => <rect x={1} y={b.y} width={props.w - 2} height={b.h} fill={b.fill} />}
+        {b => <rect x={1} y={b.y} width={laid().frame - 2} height={b.h} fill={b.fill} />}
       </For>
       <For each={ranges()}>
         {m => (
@@ -316,7 +316,7 @@ export function CodeBody(props: {
             <rect
               x={1}
               y={m.y}
-              width={props.w - 2}
+              width={laid().frame - 2}
               height={m.h}
               fill={m.band}
               fill-opacity={BAND_OPACITY}
@@ -337,7 +337,7 @@ export function CodeBody(props: {
         <line
           x1={0}
           y1={laid().caption}
-          x2={props.w}
+          x2={laid().frame}
           y2={laid().caption}
           stroke={props.swatch.stroke}
           stroke-width={1}
@@ -354,7 +354,7 @@ export function CodeBody(props: {
           fill-opacity={props.fade}
           text-decoration={props.strike ? 'line-through' : undefined}
         >
-          {truncateText(props.caption, props.w - 2 * laid().gutter, props.look.annotation)}
+          {truncateText(props.caption, laid().frame - 2 * laid().gutter, props.look.annotation)}
         </text>
       </Show>
       <Show when={laid().rule !== undefined}>
@@ -417,14 +417,31 @@ export function CodeBody(props: {
       <For each={ranges().filter(m => m.tag)}>
         {m => (
           <g class="code-range-tag" opacity={m.opacity < 1 ? m.opacity : undefined}>
-            <rect
-              x={m.tag!.x}
-              y={m.tag!.y}
-              width={m.tag!.w}
-              height={m.tag!.h}
-              rx={3}
-              fill={m.band}
-            />
+            <Show
+              when={m.leader}
+              fallback={
+                <rect
+                  x={m.tag!.x}
+                  y={m.tag!.y}
+                  width={m.tag!.w}
+                  height={m.tag!.h}
+                  rx={3}
+                  fill={m.band}
+                />
+              }
+            >
+              {l => (
+                <>
+                  <path
+                    d={`M${l().x1},${l().y1}H${l().bend}V${l().y}H${l().x2}`}
+                    fill="none"
+                    stroke={m.bar}
+                    stroke-width={1.25}
+                  />
+                  <circle cx={l().x1} cy={l().y1} r={LEADER_DOT_R} fill={m.bar} />
+                </>
+              )}
+            </Show>
             <text
               x={m.tag!.x + m.tag!.w / 2}
               y={m.tag!.y + m.tag!.h / 2}

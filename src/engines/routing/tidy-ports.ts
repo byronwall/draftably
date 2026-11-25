@@ -22,6 +22,11 @@ export type Attempt = (
 /** Whether a shape's sides are straight, so a port may slide along them. */
 export const flat = (r: Box) => !['pill', 'circle', 'diamond', 'icon'].includes(r.shape!);
 export const ends: End[] = ['from', 'to'];
+/** An end at a code range: its port stays level with the range's line, so no pass moves it. */
+export const held = (ctx: Context, r: Route, end: End) => {
+  const cfg = ctx.edges.find(e => e.id === r.id)?.cfg;
+  return (end === 'from' ? cfg?.fromAt : cfg?.toAt) !== undefined;
+};
 /** The point `k` steps in from one end of a path. */
 export const tip = (ps: Point[], end: End, k = 0) =>
   end === 'from' ? ps[k] : ps[ps.length - 1 - k];
@@ -39,6 +44,7 @@ export function centrePorts(ctx: Context, attempt: Attempt) {
   const sides = new Map<string, PortEnd[]>();
   state.routes.forEach((r, i) => {
     for (const end of ends) {
+      if (held(ctx, r, end)) continue;
       const key = r[end] + '|' + r[sideKey(end)];
       if (!sides.has(key)) sides.set(key, []);
       sides.get(key)!.push({ i, end });
@@ -167,6 +173,7 @@ export function swapPorts(ctx: Context, attempt: Attempt) {
   state.routes.forEach((r, i) => {
     if (r.points.length < 3 || r.from === r.to) return;
     for (const end of ends) {
+      if (held(ctx, r, end)) continue;
       const key = r[end] + '|' + end + '|' + r[sideKey(end)];
       if (!sides.has(key)) sides.set(key, []);
       sides.get(key)!.push({ i, end });

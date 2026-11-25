@@ -139,11 +139,20 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         s.doc.layout.edges,
         s.doc.settings.routing,
         vg.groups.map(g => [g.id, g.parentId, s.doc.collapsed.includes(g.id)]),
-        vg.nodes.map(n => [n.id, n.parentId, styleOf(s.doc, n.id).shape]),
+        // A code node's range labels and their mode move its ports and block lines.
+        vg.nodes.map(n => [
+          n.id,
+          n.parentId,
+          styleOf(s.doc, n.id).shape,
+          // Its lines too: a line that starts to wrap moves the ports of the ranges below it.
+          n.code,
+        ]),
         quick,
         temporary,
         deferred,
         !!known,
+        // A result the worker hands over replaces the routes drawn while it ran.
+        ready && adopted.fingerprint,
       ]);
       if (cache?.signature === signature) return cache.value;
       let value;

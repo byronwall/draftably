@@ -213,6 +213,8 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
     }
     // A soft group's title, a few units out, blocks every line: no border gives way round it.
     for (const t of input.titles ?? []) obstacles.push(inflate(t, TITLE_CLEAR));
+    for (const t of input.marks ?? [])
+      obstacles.push(e.ranges?.includes(t.id) ? { id: t.id, ...t.text } : t);
     const common = ancestors(e.from).find(id => ancestors(e.to).includes(id))!;
     const g = groups.get(common);
     if (g) {
