@@ -44,3 +44,21 @@ Known limits from the palette study:
 
 The comparison covers 28 diagram families and 37 features across Draftably and 15 alternatives.
 Its evidence tables separate native notation, approximations, custom application work, and extensions.
+
+## Missing diagram types
+
+[Diagram types draftably lacks, from 23 diagramming tools](missing-diagram-types-2026-11-24.md)
+is a quick survey weighted to paid tools (Lucidchart, Eraser, IcePanel, Ilograph and others). It
+ranks ERD tables with crow's feet, architecture icons, mind maps, UML class and C4 views as the top
+five gaps, with syntax sketches for each.
+
+[Syntax options](missing-diagram-types-syntax-2026-11-24.md) compares syntax for the three types
+Byron picked: tables, icons (Lucide by default, any Iconify set by prefix) and mind maps.
+
+[Org charts](org-charts-2026-11-24.md) draws a 23-person org chart with today's `tree` engine, lists
+nine problems, and proposes an `orgchart` layout with compact leaves, roles, cards and CSV import.
+
+[Diagram-adjacent ideas](adjacent-domains-2026-11-24.md) lists 20 other domains the layout engine
+could serve, from code maps and IaC diffs to traces, slides and rack layouts.
+
+Status: research only. Nothing is planned yet (TASK-0081).
