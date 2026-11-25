@@ -46,14 +46,20 @@ export class UnsupportedEdit extends Error {}
 /** A pasted or duplicated code node's options and body, as a new statement writes them. */
 function writeCode(s: Statement, code: CodeBlock) {
   if (code.lang) setAttr(s, 'lang', bare(code.lang));
-  if (!code.wrap) setAttr(s, 'wrap', bare('off'));
+  // A table's lines run on by default; a plain listing wraps.
+  if (code.wrap === !!code.table) setAttr(s, 'wrap', bare(code.wrap ? 'on' : 'off'));
   if (code.numbers) setAttr(s, 'numbers', bare('on'));
   if (code.table) setAttr(s, 'table', bare('on'));
   if (code.start !== 1) setAttr(s, 'start', bare(code.start));
   if (code.maxWidth !== CODE_MAX_WIDTH) setAttr(s, 'max-width', bare(code.maxWidth));
-  let tag = 'CODE';
-  for (let n = 2; code.lines.some(l => l.trim() === tag); n++) tag = `CODE${n}`;
-  s.body = { tag, lines: code.lines, close: tag };
+  writeBody(s, code.body ?? code.lines);
+}
+
+/** A code statement's heredoc body: its tag kept, unless a line of the code would close it. */
+function writeBody(s: Statement, lines: string[]) {
+  let tag = s.body?.tag ?? 'CODE';
+  for (let n = 2; lines.some(l => l.trim() === tag); n++) tag = `CODE${n}`;
+  s.body = { tag, lines, close: tag };
 }
 
 export interface EditInput {
@@ -292,9 +298,9 @@ export function translateEdit(input: EditInput): EditResult {
   ];
   for (const o of added) {
     const type = after.graph.groups.includes(o as never) ? 'group' : 'node';
-    const id = fresh(o.title, type);
+    const code = (o as DiagramNode).code,
+      id = fresh(o.title, code ? (code.table ? 'table' : 'code') : type);
     ids.set(o.id, id);
-    const code = (o as DiagramNode).code;
     const s = statement(type, [bare(id), ...(code && !o.title ? [] : [quoted(o.title)])]);
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
@@ -336,6 +342,19 @@ export function translateEdit(input: EditInput): EditResult {
       throw new UnsupportedEdit('A code node keeps its shape; edit its body in the source.');
     if (s.command === 'node' && a?.shape !== b?.shape)
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
+    const code = (o as DiagramNode).code,
+      was = (old as DiagramNode).code;
+    // An Editor edit carries the body it wrote; the drawn lines are not the file's text.
+    const body =
+      code?.body && code.body.join('\n') !== (s.body?.lines ?? []).join('\n')
+        ? code.body
+        : undefined;
+    if (s.command === 'node' && code && was && (code.table !== was.table || body)) {
+      if (getAttr(s, 'src'))
+        throw new UnsupportedEdit('This code node reads its lines from a file; edit that file.');
+      if (code.table !== was.table) setAttr(s, 'table', code.table ? bare('on') : undefined);
+      if (body) writeBody(s, body);
+    }
     const span = (o as DiagramNode).span;
     if (s.command === 'node' && span !== (old as DiagramNode).span)
       setAttr(s, 'span', span === undefined || span === 1 ? undefined : bare(span));

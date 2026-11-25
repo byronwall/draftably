@@ -235,7 +235,7 @@ JetBrains Mono column in the viewer, SVG, PNG and PDF. Options:
 
 | Option       | Default       | Effect                                                                                                        |
 | ------------ | ------------- | ------------------------------------------------------------------------------------------------------------- |
-| `"label"`    | none          | A caption band above the code, like a file tab.                                                               |
+| `"label"`    | none          | A tinted caption band above the code, like a file tab.                                                        |
 | `lang=`      | none          | Colors the code: `sql`, `python`, `ts`, `js`, `json`, `yaml`, `sh` or `diff`. Another value draws plain text. |
 | `numbers=`   | `off`         | `on` adds line numbers.                                                                                       |
 | `table=`     | `off`         | `on` draws the body as a light table. See [Code tables](#code-tables).                                        |
@@ -287,6 +287,23 @@ range df.row lines=3
 - A table does not wrap: `wrap=` defaults to `off`, so a long row is cut with `…`.
 - The rows are still code: the same font, line numbers and ranges. `range` counts the header as
   line 1 and does not count a removed rule.
+
+**Edit a table in the Editor.** Double-click the table, or select it and press `Enter`. The table
+opens as a grid of cells over the node:
+
+- `Tab` goes to the next cell, and past the last cell it adds a row. `Enter` goes to the cell
+  below, and on the last row it adds a row.
+- Paste cells copied from a spreadsheet, or a Markdown table, into any cell. They fill the grid
+  from that cell, and rows and columns are added as needed.
+- The bar adds and deletes rows and columns, and sets the alignment of the column that has the caret.
+- The **Table** switch turns `table=on` off or on. With it off, the body edits as plain text.
+- Click **Done**, press `Ctrl/⌘ Enter` or click outside the table to save. `Escape` cancels.
+
+The Editor writes the columns two spaces apart. If you set an alignment that differs from the one
+numbers give, it writes a Markdown table with `:---:` marks, so the file reads back the same.
+Empty rows and empty columns at the right are removed, and a psql `(3 rows)` line is counted again.
+
+Paste spreadsheet cells, or a Markdown or psql table, on the canvas to add a table node.
 
 ### Line ranges
 
@@ -1824,6 +1841,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 ### Code
 
 - [Why the orders report is slow](https://draftably.dev/app/?example=code-review): Code nodes: SQL and a diff colored by `lang=`, named line ranges, and edges that end on a range.
+- [Which accounts are slipping](https://draftably.dev/app/?example=slipping-accounts): Code tables: a query beside its result, drawn with `table=on`, with numbers aligned right and ranges on the rows that matter.
 
 The repository's `examples/code-from-file/` folder holds a `src=` example with its SQL file. Open it with `draftably open`, because the Editor's bundled examples cannot read files.
 
@@ -1873,6 +1891,8 @@ Edits made in the Editor are written back to the file as readable statements:
 | Color family or shade in Inspector     | `color=` and `shade=` on the declaration.                           |
 | Theme or padding in **Appearance**     | The `theme` line; preset changes drop built-in `theme-color` lines. |
 | Double-click the title or subtitle     | The `diagram` title and the `subtitle` line.                        |
+| Double-click a code node, then Done    | The node's body and caption; the **Table** switch sets `table=on`.  |
+| Paste spreadsheet cells on the canvas  | A `node table shape=code table=on` declaration with the cells.      |
 | Drag the frame's right edge            | `width=` on the `diagram` line; back to its content removes it.     |
 | Wrap in a container or ungroup         | A `group` and the members' `in=`.                                   |
 | Clear manual markers                   | Removes the object's soft position refinements.                     |

@@ -48,6 +48,24 @@ To connect from the keyboard, select a source, press `C`, press `Tab` to reach t
 | Undo                     | `Ctrl/⌘ Z`                     |
 | Redo                     | `Ctrl/⌘ Shift Z` or `Ctrl/⌘ Y` |
 
+## Edit a code table
+
+Double-click a code node, or select it and press `Enter`. A `table=on` node opens as a grid of cells.
+
+| Action                            | Keys                             |
+| --------------------------------- | -------------------------------- |
+| Next cell; past the last, new row | `Tab`                            |
+| Previous cell                     | `Shift Tab`                      |
+| Cell below; on the last row, new  | `Enter`                          |
+| Cell above                        | `Shift Enter`                    |
+| Move between cells                | Arrow keys, at the start or end  |
+| Fill cells from a spreadsheet     | `Ctrl/⌘ V`                       |
+| Delete the row                    | `Ctrl/⌘ Shift Backspace`         |
+| Save                              | `Ctrl/⌘ Enter`, or click outside |
+| Cancel                            | `Escape`                         |
+
+Other code opens as text. There, `Tab` indents, `Ctrl/⌘ Enter` saves and `Escape` cancels.
+
 ## Zoom and pan
 
 | Action                    | Keys                                    |

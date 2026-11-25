@@ -256,6 +256,11 @@ export function createPointer(
       s.finishInlineEdit(true);
       return;
     }
+    // A press on the canvas saves the open code editor, as it saves a title.
+    if (s.codeEditId()) {
+      s.commitCodeEdit();
+      return;
+    }
     s.options.onInteract?.();
     const pos = s.screenToWorld(e.clientX, e.clientY);
     s.setPointer(pos);
@@ -743,7 +748,7 @@ export function createPointer(
 
   function onDoubleClick(e: MouseEvent) {
     if (s.timelineOpen() || s.stroking()) return e.preventDefault();
-    if (s.inlineEditId() || performance.now() < suppressDoubleClickUntil) return;
+    if (s.inlineEditId() || s.codeEditId() || performance.now() < suppressDoubleClickUntil) return;
     const t = e.target as Element,
       // The canvas holds the pointer during a background gesture, so the heading is found by position.
       under = rootOf(t).elementFromPoint(e.clientX, e.clientY) ?? t,

@@ -13,6 +13,7 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
+import { bodyLines, CODE_MAX_WIDTH, codeLayout, type CodeBlock } from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -68,7 +69,83 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   s.onSourceIdMap(mapId => {
     const id = s.inlineEditId();
     if (id) s.setInlineEditId(mapId(id));
+    const code = codeEditId();
+    if (code) setCodeEditId(mapId(code));
   });
+
+  // --- Code and table editing ------------------------------------------------------------------
+
+  /** The code node whose body is open in the code or table editor. */
+  const [codeEditId, setCodeEditId] = createSignal<string | null>(null);
+  /** Saves the open code editor's draft; the editor sets it while it is open. */
+  let saveOpenCode: (() => void) | undefined;
+  const onCodeSave = (fn: (() => void) | undefined) => (saveOpenCode = fn);
+  /** Save the open code editor, if any, before another edit or a press on the canvas. */
+  const commitCodeEdit = () => saveOpenCode?.();
+
+  function startCodeEdit(id: string) {
+    finishInlineEdit(true);
+    commitCodeEdit();
+    const code = findNode(s.doc, id)?.code;
+    if (code?.src)
+      return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
+    batch(() => {
+      s.setConnectFrom(null);
+      s.setSelection([id]);
+      setCodeEditId(id);
+    });
+  }
+
+  /** A table node from a pasted table's body, at the middle of the view, selected. */
+  function addTable(body: string[]) {
+    const code: CodeBlock = {
+        lines: bodyLines(body, true),
+        body,
+        table: true,
+        wrap: false,
+        numbers: false,
+        start: 1,
+        maxWidth: CODE_MAX_WIDTH,
+        sourceLine: 0,
+      },
+      laid = codeLayout(code, '', resolveAppearance(s.doc.appearance));
+    let id = '';
+    s.transact('Paste table', d => {
+      id = edits.addNode(d, { style: { shape: 'code' }, w: laid.w, h: laid.h }, s.canvasCenter());
+      const node = findNode(d, id)!;
+      node.title = '';
+      node.code = code;
+    });
+    s.setSelection([id]);
+    return id;
+  }
+
+  /**
+   * Close the code editor of node `id`; with `next`, save its caption, table setting and, when it
+   * changed, its body, as one undo step. The node draws from the new body at once.
+   */
+  function finishCodeEdit(
+    id: string,
+    next?: { body?: string[]; table: boolean; title: string; tab?: number; wrap?: boolean },
+  ) {
+    if (codeEditId() === id) setCodeEditId(null);
+    saveOpenCode = undefined;
+    if (!next) return;
+    s.transact(next.table ? 'Edit table' : 'Edit code', d => {
+      const node = findNode(d, id);
+      if (!node?.code || node.code.src) return;
+      const { table: _, ...rest } = node.code;
+      node.code = {
+        ...rest,
+        ...(next.table ? { table: true } : {}),
+        ...(next.wrap !== undefined ? { wrap: next.wrap } : {}),
+        ...(next.body
+          ? { body: next.body, lines: bodyLines(next.body, next.table, next.tab) }
+          : {}),
+      };
+      node.title = next.title;
+    });
+  }
 
   function startInlineEdit(id: string) {
     const text = parseTextId(id) && textValue(s.doc, id);
@@ -83,8 +160,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     }
     const entity = findNode(s.doc, id) ?? findGroup(s.doc, id) ?? findEdge(s.doc, id);
     if (!entity) return;
-    // A code node's body is edited in the source, not on the canvas.
-    if ('code' in entity && entity.code) return;
+    // A code node's body opens in the code editor: a cell grid for a table.
+    if ('code' in entity && entity.code) return startCodeEdit(id);
     finishInlineEdit(true);
     batch(() => {
       s.setConnectFrom(null);
@@ -648,6 +725,12 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     setTool,
     startInlineEdit,
     finishInlineEdit,
+    codeEditId,
+    startCodeEdit,
+    finishCodeEdit,
+    commitCodeEdit,
+    onCodeSave,
+    addTable,
     addNode,
     addEdge,
     completeConnection,

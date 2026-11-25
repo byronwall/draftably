@@ -22,6 +22,8 @@ import { drawingBounds } from '../model/bounds';
 import { timelineOrigin, timelineSvg } from '../model/timeline';
 import {
   CODE_ADVANCE,
+  captionBandPath,
+  CAPTION_TINT,
   CODE_TYPE,
   codeLayout,
   codeRuns,
@@ -184,6 +186,7 @@ function codeMarkup(
   look: ResolvedAppearance,
   c: { fill: string; stroke: string; ink: string },
   p: StatusPaint,
+  radius: number,
 ) {
   const code = n.code!,
     laid = codeLayout(code, n.title, look, { width: r.w, height: r.h }),
@@ -192,6 +195,11 @@ function codeMarkup(
     tokens = codeTokens(code),
     colors = codeColors(look, c.fill, c.ink),
     out: string[] = [];
+  // The caption band takes a light tint of the stroke, so it reads apart from the code.
+  if (laid.caption)
+    out.push(
+      `<path d="${captionBandPath(r.x, r.y, r.w, laid.caption, radius)}" fill="${c.stroke}" fill-opacity="${CAPTION_TINT}"/>`,
+    );
   // Added and removed diff lines: a band behind every row of the line.
   tokens?.forEach((t, line) => {
     const band = (t.line === 'added' || t.line === 'removed') && lineBand(laid, line);
@@ -533,7 +541,7 @@ function sceneMarkup(
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
           n.code
-            ? codeMarkup(n, r, look, c, p)
+            ? codeMarkup(n, r, look, c, p, radius)
             : `<text x="${r.x + label.x}" y="${r.y + label.y}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
               label.lines
                 .map(

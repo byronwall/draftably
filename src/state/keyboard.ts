@@ -15,6 +15,7 @@ import {
   handleKeyUp,
   isEditable,
   pasteShapes,
+  pasteTable,
 } from './canvas-keyboard';
 
 export { handleKeyUp };
@@ -79,6 +80,8 @@ export function handleCopy(e: ClipboardEvent) {
 export async function handlePaste(e: ClipboardEvent) {
   if (isEditable(e.target) || modalOpen() || !e.clipboardData) return;
   try {
+    // A spreadsheet copies its cells as text and as a picture: the cells win.
+    if (pasteTable(e)) return;
     const image = [...e.clipboardData.items].find(i => /^image\/(png|jpeg|webp|gif)$/.test(i.type));
     if (image) {
       e.preventDefault();

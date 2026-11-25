@@ -11,6 +11,7 @@ import { type Tool } from './session/editor';
 import { parseTextId, removeText, TEXT_NAMES } from './session/canvas-text';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
+import { pastedTable, writeTable } from '../model/code';
 import { activeSession } from './active-session';
 import { eventTarget } from './dom-root';
 
@@ -71,7 +72,7 @@ export function handleCanvasKey(e: KeyboardEvent, closeMenu?: () => boolean): bo
       return (e.preventDefault(), activeSession().cancelLayout(), true);
     if (activeSession().layoutPreview())
       return (e.preventDefault(), activeSession().discardPreview(), true);
-    if (activeSession().inlineEditId()) return true;
+    if (activeSession().inlineEditId() || activeSession().codeEditId()) return true;
     if (closeMenu?.()) return (e.preventDefault(), true);
     e.preventDefault();
     activeSession().cancelGesture();
@@ -264,11 +265,24 @@ export function copyShapes(e: ClipboardEvent) {
   e.preventDefault();
 }
 
+/**
+ * Cells copied from a spreadsheet, or a Markdown or psql table, as a new table node. Reads the
+ * clipboard text untrimmed, so an empty cell at a row's end still counts.
+ */
+export function pasteTable(e: ClipboardEvent) {
+  const table = pastedTable(e.clipboardData?.getData('text/plain') ?? '');
+  if (!table) return false;
+  e.preventDefault();
+  activeSession().addTable(writeTable(table));
+  return true;
+}
+
 /** Paste copied shapes: from the clipboard text, or the session's own copy when it is empty. */
 export function pasteShapes(e: ClipboardEvent) {
   if (isEditable(eventTarget(e)) || !e.clipboardData) return;
   const text = e.clipboardData.getData('text/plain').trim();
   try {
+    if (pasteTable(e)) return;
     if (text.startsWith('{')) {
       const data = JSON.parse(text);
       if (!isClipboardFragment(data)) return;

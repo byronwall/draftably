@@ -230,6 +230,7 @@ export function NodeView(props: NodeViewProps) {
             h={props.rect.h}
             look={look()}
             swatch={color()}
+            radius={radius()}
             strike={paint().strike}
             fade={paint().inkFade}
           />
