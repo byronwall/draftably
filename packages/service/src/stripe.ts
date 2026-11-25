@@ -14,6 +14,9 @@ export interface StripeEnv {
 export const paidCreditsOn = (env: StripeEnv) =>
   !!(env.STRIPE_SECRET_KEY && env.STRIPE_WEBHOOK_SECRET);
 
+/** Marks a Checkout session as a Draftably credit pack; other sessions on the account are ignored. */
+const PRODUCT = 'draftably-credits';
+
 /** Credit packs. Prices are placeholders until Byron sets them. */
 export const PACKS = [
   { id: 'small', credits: 25_000, cents: 500 },
@@ -33,6 +36,7 @@ export async function checkoutUrl(env: StripeEnv, account: string, packId: strin
     'line_items[0][price_data][currency]': 'usd',
     'line_items[0][price_data][unit_amount]': String(pack.cents),
     'line_items[0][price_data][product_data][name]': `${pack.credits.toLocaleString('en-US')} Draftably credits`,
+    'metadata[product]': PRODUCT,
     'metadata[account]': account,
     'metadata[credits]': String(pack.credits),
   });
@@ -87,7 +91,7 @@ interface CheckoutEvent {
     object: {
       id: string;
       payment_status?: string;
-      metadata?: { account?: string; credits?: string };
+      metadata?: { product?: string; account?: string; credits?: string };
     };
   };
 }
@@ -109,8 +113,22 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
     return new Response('Ignored.');
   const account = s.metadata?.account,
     credits = Number(s.metadata?.credits);
-  if (!account || !Number.isInteger(credits) || credits <= 0)
-    return new Response('No account or credits on the session.', { status: 400 });
+  // A failed delivery is retried for days, so anything that isn't ours, or can't be credited,
+  // is acknowledged. A marked purchase for an unknown account is logged with its session ID so it
+  // can be matched by hand.
+  if (s.metadata?.product !== PRODUCT) return new Response('Not a Draftably purchase.');
+  const known =
+    account && (await env.DB.prepare(`SELECT 1 FROM accounts WHERE id = ?1`).bind(account).first());
+  if (!known || !Number.isInteger(credits) || credits <= 0) {
+    console.error(
+      JSON.stringify({
+        unmatchedPurchase: s.id,
+        account: account ?? null,
+        credits: s.metadata?.credits,
+      }),
+    );
+    return new Response('Logged for reconciliation.');
+  }
   // The unique index on purchase refs makes a repeated event insert nothing, and then the
   // balance update sees changes() = 0 and skips too.
   await env.DB.batch([

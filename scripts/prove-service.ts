@@ -644,7 +644,7 @@ if (!remote) {
       object: {
         id: 'cs_proof_1',
         payment_status: 'paid',
-        metadata: { account: 'poor', credits: '25000' },
+        metadata: { product: 'draftably-credits', account: 'poor', credits: '25000' },
       },
     },
   });
@@ -667,7 +667,7 @@ if (!remote) {
         object: {
           id: 'cs_proof_2',
           payment_status: paid,
-          metadata: { account: 'poor', credits: '1000' },
+          metadata: { product: 'draftably-credits', account: 'poor', credits: '1000' },
         },
       },
     });
@@ -680,6 +680,18 @@ if (!remote) {
   assert.equal(bought(), 26000);
   sql(`UPDATE accounts SET bought = bought - 1000 WHERE id = 'poor'`);
   assert.equal(sql(`SELECT count(*) AS n FROM ledger WHERE reason = 'purchase'`)[0].n, 2);
+  // Someone else's session, and a marked one for an unknown account: acknowledged, no credits.
+  for (const metadata of [
+    { account: 'poor', credits: '5' },
+    { product: 'draftably-credits', account: 'ghost', credits: '5' },
+  ]) {
+    const other = JSON.stringify({
+      type: 'checkout.session.completed',
+      data: { object: { id: `cs_${metadata.account}_x`, payment_status: 'paid', metadata } },
+    });
+    assert.equal((await hook(other, sign(other))).status, 200);
+  }
+  assert.equal(bought(), 25000);
   // The grant is spent before bought credits.
   sql(`UPDATE accounts SET grant_left = 1 WHERE id = 'poor'`);
   await post('/v1/render', KEYS.poor, { code: checkout + '\n# grant\n', format: 'svg' });
@@ -687,7 +699,7 @@ if (!remote) {
   await post('/v1/render', KEYS.poor, { code: checkout + '\n# bought\n', format: 'svg' });
   assert.equal(bought(), 24999);
   console.log(
-    'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; wrong or 10-minute-old signatures got 400; the grant is spent first.',
+    'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; unrelated and unknown-account sessions got 200 and no credits; wrong or 10-minute-old signatures got 400; the grant is spent first.',
   );
 }
 
