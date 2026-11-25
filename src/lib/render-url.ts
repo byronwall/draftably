@@ -5,6 +5,9 @@
  * Worker both use this file, so the two can't disagree. No Node APIs: it runs in Node 22, a
  * browser and a Worker.
  */
+import { readSource } from '../dsl/syntax';
+import { baseUrl } from '../model/link';
+
 export const SERVICE_URL = 'https://api.draftably.dev';
 
 /** The largest source the service decodes, in bytes. */
@@ -94,6 +97,45 @@ export async function decodeSource(segment: string) {
   if (bytes.length > MAX_SOURCE_BYTES)
     throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
   return new TextDecoder().decode(bytes);
+}
+
+/**
+ * The file's own `config link-base=` (the last one wins, as in the language) when it is a web
+ * address, read by the DSL's own reader. The runtime never trusts an authored base; on a hosted
+ * image it is as safe as the absolute links the policy already keeps. A local base (`.`, a folder)
+ * means nothing there, so those relative links are dropped.
+ */
+export function webLinkBase(source: string) {
+  let base: string | undefined;
+  try {
+    for (const line of readSource(source).lines)
+      if (line.kind === 'statement' && line.command === 'config')
+        for (const [key, word] of line.attrs)
+          if (key === 'link-base' && word.quoted) base = word.value;
+  } catch {
+    return undefined; // the renderer reports the syntax error
+  }
+  if (!base) return undefined;
+  // One parse decides: an http(s) URL, in the canonical form the runtime's own check accepts.
+  try {
+    const url = new URL(base);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The link policy for a hosted drawing of `source`: absolute links as written, relative ones
+ * joined to a web link base the way the CLI's `svgHref` joins them, anything else dropped. Node,
+ * note and footnote links all go through `resolve`.
+ */
+export function webLinks(source: string) {
+  const base = webLinkBase(source);
+  return {
+    mode: 'safe' as const,
+    resolve: ({ href }: { href: string }) => (base ? baseUrl(href, base) : null) ?? href,
+  };
 }
 
 /** The service URL that draws `source` as `format`. */

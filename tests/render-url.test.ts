@@ -1,7 +1,14 @@
 import { randomBytes } from 'node:crypto';
 import { deflateSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { decodeSource, encodeSource, imageUrl, SourceError } from '../src/lib/render-url';
+import {
+  decodeSource,
+  encodeSource,
+  imageUrl,
+  SourceError,
+  webLinkBase,
+  webLinks,
+} from '../src/lib/render-url';
 
 const src = 'title "Checkout"\nweb -> api: "POST /pay"\napi -> db';
 
@@ -37,5 +44,34 @@ describe('render URLs', () => {
     expect(await imageUrl(src, 'png', 'http://localhost:8787/')).toMatch(
       /^http:\/\/localhost:8787\/png\/pako:[\w-]+$/,
     );
+  });
+
+  it('reads the last web link-base, joins links as a folder, and drops a bad base', () => {
+    const two =
+      'config link-base="https://a.example/x/"\nconfig link-base="https://b.example/docs"\n';
+    expect(webLinkBase(two)).toBe('https://b.example/docs');
+    expect(webLinks(two).resolve({ href: 'notes' })).toBe('https://b.example/docs/notes');
+    expect(webLinkBase('config link-base="https://bad host"\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="../.."\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="file:///Users/shared/specs"\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="https://example.org/project docs"\n')).toBe(
+      'https://example.org/project%20docs',
+    );
+    expect(webLinks('node a "A"\n').resolve({ href: 'https://x.example/' })).toBe(
+      'https://x.example/',
+    );
+  });
+
+  it('resolves a footnote link as the CLI resolves a node link', async () => {
+    const { renderSvg } = await import('../src/runtime/render');
+    const source =
+      'config link-base="https://example.org/docs"\nnode a "A" href="notes"\nfootnote 1 "[see](notes)"\n';
+    const r = await renderSvg(source, { links: webLinks(source) });
+    expect(r.ok).toBe(true);
+    const hrefs = r.ok ? [...r.value.svg.matchAll(/href="([^"]+)"/g)].map(m => m[1]) : [];
+    expect(hrefs.filter(h => h.startsWith('https://example.org'))).toEqual([
+      'https://example.org/docs/notes',
+      'https://example.org/docs/notes',
+    ]);
   });
 });
