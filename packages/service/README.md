@@ -15,6 +15,8 @@ The `.draft` files in [docs/](docs) show how the service works. Open them with
   or PNG.
 - [4-data-model](docs/4-data-model.draft): the D1 tables.
 - [5-buy-credits](docs/5-buy-credits.draft): sign-in, Stripe Checkout and the webhook.
+- [6-domains](docs/6-domains.draft): how DNS sends `draftably.dev` to GitHub Pages and
+  `api.draftably.dev` to the Worker, and which records the Cloudflare move needs.
 
 ## Work on it
 
