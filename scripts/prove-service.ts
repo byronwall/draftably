@@ -626,13 +626,15 @@ if (!remote) {
   assert.match(validMcp, /^valid/);
   const convMcp = (await call('convert_mermaid', { code: flow.source })).content[0].text;
   assert.equal(convMcp.split('\n# Warnings:')[0], conv.draft);
+  const bigUrl = await call('image_url', { code: checkout + '\n#' + 'x'.repeat(66 * 1024) });
+  assert.equal(bigUrl.isError, true, 'image_url gave a URL the service refuses');
   assert.equal((await rpc('tools/list', {}, null)).status, 401);
   assert.equal(
     (await fetch(`${base}/mcp`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })).status,
     405,
   );
   console.log(
-    `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405.`,
+    `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405; image_url refuses a source over 64 KB.`,
   );
 }
 

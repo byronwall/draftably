@@ -11,7 +11,7 @@ import guide from '../../../skills/draftably/SKILL.md';
 import { SourceError } from '../../../src/lib/render-url';
 import { ApiError, checkSource, errorJson, requireKey, type ApiEnv } from './api';
 import { drawOptions } from './draw';
-import { embedUrl, render } from './render';
+import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
 
 const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
@@ -31,7 +31,7 @@ function base64(bytes: Uint8Array) {
 }
 
 /** The tools, for one caller. */
-function server(env: ApiEnv, ctx: ExecutionContext, account: string, origin: string) {
+function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) {
   const mcp = new McpServer({ name: 'draftably', version: runtimeVersion });
 
   mcp.registerTool(
@@ -57,33 +57,28 @@ function server(env: ApiEnv, ctx: ExecutionContext, account: string, origin: str
         };
         const source = checkSource(args.code);
         const opts = drawOptions(get);
-        const { body, left, hit } = await render(
+        // The image content and URL are built before the credits are taken.
+        const url = await embedUrl(origin, source, args.format, opts);
+        const drawn = await render(
           env,
           ctx,
           origin,
           source,
           args.format,
           opts,
-          account,
+          async body =>
+            args.format === 'png'
+              ? { type: 'image' as const, data: base64(body as Uint8Array), mimeType: 'image/png' }
+              : { type: 'text' as const, text: body as string },
+          who,
         );
-        const url = await embedUrl(origin, source, args.format, opts);
         const note = [
           url ? `URL: ${url}` : 'No URL: the source is too long for one.',
-          hit ? 'From the cache: no credits spent.' : `Credits left: ${left!.grant + left!.bought}`,
+          drawn.hit
+            ? 'From the cache: no credits spent.'
+            : `Credits left: ${drawn.left!.grant + drawn.left!.bought}`,
         ].join('\n');
-        return args.format === 'png'
-          ? {
-              content: [
-                { type: 'image' as const, data: base64(body as Uint8Array), mimeType: 'image/png' },
-                { type: 'text' as const, text: note },
-              ],
-            }
-          : {
-              content: [
-                { type: 'text' as const, text: body as string },
-                { type: 'text' as const, text: note },
-              ],
-            };
+        return { content: [drawn.out, { type: 'text' as const, text: note }] };
       } catch (error) {
         if (error instanceof SourceError || error instanceof ApiError)
           return failure(error.message);
@@ -146,6 +141,12 @@ function server(env: ApiEnv, ctx: ExecutionContext, account: string, origin: str
       inputSchema: { code, format: z.enum(['png', 'svg']).default('svg') },
     },
     async ({ code, format }) => {
+      try {
+        checkSource(code);
+      } catch (error) {
+        if (error instanceof ApiError) return failure(error.message);
+        throw error;
+      }
       const url = await embedUrl(
         origin,
         code,
@@ -177,9 +178,9 @@ export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext
   // Stateless: no session to stream to or close, so only POST means anything.
   if (req.method !== 'POST')
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'POST' } });
-  let account: string;
+  let who: Payer;
   try {
-    account = (await requireKey(req, env, ctx)).account;
+    who = await requireKey(req, env, ctx);
   } catch (error) {
     if (error instanceof ApiError) return errorJson(error);
     throw error;
@@ -188,6 +189,6 @@ export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext
     sessionIdGenerator: undefined,
     enableJsonResponse: true,
   });
-  await server(env, ctx, account, url.origin).connect(transport);
+  await server(env, ctx, who, url.origin).connect(transport);
   return transport.handleRequest(req);
 }
