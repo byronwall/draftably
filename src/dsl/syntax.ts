@@ -32,7 +32,7 @@ import {
 } from './timeline';
 import { MARKERS, MESSAGE_KINDS, type EndMarker, type MessageKind } from '../model/markers';
 import { EDITORS } from '../model/link';
-import { CODE_MAX_WIDTH, CODE_TAB, codeLines, type CodeBlock } from '../model/code';
+import { CODE_MAX_WIDTH, CODE_TAB, codeLines, tableLines, type CodeBlock } from '../model/code';
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
@@ -591,7 +591,7 @@ export const DSL_SHAPES: DslShape[] = [
   'code',
 ];
 /** Attributes only a code node takes. */
-const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'start', 'max-width', 'src'];
+const CODE_ATTRS = ['lang', 'tab', 'wrap', 'numbers', 'table', 'start', 'max-width', 'src'];
 /** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
 export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker' && s !== 'code');
 const FRAMES = ['box', 'soft', 'none'] as const;
@@ -889,11 +889,14 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
             `Expected src="path" or src="path#L10-L40"; got ${src?.value}.`,
           );
           const read = ref ? srcBody(src!.value, ref, files?.[ref.path], tab) : undefined,
-            lang = attrs.has('lang') ? text(attrs.get('lang')) : ref && langOf(ref.path);
+            lang = attrs.has('lang') ? text(attrs.get('lang')) : ref && langOf(ref.path),
+            table = choice('table', 'off', ['on', 'off'] as const) === 'on',
+            lines = read ? read.lines : codeLines(s.body!.lines, tab);
           return {
-            lines: read ? read.lines : codeLines(s.body!.lines, tab),
+            lines: table && !read?.placeholder ? tableLines(lines) : lines,
+            ...(table ? { table } : {}),
             ...(lang && !read?.placeholder ? { lang } : {}),
-            wrap: choice('wrap', 'on', ['on', 'off'] as const) === 'on',
+            wrap: choice('wrap', table ? 'off' : 'on', ['on', 'off'] as const) === 'on',
             numbers: choice('numbers', 'off', ['on', 'off'] as const) === 'on',
             start: num('start', read?.start ?? 1, 0, 1_000_000),
             maxWidth: num('max-width', CODE_MAX_WIDTH, 120, 8000),

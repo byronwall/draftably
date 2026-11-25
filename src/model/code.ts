@@ -22,6 +22,8 @@ export interface CodeBlock {
   wrap: boolean;
   /** `numbers=on`: a line-number gutter. */
   numbers: boolean;
+  /** `table=on`: line 1 is a header, drawn muted with a rule under it, and the columns align. */
+  table?: boolean;
   /** `start=`: the first line's number. */
   start: number;
   /** `max-width=`: the widest the box grows before lines wrap or clip. */
@@ -74,6 +76,8 @@ export const CAPTION_HEIGHT = 26;
 const GUTTER_GAP = 2;
 /** A continuation row starts this many columns past its line's own indent. */
 const HANG = 2;
+/** Space between a table's header line and its first row. */
+const TABLE_GAP = 6;
 /** The narrowest box. */
 const MIN_WIDTH = 80;
 
@@ -91,6 +95,97 @@ export function codeLines(raw: string[], tab = CODE_TAB): string[] {
     Infinity,
   );
   return Number.isFinite(indent) ? lines.map(l => l.slice(indent)) : lines;
+}
+
+/** A number with an optional sign, currency, commas, decimals and short unit: 1,204, $48.2k, 12ms. */
+const NUMBER = /^[-+]?[$€£]?\d[\d,]*(\.\d+)?(%|[A-Za-zµ]{1,3})?$/;
+/** Cells that hold no value; they never stop a column from counting as numbers. */
+const NO_VALUE = /^(-|—|NULL|null|None|NaN|n\/a)?$/;
+/** A rule typed under a header: dashes or equals signs, with `|`, `+` or `:` between columns. */
+const RULE = /^[\s|+:]*[-=]{3,}[\s|+:=-]*$/;
+
+/** A typed rule: dashes or equals signs, or a Markdown row of `---` cells such as `|:-:|--|`. */
+const isRule = (l: string) =>
+  RULE.test(l) || (l.includes('|') && pipeCells(l).every(c => /^:?-+:?$/.test(c)));
+
+/** psql's row count under a result. */
+const FOOTER = /^\(\d+ rows?\)$/;
+
+/** A Markdown or psql row's cells: the outer pipes go, and `|` splits the rest. */
+const pipeCells = (l: string) =>
+  l
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map(c => c.trim());
+
+/**
+ * The cells of a table body, by column. When every line holds a `|`, pipes split the cells
+ * (Markdown, psql). Otherwise runs of two or more spaces split them when every line gives the
+ * same count, and failing that a column break is a run of positions blank in every line. Fewer
+ * than two columns: undefined.
+ */
+export function tableCells(lines: string[]): string[][] | undefined {
+  const rows = lines.filter(l => l.trim());
+  if (rows.length < 2) return undefined;
+  if (rows.every(l => l.includes('|'))) return lines.map(l => (l.trim() ? pipeCells(l) : []));
+  const split = rows.map(l => l.trim().split(/ {2,}/));
+  if (split[0].length > 1 && split.every(c => c.length === split[0].length))
+    return lines.map(l => (l.trim() ? l.trim().split(/ {2,}/) : []));
+  const width = Math.max(...rows.map(l => l.length)),
+    spans: Array<[number, number]> = [];
+  for (let i = 0; i < width; i++) {
+    if (rows.every(l => (l[i] ?? ' ') === ' ')) continue;
+    const last = spans[spans.length - 1];
+    if (last && last[1] === i) last[1] = i + 1;
+    else spans.push([i, i + 1]);
+  }
+  if (spans.length < 2) return undefined;
+  return lines.map(l => (l.trim() ? spans.map(([a, b]) => l.slice(a, b).trim()) : []));
+}
+
+/**
+ * `table=on`: the body as a table with its columns two spaces apart. A rule typed under the
+ * header (`-----`, `|---|---:|`, `----+----`) is dropped, since the drawing has its own; its
+ * `:` marks set the alignment (`---:`, `:---:`). Otherwise a column whose cells under the header are all numbers
+ * aligns right.
+ */
+export function tableLines(lines: string[]): string[] {
+  // psql ends with a "(3 rows)" line: keep it as it is, outside the columns.
+  const last = lines.findLastIndex(l => l.trim());
+  if (last > 0 && FOOTER.test(lines[last].trim()))
+    return [...tableLines(lines.slice(0, last)), lines[last].trim()];
+  const first = lines.findIndex(l => l.trim()),
+    typed = first >= 0 && isRule(lines[first + 1] ?? '') ? pipeCells(lines[first + 1]) : [],
+    body = typed.length ? lines.filter((_, i) => i !== first + 1) : lines,
+    cells = tableCells(body);
+  if (!cells) return body;
+  const n = Math.max(...cells.map(c => c.length)),
+    head = cells.findIndex(c => c.length),
+    widths = Array.from({ length: n }, (_, i) => Math.max(...cells.map(c => (c[i] ?? '').length))),
+    align = widths.map((_, i) => {
+      const mark = typed.length === n ? typed[i] : '';
+      if (mark.startsWith(':') && mark.endsWith(':')) return 'center';
+      if (mark.endsWith(':')) return 'right';
+      if (mark.startsWith(':')) return 'left';
+      const values = cells.filter((c, j) => j !== head && !NO_VALUE.test(c[i] ?? ''));
+      return values.length > 0 && values.every(c => NUMBER.test(c[i])) ? 'right' : 'left';
+    }),
+    pad = (s: string, w: number, a: string) =>
+      a === 'right'
+        ? s.padStart(w)
+        : a === 'center'
+          ? s.padStart(s.length + Math.floor((w - s.length) / 2)).padEnd(w)
+          : s.padEnd(w);
+  return cells.map(c =>
+    c.length
+      ? widths
+          .map((w, i) => pad(c[i] ?? '', w, align[i]))
+          .join('  ')
+          .trimEnd()
+      : '',
+  );
 }
 
 /** One drawn row: all of a source line, or one piece of a long one. */
@@ -133,6 +228,10 @@ export interface CodeLayout {
   moreShown: boolean;
   /** Source lines that wrapped or were clipped. */
   long: number[];
+  /** `table=on`: y of the rule under the header line, from the box's top edge. */
+  rule?: number;
+  /** x where the rule ends: the table's last column, or the right padding when that is nearer. */
+  ruleEnd?: number;
 }
 
 const columns = (s: string) => s.length;
@@ -199,7 +298,9 @@ export function codeLayout(
     cols = Math.max(4, Math.floor((w - 2 * CODE_PAD.x - gutterW) / adv + 0.05));
   const rows: CodeRow[] = [],
     long: number[] = [],
-    top = band + CODE_PAD.y;
+    top = band + CODE_PAD.y,
+    // A table's header line gets a gap below it, and its rule sits in the middle of the gap.
+    gap = code.table && lines.length > 1 ? TABLE_GAP : 0;
   lines.forEach((text, line) => {
     const pieces = code.wrap
       ? wrapLine(text, cols)
@@ -211,19 +312,19 @@ export function codeLayout(
       rows.push({
         line,
         ...p,
-        y: top + rows.length * lh,
+        y: top + rows.length * lh + (line > 0 ? gap : 0),
         ...(i < pieces.length - 1 ? { wraps: true } : {}),
         ...(!code.wrap && p.to < text.length ? { clipped: true } : {}),
       }),
     );
   });
-  const auto = band + 2 * CODE_PAD.y + rows.length * lh;
+  const auto = band + 2 * CODE_PAD.y + rows.length * lh + gap;
   let more = 0,
     moreY = 0,
     moreShown = false;
   if (size.height !== undefined && auto > size.height + 0.5) {
     // Keep the rows that fit with one row to spare for "… N more lines".
-    const fit = Math.max(0, Math.floor((size.height - band - 2 * CODE_PAD.y) / lh) - 1);
+    const fit = Math.max(0, Math.floor((size.height - band - 2 * CODE_PAD.y - gap) / lh) - 1);
     let kept = rows.slice(0, fit);
     // Never end on part of a wrapped line: drop its earlier rows too.
     const cut = rows[fit];
@@ -232,10 +333,15 @@ export function codeLayout(
     more = lines.length - (kept.length ? kept[kept.length - 1].line + 1 : 0);
     rows.length = 0;
     rows.push(...kept);
-    moreY = top + kept.length * lh;
+    moreY = top + kept.length * lh + (kept.some(r => r.line > 0) ? gap : 0);
     moreShown = moreY + lh <= size.height + 0.5;
   }
+  const head = rows.filter(r => r.line === 0).pop(),
+    rule = gap && head ? head.y + lh + gap / 2 : undefined;
   return {
+    ...(rule !== undefined
+      ? { rule, ruleEnd: Math.min(w - CODE_PAD.x, CODE_PAD.x + gutterW + longest * adv) }
+      : {}),
     w,
     h: size.height ?? auto,
     left: CODE_PAD.x + gutterW,

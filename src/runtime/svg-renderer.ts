@@ -206,6 +206,10 @@ function codeMarkup(
       `<line x1="${r.x}" y1="${r.y + laid.caption}" x2="${r.x + r.w}" y2="${r.y + laid.caption}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
       `<text x="${r.x + laid.gutter}" y="${r.y + laid.caption / 2}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(n.title, r.w - 2 * laid.gutter, look.annotation))}</text>`,
     );
+  if (laid.rule !== undefined)
+    out.push(
+      `<line class="code-rule" x1="${r.x + laid.left}" y1="${r.y + laid.rule}" x2="${r.x + laid.ruleEnd!}" y2="${r.y + laid.rule}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.5"/>`,
+    );
   const spans: string[] = [],
     numbers: string[] = [];
   laid.rows.forEach((row, i) => {
@@ -216,9 +220,11 @@ function codeMarkup(
         `<tspan x="${r.x + laid.gutter + (laid.numberCols - number.length) * CODE_ADVANCE}" y="${y}">${number}</tspan>`,
       );
     const t = tokens?.[row.line],
-      bandInk = t?.line === 'added' || t?.line === 'removed' ? colors[t.line].ink : undefined;
+      bandInk = t?.line === 'added' || t?.line === 'removed' ? colors[t.line].ink : undefined,
+      // A table's header line is muted, over any token colors; the rule separates it.
+      head = laid.rule !== undefined && row.line === 0;
     for (const run of coloredRuns(row, codeRuns(row, code.lines[row.line]), t)) {
-      const ink = run.cls ? colors.tokens[run.cls] : bandInk;
+      const ink = head ? muted : run.cls ? colors.tokens[run.cls] : bandInk;
       spans.push(
         `<tspan x="${r.x + columnX(laid, run.col)}" y="${y}"${ink ? ` fill="${ink}"` : ''}>${esc(run.text)}</tspan>`,
       );

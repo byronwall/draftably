@@ -7,7 +7,14 @@ import { projectScene } from '../src/dsl/project';
 import { formatSource, parseModel, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit, UnsupportedEdit } from '../src/dsl/translate';
 import { resolveAppearance } from '../src/model/appearance';
-import { CODE_ADVANCE, CODE_PAD, codeLayout, type CodeBlock } from '../src/model/code';
+import {
+  CODE_ADVANCE,
+  CODE_PAD,
+  CODE_TYPE,
+  codeLayout,
+  tableLines,
+  type CodeBlock,
+} from '../src/model/code';
 import { FACES } from '../src/model/fonts';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
@@ -123,6 +130,98 @@ describe('code layout', () => {
     expect(laid.more).toBe(30 - laid.rows.length);
     expect(laid.moreY + 17).toBeLessThanOrEqual(150);
     expect(laid.numberCols).toBe(3);
+  });
+});
+
+describe('code tables', () => {
+  it('finds columns from runs of spaces or blank positions, and right-aligns numbers', () => {
+    // Ragged gaps of two or more spaces.
+    expect(tableLines(['name  cat  count', 'apple   fruit   10', 'bread  bakery  4'])).toEqual([
+      'name   cat     count',
+      'apple  fruit      10',
+      'bread  bakery      4',
+    ]);
+    // Single spaces in a cell, aligned by hand: blank positions split the columns.
+    expect(tableLines(['city     pop', 'New York 8.3', 'Rome     2.8'])).toEqual([
+      'city      pop',
+      'New York  8.3',
+      'Rome      2.8',
+    ]);
+    // One column is no table: the text stays as it is.
+    expect(tableLines(['apples', 'kiwi'])).toEqual(['apples', 'kiwi']);
+  });
+
+  it('reads Markdown and psql pastes, drops a typed rule and keeps its alignment marks', () => {
+    // `:---` holds a number column left; units and NULL still count as numbers.
+    expect(
+      tableLines([
+        '| id | ms | note |',
+        '|:---|---:|------|',
+        '| 7 | 12ms | ok |',
+        '| 10 | NULL | x |',
+      ]),
+    ).toEqual(['id    ms  note', '7   12ms  ok', '10  NULL  x']);
+    expect(tableLines([' id | plan', '----+------', '  1 | pro', '  2 | free'])).toEqual([
+      'id  plan',
+      ' 1  pro',
+      ' 2  free',
+    ]);
+    // `:---:` centres; a psql row count stays as its own line, out of the columns.
+    expect(tableLines(['| a | b |', '|:-:|---|', '| x | 1 |', '| long | 2 |'])).toEqual([
+      ' a    b',
+      ' x    1',
+      'long  2',
+    ]);
+    expect(tableLines([' id | n', '----+---', '  1 | 5', '(1 row)'])).toEqual([
+      'id  n',
+      ' 1  5',
+      '(1 row)',
+    ]);
+    // The old workaround: dashes typed under the header.
+    expect(tableLines(['name   n', '-----  --', 'apple  10'])).toEqual(['name    n', 'apple  10']);
+  });
+
+  it('draws the rule in a gap under the header, clear of both rows', () => {
+    const lh = CODE_TYPE.lineHeight,
+      plain = codeLayout(block(['a  b', '1  2', '3  4']), 'q', look),
+      laid = codeLayout(block(['a  b', '1  2', '3  4'], { table: true }), 'q', look),
+      gap = laid.rows[1].y - laid.rows[0].y - lh;
+    expect(plain.rule).toBeUndefined();
+    expect(gap).toBeGreaterThan(0);
+    expect(laid.rule).toBe(laid.rows[0].y + lh + gap / 2);
+    expect(laid.rows[2].y - laid.rows[1].y).toBe(lh);
+    expect(laid.h).toBe(plain.h + gap);
+    // A box wider than its table: the rule stops at the table's last column.
+    const wide = codeLayout(block(['k  v', '1  2'], { table: true }), 'a long caption here', look);
+    expect(wide.ruleEnd).toBe(CODE_PAD.x + 4 * CODE_ADVANCE);
+    expect(wide.ruleEnd).toBeLessThan(wide.w - CODE_PAD.x);
+    // A box too short to show the header draws no rule.
+    expect(codeLayout(block(['a', 'b'], { table: true }), 'q', look, { height: 20 }).rule).toBe(
+      undefined,
+    );
+  });
+
+  it('keeps line numbers for ranges, and draws the rule in the SVG', () => {
+    const doc = projectScene(
+        checkSource(
+          [
+            'node df "Query result" shape=code table=on <<T',
+            'name    cat     count',
+            'apple   fruit   10',
+            'bread   bakery  4',
+            'T',
+            'range df.row lines=3',
+          ].join('\n'),
+        ),
+      ),
+      node = doc.graph.nodes.find(n => n.id === 'df')!;
+    expect(node.code!.lines).toEqual([
+      'name   cat     count',
+      'apple  fruit      10',
+      'bread  bakery      4',
+    ]);
+    expect(node.code!.ranges![0]).toMatchObject({ from: 2, to: 2 });
+    expect(renderSvg(doc)).toContain('class="code-rule"');
   });
 });
 
