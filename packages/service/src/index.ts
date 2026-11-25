@@ -82,11 +82,10 @@ function parseImagePath(path: string): { format: Format; segment: string } | nul
   return m ? { format: m[1] as Format, segment: m[2] } : null;
 }
 
-async function imageResponse(segment: string, params: URLSearchParams) {
+async function imageResponse(segment: string, opts: ImageOptions) {
   try {
     if (segment.length > MAX_URL)
       throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
-    const opts = imageOptions(params);
     const svg = await drawSvg(await decodeSource(segment), opts);
     return image(svg, 'image/svg+xml; charset=utf-8');
   } catch (error) {
@@ -121,10 +120,17 @@ export default {
     const route = parseImagePath(url.pathname);
     if (!route) return new Response('Not found', { status: 404 });
 
-    // The cache key holds only what changes the image: the path, known options, the version.
+    // Options are checked before the cache, so a bad one never matches a good image. The key
+    // holds only what changes the image: the path, the checked options, the version.
+    let opts: ImageOptions;
+    try {
+      opts = imageOptions(url.searchParams);
+    } catch (error) {
+      if (!(error instanceof SourceError)) throw error;
+      return image(errorSvg(error.message), 'image/svg+xml; charset=utf-8', 400, 'no-store');
+    }
     const keyUrl = new URL(url.pathname, url.origin);
-    const scheme = url.searchParams.get('scheme');
-    if (scheme) keyUrl.searchParams.set('scheme', scheme);
+    keyUrl.searchParams.set('scheme', opts.scheme);
     keyUrl.searchParams.set('v', runtimeVersion);
     const key = new Request(keyUrl.toString());
     const cache = caches.default;
@@ -145,8 +151,8 @@ export default {
         'no-store',
       );
 
-    const res = await imageResponse(route.segment, url.searchParams);
-    ctx.waitUntil(cache.put(key, res.clone()));
+    const res = await imageResponse(route.segment, opts);
+    if (res.status === 200) ctx.waitUntil(cache.put(key, res.clone()));
     res.headers.set('X-Draftably-Cache', 'miss');
     return res;
   },
