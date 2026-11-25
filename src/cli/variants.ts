@@ -291,7 +291,9 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
       ? { fixed: root.algorithm }
       : root?.mindmap
         ? { fixed: 'mindmap' }
-        : {}),
+        : root?.orgchart
+          ? { fixed: 'orgchart' }
+          : {}),
     layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
     ...(root?.engine ? { engine: root.engine.algorithm } : {}),
     direction: root?.direction ?? 'auto',

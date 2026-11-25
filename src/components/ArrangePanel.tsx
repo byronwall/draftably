@@ -157,20 +157,23 @@ export function ArrangePanel() {
             </p>
           }
         >
-          <section class="arrange-field">
-            <h3>Direction</h3>
-            <Choices<Direction>
-              label="Direction"
-              value={direction()}
-              options={[
-                ...(s.fileMode() && !axisOnly() ? [['auto', 'Auto'] as const] : []),
-                ['right', 'Right'],
-                ['down', 'Down'],
-              ]}
-              onChange={setDirection}
-              hints={{ auto: 'Reads whichever way fits best.' }}
-            />
-          </section>
+          {/* An org chart always reads down. */}
+          <Show when={shape()?.recipe !== 'orgchart'}>
+            <section class="arrange-field">
+              <h3>Direction</h3>
+              <Choices<Direction>
+                label="Direction"
+                value={direction()}
+                options={[
+                  ...(s.fileMode() && !axisOnly() ? [['auto', 'Auto'] as const] : []),
+                  ['right', 'Right'],
+                  ['down', 'Down'],
+                ]}
+                onChange={setDirection}
+                hints={{ auto: 'Reads whichever way fits best.' }}
+              />
+            </section>
+          </Show>
           <Show when={hasFormat()}>
             <section class="arrange-field">
               <h3>Format</h3>
@@ -505,8 +508,8 @@ function RecipeControls() {
     <Show when={!s.rebuildBlocked() && shape()}>
       {current => (
         <>
-          {/* A mind map spaces its topics itself and takes no gap. */}
-          <Show when={current().recipe !== 'mindmap'}>
+          {/* A mind map or org chart spaces its people itself and takes no gap. */}
+          <Show when={!['mindmap', 'orgchart'].includes(current().recipe)}>
             <RangeField
               label="Gap"
               min={8}

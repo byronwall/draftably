@@ -428,9 +428,10 @@ export function translateEdit(input: EditInput): EditResult {
     setAttr(s, 'from', cfg?.fromSide && cfg.fromSide !== 'auto' ? bare(cfg.fromSide) : undefined);
     setAttr(s, 'to', cfg?.toSide && cfg.toSide !== 'auto' ? bare(cfg.toSide) : undefined);
   };
-  // Both ends topics of one mind map: a line there with no written end is a branch.
+  // Both ends topics of one mind map or people of one org chart: a line there with no written
+  // end is a branch or a reporting line.
   const objects = new Map(scene.model.objects.map(o => [o.id, o])),
-    maps = scene.model.layouts.filter(l => l.mindmap).map(l => l.scope),
+    maps = scene.model.layouts.filter(l => l.mindmap || l.orgchart).map(l => l.scope),
     inMap = (e: DiagramEdge) =>
       maps.some(
         m => layoutParent(objects, sid(e.from)) === m && layoutParent(objects, sid(e.to)) === m,

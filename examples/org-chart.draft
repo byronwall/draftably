@@ -1,0 +1,65 @@
+diagram "Acme engineering and product" version=1
+subtitle "Reporting lines as of November 2026"
+
+# An org chart: plain nodes and edges, placed top down from root=. Each manager's reports hang
+# off one bus with no arrowheads. role=assistant sits beside the stem, role=vacant draws an open
+# role dashed, and rows of leaf reports stack into columns while the chart is wider than fit= asks
+# (2:1 without it). Any other line, such as a dotted-line report, draws as written.
+
+node ceo "Dana Ruiz\nCEO"
+node ea "Sam Ito\nExecutive assistant" role=assistant
+node cto "Priya Nair\nCTO" color=blue
+node cpo "Marcus Lee\nCPO" color=violet
+node cfo "Hannah Kim\nCFO" color=amber
+
+node plat "Leo Park\nDirector, Platform" color=blue
+node apps "Ana Silva\nDirector, Apps" color=blue
+node sec "Head of Security" color=blue role=vacant
+node pm1 "Raj Patel\nGroup PM, Growth" color=violet
+node pm2 "Mei Chen\nGroup PM, Core" color=violet
+node design "Tom Berg\nHead of Design" color=violet
+node fin "Olu Ade\nController" color=amber
+
+node infra "Kai Wong\nEM, Infra" color=blue
+node data "Ivy Cole\nEM, Data" color=blue
+node web "Noah Fox\nEM, Web" color=blue
+node mobile "Zoe Hart\nEM, Mobile" color=blue
+node infra1 "Ben Ito\nSRE" color=blue
+node infra2 "Ada Moss\nSRE" color=blue
+node data1 "Eli Ng\nData engineer" color=blue
+node web1 "Sara Diaz\nEngineer" color=blue
+node web2 "Omar Aziz\nEngineer" color=blue
+node web3 "Lena Vogt\nEngineer" color=blue
+node mob1 "Yuki Sato\nEngineer" color=blue
+
+edge r1 ceo -> ea
+edge r2 ceo -> cto
+edge r3 ceo -> cpo
+edge r4 ceo -> cfo
+edge r5 cto -> plat
+edge r6 cto -> apps
+edge r7 cto -> sec
+edge r8 cpo -> pm1
+edge r9 cpo -> pm2
+edge r10 cpo -> design
+edge r11 cfo -> fin
+edge r12 plat -> infra
+edge r13 plat -> data
+edge r14 apps -> web
+edge r15 apps -> mobile
+edge r16 infra -> infra1
+edge r17 infra -> infra2
+edge r18 data -> data1
+edge r19 web -> web1
+edge r20 web -> web2
+edge r21 web -> web3
+edge r22 mobile -> mob1
+edge dot pm2 -> web "partners with" kind=async constraint=false
+
+legend blue "Engineering"
+legend violet "Product"
+legend amber "Finance"
+legend line dashed "Dotted-line partnership"
+legend line solid "Reports to"
+
+layout root orgchart root=ceo

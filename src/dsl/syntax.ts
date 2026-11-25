@@ -346,6 +346,8 @@ export interface ModelObject {
   when?: TimelineWhen;
   /** A member a group's body lists: its type, key marks and the row it refers to. */
   row?: TableRow;
+  /** Nodes only: `role=` in an org chart. A vacant role draws dashed and muted anywhere. */
+  role?: 'assistant' | 'vacant';
   /** Set by `withMindmaps` on every topic below the root: the family of its mind-map branch. */
   branch?: string;
   /** Set by `withMindmaps` below the first level: drawn as a pale card of `branch`. */
@@ -398,6 +400,10 @@ export interface EngineRecipe {
 }
 
 /** Image shapes a drawing can aim for (`fit=`, `vary --fit`): width over height. */
+/** How an org chart places a manager whose reports are all leaves. */
+export const ORG_LEAVES = ['auto', 'stack', 'split', 'row'] as const;
+export type OrgLeaves = (typeof ORG_LEAVES)[number];
+
 export const FITS = { wide: 2, slide: 1.78, square: 1, page: 0.77, tall: 0.6 } as const;
 export type Fit = keyof typeof FITS;
 
@@ -408,6 +414,8 @@ export interface ModelLayout {
   engine?: EngineRecipe;
   /** `mindmap`: the center topic. The scope is a tree engine run with this node in the middle. */
   mindmap?: string;
+  /** `orgchart`: the top of the chart and how leaf reports sit; see `src/dsl/orgchart.ts`. */
+  orgchart?: { root: string; leaves: OrgLeaves };
   direction: 'auto' | 'right' | 'down';
   /** `cells` only: columns in each row of the grid; one row or column without it. */
   columns?: number;
@@ -926,6 +934,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
                 'span',
                 'icon',
                 'icon-pos',
+                'role',
                 ...TIMELINE_ATTRS,
               ]
             : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold', 'icon'],
@@ -1002,6 +1011,9 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
           ...iconOf(command === 'node' ? (attrs.get('shape')?.value ?? 'box') : 'group'),
           ...(attrs.has('count') ? { count: countOf('count', 2) } : {}),
+          ...(attrs.has('role')
+            ? { role: choice('role', 'vacant', ['assistant', 'vacant'] as const) }
+            : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),
@@ -1182,8 +1194,27 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           'min-height',
           ...(scope === 'root' ? ['fit'] : []),
         ];
-        let engine: EngineRecipe | undefined, mindmap: string | undefined;
-        if (named === undefined && args[1]?.value === 'mindmap' && !args[1].quoted) {
+        let engine: EngineRecipe | undefined,
+          mindmap: string | undefined,
+          orgchart: ModelLayout['orgchart'];
+        if (named === undefined && args[1]?.value === 'orgchart' && !args[1].quoted) {
+          // An org chart places its own tree from the top down; see `src/dsl/orgchart.ts`.
+          count(2);
+          allow([
+            'root',
+            'leaves',
+            'min-width',
+            'min-height',
+            ...(scope === 'root' ? ['fit'] : []),
+          ]);
+          assert(
+            attrs.has('root'),
+            `An org chart needs its top person: layout ${scope} orgchart root=<node id>.`,
+          );
+          const root = id(attrs.get('root'));
+          orgchart = { root, leaves: choice('leaves', 'auto', ORG_LEAVES) };
+          engine = { algorithm: 'tree', params: { rootId: root } };
+        } else if (named === undefined && args[1]?.value === 'mindmap' && !args[1].quoted) {
           // A mind map is the tree engine with its root in the middle; see `src/dsl/mindmap.ts`.
           count(2);
           allow(['root', ...common]);
@@ -1222,10 +1253,12 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         }
         // `table` is one column of cells, each a database row.
         const table = !named && args[1]?.value === 'table',
-          algorithm = (named || mindmap ? 'flow' : table ? 'cells' : args[1]?.value) as Algorithm;
+          algorithm = (
+            named || mindmap || orgchart ? 'flow' : table ? 'cells' : args[1]?.value
+          ) as Algorithm;
         assert(
           ['flow', 'row', 'column', 'lanes', 'sequence', 'cells', 'timeline'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline, cells, table or mindmap, or engine=.`,
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline, cells, table, mindmap or orgchart, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
@@ -1240,11 +1273,16 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           algorithm,
           ...(engine ? { engine } : {}),
           ...(mindmap ? { mindmap } : {}),
-          direction: table
-            ? 'down'
-            : choice('direction', 'auto', ['auto', 'right', 'down'] as const),
+          ...(orgchart ? { orgchart } : {}),
+          direction:
+            table || orgchart
+              ? 'down'
+              : choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           ...(table ? { table: true as const, columns: 1 } : {}),
-          fold: named || mindmap ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          fold:
+            named || mindmap || orgchart
+              ? 'auto'
+              : choice('fold', 'auto', ['auto', 'never'] as const),
           ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
           ...(choice('activations', 'off', ['on', 'off'] as const) === 'on'
             ? { activations: true as const }
@@ -2120,12 +2158,14 @@ function validateReferences(m: Model) {
       assert(by.get(root)!.type === 'node', `The tree root ${root} must be a node.`, l.line);
     }
     // The root is one of the scope's own members: the layout places members, not their contents.
-    if (l.mindmap)
+    const top = l.mindmap ?? l.orgchart?.root,
+      what = l.mindmap ? "The mind map's root" : "The org chart's root";
+    if (top)
       assert(
-        parentOf(l.mindmap) === l.scope,
+        parentOf(top) === l.scope,
         l.scope === 'root'
-          ? `The mind map's root ${l.mindmap} must be a top-level node: remove its in=.`
-          : `The mind map's root ${l.mindmap} must be a member of ${l.scope}: give it in=${l.scope}.`,
+          ? `${what} ${top} must be a top-level node: remove its in=.`
+          : `${what} ${top} must be a member of ${l.scope}: give it in=${l.scope}.`,
         l.line,
       );
   }

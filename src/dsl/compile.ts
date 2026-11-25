@@ -63,6 +63,7 @@ import {
 } from './frame';
 import { projectScene } from './project';
 import { arrangeMindmap, withMindmaps } from './mindmap';
+import { arrangeOrgchart, orgPlans, withOrgcharts } from './orgchart';
 import { legendNotes, settleLegendShades } from './legend-notes';
 import {
   DslError,
@@ -163,7 +164,7 @@ const round = (n: number) => Math.round(n);
 
 /** `files` holds the text of the files `src=` names; see `CodeFiles`. */
 export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
-  const m = withMindmaps(parseModel(source, files));
+  const m = withOrgcharts(withMindmaps(parseModel(source, files)));
   return withIcons(await compileFit(m), m);
 }
 
@@ -248,7 +249,7 @@ async function compileFit(m: Model): Promise<Scene> {
   });
   // A stated direction holds, so fit= can only fold. Say so when that leaves the drawing much
   // wider than the target; taller is fine in a page column.
-  if (root.direction !== 'auto' && aspectOf(best.scene) > target * 1.5)
+  if (root.direction !== 'auto' && !root.orgchart && aspectOf(best.scene) > target * 1.5)
     best.scene.diagnostics.push({
       level: 'warning',
       code: 'fit-direction',
@@ -308,7 +309,11 @@ function fitVariants(root: ModelLayout) {
   const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
     { label: `as written (${reads(root)})`, layout: {} },
   ];
-  if (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine)
+  // An org chart meets fit= itself, by stacking rows of leaves (`arrangeOrgchart`).
+  if (
+    (['lanes', 'sequence', 'cells', 'timeline'].includes(root.algorithm) && !root.engine) ||
+    root.orgchart
+  )
     return out;
   // A stated direction holds, so the search has only folding left to try.
   const directions = root.direction === 'auto' ? (['right', 'down'] as const) : [root.direction];
@@ -330,7 +335,7 @@ function fitVariants(root: ModelLayout) {
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
 export function checkSource(source: string, files?: CodeFiles): Scene {
-  const m = withMindmaps(parseModel(source, files));
+  const m = withOrgcharts(withMindmaps(parseModel(source, files)));
   const flat = dissolved(m);
   return withOldOrder(
     sequenced(withSoftGroups(ownLabels(layoutModel(widestLabels(flat)), flat), m)),
@@ -1040,6 +1045,19 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | un
     if (l.mindmap) {
       const scope = l.scope === 'root' ? undefined : alias.get(l.scope);
       doc = arrangeMindmap(doc, scope, alias.get(l.mindmap)!, axisOf(l) === 'down');
+      continue;
+    }
+    if (l.orgchart) {
+      const scope = l.scope === 'root' ? undefined : alias.get(l.scope),
+        aides = new Set(m.objects.filter(o => o.role === 'assistant').map(o => alias.get(o.id)!));
+      doc = arrangeOrgchart(
+        doc,
+        scope,
+        alias.get(l.orgchart.root)!,
+        l.orgchart.leaves,
+        l.fit,
+        aides,
+      );
       continue;
     }
     const settings = LayoutLab.settings({
@@ -3685,7 +3703,12 @@ function layoutPass(
                 axisOf(governing),
                 // A mind map reads out from its middle both ways: a cross-link between two
                 // topics must not shift the columns it spans.
-                governing.mindmap ? with_.filter(r => offTree.has(`${r.a}\0${r.b}`)) : with_,
+                // An org chart's bars sit in its gaps as placed: its dotted lines find their own room.
+                governing.orgchart
+                  ? []
+                  : governing.mindmap
+                    ? with_.filter(r => offTree.has(`${r.a}\0${r.b}`))
+                    : with_,
               )
             : baseLayout(list, layout, pairs, with_, lines, spacing);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
@@ -4118,6 +4141,7 @@ function layoutPass(
   };
   place('root', { x: 0, y: 0 }, 0);
   const plans = planCorridors(corridorScopes, objects, ranking, immediate, spacing);
+  for (const [id, plan] of orgPlans(m, objects)) plans.set(id, plan);
   const lanes = wrapLanes(
     folds,
     m.edges,

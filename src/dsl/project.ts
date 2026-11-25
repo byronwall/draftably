@@ -90,6 +90,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       ...(o.card ? { card: true } : {}),
+      ...(o.role === 'vacant' ? { vacant: true } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
     });
@@ -117,7 +118,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     set(doc.layout.edges, e.id, {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
-      ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
+      ...(flow(e.source, e.target, e) ? { flow: flow(e.source, e.target, e) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
       ...(e.plan ? { plan: e.plan } : {}),
       ...(e.row !== undefined ? { row: e.row } : {}),
@@ -167,8 +168,9 @@ function readingDirections(scene: Scene) {
       list.push(p);
     return list;
   };
-  return (a: string, b: string) => {
-    if (!direction) return undefined;
+  return (a: string, b: string, e?: Scene['edges'][number]) => {
+    // In a root org chart only a reporting line reads down: a dotted line runs where it fits.
+    if (!direction || (root?.orgchart && e && !e.branch)) return undefined;
     const above = new Set(chain(b));
     const common = chain(a).find(p => above.has(p));
     if (!common) return direction;

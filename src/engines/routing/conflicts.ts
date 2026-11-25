@@ -211,6 +211,9 @@ export function conflicts(
         // A shared shape terminal is connectivity, not an edge crossing.
         if ((same(p, p0) || same(p, p1)) && (same(p, r.points[0]) || same(p, r.points.at(-1)!)))
           continue;
+        // Two lines from one port are one fan, such as an org chart's bus: where they part is a
+        // branch, not a crossing.
+        if (same(p0, r.points[0])) continue;
         const rx = round(x),
           ry = round(y);
         let k = first;

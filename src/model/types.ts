@@ -213,8 +213,10 @@ export interface NodeStyle {
   color: ColorKey;
   /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
   shade?: Shade;
-  /** A mind-map topic below the first level: with no shade, a pale card of its family. */
+  /** A mind-map topic below the first level, or a vacant role: with no shade, a pale card. */
   card?: boolean;
+  /** `role=vacant`: an open role, drawn with a dashed outline and faded text. */
+  vacant?: boolean;
   icon: string;
   /** How it differs between two versions of the diagram. */
   status?: Status;

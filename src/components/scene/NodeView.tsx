@@ -78,7 +78,7 @@ export function NodeView(props: NodeViewProps) {
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
-  const paint = () => statusPaint(look(), style().status, style().spot);
+  const paint = () => statusPaint(look(), style().status, style().spot, style().vacant);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   // A code node's layout box holds its outside label lane; the outline is the drawn box.
   const box = createMemo(() => {
