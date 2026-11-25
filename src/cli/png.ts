@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { embedPngSource } from '../model/embed';
+import { withSourceStrip } from '../model/strip';
 import { fontFiles, rasterFamilies } from './raster-fonts';
 
 /** The width and height an SVG declares on its root, rounded up. */
@@ -29,10 +30,12 @@ export async function rasterize(svg: string) {
 }
 
 /**
- * Write `svg` as a PNG at `scale` times its own size, with `source` embedded when given. Returns
+ * Write `svg` as a PNG at `scale` times its own size, with `source` embedded when given: in a
+ * metadata chunk, and unless `strip` is false, as a faint pixel strip below the drawing. Returns
  * the image's size in pixels.
  */
-export async function writePng(svg: string, out: string, scale = 2, source?: string) {
+export async function writePng(svg: string, out: string, scale = 2, source?: string, strip = true) {
+  if (source !== undefined && strip) svg = await withSourceStrip(svg, source, scale);
   const { w, h } = svgSize(svg);
   // Scale through the root size, as Chrome's device scale did: the drawing keeps its viewBox.
   const sized = svg.replace(
@@ -52,14 +55,20 @@ export async function writePng(svg: string, out: string, scale = 2, source?: str
  * `svgText` as text, so it pastes as an image in a doc or chat and as markup in an editor. Returns
  * the PNG's size in pixels.
  */
-export async function copyToClipboard(svg: string, svgText: string, scale = 2, source?: string) {
+export async function copyToClipboard(
+  svg: string,
+  svgText: string,
+  scale = 2,
+  source?: string,
+  strip = true,
+) {
   if (process.platform !== 'darwin')
     throw Error('--clipboard works on macOS only. Use --png or --svg to write a file instead.');
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draftably-copy-'));
   try {
     const png = path.join(dir, 'copy.png'),
       text = path.join(dir, 'copy.svg');
-    const size = await writePng(svg, png, scale, source);
+    const size = await writePng(svg, png, scale, source, strip);
     fs.writeFileSync(text, svgText);
     const read = (file: string, type: string) =>
       `(read (POSIX file ${JSON.stringify(file)}) as «class ${type}»)`;

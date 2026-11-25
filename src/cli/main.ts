@@ -63,9 +63,12 @@ Commands:
                             Save the drawing as a PNG. --max-width lowers the scale so the
                             image is at most that many pixels wide.
                             PNG and SVG output embed the source; --no-source leaves it out.
+                            A PNG also draws the source as a faint strip of pixels below the
+                            drawing, read back after a site strips the metadata (if it does
+                            not resize the image); --no-source-strip leaves the strip out.
   inspect <file> --clipboard [--scale 2]
                             Put the drawing on the macOS clipboard: a PNG with its source, and
-                            the SVG as text.
+                            the SVG as text. --no-source-strip as for --png.
   pdf <file|folder>… -o <out.pdf>
                             Save the diagrams as one vector PDF, one per page, each with its
        [--order <how>]      heading and key. --order: given (default;
@@ -178,12 +181,22 @@ async function read(file: string | undefined) {
     );
   }
   if (!isImageName(file)) return fs.readFileSync(path.resolve(file), 'utf8');
-  const source = await readImageSource(fs.readFileSync(path.resolve(file)));
+  const bytes = fs.readFileSync(path.resolve(file));
+  // A host that drops PNG metadata keeps the pixels: read the strip below the drawing.
+  const source = (await readImageSource(bytes)) ?? (await readStripSource(bytes));
   if (source === null)
     throw Error(
-      `${file} has no embedded draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
+      `${file} has no embedded draftably source. It was exported with --no-source, by another tool, or resized or recompressed by a host.`,
     );
   return source;
+}
+
+/** The source in a PNG's pixel strip, or null when it has none or is not a PNG this reads. */
+async function readStripSource(bytes: Uint8Array) {
+  const { readPngPixels } = await import('./png-pixels');
+  const { decodeStrip } = await import('../model/strip');
+  const pixels = readPngPixels(bytes);
+  return pixels ? (await decodeStrip(pixels)).source : null;
 }
 
 class UsageError extends Error {}
@@ -276,7 +289,7 @@ async function maybePng(svg: () => string | Promise<string>, args: string[], sou
   const drawing = await svg();
   if (maxWidth !== undefined) scale = Math.min(scale, Number(maxWidth) / svgSize(drawing).w);
   const { writePng } = await import('./png');
-  const { w, h } = await writePng(drawing, out, scale, source);
+  const { w, h } = await writePng(drawing, out, scale, source, !args.includes('--no-source-strip'));
   console.log(`Wrote ${out} (${w}×${h}).`);
   return true;
 }
@@ -478,7 +491,13 @@ export async function main(argv: string[]): Promise<number> {
           if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
           const { copyToClipboard } = await import('./png');
           const svg = renderSvg(doc, opts),
-            { w, h } = await copyToClipboard(svg, withSource(svg, source), scale, embed(source));
+            { w, h } = await copyToClipboard(
+              svg,
+              withSource(svg, source),
+              scale,
+              embed(source),
+              !flag('--no-source-strip'),
+            );
           console.log(`Copied the drawing as a PNG (${w}×${h}) and SVG text.`);
           return 0;
         }

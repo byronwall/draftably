@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
+import { createMemo, createResource, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
 import type { PdfPage } from '../cli/pdf';
 import {
   copyImage,
@@ -8,10 +8,12 @@ import {
   exportPdf,
   exportSvg,
   pdfFiles,
+  pngSvg,
   setExportKind,
   setExportLook,
   type ExportKind,
 } from '../state/files';
+import { pngCanvas } from '../lib/svg-export';
 import { workspace } from '../state/launch';
 import { closeDialog } from '../state/ui';
 import { IconButton, tip } from './controls';
@@ -90,11 +92,18 @@ export function ExportDialog() {
     onCleanup(() => url && URL.revokeObjectURL(url));
     return url;
   });
+  // A PNG's size: the canvas it really draws, with the source strip and any clamped scale.
+  const [raster] = createResource(
+    () => ({ v: svg(), look: exportLook(), kind: exportKind() }),
+    ({ v, look, kind }) => (kind === 'svg' || !v ? { svg: v, scale: 1 } : pngSvg(v, look)),
+  );
   const size = () => {
-    const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(svg()) ?? [];
+    const r = raster.latest,
+      [, w, h] = /width="([\d.]+)" height="([\d.]+)"/.exec(r?.svg ?? svg()) ?? [];
     if (!w) return '';
-    const k = exportKind() === 'svg' ? 1 : exportLook().scale;
-    return `${Math.round(+w * k)} × ${Math.round(+h * k)} px`;
+    if (exportKind() === 'svg') return `${Math.round(+w)} × ${Math.round(+h)} px`;
+    const c = pngCanvas(+w, +h, r?.scale ?? exportLook().scale);
+    return `${c.width} × ${c.height} px`;
   };
 
   const action = () =>
@@ -213,6 +222,20 @@ export function ExportDialog() {
                   />
                   Include .draft source
                 </label>
+                <Show when={exportKind() !== 'svg'}>
+                  <label
+                    classList={{ disabled: !exportLook().source }}
+                    title="A faint band of pixels below the PNG. It keeps the source when a site strips PNG metadata, as long as the image is not resized."
+                  >
+                    <input
+                      type="checkbox"
+                      checked={exportLook().source && exportLook().strip}
+                      disabled={!exportLook().source}
+                      onChange={e => setExportLook({ strip: e.currentTarget.checked })}
+                    />
+                    Also as a pixel strip
+                  </label>
+                </Show>
               </Show>
             </div>
             <p class="export-size">

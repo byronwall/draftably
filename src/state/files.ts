@@ -18,8 +18,10 @@ import {
   materializeSvg,
   serializeSvg,
   svgToPng,
+  pngScale,
   fileName,
 } from '../lib/svg-export';
+import { decodeStrip, withSourceStrip } from '../model/strip';
 import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
 import { inlineSources } from '../dsl/inline-sources';
 import { exportHref } from './links';
@@ -42,6 +44,11 @@ export interface ExportLook {
   heading: boolean;
   /** Carry the open file's `.draft` source. */
   source: boolean;
+  /**
+   * Also draw the source as a faint strip of pixels below a PNG, which survives hosts that strip
+   * PNG metadata, as long as the image is not resized.
+   */
+  strip: boolean;
 }
 
 const LOOK_KEY = 'draftably-export-look';
@@ -50,6 +57,7 @@ const [exportLook, setLook] = createSignal<ExportLook>({
   transparent: false,
   heading: true,
   source: true,
+  strip: true,
   ...(() => {
     try {
       return JSON.parse(localStorage.getItem(LOOK_KEY) ?? '{}');
@@ -85,7 +93,9 @@ const SELECTION_MARGIN = 24;
  */
 export async function openImageSource(file: File) {
   if (!/\.(png|svg)$/i.test(file.name) && !/^image\/(png|svg\+xml)$/.test(file.type)) return false;
-  const source = await readImageSource(new Uint8Array(await file.arrayBuffer()));
+  const source =
+    (await readImageSource(new Uint8Array(await file.arrayBuffer()))) ??
+    (/svg/.test(file.type) || /\.svg$/i.test(file.name) ? null : await readStripSource(file));
   if (source === null) return false;
   await activeSession().settleSave();
   // Named after the diagram's title, since a pasted image is just "image.png".
@@ -102,6 +112,19 @@ export async function openImageSource(file: File) {
   activeSession().fitView();
   toast('Opened the diagram in ' + (file.name || 'the pasted image'));
   return true;
+}
+
+/** The source in a PNG's pixel strip, for a host that dropped the metadata chunk; else null. */
+async function readStripSource(file: Blob) {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(bitmap, 0, 0);
+    return (await decodeStrip(ctx.getImageData(0, 0, bitmap.width, bitmap.height))).source;
+  } catch {
+    return null;
+  }
 }
 
 /** The `<g>` that holds the active session's drawn diagram. */
@@ -141,9 +164,14 @@ export async function importText(text: string, name = '') {
 }
 
 /** Embed an image as a new shape, or replace the image in an existing one. */
-export async function insertImage(file: File, replaceId: string | null = null) {
+export async function insertImage(
+  file: File,
+  replaceId: string | null = null,
+  /** The caller already looked for draftably source in the image. */
+  probed = false,
+) {
   // A draftably export opens as the diagram it was drawn from.
-  if (!replaceId && (await openImageSource(file))) return;
+  if (!replaceId && !probed && (await openImageSource(file))) return;
   if (!IMAGE_TYPES.test(file.type))
     throw Error(
       'Use a PNG, JPEG, WebP, or GIF image. SVG files are imported only as editable diagrams.',
@@ -188,7 +216,7 @@ export async function insertImage(file: File, replaceId: string | null = null) {
 export async function openFile(file: File | undefined, replaceImageId: string | null = null) {
   if (!file) return;
   if (!replaceImageId && (await openImageSource(file))) return;
-  if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId);
+  if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId, !replaceImageId);
   if (file.size > 24 * 1024 * 1024) throw Error('Use a diagram smaller than 24 MB.');
   const text = await file.text();
   const detected = detectSource(text, { filename: file.name });
@@ -407,10 +435,41 @@ export async function exportPdf(paths: string[], opts: PdfOptions) {
 
 export type ExportFormat = 'json' | 'svg' | 'png';
 
-/** `svg` as a PNG at the look's scale, carrying the file's source when the look keeps it. */
+/** The width and height an SVG's root declares. */
+const svgDims = (svg: string) => {
+  const m = /<svg\b[^>]*?\swidth="([\d.]+)"[^>]*?\sheight="([\d.]+)"/.exec(svg);
+  return m ? { w: Number(m[1]), h: Number(m[2]) } : null;
+};
+
+/**
+ * The SVG a PNG export rasterizes, and the scale it rasterizes at: `svg` with the strip below it
+ * when the look carries source and the strip. The strip's modules are one image pixel at the
+ * scale the canvas really uses, and its rows can lower that scale for a drawing at the canvas
+ * limits, so the two settle together.
+ */
+export async function pngSvg(svg: string, look: ExportLook) {
+  const source = exportSource(look),
+    dims = svgDims(svg);
+  let scale = dims ? pngScale(dims.w, dims.h, look.scale) : look.scale;
+  if (source === undefined || !look.strip || !dims) return { svg, scale };
+  for (let i = 0; i < 8; i++) {
+    const drawn = await withSourceStrip(svg, source, scale),
+      grown = svgDims(drawn)!,
+      next = pngScale(grown.w, grown.h, look.scale);
+    if (next >= scale - 1e-12) return { svg: drawn, scale };
+    scale = next;
+  }
+  return { svg, scale };
+}
+
+/**
+ * `svg` as a PNG at the look's scale, carrying the file's source when the look keeps it: in a
+ * metadata chunk, and in a pixel strip below the drawing unless the look turns it off.
+ */
 async function pngOf(svg: string, look: ExportLook) {
-  const png = await svgToPng(svg, look.scale),
-    source = exportSource(look);
+  const source = exportSource(look),
+    raster = await pngSvg(svg, look);
+  const png = await svgToPng(raster.svg, raster.scale);
   if (source === undefined) return png;
   const bytes = await embedPngSource(new Uint8Array(await png.arrayBuffer()), source);
   return new Blob([bytes as BlobPart], { type: 'image/png' });
