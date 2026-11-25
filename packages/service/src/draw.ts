@@ -59,13 +59,17 @@ export async function drawSvg(source: string, opts: DrawOptions) {
 let ready: Promise<unknown> | undefined;
 const fonts = [sans500, sans600, serif600, mono500].map(b => new Uint8Array(b));
 
-/** `svg` as a PNG at `scale`, refused above MAX_PIXELS. */
-export async function rasterize(svg: string, scale: number) {
+function checkPixels(svg: string, scale: number) {
   const { w, h } = svgSize(svg);
   if (w * h * scale * scale > MAX_PIXELS)
     throw new SourceError(
       `The PNG would be ${w * scale} × ${h * scale} pixels, over the ${MAX_PIXELS / 1e6} M pixel limit. Use a smaller scale or SVG.`,
     );
+}
+
+/** `svg` as a PNG at `scale`, refused above MAX_PIXELS. */
+export async function rasterize(svg: string, scale: number) {
+  checkPixels(svg, scale);
   await (ready ??= initWasm(wasm));
   const r = new Resvg(rasterFamilies(scaleSvg(svg, scale)), {
     font: { fontBuffers: fonts, loadSystemFonts: false, defaultFontFamily: 'Inter' },
@@ -90,6 +94,8 @@ export async function draw(source: string, format: Format, opts: DrawOptions) {
   const svg = await drawSvg(source, opts);
   if (format === 'svg') return svg;
   const kept = formatSource(source);
+  // Check the size before the strip: building the strip for a huge drawing costs memory too.
+  checkPixels(svg, opts.scale);
   const png = await rasterize(await withSourceStrip(svg, kept, opts.scale), opts.scale);
   return embedPngSource(png, kept);
 }

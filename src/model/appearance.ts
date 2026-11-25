@@ -634,6 +634,8 @@ export function builtInFamilies(
       const [h, c] = p.hues?.[name] ?? hue;
       families.set(name, ramp(h, c * p.chroma, canvas, p.dark));
     }
+    // A long-lived host (the render service) sees many canvas colors; keep the newest 64.
+    if (presetFamilies.size >= 64) presetFamilies.delete(presetFamilies.keys().next().value!);
     presetFamilies.set(key, families);
   }
   return families;

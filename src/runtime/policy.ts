@@ -54,8 +54,13 @@ function httpUrl(value: string, base?: string): string | null {
 }
 
 /** A link in note or footnote text: kept only as a safe HTTP(S) URL under a safe policy. */
-export const textLink = (options: RenderOptions) => (href: string) =>
-  options.links?.mode === 'safe' ? httpUrl(href, options.links.baseUrl) : null;
+export const textLink = (options: RenderOptions) => (href: string) => {
+  const links = options.links;
+  if (links?.mode !== 'safe') return null;
+  // The host resolves note and footnote links as it resolves node links; '' is their item ID.
+  const resolved = links.resolve ? links.resolve({ itemId: '', href }) : href;
+  return resolved === null ? null : httpUrl(resolved, links.baseUrl);
+};
 
 /** The host resolves first; final validation never trusts the callback or authored link-base. */
 export function applyLinks(doc: Diagram, options: RenderOptions): Diagnostic[] {

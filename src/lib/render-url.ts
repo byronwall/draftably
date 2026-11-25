@@ -115,19 +115,25 @@ export function webLinkBase(source: string) {
   } catch {
     return undefined; // the renderer reports the syntax error
   }
-  return base && baseUrl('x', base) ? base : undefined;
+  if (!base) return undefined;
+  // One parse decides: an http(s) URL, in the canonical form the runtime's own check accepts.
+  try {
+    const url = new URL(base);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 /**
  * The link policy for a hosted drawing of `source`: absolute links as written, relative ones
- * joined to a web link base the way the CLI's `svgHref` joins them, anything else dropped.
+ * joined to a web link base the way the CLI's `svgHref` joins them, anything else dropped. Node,
+ * note and footnote links all go through `resolve`.
  */
 export function webLinks(source: string) {
   const base = webLinkBase(source);
   return {
     mode: 'safe' as const,
-    // Footnote and note links go through baseUrl; a trailing slash joins them as a folder.
-    ...(base ? { baseUrl: base.endsWith('/') ? base : base + '/' } : {}),
     resolve: ({ href }: { href: string }) => (base ? baseUrl(href, base) : null) ?? href,
   };
 }

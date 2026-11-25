@@ -51,11 +51,27 @@ describe('render URLs', () => {
       'config link-base="https://a.example/x/"\nconfig link-base="https://b.example/docs"\n';
     expect(webLinkBase(two)).toBe('https://b.example/docs');
     expect(webLinks(two).resolve({ href: 'notes' })).toBe('https://b.example/docs/notes');
-    expect(webLinks(two).baseUrl).toBe('https://b.example/docs/');
     expect(webLinkBase('config link-base="https://bad host"\n')).toBeUndefined();
     expect(webLinkBase('config link-base="../.."\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="file:///Users/shared/specs"\n')).toBeUndefined();
+    expect(webLinkBase('config link-base="https://example.org/project docs"\n')).toBe(
+      'https://example.org/project%20docs',
+    );
     expect(webLinks('node a "A"\n').resolve({ href: 'https://x.example/' })).toBe(
       'https://x.example/',
     );
+  });
+
+  it('resolves a footnote link as the CLI resolves a node link', async () => {
+    const { renderSvg } = await import('../src/runtime/render');
+    const source =
+      'config link-base="https://example.org/docs"\nnode a "A" href="notes"\nfootnote 1 "[see](notes)"\n';
+    const r = await renderSvg(source, { links: webLinks(source) });
+    expect(r.ok).toBe(true);
+    const hrefs = r.ok ? [...r.value.svg.matchAll(/href="([^"]+)"/g)].map(m => m[1]) : [];
+    expect(hrefs.filter(h => h.startsWith('https://example.org'))).toEqual([
+      'https://example.org/docs/notes',
+      'https://example.org/docs/notes',
+    ]);
   });
 });
