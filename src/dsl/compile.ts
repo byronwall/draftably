@@ -40,6 +40,7 @@ import {
   type IconData,
 } from '../model/iconify';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
+import { rowSize } from '../model/table';
 import { layoutTimeline, onChartEdges } from './timeline';
 import type { PlacedTimeline, TimelinePlan } from '../model/timeline';
 import { marginNoteRoom, marginNotes } from '../model/note';
@@ -3847,7 +3848,12 @@ function layoutPass(
       sizeOf = (id: string) => m.hints.find(h => h.type === 'size' && h.id === id),
       out = layoutCells(
         kids.map(o => {
-          const hint = sizeOf(o.id);
+          const hint = sizeOf(o.id),
+            // A table's row is sized from its glyph, name and type, unless a `size` line says.
+            row =
+              layout.table && o.row && hint?.type !== 'size'
+                ? rowSize(o.label, o.row, look)
+                : undefined;
           return {
             id: o.id,
             label: o.label,
@@ -3855,7 +3861,9 @@ function layoutPass(
             ...(typeof o.span === 'number' ? { span: o.span } : {}),
             ...(hint?.type === 'size'
               ? { size: { width: hint.width, height: hint.height, minHeight: hint.minHeight } }
-              : {}),
+              : row
+                ? { size: { width: row.w, height: row.h } }
+                : {}),
           };
         }),
         {

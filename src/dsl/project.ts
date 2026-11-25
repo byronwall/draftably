@@ -55,6 +55,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.titleLines ? { titleLines: o.titleLines } : {}),
       ...(o.lifeline ? { lifeline: o.lifeline } : {}),
       ...(o.code ? { code: clone(o.code) } : {}),
+      ...(o.row ? { row: clone(o.row) } : {}),
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);
@@ -105,6 +106,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.status ? { status: e.status } : {}),
       ...(e.fromRange ? { fromRange: e.fromRange } : {}),
       ...(e.toRange ? { toRange: e.toRange } : {}),
+      ...(e.inferred ? { inferred: true as const } : {}),
     });
     set(doc.layout.edges, e.id, {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),

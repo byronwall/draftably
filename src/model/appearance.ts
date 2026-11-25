@@ -9,7 +9,7 @@ import type { Footnote } from './footnote';
 import type { Note } from './note';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
-import type { MessageKind } from './markers';
+import type { EndMarker, MessageKind } from './markers';
 
 export type ThemeId = 'drafting' | 'fieldnotes' | 'signal' | 'ink' | 'blueprint' | 'drafting-dark';
 export const THEME_IDS: ThemeId[] = ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint'];
@@ -138,6 +138,9 @@ export interface LegendEntry {
   /** An icon drawn after the swatch, by Iconify name. */
   icon?: string;
   line?: LegendLine;
+  /** With `line`: the marks at its ends, as `head=` and `tail=` draw them on an edge. */
+  head?: EndMarker;
+  tail?: EndMarker;
   message?: MessageKind;
   /** An activation bar, which a sequence with `activations=on` adds a row for. */
   activation?: true;

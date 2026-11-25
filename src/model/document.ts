@@ -23,6 +23,7 @@ import { MARKERS, MESSAGE_KINDS } from './markers';
 import type { Footnote } from './footnote';
 import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
+import { TABLE_KEYS } from './table';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
   ContainerLayout,
@@ -184,6 +185,15 @@ export function normalize(input: unknown): Diagram {
       ...(n.image ? { image: n.image } : {}),
       ...(finite(n.lifeline) && n.lifeline > 0 ? { lifeline: n.lifeline } : {}),
       ...(n.code && Array.isArray(n.code.lines) ? { code: n.code } : {}),
+      ...(n.row && typeof n.row.type === 'string' && Array.isArray(n.row.keys)
+        ? {
+            row: {
+              type: n.row.type,
+              keys: n.row.keys.filter((k: unknown) => TABLE_KEYS.includes(k as never)),
+              ...(typeof n.row.ref === 'string' ? { ref: n.row.ref } : {}),
+            },
+          }
+        : {}),
     });
   }
   for (const g of data.graph.groups || []) {
@@ -241,6 +251,7 @@ export function normalize(input: unknown): Diagram {
         : {}),
       ...(e.message === 'reply' && typeof e.replyTo === 'string' ? { replyTo: e.replyTo } : {}),
       ...(STATUSES.includes(e.status) && e.status !== 'same' ? { status: e.status } : {}),
+      ...(e.inferred === true ? { inferred: true as const } : {}),
     });
   }
 
@@ -522,7 +533,12 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
   for (const e of Array.isArray(input.legend) ? input.legend : []) {
     if (e && LEGEND_LINES.includes(e.line)) {
       if (typeof e.label !== 'string') throw Error(`Legend line ${e.line}: a label is required.`);
-      legend.push({ line: e.line, label: e.label });
+      legend.push({
+        line: e.line,
+        label: e.label,
+        ...(MARKERS.includes(e.head) && e.head !== 'none' ? { head: e.head } : {}),
+        ...(MARKERS.includes(e.tail) && e.tail !== 'none' ? { tail: e.tail } : {}),
+      });
       continue;
     }
     if (!e || typeof e.family !== 'string' || !/^[A-Za-z_][A-Za-z0-9_-]*$/.test(e.family))

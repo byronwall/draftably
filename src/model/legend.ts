@@ -31,7 +31,9 @@ const LEGEND_ICON = 14;
 const swatchW = (e?: LegendEntry) =>
   e?.caption
     ? -8
-    : (e?.message && e.message !== 'action' ? 28 : 16) + (e?.icon ? LEGEND_ICON + 6 : 0);
+    : e?.line && (e.head || e.tail)
+      ? 44
+      : (e?.message && e.message !== 'action' ? 28 : 16) + (e?.icon ? LEGEND_ICON + 6 : 0);
 
 /** Width of one entry: its swatch, the gap after it, and its label. */
 const entryW = (look: ResolvedAppearance, label: string, e?: LegendEntry) =>
@@ -48,17 +50,17 @@ function endMark(kind: EndMarker, x: number, y: number, tail: boolean, look: Res
   return `<path transform="${at}" d="${s.d}" fill="${markerFill(kind, look.connection, look.canvas)}" stroke="${look.connection}" stroke-width="${MARKER_STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
 
-/** The mark of a kind of message: its line and ends, or a local action's box. */
+/** The mark of a kind of message: its line and ends, or a local action's box. A line row with ends draws the same way. */
 function messageSwatch(e: LegendEntry, left: number, mid: number, look: ResolvedAppearance) {
   const ink = look.connection;
   if (e.message === 'action')
     return `<rect x="${left}" y="${mid - 6}" width="16" height="12" rx="3" fill="none" stroke="${ink}" stroke-width="1.4"/>`;
-  const ends = { message: e.message },
+  const ends = e.message ? { message: e.message } : { head: e.head ?? 'none', tail: e.tail },
     [head, tail] = [headOf(ends), tailOf(ends)],
     stop = (k: EndMarker) => (k === 'none' ? 0 : MARKER_SHAPES[k].stop),
     right = left + swatchW(e);
   return (
-    `<line x1="${left + stop(tail)}" y1="${mid}" x2="${right - stop(head)}" y2="${mid}" stroke="${ink}" stroke-width="1.4" stroke-linecap="round"${e.message === 'reply' ? ' stroke-dasharray="5 5"' : ''}/>` +
+    `<line x1="${left + stop(tail)}" y1="${mid}" x2="${right - stop(head)}" y2="${mid}" stroke="${ink}" stroke-width="1.4" stroke-linecap="round"${e.message === 'reply' || e.line === 'dashed' ? ' stroke-dasharray="5 5"' : ''}/>` +
     endMark(tail, left, mid, true, look) +
     endMark(head, right, mid, false, look)
   );
@@ -125,7 +127,8 @@ export function legendMarkup(
         swatch =
           `<line x1="${left + 8}" y1="${mid - 9}" x2="${left + 8}" y2="${mid + 9}" stroke="${look.muted}" stroke-width="1" stroke-dasharray="3 3"/>` +
           `<rect x="${left + 4}" y="${mid - 6}" width="8" height="12" rx="1.5" fill="${look.canvas}" stroke="${look.connection}" stroke-width="1.2"/>`;
-      else if (e.legend?.message) swatch = messageSwatch(e.legend, left, mid, look);
+      else if (e.legend?.message || e.legend?.head || e.legend?.tail)
+        swatch = messageSwatch(e.legend, left, mid, look);
       else if (e.legend?.line) {
         // A line row draws a short connection in the style it explains.
         swatch = `<line x1="${left}" y1="${mid}" x2="${left + 16}" y2="${mid}" stroke="${look.connection}" stroke-width="1.4"${e.legend.line === 'dashed' ? ' stroke-dasharray="5 5"' : ''}/>`;

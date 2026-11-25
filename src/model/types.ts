@@ -11,6 +11,7 @@ import type { EndMarker, MessageKind } from './markers';
 import type { Spot, Status } from './status';
 import type { PlacedTimeline } from './timeline';
 import type { IconData } from './iconify';
+import type { TableRow } from './table';
 
 export type ShapeKind =
   | 'box'
@@ -53,6 +54,8 @@ export interface DiagramNode {
   lifeline?: number;
   /** A code node's body and options; its title, when set, is a caption above the code. */
   code?: CodeBlock;
+  /** A member a group's body lists; in a table it draws as a row with a key glyph and type. */
+  row?: TableRow;
 }
 
 export interface DiagramGroup {
@@ -101,6 +104,8 @@ export interface DiagramEdge {
   /** A code node's range the line leaves from or ends at (`edge e1 a -> sql.copy2`). */
   fromRange?: string;
   toRange?: string;
+  /** Drawn from a table row's `-> table.column`; the source has no `edge` line for it. */
+  inferred?: true;
 }
 
 export interface NodeLayout extends Rect {

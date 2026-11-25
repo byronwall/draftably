@@ -36,6 +36,8 @@ import { CODE_MAX_WIDTH, CODE_TAB, codeLines, tableLines, type CodeBlock } from 
 import { langOf, parseSrc, srcBody, type CodeFiles } from '../model/code-src';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import { ICON_NAME } from '../model/iconify';
+import type { TableRow } from '../model/table';
+import { readBodyRows } from './table-rows';
 import type { Status } from '../model/status';
 import type {
   ColorKey,
@@ -341,6 +343,8 @@ export interface ModelObject {
   span?: number | 'var';
   /** Timeline nodes: the dates and row text that place them; `milestone` lines set `milestone`. */
   when?: TimelineWhen;
+  /** A member a group's body lists: its type, key marks and the row it refers to. */
+  row?: TableRow;
   line: number;
 }
 
@@ -371,6 +375,8 @@ export interface ModelEdge {
   /** Set by `validateReferences` for an end written as a code range, `sql.copy2`. */
   fromRange?: string;
   toRange?: string;
+  /** Drawn from a body row's `-> table.column`, not written as an `edge` line. */
+  inferred?: true;
   line: number;
 }
 
@@ -394,6 +400,8 @@ export interface ModelLayout {
   columns?: number;
   /** `cells` only: a byte or bit layout, where each column is one unit of the same width. */
   unit?: 'bit' | 'byte';
+  /** `cells` only, from `layout g table`: one column of database rows. */
+  table?: true;
   /** With `unit`: the width of one unit, and whether unit numbers run above the first row. */
   unitWidth?: number;
   ruler?: boolean;
@@ -737,7 +745,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
     // Only a code node takes a body; the node and group case says so for those two.
     assert(
       !s.body || command === 'node' || command === 'group',
-      `The ${command} line takes no body. Only a code node (node id shape=code <<TAG) does.`,
+      `The ${command} line takes no body. Only a code node (node id shape=code <<TAG) or a group does.`,
     );
     const status: Status | undefined = s.mark && MARKS[s.mark];
     assert(
@@ -866,10 +874,8 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         if (code) count(1, 2);
         else count(2);
         assert(
-          !s.body || code,
-          command === 'node'
-            ? 'Only a code node takes a body. Add shape=code, or remove the <<TAG body.'
-            : 'A group takes no body. Remove the <<TAG body.',
+          !s.body || code || command === 'group',
+          'Only a code node or a group takes a body. Add shape=code, or remove the <<TAG body.',
         );
         assert(
           !(s.body && attrs.has('src')),
@@ -979,6 +985,26 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           ...(command === 'node' && readWhen(attrs, fail) ? { when: readWhen(attrs, fail) } : {}),
           line,
         });
+        // A group's body lists its members, one per line, each an ordinary node `group.name`.
+        if (command === 'group' && s.body)
+          for (const r of readBodyRows(s.body.lines, line + 1, (message, at) => {
+            throw new DslError(message, at);
+          })) {
+            const rid = `${oid}.${r.name}`;
+            if (objectIds.has(rid)) throw new DslError(`Duplicate node/group id ${rid}.`, r.line);
+            objectIds.add(rid);
+            m.objects.push({
+              id: rid,
+              type: 'node',
+              label: r.name,
+              parent: oid,
+              color: 'auto',
+              shape: 'box',
+              ...(r.mark ? { status: MARKS[r.mark] } : {}),
+              row: r.row,
+              line: r.line,
+            });
+          }
         break;
       }
       case 'milestone': {
@@ -1134,21 +1160,27 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
           count(2);
           const recipe = args[1]?.value;
           allow(
-            recipe === 'cells'
-              ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
-              : [
-                  'gap',
-                  ...(recipe === 'flow' ? ['fold'] : []),
-                  ...(recipe === 'sequence' ? ['activations'] : []),
-                  ...(recipe === 'timeline' ? ['today', 'zoom', 'width', 'scale', 'headers'] : []),
-                  ...common,
-                ],
+            recipe === 'table'
+              ? common.filter(k => k !== 'direction')
+              : recipe === 'cells'
+                ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
+                : [
+                    'gap',
+                    ...(recipe === 'flow' ? ['fold'] : []),
+                    ...(recipe === 'sequence' ? ['activations'] : []),
+                    ...(recipe === 'timeline'
+                      ? ['today', 'zoom', 'width', 'scale', 'headers']
+                      : []),
+                    ...common,
+                  ],
           );
         }
-        const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
+        // `table` is one column of cells, each a database row.
+        const table = !named && args[1]?.value === 'table',
+          algorithm = (named ? 'flow' : table ? 'cells' : args[1]?.value) as Algorithm;
         assert(
           ['flow', 'row', 'column', 'lanes', 'sequence', 'cells', 'timeline'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline or cells, or engine=.`,
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence, timeline, cells or table, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
@@ -1156,13 +1188,16 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         );
         assert(
           algorithm !== 'cells' || scope !== 'root',
-          'Cells lay out a group; give the cells a group and use layout <group> cells.',
+          `${table ? 'A table lays out a group; write layout <group> table.' : 'Cells lay out a group; give the cells a group and use layout <group> cells.'}`,
         );
         m.layouts.push({
           scope,
           algorithm,
           ...(engine ? { engine } : {}),
-          direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
+          direction: table
+            ? 'down'
+            : choice('direction', 'auto', ['auto', 'right', 'down'] as const),
+          ...(table ? { table: true as const, columns: 1 } : {}),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
           ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
           ...(choice('activations', 'off', ['on', 'off'] as const) === 'on'
@@ -1229,15 +1264,22 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
         if (args[0]?.value === 'line' && !args[0].quoted) {
           // `legend line dashed "meaning"`: a short connection in that style, then its meaning.
           count(3);
-          allow([]);
+          allow(['head', 'tail']);
           const style = args[1].value as LegendLine;
           assert(
             !args[1].quoted && LEGEND_LINES.includes(style),
             `Expected legend line ${LEGEND_LINES.join('|')} "meaning".`,
           );
-          once(`legend:line:${style}`);
+          once(`legend:line:${style}:${attrs.get('head')?.value}:${attrs.get('tail')?.value}`);
           assert(text(args[2]).trim(), 'A legend entry needs its meaning in quotes.');
-          (m.appearance.legend ??= []).push({ line: style, label: text(args[2]) });
+          const head = choice('head', 'none', MARKERS),
+            tail = choice('tail', 'none', MARKERS);
+          (m.appearance.legend ??= []).push({
+            line: style,
+            label: text(args[2]),
+            ...(head !== 'none' ? { head } : {}),
+            ...(tail !== 'none' ? { tail } : {}),
+          });
           m.legendLines.push(line);
           break;
         }
@@ -1443,6 +1485,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
     }
   }
 
+  addRowEdges(m);
   if (m.objects.length > 500) throw new DslError('Limit: 500 nodes and groups.');
   if (m.edges.length > 1200) throw new DslError('Limit: 1,200 edges.');
   // A timeline's bands draw as headings in its gutter, not as frames, so they are never scopes.
@@ -1451,6 +1494,49 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
       for (const o of m.objects) if (o.type === 'group' && o.parent === l.scope) o.frame = 'none';
   validateReferences(m);
   return m;
+}
+
+/**
+ * A body row's `-> table.column` draws a line from the row to the one it names: many rows here
+ * to one there. Its id is the row's id and `.fk`, since a node and an edge never share an id.
+ * A written `edge` between the same two rows, either way round, replaces it.
+ */
+function addRowEdges(m: Model) {
+  const ids = new Set(m.objects.map(o => o.id)),
+    written = new Set(
+      m.edges.flatMap(e => [`${e.source}\0${e.target}`, `${e.target}\0${e.source}`]),
+    );
+  for (const o of m.objects) {
+    const ref = o.row?.ref;
+    if (!ref) continue;
+    if (!ids.has(ref))
+      throw new DslError(
+        `${o.id} refers to ${ref}, which is not a node. Name a row of a table: -> table.column.`,
+        o.line,
+      );
+    if (ref === o.id) throw new DslError(`${o.id} refers to itself.`, o.line);
+    if (written.has(`${o.id}\0${ref}`)) continue;
+    const id = `${o.id}.fk`;
+    if (m.edges.some(e => e.id === id))
+      throw new DslError(
+        `Edge ${id} is the line ${o.id} draws to ${ref}; give the written edge another id.`,
+        m.edges.find(e => e.id === id)!.line,
+      );
+    m.edges.push({
+      id,
+      source: o.id,
+      target: ref,
+      label: '',
+      dashed: false,
+      from: 'auto',
+      to: 'auto',
+      head: 'one',
+      tail: 'many',
+      ...(o.status === 'added' || o.status === 'removed' ? { status: o.status } : {}),
+      inferred: true,
+      line: o.line,
+    });
+  }
 }
 
 /**
