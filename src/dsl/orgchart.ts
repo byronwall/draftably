@@ -215,6 +215,8 @@ function place(
     const a = side(id);
     if (a.length) aides[d] = Math.max(aides[d] ?? 0, columnHeight(pairs(a), by) + RANK / 2);
     if (mode(id) === 'row') for (const k of below(id)) walk(k, d + 1);
+    // A column of leaves starts on the next level, even when no row sits there.
+    else tall[d + 1] ??= 0;
   };
   walk(root, 0);
   const tops = [0];

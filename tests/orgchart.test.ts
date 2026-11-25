@@ -92,6 +92,16 @@ describe('layout … orgchart', () => {
     expect(width(tall)).toBeLessThan(width(plain));
   });
 
+  it('stacks leaves on a level that holds no row', async () => {
+    const { at, routes } = await routed(
+      'node a "A"\nnode b "B"\nnode c "C"\nedge e1 a -> b\nedge e2 a -> c\n' +
+        'layout root orgchart root=a leaves=stack',
+    );
+    expect(at('c').y).toBeGreaterThan(at('b').y + at('b').h);
+    expect(at('b').y).toBeGreaterThan(at('a').y + at('a').h);
+    expect(routes.every(r => r.points.every(p => Number.isFinite(p.x + p.y)))).toBe(true);
+  });
+
   it('draws a vacant role dashed, with an Open role line', async () => {
     const { doc } = await routed(sample),
       sec = doc.graph.nodes.find(n => n.id === 'sec')!;
