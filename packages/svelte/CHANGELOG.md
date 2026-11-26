@@ -1,5 +1,22 @@
 # @draftably/svelte
 
+## 0.11.0
+
+### Minor Changes
+
+- ae3414b: New releases use the Functional Source License, FSL-1.1-MIT, in place of MIT. You can use, change and redistribute the code for any purpose except a competing commercial product or service. Each release becomes MIT two years after its release date. Versions already on npm (0.10.0 and older) stay MIT.
+
+### Patch Changes
+
+- Updated dependencies [7b61ef4]
+- Updated dependencies [9d8883d]
+- Updated dependencies [7b61ef4]
+- Updated dependencies [8753fa9]
+- Updated dependencies [8753fa9]
+- Updated dependencies [ae3414b]
+  - @draftably/runtime@0.11.0
+  - @draftably/editor@0.11.0
+
 ## 0.10.0
 
 ### Patch Changes

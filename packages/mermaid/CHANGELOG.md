@@ -1,5 +1,19 @@
 # @draftably/mermaid
 
+## 0.5.0
+
+### Minor Changes
+
+- ae3414b: New releases use the Functional Source License, FSL-1.1-MIT, in place of MIT. You can use, change and redistribute the code for any purpose except a competing commercial product or service. Each release becomes MIT two years after its release date. Versions already on npm (0.10.0 and older) stay MIT.
+
+### Patch Changes
+
+- 8753fa9: Mermaid import reads labels with linkedom as well as with a browser or JSDOM document, so the hosted render service can import Mermaid.
+- Updated dependencies [7b61ef4]
+- Updated dependencies [7b61ef4]
+- Updated dependencies [ae3414b]
+  - @draftably/runtime@0.11.0
+
 ## 0.4.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @draftably/runtime
 
+## 0.11.0
+
+### Minor Changes
+
+- ae3414b: New releases use the Functional Source License, FSL-1.1-MIT, in place of MIT. You can use, change and redistribute the code for any purpose except a competing commercial product or service. Each release becomes MIT two years after its release date. Versions already on npm (0.10.0 and older) stay MIT.
+
+### Patch Changes
+
+- 7b61ef4: PNG scaling and font naming now live in one shared module, so the hosted render service draws the same pixels as `draftably inspect --png`. Output is unchanged.
+- 7b61ef4: Note and footnote links now go through `links.resolve` like node links, so a host resolves every link the same way. A long-lived host keeps at most 64 palettes for custom canvas colors.
+
 ## 0.10.0
 
 ### Minor Changes

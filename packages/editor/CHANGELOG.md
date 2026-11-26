@@ -1,5 +1,19 @@
 # @draftably/editor
 
+## 0.11.0
+
+### Minor Changes
+
+- ae3414b: New releases use the Functional Source License, FSL-1.1-MIT, in place of MIT. You can use, change and redistribute the code for any purpose except a competing commercial product or service. Each release becomes MIT two years after its release date. Versions already on npm (0.10.0 and older) stay MIT.
+
+### Patch Changes
+
+- 7b61ef4: PNG scaling and font naming now live in one shared module, so the hosted render service draws the same pixels as `draftably inspect --png`. Output is unchanged.
+- 9d8883d: New `draftably url <file>` prints an image URL that draws the file on the hosted render service (SVG, or PNG with `--png`). The URL holds the source in the mermaid.ink `pako:` form.
+- 7b61ef4: Note and footnote links now go through `links.resolve` like node links, so a host resolves every link the same way. A long-lived host keeps at most 64 palettes for custom canvas colors.
+- 8753fa9: `draftably import` reads a Mermaid file whose first line is a bare `flowchart` or `graph` (no direction) as Mermaid.
+- 8753fa9: Mermaid import reads labels with linkedom as well as with a browser or JSDOM document, so the hosted render service can import Mermaid.
+
 ## 0.10.0
 
 ### Minor Changes
