@@ -645,6 +645,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     }
     const mapId = (id: string) => result.ids.get(id) ?? id,
       { drops } = result;
+    // A written edge can stand in for the line a table row's `->` draws. Without it the row's line
+    // comes back, so the edit cannot remove it.
+    const shown = new Set(s.doc.graph.edges.map(e => mapId(e.id)));
+    const back = checked.edges.find(e => e.inferred && !shown.has(e.id));
+    if (back)
+      return snapBack(
+        `Without that line, the row ${back.source} draws its own line to ${back.target}. Remove \`-> ${back.target}\` from its table's body in the source.`,
+      );
     // Which lines are a mind map's branches or an org chart's reporting lines depends on the whole
     // file, so take each line's head from the checked source.
     const ends = new Map(checked.edges.map(e => [e.id, edgeEnds(e)]));

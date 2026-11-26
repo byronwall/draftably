@@ -119,10 +119,7 @@ function targets(d: Diagram): [Kind, string][] {
  * Edits whose saved file draws something else today, as `<example>: <action> on <kind> <id>`,
  * with what goes wrong. Fix one, then delete its line: the test fails while a fixed edit is listed.
  */
-const KNOWN: Record<string, string> = {
-  'billing-schema.draft: delete on edge has-lines':
-    'An inferred foreign-key line comes back after the save.',
-};
+const KNOWN: Record<string, string> = {};
 
 const RUN = !!process.env.EDIT_MATRIX;
 const dir = path.join(__dirname, '../examples');
