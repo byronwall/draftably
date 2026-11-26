@@ -14,6 +14,8 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import { proveHost, report, type HostProof } from './lib/host-proof.ts';
 
+import { proofCases } from './lib/proof-cases.ts';
+
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'tmp/frameworks');
 const only = process.argv.slice(2);
@@ -134,7 +136,7 @@ type W = Record<string, never> & {
 const browser = await chromium.launch();
 const failures: string[] = [];
 const hostProofs: HostProof[] = [];
-for (const fw of FRAMEWORKS) {
+for (const fw of proofCases(FRAMEWORKS)) {
   const app = path.join(out, 'apps', fw);
   const tarball = pack(fw);
   const manifest = JSON.parse(readFileSync(path.join(app, 'package.json'), 'utf8'));

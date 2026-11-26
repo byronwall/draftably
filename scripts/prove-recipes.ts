@@ -22,6 +22,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 
+import { proofCases } from './lib/proof-cases.ts';
+
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'tmp/recipes');
 
@@ -213,7 +215,7 @@ const editor = pack('editor');
 const only = process.argv.slice(2);
 const browser = await chromium.launch();
 const failures: string[] = [];
-for (const name of only.length ? only : Object.keys(RECIPES)) {
+for (const name of proofCases(only.length ? only : Object.keys(RECIPES))) {
   const recipe = RECIPES[name];
   const app = path.join(out, name);
   const step = { now: 'write' };
