@@ -204,7 +204,8 @@ POST /api/link            The source itself as the body, so nothing is encoded:
                           needs Content-Type: application/json.
 GET /api/d/{id}.png       The short link's drawing; also .svg, ?scheme=, ?scale=.
 GET /api/d/{id}.draft     The short link's source, as Draftably.
-POST /api/v1/share        {"code": "...", "type"?}  -> {id, png, svg, edit}. No key needed.
+POST /api/v1/share        {"code": "...", "type"?}  -> {id, png, svg, edit, diagnostics}.
+                          No key needed.
 
 POST /api/v1/render       {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?}
 POST /api/v1/validate     {"code": "...", "type"?}  -> {valid, type, diagnostics}
