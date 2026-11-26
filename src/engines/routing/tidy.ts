@@ -3,7 +3,15 @@ import { standoffCost } from './cost.ts';
 import { center, clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { validPath } from './paths.ts';
 import { offsetKey, port, sideKey } from './ports.ts';
-import { centrePorts, ends, flat, swapPorts, tip, type Attempt } from './tidy-ports.ts';
+import {
+  clearPortCrossings,
+  centrePorts,
+  ends,
+  flat,
+  swapPorts,
+  tip,
+  type Attempt,
+} from './tidy-ports.ts';
 import { PORT_SLACK } from './tuning.ts';
 import type { Axis, End, Obstacle, Point, Route, RouteEdge, Side } from './types.ts';
 
@@ -202,6 +210,7 @@ export function tidy(ctx: Context) {
       }
     }
 
+  clearPortCrossings(ctx, attempt);
   centrePorts(ctx, attempt);
 
   // Centre: an inner run between two sides (boxes or group borders) slides to the middle

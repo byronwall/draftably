@@ -162,56 +162,132 @@ export function centrePorts(ctx: Context, attempt: Attempt) {
   }
 }
 
-/**
- * Ports: two bent lines out of (or into) one side that cross each other change ports, each
- * keeping its own track beyond the first turn, when that removes the crossing and adds none.
- * The two ports hold their places on the side, so the fan's spacing stays.
- */
-export function swapPorts(ctx: Context, attempt: Attempt) {
-  const { rects, state, metrics } = ctx;
+/** All line ends compete for space on the physical side, in both directions. */
+function sidePorts(ctx: Context) {
   const sides = new Map<string, PortEnd[]>();
-  state.routes.forEach((r, i) => {
-    if (r.points.length < 3 || r.from === r.to) return;
+  ctx.state.routes.forEach((r, i) => {
     for (const end of ends) {
-      if (held(ctx, r, end)) continue;
-      const key = r[end] + '|' + end + '|' + r[sideKey(end)];
+      const key = r[end] + '|' + r[sideKey(end)];
       if (!sides.has(key)) sides.set(key, []);
       sides.get(key)!.push({ i, end });
     }
   });
-  for (const [key, list] of sides) {
-    if (list.length < 2) continue;
-    const [id, , side] = key.split('|') as [string, End, Side],
-      rect = rects.get(id)!,
-      axis = side === 'left' || side === 'right' ? 'y' : 'x';
-    if (!flat(rect)) continue;
-    const at = (p: PortEnd) => tip(state.routes[p.i].points, p.end)[axis];
-    const sorted = [...list].sort((p, q) => at(p) - at(q));
+  return sides;
+}
+
+function canMove(ctx: Context, r: Route, end: End) {
+  if (r.blocked || r.from === r.to || ctx.state.fixedPlans.has(r.id)) return false;
+  const cfg = ctx.edges.find(e => e.id === r.id)?.cfg;
+  return end === 'from'
+    ? cfg?.fromAt === undefined
+    : cfg?.toAt === undefined && cfg?.toOffset === undefined;
+}
+
+function crowded(ctx: Context, slots: PortEnd[], i: number, offset: number) {
+  const pitch = Math.max(ctx.s.portGap, ctx.s.edgeGap);
+  return slots.some(
+    p => p.i !== i && Math.abs(ctx.state.routes[p.i][offsetKey(p.end)] - offset) < pitch - EPS,
+  );
+}
+
+function movePort(ctx: Context, sides: Map<string, PortEnd[]>, p: PortEnd, offset: number) {
+  const r = ctx.state.routes[p.i],
+    side = r[sideKey(p.end)],
+    rect = ctx.rects.get(r[p.end])!;
+  const axis = side === 'left' || side === 'right' ? 'y' : 'x';
+  const points = clone(r.points),
+    moved = port(rect, side, offset);
+  const extra: Partial<Route> = { [offsetKey(p.end)]: offset };
+  Object.assign(tip(points, p.end), moved);
+  if (points.length === 2) {
+    // A straight line slides as one piece. Both ports must fit without displacing a neighbour.
+    const far = p.end === 'from' ? 'to' : 'from',
+      farSide = r[sideKey(far)],
+      box = ctx.rects.get(r[far])!;
+    const farOffset = round(moved[axis] - center(box)[axis]);
+    if (
+      !canMove(ctx, r, far) ||
+      Math.abs(farOffset) > (axis === 'y' ? box.h : box.w) / 2 - 10 ||
+      crowded(ctx, sides.get(r[far] + '|' + farSide)!, p.i, farOffset)
+    )
+      return;
+    Object.assign(tip(points, far), port(box, farSide, farOffset));
+    extra[offsetKey(far)] = farOffset;
+  } else tip(points, p.end, 1)[axis] = moved[axis];
+  return { points, extra };
+}
+
+/** Exchange two occupied slots. Keep each edge's track beyond its first bend. */
+export function swapPorts(ctx: Context, attempt: Attempt) {
+  const { state, metrics } = ctx,
+    sides = sidePorts(ctx);
+  for (const ports of sides.values()) {
+    const offset = (p: PortEnd) => state.routes[p.i][offsetKey(p.end)];
+    const sorted = ports
+      .filter(p => canMove(ctx, state.routes[p.i], p.end))
+      .sort((a, b) => offset(a) - offset(b));
     for (let k = 1; k < sorted.length; k++) {
       const p = sorted[k - 1],
         q = sorted[k],
-        rp = state.routes[p.i],
-        rq = state.routes[q.i];
-      if (!conflicts(rp.points, [rq]).crossings) continue;
-      const changes = new Map<number, Point[]>(),
-        extra: Record<number, Partial<Route>> = {};
-      for (const [x, y] of [
-        [p, q],
-        [q, p],
-      ]) {
-        const ps = clone(state.routes[x.i].points),
-          offset = state.routes[y.i][offsetKey(y.end)],
-          moved = port(rect, side, offset);
-        Object.assign(tip(ps, x.end), moved);
-        tip(ps, x.end, 1)[axis] = moved[axis];
-        changes.set(x.i, ps);
-        extra[x.i] = { [offsetKey(x.end)]: offset };
-      }
+        a = state.routes[p.i],
+        b = state.routes[q.i];
+      if (!conflicts(a.points, [b]).crossings) continue;
+      const left = movePort(ctx, sides, p, offset(q)),
+        right = movePort(ctx, sides, q, offset(p));
+      if (!left || !right) continue;
+      const changes = new Map([
+        [p.i, left.points],
+        [q.i, right.points],
+      ]);
       const next = state.routes.map((r, i) =>
         changes.has(i) ? { ...r, points: changes.get(i)! } : r,
       );
       if (metrics(next).crossings >= metrics(state.routes).crossings) continue;
-      if (attempt(changes, extra)) sorted.splice(k - 1, 2, q, p);
+      if (attempt(changes, { [p.i]: left.extra, [q.i]: right.extra }, true))
+        sorted.splice(k - 1, 2, q, p);
+    }
+  }
+}
+
+/** A bent line may instead take an empty slot beyond the port it crosses. */
+export function clearPortCrossings(ctx: Context, attempt: Attempt) {
+  const { state, rects, s } = ctx,
+    sides = sidePorts(ctx),
+    pitch = Math.max(s.portGap, s.edgeGap);
+  for (const list of sides.values()) {
+    if (list.length < 2) continue;
+    for (const p of list) {
+      const r = state.routes[p.i],
+        side = r[sideKey(p.end)],
+        rect = rects.get(r[p.end])!;
+      if (r.points.length < 3 || !canMove(ctx, r, p.end)) continue;
+      const limit = (side === 'left' || side === 'right' ? rect.h : rect.w) / 2 - 10;
+      for (const q of list) {
+        const other = state.routes[q.i];
+        if (p.i === q.i || !conflicts(r.points, [other]).crossings) continue;
+        const at = other[offsetKey(q.end)],
+          next = at + Math.sign(at - r[offsetKey(p.end)]) * pitch;
+        if (Math.abs(next) > limit || crowded(ctx, list, p.i, next)) continue;
+        // A free slot should still leave the fan spanning the centre of the face.
+        if (
+          !list.some(
+            slot => slot.i !== p.i && next * state.routes[slot.i][offsetKey(slot.end)] <= 0,
+          )
+        )
+          continue;
+        const move = movePort(ctx, sides, p, next)!;
+        if (conflicts(move.points, [other]).crossings) continue;
+        if (
+          state.routes.some(
+            (line, j) =>
+              j !== p.i &&
+              j !== q.i &&
+              conflicts(move.points, [line]).crossings > conflicts(r.points, [line]).crossings,
+          )
+        )
+          continue;
+        if (attempt(new Map([[p.i, move.points]]), { [p.i]: move.extra }, true)) break;
+      }
     }
   }
 }

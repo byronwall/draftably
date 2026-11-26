@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
 import { projectScene, visibleRects } from '../src/dsl/project';
@@ -175,6 +176,21 @@ layout root engine=compound-flow direction=down
 `);
     const n = rect('n5');
     expect(line('e5').points[0]).toEqual({ x: n.x + n.w / 2, y: n.y + n.h });
+  });
+
+  it('orders an arrival and departure on the same side of My books', async () => {
+    const source = readFileSync(
+      new URL(
+        '../docs/intent/diagram-quality/population/comic-books-850d0f8e18/v0.draft',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    const { line } = await route(source);
+    const arrival = line('edge_3'),
+      departure = line('edge_8');
+    expect(arrival.toSide).toBe(departure.fromSide);
+    expect(crosses(arrival, departure)).toBe(false);
   });
 
   it('swaps two ports of a fan whose lines cross just past the side (#599)', async () => {
