@@ -89,13 +89,15 @@ function checkPixels(svg: string, scale: number) {
 
 /** `svg` as a PNG at `scale`, with `source` in it when given; refused above MAX_PIXELS. */
 async function png(svg: string, scale: number, source?: string) {
-  // Check the size before the strip: building the strip for a huge drawing costs memory too.
+  // Check the size before the strip too: building the strip for a huge drawing costs memory.
   await span('png.pixels', { scale }, () => checkPixels(svg, scale));
   const step: Step = (name, fn) =>
     span(`png.${name}`, name === 'rasterize' ? { scale, cold: !ready } : { scale }, async s => {
       if (name === 'rasterize') await (ready ??= initWasm(wasm));
       const out = await fn();
       if (out instanceof Uint8Array) s.setAttribute('png_bytes', out.length);
+      // The strip makes the drawing taller: check again before resvg allocates the image.
+      else if (typeof out === 'string') checkPixels(out, scale);
       return out;
     });
   return drawPng(engine, svg, { scale, source, step });
