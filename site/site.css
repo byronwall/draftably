@@ -1468,6 +1468,25 @@ main {
   height: 100%;
 }
 
+/* Terms and Privacy */
+
+.legal {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 40px var(--gutter) 0;
+}
+
+.legal a {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.legal a:hover {
+  color: var(--accent-hover);
+}
+
 /* Footer */
 
 .footer {

@@ -31,6 +31,18 @@ const SITE: Meta[] = [
       'A text language and CLI for diagrams, plus a hosted render API and MCP server. Write plain .draft source; draftably lays out the boxes and routes the lines.',
   },
   {
+    path: 'terms',
+    title: 'Terms of use · draftably',
+    description:
+      'The terms for the Draftably render service at api.draftably.dev: accounts, keys, credits and fair use.',
+  },
+  {
+    path: 'privacy',
+    title: 'Privacy · draftably',
+    description:
+      'What Draftably collects, why, and who else handles it. The editor, CLI and packages send nothing.',
+  },
+  {
     path: 'pricing',
     title: 'Pricing · draftably',
     description:

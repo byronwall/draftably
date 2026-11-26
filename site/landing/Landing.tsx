@@ -119,30 +119,7 @@ export function Landing() {
         <Points />
         <Examples />
       </main>
-      <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>
-        <span class="wordmark">
-          <Logo size={18} />
-          draftably
-        </span>
-        <span class="footer-links">
-          <A href="/play">Playground</A>
-          <a href={appUrl()} rel="external">
-            Editor
-          </a>
-          <A href="/docs">Docs</A>
-          <A href="/#api">API</A>
-          <a href={NPM}>npm</a>
-          <a href={GITHUB}>GitHub</a>
-        </span>
-        <p style={{ width: '100%', margin: 0, color: 'var(--muted)', 'font-size': '13px' }}>
-          Playground: write the source and see it draw. Editor: build on a canvas, tidy the layout
-          and save a file.
-        </p>
-        <p class="footer-legal">
-          Source under <a href={`${GITHUB}/blob/main/LICENSE`}>FSL-1.1-MIT</a>: use it freely; only
-          Draftably sells it as a service. <a href={`${API}/health`}>Service status</a>
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -179,7 +156,7 @@ function DocLink(props: { href: string; children: string }) {
   );
 }
 
-function Nav() {
+export function Nav() {
   return (
     <header class="nav">
       <a class="wordmark" href={import.meta.env.BASE_URL}>
@@ -348,5 +325,37 @@ function ReopenLine() {
         , to keep editing. The editor runs in your browser and uploads nothing.
       </Show>
     </p>
+  );
+}
+
+/** Every page's footer: the site's links, then the license and the service's status. */
+export function Footer() {
+  return (
+    <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>
+      <span class="wordmark">
+        <Logo size={18} />
+        draftably
+      </span>
+      <span class="footer-links">
+        <A href="/play">Playground</A>
+        <a href={appUrl()} rel="external">
+          Editor
+        </a>
+        <A href="/docs">Docs</A>
+        <A href="/#api">API</A>
+        <a href={NPM}>npm</a>
+        <a href={GITHUB}>GitHub</a>
+        <A href="/terms">Terms</A>
+        <A href="/privacy">Privacy</A>
+      </span>
+      <p style={{ width: '100%', margin: 0, color: 'var(--muted)', 'font-size': '13px' }}>
+        Playground: write the source and see it draw. Editor: build on a canvas, tidy the layout and
+        save a file.
+      </p>
+      <p class="footer-legal">
+        Source under <a href={`${GITHUB}/blob/main/LICENSE`}>FSL-1.1-MIT</a>: use it freely; only
+        Draftably sells it as a service. <a href={`${API}/health`}>Service status</a>
+      </p>
+    </footer>
   );
 }
