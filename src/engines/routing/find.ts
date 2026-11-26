@@ -322,6 +322,8 @@ function findAmong(
       best.points.length <= 6
     )
       break;
+    // No grid search can reach a waypoint inside a solid obstacle.
+    if (cfg.waypoints?.some(point => blocked(point, point, c.obs))) continue;
     const points = [c.as, ...(cfg.waypoints || []), c.bs],
       path: Point[] = [];
     let ok = true;
