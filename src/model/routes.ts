@@ -17,7 +17,7 @@ import {
   groupTitleLines,
   SELF_LOOP,
 } from './labels';
-import { ARROW_REACH, hasMarkers, MARKER_SHAPES, markerRects, stoppedPoints } from './markers';
+import { ARROW_HALF_HEIGHT, ARROW_REACH, hasMarkers, markerRects, stoppedPoints } from './markers';
 import { codeLayout } from './code';
 import { drawnRect, rangeLabelBoxes, rangePort } from './ranges';
 import {
@@ -1014,15 +1014,14 @@ export function drawRoutes(
     const axis = flat ? 'x' : 'y',
       across = flat ? 'y' : 'x',
       size = flat ? 'w' : 'h';
-    if (
-      Math.abs(end[across] - label[across]) >
-      ((flat ? label.h : label.w) + MARKER_SHAPES.arrow.h) / 2
-    )
+    if (Math.abs(end[across] - label[across]) > (flat ? label.h : label.w) / 2 + ARROW_HALF_HEIGHT)
       continue;
     const gap = Math.sign(end[axis] - prev[axis]) * (end[axis] - label[axis]);
     const room = 2 * (gap - ARROW_REACH);
     if (gap <= 0 || room >= label[size]) continue;
     const lines = edgeLabelLines(edge.label!, look, false, label.wrap);
+    // Preserve the full line box for accented, combining or fallback glyphs.
+    if (!flat && lines.some(line => /[^ -~]/u.test(line))) continue;
     const ink = flat
       ? Math.max(...lines.map(line => measureText(line, look.annotation)))
       : look.annotation.size + (lines.length - 1) * look.annotation.lineHeight;
