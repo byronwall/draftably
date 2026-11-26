@@ -96,10 +96,12 @@ export const scrub = (text: string) =>
   // Cut first: the patterns below are slow on a long run of text with no match.
   text
     .slice(0, 400)
+    // A percent-encoded @ is still an address.
+    .replace(/%(?:25)*40/gi, '@')
     .replace(/[^\s@<>"'(),;:/]{1,64}@[^\s@<>"'(),;:/]{1,255}/g, '<email>')
     .replace(/dft_[\w.-]+/g, '<key>')
     .replace(/(?<!\d)\d{1,3}(?:\.\d{1,3}){3}(?!\d)/g, '<ip>')
-    .replace(/(?<![\w:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![\w:])/gi, m =>
+    .replace(/(?<![0-9a-f:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![\w:])/gi, m =>
       /[0-9a-f]/i.test(m) ? '<ip>' : m,
     )
     .replace(/[\w+/=-]{24,}/g, '<token>')

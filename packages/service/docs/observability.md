@@ -93,18 +93,18 @@ Visualize `Count`, Filter `event = request`, Group by `route` and `status`.
 Latency comes from the invocation logs (not the spans, above). In the Query builder, Visualize
 `P50` and `P95` of `$workers.cpuTimeMs` and `$workers.wallTimeMs`, Filter
 `$workers.event.request.method = GET` and `$workers.event.request.url` matches regex
-`/(draftably/)?png/` (then `svg/`). Cloudflare shows an image path as `/png/REDACTED`, which still
+`/(draftably/)?png/[^/]+$` (then `svg`). Cloudflare shows an image path as `/png/REDACTED`, which still
 matches. For REST and MCP, Filter the URL on `/v1/render` or `/mcp`: those don't split by format.
 Hit rate: Visualize `Count`, Filter `event = request` and `cache exists`, Group by `format` and
 `cache`.
 
 **Which diagrams fail to render, and why? Mermaid import failures.**
-Failed renders: Visualize `Count`, Filter `event = request`, `error_code = ERR_SOURCE` and
-`format exists` (set only by a render: GET images, `/v1/render`, MCP `render_diagram`), Group by
-`source_type` and `error`. Every failed import, including `/v1/validate`, `/v1/convert` and the
-MCP validate and convert tools: drop `format exists` and add `source_type = mermaid`, Group by
-`route` and `error`. To see a failure's steps, open the matching event's trace from the event's
-details, and look at its `mermaid.import` or `render.svg` span.
+Visualize `Count`, Filter `event = request` and `error_code = ERR_SOURCE`, Group by `route`,
+`path`, `mcp_tool`, `source_type` and `error`. Failed renders are the rows with `route = image`,
+`path = /v1/render` or `mcp_tool = render_diagram`; the rest are `/v1/validate`, `/v1/convert` and
+the MCP validate and convert tools. For Mermaid only, add Filter `source_type = mermaid`. To see a
+failure's steps, open the matching event's trace from the event's details, and look at its
+`mermaid.import` or `render.svg` span.
 
 **Who uses it: accounts and keys by request count and credits spent.**
 Visualize `Count` and `Sum` of `credits_spent`, Filter `event = request` and `account exists`,
@@ -115,7 +115,7 @@ Group by `account` and `key`, Order by the sum. The account ID maps to an email 
 Out: Visualize `Count`, Filter `event = request` and `error_code = ERR_LIMIT_BALANCE`, Group by
 `account`. That is a 402 over GET and REST, and an error result (status 200) over MCP. Near empty:
 Visualize `Min` of `credits_left`, Filter `credits_left < 100`, Group by `account`. A render that
-lost a race for the last credits has no `credits_left`.
+lost a race for the last credits records the balance read after its failed debit.
 
 **Rate-limit hits by limiter. Bot or scanner noise.**
 Limits: Visualize `Count`, Filter `rate_limit exists`, Group by `rate_limit`. Scanners: Visualize

@@ -28,7 +28,8 @@ const arg = (name: string) => {
   return at > 0 ? (process.argv[at + 1] ?? '') : undefined;
 };
 const HOURS = Number(arg('hours') ?? 24);
-const BASELINE = 7;
+/** Cloudflare keeps 7 days; the baseline is as many earlier windows as fit, up to 7. */
+const BASELINE = Math.max(1, Math.min(7, Math.floor((7 * 24 - HOURS) / HOURS)));
 
 function token() {
   if (process.env.CF_O11Y_TOKEN) return process.env.CF_O11Y_TOKEN.trim();
@@ -103,7 +104,8 @@ const imageGet = (format: string): Filter[] => [
     key: '$workers.event.request.url',
     operation: 'regex',
     type: 'string',
-    value: `^https?://[^/]+/(draftably/)?${format}/`,
+    // Exactly one source segment, as the image router takes; Cloudflare shows it as REDACTED.
+    value: `^https?://[^/]+/(draftably/)?${format}/[^/]+$`,
   },
 ];
 const gte = (key: string, value: number): Filter => ({
@@ -324,13 +326,37 @@ async function main() {
     // Headline counts, ungrouped, so a rare route or status is never cut by a group limit.
     Promise.all(
       [window, baseline].flatMap(t => [
-        calc(t, WIDE, []),
-        calc(t, [...WIDE, gte('status', 500)], []),
+        // From the invocation log, so a request Cloudflare cut off (CPU limit) still counts.
+        calc(t, [SCRIPT, has('$workers.outcome')], []),
+        calc(
+          t,
+          [
+            SCRIPT,
+            has('$workers.outcome'),
+            { key: '$workers.outcome', operation: 'neq', type: 'string', value: 'ok' },
+          ],
+          [],
+        ),
+        // A 5xx the Worker answered itself; a thrown one (ERR_INTERNAL) is already an outcome.
+        calc(
+          t,
+          [
+            ...WIDE,
+            gte('status', 500),
+            { key: 'error_code', operation: 'neq', type: 'string', value: 'ERR_INTERNAL' },
+          ],
+          [],
+        ),
       ]),
     ),
   ]);
 
-  const [requests, fivexx, baseAll, base5] = totals.map(rows => total(rows));
+  const [requests, failed, answered5xx, baseAll, baseFailed, base5xx] = totals.map(rows =>
+    total(rows),
+  );
+  // Failed: cut off or threw, or answered 5xx.
+  const fivexx = failed + answered5xx;
+  const base5 = baseFailed + base5xx;
   const baseRequests = baseAll / BASELINE;
   const baseFivexx = base5 / BASELINE;
   const rate = (n: number, d: number) => (d ? n / d : 0);
@@ -433,7 +459,7 @@ async function main() {
 
   console.log(`# ${SERVICE}: the last ${HOURS} h, to ${snapshot.at}
 
-**Requests** ${requests} (baseline ${baseRequests.toFixed(0)} a window) · **5xx** ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
+**Requests** ${requests} (baseline ${baseRequests.toFixed(0)} a window) · **failed** (5xx, thrown or cut off) ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
 
 ## Actions
 ${
