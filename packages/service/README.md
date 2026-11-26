@@ -109,3 +109,6 @@ before you deploy (`0002_shares.sql` needs this once):
 ```sh
 pnpm --dir packages/service exec wrangler d1 migrations apply DB --remote
 ```
+
+Short links' `edit` URLs (`draftably.dev/d/{id}`) are served by the site Worker, so deploy the site
+too (`pnpm site:deploy`) when shipping them.
