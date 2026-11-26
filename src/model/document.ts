@@ -650,7 +650,14 @@ export function routingTypography(doc: Diagram) {
  */
 export function routingFingerprint(doc: Diagram, typography = routingTypography(doc)) {
   return JSON.stringify(
-    [doc.graph, doc.layout, doc.styles, doc.collapsed, doc.settings.routing, typography],
+    [
+      doc.graph,
+      doc.layout,
+      Object.fromEntries(Object.entries(doc.styles).map(([id, style]) => [id, style.shape])),
+      doc.collapsed,
+      doc.settings.routing,
+      typography,
+    ],
     sortedKeys,
   );
 }

@@ -33,6 +33,8 @@ describe('routingFingerprint', () => {
   it('updates route geometry for font changes and keeps it for color edits', () => {
     const doc = twoBoxes();
     const original = routingFingerprint(doc);
+    doc.styles.a.color = 'red';
+    doc.styles.a.shade = 700;
     doc.appearance.overrides.text = '#142034';
     expect(routingFingerprint(doc)).toBe(original);
     doc.appearance.overrides.annotationFont = 'mono';
