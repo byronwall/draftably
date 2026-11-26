@@ -7,7 +7,7 @@ import { validate } from '@draftably/runtime';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { keyAccount, type AuthEnv } from './auth';
 import { balance } from './credits';
-import { type Format } from './draw';
+import { type Format, type RuntimeNote } from './draw';
 import { ApiError, DiagramError, errorJson } from './errors';
 import { toDraft, type Note } from './mermaid';
 import { embedUrl, render } from './render';
@@ -56,10 +56,11 @@ export interface Checked {
 }
 
 /**
- * Check a diagram without drawing it: `/v1/validate`, the MCP tool and the notes on `/link`. A
- * line names the submitted text, so a Mermaid fence in Markdown counts the lines before it.
+ * Check a diagram without drawing it: `/v1/validate`, the MCP tool and the notes on a new short
+ * link. A line names the submitted text, so a Mermaid fence in Markdown counts the lines before
+ * it. `rendered` adds the renderer's own warnings (a dropped link), when the caller drew it.
  */
-export async function checkDiagram(r: DrawRequest): Promise<Checked> {
+export async function checkDiagram(r: DrawRequest, rendered: RuntimeNote[] = []): Promise<Checked> {
   const submitted = r.source.split('\n');
   const at = (line?: number) => {
     const text = line ? submitted[line - 1]?.trim() : undefined;
@@ -84,12 +85,14 @@ export async function checkDiagram(r: DrawRequest): Promise<Checked> {
     noteError('ERR_SOURCE', result.diagnostics.find(d => d.severity === 'error')?.code);
   // Lines in a draft converted from Mermaid name nothing the caller wrote, so they are left out.
   const own = r.opts.type === 'draftably';
+  const seen = new Set(result.diagnostics.map(d => `${d.message}@${d.location?.line ?? ''}`));
+  const extra = rendered.filter(d => !seen.has(`${d.message}@${d.location?.line ?? ''}`));
   return {
     valid: result.ok,
     type: r.opts.type,
     diagnostics: [
       ...notes.map(n => ({ severity: 'warning', message: n.message, ...at(n.line) })),
-      ...result.diagnostics.map(d => ({
+      ...[...result.diagnostics, ...extra].map(d => ({
         severity: d.severity,
         message: d.message,
         ...(own ? at(d.location?.line) : {}),

@@ -11,7 +11,7 @@
  */
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
 import { ApiError, checkDiagram, errorJson, requireKey, type ApiEnv, type Diagnostic } from './api';
-import { drawSvg, maxPngScale, type DrawOptions } from './draw';
+import { drawSvg, maxPngScale, type DrawOptions, type RuntimeNote } from './draw';
 import { freshness, toDraft } from './mermaid';
 import { MAX_BODY, readBody, readFields, readRequest, refusal, type DrawRequest } from './request';
 
@@ -64,15 +64,20 @@ const ipHash = async (req: Request) => {
     .join('');
 };
 
-/** A stored share: its id and the largest PNG scale that fits the pixel limit (0 for none). */
+/**
+ * A stored share: its id, the largest PNG scale that fits the pixel limit (0 for none), and the
+ * warnings and notes found when it was stored.
+ */
 export interface Share {
   id: string;
   pngScale: number;
+  notes: Diagnostic[];
 }
 
 /**
  * Store `r` as a share, or find it. A new source must draw (the first diagnostic comes back as
- * a 400 with its line) and is counted against the caller's limit; one that exists is free.
+ * a 400 with its line) and is counted against the caller's limit; one that exists is free. Its
+ * notes are found once, when it is stored, so a repeat call only reads the row.
  */
 export async function createShare(
   req: Request,
@@ -84,36 +89,64 @@ export async function createShare(
   const { source, opts } = r;
   const kind = opts.type;
   const find = async () => {
-    const row = await env.DB.prepare(`SELECT source, type, png_scale FROM shares WHERE id = ?1`)
+    const row = await env.DB.prepare(
+      `SELECT source, type, png_scale, notes FROM shares WHERE id = ?1`,
+    )
       .bind(id)
-      .first<{ source: string; type: string; png_scale: number }>();
+      .first<{ source: string; type: string; png_scale: number; notes: string | null }>();
     if (row && (row.source !== source || row.type !== kind))
       throw new ApiError(
         409,
         'ERR_SHARE',
         'This id is taken by another diagram. Change the source a little.',
       );
-    return row && { id, pngScale: row.png_scale };
+    return row;
+  };
+  // Every draw counts against the caller's address, with or without a key.
+  const limit = async () => {
+    const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+    if (!(await env.LINK_LIMIT.limit({ key: ip })).success)
+      throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many new links this minute. Wait a minute.');
+  };
+  /** Draw it: only a source that draws is stored. Scheme doesn't change whether it draws. */
+  const draw = async () => {
+    const { draft } = await toDraft(source, kind);
+    const rendered: RuntimeNote[] = [];
+    const svg = await drawSvg(draft, { type: kind, scheme: 'light', scale: 1 }, rendered);
+    const notes = (await checkDiagram(r, rendered)).diagnostics.filter(d => d.severity !== 'error');
+    return { pngScale: await maxPngScale(svg, draft), notes };
   };
   const found = await find();
-  if (found) return found;
-  // Every new row counts against the caller's address, with or without a key.
-  const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-  if (!(await env.LINK_LIMIT.limit({ key: ip })).success)
-    throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many new links this minute. Wait a minute.');
-  // Only a source that draws is stored. Scheme doesn't change whether it draws.
-  const { draft } = await toDraft(source, kind);
-  const svg = await drawSvg(draft, { type: kind, scheme: 'light', scale: 1 });
-  const pngScale = await maxPngScale(svg, draft);
+  if (found?.notes != null)
+    return { id, pngScale: found.png_scale, notes: JSON.parse(found.notes) };
+  await limit();
+  if (found) {
+    // A row stored before notes were kept: find them once, under the same limit.
+    const { notes } = await draw();
+    await env.DB.prepare(`UPDATE shares SET notes = ?2 WHERE id = ?1`)
+      .bind(id, JSON.stringify(notes))
+      .run();
+    return { id, pngScale: found.png_scale, notes };
+  }
+  const { pngScale, notes } = await draw();
   const added = await env.DB.prepare(
-    `INSERT INTO shares (id, source, type, png_scale, created_at, account_id, ip_hash)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(id) DO NOTHING`,
+    `INSERT INTO shares (id, source, type, png_scale, created_at, account_id, ip_hash, notes)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8) ON CONFLICT(id) DO NOTHING`,
   )
-    .bind(id, source, kind, pngScale, new Date().toISOString(), account, await ipHash(req))
+    .bind(
+      id,
+      source,
+      kind,
+      pngScale,
+      new Date().toISOString(),
+      account,
+      await ipHash(req),
+      JSON.stringify(notes),
+    )
     .run();
   // A parallel call stored it first: the same source, or a collision that find() refuses.
-  if (!added.meta.changes) return (await find())!;
-  return { id, pngScale };
+  if (!added.meta.changes) await find();
+  return { id, pngScale, notes };
 }
 
 /**
@@ -191,9 +224,9 @@ const plain = (body: string, status = 200) =>
  * The links, with the warnings and notes on a source that draws (an arrow that runs up, a note
  * that covers the drawing), so the caller can fix them before sharing.
  */
-async function answer(origin: string, share: Share, r: DrawRequest, json: boolean) {
+function answer(origin: string, share: Share, r: DrawRequest, json: boolean) {
   const l = links(origin, share, r.opts);
-  const notes = (await checkDiagram(r)).diagnostics.filter(d => d.severity !== 'error');
+  const { notes } = share;
   if (json)
     return Response.json(
       { ...l, diagnostics: notes },

@@ -38,7 +38,7 @@ layout root flow direction=right
 curl --data-binary @diagram.draft https://draftably.dev/api/link
 ```
 
-   From a tool that can only GET, open `https://draftably.dev/api/link?code=<source>` with the source percent-encoded (see "Share a short link" below). When the source draws, the answer is `200` and text with the image and editor links:
+   A source that draws is stored, and anyone with its short link can read the source. From a tool that can only GET, open `https://draftably.dev/api/link?code=<source>` with the source percent-encoded (see "Share a short link" below). When the source draws, the answer is `200` and text with the image and editor links:
 
 ```text
 png: https://draftably.dev/api/d/<id>.png

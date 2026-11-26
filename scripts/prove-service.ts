@@ -1205,9 +1205,27 @@ if (!remote) {
       `fence warning line with ${JSON.stringify(eol)}: ${JSON.stringify(got.diagnostics)}`,
     );
   }
+  // A link the hosted renderer drops is named, from the renderer's own warnings.
+  const hrefSrc = 'node a "A" href="src/parser.ts"\n';
+  const linked = await (await post(hrefSrc)).json();
+  assert.ok(linked.diagnostics.length, `no warning for a dropped link: ${JSON.stringify(linked)}`);
+  // A repeat call reads the notes stored with the row; it draws nothing. A row stored before notes
+  // were kept gets them once.
+  sql(
+    `UPDATE shares SET notes = '[{"severity":"info","message":"stored"}]' WHERE id = '${linked.id}'`,
+  );
+  const again = await (await post(hrefSrc)).json();
+  assert.deepEqual(again.diagnostics, [{ severity: 'info', message: 'stored' }]);
+  sql(`UPDATE shares SET notes = NULL WHERE id = '${linked.id}'`);
+  assert.deepEqual((await (await post(hrefSrc)).json()).diagnostics, linked.diagnostics);
+  assert.equal(
+    sql(`SELECT count(*) AS n FROM shares WHERE id = '${linked.id}' AND notes IS NOT NULL`)[0].n,
+    1,
+  );
   console.log(
     `POST /link: the same id as GET; transport parity ${parity.join('; ')}; JSON by media type; ` +
-      'a bad line comes back with its text; fence warnings name their line (LF and CRLF).',
+      'a bad line comes back with its text; fence warnings name their line (LF and CRLF); ' +
+      'a dropped link is named; a repeat reads the stored notes.',
   );
 
   // New links from one address stop at 30 a minute; existing ones still answer.

@@ -17,8 +17,9 @@ goes:
 
 ## Links without the CLI
 
-`/link` takes the source as plain text, checks it, and returns short links. Use it when you have
-no CLI, for example from an agent in a chat:
+`/link` takes the source as plain text, checks it, stores it, and returns short links. Anyone with
+a short link can read the stored source. Use it when you have no CLI, for example from an agent in
+a chat:
 
 ```sh
 curl --data-binary @architecture.draft https://draftably.dev/api/link
@@ -74,6 +75,8 @@ credits: an SVG costs 1 and a PNG 2. A cache hit is free. Make a key on the
 ## What the server keeps
 
 The URL sends the source to Draftably's server. The server keeps the images it draws in a cache.
+A short link (`/link` or `/v1/share`) stores the source itself, and anyone with the link can read
+it at `/d/{id}.draft`.
 For an account, it stores your email, your credit balance and a hash of each API key, never the key
 itself. To keep a diagram off the server, use `draftably inspect plan.draft --svg` and host the file
 yourself.
