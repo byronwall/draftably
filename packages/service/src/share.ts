@@ -13,7 +13,7 @@ import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-
 import { ApiError, checkDiagram, errorJson, requireKey, type ApiEnv, type Diagnostic } from './api';
 import { drawSvg, maxPngScale, type DrawOptions } from './draw';
 import { freshness, toDraft } from './mermaid';
-import { readBody, readFields, readRequest, refusal, type DrawRequest } from './request';
+import { MAX_BODY, readBody, readFields, readRequest, refusal, type DrawRequest } from './request';
 
 export interface ShareEnv extends ApiEnv {
   /** New shares per IP. A link that already exists costs nothing. */
@@ -211,13 +211,14 @@ const noteText = (d: Diagnostic) =>
  * when the request says JSON.
  */
 async function postedSource(req: Request) {
-  const text = await readBody(req);
+  const text = await readBody(req, MAX_BODY, true);
   // `application/json` or a `+json` type, in any case, with or without parameters.
   const media = (req.headers.get('Content-Type') ?? '').split(';')[0].trim().toLowerCase();
   if (media !== 'application/json' && !/^application\/[\w.-]+\+json$/.test(media)) return text;
   let json: unknown;
   try {
-    json = JSON.parse(text);
+    // A JSON body drops one byte-order mark, as `readFields` does.
+    json = JSON.parse(text.replace(/^\uFEFF/, ''));
   } catch {
     throw new ApiError(400, 'ERR_SOURCE', 'The body is not JSON. Send the source as plain text.');
   }

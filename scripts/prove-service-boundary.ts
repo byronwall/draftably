@@ -4,8 +4,8 @@
  * error code (and HTTP status, where the transport has one), and the same price.
  *
  * Transports: an anonymous GET image URL, a keyed GET image URL, `POST /api/v1/render`, the MCP
- * tool `render_diagram`, and a short link (`POST /api/v1/share`, then `GET /api/d/{id}.{svg|png}`).
- * Inputs:
+ * tool `render_diagram`, and a short link (`POST /api/v1/share` or `POST /api/link` with the source
+ * as the body, then `GET /api/d/{id}.{svg|png}`). Inputs:
  * good sources and options, a leading byte-order mark, Mermaid with and without `type`, a source
  * that does not draw, an empty source, one over 64 KB, a wrong key, and a body over 256 KB.
  */
@@ -108,20 +108,31 @@ const viaMcp = (key?: string) => async (i: Input) => {
   };
 };
 
-/** A short link: store, then draw `/d/{id}`. A refusal at either step is the answer. */
-const viaShare = (key?: string) => async (i: Input) => {
-  const stored = await post(
-    '/v1/share',
-    JSON.stringify({ code: i.code, type: i.type, scheme: i.scheme, scale: i.scale }),
-    key,
-  );
-  if (!stored.ok) return image(stored);
-  const { id } = await stored.json();
-  const q = new URLSearchParams();
-  if (i.scheme) q.set('scheme', i.scheme);
-  if (i.scale) q.set('scale', String(i.scale));
-  return image(await fetch(`${base}/api/d/${id}.${i.format}${q.size ? `?${q}` : ''}`));
-};
+/**
+ * A short link: store, then draw `/d/{id}`. A refusal at either step is the answer. `link` stores
+ * with `POST /link`, the source as a plain-text body and the options in the query.
+ */
+const viaShare =
+  (key?: string, link = false) =>
+  async (i: Input) => {
+    const stored = link
+      ? await fetch(`${base}/api/link${query(i) || '?'}&format=json`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain', ...auth(key) },
+          body: i.code,
+        })
+      : await post(
+          '/v1/share',
+          JSON.stringify({ code: i.code, type: i.type, scheme: i.scheme, scale: i.scale }),
+          key,
+        );
+    if (!stored.ok) return image(stored);
+    const { id } = await stored.json();
+    const q = new URLSearchParams();
+    if (i.scheme) q.set('scheme', i.scheme);
+    if (i.scale) q.set('scale', String(i.scale));
+    return image(await fetch(`${base}/api/d/${id}.${i.format}${q.size ? `?${q}` : ''}`));
+  };
 
 const checkout = fs.readFileSync('examples/checkout.draft', 'utf8');
 const mermaid = 'flowchart LR\n  A[Start] --> B[End]\n';
@@ -170,6 +181,7 @@ const transports = {
   REST: viaRest(KEYS.rich),
   MCP: viaMcp(KEYS.rich),
   share: viaShare(),
+  'POST /link': viaShare(undefined, true),
 };
 type Name = keyof typeof transports;
 
@@ -177,7 +189,8 @@ let checked = 0;
 for (const c of cases) {
   const seen: [Name, Outcome][] = [];
   for (const [name, run] of Object.entries(transports) as [Name, (i: Input) => Promise<Outcome>][])
-    if (name !== 'share' || c.share || c.want !== 'image') seen.push([name, await run(c.input)]);
+    if (!/share|link/.test(name) || c.share || c.want !== 'image')
+      seen.push([name, await run(c.input)]);
   const results = new Set(seen.map(([, o]) => o.result));
   const statuses = new Set(seen.flatMap(([, o]) => (o.status ? [o.status] : [])));
   const table = seen.map(([n, o]) => `${n}=${o.result}/${o.status ?? '-'}`).join(', ');
@@ -198,6 +211,7 @@ const refusals: [string, Outcome][] = [
   ['REST', await viaRest(BAD_KEY)(warm)],
   ['MCP', await image(await post('/mcp', rpcBody('render_diagram', warm), BAD_KEY))],
   ['share', await viaShare(BAD_KEY)(warm)],
+  ['POST /link', await viaShare(BAD_KEY, true)(warm)],
   [
     'GET /link',
     await image(
@@ -216,6 +230,10 @@ const tooBig: [string, Outcome][] = [
   ['REST', await image(await post('/v1/render', JSON.stringify({ code: pad }), KEYS.rich))],
   ['MCP', await image(await post('/mcp', rpcBody('render_diagram', { code: pad }), KEYS.rich))],
   ['share', await image(await post('/v1/share', JSON.stringify({ code: pad })))],
+  [
+    'POST /link',
+    await image(await fetch(`${base}/api/link?format=json`, { method: 'POST', body: pad })),
+  ],
 ];
 for (const [name, o] of tooBig)
   assert.deepEqual(o, { result: 'ERR_TOO_LARGE', status: 413 }, `300 KB body over ${name}`);
@@ -233,7 +251,7 @@ assert.equal(plain.status, 415);
 const cut = await post('/mcp', '{"jsonrpc": "2.0", "id": 1, "meth', KEYS.rich);
 assert.equal((await cut.json()).error?.code, -32700);
 console.log(
-  'Refused alike: a wrong key 401 on 5 routes, warm image too; a 300 KB body 413 on 3; MCP keeps 415 and -32700.',
+  'Refused alike: a wrong key 401 on 6 routes, warm image too; a 300 KB body 413 on 4; MCP keeps 415 and -32700.',
 );
 
 // The links the MCP link tools return keep the options: they draw what render_diagram draws.

@@ -16,8 +16,11 @@ import { freshness, sourceType, type SourceType } from './mermaid';
 /** The largest POST body any route reads: REST, share, MCP and the Stripe webhook. */
 export const MAX_BODY = 256 * 1024;
 
-/** The body as text, or a 413 once it is over `max` bytes. */
-export async function readBody(req: Request, max = MAX_BODY) {
+/**
+ * The body as text, or a 413 once it is over `max` bytes. `keepBom` keeps a leading byte-order
+ * mark, for a body that is the source itself, so the 64 KB limit counts it as GET and JSON do.
+ */
+export async function readBody(req: Request, max = MAX_BODY, keepBom = false) {
   const reader = req.body?.getReader();
   if (!reader) return '';
   const parts: Uint8Array[] = [];
@@ -38,7 +41,7 @@ export async function readBody(req: Request, max = MAX_BODY) {
     bytes.set(p, at);
     at += p.length;
   }
-  return new TextDecoder().decode(bytes);
+  return new TextDecoder('utf-8', { ignoreBOM: keepBom }).decode(bytes);
 }
 
 /** The body as JSON, any shape (an MCP batch is an array). */
