@@ -323,12 +323,12 @@ for (const file of files) {
   const source = fs.readFileSync(file, 'utf8');
   const segment = await encodeSource(source);
   if (segment.length > 8 * 1024) continue;
-  const edit = await fetch(`${base}/edit/${segment}?type=draftably`, { redirect: 'manual' });
+  const edit = await fetch(`${base}/api/edit/${segment}?type=draftably`, { redirect: 'manual' });
   const where = edit.headers.get('location') ?? '';
   const code = `code=${encodeURIComponent(source)}`;
   const same =
     code.length > 8 * 1024 ||
-    (await fetch(`${base}/edit?${code}&type=draftably`, { redirect: 'manual' })).headers.get(
+    (await fetch(`${base}/api/edit?${code}&type=draftably`, { redirect: 'manual' })).headers.get(
       'location',
     ) === where;
   if (edit.status === 302 && where.startsWith('https://draftably.dev/play#s=') && same)
@@ -338,8 +338,11 @@ for (const file of files) {
 }
 // /edit/ refuses a bad option as the image route does, and still opens a bad diagram.
 const editSeg = await encodeSource('node a "A" color=purple');
-assert.equal((await fetch(`${base}/edit/${editSeg}?type=bad`, { redirect: 'manual' })).status, 400);
-assert.equal((await fetch(`${base}/edit/${editSeg}`, { redirect: 'manual' })).status, 302);
+assert.equal(
+  (await fetch(`${base}/api/edit/${editSeg}?type=bad`, { redirect: 'manual' })).status,
+  400,
+);
+assert.equal((await fetch(`${base}/api/edit/${editSeg}`, { redirect: 'manual' })).status, 302);
 console.log(
   `/edit/: ${edits.same} files open an editor link that holds their source, the same by ?code=; ` +
     `${edits.failed.length} wrong. A bad option is 400; a bad diagram still opens.`,
@@ -1149,7 +1152,7 @@ if (!remote) {
   // JSON POST, with a byte-order mark and with a JSON-looking first line.
   const jsonType = { 'Content-Type': 'application/json' };
   const post = (body: string, headers: Record<string, string> = {}, query = '?format=json') =>
-    fetch(`${base}/link${query}`, { method: 'POST', headers, body });
+    fetch(`${base}/api/link${query}`, { method: 'POST', headers, body });
   const parity: string[] = [];
   for (const src of [
     checkout,
@@ -1160,7 +1163,7 @@ if (!remote) {
     // A 64 KB source is too long for any URL, so it compares the two POST forms only.
     const viaGet = encodeURIComponent(src).length < 8000;
     const answers = await Promise.all([
-      viaGet ? fetch(`${base}/link?${q(src)}&format=json`) : post(src),
+      viaGet ? fetch(`${base}/api/link?${q(src)}&format=json`) : post(src),
       post(src),
       post(JSON.stringify({ code: src }), jsonType),
     ]);
