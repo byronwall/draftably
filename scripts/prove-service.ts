@@ -767,9 +767,20 @@ assert.equal(first.headers.get('X-Draftably-Cache'), 'miss');
 assert.equal(second.headers.get('X-Draftably-Cache'), 'hit');
 assert.equal(await first.text(), await second.text());
 assert.equal((await fetch(`${base}/svg/pako:@@@`)).status, 400);
+// A free caller checks a source by fetching it: the error names the line, column and its text.
+const broken = await fetch(`${base}/svg/${Buffer.from('node a "A').toString('base64url')}`);
+assert.equal(broken.status, 400);
+const why = 'line 1, column 8: Unclosed quoted string. | node a "A';
+assert.equal(broken.headers.get('X-Draftably-Error'), why);
+assert.match(
+  await broken.text(),
+  /line 1, column 8: Unclosed quoted string\..*&gt; node a &quot;A/s,
+);
 // A bad option is refused even when the default image is cached.
 assert.equal((await fetch(`${url}?scheme=`)).status, 400);
 
-console.log('Cache: the second request was a hit. Bad encoding: 400.');
+console.log(
+  'Cache: the second request was a hit. Bad encoding: 400. A bad source names its line and column.',
+);
 stop();
 process.exit(tally.failed.length || png.failed.length || mm.failed.length ? 1 : 0);
