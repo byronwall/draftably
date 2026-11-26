@@ -14,7 +14,17 @@ import { ApiError } from './errors';
 /** The fields of one request's log line. Docs: `docs/observability.md`. */
 export interface Wide {
   event: 'request';
-  route: 'image' | 'share' | 'rest' | 'mcp' | 'oauth' | 'account' | 'login' | 'webhook' | 'health' | 'other';
+  route:
+    | 'image'
+    | 'share'
+    | 'rest'
+    | 'mcp'
+    | 'oauth'
+    | 'account'
+    | 'login'
+    | 'webhook'
+    | 'health'
+    | 'other';
   method: string;
   /** Only for routes whose path holds no diagram source. */
   path?: string;
@@ -40,7 +50,7 @@ export interface Wide {
   /** A fulfilled or repeated Stripe purchase. */
   credits_bought?: number;
   /** `login_email` is the cap on links one address may hold. */
-  rate_limit?: 'anon' | 'key' | 'login' | 'login_email';
+  rate_limit?: 'anon' | 'key' | 'account' | 'login' | 'login_email';
   /** The tools called, joined with commas when one request batches several. */
   mcp_tool?: string;
   mcp_calls?: number;

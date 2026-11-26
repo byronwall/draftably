@@ -15,8 +15,10 @@ import {
 import { checkKey, sessionAccount, touchKey, type AuthEnv } from './auth';
 import { esc, page } from './html';
 import { handleMcp } from './mcp';
-import { ApiError, errorJson, type ApiEnv } from './api';
+import { ApiError, errorJson } from './api';
+import type { ShareEnv } from './share';
 import type { Payer } from './render';
+import { note, noteError } from './obs';
 
 export interface OAuthEnv {
   OAUTH_KV: KVNamespace;
@@ -51,7 +53,7 @@ export interface GrantMeta {
 }
 
 /** The provider's options for one origin: `/mcp` there is the resource its tokens are for. */
-export function oauthOptions<E extends ApiEnv & OAuthEnv>(
+export function oauthOptions<E extends ShareEnv & OAuthEnv>(
   origin: string,
   app: ExportedHandler<E>,
 ): OAuthProviderOptions<E> {
@@ -61,10 +63,13 @@ export function oauthOptions<E extends ApiEnv & OAuthEnv>(
     apiHandler: {
       fetch: async (req, env, ctx) => {
         const who = (ctx as ExecutionContext & { props: Caller }).props;
+        note({ payer: who.key ? 'key' : 'app', account: who.account, key: who.key });
         if (who.key) ctx.waitUntil(touchKey(env.DB, who.key));
         // KV may still hold a disconnected app's token in another location; D1 does not.
-        else if (!who.grant || (await disconnected(env.DB, who.grant)))
+        else if (!who.grant || (await disconnected(env.DB, who.grant))) {
+          noteError('ERR_AUTH', 'This app was disconnected.');
           return errorJson(new ApiError(401, 'ERR_AUTH', 'This app was disconnected.'));
+        }
         return handleMcp(req, env, ctx, { account: who.account });
       },
     },
