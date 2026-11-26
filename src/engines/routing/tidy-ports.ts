@@ -220,13 +220,17 @@ function movePort(ctx: Context, sides: Map<string, PortEnd[]>, p: PortEnd, offse
 }
 
 /** Exchange two occupied slots. Keep each edge's track beyond its first bend. */
-export function swapPorts(ctx: Context, attempt: Attempt) {
+export function swapPorts(ctx: Context, attempt: Attempt, bentOnly = false) {
   const { state } = ctx,
     sides = sidePorts(ctx);
   for (const ports of sides.values()) {
     const offset = (p: PortEnd) => state.routes[p.i][offsetKey(p.end)];
     const sorted = ports
-      .filter(p => canMove(ctx, state.routes[p.i], p.end))
+      .filter(
+        p =>
+          (!bentOnly || state.routes[p.i].points.length >= 3) &&
+          canMove(ctx, state.routes[p.i], p.end),
+      )
       .sort((a, b) => offset(a) - offset(b));
     for (let k = 1; k < sorted.length; k++) {
       const p = sorted[k - 1],

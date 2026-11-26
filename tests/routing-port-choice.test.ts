@@ -231,6 +231,55 @@ layout root engine=compound-flow direction=down
     expect(result.routes.find(r => r.id === 'straight')!.points.at(-1)).toEqual({ x: 205, y: 140 });
   });
 
+  it('keeps an authored arrival offset when another edge takes a free slot', () => {
+    const { routes, report } = compute({
+      nodes: [
+        { id: 'a', x: 0, y: 0, w: 120, h: 96, shape: 'box' },
+        { id: 'b', x: 205, y: 0, w: 120, h: 96, shape: 'box' },
+        { id: 'd', x: 0, y: 165, w: 120, h: 96, shape: 'diamond' },
+      ],
+      groups: [],
+      edges: [
+        { id: 'e0', from: 'a', to: 'b', cfg: { fromSide: 'bottom', toSide: 'right' } },
+        { id: 'e1', from: 'a', to: 'd', cfg: { fromSide: 'bottom', toSide: 'left' } },
+        {
+          id: 'e3',
+          from: 'd',
+          to: 'a',
+          cfg: { fromSide: 'right', toSide: 'bottom', toOffset: -16 },
+        },
+      ],
+    });
+    expect(routes.find(r => r.id === 'e3')!.points.at(-1)).toEqual({ x: 44, y: 96 });
+    expect(report.crossings).toBe(0);
+  });
+
+  it('tries bent edges before sliding a straight edge in a port swap', async () => {
+    const source = `
+node a "Source"
+node b "Near"
+node c "Far"
+size a width=120 height=96
+size b width=120 height=96
+size c width=120 height=96
+pin a x=0 y=0
+pin b x=220 y=0
+pin c x=440 y=0
+edge e0 a -> c from=right to=top
+edge e1 a -> c from=right to=right
+edge e2 a -> b from=right
+edge e3 a -> c from=right to=left
+edge e4 a -> c from=right to=top
+edge e5 a -> b from=right`;
+    const doc = projectScene(await compile(source)),
+      { vg, rects } = visibleRects(doc),
+      { result } = computeRoutes(doc, vg, rects, { previous: [] });
+    const e2 = result.routes.find(r => r.id === 'e2')!,
+      e4 = result.routes.find(r => r.id === 'e4')!;
+    expect(result.report.crossings).toBe(1);
+    expect(conflicts(e2.points, [e4]).crossings).toBe(0);
+  });
+
   it('swaps two ports of a fan whose lines cross just past the side (#599)', async () => {
     const { line } = await route(`
 diagram "Two bottom ports feed stacked destinations" version=1
