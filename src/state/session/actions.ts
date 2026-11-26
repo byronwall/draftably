@@ -52,6 +52,23 @@ import type { CanvasTextPart } from './canvas-text';
 /** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
 export const HEADING_EDIT = { title: textId('title'), subtitle: textId('subtitle') } as const;
 
+export type CodeFields = { title: string; table: boolean; body: string; cells: string };
+
+/**
+ * One open of the code editor. `token` names the draft for its whole life, while `id` follows
+ * the node when a temporary id becomes a source id. `open` is the node as it was when the editor
+ * opened, a copy the editor starts from; `base` is the same node field by field, which a save
+ * checks against the latest source. `file` is the session the draft was opened in: a draft
+ * never saves into another file.
+ */
+export interface CodeDraft {
+  token: number;
+  id: string;
+  file: unknown;
+  base: CodeFields;
+  open: { title: string; table: boolean; tab: number; body: string[]; cells?: Table };
+}
+
 export function createActions(
   s: EditorPart & DocumentPart & CanvasTextPart & FileSessionPart & ScenePart & LayoutPart,
 ) {
@@ -103,21 +120,6 @@ export function createActions(
 
   // --- Code and table editing ------------------------------------------------------------------
 
-  type CodeFields = { title: string; table: boolean; body: string; cells: string };
-  /**
-   * One open of the code editor. `token` names the draft for its whole life, while `id` follows
-   * the node when a temporary id becomes a source id. `open` is the node as it was when the editor
-   * opened, a copy the editor starts from; `base` is the same node field by field, which a save
-   * checks against the latest source. `file` is the session the draft was opened in: a draft
-   * never saves into another file.
-   */
-  interface CodeDraft {
-    token: number;
-    id: string;
-    file: unknown;
-    base: CodeFields;
-    open: { title: string; table: boolean; tab: number; body: string[]; cells?: Table };
-  }
   /** Drafts that are open or waiting to be applied, so a source id map reaches each one. */
   const drafts = new Set<{ id: string }>();
   let draftCount = 0;
