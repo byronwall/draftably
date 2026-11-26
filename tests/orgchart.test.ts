@@ -87,6 +87,45 @@ describe('layout … orgchart', () => {
     expect(top(labeled, 'web')).toBeGreaterThan(top(labeled, 'cto'));
   });
 
+  it('draws each reporting line label on its own leg', async () => {
+    const source = [
+      'node ceo "CEO"',
+      'node ea "EA" role=assistant',
+      'node cto "CTO"',
+      'node cfo "CFO"',
+      'node w1 "W1"',
+      'node w2 "W2"',
+      'edge r0 ceo -> ea "reports directly"',
+      'edge r1 ceo -> cto "interim"',
+      'edge r2 ceo -> cfo',
+      'edge r3 cto -> w1 "contract"',
+      'edge r4 cto -> w2',
+      'layout root orgchart root=ceo leaves=stack',
+    ].join('\n');
+    const { scene, routes } = await routed(source);
+    expect(scene.edges.filter(e => e.branch).map(e => e.id)).toEqual([
+      'r0',
+      'r1',
+      'r2',
+      'r3',
+      'r4',
+    ]);
+    for (const r of routes.filter(r => r.label)) {
+      const box = r.label!,
+        meets = r.points.some((p, k) => {
+          const q = r.points[k + 1];
+          return (
+            !!q &&
+            Math.max(p.x, q.x) >= box.x - box.w / 2 &&
+            Math.min(p.x, q.x) <= box.x + box.w / 2 &&
+            Math.max(p.y, q.y) >= box.y - box.h / 2 &&
+            Math.min(p.y, q.y) <= box.y + box.h / 2
+          );
+        });
+      expect(meets, r.id).toBe(true);
+    }
+  });
+
   it('keeps the bus through a JSON round trip', async () => {
     const { doc, routes } = await routed(sample),
       again = normalize(JSON.parse(JSON.stringify(doc))),

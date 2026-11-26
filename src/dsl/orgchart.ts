@@ -24,6 +24,8 @@ import {
   type OrgLeaves,
 } from './syntax';
 import type { Planned } from './corridors';
+import { resolveAppearance } from '../model/appearance';
+import { edgeLabelSize } from '../model/labels';
 import type { Diagram } from '../model/types';
 
 /** Space between sibling blocks and between stacked leaves. */
@@ -84,12 +86,17 @@ export function withOrgcharts(m: Model): Model {
     for (const e of out.edges) {
       // In a comparison, an edge that repeats a reporting line's two ends is one too: compare
       // holds the edge under its old and new ID.
-      if (tree.has(e) || (treeLine(e) && e.status && pairs.has(`${e.source}\0${e.target}`)))
+      if (
+        tree.has(e) ||
+        (treeLine(e) &&
+          (e.status === 'added' || e.status === 'removed') &&
+          pairs.has(`${e.source}\0${e.target}`))
+      )
         e.branch = true;
       else if (inside(e.source) && inside(e.target)) {
         // In a comparison, a reporting line that moved to another manager is still one: it
         // draws with no head, though only the tree places people.
-        if (treeLine(e) && e.status) e.head = 'none';
+        if (treeLine(e) && e.status && e.status !== 'same') e.head = 'none';
         e.constraint = false;
       }
     }
@@ -166,7 +173,13 @@ export function arrangeOrgchart(
       .filter(id => parent.get(id) === scope)
       .map(id => ({ id, ...doc.layout.nodes[id], ...sizes.get(id) })),
     by = new Map(items.map(p => [p.id, p])),
-    gaps = gapsFor(clearance);
+    gaps = gapsFor(clearance),
+    look = resolveAppearance(doc.appearance);
+  // A labeled reporting line draws its label on its own leg: the run from the stem to an
+  // assistant or a stacked leaf leaves room for the widest such label.
+  for (const e of doc.graph.edges)
+    if (e.branch && e.label && by.has(e.from) && by.has(e.to))
+      gaps.indent = Math.max(gaps.indent, edgeLabelSize(e.label, look).w + 2 * clearance);
   if (!by.has(root)) return { doc, stacked: new Set() };
   const kids = new Map<string, string[]>(),
     seen = new Set([root]);

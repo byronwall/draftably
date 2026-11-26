@@ -76,7 +76,12 @@ function markMindmap(
   // edge under its old and new ID. Elsewhere a second line between the same two topics is a link.
   const pairs = new Set([...tree].map(e => `${e.source}\0${e.target}`));
   for (const e of m.edges) {
-    if (tree.has(e) || (treeLine(e) && e.status && pairs.has(`${e.source}\0${e.target}`)))
+    if (
+      tree.has(e) ||
+      (treeLine(e) &&
+        (e.status === 'added' || e.status === 'removed') &&
+        pairs.has(`${e.source}\0${e.target}`))
+    )
       e.branch = true;
     // A cross-link inside the map draws, but the tree alone places the topics.
     else if (inside(e.source) && inside(e.target)) {
