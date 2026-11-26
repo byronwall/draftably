@@ -20,6 +20,7 @@ import { balance, COST, spend, type Balance } from './credits';
 import { draw, type DrawOptions, type Format } from './draw';
 import { ApiError } from './errors';
 import { freshness, sourceType } from './mermaid';
+import { bump, byteSize, note, span } from './obs';
 
 export { MAX_SEGMENT };
 
@@ -77,7 +78,36 @@ export interface Payer {
  * (a Response, MCP content) and runs before the credits are taken, so nothing that can fail runs
  * after the debit; the cache entry is written only after it.
  */
-export async function render<P>(
+export function render<P>(
+  env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
+  ctx: ExecutionContext,
+  origin: string,
+  rawSource: string,
+  format: Format,
+  opts: DrawOptions,
+  prepare: (body: string | Uint8Array, cacheControl: string) => Promise<P>,
+  payer?: Payer,
+  beforeDraw?: () => Promise<void>,
+): Promise<Drawn & { out: P }> {
+  // One span per render, for latency by format and cache across GET, REST and MCP.
+  return span('render', { format, paid: !!payer }, async s => {
+    const drawn = await renderNow(
+      env,
+      ctx,
+      origin,
+      rawSource,
+      format,
+      opts,
+      prepare,
+      payer,
+      beforeDraw,
+    );
+    s.setAttribute('cache_hit', drawn.hit);
+    return drawn;
+  });
+}
+
+async function renderNow<P>(
   env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
   ctx: ExecutionContext,
   origin: string,
@@ -92,14 +122,29 @@ export async function render<P>(
 ): Promise<Drawn & { out: P }> {
   // A GET URL's decoder drops a leading byte-order mark; drop it here too, so both hash the same.
   const source = rawSource.replace(/^\uFEFF/, '');
-  if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
+  const bytes = new TextEncoder().encode(source).length;
+  note({
+    format,
+    source_bytes: bytes,
+    scheme: opts.scheme,
+    scale: format === 'png' ? opts.scale : undefined,
+  });
+  if (bytes > MAX_SOURCE_BYTES)
     throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
-  const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
-  const hit = await cache().match(key);
+  const type = sourceType(source, opts.type).type;
+  note({ source_type: type });
+  const { key, hit } = await span('cache.lookup', { format }, async s => {
+    const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
+    const hit = await cache().match(key);
+    s.setAttribute('cache_hit', !!hit);
+    return { key, hit };
+  });
+  note({ cache: hit ? 'hit' : 'miss' });
   if (hit) {
     const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
     // A dated image's lifetime is counted again: it still ends at the next UTC midnight.
     const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
+    note({ out_bytes: byteSize(body) });
     return { body, hit: true, cacheControl, out: await prepare(body, cacheControl) };
   }
   await beforeDraw?.();
@@ -108,24 +153,34 @@ export async function render<P>(
     new ApiError(402, 'ERR_LIMIT_BALANCE', 'Out of credits. Buy more at /account.');
   if (payer) {
     const b = await balance(env.DB, payer.account);
+    note({ credits_left: b.grant + b.bought });
     if (b.grant + b.bought < cost) throw outOfCredits();
   }
   const body = await draw(source, format, opts);
+  note({ out_bytes: byteSize(body) });
   const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
   const out = await prepare(body, cacheControl);
   let left: Balance | undefined;
   if (payer) {
     left = (await spend(env.DB, payer.account, cost, format, payer.key)) ?? undefined;
     if (!left) {
-      const live = await env.DB.prepare(`SELECT 1 FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
+      const live = await env.DB.prepare(
+        `SELECT a.grant_left + a.bought AS left FROM keys k JOIN accounts a ON a.id = k.account_id
+         WHERE k.id = ?1 AND k.revoked_at IS NULL`,
+      )
         .bind(payer.key)
-        .first();
+        .first<{ left: number }>();
       if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
+      note({ credits_left: live.left });
       throw outOfCredits();
     }
+    bump('credits_spent', cost);
+    note({ credits_left: left.grant + left.bought });
   }
   ctx.waitUntil(
-    cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
+    span('cache.put', { format, out_bytes: byteSize(body) }, () =>
+      cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
+    ),
   );
   return { body, hit: false, cacheControl, left, out };
 }

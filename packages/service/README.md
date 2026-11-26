@@ -29,6 +29,11 @@ Sign-in sends a one-use link by email through Cloudflare Email Service (the `EMA
 Locally, `wrangler dev` sends nothing: it writes each email to a file and logs the file's path, so
 open the link from there. The proof reads the link the same way.
 
+## Watch it in production
+
+Workers Logs, Traces and Issues are on. [docs/observability.md](docs/observability.md) lists the
+log fields, the spans, and the dashboard query for each production question.
+
 ## Connect an MCP client
 
 The server is at `/mcp` (Streamable HTTP) and takes the same key as the REST API.

@@ -13,6 +13,7 @@ import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { MAX_SEGMENT, render, type Payer } from './render';
 import { handleMcp } from './mcp';
 import { handleWebhook, type StripeEnv } from './stripe';
+import { ipHash, note, noteError, scrub, span, withEvent, type Wide } from './obs';
 
 export interface Env extends ApiEnv, StripeEnv {
   ANON_LIMIT: RateLimit;
@@ -67,17 +68,23 @@ async function imageResponse(
   const anonLimit = async () => {
     if (payer) return;
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-    if (!(await env.ANON_LIMIT.limit({ key: ip })).success)
+    if (!(await env.ANON_LIMIT.limit({ key: ip })).success) {
+      note({ rate_limit: 'anon' });
       throw new ApiError(
         429,
         'ERR_LIMIT_BURST',
         'Too many renders from this address. Wait a minute, or use an API key.',
       );
+    }
   };
   try {
-    if (segment.length > MAX_SEGMENT)
-      throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
-    const source = await decodeSource(segment);
+    const source = await span('decode', { segment_bytes: segment.length }, async s => {
+      if (segment.length > MAX_SEGMENT)
+        throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
+      const text = await decodeSource(segment);
+      s.setAttribute('source_bytes', new TextEncoder().encode(text).length);
+      return text;
+    });
     // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
     // one. An anonymous answer varies on Authorization for the same reason.
     const drawn = await render(
@@ -96,8 +103,12 @@ async function imageResponse(
     res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
     return res;
   } catch (error) {
-    if (error instanceof ApiError) return errorResponse(error.message, format, error.status);
+    if (error instanceof ApiError) {
+      noteError(error.code, error.message);
+      return errorResponse(error.message, format, error.status);
+    }
     if (!(error instanceof SourceError)) throw error;
+    noteError('ERR_SOURCE', error.message);
     return errorResponse(error.message, format, 400);
   }
 }
@@ -140,46 +151,132 @@ GET  /v1/balance     -> {grant, bought, resetsAt}
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
 `;
 
+/** The route kind on the request's log line. */
+function routeKind(path: string): Wide['route'] {
+  if (parseImagePath(path)) return 'image';
+  if (path.startsWith('/v1/')) return 'rest';
+  if (path === '/mcp') return 'mcp';
+  if (path === '/stripe/webhook') return 'webhook';
+  if (path === '/login' || path.startsWith('/auth/')) return 'login';
+  if (path === '/logout' || path.startsWith('/account')) return 'account';
+  if (path === '/' || path === '/health') return 'health';
+  return 'other';
+}
+
+/** Every path the service answers, as logged. */
+const PATHS = new Set([
+  '/',
+  '/health',
+  '/mcp',
+  '/login',
+  '/logout',
+  '/auth/verify',
+  '/account',
+  '/account/keys',
+  '/account/buy',
+  '/account/keys/:id/revoke',
+  '/stripe/webhook',
+  '/v1/render',
+  '/v1/validate',
+  '/v1/convert',
+  '/v1/balance',
+]);
+
+/**
+ * The path for the log line, safe to keep: none for an image (its path holds the diagram source),
+ * a known route as its template, and for anything else only its first segment, scrubbed, which is
+ * enough to spot scanners (`/wp-login.php`).
+ */
+function pathLabel(route: Wide['route'], path: string) {
+  if (route === 'image') return undefined;
+  const template = path.replace(
+    /^\/account\/keys\/[0-9a-f]{12}\/revoke$/,
+    '/account/keys/:id/revoke',
+  );
+  if (PATHS.has(template)) return template;
+  // Anything else (scanner noise) logs its first segment when it is a short name that starts
+  // with a letter, such as `/wp-login.php`. A token (32 characters) or an IP never matches.
+  const first = path.split('/')[1] ?? '';
+  const more = path.split('/').length > 2 ? '/*' : '';
+  return /^[a-z][\w.-]{0,24}$/i.test(first) ? `/${first}${more}` : '/<other>';
+}
+
+async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
+  if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
+  const api = (await handleApi(req, env, ctx, url)) ?? (await handleMcp(req, env, ctx, url));
+  if (api) return api;
+  const account = await handleAccount(req, env, url);
+  if (account) return account;
+  // HEAD would draw and charge for a body it never sends.
+  if (req.method !== 'GET')
+    return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
+  if (url.pathname === '/')
+    return req.headers.get('Accept')?.includes('text/html')
+      ? homePage(HOME)
+      : new Response(HOME, {
+          headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
+        });
+  if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
+  const route = parseImagePath(url.pathname);
+  if (!route) return new Response('Not found', { status: 404 });
+  note({ format: route.format });
+
+  // Options are checked first, so a bad one never matches a cached image.
+  let opts: DrawOptions;
+  try {
+    opts = drawOptions(k => url.searchParams.get(k));
+  } catch (error) {
+    if (!(error instanceof SourceError)) throw error;
+    noteError('ERR_SOURCE', error.message);
+    return errorResponse(error.message, route.format, 400);
+  }
+  // A key spends credits and skips the per-address limit. It is checked before the cache, so a
+  // revoked or wrong key is refused even for an image that is already cached.
+  let payer: Payer | undefined;
+  if (req.headers.has('Authorization')) {
+    try {
+      payer = await requireKey(req, env, ctx);
+    } catch (error) {
+      if (!(error instanceof ApiError)) throw error;
+      noteError(error.code, error.message);
+      return errorResponse(error.message, route.format, error.status);
+    }
+  }
+  return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);
+}
+
 export default {
+  /** Every request: handle it, then log one wide event for it. */
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
-    if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
-    const api = (await handleApi(req, env, ctx, url)) ?? (await handleMcp(req, env, ctx, url));
-    if (api) return api;
-    const account = await handleAccount(req, env, url);
-    if (account) return account;
-    // HEAD would draw and charge for a body it never sends.
-    if (req.method !== 'GET')
-      return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
-    if (url.pathname === '/')
-      return req.headers.get('Accept')?.includes('text/html')
-        ? homePage(HOME)
-        : new Response(HOME, {
-            headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
-          });
-    if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
-    const route = parseImagePath(url.pathname);
-    if (!route) return new Response('Not found', { status: 404 });
-
-    // Options are checked first, so a bad one never matches a cached image.
-    let opts: DrawOptions;
+    const route = routeKind(url.pathname);
+    const ev: Wide = {
+      event: 'request',
+      route,
+      method: req.method,
+      path: pathLabel(route, url.pathname),
+      version: runtimeVersion,
+      build: env.CF_VERSION_METADATA?.id ?? 'unknown',
+      country: (req.cf?.country as string | undefined) ?? undefined,
+      payer: 'anonymous',
+    };
     try {
-      opts = drawOptions(k => url.searchParams.get(k));
+      const ip = req.headers.get('CF-Connecting-IP');
+      // Best effort: a failed digest must not fail the request.
+      if (ip) ev.ip = await ipHash(ip).catch(() => undefined);
+      const res = await withEvent(ev, () => handle(req, env, ctx, url));
+      ev.status = res.status;
+      // An answer no handler gave a code, such as a 404 or 405.
+      if (res.status >= 400) ev.error_code ??= `HTTP_${res.status}`;
+      return res;
     } catch (error) {
-      if (!(error instanceof SourceError)) throw error;
-      return errorResponse(error.message, route.format, 400);
+      // Thrown on, so Workers Issues groups it as a failed invocation.
+      ev.status = 500;
+      ev.error_code = 'ERR_INTERNAL';
+      ev.error = scrub(String(error instanceof Error ? error.message : error));
+      throw error;
+    } finally {
+      console.log(ev);
     }
-    // A key spends credits and skips the per-address limit. It is checked before the cache, so a
-    // revoked or wrong key is refused even for an image that is already cached.
-    let payer: Payer | undefined;
-    if (req.headers.has('Authorization')) {
-      try {
-        payer = await requireKey(req, env, ctx);
-      } catch (error) {
-        if (!(error instanceof ApiError)) throw error;
-        return errorResponse(error.message, route.format, error.status);
-      }
-    }
-    return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);
   },
 } satisfies ExportedHandler<Env>;

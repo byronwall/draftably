@@ -11,6 +11,7 @@ import { DEFAULT_FORMAT, drawOptions, type Format } from './draw';
 import { ApiError, errorJson } from './errors';
 import { sourceType, toDraft } from './mermaid';
 import { embedUrl, render } from './render';
+import { note, noteError } from './obs';
 
 export { ApiError, errorJson };
 
@@ -34,8 +35,11 @@ export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContex
       'ERR_AUTH',
       'Send Authorization: Bearer <key>. Make a key at /account.',
     );
-  if (!(await env.KEY_LIMIT.limit({ key: who.key })).success)
+  note({ payer: 'key', account: who.account, key: who.key });
+  if (!(await env.KEY_LIMIT.limit({ key: who.key })).success) {
+    note({ rate_limit: 'key' });
     throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many calls this minute for this key.');
+  }
   return who;
 }
 
@@ -99,6 +103,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         const format = (get('format') ?? DEFAULT_FORMAT) as Format;
         if (format !== 'svg' && format !== 'png')
           throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
+        note({ format });
         const opts = drawOptions(get);
         // Everything the answer needs is built before the credits are taken.
         const link = await embedUrl(url.origin, code, format, opts);
@@ -132,12 +137,15 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
           ({ draft, warnings } = await toDraft(code, get('type')));
         } catch (error) {
           if (!(error instanceof SourceError)) throw error;
+          noteError('ERR_SOURCE', error.message);
           return Response.json({
             valid: false,
             diagnostics: [{ severity: 'error', message: error.message }],
           });
         }
         const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
+        const bad = result.diagnostics.find(d => d.severity === 'error');
+        if (!result.ok) noteError('ERR_SOURCE', bad?.message ?? 'invalid');
         const diagnostics = [
           ...warnings.map(message => ({ severity: 'warning', message })),
           ...result.diagnostics.map(d => ({
@@ -163,8 +171,10 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         throw new ApiError(404, 'ERR_NOT_FOUND', `No route ${route}.`);
     }
   } catch (error) {
-    if (error instanceof SourceError) return errorJson(sourceError(error));
-    if (error instanceof ApiError) return errorJson(error);
-    throw error;
+    const e = error instanceof SourceError ? sourceError(error) : error;
+    if (!(e instanceof ApiError)) throw error;
+    // A 404's message repeats the path the caller sent.
+    noteError(e.code, e.code === 'ERR_NOT_FOUND' ? 'No such route.' : e.message);
+    return errorJson(e);
   }
 }

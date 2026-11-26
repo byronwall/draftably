@@ -3,6 +3,8 @@
  * payments; D1 stays the record of balances. The webhook adds a pack's credits once per Checkout
  * session, however often Stripe sends it.
  */
+import { byteSize, note, span } from './obs';
+
 export interface StripeEnv {
   DB: D1Database;
   /** Empty until paid credits are switched on; the account page then offers no packs. */
@@ -123,33 +125,52 @@ async function readLimited(req: Request, max: number) {
 }
 
 export async function handleWebhook(req: Request, env: StripeEnv) {
-  if (!env.STRIPE_WEBHOOK_SECRET) return new Response('Paid credits are off.', { status: 404 });
+  const secret = env.STRIPE_WEBHOOK_SECRET;
+  if (!secret) {
+    note({ webhook: 'off' });
+    return new Response('Paid credits are off.', { status: 404 });
+  }
   // Nothing is read until the request looks signed, and then at most 256 KB: the endpoint is
   // public, and a Stripe event is a few KB.
-  if (!/(?:^|,)t=\d+/.test(req.headers.get('Stripe-Signature') ?? ''))
+  const badSignature = () => {
+    note({ webhook: 'bad_signature' });
     return new Response('Bad signature.', { status: 400 });
+  };
+  if (!/(?:^|,)t=\d+/.test(req.headers.get('Stripe-Signature') ?? '')) return badSignature();
   const body = await readLimited(req, 256 * 1024);
-  if (body === null) return new Response('Too large.', { status: 413 });
-  if (
-    !(await verifySignature(body, req.headers.get('Stripe-Signature'), env.STRIPE_WEBHOOK_SECRET))
-  )
-    return new Response('Bad signature.', { status: 400 });
+  if (body === null) {
+    note({ webhook: 'too_large' });
+    return new Response('Too large.', { status: 413 });
+  }
+  const signed = await span('stripe.signature', { body_bytes: byteSize(body) }, async s => {
+    const ok = await verifySignature(body, req.headers.get('Stripe-Signature'), secret);
+    s.setAttribute('valid', ok);
+    return ok;
+  });
+  if (!signed) return badSignature();
   const event = JSON.parse(body) as CheckoutEvent;
+  note({ stripe_event: event.type });
   const s = event.data.object;
   // A card pays at once (completed, paid); a delayed method such as a bank debit completes unpaid
   // and pays later (async_payment_succeeded). Either way the session ID keeps it to one credit.
   const paidEvents = ['checkout.session.completed', 'checkout.session.async_payment_succeeded'];
-  if (!paidEvents.includes(event.type) || s.payment_status !== 'paid')
+  if (!paidEvents.includes(event.type) || s.payment_status !== 'paid') {
+    note({ webhook: 'ignored' });
     return new Response('Ignored.');
+  }
   const account = s.metadata?.account,
     credits = Number(s.metadata?.credits);
   // A failed delivery is retried for days, so anything that isn't ours, or can't be credited,
   // is acknowledged. A marked purchase for an unknown account is logged with its session ID so it
   // can be matched by hand.
-  if (s.metadata?.product !== PRODUCT) return new Response('Not a Draftably purchase.');
+  if (s.metadata?.product !== PRODUCT) {
+    note({ webhook: 'not_ours' });
+    return new Response('Not a Draftably purchase.');
+  }
   const known =
     account && (await env.DB.prepare(`SELECT 1 FROM accounts WHERE id = ?1`).bind(account).first());
   if (!known || !Number.isInteger(credits) || credits <= 0) {
+    note({ webhook: 'unmatched' });
     console.error(
       JSON.stringify({
         unmatchedPurchase: s.id,
@@ -161,15 +182,22 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
   }
   // The unique index on purchase refs makes a repeated event insert nothing, and then the
   // balance update sees changes() = 0 and skips too.
-  await env.DB.batch([
-    env.DB.prepare(
-      `INSERT INTO ledger (account_id, delta, reason, ref, created_at) VALUES (?1, ?2, 'purchase', ?3, ?4)
+  const [added] = await span('stripe.fulfil', { credits }, () =>
+    env.DB.batch([
+      env.DB.prepare(
+        `INSERT INTO ledger (account_id, delta, reason, ref, created_at) VALUES (?1, ?2, 'purchase', ?3, ?4)
        ON CONFLICT DO NOTHING`,
-    ).bind(account, credits, s.id, new Date().toISOString()),
-    env.DB.prepare(`UPDATE accounts SET bought = bought + ?1 WHERE id = ?2 AND changes() = 1`).bind(
-      credits,
-      account,
-    ),
-  ]);
+      ).bind(account, credits, s.id, new Date().toISOString()),
+      env.DB.prepare(
+        `UPDATE accounts SET bought = bought + ?1 WHERE id = ?2 AND changes() = 1`,
+      ).bind(credits, account),
+    ]),
+  );
+  note({
+    webhook: added.meta.changes ? 'fulfilled' : 'duplicate',
+    account,
+    // A repeat adds nothing, so a sum over events matches the ledger.
+    credits_bought: added.meta.changes ? credits : 0,
+  });
   return new Response('OK');
 }

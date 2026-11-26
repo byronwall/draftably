@@ -11,6 +11,8 @@ export interface AuthEnv {
   LOGIN_LIMIT: RateLimit;
 }
 
+import { note, span } from './obs';
+
 const hex = (buf: ArrayBuffer) =>
   [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 const sha256 = async (text: string) =>
@@ -51,11 +53,16 @@ export async function keyAccount(req: Request, db: D1Database, ctx: ExecutionCon
   const token = /^bearer\s+(\S+)$/i.exec(header.trim())?.[1] ?? '';
   const m = /^dft_([0-9a-f]{12})\.([\w-]{20,64})$/.exec(token);
   if (!m) return null;
-  const row = await db
-    .prepare(`SELECT account_id, hash FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
-    .bind(m[1])
-    .first<{ account_id: string; hash: string }>();
-  if (!row || row.hash !== (await sha256(m[2]))) return null;
+  const row = await span('auth.key', {}, async s => {
+    const row = await db
+      .prepare(`SELECT account_id, hash FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
+      .bind(m[1])
+      .first<{ account_id: string; hash: string }>();
+    const ok = !!row && row.hash === (await sha256(m[2]));
+    s.setAttribute('found', ok);
+    return ok ? row : null;
+  });
+  if (!row) return null;
   ctx.waitUntil(
     db
       .prepare(`UPDATE keys SET last_used_at = ?1 WHERE id = ?2`)
@@ -84,6 +91,7 @@ export async function sessionAccount(req: Request, db: D1Database) {
     )
     .bind(await sha256(id), new Date().toISOString())
     .first<{ id: string; email: string }>();
+  if (row) note({ payer: 'session', account: row.id });
   return row ?? undefined;
 }
 
@@ -116,18 +124,20 @@ export async function sendLoginLink(env: AuthEnv, email: string, origin: string)
   ]);
   if (!added.meta.changes) return false;
   const link = `${origin}/auth/verify?token=${token}`;
-  const mail = env.EMAIL.send({
-    to: email,
-    from: { email: env.EMAIL_FROM, name: 'Draftably' },
-    subject: 'Sign in to Draftably',
-    text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
-    html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
-  });
-  // A failed send must not hold one of the address's links.
-  await mail.catch(async error => {
-    await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
-    throw error;
-  });
+  // A failed send must not hold one of the address's links. The cleanup hangs on the send's own
+  // promise, so a send that throws at once leaves the row, as before tracing.
+  await span('login.email', {}, () =>
+    env.EMAIL.send({
+      to: email,
+      from: { email: env.EMAIL_FROM, name: 'Draftably' },
+      subject: 'Sign in to Draftably',
+      text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
+      html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
+    }).catch(async error => {
+      await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
+      throw error;
+    }),
+  );
   return true;
 }
 

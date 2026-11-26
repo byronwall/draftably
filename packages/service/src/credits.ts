@@ -4,6 +4,7 @@
  * resets on the first spend of a new month.
  */
 import type { Format } from './draw';
+import { span } from './obs';
 
 /** Free credits each account gets every month. */
 export const MONTHLY_GRANT = 1000;
@@ -44,35 +45,39 @@ export async function spend(
   key?: string,
 ) {
   const now = new Date().toISOString();
-  const [, spent] = await db.batch<{ grant_left: number; bought: number }>([
-    resetGrant(db, account),
-    // SQLite reads every right-hand side from the row before the update.
-    db
-      .prepare(
-        `UPDATE accounts
+  const [, spent] = await span('credits.spend', { credits: n }, () =>
+    db.batch<{ grant_left: number; bought: number }>([
+      resetGrant(db, account),
+      // SQLite reads every right-hand side from the row before the update.
+      db
+        .prepare(
+          `UPDATE accounts
          SET grant_left = max(grant_left - ?1, 0), bought = bought - max(?1 - grant_left, 0)
          WHERE id = ?2 AND grant_left + bought >= ?1
            AND (?3 IS NULL OR EXISTS (
              SELECT 1 FROM keys WHERE id = ?3 AND account_id = ?2 AND revoked_at IS NULL))
          RETURNING grant_left, bought`,
-      )
-      .bind(n, account, key ?? null),
-    db
-      .prepare(
-        `INSERT INTO ledger (account_id, delta, reason, ref, created_at)
+        )
+        .bind(n, account, key ?? null),
+      db
+        .prepare(
+          `INSERT INTO ledger (account_id, delta, reason, ref, created_at)
          SELECT ?1, ?2, 'render', ?3, ?4 WHERE changes() = 1`,
-      )
-      .bind(account, -n, ref, now),
-  ]);
+        )
+        .bind(account, -n, ref, now),
+    ]),
+  );
   const row = spent.results[0];
   return row ? { grant: row.grant_left, bought: row.bought, resetsAt: nextMonth() } : null;
 }
 
 export async function balance(db: D1Database, account: string): Promise<Balance> {
-  const [, read] = await db.batch<{ grant_left: number; bought: number }>([
-    resetGrant(db, account),
-    db.prepare(`SELECT grant_left, bought FROM accounts WHERE id = ?1`).bind(account),
-  ]);
+  const [, read] = await span('credits.balance', {}, () =>
+    db.batch<{ grant_left: number; bought: number }>([
+      resetGrant(db, account),
+      db.prepare(`SELECT grant_left, bought FROM accounts WHERE id = ?1`).bind(account),
+    ]),
+  );
   const row = read.results[0];
   return { grant: row?.grant_left ?? 0, bought: row?.bought ?? 0, resetsAt: nextMonth() };
 }

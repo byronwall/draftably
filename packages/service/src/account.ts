@@ -18,6 +18,7 @@ import {
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
 import { copyButton, esc, page } from './html';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
+import { note, noteError, scrub } from './obs';
 
 const redirect = (to: string, cookie?: string) =>
   new Response(null, {
@@ -142,19 +143,33 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
   if (req.method === 'POST' && req.headers.get('Origin') !== url.origin)
     return new Response('This form must be sent from this site.', { status: 403 });
   if (path === '/login') {
-    if (req.method !== 'POST') return loginForm();
+    if (req.method !== 'POST') {
+      note({ login: 'form' });
+      return loginForm();
+    }
     const email = cleanEmail(String((await req.formData()).get('email') ?? ''));
-    if (!email) return loginForm('<p class="note error">That is not an email address.</p>', 400);
+    if (!email) {
+      note({ login: 'bad_email' });
+      return loginForm('<p class="note error">That is not an email address.</p>', 400);
+    }
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-    const tooMany = () =>
-      failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
-    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany();
+    const tooMany = (limit: 'login' | 'login_email') => {
+      note({ login: 'capped', rate_limit: limit });
+      return failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
+    };
+    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany('login');
     try {
-      if (!(await sendLoginLink(env, email, url.origin))) return tooMany();
+      if (!(await sendLoginLink(env, email, url.origin))) return tooMany('login_email');
     } catch (error) {
-      console.error('sign-in email failed', error);
+      // console.error, so Workers Issues groups a failing mail service. The error can name the
+      // address, so only its scrubbed message is logged.
+      const message = scrub(error instanceof Error ? error.message : String(error));
+      console.error(`sign-in email failed: ${message}`);
+      note({ login: 'send_failed' });
+      noteError('ERR_EMAIL', message);
       return failed('We could not send the email. Try again later.', 503);
     }
+    note({ login: 'sent' });
     // The same answer for every address, so the form doesn't tell which ones have accounts.
     return page(
       'Check your email',
@@ -173,6 +188,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     if (req.method !== 'POST') {
       const token = url.searchParams.get('token') ?? '';
       const email = await loginTokenEmail(env.DB, token);
+      note({ login: email ? 'link_shown' : 'link_dead' });
       if (!email) return failed('This sign-in link was used already or has expired.');
       return page(
         'Sign in',
@@ -182,8 +198,14 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       );
     }
     const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));
-    if (!email) return failed('This sign-in link was used already or has expired.');
-    return redirect('/account', await startSession(env.DB, await upsertAccount(env.DB, email)));
+    if (!email) {
+      note({ login: 'link_dead' });
+      return failed('This sign-in link was used already or has expired.');
+    }
+    const account = await upsertAccount(env.DB, email);
+    const cookie = await startSession(env.DB, account);
+    note({ login: 'signed_in', payer: 'session', account });
+    return redirect('/account', cookie);
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);
