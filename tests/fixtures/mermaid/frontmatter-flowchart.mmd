@@ -1,0 +1,12 @@
+---
+title: Checkout flow
+config:
+  theme: dark
+  flowchart:
+    curve: basis
+    htmlLabels: false
+---
+flowchart LR
+  cart[Cart] --> pay{Pay?}
+  pay -->|yes| done[Order placed]
+  pay -->|no| cart

@@ -1,0 +1,9 @@
+---
+title: "Sign-in handshake"
+config: {theme: forest, sequence: {mirrorActors: false}}
+---
+sequenceDiagram
+  participant b as Browser
+  participant s as Server
+  b->>s: POST /login
+  s-->>b: session cookie
