@@ -1,0 +1,44 @@
+diagram "How draw() makes an SVG or PNG" version=1
+subtitle "A PNG matches the CLI's export and carries its own source"
+config link-base="../../.."
+
+node src "Source text\nDraftably or Mermaid" icon=file-text
+node detect "Detect the language\n?type= overrides" shape=diamond href="packages/service/src/mermaid.ts"
+
+group mm "Mermaid import" color=teal
+node linkedom "linkedom window\nin place of JSDOM" in=mm
+node importer "Mermaid importer\nsame as draftably import" in=mm href="src/import/mermaid-importer.ts"
+
+node draft "Draftably source"
+node svg "renderSvg()\n@draftably/runtime, safe links" color=amber shade=300 href="packages/service/src/draw.ts"
+node out_svg "SVG" shape=pill color=green shade=200
+
+group png "PNG only" color=violet
+node cap "Pixel cap\n8 M pixels" in=png
+node strip "Source strip\nfaint pixels under the drawing" in=png href="src/model/strip.ts"
+node raster "resvg-wasm\nbundled Inter, Serif, Mono" in=png href="src/model/raster.ts"
+node embed "Embed source\nPNG metadata chunk" in=png href="src/model/embed.ts"
+
+node out_png "PNG" shape=pill color=green shade=200
+
+legend teal "Mermaid input only"
+legend amber "Shared with every format" shade=300
+legend violet "PNG only"
+legend green "Output" shade=200
+
+edge e1 src -> detect
+edge e2 detect -> linkedom "Mermaid"
+edge e3 linkedom -> importer
+edge e4 importer -> draft
+edge e5 detect -> draft "Draftably"
+edge e6 draft -> svg
+edge e7 svg -> out_svg "format=svg"
+edge e8 svg -> cap "format=png"
+edge e9 cap -> strip
+edge e10 strip -> raster
+edge e11 raster -> embed
+edge e12 embed -> out_png
+
+note "draftably open reads the source back from either copy." near=embed side=below
+
+layout root engine=layered fit=slide

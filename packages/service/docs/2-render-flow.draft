@@ -1,0 +1,45 @@
+diagram "How one render is paid for" version=1
+subtitle "A cache hit is free; credits are taken only after a good drawing"
+config link-base="../../.."
+
+node req "Image URL, /v1/render\nor render_diagram" icon=send
+node key "Decode, check size,\nhash the cache key [1]" href="packages/service/src/render.ts"
+node hit "In the edge cache?" shape=diamond
+node free "Send the cached image\n0 credits" color=green shade=200
+node payer "Called with a key?" shape=diamond
+node anon "Under the IP limit?\n60 new / min" shape=diamond href="packages/service/src/index.ts"
+node bal "Balance covers\nthe cost? [2]" shape=diamond href="packages/service/src/credits.ts"
+node draw "draw()\nMermaid → SVG → PNG" color=amber shade=300 href="packages/service/src/draw.ts"
+node spend "Guarded spend\nheld? [3]" shape=diamond color=violet shade=200 href="packages/service/src/credits.ts"
+node put "Store in the edge cache" color=violet shade=200
+node send "Send the image" color=green shade=200
+node e429 "429 error image" color=red shade=200
+node e402 "402 out of credits" color=red shade=200
+node e402b "402, or 401 if\nthe key was revoked" color=red shade=200
+
+legend amber "Drawing" shade=300
+legend violet "D1 and the edge cache" shade=200
+legend green "Answer sent" shade=200
+legend red "Refused, no credits taken" shade=200
+
+edge e1 req -> key
+edge e2 key -> hit
+edge e3 hit -> free "yes"
+edge e4 hit -> payer "no"
+edge e5 payer -> anon "no" from=right
+edge e6 payer -> bal "yes"
+edge e7 anon -> draw "yes"
+edge e8 bal -> draw "yes"
+edge e9 draw -> spend "keyed"
+edge e10 draw -> put "anonymous"
+edge e11 spend -> put "yes"
+edge e12 put -> send
+edge x1 anon -> e429 "no"
+edge x2 bal -> e402 "no"
+edge x3 spend -> e402b "no"
+
+footnote 1 "Key: source hash, format, options, runtime version and deploy. A bad source or a source over 64 KB gets a 400 here."
+footnote 2 "1 credit for an SVG, 2 for a PNG. The monthly grant is spent first, then bought credits."
+footnote 3 "Parallel calls can all pass the balance check; the guarded UPDATE lets through only what the balance covers. A drawing that fails never reaches it, so there is no refund path."
+
+layout root engine=layered direction=right fit=slide

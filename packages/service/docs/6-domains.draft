@@ -1,0 +1,61 @@
+diagram "How draftably.dev and api.draftably.dev fit together" version=1
+subtitle "Cloudflare DNS sends the site to GitHub Pages and the API to the Worker"
+config link-base="../../.."
+
+group callers "Who asks" color=blue frame=soft
+node browser "Person's browser" in=callers icon=globe
+node agent "Agent or script" in=callers icon=terminal
+node stripe "Stripe webhooks" in=callers icon=credit-card
+
+node reg "Namecheap\nregistrar only" icon=landmark
+
+group zone "Cloudflare DNS: draftably.dev [1]" color=violet
+node r_apex "draftably.dev\n4 A records, DNS only" in=zone
+node r_www "www\nCNAME byronwall.github.io" in=zone
+node r_api "api\nWorker custom domain" in=zone
+node r_mx "MX\nEmail Routing [2]" in=zone
+node r_mail "cf-bounce, _dmarc\nsending records" in=zone
+node r_txt "TXT\nGoogle site verification" in=zone
+
+group gh "GitHub" color=slate
+node build "deploy.yml\npnpm site:build" in=gh href=".github/workflows/deploy.yml"
+node pages "GitHub Pages\nlanding, docs, editor" in=gh href="site"
+
+group cf "Cloudflare services" color=amber
+node worker "Worker draftably-api\nimages, /v1, /mcp, /account" in=cf href="packages/service/src/index.ts"
+node send "Email Service\nmagic-link mail" in=cf
+node routing "Email Routing\nforwards inbound mail" in=cf
+
+node inbox "Byron's inbox" icon=inbox
+
+legend blue "Callers"
+legend violet "DNS records, after the move"
+legend amber "Cloudflare services"
+legend line solid "Request or DNS answer"
+legend line dashed "Link, deploy or mail"
+
+edge ns reg -> zone "nameservers"
+edge q1 browser -> r_apex "draftably.dev"
+edge q2 browser -> r_www "www"
+edge q3 browser -> r_api "api…/account"
+edge q4 agent -> r_api "images, REST, MCP"
+edge q5 stripe -> r_api "/stripe/webhook"
+edge a1 r_apex -> pages
+edge a2 r_www -> pages
+edge a3 r_api -> worker
+edge d1 build -> pages "on push to main" kind=async
+edge l1 pages -> worker "image tags, Get an API key" kind=async constraint=false
+edge m1 worker -> send "send link"
+edge m2 r_mail -> send "SPF, DKIM" kind=async
+edge m3 r_mx -> routing kind=async
+edge m4 routing -> inbox kind=async
+
+state site "Landing page" browser r_apex r_www pages build
+state api "API request" browser agent stripe r_api worker
+state mail "Email" worker send r_mail r_mx routing inbox
+
+footnote 1 "Today Namecheap runs the DNS. Before the move, copy the A, www CNAME and TXT records into Cloudflare. Until then the Worker answers on draftably-api.<account>.workers.dev."
+footnote 2 "Namecheap email forwarding stops working when the nameservers move. Set up Cloudflare Email Routing for the same addresses."
+
+layout root engine=compound-flow fit=slide
+order cf worker send routing

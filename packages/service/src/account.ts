@@ -1,15 +1,17 @@
 /**
- * The account page: sign in with GitHub, see the balance, make and revoke API keys. Plain HTML
+ * The account page: sign in with an emailed link, see the balance, make and revoke API keys. Plain HTML
  * forms; the session cookie is SameSite=Lax, so another site can't post to them.
  */
 import {
+  cleanEmail,
   createKey,
   endSession,
-  finishSignIn,
+  loginTokenEmail,
   revokeKey,
+  sendLoginLink,
   sessionAccount,
   startSession,
-  startSignIn,
+  useLoginToken,
   type AuthEnv,
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
@@ -44,6 +46,8 @@ button,.button{font:inherit;border:1px solid var(--line);background:var(--card);
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'no-store',
+        // No other site may frame these pages and hide what a button does.
+        'Content-Security-Policy': "frame-ancestors 'none'",
         ...headers,
       },
     },
@@ -65,7 +69,7 @@ interface KeyRow {
 async function accountPage(
   env: AuthEnv & StripeEnv,
   origin: string,
-  account: { id: string; login: string },
+  account: { id: string; email: string },
   newKey?: string,
   bought = false,
 ) {
@@ -81,7 +85,7 @@ async function accountPage(
   return page(
     'Account',
     `<h1>Draftably render service</h1>
-<p class="muted">Signed in as <b>${esc(account.login)}</b> · <form method="post" action="/logout" style="display:inline"><button>Sign out</button></form></p>
+<p class="muted">Signed in as <b>${esc(account.email)}</b> · <form method="post" action="/logout" style="display:inline"><button>Sign out</button></form></p>
 <section><h2>Credits</h2>
 <div class="big">${(b.grant + b.bought).toLocaleString('en-US')}</div>
 <p class="muted">${b.grant.toLocaleString('en-US')} left in this month's free ${MONTHLY_GRANT.toLocaleString('en-US')} (resets ${b.resetsAt}) · ${b.bought.toLocaleString('en-US')} bought.
@@ -121,7 +125,23 @@ ${
   );
 }
 
-/** `/login`, `/logout`, `/auth/github/callback` and `/account*`. Null for other paths. */
+const loginForm = (note = '', status = 200) =>
+  page(
+    'Sign in',
+    `<h1>Sign in to Draftably</h1>${note}
+<section><form method="post" action="/login"><p>We email you a link that signs you in. A new address gets a new account with 1,000 free credits a month.</p>
+<input type="email" name="email" required maxlength="254" placeholder="you@example.com" autocomplete="email"> <button class="primary">Email me a link</button></form></section>`,
+    status,
+  );
+
+const failed = (message: string, status = 400) =>
+  page(
+    'Sign-in failed',
+    `<h1>Sign-in failed</h1><p>${esc(message)}</p><p><a href="/login">Try again</a></p>`,
+    status,
+  );
+
+/** `/login`, `/logout`, `/auth/verify` and `/account*`. Null for other paths. */
 export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url: URL) {
   const path = url.pathname;
   const ours =
@@ -134,21 +154,46 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
   // so a form on another origin, even a sibling subdomain, is refused.
   if (req.method === 'POST' && req.headers.get('Origin') !== url.origin)
     return new Response('This form must be sent from this site.', { status: 403 });
-  if (path === '/login') return startSignIn(env, url.origin);
+  if (path === '/login') {
+    if (req.method !== 'POST') return loginForm();
+    const email = cleanEmail(String((await req.formData()).get('email') ?? ''));
+    if (!email) return loginForm('<p><b>That is not an email address.</b></p>', 400);
+    const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+    const tooMany = () =>
+      failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
+    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany();
+    try {
+      if (!(await sendLoginLink(env, email, url.origin))) return tooMany();
+    } catch (error) {
+      console.error('sign-in email failed', error);
+      return failed('We could not send the email. Try again later.', 503);
+    }
+    // The same answer for every address, so the form doesn't tell which ones have accounts.
+    return page(
+      'Check your email',
+      `<h1>Check your email</h1><p>We sent a sign-in link to <b>${esc(email)}</b>. It works once, for 15 minutes.</p>`,
+    );
+  }
   if (path === '/logout')
     return req.method === 'POST'
       ? redirect('/', await endSession(req, env.DB))
       : new Response('Sign out with the button on /account.', { status: 405 });
-  if (path === '/auth/github/callback') {
-    const done = await finishSignIn(req, env);
-    if ('error' in done)
+  if (path === '/auth/verify') {
+    // Mail scanners open GET links, so only the button's POST spends the token.
+    // The page names the account, so a person who opens someone else's link sees whose it is.
+    if (req.method !== 'POST') {
+      const token = url.searchParams.get('token') ?? '';
+      const email = await loginTokenEmail(env.DB, token);
+      if (!email) return failed('This sign-in link was used already or has expired.');
       return page(
-        'Sign-in failed',
-        `<h1>Sign-in failed</h1><p>${esc(done.error!)}</p><p><a href="/login">Try again</a></p>`,
-        400,
+        'Sign in',
+        `<h1>Sign in to Draftably</h1><p>Sign in as <b>${esc(email)}</b>?</p>
+<form method="post" action="/auth/verify"><input type="hidden" name="token" value="${esc(token)}"><button class="primary">Sign in</button></form>`,
       );
-    const id = await upsertAccount(env.DB, done.user.id, done.user.login);
-    return redirect('/account', await startSession(env.DB, id));
+    }
+    const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));
+    if (!email) return failed('This sign-in link was used already or has expired.');
+    return redirect('/account', await startSession(env.DB, await upsertAccount(env.DB, email)));
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);

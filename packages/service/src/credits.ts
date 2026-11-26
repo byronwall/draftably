@@ -77,17 +77,16 @@ export async function balance(db: D1Database, account: string): Promise<Balance>
   return { grant: row?.grant_left ?? 0, bought: row?.bought ?? 0, resetsAt: nextMonth() };
 }
 
-/** A new account with this month's grant, or the existing one for this GitHub user. */
-export async function upsertAccount(db: D1Database, githubId: number, login: string) {
-  const id = crypto.randomUUID();
+/** A new account with this month's grant, or the existing one for this email. */
+export async function upsertAccount(db: D1Database, email: string) {
   const row = await db
     .prepare(
-      `INSERT INTO accounts (id, github_id, login, grant_left, grant_month, created_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6)
-       ON CONFLICT (github_id) DO UPDATE SET login = excluded.login
+      `INSERT INTO accounts (id, email, grant_left, grant_month, created_at)
+       VALUES (?1, ?2, ?3, ?4, ?5)
+       ON CONFLICT (email) DO UPDATE SET email = excluded.email
        RETURNING id`,
     )
-    .bind(id, githubId, login, MONTHLY_GRANT, month(), new Date().toISOString())
+    .bind(crypto.randomUUID(), email, MONTHLY_GRANT, month(), new Date().toISOString())
     .first<{ id: string }>();
   return row!.id;
 }

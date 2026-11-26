@@ -1,11 +1,14 @@
 /**
  * Who is calling: an API key (`Authorization: Bearer dft_<id>.<secret>`) for the REST API, MCP
- * and keyed image URLs, or a session cookie for the account page. Sign-in is GitHub OAuth only.
+ * and keyed image URLs, or a session cookie for the account page. Sign-in is a link sent by email.
  */
 export interface AuthEnv {
   DB: D1Database;
-  GITHUB_CLIENT_ID: string;
-  GITHUB_CLIENT_SECRET: string;
+  /** Cloudflare Email Service; sends the sign-in links. */
+  EMAIL: SendEmail;
+  EMAIL_FROM: string;
+  /** Sign-in emails per IP. The per-address cap is in D1 (`sendLoginLink`). */
+  LOGIN_LIMIT: RateLimit;
 }
 
 const hex = (buf: ArrayBuffer) =>
@@ -76,61 +79,80 @@ export async function sessionAccount(req: Request, db: D1Database) {
   if (!id) return undefined;
   const row = await db
     .prepare(
-      `SELECT a.id, a.login FROM sessions s JOIN accounts a ON a.id = s.account_id
+      `SELECT a.id, a.email FROM sessions s JOIN accounts a ON a.id = s.account_id
        WHERE s.id = ?1 AND s.expires_at > ?2`,
     )
     .bind(await sha256(id), new Date().toISOString())
-    .first<{ id: string; login: string }>();
+    .first<{ id: string; email: string }>();
   return row ?? undefined;
 }
 
-/** The redirect to GitHub's sign-in, with a state cookie that the callback checks. */
-export function startSignIn(env: AuthEnv, origin: string) {
-  const state = randomToken(16);
-  const url = new URL('https://github.com/login/oauth/authorize');
-  url.searchParams.set('client_id', env.GITHUB_CLIENT_ID);
-  url.searchParams.set('redirect_uri', `${origin}/auth/github/callback`);
-  url.searchParams.set('state', state);
-  url.searchParams.set('scope', ''); // the public profile is enough
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: url.toString(),
-      'Set-Cookie': `dft_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/auth; Max-Age=600`,
-    },
-  });
-}
+const LINK_MINUTES = 15;
+/** Links one address may get in 15 minutes (a link's life), so the form can't flood an inbox. */
+const MAX_LINKS = 5;
+
+/** A plausible address, lowercased, or null. The mail server decides the rest. */
+export const cleanEmail = (raw: string) => {
+  const email = raw.trim().toLowerCase();
+  return email.length <= 254 && /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(email) ? email : null;
+};
 
 /**
- * GitHub's redirect back: check the state, trade the code for a token, read the user, and start a
- * 30-day session. Returns the GitHub user, or an error message.
+ * Mail a one-use sign-in link to `email`. Only the token's hash is stored. False, and nothing
+ * sent, when the address already got `MAX_LINKS` links that have not expired. The cap is one
+ * statement, so it holds across Cloudflare locations and parallel requests.
  */
-export async function finishSignIn(req: Request, env: AuthEnv) {
-  const url = new URL(req.url);
-  const code = url.searchParams.get('code'),
-    state = url.searchParams.get('state');
-  if (!code || !state || state !== cookie(req, 'dft_state'))
-    return { error: 'The sign-in link expired. Try again.' };
-  const token = await fetch('https://github.com/login/oauth/access_token', {
-    method: 'POST',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id: env.GITHUB_CLIENT_ID,
-      client_secret: env.GITHUB_CLIENT_SECRET,
-      code,
-      redirect_uri: `${url.origin}/auth/github/callback`,
-    }),
-  }).then(r => r.json<{ access_token?: string }>());
-  if (!token.access_token) return { error: 'GitHub did not accept the sign-in. Try again.' };
-  const user = await fetch('https://api.github.com/user', {
-    headers: {
-      Authorization: `Bearer ${token.access_token}`,
-      'User-Agent': 'draftably-render-service',
-      Accept: 'application/vnd.github+json',
-    },
-  }).then(r => r.json<{ id?: number; login?: string }>());
-  if (!user.id || !user.login) return { error: 'GitHub did not return a profile.' };
-  return { user: { id: user.id, login: user.login } };
+export async function sendLoginLink(env: AuthEnv, email: string, origin: string) {
+  const token = randomToken(32);
+  const hash = await sha256(token);
+  const now = new Date().toISOString();
+  const expires = new Date(Date.now() + LINK_MINUTES * 60_000).toISOString();
+  const [, added] = await env.DB.batch([
+    env.DB.prepare(`DELETE FROM login_tokens WHERE expires_at <= ?1`).bind(now),
+    env.DB.prepare(
+      `INSERT INTO login_tokens (hash, email, expires_at) SELECT ?1, ?2, ?3
+       WHERE (SELECT count(*) FROM login_tokens WHERE email = ?2) < ?4`,
+    ).bind(hash, email, expires, MAX_LINKS),
+  ]);
+  if (!added.meta.changes) return false;
+  const link = `${origin}/auth/verify?token=${token}`;
+  const mail = env.EMAIL.send({
+    to: email,
+    from: { email: env.EMAIL_FROM, name: 'Draftably' },
+    subject: 'Sign in to Draftably',
+    text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
+    html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
+  });
+  // A failed send must not hold one of the address's links.
+  await mail.catch(async error => {
+    await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
+    throw error;
+  });
+  return true;
+}
+
+/** The address a sign-in token is for, if it can still be used. Spends nothing. */
+export async function loginTokenEmail(db: D1Database, token: string) {
+  const row = await db
+    .prepare(
+      `SELECT email FROM login_tokens WHERE hash = ?1 AND used_at IS NULL AND expires_at > ?2`,
+    )
+    .bind(await sha256(token), new Date().toISOString())
+    .first<{ email: string }>();
+  return row?.email ?? null;
+}
+
+/** Spend a sign-in token: its email if it is known, unused and unexpired; else null. */
+export async function useLoginToken(db: D1Database, token: string) {
+  const now = new Date().toISOString();
+  const row = await db
+    .prepare(
+      `UPDATE login_tokens SET used_at = ?2
+       WHERE hash = ?1 AND used_at IS NULL AND expires_at > ?2 RETURNING email`,
+    )
+    .bind(await sha256(token), now)
+    .first<{ email: string }>();
+  return row?.email ?? null;
 }
 
 /** A session cookie for `account`, stored by hash like keys. */

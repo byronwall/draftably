@@ -1,8 +1,7 @@
--- One account per GitHub user. Credits: a monthly grant that resets, plus bought credits that keep.
+-- One account per email address. Credits: a monthly grant that resets, plus bought credits that keep.
 CREATE TABLE accounts (
   id TEXT PRIMARY KEY,
-  github_id INTEGER NOT NULL UNIQUE,
-  login TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
   grant_left INTEGER NOT NULL,
   grant_month TEXT NOT NULL, -- YYYY-MM the grant belongs to
   bought INTEGER NOT NULL DEFAULT 0,
@@ -39,3 +38,13 @@ CREATE TABLE sessions (
   account_id TEXT NOT NULL REFERENCES accounts(id),
   expires_at TEXT NOT NULL
 );
+
+-- Emailed sign-in links. Only a SHA-256 of the token is kept; a link works once, for 15 minutes.
+CREATE TABLE login_tokens (
+  hash TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  used_at TEXT
+);
+CREATE INDEX login_tokens_email ON login_tokens(email);
+CREATE INDEX login_tokens_expires ON login_tokens(expires_at);

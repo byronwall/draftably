@@ -120,13 +120,20 @@ SDK's dependencies. Tools:
 
 Auth: the same bearer key, sent as an `Authorization` header in the client's MCP config. OAuth (for
 claude.ai custom connectors) is a later slice; it uses `@cloudflare/workers-oauth-provider` with
-GitHub sign-in and maps a sign-in to the same account row.
+the same email sign-in and maps a sign-in to the same account row.
 
 ### Account page
 
-`GET /` shows a short page: what the service is, sample URLs, and "Sign in with GitHub". After
-sign-in it shows the credit balance and lets the user create and revoke keys. GitHub OAuth is the
-only sign-in. The users are developers and agents, and it needs no email sending.
+`/login` takes an email address and sends a one-use sign-in link through Cloudflare Email Service
+(the Worker's `send_email` binding; no other account or key). The link is good for 15 minutes.
+It opens a page with one "Sign in" button, because mail scanners fetch GET links; only the POST
+spends the token. The form always says "check your email", so it does not tell which addresses
+have accounts. A rate limit per IP, and a cap of 5 links per address in 15 minutes (counted in
+D1), stop it from flooding an inbox. The verify page names the address, so a person who opens
+someone else's link sees whose account it is. After sign-in the page shows the credit balance
+and lets the user create and revoke keys. There is no other sign-in and no outside identity
+provider. If Email Service fails us, Resend is the fallback: the send call becomes one `fetch`
+with a secret.
 
 ## Credits
 
@@ -141,7 +148,8 @@ only sign-in. The users are developers and agents, and it needs no email sending
 ### Data (one D1 database)
 
 ```sql
-accounts (id, github_id UNIQUE, login, grant_left, grant_month, bought, created_at)
+accounts     (id, email UNIQUE, grant_left, grant_month, bought, created_at)
+login_tokens (hash, email, expires_at, used_at)  -- emailed sign-in links
 keys     (id, account_id, hash, label, created_at, last_used_at, revoked_at)
 ledger   (id, account_id, delta, reason, ref, created_at)  -- render, purchase
 ```

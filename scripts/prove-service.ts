@@ -73,8 +73,8 @@ if (!remote) {
     now = new Date().toISOString();
   const hash = (key: string) => createHash('sha256').update(key.split('.')[1]).digest('hex');
   sql(
-    `INSERT INTO accounts (id, github_id, login, grant_left, grant_month, bought, created_at) VALUES
-     ('poor', 1, 'poor', 20, '${month}', 0, '${now}'), ('rich', 2, 'rich', 0, '${month}', 100000, '${now}');
+    `INSERT INTO accounts (id, email, grant_left, grant_month, bought, created_at) VALUES
+     ('poor', 'poor@example.com', 20, '${month}', 0, '${now}'), ('rich', 'rich@example.com', 0, '${month}', 100000, '${now}');
      INSERT INTO keys (id, account_id, hash, label, created_at) VALUES
      ('aaaaaaaaaaaa', 'poor', '${hash(KEYS.poor)}', 'proof', '${now}'),
      ('bbbbbbbbbbbb', 'rich', '${hash(KEYS.rich)}', 'proof', '${now}');`,
@@ -569,17 +569,69 @@ if (!remote) {
       .status,
     401,
   );
-  const login = await fetch(`${base}/login`, { redirect: 'manual' });
-  assert.match(
-    login.headers.get('Location')!,
-    /^https:\/\/github\.com\/login\/oauth\/authorize\?client_id=proof-client-id/,
-  );
   assert.equal(
     (await fetch(`${base}/account`, { redirect: 'manual' })).headers.get('Location'),
     '/login',
   );
   console.log(
-    'API: validate, convert (= draftably import), REST = GET bytes, 401 without or with a bad key, /account sends you to GitHub.',
+    'API: validate, convert (= draftably import), REST = GET bytes, 401 without or with a bad key, /account sends you to sign in.',
+  );
+
+  // Sign-in by email. Locally, wrangler writes each sent email's text to a file and logs its path.
+  const form = (to: string, fields: Record<string, string>) =>
+    fetch(`${base}${to}`, {
+      method: 'POST',
+      headers: { Origin: base, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(fields),
+      redirect: 'manual',
+    });
+  const sent = () => [...log.matchAll(/Text: (\S+\.txt)/g)].map(m => m[1]);
+  const mailLink = async (email: string) => {
+    const before = sent().length;
+    const res = await form('/login', { email });
+    assert.equal(res.status, 200);
+    assert.match(await res.text(), /Check your email/);
+    for (let i = 0; i < 50 && sent().length === before; i++)
+      await new Promise(r => setTimeout(r, 100));
+    const text = fs.readFileSync(sent()[before], 'utf8');
+    return /\/auth\/verify\?token=([\w-]+)/.exec(text)![1];
+  };
+  const verify = (token: string) => form('/auth/verify', { token });
+  const link = await mailLink(' Proof@Example.com ');
+  // A GET, as a mail scanner sends, shows the button and leaves the token unspent.
+  const scan = await fetch(`${base}/auth/verify?token=${link}`);
+  assert.equal(scan.status, 200);
+  assert.equal(scan.headers.get('Content-Security-Policy'), "frame-ancestors 'none'");
+  const scanned = await scan.text();
+  assert.match(scanned, /Sign in as <b>proof@example\.com<\/b>/);
+  assert.match(scanned, new RegExp(`name="token" value="${link}"`));
+  const signIn = await verify(link);
+  assert.equal(signIn.status, 303);
+  assert.equal(signIn.headers.get('Location'), '/account');
+  const session = signIn.headers.get('Set-Cookie')!.split(';')[0];
+  const page = await fetch(`${base}/account`, { headers: { Cookie: session } });
+  assert.equal(page.status, 200);
+  assert.match(await page.text(), /Signed in as <b>proof@example\.com<\/b>/);
+  assert.equal((await verify(link)).status, 400, 'a used link signed in again');
+  assert.equal((await fetch(`${base}/auth/verify?token=${link}`)).status, 400);
+  const stale = await mailLink('proof@example.com');
+  const staleHash = createHash('sha256').update(stale).digest('hex');
+  sql(`UPDATE login_tokens SET expires_at = '2000-01-01' WHERE hash = '${staleHash}'`);
+  assert.equal((await verify(stale)).status, 400, 'an expired link signed in');
+  assert.equal((await verify('not-a-token')).status, 400);
+  assert.equal((await verify(await mailLink('proof@example.com'))).status, 303);
+  assert.equal(sql(`SELECT count(*) AS n FROM accounts WHERE email = 'proof@example.com'`)[0].n, 1);
+  assert.equal((await form('/login', { email: 'not an email' })).status, 400);
+  // An address gets at most 5 links in 15 minutes, whatever the IP.
+  for (let i = 0; i < 5; i++) await mailLink('flood@example.com');
+  const flood = await form('/login', { email: 'flood@example.com' });
+  assert.equal(flood.status, 429);
+  assert.equal(
+    sql(`SELECT count(*) AS n FROM login_tokens WHERE email = 'flood@example.com'`)[0].n,
+    5,
+  );
+  console.log(
+    `Email sign-in: a GET leaves the link unspent; its POST signs in once, to one account per address; the page names the account; a used, expired or unknown token gets 400; a 6th link to one address in 15 minutes gets 429 and sends nothing.`,
   );
 
   // MCP: the same key, stateless JSON-RPC. render_diagram returns the same PNG as /v1/render.
