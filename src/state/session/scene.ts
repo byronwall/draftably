@@ -4,13 +4,19 @@
  */
 import { createMemo, createSignal } from 'solid-js';
 import type { PriorRoute, RoutingResult } from '../../engines/routing-engine';
-import { routingFingerprint } from '../../model/document';
+import { routingFingerprint, routingTypography } from '../../model/document';
 import { drawingBounds } from '../../model/bounds';
 import { resolveAppearance } from '../../model/appearance';
 import { diagramFrame, FRAME_PAD } from '../../model/frame';
 import { placeNotes } from '../../model/note';
 import { drawnLegend, usedStatuses } from '../../model/status';
-import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../../model/graph';
+import {
+  frameRect,
+  makeGeometry,
+  styleOf,
+  visibleGraph,
+  type VisibleGraph,
+} from '../../model/graph';
 import { startEngineTask, type RunningTask } from '../../lib/engine-tasks';
 import {
   computeRoutes,
@@ -62,6 +68,8 @@ export function createScene(s: DocumentPart & FileSessionPart) {
     let lastRoutes: DrawnRoute[] = [];
     let cache: {
       signature: string;
+      typography: string;
+      adopted: RoutingResult | null;
       value: { routes: DrawnRoute[]; result: RoutingResult };
     } | null = null;
 
@@ -119,7 +127,8 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         quick = quickRouting(),
         temporary = !!sculptGeometry() || !!animationGeometry();
       const adopted = adoptedRoutes(),
-        fingerprint = routingFingerprint(s.doc),
+        typography = routingTypography(s.doc),
+        fingerprint = routingFingerprint(s.doc, typography),
         ready = !quick && !temporary && adopted?.fingerprint === fingerprint,
         // A file's full routes come from the engine worker, with each compiled revision or from
         // `refine`: routing a large file here would block the page for seconds.
@@ -127,18 +136,31 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         deferred = s.fileMode() && !quick && !temporary && !ready && !known;
       if (deferred && !s.fileCompiling() && !awaiting()) refine(fingerprint);
       else if (!deferred && refining) queueMicrotask(stopRefining);
+      const adoptedResult = ready ? adopted.result : null;
       const signature = JSON.stringify([
-        fingerprint,
-        // Dragging and animations can move boxes without changing the saved layout.
+        vg.edges,
         [...map],
+        s.doc.layout.edges,
+        s.doc.settings.routing,
+        vg.groups.map(g => [g.id, g.parentId, s.doc.collapsed.includes(g.id)]),
+        // A code node's range labels and their mode move its ports and block lines.
+        vg.nodes.map(n => [
+          n.id,
+          n.parentId,
+          styleOf(s.doc, n.id).shape,
+          // Its lines too: a line that starts to wrap moves the ports of the ranges below it.
+          n.code,
+        ]),
         quick,
         temporary,
         deferred,
         !!known,
         // A result the worker hands over replaces the routes drawn while it ran.
-        ready,
+        ready && adopted.fingerprint,
       ]);
-      if (cache?.signature === signature) return cache.value;
+      const sameType = cache?.typography === typography;
+      if (cache?.signature === signature && sameType && cache.adopted === adoptedResult)
+        return cache.value;
       let value;
       if (ready) {
         const result = structuredClone(adopted.result);
@@ -153,12 +175,12 @@ export function createScene(s: DocumentPart & FileSessionPart) {
           // except while dragging: quick routes keep each line's sides from the last frame, so a
           // drag doesn't search every line from scratch on every pointer move. The drop redraws
           // without them.
-          previous: s.fileMode() && !quick ? [] : (routePrior() ?? lastRoutes),
+          previous: !quick && (s.fileMode() || !sameType) ? [] : (routePrior() ?? lastRoutes),
           quick: quick || !!animationGeometry(),
         });
       }
       lastRoutes = value.routes;
-      cache = { signature, value };
+      cache = { signature, typography, adopted: adoptedResult, value };
       return value;
     });
 
