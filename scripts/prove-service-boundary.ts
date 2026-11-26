@@ -3,8 +3,9 @@
  * input through every transport must give the same answer: the same image bytes, or the same
  * error code (and HTTP status, where the transport has one), and the same price.
  *
- * Transports: an anonymous GET image URL, a keyed GET image URL, `POST /v1/render`, the MCP tool
- * `render_diagram`, and a short link (`POST /v1/share`, then `GET /d/{id}.{svg|png}`). Inputs:
+ * Transports: an anonymous GET image URL, a keyed GET image URL, `POST /api/v1/render`, the MCP
+ * tool `render_diagram`, and a short link (`POST /api/v1/share`, then `GET /api/d/{id}.{svg|png}`).
+ * Inputs:
  * good sources and options, a leading byte-order mark, Mermaid with and without `type`, a source
  * that does not draw, an empty source, one over 64 KB, a wrong key, and a body over 256 KB.
  */
@@ -67,13 +68,13 @@ async function image(res: Response): Promise<Outcome> {
 
 const viaGet = (key?: string) => async (i: Input) =>
   image(
-    await fetch(`${base}/${i.format}/${await encodeSource(i.code)}${query(i)}`, {
+    await fetch(`${base}/api/${i.format}/${await encodeSource(i.code)}${query(i)}`, {
       headers: auth(key),
     }),
   );
 
 const post = (route: string, body: string, key?: string) =>
-  fetch(`${base}${route}`, {
+  fetch(`${base}${route === '/mcp' ? '' : '/api'}${route}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -119,7 +120,7 @@ const viaShare = (key?: string) => async (i: Input) => {
   const q = new URLSearchParams();
   if (i.scheme) q.set('scheme', i.scheme);
   if (i.scale) q.set('scale', String(i.scale));
-  return image(await fetch(`${base}/d/${id}.${i.format}${q.size ? `?${q}` : ''}`));
+  return image(await fetch(`${base}/api/d/${id}.${i.format}${q.size ? `?${q}` : ''}`));
 };
 
 const checkout = fs.readFileSync('examples/checkout.draft', 'utf8');
@@ -200,7 +201,7 @@ const refusals: [string, Outcome][] = [
   [
     'GET /link',
     await image(
-      await fetch(`${base}/link?format=json&code=${encodeURIComponent(warm.code + '\n# k')}`, {
+      await fetch(`${base}/api/link?format=json&code=${encodeURIComponent(warm.code + '\n# k')}`, {
         headers: auth(BAD_KEY),
       }),
     ),
@@ -254,7 +255,8 @@ console.log('MCP link tools: image_url and share_diagram links draw the render_d
 // Price: a miss costs 1 credit for SVG and 2 for PNG on every paid transport; the same image again,
 // by any transport, is a free hit; a source that does not draw costs nothing.
 const left = async () =>
-  (await (await fetch(`${base}/v1/balance`, { headers: auth(KEYS.rich) })).json()).bought as number;
+  (await (await fetch(`${base}/api/v1/balance`, { headers: auth(KEYS.rich) })).json())
+    .bought as number;
 const paid = { 'GET keyed': transports['GET keyed'], REST: transports.REST, MCP: transports.MCP };
 const prices: string[] = [];
 for (const format of ['svg', 'png'] as const)
