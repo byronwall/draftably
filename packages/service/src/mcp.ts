@@ -13,7 +13,7 @@ import { ApiError, checkSource, errorJson, requireKey, type ApiEnv } from './api
 import { DEFAULT_FORMAT, drawOptions } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
-import { note, noteError, span } from './obs';
+import { bump, note, noteError, span } from './obs';
 
 const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
 const type = z
@@ -27,11 +27,21 @@ const failure = (t: string, code = 'ERR_SOURCE') => {
   return { ...text(t), isError: true };
 };
 
-/** A tool call, in its own span, with its name on the request's event. */
-const tool = <R>(name: string, fn: () => Promise<R>) => {
-  note({ mcp_tool: name });
-  return span(`mcp.${name}`, { tool: name }, fn);
-};
+/** A tool call, in its own span. */
+const tool = <R>(name: string, fn: () => Promise<R>) => span(`mcp.${name}`, { tool: name }, fn);
+
+interface RpcMessage {
+  method?: string;
+  params?: { name?: unknown };
+  result?: { isError?: boolean; content?: { text?: string }[] };
+  error?: { message?: string };
+}
+
+/** JSON-RPC messages from a body that may be one message or a batch. */
+const messages = async (r: { json<T>(): Promise<T> }): Promise<RpcMessage[]> =>
+  [await r.json<unknown>().catch(() => null)]
+    .flat()
+    .filter((m): m is RpcMessage => !!m && typeof m === 'object');
 
 function base64(bytes: Uint8Array) {
   let bin = '';
@@ -213,5 +223,16 @@ export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext
     enableJsonResponse: true,
   });
   await server(env, ctx, who, url.origin).connect(transport);
-  return transport.handleRequest(req);
+  // The request's tool names and the answer's errors, read here so a call the SDK refuses before
+  // the tool runs (bad arguments) is counted too.
+  const calls = (await messages(req.clone())).filter(m => m.method === 'tools/call');
+  bump('mcp_calls', calls.length);
+  if (calls.length) note({ mcp_tool: calls.map(m => String(m.params?.name)).join(',') });
+  const res = await transport.handleRequest(req);
+  if (res.headers.get('Content-Type')?.includes('application/json'))
+    for (const m of await messages(res.clone())) {
+      const failed = m.error?.message ?? (m.result?.isError && m.result.content?.[0]?.text);
+      if (failed) noteError('ERR_TOOL', failed, true);
+    }
+  return res;
 }

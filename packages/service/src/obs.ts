@@ -38,8 +38,11 @@ export interface Wide {
   credits_left?: number;
   /** A fulfilled or repeated Stripe purchase. */
   credits_bought?: number;
-  rate_limit?: 'anon' | 'key' | 'login';
+  /** `login_email` is the cap on links one address may hold. */
+  rate_limit?: 'anon' | 'key' | 'login' | 'login_email';
+  /** The tools called, joined with commas when one request batches several. */
   mcp_tool?: string;
+  mcp_calls?: number;
   login?:
     | 'form'
     | 'bad_email'
@@ -74,10 +77,31 @@ export function note(fields: Partial<Wide>) {
   if (ev) Object.assign(ev, fields);
 }
 
-/** Note an error the caller turns into an answer: its code, and a short message. */
-export function noteError(code: string, message: string) {
-  note({ error_code: code, error: message.slice(0, 300) });
+/** Add `n` to a counter on the current request's event. */
+export function bump(field: 'credits_spent' | 'mcp_calls', n = 1) {
+  const ev = store.getStore();
+  if (ev) ev[field] = (ev[field] ?? 0) + n;
 }
+
+/**
+ * Text that may echo what the caller sent, made safe to log: email addresses are masked, and it is
+ * cut to 300 characters.
+ */
+export const scrub = (text: string) =>
+  text.replace(/[^\s@<>"'(),;:]+@[^\s@<>"'(),;:]+/g, '<email>').slice(0, 300);
+
+/**
+ * Note an error the caller turns into an answer: its code, and a scrubbed message. With `keep`,
+ * an error noted earlier in the request stays.
+ */
+export function noteError(code: string, message: string, keep = false) {
+  if (keep && store.getStore()?.error_code) return;
+  note({ error_code: code, error: scrub(message) });
+}
+
+/** The size of a body in bytes. */
+export const byteSize = (body: string | Uint8Array) =>
+  typeof body === 'string' ? new TextEncoder().encode(body).length : body.byteLength;
 
 type Attrs = Record<string, string | number | boolean | undefined>;
 type Span = Parameters<Parameters<typeof tracing.enterSpan>[1]>[0];
@@ -93,8 +117,8 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
       return await fn(s);
     } catch (error) {
       const e = error instanceof Error ? error : new Error(String(error));
-      s.recordException({ name: e.name, message: e.message, stack: e.stack });
-      s.setStatus({ code: 'error', message: e.message.slice(0, 300) });
+      s.recordException({ name: e.name, message: scrub(e.message), stack: e.stack });
+      s.setStatus({ code: 'error', message: scrub(e.message) });
       throw error;
     }
   });

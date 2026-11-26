@@ -12,7 +12,7 @@ import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { MAX_SEGMENT, render, type Payer } from './render';
 import { handleMcp } from './mcp';
 import { handleWebhook, type StripeEnv } from './stripe';
-import { ipHash, note, noteError, span, withEvent, type Wide } from './obs';
+import { ipHash, note, noteError, scrub, span, withEvent, type Wide } from './obs';
 
 export interface Env extends ApiEnv, StripeEnv {
   ANON_LIMIT: RateLimit;
@@ -72,7 +72,7 @@ async function imageResponse(
       if (segment.length > MAX_SEGMENT)
         throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
       const text = await decodeSource(segment);
-      s.setAttribute('source_bytes', text.length);
+      s.setAttribute('source_bytes', new TextEncoder().encode(text).length);
       return text;
     });
     // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
@@ -156,6 +156,7 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
   const route = parseImagePath(url.pathname);
   if (!route) return new Response('Not found', { status: 404 });
+  note({ format: route.format });
 
   // Options are checked first, so a bad one never matches a cached image.
   let opts: DrawOptions;
@@ -188,28 +189,30 @@ export default {
     const start = Date.now();
     const url = new URL(req.url);
     const route = routeKind(url.pathname);
-    const ip = req.headers.get('CF-Connecting-IP');
     const ev: Wide = {
       event: 'request',
       route,
       method: req.method,
-      // An image path holds the whole diagram source.
-      path: route === 'image' ? undefined : url.pathname.slice(0, 200),
+      // An image path holds the whole diagram source, and a long segment elsewhere may be one.
+      path: route === 'image' ? undefined : url.pathname.slice(0, 200).replace(/[^/]{41,}/g, '…'),
       version: runtimeVersion,
-      build: env.CF_VERSION_METADATA.id,
-      ip: ip ? await ipHash(ip) : undefined,
+      build: env.CF_VERSION_METADATA?.id ?? 'unknown',
       country: (req.cf?.country as string | undefined) ?? undefined,
       payer: 'anonymous',
     };
     try {
+      const ip = req.headers.get('CF-Connecting-IP');
+      if (ip) ev.ip = await ipHash(ip);
       const res = await withEvent(ev, () => handle(req, env, ctx, url));
       ev.status = res.status;
+      // An answer no handler gave a code, such as a 404 or 405.
+      if (res.status >= 400) ev.error_code ??= `HTTP_${res.status}`;
       return res;
     } catch (error) {
       // Thrown on, so Workers Issues groups it as a failed invocation.
       ev.status = 500;
       ev.error_code = 'ERR_INTERNAL';
-      ev.error = String(error instanceof Error ? error.message : error).slice(0, 300);
+      ev.error = scrub(String(error instanceof Error ? error.message : error));
       throw error;
     } finally {
       ev.ms = Date.now() - start;

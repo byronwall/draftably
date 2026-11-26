@@ -196,7 +196,8 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
   note({
     webhook: added.meta.changes ? 'fulfilled' : 'duplicate',
     account,
-    credits_bought: credits,
+    // A repeat adds nothing, so a sum over events matches the ledger.
+    credits_bought: added.meta.changes ? credits : 0,
   });
   return new Response('OK');
 }

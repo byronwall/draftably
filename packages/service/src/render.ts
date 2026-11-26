@@ -20,7 +20,7 @@ import { balance, COST, spend, type Balance } from './credits';
 import { draw, type DrawOptions, type Format } from './draw';
 import { ApiError } from './errors';
 import { freshness, sourceType } from './mermaid';
-import { note, span } from './obs';
+import { bump, byteSize, note, span } from './obs';
 
 export { MAX_SEGMENT };
 
@@ -115,7 +115,7 @@ export async function render<P>(
     const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
     // A dated image's lifetime is counted again: it still ends at the next UTC midnight.
     const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
-    note({ out_bytes: body.length });
+    note({ out_bytes: byteSize(body) });
     return { body, hit: true, cacheControl, out: await prepare(body, cacheControl) };
   }
   await beforeDraw?.();
@@ -128,23 +128,26 @@ export async function render<P>(
     if (b.grant + b.bought < cost) throw outOfCredits();
   }
   const body = await draw(source, format, opts);
-  note({ out_bytes: body.length });
+  note({ out_bytes: byteSize(body) });
   const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
   const out = await prepare(body, cacheControl);
   let left: Balance | undefined;
   if (payer) {
     left = (await spend(env.DB, payer.account, cost, format, payer.key)) ?? undefined;
     if (!left) {
+      // A parallel spend took the credits the first check saw; the balance now is not known.
+      note({ credits_left: undefined });
       const live = await env.DB.prepare(`SELECT 1 FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
         .bind(payer.key)
         .first();
       if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
       throw outOfCredits();
     }
-    note({ credits_spent: cost, credits_left: left.grant + left.bought });
+    bump('credits_spent', cost);
+    note({ credits_left: left.grant + left.bought });
   }
   ctx.waitUntil(
-    span('cache.put', { format, out_bytes: body.length }, () =>
+    span('cache.put', { format, out_bytes: byteSize(body) }, () =>
       cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
     ),
   );

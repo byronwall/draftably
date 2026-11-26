@@ -166,16 +166,13 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       return loginForm('<p><b>That is not an email address.</b></p>', 400);
     }
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-    const tooMany = () => {
-      note({ login: 'capped' });
+    const tooMany = (limit: 'login' | 'login_email') => {
+      note({ login: 'capped', rate_limit: limit });
       return failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
     };
-    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) {
-      note({ rate_limit: 'login' });
-      return tooMany();
-    }
+    if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany('login');
     try {
-      if (!(await sendLoginLink(env, email, url.origin))) return tooMany();
+      if (!(await sendLoginLink(env, email, url.origin))) return tooMany('login_email');
     } catch (error) {
       // console.error, so Workers Issues groups a failing mail service.
       console.error('sign-in email failed', error);
@@ -209,11 +206,14 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       );
     }
     const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));
-    note({ login: email ? 'signed_in' : 'link_dead' });
-    if (!email) return failed('This sign-in link was used already or has expired.');
+    if (!email) {
+      note({ login: 'link_dead' });
+      return failed('This sign-in link was used already or has expired.');
+    }
     const account = await upsertAccount(env.DB, email);
-    note({ payer: 'session', account });
-    return redirect('/account', await startSession(env.DB, account));
+    const cookie = await startSession(env.DB, account);
+    note({ login: 'signed_in', payer: 'session', account });
+    return redirect('/account', cookie);
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);

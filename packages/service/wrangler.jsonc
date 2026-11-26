@@ -14,6 +14,9 @@
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,
+    // A sign-in link carries its token in the query (/auth/verify?token=), and the token stays
+    // good until the confirm button. Keep query strings out of logs and traces.
+    "redact_query_string": true,
     "logs": { "enabled": true, "persist": true, "invocation_logs": true, "head_sampling_rate": 1 },
     "traces": { "enabled": true, "persist": true, "head_sampling_rate": 1 },
     // Grouped exceptions, failed invocations, 5xx and console.error. A deploy without this key
