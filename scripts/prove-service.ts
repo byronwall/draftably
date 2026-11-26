@@ -769,6 +769,16 @@ if (!remote) {
     next: 'https://evil.example/',
   });
   assert.equal(offsite.headers.get('Location'), '/account');
+  // A crafted authorization (a response type the app may not use) goes straight to the app's
+  // callback with an error; a sign-in link that carries one lands on /account instead.
+  const crafted = `/authorize?${new URLSearchParams({ response_type: 'token', client_id: clientId, redirect_uri: redirectUri, state: 'crafted' })}`;
+  const bounce = await fetch(`${base}${crafted}`, { redirect: 'manual' });
+  assert.equal(bounce.status, 302);
+  assert.ok(bounce.headers.get('Location')!.startsWith(`${redirectUri}?error=`));
+  const craftedLink = await mailLink('crafted@example.com');
+  const craftedSignIn = await form('/auth/verify', { token: craftedLink, next: crafted });
+  assert.equal(craftedSignIn.status, 303);
+  assert.equal(craftedSignIn.headers.get('Location'), '/account');
 
   // Signed in: the consent page names the app, the account and where access goes.
   const consentFor = async () => {
@@ -909,7 +919,7 @@ if (!remote) {
     400,
   );
   console.log(
-    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site.',
+    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site, nor into an authorization that would bounce to the app callback with an error.',
   );
 
   // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.
