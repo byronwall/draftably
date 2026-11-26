@@ -4,7 +4,7 @@
  * beyond the copy buttons.
  */
 
-import { encodeSource, SERVICE_URL } from '../../../src/lib/render-url';
+import { encodeSource } from '../../../src/lib/render-url';
 
 export const esc = (s: string) =>
   s.replace(
@@ -170,11 +170,11 @@ export const page = (
 <title>${esc(title)} · Draftably API</title>
 <link rel="icon" href="data:image/svg+xml,${encodeURIComponent(LOGO)}">
 <style>${CSS}</style></head><body>
-<header class="nav"><div class="brand"><a class="wordmark" href="${SITE}"><span class="logo" aria-hidden="true">${LOGO}</span>draftably</a><a class="area" href="/"${opts.current === 'home' ? ' aria-current="page"' : ''}>API</a></div>
+<header class="nav"><div class="brand"><a class="wordmark" href="${SITE}"><span class="logo" aria-hidden="true">${LOGO}</span>draftably</a><a class="area" href="/api"${opts.current === 'home' ? ' aria-current="page"' : ''}>API</a></div>
 <nav class="site-nav" aria-label="Site"><a href="${SITE}/docs">Docs</a><a class="wide" href="${SITE}/play">Playground</a><a class="wide" href="${SITE}/app/">Editor</a><a class="account" href="/account"${opts.current === 'account' ? ' aria-current="page"' : ''}>Account</a></nav></header>
 <main id="main">${body}</main>
 <footer class="footer"><a class="wordmark" href="${SITE}"><span class="logo" aria-hidden="true">${LOGO}</span>draftably</a><span class="muted" style="font-size:13px">Render API</span>
-<span class="footer-links"><a href="/">API reference</a><a href="${SITE}/docs">Docs</a><a href="${SITE}/play">Playground</a><a href="${SITE}/app/">Editor</a><a href="${GITHUB}" aria-label="GitHub">GitHub</a></span></footer>
+<span class="footer-links"><a href="/api">API reference</a><a href="${SITE}/docs">Docs</a><a href="${SITE}/play">Playground</a><a href="${SITE}/app/">Editor</a><a href="${GITHUB}" aria-label="GitHub">GitHub</a></span></footer>
 ${opts.script ? `<script>${SCRIPT}</script>` : ''}</body></html>`,
     {
       status: opts.status ?? 200,
@@ -187,23 +187,23 @@ ${opts.script ? `<script>${SCRIPT}</script>` : ''}</body></html>`,
     },
   );
 
-// The live example on `/`: this service drawing a picture of itself.
+// The live example on `/api`: this service drawing a picture of itself.
 const EXAMPLE = `diagram "How a render works" version=1
 
 node src "Diagram source"
-node api "api.draftably.dev" color=violet
+node api "draftably.dev/api" color=violet
 node img "Image in your page" shape=pill
 
-edge enc src -> api "GET /svg/{encoded}"
+edge enc src -> api "GET /api/svg/{encoded}"
 edge out api -> img "cached at the edge"
 
 layout root flow gap=48
 `;
 
 const GROUPS: [RegExp, string][] = [
-  [/^GET \/(svg|png)[/?]/, 'Image URLs'],
-  [/^(GET|POST)\s+\/(link|d\/|v1\/share)/, 'Short links'],
-  [/^(GET|POST)\s+\/v1\//, 'REST API'],
+  [/^GET \/api\/(svg|png)[/?]/, 'Image URLs'],
+  [/^(GET|POST)\s+\/api\/(link|d\/|v1\/share)/, 'Short links'],
+  [/^(GET|POST)\s+\/api\/v1\//, 'REST API'],
   [/^\/mcp/, 'MCP server'],
   [/^\/account/, 'Account'],
 ];
@@ -226,7 +226,7 @@ const inline = (line: string) =>
 
 /**
  * The plain-text reference as sections of endpoint rows. It reads the same text curl gets, so the
- * two can't drift: an endpoint starts a line, its description sits from column 21, and indented
+ * two can't drift: an endpoint starts a line, its description sits from column 26, and indented
  * lines continue it.
  */
 function reference(text: string) {
@@ -254,8 +254,8 @@ function reference(text: string) {
       footer = raw;
       continue;
     }
-    const at = raw.slice(0, 21).trim();
-    const rest = raw.slice(21).trim();
+    const at = raw.slice(0, 26).trim();
+    const rest = raw.slice(26).trim();
     if (at) rows.push({ at, lines: rest ? [rest] : [] });
     else {
       // The text wraps at 80 columns. Rejoin a wrapped sentence; a finished one, or a ?query line,
@@ -293,16 +293,16 @@ function reference(text: string) {
     )}${connect ? `<section class="ref-group"><h2>Connect over MCP</h2><pre class="recipe">${inline(connect)}</pre></section>` : ''}<p class="ref-foot">${inline(footer)}</p>`;
 }
 
-/** `/` for a browser: the plain-text reference, framed. Clients that don't ask for HTML get the text. */
+/** `/api` for a browser: the plain-text reference, framed. Clients that don't ask for HTML get the text. */
 export async function homePage(text: string) {
-  const url = `/svg/${await encodeSource(EXAMPLE)}`;
+  const url = `/api/svg/${await encodeSource(EXAMPLE)}`;
   return page(
     'Render API',
     `<div class="hero"><div><h1>Render API</h1>
 <p class="lead">Draw Draftably and Mermaid diagrams from an image URL, a REST call or an MCP tool.</p>
 <div class="actions"><a class="button primary" href="/account">Get an API key</a><a class="button" href="${SITE}/docs">Language docs</a></div></div>
-<figure class="example"><a href="${url}"><picture><source media="(prefers-color-scheme: dark)" srcset="${url}?scheme=dark"><img src="${url}" alt="Diagram source goes to api.draftably.dev with GET /svg/{encoded}, which returns an image for your page, cached at the edge." width="560"></picture></a>
-<figcaption class="codeline"><code>&lt;img src="${SERVICE_URL}${esc(url)}"&gt;</code>${copyButton(`<img src="${SERVICE_URL}${url}">`, 'Copy the image tag')}</figcaption></figure></div>
+<figure class="example"><a href="${url}"><picture><source media="(prefers-color-scheme: dark)" srcset="${url}?scheme=dark"><img src="${url}" alt="Diagram source goes to draftably.dev with GET /api/svg/{encoded}, which returns an image for your page, cached at the edge." width="560"></picture></a>
+<figcaption class="codeline"><code>&lt;img src="${SITE}${esc(url)}"&gt;</code>${copyButton(`<img src="${SITE}${url}">`, 'Copy the image tag')}</figcaption></figure></div>
 ${reference(text)}`,
     { current: 'home', script: true },
   );

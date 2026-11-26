@@ -1,8 +1,8 @@
 # MCP server
 
-`https://api.draftably.dev/mcp` is a remote MCP server (Streamable HTTP). An agent connects to it
+`https://draftably.dev/mcp` is a remote MCP server (Streamable HTTP). An agent connects to it
 and draws diagrams with nothing installed. It takes the same key as the [REST API](#rest-api). Make
-one on the [account page](https://api.draftably.dev/account): sign in with your email.
+one on the [account page](https://draftably.dev/account): sign in with your email.
 
 To have the agent write `.draft` files on your machine instead, install the
 [agent skill](#agent-skill). That runs locally and costs nothing.
@@ -12,7 +12,7 @@ To have the agent write `.draft` files on your machine instead, install the
 In Claude Code:
 
 ```sh
-claude mcp add --transport http draftably https://api.draftably.dev/mcp \
+claude mcp add --transport http draftably https://draftably.dev/mcp \
   --header "Authorization: Bearer dft_..."
 ```
 
@@ -23,7 +23,7 @@ Other clients take a JSON block like this:
   "mcpServers": {
     "draftably": {
       "type": "http",
-      "url": "https://api.draftably.dev/mcp",
+      "url": "https://draftably.dev/mcp",
       "headers": { "Authorization": "Bearer dft_..." }
     }
   }

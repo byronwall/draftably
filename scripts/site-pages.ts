@@ -34,7 +34,7 @@ const SITE: Meta[] = [
     path: 'terms',
     title: 'Terms of use · draftably',
     description:
-      'The terms for the Draftably render service at api.draftably.dev: accounts, keys, credits and fair use.',
+      'The terms for the Draftably render service at draftably.dev/api: accounts, keys, credits and fair use.',
   },
   {
     path: 'privacy',

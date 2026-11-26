@@ -172,8 +172,8 @@ export function links(origin: string, { id, pngScale }: Share, opts: DrawOptions
   const fits = opts.scale <= pngScale;
   return {
     id,
-    png: fits ? `${origin}/d/${id}.png${pngQ}` : null,
-    svg: `${origin}/d/${id}.svg${svgQ}`,
+    png: fits ? `${origin}/api/d/${id}.png${pngQ}` : null,
+    svg: `${origin}/api/d/${id}.svg${svgQ}`,
     edit: `${SITE}/d/${id}`,
   };
 }
@@ -220,7 +220,7 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
     const json = url.searchParams.get('format') === 'json';
     try {
       const opts = drawOptions(k => url.searchParams.get(k));
-      const source = await urlSource(url, link[1], 'POST /v1/share');
+      const source = await urlSource(url, link[1], 'POST /api/v1/share');
       const share = await createShare(req, env, source, opts.type ?? null, null);
       return answer(links(url.origin, share, opts), json);
     } catch (error) {

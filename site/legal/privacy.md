@@ -21,7 +21,7 @@ and a rough location from your IP address. Google sets cookies for this. Cloudfl
 
 ## The render service
 
-`api.draftably.dev` draws diagrams from image URLs, the REST API and the MCP server.
+`draftably.dev/api` draws diagrams from image URLs, the REST API and the MCP server.
 
 **Diagram source.** An image URL holds the diagram's source, so anyone with the URL can see the
 diagram. The REST API and the MCP server receive the source in the request. The service draws it
@@ -29,7 +29,7 @@ and keeps the image in Cloudflare's cache, so the next request for the same diag
 free. A PNG carries its source inside the file. Apart from short links (below), the service does
 not store the source anywhere else, and it never uses diagrams to train models.
 
-**Short links.** Creating a short link (`/link`, `/v1/share` or the MCP tool `share_diagram`)
+**Short links.** Creating a short link (`/api/link`, `/api/v1/share` or the MCP tool `share_diagram`)
 stores the diagram's source in the service's database, so the link can draw it later. Anyone with
 the link can see the diagram and its source. The service also stores when the link was made, the
 account when an API key made it, and a hash of the IP address (never the address itself). To have
@@ -64,7 +64,7 @@ Draftably does not sell your data or share it with anyone else.
 
 ## Your choices
 
-- Revoke an API key at any time on the [account page](https://api.draftably.dev/account).
+- Revoke an API key at any time on the [account page](https://draftably.dev/account).
 - To delete your account, email [hello@draftably.dev](mailto:hello@draftably.dev) from the
   account's address. The account, its keys, its sign-in sessions and its credit record are deleted.
   Images already in the cache expire on their own.

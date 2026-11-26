@@ -1,9 +1,9 @@
 # REST API
 
-The REST API at `https://api.draftably.dev/v1/` draws, checks and converts diagrams. The bodies
+The REST API at `https://draftably.dev/api/v1/` draws, checks and converts diagrams. The bodies
 follow the Mermaid API (`{code, format}`), so an agent that knows one knows the other.
 
-Every call needs a key. Make one on the [account page](https://api.draftably.dev/account): sign in
+Every call needs a key. Make one on the [account page](https://draftably.dev/account): sign in
 with your email. Send it as a header:
 
 ```text
@@ -13,7 +13,7 @@ Authorization: Bearer dft_...
 ## Render
 
 ```sh
-curl https://api.draftably.dev/v1/render \
+curl https://draftably.dev/api/v1/render \
   -H "Authorization: Bearer dft_..." \
   -d '{"code": "node a\nnode b\nedge e a -> b", "format": "svg"}'
 ```
@@ -38,7 +38,7 @@ An SVG costs 1 credit and a PNG 2. A cache hit is free.
 
 ## Validate
 
-`POST /v1/validate` with `{"code": "...", "type"?}` checks the source without drawing it. It is
+`POST /api/v1/validate` with `{"code": "...", "type"?}` checks the source without drawing it. It is
 free.
 
 ```json
@@ -51,7 +51,7 @@ free.
 
 ## Convert
 
-`POST /v1/convert` with `{"code": "...", "from": "mermaid"}` returns Draftably source. It is free.
+`POST /api/v1/convert` with `{"code": "...", "from": "mermaid"}` returns Draftably source. It is free.
 
 ```json
 { "draft": "node api \"API\"\n…", "warnings": [] }
@@ -59,7 +59,7 @@ free.
 
 ## Balance
 
-`GET /v1/balance` returns `{grant, bought, resetsAt}`: the monthly credits left, the bought credits
+`GET /api/v1/balance` returns `{grant, bought, resetsAt}`: the monthly credits left, the bought credits
 left, and when the monthly credits reset. The monthly credits are spent first. Bought credits never
 expire.
 

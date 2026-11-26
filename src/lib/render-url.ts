@@ -8,7 +8,8 @@
 import { readSource } from '../dsl/syntax';
 import { baseUrl } from '../model/link';
 
-export const SERVICE_URL = 'https://api.draftably.dev';
+/** The render service's base: draftably.dev serves it under `/api`. */
+export const SERVICE_URL = 'https://draftably.dev/api';
 
 /** The largest source the service decodes, in bytes. */
 export const MAX_SOURCE_BYTES = 64 * 1024;
@@ -147,7 +148,7 @@ export async function imageUrl(source: string, format: 'svg' | 'png', base = SER
   const segment = await encodeSource(source);
   if (segment.length > MAX_SEGMENT)
     throw new SourceError(
-      `The encoded source is ${segment.length} characters, over the ${MAX_SEGMENT} a URL may carry. Use POST /v1/render.`,
+      `The encoded source is ${segment.length} characters, over the ${MAX_SEGMENT} a URL may carry. Use POST /api/v1/render.`,
     );
   return `${base.replace(/\/$/, '')}/${format}/${segment}`;
 }

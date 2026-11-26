@@ -2,7 +2,7 @@
 
 Last updated 25 November 2026.
 
-These terms cover the render service at `api.draftably.dev` (image URLs, the REST API, the MCP
+These terms cover the render service at `draftably.dev/api` (image URLs, the REST API, the MCP
 server and accounts) and the website at draftably.dev. Draftably is made by Byron Wall ("we").
 When you use the service, you agree to these terms. Questions go to
 [hello@draftably.dev](mailto:hello@draftably.dev).
@@ -14,7 +14,7 @@ That license covers the code. These terms cover the hosted service.
 
 - You sign in with your email. One account belongs to one person or one team.
 - Keep your API keys secret. You are responsible for what is done with your keys. If a key leaks,
-  revoke it on the [account page](https://api.draftably.dev/account).
+  revoke it on the [account page](https://draftably.dev/account).
 
 ## Credits
 
