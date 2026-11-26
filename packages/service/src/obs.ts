@@ -87,11 +87,20 @@ export function bump(field: 'credits_spent' | 'mcp_calls', n = 1) {
 }
 
 /**
- * Text that may echo what the caller sent, made safe to log: email addresses are masked, and it is
- * cut to 300 characters.
+ * Text that may echo what the caller sent, made safe to log: email addresses, API keys, IP
+ * addresses and long token-like runs are masked, and it is cut to 300 characters. A diagnostic
+ * keeps its words, so the log still says why a diagram failed.
  */
 export const scrub = (text: string) =>
-  text.replace(/[^\s@<>"'(),;:]+@[^\s@<>"'(),;:]+/g, '<email>').slice(0, 300);
+  text
+    .replace(/[^\s@<>"'(),;:/]+@[^\s@<>"'(),;:/]+/g, '<email>')
+    .replace(/dft_[\w.-]+/g, '<key>')
+    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, '<ip>')
+    .replace(/\b[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}\b/gi, m =>
+      /[0-9a-f]{1,4}:/i.test(m) ? '<ip>' : m,
+    )
+    .replace(/[\w+/=-]{24,}/g, '<token>')
+    .slice(0, 300);
 
 /**
  * Note an error the caller turns into an answer: its code, and a scrubbed message. With `keep`,
@@ -122,7 +131,7 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
       const e = error instanceof Error ? error : new Error(String(error));
       const message = scrub(e.message);
       // The stack's first line repeats the message.
-      const stack = e.stack?.replace(e.message, message);
+      const stack = e.stack?.replace(e.message, () => message);
       s.recordException({ name: e.name, message, stack });
       s.setStatus({ code: 'error', message: scrub(e.message) });
       throw error;

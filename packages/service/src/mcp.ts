@@ -54,7 +54,8 @@ function watch(transport: WebStandardStreamableHTTPServerTransport) {
   const onmessage = transport.onmessage;
   transport.onmessage = (msg, extra) => {
     const m = msg as RpcMessage;
-    if (m.method === 'tools/call') {
+    // A notification (no id) runs nothing, so it is not a call.
+    if (m.method === 'tools/call' && 'id' in msg) {
       const name = typeof m.params?.name === 'string' && TOOLS.has(m.params.name);
       const tool = name ? (m.params!.name as string) : 'unknown';
       bump('mcp_calls');

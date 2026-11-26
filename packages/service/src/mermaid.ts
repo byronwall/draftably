@@ -8,7 +8,7 @@ import { parseHTML } from 'linkedom';
 import { detectSource } from '../../../src/import/detect';
 import type { ParseFlowResult } from '../../../src/import/mermaid-facade';
 import { SourceError } from '../../../src/lib/render-url';
-import { byteSize, span } from './obs';
+import { byteSize, note, span } from './obs';
 
 export type SourceType = 'draftably' | 'mermaid';
 
@@ -95,6 +95,7 @@ export async function toDraft(source: string, type?: string | null) {
     s.setAttribute('source_type', found.type);
     return found;
   });
+  note({ source_type: found.type });
   if (found.type !== 'mermaid') return { draft: source, warnings: [] as string[] };
   // `cold`: the first Mermaid call in this isolate also loads the parser.
   return span('mermaid.import', { source_bytes: byteSize(found.text), cold: !parse }, async s => {

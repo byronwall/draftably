@@ -289,7 +289,8 @@ async function main() {
       [{ operator: 'count' }, { operator: 'sum', key: 'credits_spent', keyType: 'number' }],
       10,
     ),
-    calc(window, [...WIDE, eq('status', 402)], ['account']),
+    // An MCP call that runs out answers 200 with an error, so match the code, not the status.
+    calc(window, [...WIDE, eq('error_code', 'ERR_LIMIT_BALANCE')], ['account']),
     calc(window, [...WIDE, gte('status', 400), has('ip')], ['ip'], [{ operator: 'count' }], 5),
     issues(),
   ]);
@@ -408,9 +409,12 @@ ${table(errorsByBuild, ['error_code', 'build', 'count'])}
 ${table(byRoute, ['route', 'status', 'count'])}
 
 ## Latency
-- All: ${lat(latency[0])}
-- PNG URLs: ${lat(png[0])}
-- SVG URLs: ${lat(svg[0])}
+Cloudflare's measure on the invocation log. Only GET image URLs carry the format in the URL; for
+REST and MCP renders, read the \`render\` span in Observability → Traces.
+
+- All requests: ${lat(latency[0])}
+- GET /png/ URLs: ${lat(png[0])}
+- GET /svg/ URLs: ${lat(svg[0])}
 
 ## Cache
 ${table(cache, ['format', 'cache', 'count'])}
@@ -419,7 +423,7 @@ ${table(cache, ['format', 'cache', 'count'])}
 Top accounts:
 ${table(spenders, ['account', 'count', 'sum_credits_spent'])}
 
-Out of credits (402):
+Out of credits (ERR_LIMIT_BALANCE: 402 over GET and REST, an error result over MCP):
 ${table(broke, ['account', 'count'])}
 
 MCP tools:

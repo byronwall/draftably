@@ -16,7 +16,7 @@ import {
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
-import { note, noteError } from './obs';
+import { note, noteError, scrub } from './obs';
 
 const esc = (s: string) =>
   s.replace(
@@ -174,10 +174,12 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     try {
       if (!(await sendLoginLink(env, email, url.origin))) return tooMany('login_email');
     } catch (error) {
-      // console.error, so Workers Issues groups a failing mail service.
-      console.error('sign-in email failed', error);
+      // console.error, so Workers Issues groups a failing mail service. The error can name the
+      // address, so only its scrubbed message is logged.
+      const message = scrub(error instanceof Error ? error.message : String(error));
+      console.error(`sign-in email failed: ${message}`);
       note({ login: 'send_failed' });
-      noteError('ERR_EMAIL', error instanceof Error ? error.message : String(error));
+      noteError('ERR_EMAIL', message);
       return failed('We could not send the email. Try again later.', 503);
     }
     note({ login: 'sent' });

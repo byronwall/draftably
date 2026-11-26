@@ -142,14 +142,40 @@ function routeKind(path: string): Wide['route'] {
   return 'other';
 }
 
+/** Every path the service answers, as logged. */
+const PATHS = new Set([
+  '/',
+  '/health',
+  '/mcp',
+  '/login',
+  '/logout',
+  '/auth/verify',
+  '/account',
+  '/account/keys',
+  '/account/buy',
+  '/account/keys/:id/revoke',
+  '/stripe/webhook',
+  '/v1/render',
+  '/v1/validate',
+  '/v1/convert',
+  '/v1/balance',
+]);
+
 /**
  * The path for the log line, safe to keep: none for an image (its path holds the diagram source),
- * a key ID replaced by `:id`, and only the first segment of an unknown path, for scanner noise.
+ * a known route as its template, and for anything else only its first segment, scrubbed, which is
+ * enough to spot scanners (`/wp-login.php`).
  */
 function pathLabel(route: Wide['route'], path: string) {
   if (route === 'image') return undefined;
-  if (route !== 'other') return path.replace(/\/[0-9a-f]{12}\//, '/:id/').slice(0, 60);
-  return scrub('/' + (path.split('/')[1] ?? '')).slice(0, 40);
+  const template = path.replace(
+    /^\/account\/keys\/[0-9a-f]{12}\/revoke$/,
+    '/account/keys/:id/revoke',
+  );
+  if (PATHS.has(template)) return template;
+  return (
+    scrub('/' + (path.split('/')[1] ?? '')).slice(0, 40) + (path.split('/').length > 2 ? '/*' : '')
+  );
 }
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
