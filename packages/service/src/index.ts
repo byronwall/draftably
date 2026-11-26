@@ -194,11 +194,11 @@ function pathLabel(route: Wide['route'], path: string) {
     '/account/keys/:id/revoke',
   );
   if (PATHS.has(template)) return template;
-  // Anything else (scanner noise) logs its first segment when it is a plain name, such as
-  // `/wp-login.php`; any other text could be the caller's data.
+  // Anything else (scanner noise) logs its first segment when it is a short name that starts
+  // with a letter, such as `/wp-login.php`. A token (32 characters) or an IP never matches.
   const first = path.split('/')[1] ?? '';
   const more = path.split('/').length > 2 ? '/*' : '';
-  return /^[\w.-]{1,40}$/.test(first) ? `/${first}${more}` : '/<other>';
+  return /^[a-z][\w.-]{0,24}$/i.test(first) ? `/${first}${more}` : '/<other>';
 }
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {

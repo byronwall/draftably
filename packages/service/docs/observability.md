@@ -77,7 +77,10 @@ invocation log (one per request).
 
 ## Questions and the queries that answer them
 
-All queries are in **Observability → Query builder** unless they say otherwise. Set the time range
+All queries are in **Observability → Query builder** unless they say otherwise. Open it from
+**Workers & Pages → draftably-api → Observability**, so it is limited to this Worker. From the
+account-level Observability page, add Filter `$workers.scriptName = draftably-api` to every query,
+or `draftably-site` counts too. Set the time range
 at the top right. "Filter" means a row in the Filter section; "Group by" and "Visualize" are the
 other sections. Star a query to keep it.
 

@@ -241,6 +241,8 @@ async function issues() {
         // At most the 100 newest occurrences are read, so this is a floor.
         inWindow: inWindow.length,
         versions: [...new Set(inWindow.map(o => o.worker?.scriptVersion?.id).filter(Boolean))],
+        // An occurrence with no version could be on any build.
+        unknownVersion: inWindow.some(o => !o.worker?.scriptVersion?.id),
         mechanism: last?.error.mechanism,
         frame: last?.error.stack
           ?.split('\n')
@@ -353,8 +355,8 @@ async function main() {
   const per = BASELINE || NaN;
   const baseRequests = baseAll / per;
   const baseFivexx = base5 / per;
-  const rate = (n: number, d: number) => (d ? n / d : 0);
-  const pct = (x: number) => `${(x * 100).toFixed(2)}%`;
+  const rate = (n: number, d: number) => (Number.isNaN(d) ? NaN : d ? n / d : 0);
+  const pct = (x: number) => (Number.isNaN(x) ? 'n/a' : `${(x * 100).toFixed(2)}%`);
   const baseByCode = new Map(baseErrors.map(r => [r.error_code, Number(r.count) / per]));
 
   const snapshot = {
@@ -389,7 +391,9 @@ async function main() {
   // Cloudflare flags scanner probes (/.env, /wp-login.php) as Issues too; nothing to fix there.
   const scan = (i: { title: string }) => /vulnerability scan/i.test(i.title);
   // An issue with no occurrence on the newest build seen is likely fixed.
-  const live = (i: { versions: unknown[] }) => !current || i.versions.includes(current);
+  // Unknown when the newest build or an occurrence's version is missing: then never "fixed".
+  const live = (i: { versions: unknown[]; unknownVersion: boolean }) =>
+    !current || i.unknownVersion || i.versions.includes(current);
   const status = (i: (typeof issueList)[number]) =>
     scan(i) ? 'scanner' : live(i) ? (i.isNew ? 'new' : 'open') : 'not on newest build';
 
@@ -411,7 +415,8 @@ async function main() {
     actions.push(
       `5xx rate is ${pct(rate(fivexx, requests))} (${fivexx} of ${requests}); baseline ${pct(rate(baseFivexx, baseRequests))}. See errors by build below.`,
     );
-  for (const e of errors) {
+  // Growth needs a baseline.
+  for (const e of BASELINE ? errors : []) {
     const code = String(e.error_code);
     // Only the service's own failures; a rise in bad diagrams, bad keys or limits is the
     // callers', and shows in the tables.

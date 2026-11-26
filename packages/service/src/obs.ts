@@ -100,10 +100,10 @@ export const scrub = (text: string) =>
     .replace(/\n> [\s\S]*/, '')
     // A percent-encoded @ is still an address.
     .replace(/%(?:25)*40/gi, '@')
-    .replace(/[^\s<>(),;:/]{1,64}@[\w-]+(?:\.[\w-]+)+/g, '<email>')
+    .replace(/[^\s<>(),;:/]{1,64}@[^\s<>()"',;:/@]+(?:\.[^\s<>()"',;:/@]+)+/g, '<email>')
     .replace(/dft_[\w.-]+/g, '<key>')
     .replace(/\b(\w*(?:pass(?:word)?|secret|token|key|auth)\w*)(?:=|:(?!\s))\S+/gi, '$1=<secret>')
-    .replace(/\/\/[^/\s:@]+:[^/\s@]+@/g, '//<secret>@')
+    .replace(/\/\/[^/\s@]*:[^/\s@]+@/g, '//<secret>@')
     .replace(/(?<!\d)\d{1,3}(?:\.\d{1,3}){3}(?!\d)/g, '<ip>')
     .replace(/(?<![0-9a-f:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![0-9a-f:])/gi, m =>
       /[0-9a-f]/i.test(m) ? '<ip>' : m,
