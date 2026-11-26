@@ -857,9 +857,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * The current source with `scope` arranged by the engine in `settings`. Throws
    * `UnstorableLayout` for an engine a file cannot name.
    */
-  function sourceWithRecipe(scope: string, settings: LayoutSettings, direction?: 'right' | 'down') {
-    const source = readSource(localSource),
-      removed = setLayoutRecipe(source, state.scene()!, scope, settings, direction);
+  function sourceWithRecipe(
+    scope: string,
+    settings: LayoutSettings,
+    direction?: 'right' | 'down',
+    base?: { source: string; scene: Scene },
+  ) {
+    const source = readSource(base?.source ?? localSource),
+      removed = setLayoutRecipe(source, base?.scene ?? state.scene()!, scope, settings, direction);
     return { source: printSource(source), removed };
   }
 
