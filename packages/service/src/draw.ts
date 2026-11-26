@@ -12,6 +12,7 @@ import { withSourceStrip } from '../../../src/model/strip';
 import { embedPngSource } from '../../../src/model/embed';
 import { rasterFamilies, scaleSvg, svgSize } from '../../../src/model/raster';
 import { toDraft } from './mermaid';
+import { note, span } from './obs';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
 import sans600 from '../../../src/cli/fonts/inter-latin-600-normal.ttf';
 import serif600 from '../../../src/cli/fonts/source-serif-4-latin-600-normal.ttf';
@@ -51,18 +52,21 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
 }
 
 /** Draw `source` as SVG, or throw a SourceError with the first diagnostic. */
-export async function drawSvg(source: string, opts: DrawOptions) {
-  const result = await renderSvg(source, {
-    colorScheme: opts.scheme,
-    links: webLinks(source),
-    limits: { maxSourceBytes: MAX_SOURCE_BYTES },
+export function drawSvg(source: string, opts: DrawOptions) {
+  return span('render.svg', { source_bytes: source.length, scheme: opts.scheme }, async s => {
+    const result = await renderSvg(source, {
+      colorScheme: opts.scheme,
+      links: webLinks(source),
+      limits: { maxSourceBytes: MAX_SOURCE_BYTES },
+    });
+    if (!result.ok) {
+      const d = result.diagnostics.find(x => x.severity === 'error') ?? result.diagnostics[0];
+      const line = d?.location?.line ? `line ${d.location.line}: ` : '';
+      throw new SourceError(line + (d?.message ?? 'The diagram did not render.'));
+    }
+    s.setAttribute('svg_bytes', result.value.svg.length);
+    return result.value.svg;
   });
-  if (!result.ok) {
-    const d = result.diagnostics.find(x => x.severity === 'error') ?? result.diagnostics[0];
-    const line = d?.location?.line ? `line ${d.location.line}: ` : '';
-    throw new SourceError(line + (d?.message ?? 'The diagram did not render.'));
-  }
-  return result.value.svg;
 }
 
 let ready: Promise<unknown> | undefined;
@@ -70,6 +74,7 @@ const fonts = [sans500, sans600, serif600, mono500].map(b => new Uint8Array(b));
 
 function checkPixels(svg: string, scale: number) {
   const { w, h } = svgSize(svg);
+  note({ pixels: Math.round(w * h * scale * scale) });
   if (w * h * scale * scale > MAX_PIXELS)
     throw new SourceError(
       `The PNG would be ${w * scale} × ${h * scale} pixels, over the ${MAX_PIXELS / 1e6} M pixel limit. Use a smaller scale or SVG.`,
@@ -77,7 +82,11 @@ function checkPixels(svg: string, scale: number) {
 }
 
 /** `svg` as a PNG at `scale`, refused above MAX_PIXELS. */
-export async function rasterize(svg: string, scale: number) {
+export function rasterize(svg: string, scale: number) {
+  return span('png.rasterize', { scale, cold: !ready }, () => rasterizeNow(svg, scale));
+}
+
+async function rasterizeNow(svg: string, scale: number) {
   checkPixels(svg, scale);
   await (ready ??= initWasm(wasm));
   const r = new Resvg(rasterFamilies(scaleSvg(svg, scale)), {
@@ -106,9 +115,12 @@ export async function draw(source: string, format: Format, opts: DrawOptions) {
   if (format === 'svg') return svg;
   const kept = formatSource(draft);
   // Check the size before the strip: building the strip for a huge drawing costs memory too.
-  checkPixels(svg, opts.scale);
-  const png = await rasterize(await withSourceStrip(svg, kept, opts.scale), opts.scale);
-  return embedPngSource(png, kept);
+  await span('png.pixels', { scale: opts.scale }, () => checkPixels(svg, opts.scale));
+  const strip = await span('png.strip', { scale: opts.scale }, () =>
+    withSourceStrip(svg, kept, opts.scale),
+  );
+  const png = await rasterize(strip, opts.scale);
+  return span('png.embed', { png_bytes: png.length }, () => embedPngSource(png, kept));
 }
 
 const esc = (s: string) =>

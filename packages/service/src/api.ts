@@ -11,6 +11,7 @@ import { DEFAULT_FORMAT, drawOptions, type Format } from './draw';
 import { ApiError, errorJson } from './errors';
 import { sourceType, toDraft } from './mermaid';
 import { embedUrl, render } from './render';
+import { note, noteError } from './obs';
 
 export { ApiError, errorJson };
 
@@ -34,8 +35,11 @@ export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContex
       'ERR_AUTH',
       'Send Authorization: Bearer <key>. Make a key at /account.',
     );
-  if (!(await env.KEY_LIMIT.limit({ key: who.key })).success)
+  note({ payer: 'key', account: who.account, key: who.key });
+  if (!(await env.KEY_LIMIT.limit({ key: who.key })).success) {
+    note({ rate_limit: 'key' });
     throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many calls this minute for this key.');
+  }
   return who;
 }
 
@@ -132,6 +136,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
           ({ draft, warnings } = await toDraft(code, get('type')));
         } catch (error) {
           if (!(error instanceof SourceError)) throw error;
+          noteError('ERR_SOURCE', error.message);
           return Response.json({
             valid: false,
             diagnostics: [{ severity: 'error', message: error.message }],
@@ -163,8 +168,9 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         throw new ApiError(404, 'ERR_NOT_FOUND', `No route ${route}.`);
     }
   } catch (error) {
-    if (error instanceof SourceError) return errorJson(sourceError(error));
-    if (error instanceof ApiError) return errorJson(error);
-    throw error;
+    const e = error instanceof SourceError ? sourceError(error) : error;
+    if (!(e instanceof ApiError)) throw error;
+    noteError(e.code, e.message);
+    return errorJson(e);
   }
 }

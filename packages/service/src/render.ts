@@ -20,6 +20,7 @@ import { balance, COST, spend, type Balance } from './credits';
 import { draw, type DrawOptions, type Format } from './draw';
 import { ApiError } from './errors';
 import { freshness, sourceType } from './mermaid';
+import { note, span } from './obs';
 
 export { MAX_SEGMENT };
 
@@ -92,14 +93,29 @@ export async function render<P>(
 ): Promise<Drawn & { out: P }> {
   // A GET URL's decoder drops a leading byte-order mark; drop it here too, so both hash the same.
   const source = rawSource.replace(/^\uFEFF/, '');
-  if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
+  const bytes = new TextEncoder().encode(source).length;
+  note({
+    format,
+    source_bytes: bytes,
+    scheme: opts.scheme,
+    scale: format === 'png' ? opts.scale : undefined,
+  });
+  if (bytes > MAX_SOURCE_BYTES)
     throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
-  const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
-  const hit = await cache().match(key);
+  const type = sourceType(source, opts.type).type;
+  note({ source_type: type });
+  const { key, hit } = await span('cache.lookup', { format }, async s => {
+    const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
+    const hit = await cache().match(key);
+    s.setAttribute('cache_hit', !!hit);
+    return { key, hit };
+  });
+  note({ cache: hit ? 'hit' : 'miss' });
   if (hit) {
     const body = format === 'png' ? new Uint8Array(await hit.arrayBuffer()) : await hit.text();
     // A dated image's lifetime is counted again: it still ends at the next UTC midnight.
     const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
+    note({ out_bytes: body.length });
     return { body, hit: true, cacheControl, out: await prepare(body, cacheControl) };
   }
   await beforeDraw?.();
@@ -108,9 +124,11 @@ export async function render<P>(
     new ApiError(402, 'ERR_LIMIT_BALANCE', 'Out of credits. Buy more at /account.');
   if (payer) {
     const b = await balance(env.DB, payer.account);
+    note({ credits_left: b.grant + b.bought });
     if (b.grant + b.bought < cost) throw outOfCredits();
   }
   const body = await draw(source, format, opts);
+  note({ out_bytes: body.length });
   const cacheControl = freshness(source, opts.type)?.cacheControl ?? IMMUTABLE;
   const out = await prepare(body, cacheControl);
   let left: Balance | undefined;
@@ -123,9 +141,12 @@ export async function render<P>(
       if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
       throw outOfCredits();
     }
+    note({ credits_spent: cost, credits_left: left.grant + left.bought });
   }
   ctx.waitUntil(
-    cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
+    span('cache.put', { format, out_bytes: body.length }, () =>
+      cache().put(key, new Response(body, { headers: { 'Cache-Control': cacheControl } })),
+    ),
   );
   return { body, hit: false, cacheControl, left, out };
 }

@@ -7,6 +7,19 @@
   "compatibility_flags": ["nodejs_compat"],
   // The slowest example takes about 600 ms; anything far past that is abuse.
   "limits": { "cpu_ms": 5000 },
+  // Workers Logs, Traces and Issues; queries in docs/observability.md. Every request is kept
+  // (rate 1) while traffic is small. Logs and traces share the Paid plan's 50 GB ingestion and
+  // 10 GB-month storage a month. Lower both rates when the dashboard's usage nears that, about
+  // 15 M requests a month at today's ~3 KB of logs and spans a request.
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": { "enabled": true, "persist": true, "invocation_logs": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "persist": true, "head_sampling_rate": 1 },
+    // Grouped exceptions, failed invocations, 5xx and console.error. A deploy without this key
+    // turns Issues off.
+    "issues": { "enabled": true },
+  },
   "version_metadata": { "binding": "CF_VERSION_METADATA" },
   // The bundled TrueType fonts load as bytes for resvg.
   "rules": [
