@@ -64,7 +64,7 @@ export function Landing() {
   const location = useLocation();
   // /pricing is this page, opened at its pricing table.
   onMount(() => {
-    if (location.pathname.endsWith('/pricing'))
+    if (/\/pricing\/?$/.test(location.pathname))
       setTimeout(() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'instant' }));
   });
   createEffect(
