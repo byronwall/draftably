@@ -1,7 +1,8 @@
 /**
  * The MCP server at `/mcp`: Streamable HTTP, stateless, one server per request. It needs no
- * Durable Object. Every call needs the same bearer key as the REST API, and `render_diagram`
- * draws through the same `render` (one cache, one price), so the two can't charge differently.
+ * Durable Object. The OAuth layer (oauth.ts) lets a call in with an API key or an OAuth access
+ * token, both naming an account, and `render_diagram` draws through the same `render` (one cache,
+ * one price), so REST, keys and apps can't charge differently.
  */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
@@ -9,11 +10,11 @@ import { validate, runtimeVersion } from '@draftably/runtime';
 import { z } from 'zod';
 import guide from '../../../skills/draftably/SKILL.md';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
-import { ApiError, checkSource, errorJson, requireKey } from './api';
+import { ApiError, checkSource, errorJson } from './api';
 import { DEFAULT_FORMAT, drawOptions } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
-import { bump, currentEvent, noteError, span } from './obs';
+import { bump, currentEvent, note, noteError, span } from './obs';
 import { createShare, links, shareText, type ShareEnv } from './share';
 
 const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
@@ -271,17 +272,17 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
   return mcp;
 }
 
-/** `/mcp`. Returns null for other paths. */
-export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionContext, url: URL) {
-  if (url.pathname !== '/mcp') return null;
+/** `/mcp`, for a caller the OAuth layer has already let in. */
+export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer) {
+  const url = new URL(req.url);
+  if (url.pathname !== '/mcp') return new Response('Not found', { status: 404 });
   // Stateless: no session to stream to or close, so only POST means anything.
   if (req.method !== 'POST')
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'POST' } });
-  let who: Payer;
-  try {
-    who = await requireKey(req, env, ctx);
-  } catch (error) {
-    if (!(error instanceof ApiError)) throw error;
+  // A guard against a runaway agent loop: per API key, or per account for an app.
+  if (!(await env.KEY_LIMIT.limit({ key: who.key ?? `account:${who.account}` })).success) {
+    note({ rate_limit: who.key ? 'key' : 'account' });
+    const error = new ApiError(429, 'ERR_LIMIT_BURST', 'Too many calls this minute.');
     noteError(error.code, error.message);
     return errorJson(error);
   }

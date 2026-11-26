@@ -237,6 +237,17 @@ function reference(text: string) {
   const lines = text.split('\n').slice(1);
   const first = lines.findIndex(l => /^(GET|POST|\/)/.test(l));
   const recipe = lines.slice(0, first).join('\n').trim();
+  // "Connect over MCP" is per-client steps, also prose, so it draws the same way.
+  const connectAt = lines.indexOf('Connect over MCP');
+  const versionAt = lines.findIndex(l => /^Version /.test(l));
+  const connect =
+    connectAt > 0
+      ? lines
+          .slice(connectAt + 1, versionAt)
+          .join('\n')
+          .trimEnd()
+      : '';
+  if (connectAt > 0) lines.splice(connectAt, versionAt - connectAt);
   for (const raw of lines.slice(first)) {
     if (!raw.trim()) continue;
     if (/^Version /.test(raw)) {
@@ -277,7 +288,9 @@ function reference(text: string) {
           })
           .join('')}</dl></section>`,
     )
-    .join('')}<p class="ref-foot">${inline(footer)}</p>`;
+    .join(
+      '',
+    )}${connect ? `<section class="ref-group"><h2>Connect over MCP</h2><pre class="recipe">${inline(connect)}</pre></section>` : ''}<p class="ref-foot">${inline(footer)}</p>`;
 }
 
 /** `/` for a browser: the plain-text reference, framed. Clients that don't ask for HTML get the text. */

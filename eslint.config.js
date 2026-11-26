@@ -14,6 +14,8 @@ export default tseslint.config(
       'reference',
       'docs/intent/diagram-imports/assets/pro-results/2026-10-31',
       'tmp',
+      // wrangler dev's bundles and local state.
+      '**/.wrangler',
     ],
   },
   js.configs.recommended,

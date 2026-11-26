@@ -3,8 +3,9 @@
   "name": "draftably-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-01",
-  // Mermaid's parser reaches for a few Node globals.
-  "compatibility_flags": ["nodejs_compat"],
+  // Mermaid's parser reaches for a few Node globals. The OAuth provider fetches an app's Client ID
+  // Metadata Document only with global_fetch_strictly_public, which keeps it off private addresses.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   // The slowest example takes about 600 ms; anything far past that is abuse.
   "limits": { "cpu_ms": 5000 },
   // Workers Logs, Traces and Issues; queries in docs/observability.md. Every request is kept
@@ -51,6 +52,8 @@
       "migrations_dir": "migrations",
     },
   ],
+  // OAuth apps' clients, grants and tokens (oauth.ts). The provider library names the binding.
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "47cf8d03791549509f2420999ae918c1" }],
   // Paid credits: `wrangler secret put STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. With no key
   // the account page offers no packs.
   "vars": { "EMAIL_FROM": "login@draftably.dev" },
@@ -59,6 +62,9 @@
     // `pnpm prove:service` renders every .draft in the repo from one address, and fires parallel
     // keyed renders at one account.
     "proof": {
+      // No custom domain, so wrangler dev keeps the request's own origin. OAuth tokens and the
+      // links the service returns name that origin.
+      "routes": [],
       "version_metadata": { "binding": "CF_VERSION_METADATA" },
       "ratelimits": [
         {
@@ -94,6 +100,7 @@
           "migrations_dir": "migrations",
         },
       ],
+      "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "00000000000000000000000000000001" }],
       "vars": {
         "EMAIL_FROM": "login@draftably.dev",
         // A fixture for the webhook signature check; this env is never deployed.

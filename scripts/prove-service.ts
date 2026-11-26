@@ -9,7 +9,8 @@
  *
  * Then Mermaid: every Mermaid input in the repo must draw the same as `draftably import`. Then
  * the REST API on a fresh local D1: parallel spends can't overdraw, a failed render refunds,
- * REST and GET give the same bytes, and calls without a valid key get 401.
+ * REST and GET give the same bytes, and calls without a valid key get 401. Then OAuth for MCP
+ * apps: discovery, registration, the PKCE flow through the emailed sign-in, refresh, disconnect.
  *
  * The same URL twice must give an edge-cache hit the second time. `--base
  * https://api.draftably.dev` checks a deployed service instead: 10 files, SVG and PNG, and the
@@ -691,6 +692,224 @@ if (!remote) {
   );
   console.log(
     `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405; image_url refuses a source over 64 KB; share_diagram stores a keyed link.`,
+  );
+
+  // OAuth for MCP apps (ChatGPT, claude.ai): discovery from the 401, dynamic registration, the
+  // PKCE code flow through the emailed sign-in and the consent page, a paid tool call with the
+  // access token, refresh, and disconnect on /account. API keys keep working on /mcp (above).
+  const resource = `${base}/mcp`;
+  const anon = await fetch(resource, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: '{}',
+  });
+  assert.equal(anon.status, 401);
+  const challenge = anon.headers.get('WWW-Authenticate') ?? '';
+  assert.match(challenge, /^Bearer /);
+  const prmUrl = /resource_metadata="([^"]+)"/.exec(challenge)?.[1];
+  assert.equal(prmUrl, `${base}/.well-known/oauth-protected-resource/mcp`);
+  const prm = await (await fetch(prmUrl!)).json();
+  assert.equal(prm.resource, resource);
+  assert.deepEqual(prm.authorization_servers, [base]);
+  const asm = await (await fetch(`${base}/.well-known/oauth-authorization-server`)).json();
+  assert.equal(asm.issuer, base);
+  assert.deepEqual(asm.code_challenge_methods_supported, ['S256']);
+  assert.ok(asm.grant_types_supported.includes('refresh_token'));
+  assert.equal(asm.authorization_response_iss_parameter_supported, true);
+  assert.ok(asm.registration_endpoint && asm.revocation_endpoint);
+
+  const redirectUri = 'https://chatgpt.com/connector_platform_oauth_redirect';
+  const reg = await fetch(asm.registration_endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_name: 'ChatGPT',
+      redirect_uris: [redirectUri],
+      token_endpoint_auth_method: 'none',
+      grant_types: ['authorization_code', 'refresh_token'],
+    }),
+  });
+  assert.equal(reg.status, 201);
+  const clientId = (await reg.json()).client_id as string;
+
+  const verifier = randomBytes(32).toString('base64url');
+  const authorizeUrl = `${asm.authorization_endpoint}?${new URLSearchParams({
+    response_type: 'code',
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    code_challenge: createHash('sha256').update(verifier).digest('base64url'),
+    code_challenge_method: 'S256',
+    state: 'proof-state',
+    scope: 'draw',
+    resource,
+  })}`;
+  const cookies = (res: Response) => res.headers.getSetCookie().map(c => c.split(';')[0]);
+  // Signed out: a sign-in form that carries the authorization along.
+  const signInPage = await (await fetch(authorizeUrl)).text();
+  assert.match(signInPage, /Sign in to connect ChatGPT/);
+  const next = /name="next" value="([^"]+)"/.exec(signInPage)![1].replace(/&amp;/g, '&');
+  assert.equal(`${base}${next}`, authorizeUrl);
+  const mailCount = sent().length;
+  await form('/login', { email: 'app@example.com', next });
+  for (let i = 0; i < 50 && sent().length === mailCount; i++)
+    await new Promise(r => setTimeout(r, 100));
+  const mailed = new URL(
+    /(http\S+\/auth\/verify\?\S+)/.exec(fs.readFileSync(sent()[mailCount], 'utf8'))![1],
+  );
+  assert.equal(mailed.searchParams.get('next'), next);
+  const verifyPage = await (await fetch(mailed)).text();
+  assert.ok(verifyPage.includes(`name="next" value="${next.replace(/&/g, '&amp;')}"`));
+  const appSignIn = await form('/auth/verify', { token: mailed.searchParams.get('token')!, next });
+  assert.equal(appSignIn.status, 303);
+  assert.equal(appSignIn.headers.get('Location'), next);
+  const appSession = cookies(appSignIn)[0];
+  // A link can't send the browser anywhere but back into an authorization.
+  const offsite = await form('/auth/verify', {
+    token: await mailLink('proof@example.com'),
+    next: 'https://evil.example/',
+  });
+  assert.equal(offsite.headers.get('Location'), '/account');
+
+  // Signed in: the consent page names the app, the account and where access goes.
+  const consentFor = async () => {
+    const res = await fetch(`${base}${next}`, { headers: { Cookie: appSession } });
+    assert.equal(res.status, 200);
+    const html = await res.text();
+    return { html, handle: /name="handle" value="([^"]+)"/.exec(html)![1], cookies: cookies(res) };
+  };
+  const consent = await consentFor();
+  assert.match(consent.html, /Allow <b>ChatGPT<\/b> to use your Draftably account\?/);
+  assert.match(consent.html, /app@example\.com/);
+  assert.match(consent.html, /<b>chatgpt\.com<\/b>/);
+  const decide = (c: typeof consent, decision: string, origin = base, session = appSession) =>
+    fetch(`${base}/authorize`, {
+      method: 'POST',
+      headers: {
+        Origin: origin,
+        Cookie: [session, ...c.cookies].join('; '),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        handle: c.handle,
+        account: /name="account" value="([^"]+)"/.exec(c.html)![1],
+        decision,
+      }),
+      redirect: 'manual',
+    });
+  assert.equal((await decide(consent, 'allow', 'https://evil.example')).status, 403);
+  const allowed = await decide(consent, 'allow');
+  assert.equal(allowed.status, 302);
+  const landed = new URL(allowed.headers.get('Location')!);
+  assert.equal(`${landed.origin}${landed.pathname}`, redirectUri);
+  assert.equal(landed.searchParams.get('state'), 'proof-state');
+  assert.equal(landed.searchParams.get('iss'), base);
+  // The handle works once.
+  assert.equal((await decide(consent, 'allow')).status, 400);
+
+  const token = (fields: Record<string, string>) =>
+    fetch(asm.token_endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ client_id: clientId, ...fields }),
+    });
+  const code = landed.searchParams.get('code')!;
+  const exchange = { grant_type: 'authorization_code', code, redirect_uri: redirectUri, resource };
+  assert.equal((await token({ ...exchange, code_verifier: 'x'.repeat(43) })).status, 400);
+  const issued = await token({ ...exchange, code_verifier: verifier });
+  assert.equal(issued.status, 200, await issued.clone().text());
+  const tokens = await issued.json();
+  assert.equal(tokens.token_type.toLowerCase(), 'bearer');
+  assert.ok(tokens.access_token && tokens.refresh_token);
+  assert.equal((await token({ ...exchange, code_verifier: verifier })).status, 400, 'code reused');
+  // A reused code is a stolen code: the grant it made is revoked (OAuth 2.1 §4.1.3).
+  assert.equal((await rpc('tools/list', {}, tokens.access_token)).status, 401);
+  const again = new URL((await decide(await consentFor(), 'allow')).headers.get('Location')!);
+  const tokens2 = await (
+    await token({ ...exchange, code: again.searchParams.get('code')!, code_verifier: verifier })
+  ).json();
+
+  // The token spends the signed-in account's credits through the same render path.
+  const appCredits = () =>
+    sql(`SELECT grant_left + bought AS n FROM accounts WHERE email = 'app@example.com'`)[0].n;
+  const left = appCredits();
+  const appDraw = await rpc(
+    'tools/call',
+    { name: 'render_diagram', arguments: { code: checkout + '\n# app\n', format: 'svg' } },
+    tokens2.access_token,
+  );
+  assert.equal(appDraw.status, 200);
+  assert.match(appDraw.body.result.content[0].text, /^<svg/);
+  assert.equal(appCredits(), left - 1);
+
+  const refreshed = await token({
+    grant_type: 'refresh_token',
+    refresh_token: tokens2.refresh_token,
+  });
+  assert.equal(refreshed.status, 200);
+  const fresh = await refreshed.json();
+  assert.notEqual(fresh.access_token, tokens2.access_token);
+  assert.equal((await rpc('tools/list', {}, fresh.access_token)).status, 200);
+
+  // /account lists the app; disconnecting it ends its tokens and its refresh token.
+  const acct = await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text();
+  assert.match(acct, /Connected apps[\s\S]*ChatGPT/);
+  const grant = /action="\/account\/apps\/([\w-]+)\/revoke"/.exec(acct)![1];
+  const cut = await fetch(`${base}/account/apps/${grant}/revoke`, {
+    method: 'POST',
+    headers: { Origin: base, Cookie: appSession },
+    redirect: 'manual',
+  });
+  assert.equal(cut.status, 303);
+  assert.equal((await rpc('tools/list', {}, fresh.access_token)).status, 401);
+  assert.equal(
+    (await token({ grant_type: 'refresh_token', refresh_token: fresh.refresh_token })).status,
+    400,
+  );
+  assert.doesNotMatch(
+    await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text(),
+    /\/account\/apps\//,
+  );
+  // Deny sends the browser back with access_denied.
+  const denied = await decide(await consentFor(), 'deny');
+  assert.equal(new URL(denied.headers.get('Location')!).searchParams.get('error'), 'access_denied');
+  // A page opened for one account can't approve for another signed in since in the same browser.
+  const otherSession = cookies(await verify(await mailLink('proof@example.com')))[0];
+  const swapped = await decide(await consentFor(), 'allow', base, otherSession);
+  assert.equal(swapped.status, 400);
+  assert.match(await swapped.text(), /Account changed/);
+  // KV may lag a disconnect in other locations; the D1 record alone stops the token and refresh.
+  const third = new URL((await decide(await consentFor(), 'allow')).headers.get('Location')!);
+  const tokens3 = await (
+    await token({ ...exchange, code: third.searchParams.get('code')!, code_verifier: verifier })
+  ).json();
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 200);
+  const grant3 = /action="\/account\/apps\/([\w-]+)\/revoke"/.exec(
+    await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text(),
+  )![1];
+  // Another account can't disconnect this one's app by its id.
+  const foreignCut = await fetch(`${base}/account/apps/${grant3}/revoke`, {
+    method: 'POST',
+    headers: { Origin: base, Cookie: otherSession },
+    redirect: 'manual',
+  });
+  assert.equal(foreignCut.status, 303);
+  assert.ok(
+    (await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text()).includes(
+      `/account/apps/${grant3}/revoke`,
+    ),
+    "another account's disconnect removed this account's grant",
+  );
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 200);
+  sql(
+    `INSERT INTO app_revocations (grant_id, account_id, revoked_at) SELECT '${grant3}', id, 'now' FROM accounts WHERE email = 'app@example.com'`,
+  );
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 401);
+  assert.equal(
+    (await token({ grant_type: 'refresh_token', refresh_token: tokens3.refresh_token })).status,
+    400,
+  );
+  console.log(
+    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site.',
   );
 
   // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.

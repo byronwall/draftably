@@ -87,6 +87,16 @@ layout root flow direction=right
 
 For every statement and option, read the [language guide](https://raw.githubusercontent.com/byronwall/draftably/main/skills/draftably/SKILL.md) (plain Markdown; its Syntax section is the part that matters without the CLI).
 
+## Connect over MCP
+
+The MCP server at `https://api.draftably.dev/mcp` (Streamable HTTP) has the tools `render_diagram`, `validate_diagram`, `convert_mermaid`, `image_url` and `language_guide`. Rendering spends credits from a free account (1,000 a month).
+
+- ChatGPT: Settings → Apps & Connectors → Advanced settings, turn on Developer mode. Create a connector with URL `https://api.draftably.dev/mcp` and OAuth. Sign in by email and press Allow.
+- claude.ai and Claude Desktop: Settings → Connectors → Add custom connector with URL `https://api.draftably.dev/mcp`. Sign in by email and press Allow.
+- Claude Code: `claude mcp add --transport http draftably https://api.draftably.dev/mcp --header "Authorization: Bearer dft_..."`, with a key from https://api.draftably.dev/account
+- Codex: `codex mcp add draftably --url https://api.draftably.dev/mcp --bearer-token-env-var DRAFTABLY_API_KEY`
+- Cursor and other JSON configs: `{"mcpServers": {"draftably": {"type": "http", "url": "https://api.draftably.dev/mcp", "headers": {"Authorization": "Bearer dft_..."}}}}`
+
 ## Docs
 
 - [Agent workflow](https://draftably.dev/docs/agent-skill/): for coding agents with a shell, `npx draftably skill install` puts the skill where Claude Code, Codex or Cursor reads it, with the check-and-render loop

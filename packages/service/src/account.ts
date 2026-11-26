@@ -17,6 +17,7 @@ import {
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
 import { copyButton, esc, page } from './html';
+import { authorizeNext, disconnectApp, type GrantMeta, type OAuthEnv } from './oauth';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
 import { note, noteError, scrub } from './obs';
 
@@ -43,7 +44,7 @@ const longDay = (iso: string) =>
     timeZone: 'UTC',
   });
 async function accountPage(
-  env: AuthEnv & StripeEnv,
+  env: AuthEnv & StripeEnv & OAuthEnv,
   origin: string,
   account: { id: string; email: string },
   newKey?: string,
@@ -57,6 +58,8 @@ async function accountPage(
       .bind(account.id)
       .all<KeyRow>()
   ).results;
+  // One page of apps is plenty: each app keeps one grant per account.
+  const apps = (await env.OAUTH_PROVIDER.listUserGrants(account.id)).items;
   const day = (s: string | null) => (s ? longDay(s) : 'Never');
   const curl = newKey
     ? `curl -X POST ${origin}/v1/render \\
@@ -94,7 +97,7 @@ ${
       ).join('')}</div></section>`
     : ''
 }
-</div><section class="block"><h2>API keys</h2>
+</div><div><section class="block"><h2>API keys</h2>
 ${
   keys.length
     ? `<table class="keys"><tr><th>Key</th><th class="made">Made</th><th>Last used</th><th><span class="sr-only">Revoke</span></th></tr>${keys
@@ -107,7 +110,23 @@ ${
     : '<p class="empty">No keys yet. A key lets the REST API and the MCP server spend these credits.</p>'
 }
 <form method="post" action="/account/keys" class="row make"><input class="input" name="label" placeholder="Label, such as laptop" maxlength="60" aria-label="Key label"><button class="button primary">Make a key</button></form>
-</section></div>`,
+</section>
+<section class="block"><h2>Connected apps</h2>
+${
+  apps.length
+    ? `<table class="keys"><tr><th>App</th><th>Connected</th><th><span class="sr-only">Disconnect</span></th></tr>${apps
+        .map(g => {
+          const meta = g.metadata as GrantMeta;
+          return `<tr><td><span class="label">${esc(meta.client)}</span>${meta.domain ? `<code>${esc(meta.domain)}</code>` : ''}</td><td>${longDay(new Date(g.createdAt * 1000).toISOString())}</td>
+<td><details class="confirm"><summary class="button small quiet">Disconnect</summary><div class="pop"><p>Disconnect <b>${esc(meta.client)}</b>? It can't draw with this account until you connect it again.</p>
+<form method="post" action="/account/apps/${encodeURIComponent(g.id)}/revoke" class="row"><button type="button" class="button small" data-close>Keep it</button><button class="button small danger">Disconnect</button></form></div></details></td></tr>`;
+        })
+        .join('')}</table>`
+    : '<p class="empty">No apps yet. Add <code>' +
+      esc(origin) +
+      '/mcp</code> as a connector in ChatGPT or claude.ai, sign in, and it shows here.</p>'
+}
+</section></div></div>`,
     { current: 'account', script: true },
   );
 }
@@ -130,7 +149,7 @@ const failed = (message: string, status = 400) =>
   );
 
 /** `/login`, `/logout`, `/auth/verify` and `/account*`. Null for other paths. */
-export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url: URL) {
+export async function handleAccount(req: Request, env: AuthEnv & StripeEnv & OAuthEnv, url: URL) {
   const path = url.pathname;
   const ours =
     path === '/login' ||
@@ -147,7 +166,9 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       note({ login: 'form' });
       return loginForm();
     }
-    const email = cleanEmail(String((await req.formData()).get('email') ?? ''));
+    const fields = await req.formData();
+    const email = cleanEmail(String(fields.get('email') ?? ''));
+    const next = authorizeNext(fields.get('next'));
     if (!email) {
       note({ login: 'bad_email' });
       return loginForm('<p class="note error">That is not an email address.</p>', 400);
@@ -159,7 +180,8 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     };
     if (!(await env.LOGIN_LIMIT.limit({ key: ip })).success) return tooMany('login');
     try {
-      if (!(await sendLoginLink(env, email, url.origin))) return tooMany('login_email');
+      if (!(await sendLoginLink(env, email, url.origin, next ?? undefined)))
+        return tooMany('login_email');
     } catch (error) {
       // console.error, so Workers Issues groups a failing mail service. The error can name the
       // address, so only its scrubbed message is logged.
@@ -187,17 +209,19 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     // The page names the account, so a person who opens someone else's link sees whose it is.
     if (req.method !== 'POST') {
       const token = url.searchParams.get('token') ?? '';
+      const next = authorizeNext(url.searchParams.get('next'));
       const email = await loginTokenEmail(env.DB, token);
       note({ login: email ? 'link_shown' : 'link_dead' });
       if (!email) return failed('This sign-in link was used already or has expired.');
       return page(
         'Sign in',
         `<div class="col narrow"><h1>Sign in to Draftably</h1><p class="lead">Sign in as <b>${esc(email)}</b>?</p>
-<form method="post" action="/auth/verify" class="actions"><input type="hidden" name="token" value="${esc(token)}"><button class="button primary">Sign in</button></form></div>`,
+<form method="post" action="/auth/verify" class="actions"><input type="hidden" name="token" value="${esc(token)}">${next ? `<input type="hidden" name="next" value="${esc(next)}">` : ''}<button class="button primary">Sign in</button></form></div>`,
         { current: 'account' },
       );
     }
-    const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));
+    const fields = await req.formData();
+    const email = await useLoginToken(env.DB, String(fields.get('token') ?? ''));
     if (!email) {
       note({ login: 'link_dead' });
       return failed('This sign-in link was used already or has expired.');
@@ -205,7 +229,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     const account = await upsertAccount(env.DB, email);
     const cookie = await startSession(env.DB, account);
     note({ login: 'signed_in', payer: 'session', account });
-    return redirect('/account', cookie);
+    return redirect(authorizeNext(fields.get('next')) ?? '/account', cookie);
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);
@@ -223,6 +247,16 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
   const revoke = /^\/account\/keys\/([0-9a-f]{12})\/revoke$/.exec(path);
   if (req.method === 'POST' && revoke) {
     await revokeKey(env.DB, account.id, revoke[1]);
+    return redirect('/account');
+  }
+  // The provider checks the grant belongs to this account.
+  const disconnect = /^\/account\/apps\/([\w-]{1,64})\/revoke$/.exec(path);
+  if (req.method === 'POST' && disconnect) {
+    // Only a grant this account holds: the provider ignores a grant id under another user.
+    const ours = (await env.OAUTH_PROVIDER.listUserGrants(account.id)).items.some(
+      g => g.id === disconnect[1],
+    );
+    if (ours) await disconnectApp(env, account.id, disconnect[1]);
     return redirect('/account');
   }
   if (path === '/account')
