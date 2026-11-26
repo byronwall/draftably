@@ -2,7 +2,7 @@
   "name": "@draftably/editor",
   "version": "0.10.0",
   "description": "The Draftably diagram editor: drag boxes and lines, and get the .draft source back.",
-  "license": "MIT",
+  "license": "FSL-1.1-MIT",
   "type": "module",
   "files": [
     "dist",

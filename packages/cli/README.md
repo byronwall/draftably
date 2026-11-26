@@ -102,4 +102,4 @@ are included in `THIRD_PARTY_NOTICES`.
 
 ## License
 
-[MIT](https://github.com/byronwall/draftably/blob/main/LICENSE) © Byron Wall
+[FSL-1.1-MIT](https://github.com/byronwall/draftably/blob/main/LICENSE) © Byron Wall

@@ -2,7 +2,7 @@
   "name": "@draftably/solid",
   "version": "0.10.0",
   "description": "Solid components for Draftably diagrams.",
-  "license": "MIT",
+  "license": "FSL-1.1-MIT",
   "type": "module",
   "files": [
     "dist",

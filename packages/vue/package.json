@@ -2,7 +2,7 @@
   "name": "@draftably/vue",
   "version": "0.10.0",
   "description": "Vue components for Draftably diagrams.",
-  "license": "MIT",
+  "license": "FSL-1.1-MIT",
   "type": "module",
   "files": [
     "dist",
