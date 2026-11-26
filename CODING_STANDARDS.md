@@ -14,3 +14,9 @@ is not listed here.
 - A draft save is a command, not a snapshot of the drawing. It names its draft, the fields it
   writes and the values it read them with. The file session runs it against the latest drawn
   source (`whenDrawn`), so a save made while a refresh compiles is checked against that refresh.
+
+## Docs
+
+- When a documented request also stores the source or makes it publicly readable (a short link
+  stores it, and anyone with the link can read it), say both at the first example of that request,
+  not only in a later storage section.
