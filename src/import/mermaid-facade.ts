@@ -476,10 +476,17 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
         // Mermaid's rule: a truthy title, as a string. YAML escapes can decode to characters SVG
         // text cannot hold (`\f`), which no diagram body can contain; they become spaces.
         title = frontmatter?.title
-          ? String(frontmatter.title).replace(
-              /[\0-\x08\x0B\x0C\x0E-\x1F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g,
-              ' ',
-            )
+          ? [...String(frontmatter.title)]
+              .map(c => {
+                const code = c.codePointAt(0)!;
+                const bad =
+                  (code < 32 && ![9, 10, 13].includes(code)) ||
+                  code === 0xfffe ||
+                  code === 0xffff ||
+                  (code >= 0xd800 && code <= 0xdfff); // a lone surrogate: pairs iterate as one
+                return bad ? ' ' : c;
+              })
+              .join('')
           : undefined;
         // Mermaid gets only the diagram: the frontmatter is read here, once, and Mermaid's
         // rewrite of HTML attribute quotes before its own YAML read cannot break ignored data.
