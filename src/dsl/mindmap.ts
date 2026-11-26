@@ -3,8 +3,8 @@
  * reads the tree out of them and marks how it draws. The layout itself is the tree engine with the
  * root in the middle (`bilateralTarget`), set up in `engineArrangement`.
  *
- * - A branch line is a plain edge (no label, `kind=`, ends or message) between two topics in the
- *   scope, reached from the root by following edges forward. It draws with no head.
+ * - A branch line is a plain edge (no `kind=`, ends or message; a label is fine) between two topics
+ *   in the scope, reached from the root by following edges forward. It draws with no head.
  * - Every other edge between two topics is a cross-link: it draws as written and does not shape
  *   the tree. A topic the tree misses sits beside the topic it links to. An edge that leaves the
  *   scope is left alone.
@@ -15,7 +15,14 @@ import { LayoutLab } from '../engines/layout-engine';
 import { bilateralTarget } from '../engines/layout/trees';
 import type { Item, Link } from '../engines/layout/types';
 import type { Diagram } from '../model/types';
-import { layoutParent, type Model, type ModelEdge, type ModelObject } from './syntax';
+import {
+  layoutParent,
+  treeCandidates,
+  treeLine,
+  type Model,
+  type ModelEdge,
+  type ModelObject,
+} from './syntax';
 
 /** Branch colors in turn: no red beside green, and no two warm or two cool families in a row. */
 export const BRANCH_FAMILIES = ['blue', 'amber', 'violet', 'teal', 'rose', 'sky', 'orange', 'mint'];
@@ -45,11 +52,7 @@ function markMindmap(
   inside: (id: string) => boolean,
   root: string,
 ) {
-  const plain = (e: ModelEdge) => !e.label && !e.styled && !e.message && e.constraint !== false;
-  const out = new Map<string, ModelEdge[]>();
-  for (const e of m.edges)
-    if (plain(e) && inside(e.source) && inside(e.target))
-      out.set(e.source, [...(out.get(e.source) ?? []), e]);
+  const out = treeCandidates(m.edges, inside);
   // Breadth first, so a topic hangs off its nearest route from the root.
   const kids = new Map<string, string[]>(),
     tree = new Set<ModelEdge>(),
@@ -68,7 +71,7 @@ function markMindmap(
   // under its old and new ID.
   const pairs = new Set([...tree].map(e => `${e.source}\0${e.target}`));
   for (const e of m.edges) {
-    if (tree.has(e) || (plain(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
+    if (tree.has(e) || (treeLine(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
     // A cross-link inside the map draws, but the tree alone places the topics.
     else if (inside(e.source) && inside(e.target)) {
       e.constraint = false;

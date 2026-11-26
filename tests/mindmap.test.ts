@@ -66,6 +66,26 @@ describe('layout … mindmap', () => {
     expect(parseModel(sample).edges.some(e => e.head || e.branch)).toBe(false);
   });
 
+  it('keeps a labeled branch in the tree, unless a plain line reaches the same topic', async () => {
+    const source = [
+      'node r "R"',
+      'node a "A"',
+      'node b "B"',
+      'node c "C"',
+      'edge e1 r -> a "owns"',
+      'edge e2 a -> b',
+      'edge e3 r -> c',
+      'edge e4 r -> b "also"',
+      'layout root mindmap root=r',
+    ].join('\n');
+    const scene = await compile(source),
+      mid = (id: string) => scene.byId.get(id)!.x + scene.byId.get(id)!.w / 2;
+    // e1 keeps A and its subtree on its own side of the root; e4 is a second line into B, which
+    // the plain e2 already reaches, so it stays a cross-link.
+    expect(scene.edges.filter(e => e.branch).map(e => e.id)).toEqual(['e1', 'e2', 'e3']);
+    expect(Math.sign(mid('b') - mid('r'))).toBe(Math.sign(mid('a') - mid('r')));
+  });
+
   it('keeps an edge with a written style out of the tree', async () => {
     const lines = ['kind=sync', 'head=arrow', 'tail=none', 'directed=true'].map(
       (attr, i) => `node t${i} "T${i}"\nedge e${i} r -> t${i} ${attr}`,

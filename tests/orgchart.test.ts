@@ -63,6 +63,26 @@ describe('layout … orgchart', () => {
     expect(doc.graph.edges.find(e => e.id === 'dot')!.dashed).toBe(true);
   });
 
+  it('keeps a labeled reporting line in the tree, and a labeled second line out', async () => {
+    const source = [
+      'node ceo "CEO"',
+      'node cto "CTO"',
+      'node cfo "CFO"',
+      'node web "Web"',
+      'edge r1 ceo -> cto "interim"',
+      'edge r2 ceo -> cfo',
+      'edge r3 cto -> web',
+      'edge d1 ceo -> web "dotted line"',
+      'layout root orgchart root=ceo',
+    ].join('\n');
+    const scene = await compile(source),
+      top = (id: string) => scene.byId.get(id)!.y;
+    expect(scene.edges.filter(e => e.branch).map(e => e.id)).toEqual(['r1', 'r2', 'r3']);
+    // The CTO stays on the CFO's row and the web lead under the CTO, not under the CEO.
+    expect(top('cto')).toBe(top('cfo'));
+    expect(top('web')).toBeGreaterThan(top('cto'));
+  });
+
   it('keeps the bus through a JSON round trip', async () => {
     const { doc, routes } = await routed(sample),
       again = normalize(JSON.parse(JSON.stringify(doc))),

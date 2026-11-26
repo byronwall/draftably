@@ -3,8 +3,8 @@
  * reads the reporting tree out of them, places it top down, and plans each reporting line as part
  * of one bus per manager.
  *
- * - A reporting line is a plain edge (no label, `kind=`, ends or message) between two people in the
- *   scope, reached from the root by following edges forward. It draws with no head.
+ * - A reporting line is a plain edge (no `kind=`, ends or message; a label is fine) between two
+ *   people in the scope, reached from the root by following edges forward. It draws with no head.
  * - Every other edge between two people (a dotted-line report, say) draws as written and places
  *   nothing. A person the tree misses sits in a row below the chart.
  * - `role=assistant` on a report with no reports of its own hangs it beside its manager's stem,
@@ -14,7 +14,15 @@
  *   rows until the drawing is wider than `fit=` asks for (2:1 without it), then stacks the widest
  *   rows first.
  */
-import { FITS, layoutParent, type Fit, type Model, type OrgLeaves } from './syntax';
+import {
+  FITS,
+  layoutParent,
+  treeCandidates,
+  treeLine,
+  type Fit,
+  type Model,
+  type OrgLeaves,
+} from './syntax';
 import type { Planned } from './corridors';
 import type { Diagram } from '../model/types';
 
@@ -76,11 +84,11 @@ export function withOrgcharts(m: Model): Model {
     for (const e of out.edges) {
       // An edge that repeats a reporting line's two ends is one too, as when compare holds an
       // edge under its old and new ID.
-      if (tree.has(e) || (plainEdge(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
+      if (tree.has(e) || (treeLine(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
       else if (inside(e.source) && inside(e.target)) {
         // In a comparison, a reporting line that moved to another manager is still one: it
         // draws with no head, though only the tree places people.
-        if (plainEdge(e) && e.status) e.head = 'none';
+        if (treeLine(e) && e.status) e.head = 'none';
         e.constraint = false;
       }
     }
@@ -103,15 +111,9 @@ export function chartEdges(m: Model): Set<string> {
   );
 }
 
-const plainEdge = (e: Model['edges'][number]) =>
-  !e.label && !e.styled && !e.message && e.constraint !== false;
-
 /** The reporting lines reached from `root`, breadth first, and each manager's reports in order. */
 function reportingTree(m: Model, inside: (id: string) => boolean, root: string) {
-  const out = new Map<string, Model['edges']>();
-  for (const e of m.edges)
-    if (plainEdge(e) && inside(e.source) && inside(e.target))
-      out.set(e.source, [...(out.get(e.source) ?? []), e]);
+  const out = treeCandidates(m.edges, inside);
   const kids = new Map<string, string[]>(),
     tree = new Set<Model['edges'][number]>(),
     seen = new Set([root]);
