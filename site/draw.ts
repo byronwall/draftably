@@ -23,10 +23,19 @@ export interface Drawing {
 
 /**
  * Compile `.draft` source and draw it the way `draftably inspect --svg` does, or
- * `inspect --svg --state <id>` with a state.
+ * `inspect --svg --state <id>` with a state. `auto` (the default) adds the dark colors.
  */
-export async function draw(source: string, state?: string): Promise<Drawing> {
-  const { result, scene } = await renderWithScene(source, state ? { state } : {});
+export async function draw(
+  source: string,
+  state?: string,
+  scheme: 'auto' | 'light' = 'auto',
+): Promise<Drawing> {
+  const { result, scene } = await renderWithScene(source, {
+    // On screen, one SVG for both schemes: its colors are light-dark() pairs, so it follows the
+    // page. Downloads ask for light, as the CLI draws.
+    colorScheme: scheme,
+    ...(state ? { state } : {}),
+  });
   if (scene) {
     const failed = !result.ok || scene.diagnostics.some(d => d.level === 'error');
     const { objects, edges } = scene.model;
@@ -72,8 +81,9 @@ export async function draw(source: string, state?: string): Promise<Drawing> {
   };
 }
 
-/** The drawing's paper color, so whatever frames it can match. */
-export const paperOf = (svg: string) => /<rect[^>]*fill="(#[0-9a-f]+)"/i.exec(svg)?.[1];
+/** The drawing's paper color, so whatever frames it can match: a hex, or a light-dark() pair. */
+export const paperOf = (svg: string) =>
+  /<rect[^>]*fill="(#[0-9a-f]+|light-dark\([^)]*\))"/i.exec(svg)?.[1];
 
 /**
  * The viewer build, served next to the site. Links to it need `rel="external"`, or the site's

@@ -285,13 +285,15 @@ const theme = EditorView.theme({
   '&.cm-focused': { outline: 'none' },
   '.cm-scroller': { fontFamily: 'var(--mono)', lineHeight: '20px', fontVariantLigatures: 'none' },
   '.cm-content': { padding: '10px 0' },
-  '.cm-gutters': { backgroundColor: 'var(--surface)', border: 'none', color: '#8c92a4' },
+  '.cm-gutters': { backgroundColor: 'var(--surface)', border: 'none', color: 'var(--faint)' },
   '.cm-lineNumbers .cm-gutterElement': { padding: '0 8px 0 14px', minWidth: '40px' },
   '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'transparent' },
-  '&.cm-focused .cm-activeLine, &.cm-focused .cm-activeLineGutter': { backgroundColor: '#f4f5f9' },
+  '&.cm-focused .cm-activeLine, &.cm-focused .cm-activeLineGutter': {
+    backgroundColor: 'var(--tint)',
+  },
   '.cm-linked': { backgroundColor: 'var(--accent-soft)' },
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
-    backgroundColor: '#6650d92e !important',
+    backgroundColor: 'color-mix(in srgb, var(--accent) 18%, transparent) !important',
   },
   '.cm-cursor': { borderLeftColor: 'var(--text)' },
   '.cm-tooltip': {

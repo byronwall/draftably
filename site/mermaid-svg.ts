@@ -4,7 +4,11 @@ let renders = 0;
 
 export async function mermaidSvg(source: string) {
   load ??= import('mermaid').then(m => {
-    m.default.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict' });
+    m.default.initialize({
+      startOnLoad: false,
+      theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'neutral',
+      securityLevel: 'strict',
+    });
     return m.default;
   });
   const mermaid = await load;

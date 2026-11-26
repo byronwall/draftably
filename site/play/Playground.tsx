@@ -119,6 +119,8 @@ export function Playground() {
   // The source that `drawing` was drawn from; it lags `source` while a redraw is pending.
   const [drawn, setDrawn] = createSignal('');
   const [svg, setSvg] = createSignal('');
+  // A download is the light drawing, as the CLI makes it, whatever scheme the screen shows.
+  const lightSvg = async () => (await draw(source(), undefined, 'light')).svg ?? svg();
   // Ids for completion and linking, kept from the last source that parsed.
   const [items, setItems] = createSignal<Drawing['items']>([]);
   const [ms, setMs] = createSignal(0);
@@ -600,11 +602,14 @@ export function Playground() {
                   aria-describedby={imageBlocked() ? 'export-note' : undefined}
                   tabIndex={-1}
                   onClick={() =>
-                    choose(() =>
-                      save(
-                        new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
-                        fileName(source(), 'svg'),
-                      ),
+                    choose(
+                      async () =>
+                        void save(
+                          new Blob([embedSvgSource(await lightSvg(), source())], {
+                            type: 'image/svg+xml',
+                          }),
+                          fileName(source(), 'svg'),
+                        ),
                     )
                   }
                 >
@@ -617,7 +622,10 @@ export function Playground() {
                   aria-describedby={imageBlocked() ? 'export-note' : undefined}
                   tabIndex={-1}
                   onClick={() =>
-                    choose(() => void savePng(svg(), source(), fileName(source(), 'png')))
+                    choose(
+                      async () =>
+                        void savePng(await lightSvg(), source(), fileName(source(), 'png')),
+                    )
                   }
                 >
                   PNG<span>2×, opens again here</span>

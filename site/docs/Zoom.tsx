@@ -126,7 +126,7 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
         role="dialog"
         aria-modal="true"
         aria-label="Expanded drawing"
-        style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}
+        style={{ background: paperOf(props.svg) ?? 'var(--canvas)' }}
       >
         <div class="zoom-bar">
           <span>
