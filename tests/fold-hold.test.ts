@@ -99,3 +99,12 @@ it('keeps both returns inside the frame when a member is held in place', async (
     }
   }
 });
+
+it('keeps the automatic job box clear of a pinned scan box', async () => {
+  const file = 'docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/v0.draft';
+  const scene = await compile(readFileSync(file, 'utf8') + '\npin scan x=168 y=48');
+  const scan = scene.byId.get('scan')!,
+    jobs = scene.byId.get('jobs')!;
+  expect([scan.localX, scan.localY]).toEqual([168, 48]);
+  expect(jobs.x + jobs.w).toBeLessThanOrEqual(scan.x);
+});

@@ -3846,7 +3846,22 @@ function layoutPass(
         const gutter = GROUP_INSET - LANE_PITCH;
         const occupied = Math.max(...[...boxes.values()].map(b => b[axis] + b[size]));
         const before = Math.max(0, -turns.min - (right ? gutter : 0));
-        if (before)
+        // Keep an authored position free when the leading gutter would push a sibling onto it.
+        const hitsAnchor =
+          before &&
+          m.hints.some(h => {
+            if (h.type !== 'pin' && h.type !== 'stay') return false;
+            const box = boxes.get(h.id);
+            if (!box) return false;
+            const anchor = { ...box, x: h.x, y: h.y };
+            return [...boxes.values()].some(
+              b =>
+                b.id !== h.id &&
+                clearance(b, anchor) >= 0 &&
+                clearance({ ...b, [axis]: b[axis] + before }, anchor) < 0,
+            );
+          });
+        if (before && !hitsAnchor)
           for (const [id, p] of base.positions)
             base.positions.set(id, { ...p, [axis]: p[axis] + before });
         const after = Math.max(0, turns.max - occupied - gutter);
