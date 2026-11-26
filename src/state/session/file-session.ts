@@ -647,8 +647,11 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       { drops } = result;
     // A written edge can stand in for the line a table row's `->` draws. Without it the row's line
     // comes back, so the edit cannot remove it.
-    const shown = new Set(s.doc.graph.edges.map(e => mapId(e.id)));
-    const back = checked.edges.find(e => e.inferred && !shown.has(e.id));
+    // In a change diagram the line can also move between panels, which its status says.
+    const shown = new Map(s.doc.graph.edges.map(e => [mapId(e.id), e.status]));
+    const back = checked.edges.find(
+      e => e.inferred && (!shown.has(e.id) || (shown.get(e.id) ?? undefined) !== e.status),
+    );
     if (back)
       return snapBack(
         `Without that line, the row ${back.source} draws its own line to ${back.target}. Remove \`-> ${back.target}\` from its table's body in the source.`,
