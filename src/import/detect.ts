@@ -1,4 +1,4 @@
-import { afterFrontmatter, mermaidText } from './mermaid-frontmatter';
+import { afterFrontmatter, matchFrontmatter, mermaidText } from './mermaid-frontmatter';
 /** A bounded dispatcher, not a parser. Ambiguous plain text never becomes D2 by guess. */
 export type KnownFormat = 'native' | 'mermaid' | 'dot' | 'd2' | 'plantuml' | 'dbml' | 'nomnoml';
 export interface DetectedSource {
@@ -118,6 +118,9 @@ export function detectSource(
   const byExtension = alias(extension);
   if (byExtension)
     return { status: 'detected', format: byExtension, source, via: 'extension', startLine: 1 };
+  // A Mermaid diagram after frontmatter is the source itself, even when its YAML quotes a fence.
+  if (matchFrontmatter(mermaidText(source)) && signature(source) === 'mermaid')
+    return { status: 'detected', format: 'mermaid', source, via: 'signature', startLine: 1 };
   const blocks = fencedSources(source);
   if (blocks.length === 1) return { status: 'detected', ...blocks[0]!, via: 'fence' };
   if (blocks.length > 1) return { status: 'choose-fence', blocks };

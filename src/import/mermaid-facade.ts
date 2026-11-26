@@ -243,7 +243,11 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     ];
   }
   const normalized = mermaidText(source);
-  if (/%%\s*\{/.test(normalized)) {
+  const frontmatter = matchFrontmatter(normalized);
+  // Frontmatter is data: only the diagram after it can hold a directive or a click.
+  const body = normalized.slice(frontmatter?.length ?? 0);
+  const bodyLine = normalized.slice(0, frontmatter?.length ?? 0).split('\n').length - 1;
+  if (/%%\s*\{/.test(body)) {
     return [
       {
         code: 'MERMAID_CONFIGURATION_UNSUPPORTED',
@@ -253,7 +257,6 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const frontmatter = matchFrontmatter(normalized);
   if (!frontmatter && /^[^\S\n]*---[^\S\n]*(?:\n|$)/.test(normalized)) {
     return [
       {
@@ -264,7 +267,6 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const body = normalized.slice(frontmatter?.length ?? 0);
   if (
     [...normalized].some(c => {
       const code = c.charCodeAt(0);
@@ -293,13 +295,13 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     ];
   }
   const diagnostics: ParserDiagnostic[] = [];
-  for (const [index, line] of normalized.split('\n').entries()) {
+  for (const [index, line] of body.split('\n').entries()) {
     if (/(?:^|;)\s*click\s/.test(line)) {
       diagnostics.push({
         code: 'MERMAID_INTERACTION_IGNORED',
         severity: 'warning',
         message: 'Mermaid click links and callbacks are data only; no interactions are installed.',
-        line: index + 1,
+        line: bodyLine + index + 1,
         locationKind: 'source',
       });
     }
@@ -452,12 +454,12 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
       let frontmatter: Record<string, unknown> | undefined;
       const ok = (
         snapshot: Extract<ParseFlowResult, { ok: true }>['snapshot'],
-      ): ParseFlowResult => ({
-        ok: true,
-        diagnostics,
-        snapshot,
-        ...(frontmatter ? { frontmatter } : {}),
-      });
+      ): ParseFlowResult => {
+        // A title written in the diagram wins; otherwise the frontmatter's, for every family
+        // (Mermaid's timeline DB has no title setter, so the metadata alone does not reach it).
+        if (!snapshot.title && frontmatter?.title) snapshot.title = String(frontmatter.title);
+        return { ok: true, diagnostics, snapshot, ...(frontmatter ? { frontmatter } : {}) };
+      };
       let phase: 'load' | 'parse' | 'snapshot' = 'load';
       try {
         const mermaid = await load();
@@ -471,11 +473,13 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
         });
         phase = 'parse';
         if (block) frontmatter = await parseFrontmatter(block);
-        // Mermaid strips the frontmatter but drops its title unless it is handed back.
-        const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''), {
-          // Mermaid's own rule: a truthy title, as a string.
-          title: frontmatter?.title ? String(frontmatter.title) : undefined,
-        });
+        // Mermaid gets only the diagram: the frontmatter is read here, once, and Mermaid's
+        // rewrite of HTML attribute quotes before its own YAML read cannot break ignored data.
+        // The title goes back as metadata, Mermaid's rule: a truthy title, as a string.
+        const diagram = await mermaid.mermaidAPI.getDiagramFromText(
+          block ? mermaidText(source).slice(block.length) : source.replace(/^\uFEFF/, ''),
+          { title: frontmatter?.title ? String(frontmatter.title) : undefined },
+        );
         if (
           !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)
         ) {

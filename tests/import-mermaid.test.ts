@@ -139,6 +139,45 @@ flowchart LR
     await compile(r.nativeSource!);
   });
 
+  it('gives every family the frontmatter title unless its body has one', async () => {
+    const bodies = {
+      flowchart: 'flowchart LR\nA-->B',
+      sequence: 'sequenceDiagram\na->>b: hi',
+      gantt: 'gantt\ndateFormat YYYY-MM-DD\nTask :a1, 2025-01-06, 2d',
+      timeline: 'timeline\n2004 : Founded',
+    };
+    for (const [family, body] of Object.entries(bodies)) {
+      const r = await imported('---\ntitle: Outer\n---\n' + body);
+      expect([family, r.nativeSource?.split('\n')[0]]).toEqual([
+        family,
+        'diagram "Outer" version=1',
+      ]);
+      if (family === 'flowchart') continue; // a flowchart has no title line
+      const own = body.replace('\n', '\ntitle Inner\n');
+      const inner = await imported('---\ntitle: Outer\n---\n' + own);
+      expect([family, inner.nativeSource?.split('\n')[0]]).toEqual([
+        family,
+        'diagram "Inner" version=1',
+      ]);
+    }
+  });
+
+  // Codex review round 2: frontmatter is data, so diagram-like text in it changes nothing.
+  it('ignores HTML, directives, fences and aliases inside frontmatter values', async () => {
+    const plain = await imported('flowchart LR\nA-->B');
+    const source =
+      '---\nnotes: \'<span class="label">Docs</span>\'\nquote: "%%{init: {}}%%"\n' +
+      'base: &b {k: 1}\nagain: *b\nexample: |\n  ```mermaid\n  flowchart LR\n  X-->Y\n  ```\n' +
+      '---\nflowchart LR\nA-->B';
+    const r = await imported(source);
+    expect(r.nativeSource!.split('\n').slice(1)).toEqual(plain.nativeSource!.split('\n').slice(1));
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: notes, quote, base.k, again.k, example.',
+    );
+    const found = detectSource(source);
+    expect(found.status === 'detected' && found.source).toBe(source);
+  });
+
   it('refuses an unclosed block', async () => {
     const parsed = await parse('---\ntitle: X\nflowchart LR\nA-->B');
     expect(parsed.diagnostics.map(d => d.code)).toEqual(['MERMAID_FRONTMATTER_INVALID']);
