@@ -1,5 +1,17 @@
 # @draftably/mermaid
 
+## 0.6.0
+
+### Minor Changes
+
+- 65ef4e3: The Mermaid importer reads frontmatter: `title` becomes the diagram title, `config.theme: dark` becomes `theme blueprint`, and other settings are ignored with a warning. Before, any frontmatter block was refused.
+
+### Patch Changes
+
+- Updated dependencies [2370558]
+- Updated dependencies [21cbcff]
+  - @draftably/runtime@0.11.1
+
 ## 0.5.0
 
 ### Minor Changes

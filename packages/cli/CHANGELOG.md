@@ -1,5 +1,19 @@
 # draftably
 
+## 0.21.0
+
+### Minor Changes
+
+- 65ef4e3: The Mermaid importer reads frontmatter: `title` becomes the diagram title, `config.theme: dark` becomes `theme blueprint`, and other settings are ignored with a warning. Before, any frontmatter block was refused.
+
+### Patch Changes
+
+- 2370558: PNG export now goes through the same SVG-to-PNG function as the render service. The output does not change.
+- ae52127: The code Editor keeps a change the file made to another field while it was open, and saves your edit on top of it. It still refuses a save when the file changed the same field.
+- 4678867: A Code editor save made while the file is still redrawing now waits for the new version and applies to it, so it no longer writes over a change the file made meanwhile. A pasted table keeps its editor draft when it gets its name from the file, and a save goes to the file the edit was made in while another file opens.
+- 21cbcff: The Editor draws a mind map's branches and an org chart's reporting lines as the saved file draws them after a rename, reverse, delete or quick extend. It refuses to delete a line that stands in for a table row's `->` line, and says to remove the `->` from the table's body. Timeline links on the chart now carry their edge's `data-id` in the export and the Editor, so a host can find them.
+- 48bc8d6: `draftably url` prints image URLs on `https://draftably.dev/api`. The render service no longer answers on `api.draftably.dev`.
+
 ## 0.20.0
 
 ### Minor Changes
