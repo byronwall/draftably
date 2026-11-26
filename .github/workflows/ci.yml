@@ -32,6 +32,7 @@ jobs:
 
   proof-suite:
     runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -55,6 +56,8 @@ jobs:
             build: pnpm runtime:build && pnpm markdown:build && pnpm markdown:pack-check
             run: pnpm markdown:browser-check
           - suite: hosts
+            # Match playwright-core in pnpm-lock.yaml. This image includes WebKit’s system libraries.
+            image: mcr.microsoft.com/playwright:v1.64.0-noble
             browsers: chromium firefox webkit
             build: pnpm runtime:build && pnpm editor:build
             run: |
@@ -82,13 +85,13 @@ jobs:
         run: |
           (
             for attempt in 1 2 3; do
-              pnpm exec playwright-core install --with-deps $BROWSERS && exit 0
+              pnpm exec playwright-core install $BROWSERS && exit 0
               if [ "$attempt" -lt 3 ]; then sleep 30; fi
             done
             exit 1
           ) &
           install_pid=$!
-          ( ${{ matrix.build }} ) || exit $?
+          ( ${{ matrix.build }} ) || exit 1
           wait "$install_pid"
       - run: ${{ matrix.run }}
         env:
