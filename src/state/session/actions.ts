@@ -80,6 +80,8 @@ export function createActions(
   /** The open label edit: the object it edits (its id follows a source id map) and its value then. */
   let inlineOpen: { id: string; value: string; file: unknown } | null = null;
   function openInline(id: string, value: string) {
+    // Another file is opening: the drawing on screen is not the file a save would go to.
+    if (s.shownFile() !== s.fileSession()) return toast('Still opening the file. Try again.');
     if (inlineOpen) drafts.delete(inlineOpen);
     inlineOpen = { id, value, file: s.fileSession() };
     drafts.add(inlineOpen);
@@ -310,7 +312,7 @@ export function createActions(
 
   /** Save a finished label edit onto the object as the drawn source has it now. */
   function saveInline(opened: { id: string; value: string; file: unknown }, value: string) {
-    if (opened.file !== s.fileSession())
+    if (opened.file !== s.fileSession() || s.shownFile() !== s.fileSession())
       return toast('Another file is open now, so your label edit was not saved.');
     const id = opened.id,
       text = parseTextId(id);

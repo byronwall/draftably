@@ -399,3 +399,30 @@ it('draws the committed text again when Source panel text is typed back during l
   expect(s.currentSource()).toBe(BASE.replace('"Query"', '"Mine"'));
   expect(s.fileScene()?.model.hints.some(h => h.type === 'size')).toBe(false);
 });
+
+it('keeps a file open when its save fails while the next file is asked for', async () => {
+  serveCopies();
+  let fail = true;
+  const served = globalThis.fetch;
+  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) =>
+    init?.method === 'PUT' && fail
+      ? Response.json({ error: 'disk full' }, { status: 500 })
+      : served(url, init),
+  );
+  const s = await session();
+  await s.openFileSession('a.draft');
+  await settle(s);
+  s.startInlineEdit('q');
+  s.finishCodeEdit(s.codeDraft()!.token, DRAFTS.caption.draft);
+  await settle(s);
+  await s.settleSave();
+  expect(s.fileStatus()).toBe('failed');
+  expect(await s.openFileSession('b.draft')).toBeNull();
+  // A is still open with the edit, and Retry saves it there.
+  expect(s.fileSession()?.file).toBe('a.draft');
+  expect(s.currentSource()).toContain('"Mine"');
+  fail = false;
+  s.retrySave();
+  await s.settleSave();
+  expect(s.fileStatus()).toBe('saved');
+});
