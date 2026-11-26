@@ -235,10 +235,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv & OAu
     const account = await upsertAccount(env.DB, email);
     const cookie = await startSession(env.DB, account);
     note({ login: 'signed_in', payer: 'session', account });
-    return redirect(
-      (await resumeAuthorize(env, url.origin, fields.get('next'))) ?? '/account',
-      cookie,
-    );
+    return redirect(resumeAuthorize(url.origin, fields.get('next')) ?? '/account', cookie);
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);

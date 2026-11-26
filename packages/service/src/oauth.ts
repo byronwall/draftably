@@ -104,20 +104,21 @@ export function oauthOptions<E extends ShareEnv & OAuthEnv>(
 export const authorizeNext = (next: unknown) =>
   typeof next === 'string' && next.startsWith('/authorize?') && next.length <= 4096 ? next : null;
 
+/** Marks the GET that resumes an authorization after sign-in (see `resumeAuthorize`). */
+const RESUMED = 'resume';
+
 /**
- * The authorization to resume after sign-in, or null. A link can carry any `next`, so it must
- * parse as a valid request here first: one the library refuses would bounce the browser to the
- * app's callback with an error before any consent page.
+ * Where sign-in sends the browser: back into the authorization, marked so that its errors show
+ * here. A link can carry any `next`, and one the library refuses must not bounce the browser to
+ * the app's callback before any consent page. Built from a parsed URL, so `Location` is canonical.
  */
-export async function resumeAuthorize(env: OAuthEnv, origin: string, next: unknown) {
+export function resumeAuthorize(origin: string, next: unknown) {
   const path = authorizeNext(next);
   if (!path) return null;
-  try {
-    await env.OAUTH_PROVIDER.parseAuthRequest(new Request(origin + path));
-    return path;
-  } catch {
-    return null;
-  }
+  const url = new URL(path, origin);
+  if (url.origin !== origin || url.pathname !== '/authorize') return null;
+  url.searchParams.set(RESUMED, '1');
+  return url.pathname + url.search;
 }
 
 const problem = (title: string, message: string, status = 400) =>
@@ -169,9 +170,13 @@ function signInPage(client: string, next: string) {
   );
 }
 
-/** An error the library found in the request: back to the app when that is safe, else a page. */
-function authError(error: unknown) {
-  if (error instanceof AuthorizationError && error.redirectTo) return redirect(error.redirectTo);
+/**
+ * An error the library found in the request: back to the app when that is safe, else a page.
+ * `local` keeps it on a page: a sign-in link must not send the browser to the app.
+ */
+function authError(error: unknown, local = false) {
+  if (error instanceof AuthorizationError && error.redirectTo && !local)
+    return redirect(error.redirectTo);
   if (error instanceof AuthorizationError)
     return problem('Cannot connect', `${error.description} Start again from the app.`);
   if (error instanceof CimdFetchError)
@@ -200,7 +205,7 @@ export async function handleAuthorize(req: Request, env: AuthEnv & OAuthEnv, url
         consent.headers,
       );
     } catch (error) {
-      return authError(error);
+      return authError(error, url.searchParams.has(RESUMED));
     }
   }
   if (req.method !== 'POST')
