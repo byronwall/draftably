@@ -4,6 +4,8 @@
  * beyond the copy buttons.
  */
 
+import { encodeSource, SERVICE_URL } from '../../../src/lib/render-url';
+
 export const esc = (s: string) =>
   s.replace(
     /[&<>"']/g,
@@ -50,7 +52,7 @@ h1,h2{text-wrap:balance}p{text-wrap:pretty}
 .site-nav svg{width:14px;height:14px;fill:currentColor}
 .site-nav .account{padding-left:24px;border-left:1px solid var(--line)}
 main{flex:1;width:100%;max-width:var(--page);margin:0 auto;padding:28px var(--gutter) 0}
-.col{max-width:760px}.col.narrow{max-width:520px}
+.col{max-width:760px}.wide-col{max-width:none}.col.narrow{max-width:520px}
 h1{margin:0;font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.035em}
 .lead{margin:10px 0 0;color:var(--muted);font-size:16px}
 .lead b{color:var(--text);font-weight:600}
@@ -60,6 +62,7 @@ h1{margin:0;font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.035e
 .note{margin:24px 0 0;padding:10px 14px;border-radius:var(--radius);background:var(--accent-soft)}
 .note.error{background:var(--danger-soft);color:var(--danger)}
 .muted{color:var(--muted)}
+.nowrap{white-space:nowrap}
 .balance{display:flex;align-items:baseline;gap:10px}
 .big{font-size:56px;line-height:1;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .unit{color:var(--muted);font-size:16px}
@@ -107,22 +110,53 @@ h1{margin:0;font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.035e
 .copy-icon{flex:none;width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round;transition:stroke 140ms}
 .is-copied .copy-icon,.is-copied:hover .copy-icon{stroke:var(--ok);stroke-width:1.8;animation:copied 220ms ease-out}
 @keyframes copied{from{transform:scale(.6)}}
-.ref{margin:24px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);line-height:1.5;overflow-x:auto}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:48px;align-items:center}
+.example{margin:0;min-width:0}
+.example a{display:block}
+.example img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:10px 10px 0 0;background:var(--surface)}
+.example .codeline{border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;align-items:center}
+.example .codeline code{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.ref-group{display:grid;grid-template-columns:200px minmax(0,1fr);gap:0 32px;margin-top:40px}
+.ref-group h2{margin:0;padding-top:12px;font-size:13px;font-weight:600;color:var(--muted)}
+.ref{display:grid;grid-template-columns:220px minmax(0,1fr);margin:0;font-size:14px}
+.ref dt,.ref dd{margin:0;padding:12px 0;border-top:1px solid var(--line)}
+.ref dt{display:flex;align-items:baseline;gap:8px;padding-right:16px}
+.ref dt code{font-size:13.5px;font-weight:600;color:var(--text)}
+.ref .verb{min-width:34px;font:600 11px/1 var(--mono);color:var(--accent)}
+.ref dd span{display:block}
+.ref dd span+span{color:var(--muted)}
+.ref dd code{color:var(--text);font-size:12.5px;overflow-wrap:break-word}
+.ref-foot{margin:28px 0 0 232px;color:var(--muted);font-size:13px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:0 64px;align-items:start}
+.confirm{position:relative;display:inline-block}
+.confirm summary{list-style:none}.confirm summary::-webkit-details-marker{display:none}
+.confirm[open] summary{background:var(--danger-soft);color:var(--danger)}
+.pop{position:absolute;right:0;top:calc(100% + 6px);z-index:10;width:280px;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);box-shadow:0 8px 28px #24241f24;text-align:left;font-size:14px}
+.pop p{margin:0 0 12px;overflow-wrap:anywhere}
+.pop .row{justify-content:space-between}
+.button.danger{background:var(--danger);border-color:var(--danger);color:#fff}
+.button.danger:hover{filter:brightness(1.08)}
+@media (prefers-color-scheme:dark){.button.danger{color:#15171f}}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 .footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:var(--page);width:100%;margin:56px auto 0;padding:20px var(--gutter);border-top:1px solid var(--line)}
 .footer .wordmark{font-size:16px}.footer .logo{width:18px;height:18px}
 .footer-links{display:flex;flex-wrap:wrap;gap:4px 22px;margin-left:auto;font-size:13px}
 .footer-links a{display:inline-flex;align-items:center;min-height:24px;color:var(--muted);transition:color 140ms}
 .footer-links a:hover{color:var(--text)}
-@media (max-width:720px){:root{--gutter:16px}.site-nav{gap:16px}.site-nav .wide{display:none}.site-nav .account{padding-left:16px}
+@media (max-width:1000px){.hero,.cols{grid-template-columns:minmax(0,1fr)}.hero{gap:28px}.ref-group{grid-template-columns:minmax(0,1fr)}.ref-group h2{padding:0 0 8px}.ref-foot{margin-left:0}}
+@media (max-width:720px){.ref{grid-template-columns:minmax(0,1fr)}.ref dd{padding-top:0;border-top:0}.ref dt{padding-bottom:6px}:root{--gutter:16px}.site-nav{gap:16px}.site-nav .wide{display:none}.site-nav .account{padding-left:16px}
 h1{font-size:28px}.big{font-size:48px}.keys .made{display:none}.footer-links{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 `;
 
-// Copy buttons: data-copy holds the text. Confirms on the icon, so nothing moves.
+// Copy buttons: data-copy holds the text. Confirms on the icon, so nothing moves. Confirm popovers
+// (details.confirm) close on an outside click or Esc, one open at a time.
 const SCRIPT = `document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(!b)return;
 navigator.clipboard.writeText(b.dataset.copy).then(()=>{b.classList.remove('is-copied');void b.offsetWidth;b.classList.add('is-copied');
-setTimeout(()=>b.classList.remove('is-copied'),1500)})})`;
+setTimeout(()=>b.classList.remove('is-copied'),1500)})});
+document.addEventListener('click',e=>{for(const d of document.querySelectorAll('details.confirm[open]'))if(!d.contains(e.target)||e.target.closest('[data-close]'))d.open=false});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')for(const d of document.querySelectorAll('details.confirm[open]')){d.open=false;d.querySelector('summary').focus()}});
+document.addEventListener('toggle',e=>{const d=e.target;if(d.open&&d.matches('details.confirm')){for(const o of document.querySelectorAll('details.confirm[open]'))if(o!==d)o.open=false;d.querySelector('.pop button')?.focus()}},true)`;
 
 /** A page in the API frame. `current` marks the header link for this page. */
 export const page = (
@@ -152,13 +186,104 @@ ${opts.script ? `<script>${SCRIPT}</script>` : ''}</body></html>`,
     },
   );
 
+// The live example on `/`: this service drawing a picture of itself.
+const EXAMPLE = `diagram "How a render works" version=1
+
+node src "Diagram source"
+node api "api.draftably.dev" color=violet
+node img "Image in your page" shape=pill
+
+edge enc src -> api "GET /svg/{encoded}"
+edge out api -> img "cached at the edge"
+
+layout root flow gap=48
+`;
+
+const GROUPS: [RegExp, string][] = [
+  [/^GET \/(svg|png)\//, 'Image URLs'],
+  [/^(GET|POST)\s+\/v1\//, 'REST API'],
+  [/^\/mcp/, 'MCP server'],
+  [/^\/account/, 'Account'],
+];
+
+// Code-like tokens inside a description line: JSON bodies, {encoded}, ?query=values, dft_ keys,
+// snake_case tool names, file names and links.
+const TOKEN =
+  /(https?:\/\/\S+|\{[^{}\n]*\}|\?\w+=[\w|]+|\bdft_\S*|\b[a-z]+(?:_[a-z]+)+\b|<file\.draft>|"pako:"|base64url\([^)]*\)+)/g;
+const inline = (line: string) =>
+  line
+    .split(TOKEN)
+    .map((part, i) =>
+      i % 2 === 0
+        ? esc(part)
+        : /^https?:/.test(part)
+          ? `<a href="${esc(part)}">${esc(part.replace(/^https?:\/\//, ''))}</a>`
+          : `<code>${esc(part)}</code>`,
+    )
+    .join('');
+
+/**
+ * The plain-text reference as sections of endpoint rows. It reads the same text curl gets, so the
+ * two can't drift: an endpoint starts a line, its description sits from column 21, and indented
+ * lines continue it.
+ */
+function reference(text: string) {
+  const rows: { at: string; lines: string[] }[] = [];
+  let footer = '';
+  for (const raw of text.split('\n').slice(1)) {
+    if (!raw.trim()) continue;
+    if (/^Version /.test(raw)) {
+      footer = raw;
+      continue;
+    }
+    const at = raw.slice(0, 21).trim();
+    const rest = raw.slice(21).trim();
+    if (at) rows.push({ at, lines: rest ? [rest] : [] });
+    else {
+      // The text wraps at 80 columns. Rejoin a wrapped sentence; a finished one, or a ?query line,
+      // starts a new paragraph.
+      const lines = rows.at(-1)?.lines;
+      const prev = lines?.at(-1);
+      if (lines && prev && !/[.)}>]$/.test(prev) && !prev.startsWith('?') && !rest.startsWith('?'))
+        lines[lines.length - 1] = `${prev} ${rest}`;
+      else lines?.push(rest);
+    }
+  }
+  const sections: { title: string; rows: typeof rows }[] = [];
+  for (const row of rows) {
+    const title = GROUPS.find(([re]) => re.test(row.at))?.[1] ?? '';
+    if (sections.at(-1)?.title !== title) sections.push({ title, rows: [] });
+    sections.at(-1)!.rows.push(row);
+  }
+  return `${sections
+    .map(
+      s =>
+        `<section class="ref-group"><h2>${esc(s.title)}</h2><dl class="ref">${s.rows
+          .map(r => {
+            const [verb, path] = r.at.includes(' ') ? r.at.split(/\s+/) : ['', r.at];
+            return `<dt>${verb ? `<span class="verb">${esc(verb)}</span>` : ''}<code>${esc(path)}</code></dt><dd>${r.lines
+              .map(l => `<span>${inline(l)}</span>`)
+              .join('')}</dd>`;
+          })
+          .join('')}</dl></section>`,
+    )
+    .join('')}<p class="ref-foot">${inline(footer)}</p>`;
+}
+
 /** `/` for a browser: the plain-text reference, framed. Clients that don't ask for HTML get the text. */
-export const homePage = (text: string) =>
-  page(
+export async function homePage(text: string) {
+  const url = `/svg/${await encodeSource(EXAMPLE)}`;
+  return page(
     'Render API',
-    `<div class="col"><h1>Render API</h1>
+    `<div class="hero"><div><h1>Render API</h1>
 <p class="lead">Draw Draftably and Mermaid diagrams from an image URL, a REST call or an MCP tool.</p>
 <div class="actions"><a class="button primary" href="/account">Get an API key</a><a class="button" href="${SITE}/docs">Language docs</a></div></div>
-<pre class="ref">${esc(text.replace(/^Draftably render service\n+/, ''))}</pre>`,
-    { current: 'home' },
+<figure class="example"><a href="${url}"><picture><source media="(prefers-color-scheme: dark)" srcset="${url}?scheme=dark"><img src="${url}" alt="Diagram source goes to api.draftably.dev with GET /svg/{encoded}, which returns an image for your page, cached at the edge." width="560"></picture></a>
+<figcaption class="codeline"><code>&lt;img src="${SERVICE_URL}${esc(url)}"&gt;</code>${copyButton(`<img src="${SERVICE_URL}${url}">`, 'Copy the image tag')}</figcaption></figure></div>
+${reference(text)}`,
+    { current: 'home', script: true },
   );
+}
+
+export const copyButton = (text: string, label: string) =>
+  `<button type="button" class="copy-btn" data-copy="${esc(text)}" aria-label="${label}" title="${label}">${COPY_ICON}</button>`;

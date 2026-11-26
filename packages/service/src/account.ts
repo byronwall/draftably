@@ -16,7 +16,7 @@ import {
   type AuthEnv,
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
-import { COPY_ICON, esc, page } from './html';
+import { copyButton, esc, page } from './html';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
 
 const redirect = (to: string, cookie?: string) =>
@@ -41,9 +41,6 @@ const longDay = (iso: string) =>
     year: 'numeric',
     timeZone: 'UTC',
   });
-const copyButton = (text: string, label: string) =>
-  `<button type="button" class="copy-btn" data-copy="${esc(text)}" aria-label="${label}" title="${label}">${COPY_ICON}</button>`;
-
 async function accountPage(
   env: AuthEnv & StripeEnv,
   origin: string,
@@ -69,8 +66,7 @@ async function accountPage(
   const left = Math.max(0, Math.min(100, (b.grant / MONTHLY_GRANT) * 100));
   return page(
     'Account',
-    `<div class="col">
-<div class="page-head"><div><h1>Account</h1>
+    `<div class="page-head"><div><h1>Account</h1>
 <p class="lead">Signed in as <b>${esc(account.email)}</b></p></div>
 <form method="post" action="/logout"><button class="button small">Sign out</button></form></div>
 ${bought ? '<p class="note"><b>Thanks.</b> Your credits appear here once Stripe confirms the payment, usually within seconds.</p>' : ''}
@@ -82,10 +78,10 @@ ${
 <div class="codeline"><pre>${esc(curl)}</pre>${copyButton(curl, 'Copy the command')}</div></section>`
     : ''
 }
-<section class="block"><h2>Credits</h2>
+<div class="cols"><div><section class="block"><h2>Credits</h2>
 <div class="balance"><span class="big">${n(b.grant + b.bought)}</span><span class="unit">credits</span></div>
 <div class="meter" title="${n(b.grant)} of ${n(MONTHLY_GRANT)} free credits left"><span style="width:${left.toFixed(1)}%"></span></div>
-<dl class="facts"><dt>Free this month</dt><dd>${n(b.grant)} of ${n(MONTHLY_GRANT)} left · resets ${longDay(b.resetsAt)}</dd>
+<dl class="facts"><dt>Free this month</dt><dd>${n(b.grant)} of ${n(MONTHLY_GRANT)} left · <span class="nowrap">resets ${longDay(b.resetsAt)}</span></dd>
 <dt>Bought</dt><dd>${n(b.bought)} · never expire</dd>
 <dt>Cost</dt><dd>An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</dd></dl></section>
 ${
@@ -97,20 +93,21 @@ ${
       ).join('')}</div></section>`
     : ''
 }
-<section class="block"><h2>API keys</h2>
+</div><section class="block"><h2>API keys</h2>
 ${
   keys.length
     ? `<table class="keys"><tr><th>Key</th><th class="made">Made</th><th>Last used</th><th><span class="sr-only">Revoke</span></th></tr>${keys
         .map(
           k => `<tr><td><span class="label">${esc(k.label)}</span><code>dft_${esc(k.id)}.…</code></td><td class="made">${day(k.created_at)}</td><td>${day(k.last_used_at)}</td>
-<td><form method="post" action="/account/keys/${esc(k.id)}/revoke"><button class="button small quiet">Revoke</button></form></td></tr>`,
+<td><details class="confirm"><summary class="button small quiet">Revoke</summary><div class="pop"><p>Revoke <b>${esc(k.label)}</b>? Anything that uses it gets 401 from now on.</p>
+<form method="post" action="/account/keys/${esc(k.id)}/revoke" class="row"><button type="button" class="button small" data-close>Keep it</button><button class="button small danger">Revoke key</button></form></div></details></td></tr>`,
         )
         .join('')}</table>`
     : '<p class="empty">No keys yet. A key lets the REST API and the MCP server spend these credits.</p>'
 }
 <form method="post" action="/account/keys" class="row make"><input class="input" name="label" placeholder="Label, such as laptop" maxlength="60" aria-label="Key label"><button class="button primary">Make a key</button></form>
 </section></div>`,
-    { current: 'account', script: !!newKey },
+    { current: 'account', script: true },
   );
 }
 
@@ -119,7 +116,7 @@ const loginForm = (note = '', status = 200) =>
     'Sign in',
     `<div class="col narrow"><h1>Sign in to Draftably</h1>
 <p class="lead">We email you a link that signs you in. A new address gets a new account with 1,000 free credits a month.</p>${note}
-<form method="post" action="/login" class="row form"><input class="input" type="email" name="email" required maxlength="254" placeholder="you@example.com" autocomplete="email" aria-label="Email"><button class="button primary">Email me a link</button></form></div>`,
+<form method="post" action="/login" class="row form"><input class="input" type="email" name="email" autofocus required maxlength="254" placeholder="you@example.com" autocomplete="email" aria-label="Email"><button class="button primary">Email me a link</button></form></div>`,
     { status, current: 'account' },
   );
 
