@@ -97,7 +97,7 @@ ${
       ).join('')}</div></section>`
     : ''
 }
-</div><section class="block"><h2>API keys</h2>
+</div><div><section class="block"><h2>API keys</h2>
 ${
   keys.length
     ? `<table class="keys"><tr><th>Key</th><th class="made">Made</th><th>Last used</th><th><span class="sr-only">Revoke</span></th></tr>${keys
@@ -126,7 +126,7 @@ ${
       esc(origin) +
       '/mcp</code> as a connector in ChatGPT or claude.ai, sign in, and it shows here.</p>'
 }
-</section></div>`,
+</section></div></div>`,
     { current: 'account', script: true },
   );
 }

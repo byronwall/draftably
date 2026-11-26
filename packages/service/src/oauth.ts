@@ -99,7 +99,7 @@ function consentPage(
     `Connect ${d.clientName}`,
     `<div class="col narrow"><h1>Connect ${name}</h1>
 <p class="lead">Allow <b>${name}</b> to use your Draftably account? It can render diagrams, spending your credits.</p>
-<dl class="facts"><dt>Account</dt><dd>${esc(email)}</dd>
+<dl class="facts" style="margin-top:20px"><dt>Account</dt><dd>${esc(email)}</dd>
 <dt>Sends access to</dt><dd><b>${esc(d.redirectHost)}</b></dd>
 <dt>App</dt><dd>${d.clientDomain ? `Published by <b>${esc(d.clientDomain)}</b>` : 'The app named itself; Draftably did not check the name.'}</dd></dl>
 ${d.redirectIsLoopback ? '<p class="note error"><b>This sends access to an app on your computer.</b> Allow it only if you just started connecting from that app.</p>' : ''}

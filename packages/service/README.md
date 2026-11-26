@@ -89,6 +89,7 @@ you get an emailed sign-in link, then press Allow. Clients that send a header us
 
   That writes `bearer_token_env_var = "DRAFTABLY_API_KEY"` under `[mcp_servers.draftably]` in
   `~/.codex/config.toml`.
+
 - **Cursor** (`~/.cursor/mcp.json`) and other clients that take a JSON block:
 
   ```json

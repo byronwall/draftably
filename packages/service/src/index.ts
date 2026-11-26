@@ -197,19 +197,25 @@ GET  /v1/balance     -> {grant, bought, resetsAt}
                      disconnect apps. 1,000 free credits a month.
 
 Connect over MCP
-  ChatGPT        Settings > Apps & Connectors > Advanced settings: turn on
-                 Developer mode. Create a connector with the URL
-                 https://api.draftably.dev/mcp and OAuth. Sign in, press Allow.
-  claude.ai,     Settings > Connectors > Add custom connector with the URL
-  Claude Desktop https://api.draftably.dev/mcp. Sign in, press Allow.
-  Claude Code    claude mcp add --transport http draftably \
-                   https://api.draftably.dev/mcp \
-                   --header "Authorization: Bearer dft_..."
-  Codex          codex mcp add draftably --url https://api.draftably.dev/mcp \
-                   --bearer-token-env-var DRAFTABLY_API_KEY
-  Cursor         {"mcpServers": {"draftably": {"type": "http",
-                   "url": "https://api.draftably.dev/mcp",
-                   "headers": {"Authorization": "Bearer dft_..."}}}}
+ChatGPT: Settings > Apps & Connectors > Advanced settings, turn on Developer
+mode. Create a connector with the URL https://api.draftably.dev/mcp and
+OAuth. Sign in, then press Allow.
+
+claude.ai and Claude Desktop: Settings > Connectors > Add custom connector
+with the URL https://api.draftably.dev/mcp. Sign in, then press Allow.
+
+Claude Code, with a key from /account:
+  claude mcp add --transport http draftably https://api.draftably.dev/mcp \\
+    --header "Authorization: Bearer dft_..."
+
+Codex, with the key in DRAFTABLY_API_KEY:
+  codex mcp add draftably --url https://api.draftably.dev/mcp \\
+    --bearer-token-env-var DRAFTABLY_API_KEY
+
+Cursor, in ~/.cursor/mcp.json:
+  {"mcpServers": {"draftably": {"type": "http",
+    "url": "https://api.draftably.dev/mcp",
+    "headers": {"Authorization": "Bearer dft_..."}}}}
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
 `;
