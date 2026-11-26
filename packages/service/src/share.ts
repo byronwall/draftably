@@ -151,12 +151,14 @@ export async function urlSource(url: URL, segment: string | undefined, big: stri
 export function codeHint(error: unknown, url: URL) {
   const code = url.searchParams.get('code');
   if (!(error instanceof SourceError) || code === null) return error;
-  const line = Number(/^line (\d+): /.exec(error.message)?.[1]);
+  // The message is `line N[, column M]: text`, then the quoted source line.
+  const [first, ...rest] = error.message.split('\n');
+  const line = Number(/^line (\d+)(?:, column \d+)?: /.exec(first)?.[1]);
   if (line !== code.trimEnd().split('\n').length) return error;
-  if (!/unclosed|got \.$/i.test(error.message)) return error;
-  return new SourceError(
-    `${error.message} (In ?code=, percent-encode the whole source: a raw # ends the URL, & starts a new parameter and + reads as a space. Write them as %23, %26 and %2B.)`,
-  );
+  if (!/unclosed|got \.$/i.test(first)) return error;
+  const hint =
+    ' (In ?code=, percent-encode the whole source: a raw # ends the URL, & starts a new parameter and + reads as a space. Write them as %23, %26 and %2B.)';
+  return new SourceError([first + hint, ...rest].join('\n'));
 }
 
 /** The short URLs for share `id`, with the drawing options that differ from the defaults. */

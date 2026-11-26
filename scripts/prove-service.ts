@@ -884,14 +884,14 @@ if (!remote) {
   const purple = await (
     await fetch(`${base}/link?${q('node a "A"\nnode b "B" color=purple')}`)
   ).text();
-  assert.match(purple, /line 2: /);
+  assert.match(purple, /line 2[,:]/);
   assert.doesNotMatch(purple, /%23/);
 
   // A bad source: 400 with its line, as text and as JSON; nothing stored.
   const bad = 'node a "A"\nnode b "B" color=purple\n';
   const badRes = await fetch(`${base}/link/${b64url(new TextEncoder().encode(bad))}`);
   assert.equal(badRes.status, 400);
-  assert.match(await badRes.text(), /^error: line 2: /);
+  assert.match(await badRes.text(), /^error: line 2[,:]/);
   const badJson = await (await share(undefined, { code: bad })).json();
   assert.equal(badJson.error.line, 2);
   // Unknown ids are 404, as an image and as source.
