@@ -108,6 +108,37 @@ flowchart LR
     expect(r.diagnostics.some(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')).toBe(false);
   });
 
+  // Codex review round 1: YAML that a line-based reader got wrong, and boundaries that detection
+  // and the import read differently.
+  it('reads YAML as Mermaid does: comments, escapes, block scalars, other line endings', async () => {
+    const r = await imported(
+      '---\ntitle: "Checkout flow" # nav label\nnotes: "Caf\\xE9"\nlist: [a, b]\nnone:\n' +
+        'config:\n  theme: "dark" # night\n---\nflowchart LR\n  A --> B',
+    );
+    expect(r.nativeSource!.split('\n').slice(0, 2)).toEqual([
+      'diagram "Checkout flow" version=1',
+      'theme blueprint',
+    ]);
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: notes, list, none.',
+    );
+    const scalar = '---\ntitle: x\nnote: |\n  a\n  ---\n  b\n---\nflowchart LR\nA-->B';
+    expect((await imported(scalar)).status).not.toBe('failed');
+    expect(detectSource(scalar).status).toBe('detected');
+    const cr = '---\rtitle: X\r---\rflowchart LR\rA-->B';
+    expect(detectSource(cr).status).toBe('detected');
+    expect((await imported(cr)).nativeSource!.split('\n')[0]).toBe('diagram "X" version=1');
+  });
+
+  it('keeps a title with a line separator whole when it adds a theme', async () => {
+    const r = await imported(
+      '---\ntitle: "First\\u2028Second"\nconfig: {theme: dark}\n---\nflowchart LR\nA-->B',
+    );
+    expect(r.status).not.toBe('failed');
+    expect(r.nativeSource!.split('\n')[1]).toBe('theme blueprint');
+    await compile(r.nativeSource!);
+  });
+
   it('refuses an unclosed block', async () => {
     const parsed = await parse('---\ntitle: X\nflowchart LR\nA-->B');
     expect(parsed.diagnostics.map(d => d.code)).toEqual(['MERMAID_FRONTMATTER_INVALID']);

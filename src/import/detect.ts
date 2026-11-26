@@ -1,3 +1,4 @@
+import { afterFrontmatter, mermaidText } from './mermaid-frontmatter';
 /** A bounded dispatcher, not a parser. Ambiguous plain text never becomes D2 by guess. */
 export type KnownFormat = 'native' | 'mermaid' | 'dot' | 'd2' | 'plantuml' | 'dbml' | 'nomnoml';
 export interface DetectedSource {
@@ -78,11 +79,12 @@ export function fencedSources(text: string): FencedSource[] {
 }
 
 function signature(source: string): KnownFormat | undefined {
+  // Only Mermaid has frontmatter; Mermaid's own rule finds where its diagram starts.
+  const body = afterFrontmatter(source);
+  if (body !== mermaidText(source)) return signature(body) === 'mermaid' ? 'mermaid' : undefined;
   // Only leading comment forms are skipped; the parser still receives the original text.
   const head = source
     .replace(/^\uFEFF/, '')
-    // Mermaid frontmatter: a `---` block before the diagram keyword.
-    .replace(/^[ \t]*---[ \t]*\r?\n[\s\S]*?\r?\n[ \t]*---[ \t]*(?:\r?\n|$)/, '')
     .replace(/^(?:\s|\/\/[^\n]*(?:\n|$)|%%[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*/, '');
   if (/^diagram\s+"/.test(head)) return 'native';
   if (

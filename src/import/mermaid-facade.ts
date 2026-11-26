@@ -3,6 +3,8 @@
  * This file parses only; it neither renders Mermaid nor attaches interaction callbacks.
  * Call in an isolated Node worker with a DOM, or in a dedicated browser Mermaid instance.
  */
+import { matchFrontmatter, mermaidText, type FrontmatterBlock } from './mermaid-frontmatter';
+
 export const MERMAID_VERSION = '12.2.0' as const;
 
 export type ParserDiagnostic = {
@@ -143,8 +145,8 @@ export type ParseFlowResult =
       ok: true;
       snapshot: FlowSnapshot | SequenceSnapshot | GanttSnapshot | TimelineSnapshot;
       diagnostics: ParserDiagnostic[];
-      /** The frontmatter's scalar keys, flattened (`title`, `config.theme`), when it has one. */
-      frontmatter?: Record<string, string>;
+      /** The frontmatter as Mermaid's YAML reader parses it, when the source has one. */
+      frontmatter?: Record<string, unknown>;
     }
   | { ok: false; diagnostics: ParserDiagnostic[] };
 
@@ -208,61 +210,26 @@ export function makePlainLabel(document: Document): (value: string) => string {
   };
 }
 
-/** Mermaid's frontmatter: a `---` block on the first line, closed by a `---` line. */
-const FRONTMATTER = /^[ \t]*---[ \t]*\n([\s\S]*?)\n[ \t]*---[ \t]*(?:\n|$)/;
-
-const unquote = (value: string) => {
-  const v = value.trim();
-  if (/^"(?:[^"\\]|\\.)*"$/.test(v)) return JSON.parse(v) as string;
-  if (/^'.*'$/.test(v)) return v.slice(1, -1).replace(/''/g, "'");
-  return v.replace(/\s+#.*$/, '');
-};
-
-/** A flow map such as `{theme: dark, flowchart: {curve: basis}}`, flattened into `out`. */
-function flowMap(text: string, prefix: string, out: Record<string, string>) {
-  const body = text.trim().slice(1, -1);
-  let depth = 0,
-    start = 0;
-  const parts: string[] = [];
-  for (let i = 0; i <= body.length; i++) {
-    const c = body[i];
-    if (c === '{' || c === '[') depth++;
-    else if (c === '}' || c === ']') depth--;
-    else if ((c === ',' && depth === 0) || i === body.length) {
-      parts.push(body.slice(start, i));
-      start = i + 1;
-    }
-  }
-  for (const part of parts) {
-    const m = /^\s*["']?([\w.-]+)["']?\s*:\s*([\s\S]*)$/.exec(part);
-    if (!m) continue;
-    if (m[2].trim().startsWith('{')) flowMap(m[2], prefix + m[1] + '.', out);
-    else out[prefix + m[1]] = unquote(m[2]);
-  }
-}
-
 /**
- * Read the scalar keys of Mermaid frontmatter: nested block maps and flow maps, flattened to
- * `config.theme`-style paths. Lists and multi-line values are skipped; Mermaid parses the full
- * YAML itself when it strips the block. Undefined when the source has no frontmatter.
+ * Parse a frontmatter body the way Mermaid 12.2.0 does: its own bundled js-yaml (this chunk is
+ * js-yaml and nothing else), the JSON schema, and the fence's indentation removed from each line.
+ * A non-mapping document is empty, as in Mermaid. Throws on YAML Mermaid would reject.
  */
-export function readFrontmatter(source: string): Record<string, string> | undefined {
-  const match = FRONTMATTER.exec(source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n'));
-  if (!match) return undefined;
-  const out: Record<string, string> = {};
-  const parents: { indent: number; key: string }[] = [];
-  for (const line of match[1].split('\n')) {
-    const m = /^(\s*)["']?([\w.-]+)["']?\s*:(?:\s+(.*))?$/.exec(line);
-    if (!m) continue;
-    const indent = m[1].length;
-    while (parents.length && parents.at(-1)!.indent >= indent) parents.pop();
-    const path = parents.map(p => p.key + '.').join('') + m[2];
-    const value = m[3]?.trim() ?? '';
-    if (!value || value.startsWith('#')) parents.push({ indent, key: m[2] });
-    else if (value.startsWith('{')) flowMap(value, path + '.', out);
-    else out[path] = unquote(value);
-  }
-  return out;
+async function parseFrontmatter(block: FrontmatterBlock): Promise<Record<string, unknown>> {
+  const { load, JSON_SCHEMA } = (await import(
+    // @ts-expect-error Mermaid ships no types for its chunks; the pinned version fixes the name.
+    'mermaid/dist/chunks/mermaid.core/chunk-LNGE3PJU.mjs'
+  )) as { load: (text: string, options: { schema: unknown }) => unknown; JSON_SCHEMA: unknown };
+  const body = block.indent
+    ? block.body
+        .split('\n')
+        .map(line => (line.startsWith(block.indent) ? line.slice(block.indent.length) : line))
+        .join('\n')
+    : block.body;
+  const parsed = load(body, { schema: JSON_SCHEMA }) ?? {};
+  return typeof parsed === 'object' && !Array.isArray(parsed)
+    ? (parsed as Record<string, unknown>)
+    : {};
 }
 
 export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
@@ -275,7 +242,7 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const normalized = source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+  const normalized = mermaidText(source);
   if (/%%\s*\{/.test(normalized)) {
     return [
       {
@@ -286,8 +253,8 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const frontmatter = FRONTMATTER.exec(normalized);
-  if (!frontmatter && /^\s*---[ \t]*(?:\n|$)/.test(normalized)) {
+  const frontmatter = matchFrontmatter(normalized);
+  if (!frontmatter && /^[^\S\n]*---[^\S\n]*(?:\n|$)/.test(normalized)) {
     return [
       {
         code: 'MERMAID_FRONTMATTER_INVALID',
@@ -297,7 +264,7 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const body = frontmatter ? normalized.slice(frontmatter[0].length) : normalized;
+  const body = normalized.slice(frontmatter?.length ?? 0);
   if (
     [...normalized].some(c => {
       const code = c.charCodeAt(0);
@@ -481,7 +448,8 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
     const job = queue.then(async (): Promise<ParseFlowResult> => {
       const diagnostics = preflightMermaidFlow(source);
       if (diagnostics.some(d => d.severity === 'error')) return { ok: false, diagnostics };
-      const frontmatter = readFrontmatter(source);
+      const block = matchFrontmatter(mermaidText(source));
+      let frontmatter: Record<string, unknown> | undefined;
       const ok = (
         snapshot: Extract<ParseFlowResult, { ok: true }>['snapshot'],
       ): ParseFlowResult => ({
@@ -502,9 +470,11 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
           suppressErrorRendering: true,
         });
         phase = 'parse';
+        if (block) frontmatter = await parseFrontmatter(block);
         // Mermaid strips the frontmatter but drops its title unless it is handed back.
         const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''), {
-          title: frontmatter?.title,
+          // Mermaid's own rule: a truthy title, as a string.
+          title: frontmatter?.title ? String(frontmatter.title) : undefined,
         });
         if (
           !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)

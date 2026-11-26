@@ -23,11 +23,19 @@ import { mapMermaidGantt, mapMermaidTimeline } from './mermaid-timeline';
 /** Mermaid themes with a Draftably preset. `default` and `base` are Drafting, which needs no line. */
 const THEMES: Record<string, string | null> = { default: null, base: null, dark: 'blueprint' };
 
-/** The Draftably theme for the frontmatter's `config.theme`, or undefined when it has none. */
-const frontmatterTheme = (parsed: ParseFlowResult) => {
-  const name = parsed.ok ? parsed.frontmatter?.['config.theme'] : undefined;
-  return name && Object.hasOwn(THEMES, name) ? (THEMES[name] ?? undefined) : undefined;
+/** Mermaid's `config.theme` from the frontmatter, when it names a theme Draftably maps. */
+const mappedTheme = (frontmatter: Record<string, unknown> | undefined) => {
+  const config = frontmatter?.config;
+  const name =
+    config && typeof config === 'object' ? (config as Record<string, unknown>).theme : undefined;
+  return typeof name === 'string' && Object.hasOwn(THEMES, name) ? name : undefined;
 };
+
+/** Every setting's dotted path (`config.flowchart.curve`); a list, null or `{}` is one setting. */
+const settingPaths = (value: unknown, prefix = ''): string[] =>
+  value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length
+    ? Object.entries(value).flatMap(([k, v]) => settingPaths(v, prefix + k + '.'))
+    : [prefix.slice(0, -1)];
 
 /** Mermaid's link types that native ends cover; a type outside this list is refused. */
 const MERMAID_ENDS: Record<string, Pick<NativeEdge, 'head' | 'tail'>> = {
@@ -82,8 +90,9 @@ function mapMermaidFlow(
     );
     return done();
   }
-  const ignored = Object.keys(parsed.frontmatter ?? {}).filter(
-    k => k !== 'title' && !(k === 'config.theme' && Object.hasOwn(THEMES, parsed.frontmatter![k])),
+  const theme = mappedTheme(parsed.frontmatter);
+  const ignored = (parsed.frontmatter ? settingPaths(parsed.frontmatter) : []).filter(
+    k => k && k !== 'title' && !(k === 'config.theme' && theme),
   );
   if (ignored.length)
     note(
@@ -504,9 +513,17 @@ export function importMermaidFlow(
 ): ImportResult {
   const result = mapMermaidFlow(parsed, plainText, title);
   if (!result.nativeSource) return result;
-  const theme = frontmatterTheme(parsed);
-  // The diagram line is always first; the theme line follows it.
-  if (theme) result.nativeSource = result.nativeSource.replace(/^.*/, `$&\ntheme ${theme}`);
+  const theme = THEMES[(parsed.ok && mappedTheme(parsed.frontmatter)) || 'default'];
+  if (theme) {
+    // The diagram line is first, and a title's own line breaks are escaped, so its end is the
+    // first `\n`. (A regex `.` stops at U+2028, which a title may hold unescaped.)
+    const end = result.nativeSource.indexOf('\n');
+    const source = result.nativeSource;
+    result.nativeSource =
+      end < 0
+        ? source + '\ntheme ' + theme
+        : source.slice(0, end) + '\ntheme ' + theme + source.slice(end);
+  }
   try {
     checkSource(result.nativeSource);
     return result;
