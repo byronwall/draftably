@@ -176,6 +176,11 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
 
   /** The open file or example, or null when the editor works on browser storage as usual. */
   const fileSession = state.info;
+  /**
+   * The file whose drawing is on screen. It lags `fileSession` while another file opens, and an
+   * editor draft opens and saves only when the two agree.
+   */
+  const [shownFile, setShownFile] = createSignal<FileSessionInfo | null>(null);
   const fileMode = () => !!state.info();
   /** True while an example is open: edits are kept in this browser only. */
   const exampleMode = () => !!state.info()?.example;
@@ -853,6 +858,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     s.setCommitHandler(null);
     s.setHistoryHandler(null);
     state.setInfo(null);
+    setShownFile(null);
   }
 
   /**
@@ -955,7 +961,10 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     });
     state.setInfo(info);
     takeFiles(info.files);
-    return acceptDisk(info.source, info.revision);
+    // The file is shown once its first drawing is projected, unless another file opened since.
+    return acceptDisk(info.source, info.revision).then(() => {
+      if (state.info() === info) setShownFile(info);
+    });
   }
 
   function onExternalChange(source: string, revision: string) {
@@ -1047,6 +1056,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     liveSource,
     sourceDraft,
     fileSession,
+    shownFile,
     fileMode,
     exampleMode,
     scratchName,

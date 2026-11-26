@@ -1,8 +1,8 @@
 // An editor draft is taken when the editor opens. If the file changes under it, a save of that
 // draft must not write over the change. Each case below changes one thing the file can say about a
 // code node while the Code editor is open, then saves a draft. The file keeps the change. A draft
-// of a different field still saves; a draft of the same field is refused. A body counts its tab
-// width and table setting, since the editor read its cells with them.
+// of a different field still saves; a draft of the same field is refused. A body saved from grid
+// cells also depends on the tab width and table setting it read the cells with; typed text does not.
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 import type { DiagramSession } from '../src/state/session';
 
@@ -66,6 +66,11 @@ const DRAFTS = {
   body: {
     draft: { body: ['SELECT 3'], table: false, title: 'Query' },
     shows: 'SELECT 3',
+    same: ['body'],
+  },
+  grid: {
+    draft: { body: ['a  b', 'c  d'], table: true, title: 'Query', grid: true },
+    shows: 'a  b',
     same: ['body', 'table', 'tab'],
   },
   toggle: { draft: { table: true, title: 'Query' }, shows: 'table=on', same: ['table'] },

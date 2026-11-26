@@ -92,17 +92,17 @@ export function createActions(
   /** Save the open code editor, if any, before another edit or a press on the canvas. */
   const commitCodeEdit = () => saveOpenCode?.();
 
-  type CodeFields = { title: string; table: boolean; body: string };
+  type CodeFields = { title: string; table: boolean; body: string; cells: string };
   /**
    * What the open editor started from, field by field. A save writes only the fields its draft
    * changed, and is refused when one of those fields changed in the file since: a change the file
-   * made to another field stays. `file` is the open file, so a draft never saves into another.
+   * made to another field stays. `file` is the shown file, so a draft never saves into another.
    */
   let codeBase: { file: unknown; fields: CodeFields } | undefined;
   /**
-   * The fields of a code node the editor can write: caption, table setting and body. The body
-   * counts its tab width and table setting too: the editor read its cells with them, so a body
-   * saved after either changed could move or drop cells.
+   * The fields of a code node the editor can write: caption, table setting and body. `cells` is
+   * what a grid read its cells with, tab width and table setting: a body written from grid cells
+   * after either changed could move or drop cells. A body typed as text does not depend on them.
    */
   const codeFields = (id: string): CodeFields | undefined => {
     const node = findNode(s.doc, id),
@@ -111,7 +111,8 @@ export function createActions(
       ? {
           title: node.title,
           table: !!code.table,
-          body: JSON.stringify([code.body ?? code.lines, code.tab ?? CODE_TAB, !!code.table]),
+          body: JSON.stringify(code.body ?? code.lines),
+          cells: JSON.stringify([code.tab ?? CODE_TAB, !!code.table]),
         }
       : undefined;
   };
@@ -122,8 +123,10 @@ export function createActions(
     const code = findNode(s.doc, id)?.code;
     if (code?.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
+    // Another file is opening: the drawing on screen is not the file a save would go to.
+    if (s.shownFile() !== s.fileSession()) return toast('Still opening the file. Try again.');
     const fields = codeFields(id);
-    codeBase = fields && { file: s.fileSession(), fields };
+    codeBase = fields && { file: s.shownFile(), fields };
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -160,25 +163,35 @@ export function createActions(
    * reads a file, so it draws the same before and after the file is saved. A node that changed
    * since the editor opened (the file was edited elsewhere) is not saved over.
    */
-  function finishCodeEdit(id: string, next?: { body?: string[]; table: boolean; title: string }) {
+  function finishCodeEdit(
+    id: string,
+    next?: { body?: string[]; table: boolean; title: string; grid?: boolean },
+  ) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
     const opened = codeBase;
     codeBase = undefined;
     if (!next || !opened) return;
     const base = opened.fields;
-    const edits: Record<keyof CodeFields, boolean> = {
+    const edits = {
       title: next.title !== base.title,
       table: next.table !== base.table,
       body: !!next.body,
     };
-    const fields = Object.keys(edits) as (keyof CodeFields)[];
-    if (!fields.some(k => edits[k])) return;
-    if (opened.file !== s.fileSession())
+    if (!edits.title && !edits.table && !edits.body) return;
+    // Each field the draft writes, and what it was read with: a body from grid cells also
+    // depends on the tab width and table setting it read them with.
+    const reads: (keyof CodeFields)[] = [
+      ...(edits.title ? (['title'] as const) : []),
+      ...(edits.table ? (['table'] as const) : []),
+      ...(edits.body ? (['body'] as const) : []),
+      ...(edits.body && next.grid ? (['cells'] as const) : []),
+    ];
+    if (opened.file !== s.shownFile() || s.shownFile() !== s.fileSession())
       return toast('Another file is open now, so your code edit was not saved.');
     const now = codeFields(id);
     if (!now) return toast('This code was removed or renamed, so your edit was not saved.');
-    if (fields.some(k => edits[k] && now[k] !== base[k]))
+    if (reads.some(k => now[k] !== base[k]))
       return toast('This code changed while you edited it, so your edit was not saved.');
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
