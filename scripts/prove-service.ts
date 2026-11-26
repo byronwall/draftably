@@ -724,7 +724,7 @@ if (!remote) {
     );
     assert.equal(plain.statusCode, 301);
     // wrangler dev rewrites the Location scheme to its own; live answers https://.
-    assert.match(plain.headers.location ?? '', /^https?:\/\/api\.example\.test\/health$/);
+    assert.match(plain.headers.location ?? '', /^https?:\/\/api\.example\.test\/api\/health$/);
   }
   const anon = await fetch(resource, {
     method: 'POST',
