@@ -22,7 +22,7 @@ export interface ApiEnv extends AuthEnv {
 }
 
 export const sourceError = (e: SourceError) => {
-  const line = /^line (\d+): /.exec(e.message);
+  const line = /^line (\d+)(?:, column \d+)?: /.exec(e.message);
   return new ApiError(400, 'ERR_SOURCE', e.message, line ? Number(line[1]) : undefined);
 };
 

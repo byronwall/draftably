@@ -61,8 +61,12 @@ export function drawSvg(source: string, opts: DrawOptions) {
     });
     if (!result.ok) {
       const d = result.diagnostics.find(x => x.severity === 'error') ?? result.diagnostics[0];
-      const line = d?.location?.line ? `line ${d.location.line}: ` : '';
-      throw new SourceError(line + (d?.message ?? 'The diagram did not render.'));
+      const loc = d?.location;
+      const at = loc?.line ? `line ${loc.line}${loc.column ? `, column ${loc.column}` : ''}: ` : '';
+      // The line itself, so a reader of the error image sees what to fix without the source.
+      const text = loc?.line ? source.split('\n')[loc.line - 1]?.trim() : '';
+      const quoted = text ? `\n> ${text.slice(0, 200)}` : '';
+      throw new SourceError(at + (d?.message ?? 'The diagram did not render.') + quoted);
     }
     s.setAttribute('svg_bytes', byteSize(result.value.svg));
     return result.value.svg;
@@ -128,7 +132,7 @@ const esc = (s: string) =>
 
 /** A small SVG that shows the error, so an image tag shows why instead of a broken icon. */
 export function errorSvg(message: string) {
-  const lines = message.match(/.{1,70}(\s|$)/g) ?? [message];
+  const lines = message.split('\n').flatMap(p => p.match(/.{1,70}(\s|$)|.{70}/g) ?? [p]);
   const h = 40 + lines.length * 20;
   const text = (y: number, attrs: string, s: string) =>
     `<text x="16" y="${y}" ${attrs}>${esc(s)}</text>`;

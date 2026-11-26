@@ -7,6 +7,7 @@
 import { runtimeVersion } from '@draftably/runtime';
 import { decodeSource, SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
+import { homePage } from './html';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { MAX_SEGMENT, render, type Payer } from './render';
@@ -30,9 +31,18 @@ function image(body: BodyInit, format: Format, status = 200, cache = IMMUTABLE) 
       'Content-Type': TYPES[format],
       'Cache-Control': cache,
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': 'X-Draftably-Error',
       'X-Draftably-Version': runtimeVersion,
     },
   });
+}
+
+/** The error as an image, and as one ASCII line in `X-Draftably-Error` for a script to read. */
+async function errorResponse(message: string, format: Format, status: number) {
+  const res = image(await errorImage(message, format), format, status, 'no-store');
+  const line = message.replace(/\n> /g, ' | ').replace(/…/g, '...');
+  res.headers.set('X-Draftably-Error', line.replace(/[^\x20-\x7e]/g, '?'));
+  return res;
 }
 
 /** `/{svg|png}/{encoded}` and the Kroki-style `/draftably/{svg|png}/{encoded}`. */
@@ -95,20 +105,31 @@ async function imageResponse(
   } catch (error) {
     if (error instanceof ApiError) {
       noteError(error.code, error.message);
-      return image(await errorImage(error.message, format), format, error.status, 'no-store');
+      return errorResponse(error.message, format, error.status);
     }
     if (!(error instanceof SourceError)) throw error;
     noteError('ERR_SOURCE', error.message);
-    return image(await errorImage(error.message, format), format, 400, 'no-store');
+    return errorResponse(error.message, format, 400);
   }
 }
 
 const HOME = `Draftably render service
 
+Draw a diagram with no install and no account:
+  1. Write Draftably source, for example:
+       node web "Web app"
+       node api "API"
+       edge call web -> api "GET /items"
+  2. Encode its UTF-8 bytes as base64url, no padding.
+     Python: base64.urlsafe_b64encode(src.encode()).decode().rstrip('=')
+  3. Open https://api.draftably.dev/png/<encoded>
+     A bad source returns 400 and an image that names the line to fix.
+Syntax, a full example and JavaScript: https://draftably.dev/llms.txt
+
 GET /svg/{encoded}   SVG drawing of a Draftably diagram
 GET /png/{encoded}   PNG drawing, with the source embedded; ?scale=1|2|3|4 (default 2)
-                     {encoded} = "pako:" + base64url(zlib(source)), as mermaid.ink, or
-                     base64url(source). Make one with: draftably url <file.draft>
+                     {encoded} = base64url(source), or "pako:" + base64url(zlib(source))
+                     as mermaid.ink. With the CLI: draftably url <file.draft>
                      The source is Draftably or Mermaid (flowchart, sequence, gantt,
                      timeline); ?type=mermaid|draftably skips the guess.
                      ?scheme=light|dark
@@ -192,7 +213,11 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   if (req.method !== 'GET')
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
   if (url.pathname === '/')
-    return new Response(HOME, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+    return req.headers.get('Accept')?.includes('text/html')
+      ? homePage(HOME)
+      : new Response(HOME, {
+          headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
+        });
   if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
   const route = parseImagePath(url.pathname);
   if (!route) return new Response('Not found', { status: 404 });
@@ -205,7 +230,7 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   } catch (error) {
     if (!(error instanceof SourceError)) throw error;
     noteError('ERR_SOURCE', error.message);
-    return image(await errorImage(error.message, route.format), route.format, 400, 'no-store');
+    return errorResponse(error.message, route.format, 400);
   }
   // A key spends credits and skips the per-address limit. It is checked before the cache, so a
   // revoked or wrong key is refused even for an image that is already cached.
@@ -216,8 +241,7 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
     } catch (error) {
       if (!(error instanceof ApiError)) throw error;
       noteError(error.code, error.message);
-      const img = await errorImage(error.message, route.format);
-      return image(img, route.format, error.status, 'no-store');
+      return errorResponse(error.message, route.format, error.status);
     }
   }
   return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);

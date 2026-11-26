@@ -103,6 +103,7 @@ const GROUPS: [string, string[]][] = [
       'support',
     ],
   ],
+  ['API and MCP', ['hosted-render-urls', 'rest-api', 'mcp']],
   ['Project', ['agent-diagram-evaluation']],
 ];
 

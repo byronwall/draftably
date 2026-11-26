@@ -8,6 +8,7 @@ import { A, useLocation, useNavigate } from '@solidjs/router';
 import { demoEditorUrl, LiveEditor } from '../live/LiveEditor';
 import { deliver, ImportCancelled, readDiagramFile, unreadableFile } from '../reopen';
 import { CopyCommand } from './CopyCommand';
+import { API, Hosted, MCP_ADD } from './Hosted';
 import { Mermaid } from './Mermaid';
 import { Points } from './Points';
 import { drawSvg, enqueue, whenSeen } from './render';
@@ -61,6 +62,11 @@ export function Landing() {
   // The router changes the hash without scrolling, so a link to a section of this page (or to
   // it from another page) scrolls there once the section exists.
   const location = useLocation();
+  // /pricing is this page, opened at its pricing table.
+  onMount(() => {
+    if (location.pathname.endsWith('/pricing'))
+      setTimeout(() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'instant' }));
+  });
   createEffect(
     on(
       () => location.hash,
@@ -108,29 +114,12 @@ export function Landing() {
           <ReopenLine />
         </section>
         <Install />
+        <Hosted />
         <Mermaid />
         <Points />
         <Examples />
       </main>
-      <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>
-        <span class="wordmark">
-          <Logo size={18} />
-          draftably
-        </span>
-        <span class="footer-links">
-          <A href="/play">Playground</A>
-          <a href={appUrl()} rel="external">
-            Editor
-          </a>
-          <A href="/docs">Docs</A>
-          <a href={NPM}>npm</a>
-          <a href={GITHUB}>GitHub</a>
-        </span>
-        <p style={{ width: '100%', margin: 0, color: 'var(--muted)', 'font-size': '13px' }}>
-          Playground: write the source and see it draw. Editor: build on a canvas, tidy the layout
-          and save a file.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -167,7 +156,7 @@ function DocLink(props: { href: string; children: string }) {
   );
 }
 
-function Nav() {
+export function Nav() {
   return (
     <header class="nav">
       <a class="wordmark" href={import.meta.env.BASE_URL}>
@@ -232,7 +221,7 @@ function Install() {
   return (
     <section class="install" id="install">
       <div class="section-head">
-        <h2>One file, four ways to use it</h2>
+        <h2>One file, five ways to use it</h2>
       </div>
       <div class="install-cols">
         <div>
@@ -252,6 +241,16 @@ function Install() {
           <CopyCommand text="npx draftably open plan.draft" />
         </div>
         <div>
+          <h3>Embed: put it in your app</h3>
+          <p>
+            A component for React, Solid, Vue and Svelte, an HTML element, or SVG from a build step.
+            Add the editor and your users can drag too.{' '}
+            <DocLink href="/docs/embed">Pick a route</DocLink>. Using React Flow, elkjs or dagre?{' '}
+            <DocLink href="/docs/layout-drop-in">Swap in the layout</DocLink>.
+          </p>
+          <CopyCommand text="pnpm add @draftably/react" />
+        </div>
+        <div>
           <h3>Agent: let it draw for you</h3>
           <p>
             A bundled skill teaches an agent the language, so it writes, checks and renders{' '}
@@ -261,14 +260,12 @@ function Install() {
           <CopyCommand text="npx draftably skill install" />
         </div>
         <div>
-          <h3>Embed: put it in your app</h3>
+          <h3>Agent: connect over MCP</h3>
           <p>
-            A component for React, Solid, Vue and Svelte, an HTML element, or SVG from a build step.
-            Add the editor and your users can drag too.{' '}
-            <DocLink href="/docs/embed">Pick a route</DocLink>. Using React Flow, elkjs or dagre?{' '}
-            <DocLink href="/docs/layout-drop-in">Swap in the layout</DocLink>.
+            No install: the agent draws on our server with your API key. Rendering spends credits;
+            checking and converting are free. <DocLink href="/docs/mcp">Set it up</DocLink>.
           </p>
-          <CopyCommand text="pnpm add @draftably/react" />
+          <CopyCommand text={MCP_ADD} />
         </div>
       </div>
       <dl class="commands">
@@ -324,7 +321,41 @@ function ReopenLine() {
           }}
         />
       </label>
-      <Show when={!error()}>, to keep editing. Runs in your browser. Nothing is uploaded.</Show>
+      <Show when={!error()}>
+        , to keep editing. The editor runs in your browser and uploads nothing.
+      </Show>
     </p>
+  );
+}
+
+/** Every page's footer: the site's links, then the license and the service's status. */
+export function Footer() {
+  return (
+    <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>
+      <span class="wordmark">
+        <Logo size={18} />
+        draftably
+      </span>
+      <span class="footer-links">
+        <A href="/play">Playground</A>
+        <a href={appUrl()} rel="external">
+          Editor
+        </a>
+        <A href="/docs">Docs</A>
+        <A href="/#api">API</A>
+        <a href={NPM}>npm</a>
+        <a href={GITHUB}>GitHub</a>
+        <A href="/terms">Terms</A>
+        <A href="/privacy">Privacy</A>
+      </span>
+      <p style={{ width: '100%', margin: 0, color: 'var(--muted)', 'font-size': '13px' }}>
+        Playground: write the source and see it draw. Editor: build on a canvas, tidy the layout and
+        save a file.
+      </p>
+      <p class="footer-legal">
+        Source under <a href={`${GITHUB}/blob/main/LICENSE`}>FSL-1.1-MIT</a>: use it freely; only
+        Draftably sells it as a service. <a href={`${API}/health`}>Service status</a>
+      </p>
+    </footer>
   );
 }
