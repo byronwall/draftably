@@ -6,23 +6,19 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { embedPngSource } from '../model/embed';
-import { withSourceStrip } from '../model/strip';
-import { rasterFamilies, scaleSvg, svgSize } from '../model/raster';
+import { drawPng, loadSvg, svgSize } from '../model/raster';
 import { fontFiles } from './raster-fonts';
 
 export { svgSize };
 
-/** `svg` loaded in resvg with the bundled fonts, each diagram family renamed so resvg finds it. */
-export async function rasterize(svg: string) {
+async function engine() {
   const { Resvg } = await import('@resvg/resvg-js');
-  return new Resvg(rasterFamilies(svg), {
-    font: {
-      loadSystemFonts: false,
-      fontFiles: Object.values(fontFiles()),
-      defaultFontFamily: 'Inter',
-    },
-  });
+  return { Resvg, fonts: { fontFiles: Object.values(fontFiles()) } };
+}
+
+/** `svg` loaded in resvg-js with the bundled fonts, as `drawPng` loads it. */
+export async function rasterize(svg: string) {
+  return loadSvg(await engine(), svg);
 }
 
 /**
@@ -31,13 +27,10 @@ export async function rasterize(svg: string) {
  * the image's size in pixels.
  */
 export async function writePng(svg: string, out: string, scale = 2, source?: string, strip = true) {
-  if (source !== undefined && strip) svg = await withSourceStrip(svg, source, scale);
-  const png = (await rasterize(scaleSvg(svg, scale))).render().asPng();
-  fs.writeFileSync(
-    path.resolve(out),
-    source === undefined ? png : await embedPngSource(png, source),
-  );
-  return { w: png.readUInt32BE(16), h: png.readUInt32BE(20) };
+  const png = await drawPng(await engine(), svg, { scale, source, strip });
+  fs.writeFileSync(path.resolve(out), png);
+  const view = new DataView(png.buffer, png.byteOffset);
+  return { w: view.getUint32(16), h: view.getUint32(20) };
 }
 
 /**
