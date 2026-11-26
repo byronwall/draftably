@@ -87,6 +87,22 @@ describe('layout … orgchart', () => {
     expect(top(labeled, 'web')).toBeGreaterThan(top(labeled, 'cto'));
   });
 
+  it('keeps the same leaf rows when a manager line gets a label', async () => {
+    const lines = [
+      'node ceo "CEO"',
+      'node m "Manager"',
+      ...[1, 2, 3, 4].map(i => `node l${i} "Leaf ${i}"`),
+      'edge r0 ceo -> m',
+      ...[1, 2, 3, 4].map(i => `edge r${i} m -> l${i}`),
+      'layout root orgchart root=ceo',
+    ];
+    const plain = await compile(lines.join('\n')),
+      labeled = await compile(lines.join('\n').replace('ceo -> m', 'ceo -> m "Reports directly"')),
+      rows = (scene: typeof plain) =>
+        [1, 2, 3, 4].map(i => scene.byId.get(`l${i}`)!.y - scene.byId.get('m')!.y);
+    expect(rows(labeled)).toEqual(rows(plain));
+  });
+
   it('draws each reporting line label on its own leg', async () => {
     const source = [
       'node ceo "CEO"',

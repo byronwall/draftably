@@ -174,12 +174,14 @@ export function arrangeOrgchart(
       .map(id => ({ id, ...doc.layout.nodes[id], ...sizes.get(id) })),
     by = new Map(items.map(p => [p.id, p])),
     gaps = gapsFor(clearance),
-    look = resolveAppearance(doc.appearance);
-  // A labeled reporting line draws its label on its own leg: the run from the stem to an
-  // assistant or a stacked leaf leaves room for the widest such label.
+    look = resolveAppearance(doc.appearance),
+    // A labeled reporting line draws its label on its own leg: the run from the stem to an
+    // assistant or a stacked leaf leaves room for the widest such label. The leaf modes are
+    // chosen with the plain gaps, so a label never changes which rows stack.
+    legs = { ...gaps };
   for (const e of doc.graph.edges)
     if (e.branch && e.label && by.has(e.from) && by.has(e.to))
-      gaps.indent = Math.max(gaps.indent, edgeLabelSize(e.label, look).w + 2 * clearance);
+      legs.indent = Math.max(legs.indent, edgeLabelSize(e.label, look).w + 2 * clearance);
   if (!by.has(root)) return { doc, stacked: new Set() };
   const kids = new Map<string, string[]>(),
     seen = new Set([root]);
@@ -213,10 +215,10 @@ export function arrangeOrgchart(
     for (const id of leafy)
       modes.set(id, leaves === 'stack' ? 'stack' : below(id).length >= 3 ? 'split' : 'row');
   // A person the tree misses sits in a row below the chart.
-  const whole = (m: Map<string, Mode>) => {
-    const at = place(root, by, below, side, m, gaps),
+  const whole = (m: Map<string, Mode>, g = gaps) => {
+    const at = place(root, by, below, side, m, g),
       placed = [...at.values()],
-      top = Math.max(...placed.map(p => p.y + p.h)) + gaps.rank;
+      top = Math.max(...placed.map(p => p.y + p.h)) + g.rank;
     let x = Math.min(...placed.map(p => p.x));
     for (const p of items)
       if (!at.has(p.id)) {
@@ -239,6 +241,7 @@ export function arrangeOrgchart(
       at = next;
     }
   }
+  if (legs.indent !== gaps.indent) at = whole(modes, legs);
   // Move each member's slot onto its drawn box's center, and everything inside a group with it.
   const owner = (id: string | undefined): string | undefined =>
     id === undefined || by.has(id) ? id : owner(parent.get(id));
