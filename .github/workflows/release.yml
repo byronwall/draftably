@@ -53,3 +53,5 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/deploy.yml
+    # A called workflow gets no secrets unless the caller passes them (CLOUDFLARE_API_TOKEN).
+    secrets: inherit
