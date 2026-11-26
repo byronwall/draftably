@@ -798,7 +798,10 @@ if (!remote) {
 
   // Signed in: the consent page names the app, the account and where access goes.
   const consentFor = async () => {
-    const res = await fetch(`${base}${next}`, { headers: { Cookie: appSession } });
+    // The URL sign-in returned, so the consent page is proved on the real continuation.
+    const res = await fetch(`${base}${appSignIn.headers.get('Location')}`, {
+      headers: { Cookie: appSession },
+    });
     assert.equal(res.status, 200);
     const html = await res.text();
     return { html, handle: /name="handle" value="([^"]+)"/.exec(html)![1], cookies: cookies(res) };
