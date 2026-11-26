@@ -128,6 +128,7 @@ export function centre(ctx: Context) {
         if (hi - lo < RUN_MIN) continue;
         mid = Math.round(below + above) / 2;
       } else {
+        if (!ctx.facingFans) continue;
         // In open space, give the nearest face its requested clearance.
         const nearer = at - below < above - at ? below : above;
         if (Math.abs(nearer - at) >= Math.min(HUG, s.standoff)) continue;
