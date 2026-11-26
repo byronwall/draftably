@@ -14,7 +14,12 @@
 import { LayoutLab } from '../engines/layout-engine';
 import { bilateralTarget } from '../engines/layout/trees';
 import type { Item, Link } from '../engines/layout/types';
+import { resolveAppearance } from '../model/appearance';
+import { edgeLabelSize } from '../model/labels';
 import type { Diagram } from '../model/types';
+
+/** Clear space each side of a branch label, between it and the topics. */
+const LABEL_CLEAR = 12;
 import {
   layoutParent,
   treeCandidates,
@@ -67,11 +72,12 @@ function markMindmap(
         q.push(e.target);
       }
   }
-  // An edge that repeats a branch's two ends is a branch too, as when compare holds an edge
-  // under its old and new ID.
+  // In a comparison, an edge that repeats a branch's two ends is a branch too: compare holds the
+  // edge under its old and new ID. Elsewhere a second line between the same two topics is a link.
   const pairs = new Set([...tree].map(e => `${e.source}\0${e.target}`));
   for (const e of m.edges) {
-    if (tree.has(e) || (treeLine(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
+    if (tree.has(e) || (treeLine(e) && e.status && pairs.has(`${e.source}\0${e.target}`)))
+      e.branch = true;
     // A cross-link inside the map draws, but the tree alone places the topics.
     else if (inside(e.source) && inside(e.target)) {
       e.constraint = false;
@@ -129,7 +135,15 @@ export function arrangeMindmap(
       rootId: root,
     }),
     t = LayoutLab.topology(items, links, { start: { id: root, placement: 'center' } }),
-    at = bilateralTarget(items, t, s);
+    look = resolveAppearance(doc.appearance);
+  // A labeled branch draws its label on the line between two columns, so the columns leave room
+  // for the widest such label (its height when the map reads down).
+  for (const e of doc.graph.edges)
+    if (e.branch && e.label && ids.has(owner(e.from)!) && ids.has(owner(e.to)!)) {
+      const box = edgeLabelSize(e.label, look);
+      s.rankGap = Math.max(s.rankGap, (vertical ? box.h : box.w) + 2 * LABEL_CLEAR);
+    }
+  const at = bilateralTarget(items, t, s);
   if (!at) return doc;
   const by = new Map(items.map(p => [p.id, p])),
     sides = t.branchSides ?? new Map<string, number>(),

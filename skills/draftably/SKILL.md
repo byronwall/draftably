@@ -213,16 +213,14 @@ Good defaults:
   with no arrowheads; rows of leaf reports stack into columns while the chart is wider than
   `fit=` asks (`leaves=stack|split|row` to choose). `role=assistant` hangs a report beside the
   stem; `role=vacant` draws an open role dashed. A label on a reporting line stays in the tree.
-  A dotted-line report is `kind=async`, or a labeled second edge into someone who already has a
-  plain reporting line: it draws but moves no one.
+  A dotted-line report is an edge with `kind=async`: it draws but moves no one.
 - Other hierarchies: `layout root engine=tree root=top direction=down`.
 - Brainstorms, plans and topic outlines: `layout root mindmap root=center`, with plain `node`
   and `edge` lines from the center out (`layout groupId mindmap root=id` for a map in a group).
   An edge with no `kind=` or ends is a branch, with or without a label: it draws with no arrowhead. Each first-level
   topic takes a color in turn and the topics under it are pale cards of it; `color=` on a topic
-  overrides it for its subtree. Branch colors need no legend row. A `kind=async` edge, or a
-  labelled second edge into a topic a plain edge reaches, is a cross-link that moves nothing; a
-  topic only a cross-link reaches sits beside the map.
+  overrides it for its subtree. Branch colors need no legend row. A `kind=async` edge is a
+  cross-link that moves nothing; a topic only a cross-link reaches sits beside the map.
   **Fits** one center and its subtopics. **Doesn't fit** steps or dependencies; use a flow.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
   Reading down, a group much taller than the others folds into columns when that makes the

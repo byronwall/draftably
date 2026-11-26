@@ -82,9 +82,10 @@ export function withOrgcharts(m: Model): Model {
     const { tree } = reportingTree(out, inside, l.orgchart!.root);
     const pairs = new Set([...tree].map(e => `${e.source}\0${e.target}`));
     for (const e of out.edges) {
-      // An edge that repeats a reporting line's two ends is one too, as when compare holds an
-      // edge under its old and new ID.
-      if (tree.has(e) || (treeLine(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
+      // In a comparison, an edge that repeats a reporting line's two ends is one too: compare
+      // holds the edge under its old and new ID.
+      if (tree.has(e) || (treeLine(e) && e.status && pairs.has(`${e.source}\0${e.target}`)))
+        e.branch = true;
       else if (inside(e.source) && inside(e.target)) {
         // In a comparison, a reporting line that moved to another manager is still one: it
         // draws with no head, though only the tree places people.

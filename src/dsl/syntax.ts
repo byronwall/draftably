@@ -1660,17 +1660,15 @@ function addRowEdges(m: Model) {
 export const treeLine = (e: ModelEdge) => !e.styled && !e.message && e.constraint !== false;
 
 /**
- * The lines a mind map or org chart builds its tree from, by source. A plain line wins: a labeled
- * line is a candidate only into a topic that no plain line inside the scope reaches, so a labeled
- * second line (a dotted-line report, say) never takes the place of a plain one. Both layouts read
- * their tree through this one function.
+ * The lines a mind map or org chart builds its tree from, by source. Labels play no part, so
+ * adding or removing one never moves a topic; a second line that must stay out of the tree says
+ * so with `kind=` or an end. Both layouts read their tree through this one function.
  */
 export function treeCandidates(edges: ModelEdge[], inside: (id: string) => boolean) {
-  const lines = edges.filter(e => treeLine(e) && inside(e.source) && inside(e.target)),
-    plainInto = new Set(lines.filter(e => !e.label).map(e => e.target)),
-    out = new Map<string, ModelEdge[]>();
-  for (const e of lines)
-    if (!e.label || !plainInto.has(e.target)) out.set(e.source, [...(out.get(e.source) ?? []), e]);
+  const out = new Map<string, ModelEdge[]>();
+  for (const e of edges)
+    if (treeLine(e) && inside(e.source) && inside(e.target))
+      out.set(e.source, [...(out.get(e.source) ?? []), e]);
   return out;
 }
 
