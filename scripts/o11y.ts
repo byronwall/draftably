@@ -28,8 +28,12 @@ const arg = (name: string) => {
   return at > 0 ? (process.argv[at + 1] ?? '') : undefined;
 };
 const HOURS = Number(arg('hours') ?? 24);
+if (!(HOURS > 0 && HOURS <= 168)) {
+  console.error('--hours must be between 1 and 168: Cloudflare keeps 7 days.');
+  process.exit(2);
+}
 /** Cloudflare keeps 7 days; the baseline is as many earlier windows as fit, up to 7. */
-const BASELINE = Math.min(7, Math.floor((7 * 24 - HOURS) / HOURS));
+const BASELINE = Math.max(0, Math.min(7, Math.floor((7 * 24 - HOURS) / HOURS)));
 
 function token() {
   if (process.env.CF_O11Y_TOKEN) return process.env.CF_O11Y_TOKEN.trim();
