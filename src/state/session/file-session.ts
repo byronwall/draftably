@@ -223,7 +223,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * Editor commands waiting for the revision being laid out. Each one reads the latest drawn
    * source when it runs, so a change on disk made meanwhile is checked, not written over.
    */
-  const commands: (() => void)[] = [];
+  const commands: { session: FileSessionInfo | null; run: () => void }[] = [];
+  /** The last revision could not be drawn (not a source error): commands are refused until one is. */
+  let undrawable = false;
   const flushQueued = () => {
     // A drawing of text not committed yet (Source panel typing): its caller commits, then flushes.
     if (shownSource !== localSource) return;
@@ -231,7 +233,12 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     queued = null;
     if (edit) handleEdit(edit.before, edit.label, 'edit', edit.after);
     // Each command that edits starts a compile, so the rest wait for that one in turn.
-    while (commands.length && !state.compiling()) commands.shift()!();
+    while (commands.length && !state.compiling()) {
+      const { session, run } = commands.shift()!;
+      // A command belongs to the file it was made in: another file never receives it.
+      if (session !== state.info()) toast('Another file is open now, so your edit was not saved.');
+      else run();
+    }
   };
   /**
    * Run an editor command against the latest drawn source: now, or once the revision being laid
@@ -239,7 +246,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * snapshot of the drawing, so it applies to whatever the file says by then.
    */
   function whenDrawn(command: () => void) {
-    if (state.info() && (state.compiling() || shownSource !== localSource)) commands.push(command);
+    if (undrawable) return toast('The file could not be drawn, so your edit was not saved.');
+    if (state.info() && (state.compiling() || shownSource !== localSource))
+      commands.push({ session: state.info(), run: command });
     else {
       flushQueued();
       command();
@@ -374,12 +383,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
           toast('The file could not be drawn, so your edit was not saved.');
         queued = null;
         commands.length = 0;
+        undrawable = true;
         throw error;
       }
       batch(() => {
         state.setSourceError({ message: error.message, line: error.line });
         state.setStatus('invalid');
       });
+      undrawable = false;
       // Waiting edits run now and are refused: the file has an error to fix first.
       if (source === localSource) shownSource = source;
       flushQueued();
@@ -407,6 +418,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       });
       s.restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
       shownSource = source;
+      undrawable = false;
       // The drawing on screen is now this file's, in the same batch as its projection.
       setShownFile(state.info());
       if (!pending) adopt(routes as Routes | undefined);
@@ -591,8 +603,13 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     setDraft(next);
     if (state.proposal()) return;
     if (next === localSource) {
-      // Typed back to the shown source: drop the error the draft reported.
-      if (!state.sourceError()) return setDraft(null);
+      // Typed back to the committed source: drop the error the draft reported, and draw that
+      // source again if a draft's drawing is on screen or on its way.
+      if (!state.sourceError()) {
+        setDraft(null);
+        if (state.compiling() || shownSource !== localSource) void showSource(localSource);
+        return;
+      }
       if ((await showSource(next)) && ticket === typing) {
         setDraft(null);
         if (state.status() === 'invalid') state.setStatus('saved');
@@ -910,6 +927,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       return false;
     }
     await useServedIconSets();
+    // Edits made in the open file while this one was asked for are saved to it first.
+    await settleSave();
     // A later open won the race: this file is not the one to show.
     if (ticket !== opening) return null;
     document.title = `${file} · draftably`;

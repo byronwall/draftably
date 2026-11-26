@@ -47,12 +47,13 @@ import type { DocumentPart } from './document';
 import type { ScenePart } from './scene';
 import type { LayoutPart } from './layout';
 import type { FileSessionPart } from './file-session';
+import type { CanvasTextPart } from './canvas-text';
 
 /** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
 export const HEADING_EDIT = { title: textId('title'), subtitle: textId('subtitle') } as const;
 
 export function createActions(
-  s: EditorPart & DocumentPart & FileSessionPart & ScenePart & LayoutPart,
+  s: EditorPart & DocumentPart & CanvasTextPart & FileSessionPart & ScenePart & LayoutPart,
 ) {
   // --- Tools -----------------------------------------------------------------------------------
 
@@ -77,10 +78,10 @@ export function createActions(
 
   const [inlineDraft, setInlineDraft] = createSignal('');
   /** The open label edit: the object it edits (its id follows a source id map) and its value then. */
-  let inlineOpen: { id: string; value: string } | null = null;
+  let inlineOpen: { id: string; value: string; file: unknown } | null = null;
   function openInline(id: string, value: string) {
     if (inlineOpen) drafts.delete(inlineOpen);
-    inlineOpen = { id, value };
+    inlineOpen = { id, value, file: s.fileSession() };
     drafts.add(inlineOpen);
     batch(() => {
       s.setConnectFrom(null);
@@ -308,7 +309,9 @@ export function createActions(
   }
 
   /** Save a finished label edit onto the object as the drawn source has it now. */
-  function saveInline(opened: { id: string; value: string }, value: string) {
+  function saveInline(opened: { id: string; value: string; file: unknown }, value: string) {
+    if (opened.file !== s.fileSession())
+      return toast('Another file is open now, so your label edit was not saved.');
     const id = opened.id,
       text = parseTextId(id);
     const changed = () =>
@@ -319,8 +322,10 @@ export function createActions(
         if (now !== opened.value) return changed();
         s.transact(`Edit ${TEXT_NAMES[text.kind]}`, d => setTextValue(d, id, value));
       }
-      // An emptied note or legend row is gone, and later ones move up an index.
-      if (!value) s.clearSelection();
+      // An emptied note or legend row is gone, and later ones move up an index: a selected one
+      // of them no longer names what it did.
+      if (!value && s.selectedText() && parseTextId(s.selectedText()!)?.kind === text.kind)
+        s.clearSelection();
       return;
     }
     const edge = findEdge(s.doc, id);

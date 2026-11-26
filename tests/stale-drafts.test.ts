@@ -287,47 +287,6 @@ it('applies a code save made while Source panel text compiles to that text', asy
   expect(s.currentSource()).toBe(SIZED);
 });
 
-it('saves each file its own edit when a save is in flight across a file switch', async () => {
-  vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
-  vi.stubGlobal(
-    'EventSource',
-    class extends EventTarget {
-      close() {}
-    },
-  );
-  const puts: [string, string][] = [];
-  let release!: () => void;
-  const held = new Promise<void>(resolve => (release = resolve));
-  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
-    if (init?.method === 'PUT') {
-      puts.push([url, JSON.parse(init.body as string).source]);
-      // A's save is held until B is open and edited.
-      if (url.includes('a.draft')) await held;
-      return Response.json({ revision: `r${puts.length}` });
-    }
-    return Response.json({ name: 'copy', path: '/copy', source: BASE, revision: 'same' });
-  });
-  const s = await session();
-  await s.openFileSession('a.draft');
-  await settle(s);
-  s.startInlineEdit('q');
-  s.finishCodeEdit(s.codeDraft()!.token, { table: false, title: 'In A' });
-  await settle(s);
-  expect(await s.openFileSession('b.draft')).toBe(true);
-  await settle(s);
-  s.startInlineEdit('q');
-  s.finishCodeEdit(s.codeDraft()!.token, { table: false, title: 'In B' });
-  await settle(s);
-  release();
-  await vi.waitFor(() => expect(puts).toHaveLength(2));
-  await s.settleSave();
-  expect(puts.map(([url, text]) => [url, /"In [AB]"/.exec(text)?.[0]])).toEqual([
-    ['./api/source?file=a.draft', '"In A"'],
-    ['./api/source?file=b.draft', '"In B"'],
-  ]);
-  expect(s.fileStatus()).toBe('saved');
-});
-
 it('shows only the newest file when two opens answer in reverse order', async () => {
   vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
   vi.stubGlobal(
@@ -352,4 +311,91 @@ it('shows only the newest file when two opens answer in reverse order', async ()
   await settle(s);
   expect(s.fileSession()?.file).toBe('c.draft');
   expect(s.currentSource()).toContain('File c');
+});
+
+/** Serve copies of BASE as files a and b; PUTs to a are held until `release`. */
+function serveCopies(hold = false, source = BASE) {
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
+  vi.stubGlobal(
+    'EventSource',
+    class extends EventTarget {
+      close() {}
+    },
+  );
+  const puts: [string, string][] = [];
+  let release!: () => void;
+  const held = new Promise<void>(resolve => (release = resolve));
+  let opened!: () => void;
+  const asked = new Promise<void>(resolve => (opened = resolve));
+  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+    if (init?.method === 'PUT') {
+      puts.push([url, JSON.parse(init.body as string).source]);
+      if (hold && url.includes('a.draft')) await held;
+      return Response.json({ revision: `r${puts.length}` });
+    }
+    if (url.includes('b.draft')) opened();
+    return Response.json({ name: 'copy', path: '/copy', source, revision: 'same' });
+  });
+  return { puts, release, asked };
+}
+
+it('never applies a label queued in one file to the next file', async () => {
+  const plain = 'diagram "Plain" version=1\nnode a "Alpha"\n';
+  const { puts } = serveCopies(false, plain);
+  const s = await session();
+  await s.openFileSession('a.draft');
+  await settle(s);
+  s.startInlineEdit('a');
+  expect(s.inlineEditId()).toBe('a');
+  s.setInlineDraft('From A');
+  // A refresh of A is laid out when the label is finished, so the label waits for it.
+  const refresh = s.receiveSource(plain + 'node b "Beta"\n');
+  s.finishInlineEdit(true);
+  await s.openFileSession('b.draft');
+  await refresh;
+  await settle(s);
+  await s.settleSave();
+  expect(puts.filter(([url]) => url.includes('b.draft'))).toEqual([]);
+  expect(s.currentSource()).toBe(plain);
+});
+
+it('saves every edit made in a file while the next file opens to that file', async () => {
+  const { puts, release, asked } = serveCopies(true);
+  const s = await session();
+  await s.openFileSession('a.draft');
+  await settle(s);
+  const edit = async (title: string) => {
+    s.startInlineEdit('q');
+    s.finishCodeEdit(s.codeDraft()!.token, { table: false, title });
+    await settle(s);
+  };
+  await edit('First');
+  const opening = s.openFileSession('b.draft');
+  await asked;
+  // A's first save is still in flight: the second edit is A's too.
+  await edit('Second');
+  release();
+  expect(await opening).toBe(true);
+  await settle(s);
+  await s.settleSave();
+  expect(puts.map(([url, text]) => [url, /node q "(\w+)"/.exec(text)?.[1]])).toEqual([
+    ['./api/source?file=a.draft', 'First'],
+    ['./api/source?file=a.draft', 'Second'],
+  ]);
+  expect(s.currentSource()).toBe(BASE);
+  expect(s.fileStatus()).toBe('saved');
+});
+
+it('draws the committed text again when Source panel text is typed back during layout', async () => {
+  const s = await session();
+  await s.openExampleSession('drafts-revert', 'Drafts', BASE);
+  await settle(s);
+  void s.typeSource(SIZED, 1);
+  expect(s.fileCompiling()).toBe(true);
+  await s.typeSource(BASE, 1);
+  s.startInlineEdit('q');
+  s.finishCodeEdit(s.codeDraft()!.token, DRAFTS.caption.draft);
+  await settle(s);
+  expect(s.currentSource()).toBe(BASE.replace('"Query"', '"Mine"'));
+  expect(s.fileScene()?.model.hints.some(h => h.type === 'size')).toBe(false);
 });
