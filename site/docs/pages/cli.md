@@ -221,7 +221,8 @@ draftably url architecture.draft --png
 
 Prints an image URL on the hosted render service, `https://api.draftably.dev`, that draws the file.
 The URL holds the source, so it works in Markdown, an `<img>` tag or an agent's reply with no upload
-and no key. `--png` asks for a PNG instead of an SVG. `--base <url>` points the URL at another
+and no key. Anyone who loads the image sends the source to Draftably's server, which draws it and
+keeps the image in a cache; see [Hosted render URLs](#hosted-render-urls). `--png` asks for a PNG instead of an SVG. `--base <url>` points the URL at another
 server, such as `pnpm service:dev` on your machine.
 
 ## docs

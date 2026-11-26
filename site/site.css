@@ -1005,6 +1005,7 @@ main {
 
 .examples,
 .install,
+.hosted,
 .switch {
   max-width: var(--page);
   margin: 0 auto;
@@ -1107,8 +1108,17 @@ main {
 
 .install-cols {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 32px;
+}
+
+/* Three ways across the top; the two agent routes share the second row. */
+.install-cols > div {
+  grid-column: span 2;
+}
+
+.install-cols > div:nth-child(n + 4) {
+  grid-column: span 3;
 }
 
 .install-cols > div {
@@ -1116,24 +1126,28 @@ main {
   flex-direction: column;
 }
 
-.install h3 {
+.install h3,
+.hosted h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
 }
 
-.install h3 + * {
+.install h3 + *,
+.hosted h3 + * {
   margin-top: 8px;
 }
 
-.install p {
+.install p,
+.hosted p {
   margin: 10px 0 0;
   color: var(--muted);
   font-size: 14px;
 }
 
 /* A long command wraps inside its button, so it never sets the column's width. */
-.install .copy {
+.install .copy,
+.hosted .copy {
   align-items: flex-start;
   width: 100%;
   height: auto;
@@ -1143,16 +1157,19 @@ main {
   line-height: 20px;
 }
 
-.install .copy code {
+.install .copy code,
+.hosted .copy code {
   white-space: normal;
   text-wrap: balance;
 }
 
-.install .copy-prompt {
+.install .copy-prompt,
+.hosted .copy-prompt {
   line-height: 20px;
 }
 
-.install .copy-icon {
+.install .copy-icon,
+.hosted .copy-icon {
   margin-top: 2px;
 }
 
@@ -1168,6 +1185,7 @@ main {
 }
 
 .install p code,
+.hosted p code,
 .switch p code {
   white-space: nowrap;
 }
@@ -1201,6 +1219,118 @@ main {
 .commands dd {
   margin: 0;
   color: var(--muted);
+}
+
+/* The hosted render service: two columns of routes, then pricing beside the free tools. */
+
+.hosted .hosted-lead {
+  max-width: 72ch;
+  margin: 0 0 28px;
+  color: var(--text);
+  font-size: 15px;
+  text-wrap: pretty;
+}
+
+.hosted-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 48px;
+}
+
+.hosted-cols + .hosted-cols {
+  margin-top: 40px;
+}
+
+.hosted-cols > div {
+  min-width: 0;
+}
+
+.hosted .hosted-tag {
+  margin-top: 2px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hosted .copy {
+  margin-top: 10px;
+}
+
+.hosted-code {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #eceef3;
+  font: 500 12.5px / 19px var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.hosted-code code {
+  font-size: inherit;
+}
+
+.hosted-url {
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.hosted-shot {
+  height: 240px;
+  margin-top: 10px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  /* The default theme's paper, so the drawing's own background meets the box without a seam. */
+  background: #f7f7f4;
+}
+
+.hosted-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hosted .hosted-tools {
+  margin-top: 14px;
+  gap: 4px 16px;
+  font-size: 13.5px;
+}
+
+.hosted-prices {
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hosted-prices td:last-child,
+.hosted-prices th:last-child {
+  padding-right: 0;
+  text-align: right;
+}
+
+.hosted .hosted-note {
+  font-size: 13px;
+}
+
+.hosted-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.footer-legal {
+  width: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.footer-legal a {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 /* Coming from Mermaid: the two routes and a comparison beside the user's own source, drawn. */
@@ -1338,6 +1468,25 @@ main {
   height: 100%;
 }
 
+/* Terms and Privacy */
+
+.legal {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 40px var(--gutter) 0;
+}
+
+.legal a {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.legal a:hover {
+  color: var(--accent-hover);
+}
+
 /* Footer */
 
 .footer {
@@ -1397,6 +1546,19 @@ main {
 
   .install-cols {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .install-cols > div,
+  .install-cols > div:nth-child(n + 4) {
+    grid-column: auto;
+  }
+
+  .install-cols > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .hosted-cols {
+    grid-template-columns: 1fr;
   }
 
   .switch-body {

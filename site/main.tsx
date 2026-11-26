@@ -4,6 +4,7 @@ import { render } from 'solid-js/web';
 import { encodeSource } from '../src/lib/source-hash';
 import { Docs } from './docs/Docs';
 import { Landing } from './landing/Landing';
+import { Legal } from './legal/Legal';
 import { incoming } from './reopen';
 import { Shell } from './Shell';
 import { SiteNav } from './SiteNav';
@@ -52,6 +53,8 @@ render(
     <Router base={import.meta.env.BASE_URL.replace(/\/$/, '')} root={Shell}>
       <Route path="/play" component={PlaygroundPage} />
       <Route path="/docs/:slug?" component={Docs} />
+      <Route path="/terms" component={() => <Legal page="terms" />} />
+      <Route path="/privacy" component={() => <Legal page="privacy" />} />
       <Route path="*" component={Landing} />
     </Router>
   ),
