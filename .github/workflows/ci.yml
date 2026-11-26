@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# Stop superseded PR checks from occupying runners needed by the replacement commit.
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -30,11 +35,50 @@ jobs:
         run: pnpm skill:check origin/${{ github.base_ref }}
       - run: pnpm release:check
 
-  proofs:
-    # Drives the real editor in Chromium against `draftably open`. Failure screenshots and
-    # failure.json are uploaded as an artifact.
+  proof-suite:
     runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [site, frameworks, recipes]
+        half: [1, 2]
+        include:
+          - suite: site
+            build: pnpm site:bundle
+            run: pnpm prove:site
+          - suite: file
+            build: pnpm bundle:viewer
+            run: pnpm prove:file && pnpm prove:sequence && pnpm prove:layout
+          - suite: runtime
+            build: pnpm typecheck && pnpm runtime:pack-check && pnpm mermaid:build
+            run: pnpm prove:runtime
+          - suite: viewer
+            build: pnpm runtime:build && pnpm viewer:pack-check
+            run: pnpm prove:viewer && pnpm prove:element
+          - suite: markdown
+            build: pnpm runtime:build && pnpm markdown:build && pnpm markdown:pack-check
+            run: pnpm markdown:browser-check
+          - suite: hosts
+            # Match playwright-core in pnpm-lock.yaml. This image includes WebKit’s system libraries.
+            image: mcr.microsoft.com/playwright:v1.64.0-noble
+            browsers: chromium firefox webkit
+            build: pnpm runtime:build && pnpm editor:build
+            run: |
+              # Firefox requires the container user to own the Actions-mounted home directory.
+              chown "$(id -u)" "$HOME"
+              pnpm prove:slots &
+              slots=$!
+              pnpm prove:color-scheme
+              wait "$slots"
+          - suite: frameworks
+            build: &framework_build pnpm runtime:build && pnpm editor:build && pnpm frameworks:build
+            run: pnpm prove:frameworks
+          - suite: recipes
+            build: *framework_build
+            run: pnpm prove:recipes
+    name: proof / ${{ matrix.suite }} ${{ matrix.half }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -42,24 +86,42 @@ jobs:
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
-      # The runner's apt mirror sometimes fails to resolve; retry before failing the job.
-      - run: for i in 1 2 3; do pnpm exec playwright-core install --with-deps chromium firefox webkit && exit 0; sleep 30; done; exit 1
-      - run: pnpm site:build
-      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks && pnpm prove:recipes && pnpm prove:slots && pnpm prove:color-scheme
-      - run: pnpm prove:file
-      - run: pnpm prove:sequence
-      - run: pnpm prove:layout
-      - run: pnpm prove:site
+      - name: Build packages and install browsers
+        env:
+          BROWSERS: ${{ matrix.browsers || 'chromium' }}
+        run: |
+          (
+            for attempt in 1 2 3; do
+              pnpm exec playwright-core install $BROWSERS && exit 0
+              if [ "$attempt" -lt 3 ]; then sleep 30; fi
+            done
+            exit 1
+          ) &
+          install_pid=$!
+          ( ${{ matrix.build }} ) || exit 1
+          wait "$install_pid"
+      - run: ${{ matrix.run }}
+        env:
+          PROOF_HALF: ${{ matrix.half }}
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: proof-screenshots
+          name: proof-screenshots-${{ matrix.suite }}-${{ matrix.half }}
           path: |
             tmp/proof/
             tmp/proof-layout/
             tmp/proof-sequence/
             tmp/proof-site/
             tmp/proof-slots/
+            tmp/proof-color-scheme/
+
+  proofs:
+    needs: proof-suite
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every proof suite
+        run: test "${{ needs.proof-suite.result }}" = success
 
   bench:
     # A report, not a gate: times CLI commands and viewer actions against the 200 ms interactive

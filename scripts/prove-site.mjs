@@ -17,6 +17,8 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 import { createProof, sleep, waitFor as wait } from './lib/proof.mjs';
 
+import { proofCases } from './lib/proof-cases.ts';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist-site');
 const proof = createProof(path.join(root, 'tmp/proof-site'));
@@ -126,10 +128,9 @@ const journeys = {
       /flowchart|graph/i.test(sourceBody),
       sourceBody.slice(0, 80),
     );
-    check(
-      'the inspector shows the same source',
-      /flowchart|graph/i.test((await page.locator('.ae-side pre').textContent()) ?? ''),
-    );
+    const inspector = page.locator('.ae-side pre').filter({ hasText: /flowchart|graph/i });
+    await inspector.waitFor();
+    check('the inspector shows the same source', (await inspector.textContent()) === sourceBody);
     await page.keyboard.press('Escape');
     check('Escape closes the inspector', (await page.locator('.ae-inspector').count()) === 0);
 
@@ -1036,7 +1037,7 @@ const journeys = {
 };
 
 const only = process.argv[2];
-for (const [name, run] of Object.entries(journeys)) {
+for (const [name, run] of proofCases(Object.entries(journeys))) {
   if (only && !name.includes(only)) continue;
   try {
     await run();
