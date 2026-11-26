@@ -199,9 +199,9 @@ GET /api/link?code=<src>  A short link, made with a GET. Answers with text: png,
                           edit URLs and a Markdown line (?format=json for JSON). The same
                           source always gets the same link. Also /api/link/{encoded}.
 POST /api/link            The source itself as the body, so nothing is encoded:
-                          curl --data-binary @diagram.draft .../api/link. The same answer
-                          and options as GET /api/link. A JSON body {"code": "..."}
-                          needs Content-Type: application/json.
+                          curl --data-binary @diagram.draft .../api/link. The same
+                          answer and options as GET /api/link. Send a JSON body
+                          {"code": "..."} with Content-Type: application/json.
 GET /api/d/{id}.png       The short link's drawing; also .svg, ?scheme=, ?scale=.
 GET /api/d/{id}.draft     The short link's source, as Draftably.
 POST /api/v1/share        {"code": "...", "type"?}  -> {id, png, svg, edit, diagnostics}.
