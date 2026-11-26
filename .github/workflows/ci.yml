@@ -61,6 +61,8 @@ jobs:
             browsers: chromium firefox webkit
             build: pnpm runtime:build && pnpm editor:build
             run: |
+              # Firefox requires the container user to own the Actions-mounted home directory.
+              chown "$(id -u)" "$HOME"
               pnpm prove:slots &
               slots=$!
               pnpm prove:color-scheme
