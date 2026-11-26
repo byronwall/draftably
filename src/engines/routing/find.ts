@@ -366,6 +366,22 @@ function findAmong(
     }
     if (ok) remember(path, c);
   }
+  // A search on either side of a waypoint can return a path that reverses at the join.
+  // Try the four direct orthogonal approaches through the same waypoint.
+  if (!best && cfg.waypoints?.length === 1) {
+    const point = cfg.waypoints[0];
+    for (const c of candidates) {
+      for (const into of [
+        { x: c.as.x, y: point.y },
+        { x: point.x, y: c.as.y },
+      ])
+        for (const out of [
+          { x: c.bs.x, y: point.y },
+          { x: point.x, y: c.bs.y },
+        ])
+          remember([c.as, into, point, out, c.bs], c);
+    }
+  }
   if (!best && rawOptions.quick && old)
     return findAmong(ctx, e, used, null, open, wall, loose, seekClearance);
   // Groups stacked edge to edge (rows of a lane layout) can leave no way round one that holds

@@ -1747,6 +1747,8 @@ export function foldRanks(
   return { positions };
 }
 
+type FoldBox = Pick<SceneObject, 'id' | 'type' | 'x' | 'y' | 'w' | 'h'>;
+
 /**
  * Lanes for a fold's wrap edges. Each edge from one band into the next returns along its own line
  * in the gap between them: out of the band's end, back along the gap, into the next band. The
@@ -1759,7 +1761,7 @@ export function foldRanks(
 function wrapLanes(
   folds: Array<{ scope: string; fold: Fold }>,
   edges: ModelEdge[],
-  byId: Map<string, SceneObject>,
+  byId: Map<string, FoldBox>,
   immediate: (id: string, scope: string) => string | undefined,
   portPitch: number,
 ): Map<string, Lane> {
@@ -1768,15 +1770,15 @@ function wrapLanes(
     // Bands read right and stack down, so their lanes are level; or read down and stack right.
     // Below, `u` runs along the bands and `v` across them.
     const level = fold.axis === 'right',
-      lo = (o: SceneObject) => (level ? o.y : o.x),
-      hi = (o: SceneObject) => (level ? o.y + o.h : o.x + o.w),
-      start = (o: SceneObject) => (level ? o.x : o.y),
-      end = (o: SceneObject) => (level ? o.x + o.w : o.y + o.h),
-      mid = (o: SceneObject) => (start(o) + end(o)) / 2,
-      middle = (o: SceneObject) => (lo(o) + hi(o)) / 2,
-      overlap = (o: SceneObject, n: SceneObject) => start(o) < end(n) && end(o) > start(n);
+      lo = (o: FoldBox) => (level ? o.y : o.x),
+      hi = (o: FoldBox) => (level ? o.y + o.h : o.x + o.w),
+      start = (o: FoldBox) => (level ? o.x : o.y),
+      end = (o: FoldBox) => (level ? o.x + o.w : o.y + o.h),
+      mid = (o: FoldBox) => (start(o) + end(o)) / 2,
+      middle = (o: FoldBox) => (lo(o) + hi(o)) / 2,
+      overlap = (o: FoldBox, n: FoldBox) => start(o) < end(n) && end(o) > start(n);
     const band = new Map(fold.bands.flatMap((ids, k) => ids.map(id => [id, k] as const))),
-      bandOf = (o: SceneObject) => band.get(immediate(o.id, scope) ?? '');
+      bandOf = (o: FoldBox) => band.get(immediate(o.id, scope) ?? '');
     const leaves = (k: number) =>
       [...byId.values()].filter(o => o.type !== 'group' && bandOf(o) === k);
     for (let k = 0; k + 1 < fold.bands.length; k++) {
@@ -1798,7 +1800,7 @@ function wrapLanes(
             below.some(o => lo(o) < lo(target) && overlap(o, target));
         // A side turn reads only from the end of a row or into its start; otherwise the line
         // would run past a neighbour, so the router draws the edge as it would any other.
-        const row = (o: SceneObject, n: SceneObject) => lo(o) < hi(n) && hi(o) > lo(n);
+        const row = (o: FoldBox, n: FoldBox) => lo(o) < hi(n) && hi(o) > lo(n);
         if (leave && above.some(o => row(o, source) && start(o) >= end(source))) return [];
         if (enter && below.some(o => row(o, target) && end(o) <= start(target))) return [];
         return [{ id: e.id, source, target, leave, enter }];
@@ -3895,6 +3897,40 @@ function layoutPass(
             x: Math.max(0, -Math.min(...boxes.map(b => b.x))) + nest * SOFT_PAD,
             y: Math.max(0, -Math.min(...boxes.map(b => b.y))) + nest * (SOFT_PAD + SOFT_LABEL),
           };
+    // Size a folded group around the return tracks as well as its boxes.
+    let extraRight = 0,
+      extraBottom = 0;
+    if (
+      scope !== 'root' &&
+      laid.fold &&
+      list.every(n => n.type === 'node') &&
+      !m.hints.some(h => (h.type === 'pin' || h.type === 'stay') && list.some(n => n.id === h.id))
+    ) {
+      const localBoxes = new Map(list.map((n, i) => [n.id, { ...n, ...boxes[i] }]));
+      const lanes = wrapLanes(
+        [{ scope, fold: laid.fold }],
+        m.edges.filter(e => localBoxes.has(e.source) && localBoxes.has(e.target)),
+        localBoxes,
+        immediate,
+        Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
+      );
+      const turns = [...lanes.values()].flatMap(l =>
+        [l.enter, l.leave].filter((v): v is number => v !== undefined),
+      );
+      if (turns.length) {
+        const right = laid.fold.axis === 'right';
+        const near = Math.min(...turns);
+        const far = Math.max(...turns);
+        const axis = right ? 'x' : 'y';
+        const size = right ? 'w' : 'h';
+        const occupied = Math.max(...boxes.map(b => b[axis] + b[size]));
+        const gutter = GROUP_INSET - LANE_PITCH;
+        shift[axis] = Math.max(shift[axis], -near - (right ? gutter : 0));
+        const extra = Math.max(0, far - occupied - gutter);
+        if (right) extraRight = extra;
+        else extraBottom = extra;
+      }
+    }
     for (const [i, n] of list.entries()) {
       const b = boxes[i],
         o = laid.off.get(n.id)!,
@@ -3913,7 +3949,7 @@ function layoutPass(
           shift[a] +
           nest * SOFT_PAD
         : 0;
-    return { w: extent('x', 'w'), h: extent('y', 'h') };
+    return { w: extent('x', 'w') + extraRight, h: extent('y', 'h') + extraBottom };
   }
   /**
    * A `cells` group's members, edge to edge from its content origin. The cells keep this place:

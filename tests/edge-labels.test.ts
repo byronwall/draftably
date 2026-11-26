@@ -274,3 +274,17 @@ it.each(['right', 'left', 'top', 'bottom'] as const)(
     ).toBeGreaterThanOrEqual(ARROW_REACH);
   },
 );
+
+it('routes both returns entirely inside the Scan services frame', async () => {
+  const file = 'docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/v0.draft';
+  const { compile } = await import('../src/dsl/compile');
+  const doc = projectScene(await compile(fs.readFileSync(file, 'utf8')));
+  const { vg, rects } = visibleRects(doc),
+    frame = rects.get('services')!;
+  const { result } = computeRoutes(doc, vg, rects);
+  for (const id of ['dispatch', 'rollup']) {
+    const route = result.routes.find(r => r.id === id)!;
+    expect(route.blocked).toBe(false);
+    expect(route.points.every(p => p.x > frame.x && p.x < frame.x + frame.w)).toBe(true);
+  }
+});
