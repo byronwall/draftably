@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# Stop superseded PR checks from occupying runners needed by the replacement commit.
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -44,7 +49,7 @@ jobs:
             build: pnpm site:bundle
             run: pnpm prove:site
           - suite: file
-            build: pnpm exec vite build
+            build: pnpm bundle:viewer
             run: pnpm prove:file && pnpm prove:sequence && pnpm prove:layout
           - suite: runtime
             build: pnpm typecheck && pnpm runtime:pack-check && pnpm mermaid:build
