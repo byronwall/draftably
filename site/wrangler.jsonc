@@ -1,0 +1,20 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  // The landing page, docs, playground and editor at draftably.dev. Build with `pnpm site:build`,
+  // deploy with `pnpm site:deploy`.
+  "name": "draftably-site",
+  "main": "worker.ts",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "../dist-site",
+    "binding": "ASSETS",
+    // A missing page gets the nearest 404.html with status 404, as on GitHub Pages.
+    "not_found_handling": "404-page",
+    // The Worker sends www to the apex before any asset is served.
+    "run_worker_first": true,
+  },
+  "routes": [
+    { "pattern": "draftably.dev", "custom_domain": true },
+    { "pattern": "www.draftably.dev", "custom_domain": true },
+  ],
+}

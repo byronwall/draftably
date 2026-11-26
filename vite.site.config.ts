@@ -5,7 +5,7 @@ import solid from 'vite-plugin-solid';
 import { analytics } from './vite.config';
 
 /**
- * GitHub Pages serves 404.html for paths it has no file for. A copy of the site's page there lets
+ * The site Worker (`site/wrangler.jsonc`) serves 404.html for paths it has no file for. A copy of the site's page there lets
  * deep links such as /docs/connections load directly.
  */
 function spaFallback(): Plugin {
