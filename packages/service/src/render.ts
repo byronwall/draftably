@@ -78,7 +78,36 @@ export interface Payer {
  * (a Response, MCP content) and runs before the credits are taken, so nothing that can fail runs
  * after the debit; the cache entry is written only after it.
  */
-export async function render<P>(
+export function render<P>(
+  env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
+  ctx: ExecutionContext,
+  origin: string,
+  rawSource: string,
+  format: Format,
+  opts: DrawOptions,
+  prepare: (body: string | Uint8Array, cacheControl: string) => Promise<P>,
+  payer?: Payer,
+  beforeDraw?: () => Promise<void>,
+): Promise<Drawn & { out: P }> {
+  // One span per render, for latency by format and cache across GET, REST and MCP.
+  return span('render', { format, paid: !!payer }, async s => {
+    const drawn = await renderNow(
+      env,
+      ctx,
+      origin,
+      rawSource,
+      format,
+      opts,
+      prepare,
+      payer,
+      beforeDraw,
+    );
+    s.setAttribute('cache_hit', drawn.hit);
+    return drawn;
+  });
+}
+
+async function renderNow<P>(
   env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
   ctx: ExecutionContext,
   origin: string,

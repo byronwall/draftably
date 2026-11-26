@@ -3,7 +3,7 @@
  * payments; D1 stays the record of balances. The webhook adds a pack's credits once per Checkout
  * session, however often Stripe sends it.
  */
-import { note, span } from './obs';
+import { byteSize, note, span } from './obs';
 
 export interface StripeEnv {
   DB: D1Database;
@@ -142,7 +142,7 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
     note({ webhook: 'too_large' });
     return new Response('Too large.', { status: 413 });
   }
-  const signed = await span('stripe.signature', { body_bytes: body.length }, async s => {
+  const signed = await span('stripe.signature', { body_bytes: byteSize(body) }, async s => {
     const ok = await verifySignature(body, req.headers.get('Stripe-Signature'), secret);
     s.setAttribute('valid', ok);
     return ok;

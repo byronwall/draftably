@@ -71,6 +71,9 @@ const store = new AsyncLocalStorage<Wide>();
 /** Run `fn` with `ev` as the current request's event. */
 export const withEvent = <T>(ev: Wide, fn: () => T) => store.run(ev, fn);
 
+/** The current request's event, if any. */
+export const currentEvent = () => store.getStore();
+
 /** Add fields to the current request's event. A no-op outside a request. */
 export function note(fields: Partial<Wide>) {
   const ev = store.getStore();
@@ -117,7 +120,10 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
       return await fn(s);
     } catch (error) {
       const e = error instanceof Error ? error : new Error(String(error));
-      s.recordException({ name: e.name, message: scrub(e.message), stack: e.stack });
+      const message = scrub(e.message);
+      // The stack's first line repeats the message.
+      const stack = e.stack?.replace(e.message, message);
+      s.recordException({ name: e.name, message, stack });
       s.setStatus({ code: 'error', message: scrub(e.message) });
       throw error;
     }

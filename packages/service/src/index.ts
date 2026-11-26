@@ -142,6 +142,16 @@ function routeKind(path: string): Wide['route'] {
   return 'other';
 }
 
+/**
+ * The path for the log line, safe to keep: none for an image (its path holds the diagram source),
+ * a key ID replaced by `:id`, and only the first segment of an unknown path, for scanner noise.
+ */
+function pathLabel(route: Wide['route'], path: string) {
+  if (route === 'image') return undefined;
+  if (route !== 'other') return path.replace(/\/[0-9a-f]{12}\//, '/:id/').slice(0, 60);
+  return scrub('/' + (path.split('/')[1] ?? '')).slice(0, 40);
+}
+
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
   const api = (await handleApi(req, env, ctx, url)) ?? (await handleMcp(req, env, ctx, url));
@@ -193,8 +203,7 @@ export default {
       event: 'request',
       route,
       method: req.method,
-      // An image path holds the whole diagram source, and a long segment elsewhere may be one.
-      path: route === 'image' ? undefined : url.pathname.slice(0, 200).replace(/[^/]{41,}/g, '…'),
+      path: pathLabel(route, url.pathname),
       version: runtimeVersion,
       build: env.CF_VERSION_METADATA?.id ?? 'unknown',
       country: (req.cf?.country as string | undefined) ?? undefined,
@@ -202,7 +211,8 @@ export default {
     };
     try {
       const ip = req.headers.get('CF-Connecting-IP');
-      if (ip) ev.ip = await ipHash(ip);
+      // Best effort: a failed digest must not fail the request.
+      if (ip) ev.ip = await ipHash(ip).catch(() => undefined);
       const res = await withEvent(ev, () => handle(req, env, ctx, url));
       ev.status = res.status;
       // An answer no handler gave a code, such as a 404 or 405.

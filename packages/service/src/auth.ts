@@ -124,20 +124,20 @@ export async function sendLoginLink(env: AuthEnv, email: string, origin: string)
   ]);
   if (!added.meta.changes) return false;
   const link = `${origin}/auth/verify?token=${token}`;
-  const mail = span('login.email', {}, () =>
+  // A failed send must not hold one of the address's links. The cleanup hangs on the send's own
+  // promise, so a send that throws at once leaves the row, as before tracing.
+  await span('login.email', {}, () =>
     env.EMAIL.send({
       to: email,
       from: { email: env.EMAIL_FROM, name: 'Draftably' },
       subject: 'Sign in to Draftably',
       text: `Open this link to sign in to Draftably:\n\n${link}\n\nIt works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.\n`,
       html: `<p>Open this link to sign in to Draftably:</p><p><a href="${link}">Sign in to Draftably</a></p><p>It works once, for ${LINK_MINUTES} minutes. If you did not ask for it, ignore this email.</p>`,
+    }).catch(async error => {
+      await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
+      throw error;
     }),
   );
-  // A failed send must not hold one of the address's links.
-  await mail.catch(async error => {
-    await env.DB.prepare(`DELETE FROM login_tokens WHERE hash = ?1`).bind(hash).run();
-    throw error;
-  });
   return true;
 }
 

@@ -24,7 +24,7 @@ top-level key: filter on `event = request` to see only these lines.
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `route`                                    | `image`, `rest`, `mcp`, `account`, `login`, `webhook`, `health`, `other`                                                                                                                                                                                                                      |
 | `method`, `status`                         | the request method and the answer's status; `500` for an uncaught error                                                                                                                                                                                                                       |
-| `path`                                     | the path, except for `image` (its path holds the diagram source). Any segment over 40 characters shows as `…`                                                                                                                                                                                 |
+| `path`                                     | none for `image` (its path holds the diagram source); a key ID shows as `:id`; for `other`, only the first segment, such as `/wp-login.php`                                                                                                                                                   |
 | `ms`                                       | the time to the answer. Workers' clock moves only on I/O, so CPU work after the last I/O is not counted. Use `$workers.wallTimeMs` and `$workers.cpuTimeMs` for latency                                                                                                                       |
 | `version`, `build`                         | the Draftably runtime version, and the Worker version ID of the deploy                                                                                                                                                                                                                        |
 | `ip`                                       | the first 12 hex characters of the client IP's SHA-256. It groups one address's requests; it is not anonymous, since IPv4 is small enough to search                                                                                                                                           |
@@ -37,7 +37,7 @@ top-level key: filter on `event = request` to see only these lines.
 | `credits_spent`, `credits_left`            | the credits this render took, and the balance after it (or the balance that was too low, on a 402)                                                                                                                                                                                            |
 | `credits_bought`                           | the credits a Stripe purchase added                                                                                                                                                                                                                                                           |
 | `rate_limit`                               | the limiter that refused the request: `anon` (per address), `key` (per key), `login` (sign-in emails per address), `login_email` (links one email may hold)                                                                                                                                   |
-| `mcp_tool`, `mcp_calls`                    | the tools called, joined with commas for a batch, and how many; empty for protocol calls such as `initialize`                                                                                                                                                                                 |
+| `mcp_tool`, `mcp_calls`                    | the tool called (`unknown` for a name the server lacks) and the count. A batch joins names with commas; MCP dropped batches in its 2025-06 spec, so they are rare                                                                                                                             |
 | `login`                                    | `form`, `bad_email`, `capped`, `sent`, `send_failed`, `link_shown`, `link_dead`, `signed_in`                                                                                                                                                                                                  |
 | `webhook`, `stripe_event`                  | `off`, `bad_signature`, `too_large`, `ignored`, `not_ours`, `unmatched`, `fulfilled`, `duplicate`; and the Stripe event type                                                                                                                                                                  |
 | `error_code`, `error`                      | `ERR_SOURCE`, `ERR_AUTH`, `ERR_LIMIT_BURST`, `ERR_LIMIT_BALANCE`, `ERR_NOT_FOUND`, `ERR_EMAIL`, `ERR_TOOL` (an MCP tool answered with an error), `ERR_INTERNAL` (uncaught), or `HTTP_<status>` for any other 4xx or 5xx; and the message, with email addresses masked, 300 characters at most |
@@ -54,6 +54,7 @@ Each span records an exception and an `error` status when its step throws.
 | Span                                                    | Attributes                                                                                       |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | `decode`                                                | `segment_bytes`, `source_bytes`                                                                  |
+| `render`                                                | `format`, `paid`, `cache_hit`: one per render, from GET, REST or MCP                             |
 | `cache.lookup`, `cache.put`                             | `format`, `cache_hit`, `out_bytes`                                                               |
 | `source.detect`                                         | `given`, `source_type`                                                                           |
 | `mermaid.import`                                        | `source_bytes`, `cold` (the first Mermaid call in the isolate also loads the parser), `warnings` |
@@ -80,10 +81,11 @@ tab, which shows requests, errors and CPU time with no query. For a probe, `GET 
 Visualize `Count`, Filter `event = request`, Group by `route` and `status`.
 
 **Render latency p50/p95 by format, and the cache hit rate.**
-Latency: in the Traces tab, filter on the root span's `url.full` containing `/png/` or `/svg/`
-and read the duration column. Or in the Query builder, Visualize `P50` and `P95` of
-`$workers.wallTimeMs` (and of `$workers.cpuTimeMs`) on the invocation logs, Filter
-`$workers.event.request.url` includes `/png/` (then `/svg/`). Hit rate: Visualize `Count`, Filter
+Latency: in **Traces**, filter on span name `render` and `format = png` (then `svg`), and read the
+duration percentiles; add `cache_hit = false` for drawn images only. This covers GET, REST and
+MCP. For GET image URLs alone, the Query builder can also Visualize `P50` and `P95` of
+`$workers.wallTimeMs` and `$workers.cpuTimeMs` on the invocation logs, Filter
+`$workers.event.request.url` includes `/png/`. Hit rate: Visualize `Count`, Filter
 `event = request` and `cache exists`, Group by `format` and `cache`.
 
 **Which diagrams fail to render, and why? Mermaid import failures.**

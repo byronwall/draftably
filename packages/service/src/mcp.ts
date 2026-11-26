@@ -13,7 +13,7 @@ import { ApiError, checkSource, errorJson, requireKey, type ApiEnv } from './api
 import { DEFAULT_FORMAT, drawOptions } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
-import { bump, note, noteError, span } from './obs';
+import { bump, currentEvent, noteError, span } from './obs';
 
 const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
 const type = z
@@ -30,6 +30,14 @@ const failure = (t: string, code = 'ERR_SOURCE') => {
 /** A tool call, in its own span. */
 const tool = <R>(name: string, fn: () => Promise<R>) => span(`mcp.${name}`, { tool: name }, fn);
 
+const TOOLS = new Set([
+  'render_diagram',
+  'validate_diagram',
+  'convert_mermaid',
+  'image_url',
+  'language_guide',
+]);
+
 interface RpcMessage {
   method?: string;
   params?: { name?: unknown };
@@ -37,11 +45,32 @@ interface RpcMessage {
   error?: { message?: string };
 }
 
-/** JSON-RPC messages from a body that may be one message or a batch. */
-const messages = async (r: { json<T>(): Promise<T> }): Promise<RpcMessage[]> =>
-  [await r.json<unknown>().catch(() => null)]
-    .flat()
-    .filter((m): m is RpcMessage => !!m && typeof m === 'object');
+/**
+ * Put each tool call and each error answer on the request's event, at the SDK's own boundary:
+ * the messages it has already parsed and accepted, and the ones it sends back. A call the SDK
+ * refuses for bad arguments is counted too.
+ */
+function watch(transport: WebStandardStreamableHTTPServerTransport) {
+  const onmessage = transport.onmessage;
+  transport.onmessage = (msg, extra) => {
+    const m = msg as RpcMessage;
+    if (m.method === 'tools/call') {
+      const name = typeof m.params?.name === 'string' && TOOLS.has(m.params.name);
+      const tool = name ? (m.params!.name as string) : 'unknown';
+      bump('mcp_calls');
+      const ev = currentEvent();
+      if (ev) ev.mcp_tool = ev.mcp_tool ? `${ev.mcp_tool},${tool}` : tool;
+    }
+    onmessage?.(msg, extra);
+  };
+  const send = transport.send.bind(transport);
+  transport.send = (msg, opts) => {
+    const m = msg as RpcMessage;
+    const failed = m.error?.message ?? (m.result?.isError && m.result.content?.[0]?.text);
+    if (failed) noteError('ERR_TOOL', failed, true);
+    return send(msg, opts);
+  };
+}
 
 function base64(bytes: Uint8Array) {
   let bin = '';
@@ -124,6 +153,8 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
         try {
           const { draft, warnings } = await toDraft(checkSource(code), type);
           const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
+          const bad = result.diagnostics.find(d => d.severity === 'error');
+          if (!result.ok) noteError('ERR_SOURCE', bad?.message ?? 'invalid');
           const lines = [
             ...warnings.map(w => `warning: ${w}`),
             ...result.diagnostics.map(
@@ -223,16 +254,6 @@ export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext
     enableJsonResponse: true,
   });
   await server(env, ctx, who, url.origin).connect(transport);
-  // The request's tool names and the answer's errors, read here so a call the SDK refuses before
-  // the tool runs (bad arguments) is counted too.
-  const calls = (await messages(req.clone())).filter(m => m.method === 'tools/call');
-  bump('mcp_calls', calls.length);
-  if (calls.length) note({ mcp_tool: calls.map(m => String(m.params?.name)).join(',') });
-  const res = await transport.handleRequest(req);
-  if (res.headers.get('Content-Type')?.includes('application/json'))
-    for (const m of await messages(res.clone())) {
-      const failed = m.error?.message ?? (m.result?.isError && m.result.content?.[0]?.text);
-      if (failed) noteError('ERR_TOOL', failed, true);
-    }
-  return res;
+  watch(transport);
+  return transport.handleRequest(req);
 }

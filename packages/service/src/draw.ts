@@ -12,7 +12,7 @@ import { withSourceStrip } from '../../../src/model/strip';
 import { embedPngSource } from '../../../src/model/embed';
 import { rasterFamilies, scaleSvg, svgSize } from '../../../src/model/raster';
 import { toDraft } from './mermaid';
-import { note, span } from './obs';
+import { byteSize, note, span } from './obs';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
 import sans600 from '../../../src/cli/fonts/inter-latin-600-normal.ttf';
 import serif600 from '../../../src/cli/fonts/source-serif-4-latin-600-normal.ttf';
@@ -53,7 +53,7 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
 
 /** Draw `source` as SVG, or throw a SourceError with the first diagnostic. */
 export function drawSvg(source: string, opts: DrawOptions) {
-  return span('render.svg', { source_bytes: source.length, scheme: opts.scheme }, async s => {
+  return span('render.svg', { source_bytes: byteSize(source), scheme: opts.scheme }, async s => {
     const result = await renderSvg(source, {
       colorScheme: opts.scheme,
       links: webLinks(source),
@@ -64,7 +64,7 @@ export function drawSvg(source: string, opts: DrawOptions) {
       const line = d?.location?.line ? `line ${d.location.line}: ` : '';
       throw new SourceError(line + (d?.message ?? 'The diagram did not render.'));
     }
-    s.setAttribute('svg_bytes', result.value.svg.length);
+    s.setAttribute('svg_bytes', byteSize(result.value.svg));
     return result.value.svg;
   });
 }

@@ -103,6 +103,7 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
         const format = (get('format') ?? DEFAULT_FORMAT) as Format;
         if (format !== 'svg' && format !== 'png')
           throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
+        note({ format });
         const opts = drawOptions(get);
         // Everything the answer needs is built before the credits are taken.
         const link = await embedUrl(url.origin, code, format, opts);
@@ -143,6 +144,8 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
           });
         }
         const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
+        const bad = result.diagnostics.find(d => d.severity === 'error');
+        if (!result.ok) noteError('ERR_SOURCE', bad?.message ?? 'invalid');
         const diagnostics = [
           ...warnings.map(message => ({ severity: 'warning', message })),
           ...result.diagnostics.map(d => ({
