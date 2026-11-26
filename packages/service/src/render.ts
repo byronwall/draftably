@@ -70,7 +70,8 @@ const cache = () => (caches as unknown as { default: Cache }).default;
 /** Who pays: the account and the key it called with. */
 export interface Payer {
   account: string;
-  key: string;
+  /** The API key that pays, or none for an OAuth app (its grant is checked per request). */
+  key?: string;
 }
 
 /**
@@ -165,14 +166,16 @@ async function renderNow<P>(
   if (payer) {
     left = (await spend(env.DB, payer.account, cost, format, payer.key)) ?? undefined;
     if (!left) {
-      const live = await env.DB.prepare(
-        `SELECT a.grant_left + a.bought AS left FROM keys k JOIN accounts a ON a.id = k.account_id
-         WHERE k.id = ?1 AND k.revoked_at IS NULL`,
-      )
-        .bind(payer.key)
-        .first<{ left: number }>();
-      if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
-      note({ credits_left: live.left });
+      if (payer.key) {
+        const live = await env.DB.prepare(
+          `SELECT a.grant_left + a.bought AS left FROM keys k JOIN accounts a ON a.id = k.account_id
+           WHERE k.id = ?1 AND k.revoked_at IS NULL`,
+        )
+          .bind(payer.key)
+          .first<{ left: number }>();
+        if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
+        note({ credits_left: live.left });
+      }
       throw outOfCredits();
     }
     bump('credits_spent', cost);

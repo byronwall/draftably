@@ -2,8 +2,9 @@
  * The hosted render service. GET image URLs hold the diagram source, so any URL always draws the
  * same image for one runtime version; the edge cache keys on both. Anonymous image URLs are free
  * and rate-limited per IP; with an API key they spend credits instead. `/v1/*` is the keyed REST
- * API and `/account` the sign-in page.
+ * API, `/mcp` the MCP server (API key or OAuth, oauth.ts) and `/account` the sign-in page.
  */
+import { OAuthProvider } from '@cloudflare/workers-oauth-provider';
 import { runtimeVersion } from '@draftably/runtime';
 import { SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
@@ -11,7 +12,7 @@ import { homePage } from './html';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { render, type Payer } from './render';
-import { handleMcp } from './mcp';
+import { handleAuthorize, oauthOptions, type OAuthEnv } from './oauth';
 import {
   codeHint,
   draftResponse,
@@ -23,7 +24,7 @@ import {
 import { handleWebhook, type StripeEnv } from './stripe';
 import { ipHash, note, noteError, scrub, span, withEvent, type Wide } from './obs';
 
-export interface Env extends ApiEnv, StripeEnv, ShareEnv {
+export interface Env extends ApiEnv, StripeEnv, ShareEnv, OAuthEnv {
   ANON_LIMIT: RateLimit;
 }
 
@@ -188,12 +189,27 @@ POST /v1/convert     {"code": "...", "from": "mermaid"}  -> {draft, warnings}
 GET  /v1/balance     -> {grant, bought, resetsAt}
                      All need Authorization: Bearer dft_.... An SVG costs 1 credit, a PNG 2.
 
-/mcp                 MCP server (Streamable HTTP) with the same key: render_diagram,
-                     validate_diagram, convert_mermaid, image_url, share_diagram,
-                     language_guide.
+/mcp                 MCP server (Streamable HTTP): render_diagram, validate_diagram,
+                     convert_mermaid, image_url, share_diagram, language_guide.
+                     Chat apps sign in with OAuth; other clients send the API key.
 
-/account             Sign in by email, see credits, make API keys, buy credits.
-                     1,000 free credits a month.
+/account             Sign in by email, see credits, make API keys, buy credits,
+                     disconnect apps. 1,000 free credits a month.
+
+Connect over MCP
+  ChatGPT        Settings > Apps & Connectors > Advanced settings: turn on
+                 Developer mode. Create a connector with the URL
+                 https://api.draftably.dev/mcp and OAuth. Sign in, press Allow.
+  claude.ai,     Settings > Connectors > Add custom connector with the URL
+  Claude Desktop https://api.draftably.dev/mcp. Sign in, press Allow.
+  Claude Code    claude mcp add --transport http draftably \
+                   https://api.draftably.dev/mcp \
+                   --header "Authorization: Bearer dft_..."
+  Codex          codex mcp add draftably --url https://api.draftably.dev/mcp \
+                   --bearer-token-env-var DRAFTABLY_API_KEY
+  Cursor         {"mcpServers": {"draftably": {"type": "http",
+                   "url": "https://api.draftably.dev/mcp",
+                   "headers": {"Authorization": "Bearer dft_..."}}}}
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
 `;
@@ -205,6 +221,8 @@ function routeKind(path: string): Wide['route'] {
   if (/^\/link(\/|$)/.test(path)) return 'share';
   if (path.startsWith('/v1/')) return 'rest';
   if (path === '/mcp') return 'mcp';
+  if (path === '/authorize' || path.startsWith('/oauth/') || path.startsWith('/.well-known/'))
+    return 'oauth';
   if (path === '/stripe/webhook') return 'webhook';
   if (path === '/login' || path.startsWith('/auth/')) return 'login';
   if (path === '/logout' || path.startsWith('/account')) return 'account';
@@ -217,6 +235,12 @@ const PATHS = new Set([
   '/',
   '/health',
   '/mcp',
+  '/authorize',
+  '/oauth/token',
+  '/oauth/register',
+  '/.well-known/oauth-authorization-server',
+  '/.well-known/oauth-protected-resource',
+  '/.well-known/oauth-protected-resource/mcp',
   '/login',
   '/logout',
   '/auth/verify',
@@ -224,6 +248,7 @@ const PATHS = new Set([
   '/account/keys',
   '/account/buy',
   '/account/keys/:id/revoke',
+  '/account/apps/:id/revoke',
   '/stripe/webhook',
   '/v1/render',
   '/v1/validate',
@@ -241,10 +266,9 @@ function pathLabel(route: Wide['route'], path: string) {
   // An image or link path can hold the diagram source; a short link's id is not logged either.
   if (route === 'image') return undefined;
   if (route === 'share') return '/link';
-  const template = path.replace(
-    /^\/account\/keys\/[0-9a-f]{12}\/revoke$/,
-    '/account/keys/:id/revoke',
-  );
+  const template = path
+    .replace(/^\/account\/keys\/[0-9a-f]{12}\/revoke$/, '/account/keys/:id/revoke')
+    .replace(/^\/account\/apps\/[\w-]{1,64}\/revoke$/, '/account/apps/:id/revoke');
   if (PATHS.has(template)) return template;
   // Anything else (scanner noise) logs its first segment when it is a short name that starts
   // with a letter, such as `/wp-login.php`. A token (32 characters) or an IP never matches.
@@ -255,12 +279,9 @@ function pathLabel(route: Wide['route'], path: string) {
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
-  const api =
-    (await handleShare(req, env, ctx, url)) ??
-    (await handleApi(req, env, ctx, url)) ??
-    (await handleMcp(req, env, ctx, url));
+  const api = (await handleShare(req, env, ctx, url)) ?? (await handleApi(req, env, ctx, url));
   if (api) return api;
-  const account = await handleAccount(req, env, url);
+  const account = (await handleAuthorize(req, env, url)) ?? (await handleAccount(req, env, url));
   if (account) return account;
   // HEAD would draw and charge for a body it never sends.
   if (req.method !== 'GET')
@@ -302,6 +323,20 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   return imageResponse(req, env, ctx, url.origin, route.load, route.format, opts, payer);
 }
 
+/** Everything but `/mcp` and the OAuth endpoints, which the provider below answers first. */
+const app = {
+  fetch: (req: Request, env: Env, ctx: ExecutionContext) => handle(req, env, ctx, new URL(req.url)),
+} satisfies ExportedHandler<Env>;
+
+// A token is for one resource, `<origin>/mcp`, so each origin (the custom domain, wrangler dev)
+// gets its own provider.
+const providers = new Map<string, OAuthProvider<Env>>();
+function provider(origin: string) {
+  let found = providers.get(origin);
+  if (!found) providers.set(origin, (found = new OAuthProvider(oauthOptions(origin, app))));
+  return found;
+}
+
 export default {
   /** Every request: handle it, then log one wide event for it. */
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -321,7 +356,9 @@ export default {
       const ip = req.headers.get('CF-Connecting-IP');
       // Best effort: a failed digest must not fail the request.
       if (ip) ev.ip = await ipHash(ip).catch(() => undefined);
-      const res = await withEvent(ev, () => handle(req, env, ctx, url));
+      // The provider caches its helpers on env, which Workers may reuse across requests and
+      // origins; a copy keeps each origin's own.
+      const res = await withEvent(ev, () => provider(url.origin).fetch(req, { ...env }, ctx));
       ev.status = res.status;
       // An answer no handler gave a code, such as a 404 or 405.
       if (res.status >= 400) ev.error_code ??= `HTTP_${res.status}`;

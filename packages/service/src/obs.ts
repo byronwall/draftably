@@ -14,7 +14,7 @@ import { ApiError } from './errors';
 /** The fields of one request's log line. Docs: `docs/observability.md`. */
 export interface Wide {
   event: 'request';
-  route: 'image' | 'share' | 'rest' | 'mcp' | 'account' | 'login' | 'webhook' | 'health' | 'other';
+  route: 'image' | 'share' | 'rest' | 'mcp' | 'oauth' | 'account' | 'login' | 'webhook' | 'health' | 'other';
   method: string;
   /** Only for routes whose path holds no diagram source. */
   path?: string;
@@ -24,7 +24,7 @@ export interface Wide {
   /** Short SHA-256 of the client IP: groups one address's requests, never shows it. */
   ip?: string;
   country?: string;
-  payer: 'anonymous' | 'key' | 'session';
+  payer: 'anonymous' | 'key' | 'session' | 'app';
   account?: string;
   key?: string;
   cache?: 'hit' | 'miss';

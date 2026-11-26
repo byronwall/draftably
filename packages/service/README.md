@@ -1,6 +1,7 @@
 # Draftably render service
 
-One Cloudflare Worker: GET image URLs, a keyed REST API, and the account page. Design and plan:
+One Cloudflare Worker: GET image URLs, a keyed REST API, an MCP server with OAuth, and the account
+page. Design and plan:
 [docs/intent/render-service](../../docs/intent/render-service/README.md).
 
 ## Diagrams
@@ -62,28 +63,60 @@ To delete a share after an abuse report (its edge-cached images expire within a 
 pnpm exec wrangler d1 execute draftably-service --remote --command "DELETE FROM shares WHERE id = '<id>'"
 ```
 
-## Connect an MCP client
+## Connect over MCP
 
-The server is at `/mcp` (Streamable HTTP) and takes the same key as the REST API.
+The server is at `https://api.draftably.dev/mcp` (Streamable HTTP). Chat apps sign in with OAuth:
+you get an emailed sign-in link, then press Allow. Clients that send a header use an API key from
+`/account` instead. Both spend the same account's credits.
 
-```sh
-claude mcp add --transport http draftably https://api.draftably.dev/mcp \
-  --header "Authorization: Bearer dft_..."
-```
+- **ChatGPT** (Plus, Pro, Business or Enterprise): Settings → Apps & Connectors → Advanced
+  settings, turn on Developer mode. Then Create: name it Draftably, URL
+  `https://api.draftably.dev/mcp`, authentication OAuth. Sign in and press Allow.
+- **claude.ai and Claude Desktop**: Settings → Connectors → Add custom connector, URL
+  `https://api.draftably.dev/mcp`. Press Connect, sign in and press Allow.
+- **Claude Code**:
 
-Other clients take a JSON block like this:
+  ```sh
+  claude mcp add --transport http draftably https://api.draftably.dev/mcp \
+    --header "Authorization: Bearer dft_..."
+  ```
 
-```json
-{
-  "mcpServers": {
-    "draftably": {
-      "type": "http",
-      "url": "https://api.draftably.dev/mcp",
-      "headers": { "Authorization": "Bearer dft_..." }
+- **Codex**: put the key in `DRAFTABLY_API_KEY`, then
+
+  ```sh
+  codex mcp add draftably --url https://api.draftably.dev/mcp --bearer-token-env-var DRAFTABLY_API_KEY
+  ```
+
+  That writes `bearer_token_env_var = "DRAFTABLY_API_KEY"` under `[mcp_servers.draftably]` in
+  `~/.codex/config.toml`.
+- **Cursor** (`~/.cursor/mcp.json`) and other clients that take a JSON block:
+
+  ```json
+  {
+    "mcpServers": {
+      "draftably": {
+        "type": "http",
+        "url": "https://api.draftably.dev/mcp",
+        "headers": { "Authorization": "Bearer dft_..." }
+      }
     }
   }
-}
-```
+  ```
+
+Connected apps show on `/account`, where you can disconnect them.
+
+### How OAuth works here
+
+`@cloudflare/workers-oauth-provider` wraps the Worker (`src/oauth.ts`). It publishes the metadata
+(`/.well-known/oauth-protected-resource/mcp` and `/.well-known/oauth-authorization-server`),
+registers clients (DCR at `/oauth/register`, or a Client ID Metadata Document as ChatGPT sends),
+and runs `/oauth/token` (PKCE S256, refresh, revocation). It keeps clients, grants and tokens in
+the `OAUTH_KV` namespace, and tokens only as hashes. A grant lives 30 days from its last refresh.
+
+`/authorize` is ours: with no session cookie it asks for an email and sends a sign-in link that
+returns to the same authorization; with one it shows the consent page. A `401` from `/mcp` carries
+`WWW-Authenticate: Bearer resource_metadata="…"`, which is how a client finds the flow. An API key
+on `/mcp` is checked as an external token, so it works unchanged.
 
 Tools: `render_diagram` (PNG as an image, or SVG; 2 or 1 credits), `validate_diagram`,
 `convert_mermaid`, `image_url`, `share_diagram` (a short link) and `language_guide` (the agent
@@ -95,6 +128,7 @@ The service runs at `https://api.draftably.dev` as the `draftably-api` Worker on
 Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
 
 - D1 database `draftably-service`, with its id in `wrangler.jsonc`.
+- KV namespace `draftably-oauth` (binding `OAUTH_KV`) for OAuth clients, grants and tokens.
 - `draftably.dev` is onboarded as an Email Service sending domain. Sign-in mail comes from
   `vars.EMAIL_FROM` (`login@draftably.dev`). Email Service is in beta, and a new account starts
   with a small daily quota.

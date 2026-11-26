@@ -45,12 +45,8 @@ export async function revokeKey(db: D1Database, account: string, id: string) {
     .run();
 }
 
-/** The account behind a request's bearer key: undefined with no key, null with a bad one. */
-export async function keyAccount(req: Request, db: D1Database, ctx: ExecutionContext) {
-  const header = req.headers.get('Authorization');
-  if (!header) return undefined;
-  // The scheme is case-insensitive (RFC 9110); the key itself is matched exactly.
-  const token = /^bearer\s+(\S+)$/i.exec(header.trim())?.[1] ?? '';
+/** The account behind an API key (`dft_<id>.<secret>`), or null for anything else. */
+export async function checkKey(db: D1Database, token: string) {
   const m = /^dft_([0-9a-f]{12})\.([\w-]{20,64})$/.exec(token);
   if (!m) return null;
   const row = await span('auth.key', {}, async s => {
@@ -63,13 +59,23 @@ export async function keyAccount(req: Request, db: D1Database, ctx: ExecutionCon
     return ok ? row : null;
   });
   if (!row) return null;
-  ctx.waitUntil(
-    db
-      .prepare(`UPDATE keys SET last_used_at = ?1 WHERE id = ?2`)
-      .bind(new Date().toISOString(), m[1])
-      .run(),
-  );
   return { account: row.account_id, key: m[1] };
+}
+
+export const touchKey = (db: D1Database, id: string) =>
+  db
+    .prepare(`UPDATE keys SET last_used_at = ?1 WHERE id = ?2`)
+    .bind(new Date().toISOString(), id)
+    .run();
+
+/** The account behind a request's bearer key: undefined with no key, null with a bad one. */
+export async function keyAccount(req: Request, db: D1Database, ctx: ExecutionContext) {
+  const header = req.headers.get('Authorization');
+  if (!header) return undefined;
+  // The scheme is case-insensitive (RFC 9110); the key itself is matched exactly.
+  const who = await checkKey(db, /^bearer\s+(\S+)$/i.exec(header.trim())?.[1] ?? '');
+  if (who) ctx.waitUntil(touchKey(db, who.key));
+  return who;
 }
 
 const SESSION = 'dft_session';
@@ -110,7 +116,7 @@ export const cleanEmail = (raw: string) => {
  * sent, when the address already got `MAX_LINKS` links that have not expired. The cap is one
  * statement, so it holds across Cloudflare locations and parallel requests.
  */
-export async function sendLoginLink(env: AuthEnv, email: string, origin: string) {
+export async function sendLoginLink(env: AuthEnv, email: string, origin: string, next?: string) {
   const token = randomToken(32);
   const hash = await sha256(token);
   const now = new Date().toISOString();
@@ -123,7 +129,8 @@ export async function sendLoginLink(env: AuthEnv, email: string, origin: string)
     ).bind(hash, email, expires, MAX_LINKS),
   ]);
   if (!added.meta.changes) return false;
-  const link = `${origin}/auth/verify?token=${token}`;
+  // `next` returns the browser to an app's authorization after sign-in (oauth.ts).
+  const link = `${origin}/auth/verify?token=${token}${next ? `&next=${encodeURIComponent(next)}` : ''}`;
   // A failed send must not hold one of the address's links. The cleanup hangs on the send's own
   // promise, so a send that throws at once leaves the row, as before tracing.
   await span('login.email', {}, () =>
