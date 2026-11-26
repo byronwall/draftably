@@ -83,13 +83,20 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /** Save the open code editor, if any, before another edit or a press on the canvas. */
   const commitCodeEdit = () => saveOpenCode?.();
 
-  /** What the open editor started from: a save is refused when the node changed since. */
-  let codeBase = '';
-  /** A code node's caption, table setting and body, to tell whether it changed. */
-  const codeState = (id: string) => {
-    const node = findNode(s.doc, id);
-    const code = node?.code;
-    return JSON.stringify([node?.title, code?.table, code?.tab, code?.body ?? code?.lines]);
+  type CodeFields = { title: string; table: boolean; body: string };
+  /**
+   * What the open editor started from, field by field. A save writes only the fields its draft
+   * changed, and is refused when one of those fields changed in the file since: a change the file
+   * made to another field stays.
+   */
+  let codeBase: CodeFields | undefined;
+  /** The fields of a code node the editor can write: caption, table setting and body. */
+  const codeFields = (id: string) => {
+    const node = findNode(s.doc, id),
+      code = node?.code;
+    return node && code
+      ? { title: node.title, table: !!code.table, body: JSON.stringify(code.body ?? code.lines) }
+      : undefined;
   };
 
   function startCodeEdit(id: string) {
@@ -98,7 +105,7 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     const code = findNode(s.doc, id)?.code;
     if (code?.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
-    codeBase = codeState(id);
+    codeBase = codeFields(id);
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -138,23 +145,34 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   function finishCodeEdit(id: string, next?: { body?: string[]; table: boolean; title: string }) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
-    if (!next) return;
-    if (codeState(id) !== codeBase)
+    const base = codeBase,
+      now = codeFields(id);
+    codeBase = undefined;
+    if (!next || !base || !now) return;
+    const edits: Record<keyof CodeFields, boolean> = {
+      title: next.title !== base.title,
+      table: next.table !== base.table,
+      body: !!next.body,
+    };
+    const fields = Object.keys(edits) as (keyof CodeFields)[];
+    if (fields.some(k => edits[k] && now[k] !== base[k]))
       return toast('This code changed while you edited it, so your edit was not saved.');
+    if (!fields.some(k => edits[k])) return;
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;
-      node.title = next.title;
-      const toggled = next.table !== !!node.code.table;
+      if (edits.title) node.title = next.title;
       // A caption edit leaves the code block as it is.
-      if (!next.body && !toggled) return;
+      if (!edits.body && !edits.table) return;
+      const table = edits.table ? next.table : !!node.code.table,
+        toggled = table !== !!node.code.table;
       const { table: _, cells: __, ...rest } = node.code;
       node.code = {
         ...rest,
-        ...(next.table ? { table: true } : {}),
+        ...(table ? { table: true } : {}),
         // `table=` sets the wrap default, unless the file sets `wrap=`.
-        ...(toggled && !rest.wrapSet ? { wrap: !next.table } : {}),
-        ...codeFromBody(next.body ?? rest.body ?? rest.lines, next.table, rest.tab),
+        ...(toggled && !rest.wrapSet ? { wrap: !table } : {}),
+        ...codeFromBody(next.body ?? rest.body ?? rest.lines, table, rest.tab),
       };
     });
   }

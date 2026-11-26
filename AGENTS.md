@@ -2,6 +2,8 @@
 
 Pointers only. Read the linked doc when the task touches it.
 
+- **Coding standards:** judgement rules from repeat review findings are in
+  [CODING_STANDARDS.md](CODING_STANDARDS.md). Read it before you change editor drafts.
 - **Checks:** `pnpm check:fast` (about 10s) while iterating; `pnpm check` before pushing. The engine
   suites take about 20s (`pnpm test:engines` runs them side by side). Suites, browser proofs and
   failure output: [docs/CHECKS.md](docs/CHECKS.md).
