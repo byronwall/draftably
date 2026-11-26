@@ -1173,9 +1173,8 @@ column right of Noah's stem, and the chart gets narrower.
 
 - **Reporting lines:** an edge with no `kind=`, `head=`, `tail=` or `directed=` is a reporting
   line. It may have a label, such as `"interim"`, which draws on the line. The tree follows
-  reporting lines down from `root=`. They draw with no arrowhead. A dotted-line report is an
-  edge with `kind=async`: it draws but moves no one.
-  Put the name on the first line of the label and the title after `\n`.
+  reporting lines down from `root=`. They draw with no arrowhead.
+  Put a person's name on the first line of their node label and the title after `\n`.
 - **Leaves:** a manager whose reports have no reports of their own can stack them.
   `leaves=stack` puts them in one column right of the stem, `leaves=split` in two columns either
   side of it (for three or more), and `leaves=row` keeps them side by side. The default,
