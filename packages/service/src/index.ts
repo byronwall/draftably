@@ -29,9 +29,18 @@ function image(body: BodyInit, format: Format, status = 200, cache = IMMUTABLE) 
       'Content-Type': TYPES[format],
       'Cache-Control': cache,
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': 'X-Draftably-Error',
       'X-Draftably-Version': runtimeVersion,
     },
   });
+}
+
+/** The error as an image, and as one ASCII line in `X-Draftably-Error` for a script to read. */
+async function errorResponse(message: string, format: Format, status: number) {
+  const res = image(await errorImage(message, format), format, status, 'no-store');
+  const line = message.replace(/\n> /g, ' | ').replace(/…/g, '...');
+  res.headers.set('X-Draftably-Error', line.replace(/[^\x20-\x7e]/g, '?'));
+  return res;
 }
 
 /** `/{svg|png}/{encoded}` and the Kroki-style `/draftably/{svg|png}/{encoded}`. */
@@ -86,19 +95,29 @@ async function imageResponse(
     res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
     return res;
   } catch (error) {
-    if (error instanceof ApiError)
-      return image(await errorImage(error.message, format), format, error.status, 'no-store');
+    if (error instanceof ApiError) return errorResponse(error.message, format, error.status);
     if (!(error instanceof SourceError)) throw error;
-    return image(await errorImage(error.message, format), format, 400, 'no-store');
+    return errorResponse(error.message, format, 400);
   }
 }
 
 const HOME = `Draftably render service
 
+Draw a diagram with no install and no account:
+  1. Write Draftably source, for example:
+       node web "Web app"
+       node api "API"
+       edge call web -> api "GET /items"
+  2. Encode its UTF-8 bytes as base64url, no padding.
+     Python: base64.urlsafe_b64encode(src.encode()).decode().rstrip('=')
+  3. Open https://api.draftably.dev/png/<encoded>
+     A bad source returns 400 and an image that names the line to fix.
+Syntax, a full example and JavaScript: https://draftably.dev/llms.txt
+
 GET /svg/{encoded}   SVG drawing of a Draftably diagram
 GET /png/{encoded}   PNG drawing, with the source embedded; ?scale=1|2|3|4 (default 2)
-                     {encoded} = "pako:" + base64url(zlib(source)), as mermaid.ink, or
-                     base64url(source). Make one with: draftably url <file.draft>
+                     {encoded} = base64url(source), or "pako:" + base64url(zlib(source))
+                     as mermaid.ink. With the CLI: draftably url <file.draft>
                      The source is Draftably or Mermaid (flowchart, sequence, gantt,
                      timeline); ?type=mermaid|draftably skips the guess.
                      ?scheme=light|dark
@@ -143,7 +162,7 @@ export default {
       opts = drawOptions(k => url.searchParams.get(k));
     } catch (error) {
       if (!(error instanceof SourceError)) throw error;
-      return image(await errorImage(error.message, route.format), route.format, 400, 'no-store');
+      return errorResponse(error.message, route.format, 400);
     }
     // A key spends credits and skips the per-address limit. It is checked before the cache, so a
     // revoked or wrong key is refused even for an image that is already cached.
@@ -153,8 +172,7 @@ export default {
         payer = await requireKey(req, env, ctx);
       } catch (error) {
         if (!(error instanceof ApiError)) throw error;
-        const img = await errorImage(error.message, route.format);
-        return image(img, route.format, error.status, 'no-store');
+        return errorResponse(error.message, route.format, error.status);
       }
     }
     return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);
