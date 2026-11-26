@@ -13,7 +13,7 @@
  * apps: discovery, registration, the PKCE flow through the emailed sign-in, refresh, disconnect.
  *
  * The same URL twice must give an edge-cache hit the second time. `--base
- * https://api.draftably.dev` checks a deployed service instead: 10 files, SVG and PNG, and the
+ * https://draftably.dev` checks a deployed service instead: 10 files, SVG and PNG, and the
  * cache, which stays under its 60-a-minute address limit.
  */
 import assert from 'node:assert/strict';
@@ -112,7 +112,7 @@ process.on('exit', stop);
 async function ready() {
   for (let i = 0; i < 120; i++) {
     try {
-      if ((await fetch(`${base}/health`)).ok) return;
+      if ((await fetch(`${base}/api/health`)).ok) return;
     } catch {
       // not listening yet
     }
@@ -145,7 +145,7 @@ for (const [i, file] of files.entries()) {
   // A .draft file is Draftably by its name. Without the type, a file that holds only prose and
   // one ```mermaid fence (an agent's refusal in docs/evaluations) is converted as Mermaid.
   const res = await fetch(
-    `${base}/svg/${segment}?type=draftably${scheme === 'dark' ? '&scheme=dark' : ''}`,
+    `${base}/api/svg/${segment}?type=draftably${scheme === 'dark' ? '&scheme=dark' : ''}`,
   );
   const body = await res.text();
   if (segment.length > 8 * 1024) {
@@ -228,7 +228,7 @@ async function checkPng({ file, source, segment }: (typeof drawn)[number], n: nu
     theirs = path.join(dir, `${n}-cli.png`),
     copy = path.join(dir, `${n}.draft`);
   fs.writeFileSync(copy, source); // beside no code files: same as the service sees
-  const res = await fetch(`${base}/png/${segment}`);
+  const res = await fetch(`${base}/api/png/${segment}`);
   if (res.status !== 200) {
     // Over the pixel cap: refused on purpose, and the CLI's own PNG must be that big.
     await cli('inspect', copy, '--png', theirs).catch(() => {});
@@ -263,7 +263,7 @@ console.log(
     `${png.sourceBack} read back by extract as the CLI's PNG reads back.`,
 );
 for (const f of png.failed) console.log('  ' + f);
-const huge = await fetch(`${base}/png/${await encodeSource('a -> b')}?scale=9`);
+const huge = await fetch(`${base}/api/png/${await encodeSource('a -> b')}?scale=9`);
 assert.equal(huge.status, 400);
 assert.equal(huge.headers.get('Content-Type'), 'image/png');
 
@@ -304,7 +304,7 @@ for (const [n, { name, source }] of (remote ? [] : mermaid).entries()) {
   } catch {
     // the CLI refuses it; the service must too
   }
-  const res = await fetch(`${base}/svg/${await encodeSource(source)}?type=mermaid`);
+  const res = await fetch(`${base}/api/svg/${await encodeSource(source)}?type=mermaid`);
   const body = await res.text();
   const want = draft
     ? await renderSvg(draft, {
@@ -352,7 +352,7 @@ for (const [name, source] of [
     links: webLinks(draft),
     limits: { maxSourceBytes: 64 * 1024 },
   });
-  const got = await fetch(`${base}/svg/${await encodeSource(source)}`);
+  const got = await fetch(`${base}/api/svg/${await encodeSource(source)}`);
   assert.equal(got.status, 200, `${name}: ${got.status}`);
   assert.equal(
     await got.text(),
@@ -361,7 +361,7 @@ for (const [name, source] of [
   );
 }
 const gantt = mermaid.find(m => /^\s*gantt\b/m.test(m.source))!;
-const ganttRes = await fetch(`${base}/svg/${await encodeSource(gantt.source)}`);
+const ganttRes = await fetch(`${base}/api/svg/${await encodeSource(gantt.source)}`);
 const ganttAge = Number(
   /^public, max-age=(\d+)$/.exec(ganttRes.headers.get('Cache-Control') ?? '')?.[1],
 );
@@ -377,8 +377,8 @@ console.log(
 let detected = 0;
 for (const { source } of mermaid.filter((_, n) => drawnMermaid.has(n))) {
   const seg = await encodeSource(source);
-  const auto = await (await fetch(`${base}/svg/${seg}`)).text();
-  if (auto === (await (await fetch(`${base}/svg/${seg}?type=mermaid`)).text())) detected++;
+  const auto = await (await fetch(`${base}/api/svg/${seg}`)).text();
+  if (auto === (await (await fetch(`${base}/api/svg/${seg}?type=mermaid`)).text())) detected++;
 }
 console.log(
   `Mermaid detection: ${detected} of ${drawnMermaid.size} drawn the same with no ?type=.`,
@@ -401,7 +401,7 @@ if (!remote) {
   // 50 parallel renders against 20 credits: exactly 20 succeed, and the ledger agrees.
   const race = await Promise.all(
     Array.from({ length: 50 }, (_, n) =>
-      post('/v1/render', KEYS.poor, { code: checkout + `\n# ${n}\n`, format: 'svg' }).then(
+      post('/api/v1/render', KEYS.poor, { code: checkout + `\n# ${n}\n`, format: 'svg' }).then(
         r => r.status,
       ),
     ),
@@ -409,7 +409,7 @@ if (!remote) {
   const ok = race.filter(s => s === 200).length,
     broke = race.filter(s => s === 402).length;
   const bal = await (
-    await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.poor}` } })
+    await fetch(`${base}/api/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.poor}` } })
   ).json();
   const ledger = sql(
     `SELECT sum(delta) AS total, count(*) AS rows FROM ledger WHERE account_id = 'poor'`,
@@ -423,7 +423,7 @@ if (!remote) {
   );
 
   // The REST answer and the anonymous URL give the same bytes, and the REST answer names that URL.
-  const rest = await post('/v1/render', KEYS.rich, { code: checkout, format: 'png', scale: 2 });
+  const rest = await post('/api/v1/render', KEYS.rich, { code: checkout, format: 'png', scale: 2 });
   const restBytes = Buffer.from(await rest.arrayBuffer());
   const urlBytes = Buffer.from(
     await (await fetch(rest.headers.get('X-Draftably-Url')! + '?scale=2')).arrayBuffer(),
@@ -431,24 +431,27 @@ if (!remote) {
   assert.equal(rest.status, 200);
   assert.ok(restBytes.equals(urlBytes), 'REST and GET PNG differ');
   const restSvg = await (
-    await post('/v1/render', KEYS.rich, { code: checkout, format: 'svg' })
+    await post('/api/v1/render', KEYS.rich, { code: checkout, format: 'svg' })
   ).text();
-  assert.equal(restSvg, await (await fetch(`${base}/svg/${await encodeSource(checkout)}`)).text());
+  assert.equal(
+    restSvg,
+    await (await fetch(`${base}/api/svg/${await encodeSource(checkout)}`)).text(),
+  );
 
   // A keyed image URL spends credits (2 for PNG); a failed render costs nothing.
   const before = (
     await (
-      await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+      await fetch(`${base}/api/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
     ).json()
   ).bought;
-  const keyed = await fetch(`${base}/png/${await encodeSource(checkout + '\n# keyed\n')}`, {
+  const keyed = await fetch(`${base}/api/png/${await encodeSource(checkout + '\n# keyed\n')}`, {
     headers: { Authorization: `Bearer ${KEYS.rich}` },
   });
-  const bad = await post('/v1/render', KEYS.rich, { code: 'node a "unclosed', format: 'svg' });
+  const bad = await post('/api/v1/render', KEYS.rich, { code: 'node a "unclosed', format: 'svg' });
   const badBody = await bad.json();
   const after = (
     await (
-      await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+      await fetch(`${base}/api/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
     ).json()
   ).bought;
   assert.equal(keyed.status, 200);
@@ -461,15 +464,15 @@ if (!remote) {
 
   // One cache for every interface: a cached image is free over REST even with no credits left,
   // and a supplied key is checked before the cache, so a wrong key fails on a warm image too.
-  const warm = await post('/v1/render', KEYS.poor, { code: checkout, format: 'svg' });
+  const warm = await post('/api/v1/render', KEYS.poor, { code: checkout, format: 'svg' });
   assert.equal(warm.status, 200, 'a cached image should be free at 0 credits');
   assert.equal(warm.headers.get('X-Draftably-Cache'), 'hit');
-  const wrongKey = await fetch(`${base}/svg/${await encodeSource(checkout)}`, {
+  const wrongKey = await fetch(`${base}/api/svg/${await encodeSource(checkout)}`, {
     headers: { Authorization: 'Bearer dft_aaaaaaaaaaaa.wrong-secret-0123456789abc' },
   });
   assert.equal(wrongKey.status, 401);
   // The URL REST returns carries the options and draws the same bytes.
-  const dark = await post('/v1/render', KEYS.rich, {
+  const dark = await post('/api/v1/render', KEYS.rich, {
     code: checkout,
     format: 'svg',
     scheme: 'dark',
@@ -482,13 +485,13 @@ if (!remote) {
     checkout +
     '\n' +
     Array.from({ length: 300 }, () => `# ${randomBytes(24).toString('hex')}`).join('\n');
-  const longRes = await post('/v1/render', KEYS.rich, { code: long, format: 'svg' });
+  const longRes = await post('/api/v1/render', KEYS.rich, { code: long, format: 'svg' });
   assert.equal(longRes.status, 200);
   assert.equal(longRes.headers.get('X-Draftably-Url'), null);
   const huge = checkout + '\n#' + 'x'.repeat(66 * 1024);
-  assert.equal((await post('/v1/validate', KEYS.rich, { code: huge })).status, 400);
+  assert.equal((await post('/api/v1/validate', KEYS.rich, { code: huge })).status, 400);
   // Codex round 2. HEAD never draws. Keyed answers are no-store; anonymous ones vary on the key.
-  const probeUrl = `${base}/svg/${await encodeSource(checkout + '\n# head\n')}`;
+  const probeUrl = `${base}/api/svg/${await encodeSource(checkout + '\n# head\n')}`;
   assert.equal((await fetch(probeUrl, { method: 'HEAD' })).status, 405);
   const anonAns = await fetch(probeUrl);
   assert.equal(anonAns.headers.get('Vary'), 'Authorization');
@@ -499,14 +502,14 @@ if (!remote) {
   const richLeft = async () =>
     (
       await (
-        await fetch(`${base}/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
+        await fetch(`${base}/api/v1/balance`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })
       ).json()
     ).bought;
   for (const [what, code, extra] of [
     ['scale 3 SVG', checkout + '\n# scale\n', { scale: 3 }],
     ['BOM source', '﻿' + checkout + '\n# bom\n', {}],
   ] as const) {
-    const first = await post('/v1/render', KEYS.rich, { code, format: 'svg', ...extra });
+    const first = await post('/api/v1/render', KEYS.rich, { code, format: 'svg', ...extra });
     await new Promise(r => setTimeout(r, 300));
     const before = await richLeft();
     const again = await fetch(first.headers.get('X-Draftably-Url')!, {
@@ -515,25 +518,28 @@ if (!remote) {
     assert.equal(again.headers.get('X-Draftably-Cache'), 'hit', `${what}: second fetch missed`);
     assert.equal(await richLeft(), before, `${what}: charged twice`);
   }
-  assert.equal((await post('/v1/render', KEYS.rich, null as unknown as object)).status, 400);
+  assert.equal((await post('/api/v1/render', KEYS.rich, null as unknown as object)).status, 400);
   // Round 3: an explicit type shares the detected image's cache entry; the scheme is
   // case-insensitive; REST with no format gives a PNG, as MCP does.
-  const typed = await post('/v1/render', KEYS.rich, {
+  const typed = await post('/api/v1/render', KEYS.rich, {
     code: checkout + '\n# typed\n',
     format: 'svg',
     type: 'draftably',
   });
   await new Promise(r => setTimeout(r, 300));
-  const detectedHit = await fetch(`${base}/svg/${await encodeSource(checkout + '\n# typed\n')}`, {
-    headers: { Authorization: `Bearer ${KEYS.rich}` },
-  });
+  const detectedHit = await fetch(
+    `${base}/api/svg/${await encodeSource(checkout + '\n# typed\n')}`,
+    {
+      headers: { Authorization: `Bearer ${KEYS.rich}` },
+    },
+  );
   assert.equal(typed.status, 200);
   assert.equal(detectedHit.headers.get('X-Draftably-Cache'), 'hit');
-  const lower = await fetch(`${base}/v1/balance`, {
+  const lower = await fetch(`${base}/api/v1/balance`, {
     headers: { Authorization: `bearer ${KEYS.rich}` },
   });
   assert.equal(lower.status, 200);
-  const noFormat = await post('/v1/render', KEYS.rich, { code: checkout + '\n# default\n' });
+  const noFormat = await post('/api/v1/render', KEYS.rich, { code: checkout + '\n# default\n' });
   assert.equal(noFormat.headers.get('Content-Type'), 'image/png');
   console.log(
     'Round 2: HEAD 405; keyed answers no-store, anonymous vary on Authorization; the returned URL is a free cache hit for a scale-3 SVG and a BOM source; a null body gets 400. Round 3: ?type=draftably shares the detected entry; lowercase bearer works; REST defaults to PNG.',
@@ -557,22 +563,25 @@ if (!remote) {
   );
 
   // Validate, convert, and auth.
-  const valid = await (await post('/v1/validate', KEYS.rich, { code: checkout })).json();
+  const valid = await (await post('/api/v1/validate', KEYS.rich, { code: checkout })).json();
   const invalid = await (
-    await post('/v1/validate', KEYS.rich, { code: 'node a "unclosed' })
+    await post('/api/v1/validate', KEYS.rich, { code: 'node a "unclosed' })
   ).json();
   assert.equal(valid.valid, true);
   assert.equal(invalid.valid, false);
   const flow = mermaid[[...drawnMermaid][0]];
-  const conv = await (await post('/v1/convert', KEYS.rich, { code: flow.source })).json();
+  const conv = await (await post('/api/v1/convert', KEYS.rich, { code: flow.source })).json();
   const cliDraft = (
     await cli('import', path.join(dir, `m${[...drawnMermaid][0]}.mmd`), '--accept-lossy')
   ).stdout;
   assert.equal(conv.draft, cliDraft.replace(/^diagram "m\d+"/, 'diagram ""'));
-  assert.equal((await post('/v1/render', undefined, { code: checkout })).status, 401);
+  assert.equal((await post('/api/v1/render', undefined, { code: checkout })).status, 401);
   assert.equal(
-    (await post('/v1/render', 'dft_aaaaaaaaaaaa.wrong-secret-0123456789abc', { code: checkout }))
-      .status,
+    (
+      await post('/api/v1/render', 'dft_aaaaaaaaaaaa.wrong-secret-0123456789abc', {
+        code: checkout,
+      })
+    ).status,
     401,
   );
   assert.equal(
@@ -708,12 +717,14 @@ if (!remote) {
     // fetch drops a Host header, so ask with node:http.
     const plain = await new Promise<http.IncomingMessage>((done, fail) =>
       http
-        .get(`${base}/health`, { headers: { Host: 'api.example.test' } }, res => done(res.resume()))
+        .get(`${base}/api/health`, { headers: { Host: 'api.example.test' } }, res =>
+          done(res.resume()),
+        )
         .on('error', fail),
     );
     assert.equal(plain.statusCode, 301);
     // wrangler dev rewrites the Location scheme to its own; live answers https://.
-    assert.match(plain.headers.location ?? '', /^https?:\/\/api\.example\.test\/health$/);
+    assert.match(plain.headers.location ?? '', /^https?:\/\/api\.example\.test\/api\/health$/);
   }
   const anon = await fetch(resource, {
     method: 'POST',
@@ -972,7 +983,11 @@ if (!remote) {
   const sign = (body: string, t = Math.floor(Date.now() / 1000), secret = 'whsec_proof_fixture') =>
     `t=${t},v1=${createHmac('sha256', secret).update(`${t}.${body}`).digest('hex')}`;
   const hook = (body: string, sig: string) =>
-    fetch(`${base}/stripe/webhook`, { method: 'POST', headers: { 'Stripe-Signature': sig }, body });
+    fetch(`${base}/api/stripe/webhook`, {
+      method: 'POST',
+      headers: { 'Stripe-Signature': sig },
+      body,
+    });
   const bought = () => sql(`SELECT bought FROM accounts WHERE id = 'poor'`)[0].bought;
   assert.equal((await hook(event, sign(event))).status, 200);
   assert.equal(bought(), 25000);
@@ -1017,9 +1032,9 @@ if (!remote) {
   assert.equal((await hook('x'.repeat(300 * 1024), sign('x'))).status, 413);
   // The grant is spent before bought credits.
   sql(`UPDATE accounts SET grant_left = 1 WHERE id = 'poor'`);
-  await post('/v1/render', KEYS.poor, { code: checkout + '\n# grant\n', format: 'svg' });
+  await post('/api/v1/render', KEYS.poor, { code: checkout + '\n# grant\n', format: 'svg' });
   assert.equal(bought(), 25000);
-  await post('/v1/render', KEYS.poor, { code: checkout + '\n# bought\n', format: 'svg' });
+  await post('/api/v1/render', KEYS.poor, { code: checkout + '\n# bought\n', format: 'svg' });
   assert.equal(bought(), 24999);
   console.log(
     'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; unrelated and unknown-account sessions got 200 and no credits; an unsigned post got 400 and a 300 KB one 413; wrong or 10-minute-old signatures got 400; the grant is spent first.',
@@ -1032,7 +1047,7 @@ if (!remote) {
   const seg = b64url(new TextEncoder().encode(checkout));
   const rows = (id: string) => sql(`SELECT count(*) AS n FROM shares WHERE id = '${id}'`)[0].n;
   // GET twice: one id, one row. The text names the png, svg and edit URLs.
-  const one = await fetch(`${base}/link/${seg}`);
+  const one = await fetch(`${base}/api/link/${seg}`);
   const text = await one.text();
   assert.equal(one.status, 200, text);
   const id = /\/d\/([a-z2-7]{12})\.png/.exec(text)?.[1];
@@ -1040,13 +1055,13 @@ if (!remote) {
   assert.match(text, new RegExp(`svg: \\S+/d/${id}\\.svg`));
   assert.match(text, new RegExp(`edit: https://draftably\\.dev/d/${id}`));
   const two = await (
-    await fetch(`${base}/link/pako:${b64url(deflateSync(checkout))}?format=json`)
+    await fetch(`${base}/api/link/pako:${b64url(deflateSync(checkout))}?format=json`)
   ).json();
   assert.equal(two.id, id);
   assert.equal(rows(id), 1);
   // POST, anonymous and keyed, gives the same id and still one row.
   const share = (key?: string, body: object = { code: checkout }) =>
-    fetch(`${base}/v1/share`, {
+    fetch(`${base}/api/v1/share`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1074,60 +1089,62 @@ if (!remote) {
     ['png', ''],
     ['png', '?scheme=dark&scale=1'],
   ]) {
-    const short = await fetch(`${base}/d/${id}.${ext}${q}`);
-    const long = await fetch(`${base}/${ext}/${seg}${q}`);
+    const short = await fetch(`${base}/api/d/${id}.${ext}${q}`);
+    const long = await fetch(`${base}/api/${ext}/${seg}${q}`);
     assert.equal(short.status, 200);
     assert.equal(short.headers.get('Cache-Control'), 'public, max-age=86400');
     assert.deepEqual(Buffer.from(await short.arrayBuffer()), Buffer.from(await long.arrayBuffer()));
   }
-  assert.equal(await (await fetch(`${base}/d/${id}.draft`)).text(), checkout);
+  assert.equal(await (await fetch(`${base}/api/d/${id}.draft`)).text(), checkout);
   // A Mermaid share keeps its type, and its .draft is the converted Draftably source.
   const mm = await (await share(undefined, { code: 'flowchart LR\n  a --> b\n' })).json();
-  const mmDraft = await (await fetch(`${base}/d/${mm.id}.draft`)).text();
+  const mmDraft = await (await fetch(`${base}/api/d/${mm.id}.draft`)).text();
   assert.doesNotMatch(mmDraft, /flowchart/);
-  assert.equal((await fetch(`${base}/d/${mm.id}.svg`)).status, 200);
+  assert.equal((await fetch(`${base}/api/d/${mm.id}.svg`)).status, 200);
   // ?code= takes plain text: the same SVG as the base64 segment, and the same short id.
   const q = (src: string) => `code=${encodeURIComponent(src)}`;
-  const viaCode = await fetch(`${base}/svg?${q(checkout)}`);
+  const viaCode = await fetch(`${base}/api/svg?${q(checkout)}`);
   assert.equal(viaCode.status, 200);
-  assert.equal(await viaCode.text(), await (await fetch(`${base}/svg/${seg}`)).text());
-  assert.equal((await (await fetch(`${base}/link?${q(checkout)}&format=json`)).json()).id, id);
+  assert.equal(await viaCode.text(), await (await fetch(`${base}/api/svg/${seg}`)).text());
+  assert.equal((await (await fetch(`${base}/api/link?${q(checkout)}&format=json`)).json()).id, id);
   assert.equal(rows(id), 1);
   // A %23-encoded comment and label survive; a raw # cuts the source and the error says why.
   const hashed = '# a comment\nnode a "Issue #12"\nnode b "B"\nedge e a -> b\n';
-  const hashedPng = await fetch(`${base}/png?${q(hashed)}`);
+  const hashedPng = await fetch(`${base}/api/png?${q(hashed)}`);
   assert.equal(hashedPng.status, 200);
   assert.deepEqual(
     Buffer.from(await hashedPng.arrayBuffer()),
     Buffer.from(
-      await (await fetch(`${base}/png/${b64url(new TextEncoder().encode(hashed))}`)).arrayBuffer(),
+      await (
+        await fetch(`${base}/api/png/${b64url(new TextEncoder().encode(hashed))}`)
+      ).arrayBuffer(),
     ),
   );
-  const cut = await fetch(`${base}/link?code=node a "A`);
+  const cut = await fetch(`${base}/api/link?code=node a "A`);
   assert.equal(cut.status, 400);
   assert.match(await cut.text(), /a raw # ends the URL.*%23/);
   // Both ways at once, an empty ?code=, no source at all, or over 8 KB: 400.
-  assert.equal((await fetch(`${base}/svg/${seg}?${q(checkout)}`)).status, 400);
-  assert.match(await (await fetch(`${base}/link/${seg}?${q(checkout)}`)).text(), /not both/);
-  assert.equal((await fetch(`${base}/png?code=`)).status, 400);
-  assert.equal((await fetch(`${base}/png`)).status, 400);
-  assert.equal((await fetch(`${base}/svg?${q('x'.repeat(9000))}`)).status, 400);
-  assert.equal((await fetch(`${base}/link?${q('x'.repeat(9000))}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/svg/${seg}?${q(checkout)}`)).status, 400);
+  assert.match(await (await fetch(`${base}/api/link/${seg}?${q(checkout)}`)).text(), /not both/);
+  assert.equal((await fetch(`${base}/api/png?code=`)).status, 400);
+  assert.equal((await fetch(`${base}/api/png`)).status, 400);
+  assert.equal((await fetch(`${base}/api/svg?${q('x'.repeat(9000))}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/link?${q('x'.repeat(9000))}`)).status, 400);
   // A ?code= value just over 8 KB once encoded, in a target under the route allowance.
   const justOver = '#'.repeat(2731) + '\nnode a "A"';
   assert.ok(q(justOver).length - 5 > 8192 && q(justOver).length < 8192 + 200);
-  assert.equal((await fetch(`${base}/link?${q(justOver)}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/link?${q(justOver)}`)).status, 400);
 
   // Leading byte-order marks, any number, are dropped the same way on every way in.
   const bommed = '\uFEFF\uFEFFnode a "BOM"\n';
   const bomSeg = await (
-    await fetch(`${base}/link/${b64url(new TextEncoder().encode(bommed))}?format=json`)
+    await fetch(`${base}/api/link/${b64url(new TextEncoder().encode(bommed))}?format=json`)
   ).json();
-  const bomCode = await (await fetch(`${base}/link?${q(bommed)}&format=json`)).json();
+  const bomCode = await (await fetch(`${base}/api/link?${q(bommed)}&format=json`)).json();
   assert.equal(bomSeg.id, bomCode.id);
   // A short link refuses a second source; an empty one is refused on every way in.
-  assert.equal((await fetch(`${base}/d/${id}.svg?${q('node z "Z"')}`)).status, 400);
-  assert.equal((await fetch(`${base}/link/pako:${b64url(deflateSync(''))}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/d/${id}.svg?${q('node z "Z"')}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/link/pako:${b64url(deflateSync(''))}`)).status, 400);
   // A drawing too big for a PNG gets an SVG markdown link and no PNG URL.
   const xl = await (
     await share(KEYS.rich, {
@@ -1139,44 +1156,44 @@ if (!remote) {
 
   // A drawing whose PNG fits at scale 2 but not at 3 once the source strip is added.
   const order = fs.readFileSync('examples/order-pipeline.draft', 'utf8');
-  const at3 = await (await fetch(`${base}/link?${q(order)}&scale=3&format=json`)).json();
-  const at2 = await (await fetch(`${base}/link?${q(order)}&format=json`)).json();
+  const at3 = await (await fetch(`${base}/api/link?${q(order)}&scale=3&format=json`)).json();
+  const at2 = await (await fetch(`${base}/api/link?${q(order)}&format=json`)).json();
   assert.equal(at3.png, null, JSON.stringify(at3));
   assert.equal((await fetch(at2.png.replace(/^https?:\/\/[^/]+/, base))).status, 200);
-  assert.equal((await fetch(`${base}/png/${await encodeSource(order)}?scale=3`)).status, 400);
+  assert.equal((await fetch(`${base}/api/png/${await encodeSource(order)}?scale=3`)).status, 400);
   // .draft refuses a second source too; an ordinary last-line error gets no # hint.
-  assert.equal((await fetch(`${base}/d/${id}.draft?${q('node z "Z"')}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/d/${id}.draft?${q('node z "Z"')}`)).status, 400);
   const purple = await (
-    await fetch(`${base}/link?${q('node a "A"\nnode b "B" color=purple')}`)
+    await fetch(`${base}/api/link?${q('node a "A"\nnode b "B" color=purple')}`)
   ).text();
   assert.match(purple, /line 2[,:]/);
   assert.doesNotMatch(purple, /%23/);
 
   // A bad source: 400 with its line, as text and as JSON; nothing stored.
   const bad = 'node a "A"\nnode b "B" color=purple\n';
-  const badRes = await fetch(`${base}/link/${b64url(new TextEncoder().encode(bad))}`);
+  const badRes = await fetch(`${base}/api/link/${b64url(new TextEncoder().encode(bad))}`);
   assert.equal(badRes.status, 400);
   assert.match(await badRes.text(), /^error: line 2[,:]/);
   const badJson = await (await share(undefined, { code: bad })).json();
   assert.equal(badJson.error.line, 2);
   // Unknown ids are 404, as an image and as source.
-  const missing = await fetch(`${base}/d/aaaaaaaaaaaa.png`);
+  const missing = await fetch(`${base}/api/d/aaaaaaaaaaaa.png`);
   assert.equal(missing.status, 404);
   assert.equal(missing.headers.get('Content-Type'), 'image/png');
-  assert.equal((await fetch(`${base}/d/aaaaaaaaaaaa.draft`)).status, 404);
+  assert.equal((await fetch(`${base}/api/d/aaaaaaaaaaaa.draft`)).status, 404);
   // Over 8 KB of URL or 64 KB of source: 400.
-  assert.equal((await fetch(`${base}/link/${'a'.repeat(9000)}`)).status, 400);
+  assert.equal((await fetch(`${base}/api/link/${'a'.repeat(9000)}`)).status, 400);
   assert.equal((await share(undefined, { code: 'x'.repeat(70 * 1024) })).status, 400);
   // New links from one address stop at 30 a minute; existing ones still answer.
   let limited = 0;
   for (let n = 0; n < 35 && !limited; n++) {
     const fresh = b64url(new TextEncoder().encode(`node a "A ${n} ${Date.now()}"\n`));
-    const r = await fetch(`${base}/link/${fresh}`);
+    const r = await fetch(`${base}/api/link/${fresh}`);
     if (r.status === 429) limited = n;
     else assert.equal(r.status, 200, await r.text());
   }
   assert.ok(limited, 'no 429 after 35 new links');
-  assert.equal((await fetch(`${base}/link/${seg}`)).status, 200);
+  assert.equal((await fetch(`${base}/api/link/${seg}`)).status, 200);
   const count = sql(`SELECT count(*) AS n FROM shares`)[0].n;
   console.log(
     `Short links: GET twice, POST anonymous and keyed gave one id (${id}) and one row; /d/ PNG and SVG match the long URL byte for byte; ?code= gives the same SVG and id; a %23 comment draws; a cut source gets the # hint; both ways 400; bad source 400 at line 2; unknown id 404; oversize 400; 429 after ${limited} more new links; ${count} rows.`,
@@ -1185,16 +1202,16 @@ if (!remote) {
 
 // The same URL twice: the second answer comes from the edge cache.
 const fresh = fs.readFileSync('examples/checkout.draft', 'utf8') + `\n# ${Date.now()}\n`;
-const url = `${base}/svg/${await encodeSource(fresh)}`;
+const url = `${base}/api/svg/${await encodeSource(fresh)}`;
 const first = await fetch(url);
 await new Promise(r => setTimeout(r, 500)); // cache.put runs in waitUntil, after the answer
 const second = await fetch(url);
 assert.equal(first.headers.get('X-Draftably-Cache'), 'miss');
 assert.equal(second.headers.get('X-Draftably-Cache'), 'hit');
 assert.equal(await first.text(), await second.text());
-assert.equal((await fetch(`${base}/svg/pako:@@@`)).status, 400);
+assert.equal((await fetch(`${base}/api/svg/pako:@@@`)).status, 400);
 // A free caller checks a source by fetching it: the error names the line, column and its text.
-const broken = await fetch(`${base}/svg/${Buffer.from('node a "A').toString('base64url')}`);
+const broken = await fetch(`${base}/api/svg/${Buffer.from('node a "A').toString('base64url')}`);
 assert.equal(broken.status, 400);
 const why = 'line 1, column 8: Unclosed quoted string. | node a "A';
 assert.equal(broken.headers.get('X-Draftably-Error'), why);

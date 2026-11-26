@@ -1,6 +1,6 @@
 # Hosted render URLs
 
-`api.draftably.dev` draws a diagram from a URL. The URL holds the source, so it works in Markdown,
+`draftably.dev/api` draws a diagram from a URL. The URL holds the source, so it works in Markdown,
 an `<img>` tag or an agent's reply. No account and no key are needed.
 
 ```sh
@@ -8,18 +8,18 @@ draftably url architecture.draft
 draftably url architecture.draft --png
 ```
 
-The CLI prints a URL like `https://api.draftably.dev/svg/pako:eJw1zE0K…`. Put it anywhere an image
+The CLI prints a URL like `https://draftably.dev/api/svg/pako:eJw1zE0K…`. Put it anywhere an image
 goes:
 
 ```md
-![Architecture](https://api.draftably.dev/svg/pako:eJw1zE0K…)
+![Architecture](https://draftably.dev/api/svg/pako:eJw1zE0K…)
 ```
 
 ## The URL
 
 ```text
-GET /svg/{encoded}   an SVG
-GET /png/{encoded}   a PNG with the source embedded, so it opens again in the editor
+GET /api/svg/{encoded}   an SVG
+GET /api/png/{encoded}   a PNG with the source embedded, so it opens again in the editor
 ```
 
 `{encoded}` is `pako:` followed by the base64url of the zlib-deflated source, as mermaid.ink writes
@@ -44,7 +44,7 @@ from the cache and does not count.
 
 Send an API key (`Authorization: Bearer dft_...`) to skip the address limit. A keyed request spends
 credits: an SVG costs 1 and a PNG 2. A cache hit is free. Make a key on the
-[account page](https://api.draftably.dev/account): sign in with your email. Each account gets
+[account page](https://draftably.dev/account): sign in with your email. Each account gets
 1,000 free credits a month. Credit packs that add more go on sale soon. See [Pricing](https://draftably.dev/pricing).
 
 ## What the server keeps

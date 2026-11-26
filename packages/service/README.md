@@ -16,8 +16,8 @@ The `.draft` files in [docs/](docs) show how the service works. Open them with
   or PNG.
 - [4-data-model](docs/4-data-model.draft): the D1 tables.
 - [5-buy-credits](docs/5-buy-credits.draft): sign-in, Stripe Checkout and the webhook.
-- [6-domains](docs/6-domains.draft): how DNS sends `draftably.dev` to GitHub Pages and
-  `api.draftably.dev` to the Worker, and which records the Cloudflare move needs.
+- [6-domains](docs/6-domains.draft): how `draftably.dev` serves the site and, through the site
+  Worker, the API.
 
 ## Work on it
 
@@ -37,23 +37,23 @@ log fields, the spans, and the dashboard query for each production question.
 
 ## Short links
 
-`GET /link?code=<source>` (plain text, percent-encoded) or `GET /link/{encoded}` (the same
-segment and options as `/png/{encoded}`) stores the source and answers with text that lists the
+`GET /api/link?code=<source>` (plain text, percent-encoded) or `GET /api/link/{encoded}` (the same
+segment and options as `/api/png/{encoded}`) stores the source and answers with text that lists the
 `png`, `svg` and `edit` short URLs
 (`?format=json` for JSON). It works over GET because web agents such as ChatGPT can only GET.
 The id is the first 12 base32 characters of the SHA-256 of the source and its type, so the same
 source always gets the same link and no new row. A source that doesn't draw gets 400 with the
-first error and its line. `POST /v1/share {"code", "type"?}` does the same for sources too big
+first error and its line. `POST /api/v1/share {"code", "type"?}` does the same for sources too big
 for a URL; it needs no key, and a keyed call records the account.
 
-The agent flow: write the source, open `/link?code=<source>`, and copy the returned `markdown`
+The agent flow: write the source, open `/api/link?code=<source>`, and copy the returned `markdown`
 line (it falls back to SVG when a PNG would be too large) or the `edit` URL. Percent-encode the whole `?code=` value: a raw `#` ends the URL, `&` starts a new parameter and
 `+` reads as a space, so write them as `%23`, `%26` and `%2B`. A failed source that has no `#` gets that hint in its error. Base64url or `pako:` in the
-path is the compact form. `/png?code=` and `/png/{encoded}` also work and need no storage. A
+path is the compact form. `/api/png?code=` and `/api/png/{encoded}` also work and need no storage. A
 source gives the same cache entry and the same id whichever way it comes; both at once is a 400.
 
-`/d/{id}.png` and `.svg` draw through the same `render()` as the long URLs (the same cache, the
-same free per-address limit). `/d/{id}.draft` returns the Draftably source; `draftably.dev/d/{id}`
+`/api/d/{id}.png` and `.svg` draw through the same `render()` as the long URLs (the same cache, the
+same free per-address limit). `/api/d/{id}.draft` returns the Draftably source; `draftably.dev/d/{id}`
 reads it and opens the playground. New links are limited to 30 a minute per address
 (`LINK_LIMIT`); a link that exists is free. The table keeps a hash of the IP, never the IP.
 
@@ -65,26 +65,26 @@ pnpm exec wrangler d1 execute draftably-service --remote --command "DELETE FROM 
 
 ## Connect over MCP
 
-The server is at `https://api.draftably.dev/mcp` (Streamable HTTP). Chat apps sign in with OAuth:
+The server is at `https://draftably.dev/mcp` (Streamable HTTP). Chat apps sign in with OAuth:
 you get an emailed sign-in link, then press Allow. Clients that send a header use an API key from
 `/account` instead. Both spend the same account's credits.
 
 - **ChatGPT** (Plus, Pro, Business or Enterprise): Settings → Apps & Connectors → Advanced
   settings, turn on Developer mode. Then Create: name it Draftably, URL
-  `https://api.draftably.dev/mcp`, authentication OAuth. Sign in and press Allow.
+  `https://draftably.dev/mcp`, authentication OAuth. Sign in and press Allow.
 - **claude.ai and Claude Desktop**: Settings → Connectors → Add custom connector, URL
-  `https://api.draftably.dev/mcp`. Press Connect, sign in and press Allow.
+  `https://draftably.dev/mcp`. Press Connect, sign in and press Allow.
 - **Claude Code**:
 
   ```sh
-  claude mcp add --transport http draftably https://api.draftably.dev/mcp \
+  claude mcp add --transport http draftably https://draftably.dev/mcp \
     --header "Authorization: Bearer dft_..."
   ```
 
 - **Codex**: put the key in `DRAFTABLY_API_KEY`, then
 
   ```sh
-  codex mcp add draftably --url https://api.draftably.dev/mcp --bearer-token-env-var DRAFTABLY_API_KEY
+  codex mcp add draftably --url https://draftably.dev/mcp --bearer-token-env-var DRAFTABLY_API_KEY
   ```
 
   That writes `bearer_token_env_var = "DRAFTABLY_API_KEY"` under `[mcp_servers.draftably]` in
@@ -97,7 +97,7 @@ you get an emailed sign-in link, then press Allow. Clients that send a header us
     "mcpServers": {
       "draftably": {
         "type": "http",
-        "url": "https://api.draftably.dev/mcp",
+        "url": "https://draftably.dev/mcp",
         "headers": { "Authorization": "Bearer dft_..." }
       }
     }
@@ -125,8 +125,12 @@ skill), all free but the first.
 
 ## Hosting
 
-The service runs at `https://api.draftably.dev` as the `draftably-api` Worker on a custom domain.
-Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
+The service is the `draftably-api` Worker. It has no route of its own: the `draftably-site` Worker
+on `draftably.dev` forwards `/api/*`, `/mcp`, the OAuth paths (`/authorize`, `/oauth/*`,
+`/.well-known/oauth-*`) and the account pages (`/login`, `/logout`, `/auth/*`, `/account*`) to it
+through a service binding, with the request unchanged. Images, short links, REST and the Stripe
+webhook live under `/api`; `/mcp`, OAuth and the pages stay at the root, where MCP clients and
+people look for them. Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
 
 - D1 database `draftably-service`, with its id in `wrangler.jsonc`.
 - KV namespace `draftably-oauth` (binding `OAUTH_KV`) for OAuth clients, grants and tokens.
@@ -145,6 +149,7 @@ Workers Scripts Edit and D1 Edit.
 
 To deploy from a laptop, run step 2, then `pnpm service:deploy`, from a checkout of main.
 
-Short links' `edit` URLs (`draftably.dev/d/{id}`) are served by the site Worker. The API workflow does
-not deploy the site: run the `Deploy the site to Cloudflare` workflow (or `pnpm site:deploy`) when a
+The site Worker serves short links' `edit` URLs (`draftably.dev/d/{id}`) and forwards every API
+request, so a new API path that is outside `/api` needs a matching change to `API_PATH` in
+`site/worker.ts`. The API workflow does not deploy the site: run the `Deploy the site to Cloudflare` workflow (or `pnpm site:deploy`) when a
 change touches `site/`.

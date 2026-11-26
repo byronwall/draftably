@@ -1,8 +1,8 @@
 /**
  * The hosted render service. GET image URLs hold the diagram source, so any URL always draws the
  * same image for one runtime version; the edge cache keys on both. Anonymous image URLs are free
- * and rate-limited per IP; with an API key they spend credits instead. `/v1/*` is the keyed REST
- * API, `/mcp` the MCP server (API key or OAuth, oauth.ts) and `/account` the sign-in page.
+ * and rate-limited per IP; with an API key they spend credits instead. `/api/v1/*` is the keyed
+ * REST API, `/mcp` the MCP server (API key or OAuth, oauth.ts) and `/account` the sign-in page.
  */
 import { OAuthProvider } from '@cloudflare/workers-oauth-provider';
 import { runtimeVersion } from '@draftably/runtime';
@@ -71,7 +71,7 @@ function parseImagePath(url: URL, db: D1Database): { format: Format; load: Load 
       format: m[1] as Format,
       load: () =>
         span('decode', { segment_bytes: m[2]?.length ?? 0 }, async s => {
-          const source = await urlSource(url, m[2], 'POST /v1/render');
+          const source = await urlSource(url, m[2], 'POST /api/v1/render');
           s.setAttribute('source_bytes', new TextEncoder().encode(source).length);
           return { source };
         }),
@@ -155,91 +155,106 @@ Draw a diagram with no install and no account:
        node api "API"
        edge call web -> api "GET /items"
   2. Percent-encode it (write # as %23, & as %26 and + as %2B) and open
-     https://api.draftably.dev/link?code=<source>
+     https://draftably.dev/api/link?code=<source>
      It answers with short png, svg and edit links; share those.
      A bad source returns 400 and the line to fix.
-  Compact form: base64url the UTF-8 bytes, no padding, and open /link/<encoded>
-  or /png/<encoded> (a long image URL that stores nothing).
+  Compact form: base64url the UTF-8 bytes, no padding, and open /api/link/<encoded>
+  or /api/png/<encoded> (a long image URL that stores nothing).
      Python: base64.urlsafe_b64encode(src.encode()).decode().rstrip('=')
 Syntax, a full example and JavaScript: https://draftably.dev/llms.txt
 
-GET /svg/{encoded}   SVG drawing of a Draftably diagram
-GET /png/{encoded}   PNG drawing, with the source embedded; ?scale=1|2|3|4 (default 2)
-                     {encoded} = base64url(source), or "pako:" + base64url(zlib(source))
-                     as mermaid.ink. With the CLI: draftably url <file.draft>
-                     The source is Draftably or Mermaid (flowchart, sequence, gantt,
-                     timeline); ?type=mermaid|draftably skips the guess.
-                     ?scheme=light|dark
-                     Free: 60 new drawings a minute per address. Send an API key
-                     (Authorization: Bearer dft_...) to use credits instead.
+GET /api/svg/{encoded}    SVG drawing of a Draftably diagram
+GET /api/png/{encoded}    PNG drawing, with the source embedded; ?scale=1|2|3|4 (default 2)
+                          {encoded} = base64url(source), or "pako:" + base64url(zlib(source))
+                          as mermaid.ink. With the CLI: draftably url <file.draft>
+                          The source is Draftably or Mermaid (flowchart, sequence, gantt,
+                          timeline); ?type=mermaid|draftably skips the guess.
+                          ?scheme=light|dark
+                          Free: 60 new drawings a minute per address. Send an API key
+                          (Authorization: Bearer dft_...) to use credits instead.
 
-GET /png?code=<src>  The source as percent-encoded text instead of {encoded}; also
-                     /svg and /link. Write # as %23, & as %26 and + as %2B.
+GET /api/png?code=<src>   The source as percent-encoded text instead of {encoded}; also
+                          /api/svg and /api/link. Write # as %23, & as %26 and + as %2B.
 
-GET /link?code=<src> A short link, made with a GET. Answers with text: png, svg and
-                     edit URLs and a Markdown line (?format=json for JSON). The same
-                     source always gets the same link. Also /link/{encoded}.
-GET /d/{id}.png      The short link's drawing; also .svg, ?scheme=, ?scale=.
-GET /d/{id}.draft    The short link's source, as Draftably.
-POST /v1/share       {"code": "...", "type"?}  -> {id, png, svg, edit}. No key needed.
+GET /api/link?code=<src>  A short link, made with a GET. Answers with text: png, svg and
+                          edit URLs and a Markdown line (?format=json for JSON). The same
+                          source always gets the same link. Also /api/link/{encoded}.
+GET /api/d/{id}.png       The short link's drawing; also .svg, ?scheme=, ?scale=.
+GET /api/d/{id}.draft     The short link's source, as Draftably.
+POST /api/v1/share        {"code": "...", "type"?}  -> {id, png, svg, edit}. No key needed.
 
-POST /v1/render      {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?}
-POST /v1/validate    {"code": "...", "type"?}  -> {valid, type, diagnostics}
-POST /v1/convert     {"code": "...", "from": "mermaid"}  -> {draft, warnings}
-GET  /v1/balance     -> {grant, bought, resetsAt}
-                     All need Authorization: Bearer dft_.... An SVG costs 1 credit, a PNG 2.
+POST /api/v1/render       {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?}
+POST /api/v1/validate     {"code": "...", "type"?}  -> {valid, type, diagnostics}
+POST /api/v1/convert      {"code": "...", "from": "mermaid"}  -> {draft, warnings}
+GET  /api/v1/balance      -> {grant, bought, resetsAt}
+                          All need Authorization: Bearer dft_.... An SVG costs 1 credit, a PNG 2.
 
-/mcp                 MCP server (Streamable HTTP): render_diagram, validate_diagram,
-                     convert_mermaid, image_url, share_diagram, language_guide.
-                     Chat apps sign in with OAuth; other clients send the API key.
+/mcp                      MCP server (Streamable HTTP): render_diagram, validate_diagram,
+                          convert_mermaid, image_url, share_diagram, language_guide.
+                          Chat apps sign in with OAuth; other clients send the API key.
 
-/account             Sign in by email, see credits, make API keys, buy credits,
-                     disconnect apps. 1,000 free credits a month.
+/account                  Sign in by email, see credits, make API keys, buy credits,
+                          disconnect apps. 1,000 free credits a month.
 
 Connect over MCP
 ChatGPT: Settings > Apps & Connectors > Advanced settings, turn on Developer
-mode. Create a connector with the URL https://api.draftably.dev/mcp and
+mode. Create a connector with the URL https://draftably.dev/mcp and
 OAuth. Sign in, then press Allow.
 
 claude.ai and Claude Desktop: Settings > Connectors > Add custom connector
-with the URL https://api.draftably.dev/mcp. Sign in, then press Allow.
+with the URL https://draftably.dev/mcp. Sign in, then press Allow.
 
 Claude Code, with a key from /account:
-  claude mcp add --transport http draftably https://api.draftably.dev/mcp \\
+  claude mcp add --transport http draftably https://draftably.dev/mcp \\
     --header "Authorization: Bearer dft_..."
 
 Codex, with the key in DRAFTABLY_API_KEY:
-  codex mcp add draftably --url https://api.draftably.dev/mcp \\
+  codex mcp add draftably --url https://draftably.dev/mcp \\
     --bearer-token-env-var DRAFTABLY_API_KEY
 
 Cursor, in ~/.cursor/mcp.json:
   {"mcpServers": {"draftably": {"type": "http",
-    "url": "https://api.draftably.dev/mcp",
+    "url": "https://draftably.dev/mcp",
     "headers": {"Authorization": "Bearer dft_..."}}}}
 
 Version ${runtimeVersion}. Language: https://draftably.dev/docs
 `;
 
+/**
+ * The path inside `/api`, or null for a root path. draftably.dev serves the site, and its Worker
+ * sends `/api/*`, `/mcp`, the OAuth paths and the account pages here. Images, short links, REST
+ * and the webhook live under `/api`; `/mcp`, OAuth and the pages stay at the root, where MCP
+ * clients and people look for them.
+ */
+function apiPath(path: string) {
+  if (path === '/api') return '/';
+  return path.startsWith('/api/') ? path.slice(4) : null;
+}
+
 /** The route kind on the request's log line. */
 function routeKind(path: string): Wide['route'] {
-  if (IMAGE_PATH.test(path) || SHARE_IMAGE.test(path) || /^\/d\/[^/]+\.draft$/.test(path))
-    return 'image';
-  if (/^\/link(\/|$)/.test(path)) return 'share';
-  if (path.startsWith('/v1/')) return 'rest';
+  const inner = apiPath(path);
+  if (inner !== null) {
+    if (IMAGE_PATH.test(inner) || SHARE_IMAGE.test(inner) || /^\/d\/[^/]+\.draft$/.test(inner))
+      return 'image';
+    if (/^\/link(\/|$)/.test(inner)) return 'share';
+    if (inner.startsWith('/v1/')) return 'rest';
+    if (inner === '/stripe/webhook') return 'webhook';
+    if (inner === '/' || inner === '/health') return 'health';
+    return 'other';
+  }
   if (path === '/mcp') return 'mcp';
   if (path === '/authorize' || path.startsWith('/oauth/') || path.startsWith('/.well-known/'))
     return 'oauth';
-  if (path === '/stripe/webhook') return 'webhook';
   if (path === '/login' || path.startsWith('/auth/')) return 'login';
   if (path === '/logout' || path.startsWith('/account')) return 'account';
-  if (path === '/' || path === '/health') return 'health';
   return 'other';
 }
 
 /** Every path the service answers, as logged. */
 const PATHS = new Set([
-  '/',
-  '/health',
+  '/api',
+  '/api/health',
   '/mcp',
   '/authorize',
   '/oauth/token',
@@ -255,12 +270,12 @@ const PATHS = new Set([
   '/account/buy',
   '/account/keys/:id/revoke',
   '/account/apps/:id/revoke',
-  '/stripe/webhook',
-  '/v1/render',
-  '/v1/validate',
-  '/v1/convert',
-  '/v1/balance',
-  '/v1/share',
+  '/api/stripe/webhook',
+  '/api/v1/render',
+  '/api/v1/validate',
+  '/api/v1/convert',
+  '/api/v1/balance',
+  '/api/v1/share',
 ]);
 
 /**
@@ -271,7 +286,7 @@ const PATHS = new Set([
 function pathLabel(route: Wide['route'], path: string) {
   // An image or link path can hold the diagram source; a short link's id is not logged either.
   if (route === 'image') return undefined;
-  if (route === 'share') return '/link';
+  if (route === 'share') return '/api/link';
   const template = path
     .replace(/^\/account\/keys\/[0-9a-f]{12}\/revoke$/, '/account/keys/:id/revoke')
     .replace(/^\/account\/apps\/[\w-]{1,64}\/revoke$/, '/account/apps/:id/revoke');
@@ -283,12 +298,20 @@ function pathLabel(route: Wide['route'], path: string) {
   return /^[a-z][\w.-]{0,24}$/i.test(first) ? `/${first}${more}` : '/<other>';
 }
 
-async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
+async function handle(req: Request, env: Env, ctx: ExecutionContext, full: URL) {
+  const inner = apiPath(full.pathname);
+  if (inner === null)
+    return (
+      (await handleAuthorize(req, env, full)) ??
+      (await handleAccount(req, env, full)) ??
+      new Response('Not found', { status: 404 })
+    );
+  // The handlers below route on the path inside `/api`; the URLs they build add it back.
+  const url = new URL(full);
+  url.pathname = inner;
   if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
   const api = (await handleShare(req, env, ctx, url)) ?? (await handleApi(req, env, ctx, url));
   if (api) return api;
-  const account = (await handleAuthorize(req, env, url)) ?? (await handleAccount(req, env, url));
-  if (account) return account;
   // HEAD would draw and charge for a body it never sends.
   if (req.method !== 'GET')
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });

@@ -26,6 +26,9 @@
     // The Worker sends www to the apex before any asset is served.
     "run_worker_first": true,
   },
+  // The render service answers /api/*, /mcp, OAuth and the account pages on this domain; worker.ts
+  // forwards them. Deploy draftably-api first: a binding to a Worker that does not exist fails.
+  "services": [{ "binding": "API", "service": "draftably-api" }],
   "routes": [
     { "pattern": "draftably.dev", "custom_domain": true },
     { "pattern": "www.draftably.dev", "custom_domain": true },

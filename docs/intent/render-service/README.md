@@ -1,11 +1,11 @@
 # Hosted render service: design
 
-Status: deployed at `api.draftably.dev` (2026-11-25). The Worker is in `packages/service`. Task: TASK-0080. Build order:
+Status: deployed at `draftably.dev/api` (2026-11-25; on `api.draftably.dev` until 2026-11-26). The Worker is in `packages/service`. Task: TASK-0080. Build order:
 [plan.md](plan.md).
 
 ## Goal
 
-One Cloudflare Worker at `api.draftably.dev` gives agents and people three ways to get a diagram:
+One Cloudflare Worker, served at `draftably.dev/api`, gives agents and people three ways to get a diagram:
 
 1. **GET image URLs.** The URL holds the source. The response is SVG or PNG. No key is needed.
    This matches mermaid.ink and Kroki, which agents already know how to build.
@@ -50,15 +50,13 @@ account is on Workers Paid and has no domains yet; its one Worker is `context-re
 
 ## Domain
 
-Cloudflare runs the `draftably.dev` zone (Free plan; Namecheap is the registrar only). Both hosts
-are Workers on custom domains:
+Cloudflare runs the `draftably.dev` zone (Free plan; Namecheap is the registrar only). One host
+serves both Workers:
 
 - `draftably.dev` and `www.draftably.dev`: the `draftably-site` Worker (`site/wrangler.jsonc`)
   serves `dist-site` as static assets and sends www to the apex. It replaced GitHub Pages.
-- `api.draftably.dev`: the `draftably-api` Worker (`packages/service`).
-- Until the zone moves, the Worker runs on `draftably-api.<account>.workers.dev`. The first two
-  slices can ship there. Edge caching is confirmed only for custom domains, so slice 1 also
-  checks cache hits on `workers.dev`.
+- The `draftably-api` Worker (`packages/service`) has no route. The site Worker forwards `/api/*`,
+  `/mcp`, the OAuth paths and the account pages to it through a service binding.
 
 ## Interfaces
 

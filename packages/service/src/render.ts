@@ -1,5 +1,5 @@
 /**
- * One way to draw for every interface: GET image URLs, `/v1/render` and the MCP tool. They share
+ * One way to draw for every interface: GET image URLs, `/api/v1/render` and the MCP tool. They share
  * one edge cache, keyed by what changes the image (the source's hash, the format, the checked
  * options, the runtime version), so a cache hit is free everywhere and the three can't price the
  * same image differently.
@@ -200,5 +200,5 @@ export async function embedUrl(origin: string, source: string, format: Format, o
   if (opts.type) q.set('type', opts.type);
   if (opts.scheme !== 'light') q.set('scheme', opts.scheme);
   if (format === 'png' && opts.scale !== 2) q.set('scale', String(opts.scale));
-  return `${origin}/${format}/${segment}${q.size ? `?${q}` : ''}`;
+  return `${origin}/api/${format}/${segment}${q.size ? `?${q}` : ''}`;
 }

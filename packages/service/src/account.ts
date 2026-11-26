@@ -68,7 +68,7 @@ async function accountPage(
   const apps = (await env.OAUTH_PROVIDER.listUserGrants(account.id)).items;
   const day = (s: string | null) => (s ? longDay(s) : 'Never');
   const curl = newKey
-    ? `curl -X POST ${origin}/v1/render \\
+    ? `curl -X POST ${origin}/api/v1/render \\
   -H "Authorization: Bearer ${newKey}" \\
   -H "Content-Type: application/json" \\
   -d '{"code": "node a \\"Web\\"\\nnode b \\"API\\"\\nedge e a -> b", "format": "svg"}'`

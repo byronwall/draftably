@@ -4,8 +4,10 @@ import { appUrl } from '../draw';
 import { CopyCommand } from './CopyCommand';
 import { A } from '@solidjs/router';
 
-export const API = 'https://api.draftably.dev';
-export const MCP_ADD = `claude mcp add --transport http draftably ${API}/mcp --header "Authorization: Bearer dft_..."`;
+export const SITE = 'https://draftably.dev';
+/** The render service's images, short links and REST API. `/mcp` and `/account` sit at the root. */
+export const API = `${SITE}/api`;
+export const MCP_ADD = `claude mcp add --transport http draftably ${SITE}/mcp --header "Authorization: Bearer dft_..."`;
 
 const SAMPLE = `node web "Web app"
 node api "API"
@@ -19,7 +21,7 @@ const MCP_JSON = `{
   "mcpServers": {
     "draftably": {
       "type": "http",
-      "url": "${API}/mcp",
+      "url": "${SITE}/mcp",
       "headers": { "Authorization": "Bearer dft_..." }
     }
   }
@@ -53,7 +55,7 @@ export function Hosted() {
         <A href="/docs/hosted-render-urls">Read the API docs</A>
       </div>
       <p class="hosted-lead">
-        <code>api.draftably.dev</code> draws the same files from a URL, a REST call or your agent.
+        <code>draftably.dev/api</code> draws the same files from a URL, a REST call or your agent.
         It keeps the images it draws in a cache and stores a hash of each API key, not the key.
       </p>
       <div class="hosted-cols">
@@ -99,8 +101,8 @@ export function Hosted() {
             </For>
           </dl>
           <p>
-            Or call the REST API, with <code>/v1/validate</code> and <code>/v1/convert</code> beside
-            it:
+            Or call the REST API, with <code>/api/v1/validate</code> and{' '}
+            <code>/api/v1/convert</code> beside it:
           </p>
           <pre class="hosted-code">
             <code>{REST}</code>
@@ -143,7 +145,7 @@ export function Hosted() {
           </p>
           <p>Sign in with your email to make a key and get 1,000 credits a month.</p>
           <div class="hosted-actions">
-            <a class="button primary" href={`${API}/account`}>
+            <a class="button primary" href="/account">
               Get an API key
             </a>
             <a class="button" href={appUrl()} rel="external">
