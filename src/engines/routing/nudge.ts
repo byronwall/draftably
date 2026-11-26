@@ -1,6 +1,7 @@
 import { conflicts, parallelConflicts, parallelNear } from './conflicts.ts';
+import type { Point as RoutePoint } from './types.ts';
 import type { Context } from './context.ts';
-import { cost } from './cost.ts';
+import { cost, standoffCost } from './cost.ts';
 import { clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { simplify, validPath } from './paths.ts';
 
@@ -70,6 +71,16 @@ export function nudge(ctx: Context) {
   return nudged;
 }
 
+// Check each segment against the part of its own path before the preceding bend.
+function crossesItself(points: RoutePoint[]) {
+  for (let i = 2; i < points.length - 1; i++) {
+    const earlier = { points: points.slice(0, i) };
+    const hit = conflicts([points[i], points[i + 1]], [earlier]);
+    if (hit.crossings || hit.shared) return true;
+  }
+  return false;
+}
+
 /** A gap wider than this between two facing sides is open space, not a gap to centre in. */
 const GAP_MAX = 80,
   /** A side counts as facing a segment when they run alongside each other this far. */
@@ -100,6 +111,7 @@ export function centre(ctx: Context) {
         : [r.y, r.y + r.h].map(at => ({ at, lo: r.x, hi: r.x + r.w, node: r.node })),
     );
   const sides = [faces(false), faces(true)];
+  const borders = ctx.near.filter(box => box.border);
   let moved = 0;
   for (let ri = 0; ri < state.routes.length; ri++) {
     const route = state.routes[ri],
@@ -165,11 +177,19 @@ export function centre(ctx: Context) {
       p[i + 1][axis] = mid;
       // The segments either side keep their length clear of a jog.
       if (distance(p[i - 1], p[i]) < 8 || distance(p[i + 1], p[i + 2]) < 8) continue;
+      const beforeLane = parallelConflicts(points, others, s.edgeGap);
+      const afterLane = parallelConflicts(p, others, s.edgeGap);
+      if (
+        wide &&
+        (afterLane.laneDeficit > beforeLane.laneDeficit + EPS ||
+          standoffCost(p, borders) > standoffCost(points, borders) + EPS ||
+          crossesItself(p))
+      )
+        continue;
       if (
         !validPath(p, e, route.fromSide, route.toSide, obsFor(e)) ||
         conflicts(p, others).crossings > conflicts(points, others).crossings ||
-        parallelConflicts(p, others, s.edgeGap).lanePairs >
-          parallelConflicts(points, others, s.edgeGap).lanePairs
+        afterLane.lanePairs > beforeLane.lanePairs
       )
         continue;
       points = p;
