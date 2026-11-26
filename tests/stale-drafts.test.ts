@@ -4,6 +4,7 @@
 // of a different field still saves; a draft of the same field is refused. A body saved from grid
 // cells also depends on the tab width and table setting it read the cells with; typed text does not.
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
+import { findNode } from '../src/model/graph';
 import type { DiagramSession } from '../src/state/session';
 
 beforeAll(() => {
@@ -239,4 +240,116 @@ it('saves a draft to its own file while the next file is still opening', async (
   await settle(s);
   expect(s.currentSource()).toBe(BASE);
   expect(puts).toEqual(['./api/source?file=a.draft']);
+});
+
+it('checks a label finished during a refresh against the refreshed label', async () => {
+  const source = 'diagram "Labels" version=1\nnode a "Alpha"\nnode b "Beta"\n';
+  for (const [changed, expected] of [
+    // The file renamed the same node: its name stays and the edit is refused.
+    [source.replace('"Alpha"', '"Disk"'), source.replace('"Alpha"', '"Disk"')],
+    // The file renamed another node: both changes stay.
+    [
+      source.replace('"Beta"', '"Disk"'),
+      source.replace('"Beta"', '"Disk"').replace('"Alpha"', '"Mine"'),
+    ],
+  ]) {
+    const s = await session();
+    await s.openExampleSession(`labels-${changed.length}-${Math.random()}`, 'Labels', source);
+    await settle(s);
+    s.startInlineEdit('a');
+    s.setInlineDraft('Mine');
+    const refresh = s.receiveSource(changed);
+    expect(s.fileCompiling()).toBe(true);
+    s.finishInlineEdit(true);
+    await refresh;
+    await settle(s);
+    expect(s.currentSource()).toBe(expected);
+  }
+});
+
+it('applies a code save made while Source panel text compiles to that text', async () => {
+  const s = await session();
+  await s.openExampleSession('drafts-typed', 'Drafts', BASE);
+  await settle(s);
+  s.startInlineEdit('q');
+  const token = s.codeDraft()!.token;
+  const typing = s.typeSource(SIZED, 1);
+  expect(s.fileCompiling()).toBe(true);
+  s.finishCodeEdit(token, DRAFTS.caption.draft);
+  await typing;
+  await settle(s);
+  const saved = s.currentSource();
+  expect(saved).toBe(SIZED.replace('"Query"', '"Mine"'));
+  // The drawing is the saved text, and undo steps back through the caption, then the typing.
+  expect(findNode(s.doc, 'q')?.title).toBe('Mine');
+  s.undo();
+  await settle(s);
+  expect(s.currentSource()).toBe(SIZED);
+});
+
+it('saves each file its own edit when a save is in flight across a file switch', async () => {
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
+  vi.stubGlobal(
+    'EventSource',
+    class extends EventTarget {
+      close() {}
+    },
+  );
+  const puts: [string, string][] = [];
+  let release!: () => void;
+  const held = new Promise<void>(resolve => (release = resolve));
+  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+    if (init?.method === 'PUT') {
+      puts.push([url, JSON.parse(init.body as string).source]);
+      // A's save is held until B is open and edited.
+      if (url.includes('a.draft')) await held;
+      return Response.json({ revision: `r${puts.length}` });
+    }
+    return Response.json({ name: 'copy', path: '/copy', source: BASE, revision: 'same' });
+  });
+  const s = await session();
+  await s.openFileSession('a.draft');
+  await settle(s);
+  s.startInlineEdit('q');
+  s.finishCodeEdit(s.codeDraft()!.token, { table: false, title: 'In A' });
+  await settle(s);
+  expect(await s.openFileSession('b.draft')).toBe(true);
+  await settle(s);
+  s.startInlineEdit('q');
+  s.finishCodeEdit(s.codeDraft()!.token, { table: false, title: 'In B' });
+  await settle(s);
+  release();
+  await vi.waitFor(() => expect(puts).toHaveLength(2));
+  await s.settleSave();
+  expect(puts.map(([url, text]) => [url, /"In [AB]"/.exec(text)?.[0]])).toEqual([
+    ['./api/source?file=a.draft', '"In A"'],
+    ['./api/source?file=b.draft', '"In B"'],
+  ]);
+  expect(s.fileStatus()).toBe('saved');
+});
+
+it('shows only the newest file when two opens answer in reverse order', async () => {
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
+  vi.stubGlobal(
+    'EventSource',
+    class extends EventTarget {
+      close() {}
+    },
+  );
+  let release!: () => void;
+  const held = new Promise<void>(resolve => (release = resolve));
+  vi.stubGlobal('fetch', async (url: string) => {
+    const name = /file=(\w)/.exec(url)![1];
+    if (name === 'b') await held;
+    const source = file(' lang=sql', `File ${name}`);
+    return Response.json({ name, path: `/${name}`, source, revision: name });
+  });
+  const s = await session();
+  const b = s.openFileSession('b.draft');
+  expect(await s.openFileSession('c.draft')).toBe(true);
+  release();
+  expect(await b).toBeNull();
+  await settle(s);
+  expect(s.fileSession()?.file).toBe('c.draft');
+  expect(s.currentSource()).toContain('File c');
 });

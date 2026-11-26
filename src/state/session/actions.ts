@@ -76,12 +76,24 @@ export function createActions(
   // --- Inline label editing --------------------------------------------------------------------
 
   const [inlineDraft, setInlineDraft] = createSignal('');
+  /** The open label edit: the object it edits (its id follows a source id map) and its value then. */
+  let inlineOpen: { id: string; value: string } | null = null;
+  function openInline(id: string, value: string) {
+    if (inlineOpen) drafts.delete(inlineOpen);
+    inlineOpen = { id, value };
+    drafts.add(inlineOpen);
+    batch(() => {
+      s.setConnectFrom(null);
+      setInlineDraft(value);
+      s.setInlineEditId(id);
+    });
+  }
 
   s.onSourceIdMap(mapId => {
     const id = s.inlineEditId();
     if (id) s.setInlineEditId(mapId(id));
-    // An open or queued code draft follows its node when a temporary id becomes a source id.
-    for (const draft of codeDrafts) draft.id = mapId(draft.id);
+    // An open or queued draft follows its object when a temporary id becomes a source id.
+    for (const draft of drafts) draft.id = mapId(draft.id);
     const open = codeDraft();
     if (open) setCodeEditId(open.id);
   });
@@ -104,7 +116,7 @@ export function createActions(
     open: { title: string; table: boolean; tab: number; body: string[]; cells?: Table };
   }
   /** Drafts that are open or waiting to be applied, so a source id map reaches each one. */
-  const codeDrafts = new Set<CodeDraft>();
+  const drafts = new Set<{ id: string }>();
   let draftCount = 0;
   const [codeDraft, setCodeDraft] = createSignal<CodeDraft | null>(null);
   /** The code node whose body is open in the code or table editor. */
@@ -159,7 +171,7 @@ export function createActions(
         cells: unwrap(code.cells),
       }),
     };
-    codeDrafts.add(draft);
+    drafts.add(draft);
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -217,7 +229,7 @@ export function createActions(
       body: next.body,
     };
     if (!patch || (patch.title === undefined && patch.table === undefined && !patch.body))
-      return void codeDrafts.delete(draft);
+      return void drafts.delete(draft);
     // Each field the patch writes, and what it was read with: a body from grid cells also
     // depends on the tab width and table setting it read them with.
     const reads: (keyof CodeFields)[] = [
@@ -227,7 +239,7 @@ export function createActions(
       ...(patch.body && next.grid ? (['cells'] as const) : []),
     ];
     s.whenDrawn(() => {
-      codeDrafts.delete(draft);
+      drafts.delete(draft);
       applyCodePatch(draft, patch, reads);
     });
   }
@@ -268,47 +280,60 @@ export function createActions(
     const text = parseTextId(id) && textValue(s.doc, id);
     if (text !== undefined) {
       finishInlineEdit(true);
-      batch(() => {
-        s.setConnectFrom(null);
-        setInlineDraft(text);
-        s.setInlineEditId(id);
-      });
-      return;
+      return openInline(id, text);
     }
     const entity = findNode(s.doc, id) ?? findGroup(s.doc, id) ?? findEdge(s.doc, id);
     if (!entity) return;
     // A code node's body opens in the code editor: a cell grid for a table.
     if ('code' in entity && entity.code) return startCodeEdit(id);
     finishInlineEdit(true);
-    batch(() => {
-      s.setConnectFrom(null);
-      setInlineDraft('label' in entity ? entity.label : entity.title);
-      s.setInlineEditId(id);
-    });
+    openInline(id, 'label' in entity ? entity.label : entity.title);
   }
 
   function finishInlineEdit(save = true) {
     const id = s.inlineEditId();
     if (!id) return;
     s.setInlineEditId(null);
-    if (!save) return;
-    const value = inlineDraft().trim(),
+    const opened = inlineOpen;
+    inlineOpen = null;
+    if (!opened) return;
+    if (!save) return void drafts.delete(opened);
+    const value = inlineDraft().trim();
+    // Like a code save, a label save runs against the latest drawn source: while a revision is
+    // laid out it waits, then checks that the file did not change the label meanwhile.
+    s.whenDrawn(() => {
+      drafts.delete(opened);
+      saveInline(opened, value);
+    });
+  }
+
+  /** Save a finished label edit onto the object as the drawn source has it now. */
+  function saveInline(opened: { id: string; value: string }, value: string) {
+    const id = opened.id,
       text = parseTextId(id);
+    const changed = () =>
+      toast('This label changed while you edited it, so your edit was not saved.');
     if (text) {
-      if (textValue(s.doc, id) !== value)
+      const now = textValue(s.doc, id);
+      if (now !== undefined && now !== value) {
+        if (now !== opened.value) return changed();
         s.transact(`Edit ${TEXT_NAMES[text.kind]}`, d => setTextValue(d, id, value));
+      }
       // An emptied note or legend row is gone, and later ones move up an index.
       if (!value) s.clearSelection();
       return;
     }
     const edge = findEdge(s.doc, id);
     if (edge) {
-      if (edge.label !== value) s.transact('Edit label', d => edits.setEdgeLabel(d, id, value));
+      if (edge.label === value) return;
+      if (edge.label !== opened.value) return changed();
+      s.transact('Edit label', d => edits.setEdgeLabel(d, id, value));
       return;
     }
     const object = findNode(s.doc, id) ?? findGroup(s.doc, id);
-    if (object && object.title !== (value || 'Untitled'))
-      s.transact('Edit label', d => edits.setTitle(d, id, value));
+    if (!object || object.title === (value || 'Untitled')) return;
+    if (object.title !== opened.value) return changed();
+    s.transact('Edit label', d => edits.setTitle(d, id, value));
   }
 
   // A registered handler, not a reactive read.

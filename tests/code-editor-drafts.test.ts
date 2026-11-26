@@ -161,3 +161,15 @@ it('keeps the draft of a pasted table when its temporary id becomes a source id'
   await ui.done();
   expect(ui.s.currentSource()).toMatch(new RegExp(`node ${id} "Pasted"`));
 });
+
+it('writes no body for text edited, then put back in the grid', async () => {
+  // Rows the file and a paste read alike: two cells each.
+  const rows = ['a\tb', 'c\td'];
+  const ui = await editor(file(' lang=sql', rows));
+  ui.type(ui.text(), 'a\tb\nc\tz');
+  ui.toggle();
+  ui.type(ui.cell(1, 1), 'd');
+  await ui.done();
+  // Only the Table switch is saved.
+  expect(ui.s.currentSource()).toBe(file(' lang=sql table=on', rows));
+});

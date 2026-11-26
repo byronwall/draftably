@@ -65,11 +65,11 @@ function Editor(props: { token: number }) {
   /** A grid as the body text it saves. */
   const bodyOf = (g: edit.Grid) => writeTable(edit.gridTable(g)).join('\n');
   /**
-   * The body of the grid as it showed the file's own body: on open in a table, or when the Table
-   * switch read the file's text. Null once the grid came from edited text. A grid that still
-   * saves this body is not a body edit.
+   * The body the file's own body saves as from a grid: the grid that opened in a table, or the
+   * grid the Table switch shows for the file's text. A grid that still saves this body is not a
+   * body edit, however the editor got there.
    */
-  let fileGrid: string | null = open.table ? bodyOf(openGrid) : null;
+  const fileGrid = bodyOf(open.table ? openGrid : edit.openGrid(fileTable()));
   const [table, setTable] = createSignal(open.table),
     // The compiler read the table once; the grid edits that read.
     [grid, setGrid] = createSignal(openGrid),
@@ -81,7 +81,7 @@ function Editor(props: { token: number }) {
     // with, even after the Table switch turns it back into text.
     [fromCells, setFromCells] = createSignal(false);
   /** The grid still shows the file's body, as the editor showed it. */
-  const gridUnchanged = () => fileGrid !== null && bodyOf(grid()) === fileGrid;
+  const gridUnchanged = () => bodyOf(grid()) === fileGrid;
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
   const rows = () => grid().table.rows,
@@ -152,14 +152,10 @@ function Editor(props: { token: number }) {
       if (table()) setText(gridUnchanged() ? raw.join('\n') : tableBody().join('\n'));
       // The file's own text shows the cells the file reads once `table=on` is saved; changed text
       // is read as a paste, and saved as the grid shows it.
-      else if (text() === raw.join('\n')) {
-        const g = edit.openGrid(fileTable());
-        fileGrid = bodyOf(g);
-        setGrid(g);
-      } else {
-        fileGrid = null;
-        setGrid(edit.openGrid(asTable(text().split('\n'))));
-      }
+      else
+        setGrid(
+          edit.openGrid(text() === raw.join('\n') ? fileTable() : asTable(text().split('\n'))),
+        );
       setTable(!table());
       setDirty(true);
     });
