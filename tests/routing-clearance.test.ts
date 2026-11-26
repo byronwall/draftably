@@ -101,6 +101,45 @@ describe('routing clearance', () => {
     for (const r of blockers) expect(closestParallel(route.points, r)).toBeGreaterThanOrEqual(20);
   });
 
+  it('lets cleanup remove a short jog before trading it for extra bends', () => {
+    const input: RouteInput = {
+      nodes: [
+        box('a', 409, -18, 83, 85),
+        box('b', 7, 143, 94, 80),
+        box('c', 200, 30, 87, 96),
+        box('d', 232, 154, 81, 87),
+        box('e', 382, 86, 114, 65),
+        box('f', 155, -23, 95, 33),
+      ],
+      groups: [],
+      edges: [{ id: 'ab', from: 'a', to: 'b', cfg: { fromSide: 'left', toSide: 'right' } }],
+    };
+    const [route] = RouteLab.compute(input).routes;
+    expect(route.blocked).toBe(false);
+    expect(route.points).toHaveLength(4);
+  });
+
+  it('searches past a clear but costly dogleg', () => {
+    const input: RouteInput = {
+      nodes: [
+        box('a', 399, 27, 89, 79),
+        box('b', 17, 147, 97, 77),
+        box('c', 242, 0, 95, 88),
+        box('d', 207, 125, 100, 70),
+        box('e', 389, 102, 106, 56),
+        box('f', 166, -17, 82, 43),
+      ],
+      groups: [],
+      edges: [edge('ab', 'a', 'b'), edge('db', 'd', 'b'), edge('cd', 'c', 'd')],
+    };
+    const { routes, report } = RouteLab.compute(input, { tidy: false });
+    expect(routes.every(r => !r.blocked)).toBe(true);
+    expect(report.crossings).toBe(0);
+    const ab = routes.find(r => r.id === 'ab')!;
+    expect(ab.points.length).toBeLessThanOrEqual(6);
+    expect(closestParallel(ab.points, input.nodes[2])).toBeGreaterThanOrEqual(20);
+  });
+
   it('keeps runs off a group border', () => {
     const group = { id: 'g', x: 0, y: 0, w: 200, h: 200, collapsed: false };
     const input: RouteInput = {

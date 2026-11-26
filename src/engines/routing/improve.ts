@@ -1,10 +1,10 @@
 import { standoffCost } from './cost.ts';
 import { conflicts, parallelConflicts } from './conflicts.ts';
-import { REPAIR_EDGES } from './tuning.ts';
+import { REPAIR_EDGES, shortStepLimit } from './tuning.ts';
 import type { Route } from './types.ts';
 import type { Context } from './context.ts';
 import { find } from './find.ts';
-import { cmp } from './geometry.ts';
+import { cmp, distance } from './geometry.ts';
 
 /**
  * Routes again each line that is blocked, crosses, shares a run, runs too close to another or
@@ -69,6 +69,14 @@ export function improve(ctx: Context) {
           !far(state.routes[i]);
         const old = state.routes[i];
         if (clearanceOnly && (old.points.length < 3 || clearanceCost(old) <= s.standoff)) continue;
+        // Let the tidy pass straighten a short step before trading the route for clearance.
+        if (
+          clearanceOnly &&
+          rawOptions.tidy !== false &&
+          rawOptions.jogs !== false &&
+          old.points.slice(1, -2).some((p, k) => distance(p, old.points[k + 2]) < shortStepLimit(s))
+        )
+          continue;
         const next = find(ctx, e, used, old, [], clearanceOnly);
         if (clearanceOnly && clearanceCost(old) - clearanceCost(next) < s.standoff) continue;
         const candidate = [...state.routes];

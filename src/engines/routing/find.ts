@@ -1,5 +1,4 @@
 import { conflicts, flatten, parallelConflicts, unflatten } from './conflicts.ts';
-import { standoffCost } from './cost.ts';
 import type { Context } from './context.ts';
 import { crossingFloor, doglegs, laneLines } from './doglegs.ts';
 import {
@@ -319,7 +318,7 @@ function findAmong(
       !conflicts(best.points, used).crossings &&
       !parallelConflicts(best.points, used, s.edgeGap).lanePairs &&
       !cfg.waypoints?.length &&
-      !(seekClearance && standoffCost(best.points, near) > s.standoff) &&
+      !seekClearance &&
       best.points.length <= 6
     )
       break;

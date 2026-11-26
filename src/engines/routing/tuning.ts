@@ -42,3 +42,7 @@ export const MAX_REPAIRS = 4,
   // one crossing matters less. On larger drawings they rarely find a better pair: none did on the
   // graph harness's DAGs. Hand-drawn diagrams stay well below this.
   REPAIR_EDGES = 32;
+
+/** A step narrower than normal line separation can straighten onto either adjacent run. */
+export const shortStepLimit = (s: { edgeGap: number; standoff: number }) =>
+  Math.max(12, Math.min(s.edgeGap, s.standoff));
