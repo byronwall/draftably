@@ -13,7 +13,13 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
-import { CODE_MAX_WIDTH, codeFromBody, codeLayout, type CodeBlock } from '../../model/code';
+import {
+  CODE_MAX_WIDTH,
+  CODE_TAB,
+  codeFromBody,
+  codeLayout,
+  type CodeBlock,
+} from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -38,11 +44,14 @@ import type { EditorPart } from './editor';
 import type { DocumentPart } from './document';
 import type { ScenePart } from './scene';
 import type { LayoutPart } from './layout';
+import type { FileSessionPart } from './file-session';
 
 /** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
 export const HEADING_EDIT = { title: textId('title'), subtitle: textId('subtitle') } as const;
 
-export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutPart) {
+export function createActions(
+  s: EditorPart & DocumentPart & FileSessionPart & ScenePart & LayoutPart,
+) {
   // --- Tools -----------------------------------------------------------------------------------
 
   /** Lets the brush and timeline intercept tool changes. Returns true when handled. */
@@ -83,13 +92,29 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /** Save the open code editor, if any, before another edit or a press on the canvas. */
   const commitCodeEdit = () => saveOpenCode?.();
 
-  /** What the open editor started from: a save is refused when the node changed since. */
-  let codeBase = '';
-  /** A code node's caption, table setting and body, to tell whether it changed. */
-  const codeState = (id: string) => {
-    const node = findNode(s.doc, id);
-    const code = node?.code;
-    return JSON.stringify([node?.title, code?.table, code?.tab, code?.body ?? code?.lines]);
+  type CodeFields = { title: string; table: boolean; body: string; cells: string };
+  /**
+   * What the open editor started from, field by field. A save writes only the fields its draft
+   * changed, and is refused when one of those fields changed in the file since: a change the file
+   * made to another field stays. `file` is the shown file, so a draft never saves into another.
+   */
+  let codeBase: { file: unknown; fields: CodeFields } | undefined;
+  /**
+   * The fields of a code node the editor can write: caption, table setting and body. `cells` is
+   * what a grid read its cells with, tab width and table setting: a body written from grid cells
+   * after either changed could move or drop cells. A body typed as text does not depend on them.
+   */
+  const codeFields = (id: string): CodeFields | undefined => {
+    const node = findNode(s.doc, id),
+      code = node?.code;
+    return node && code
+      ? {
+          title: node.title,
+          table: !!code.table,
+          body: JSON.stringify(code.body ?? code.lines),
+          cells: JSON.stringify([code.tab ?? CODE_TAB, !!code.table]),
+        }
+      : undefined;
   };
 
   function startCodeEdit(id: string) {
@@ -98,7 +123,10 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     const code = findNode(s.doc, id)?.code;
     if (code?.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
-    codeBase = codeState(id);
+    // Another file is opening: the drawing on screen is not the file a save would go to.
+    if (s.shownFile() !== s.fileSession()) return toast('Still opening the file. Try again.');
+    const fields = codeFields(id);
+    codeBase = fields && { file: s.shownFile(), fields };
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -135,26 +163,51 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
    * reads a file, so it draws the same before and after the file is saved. A node that changed
    * since the editor opened (the file was edited elsewhere) is not saved over.
    */
-  function finishCodeEdit(id: string, next?: { body?: string[]; table: boolean; title: string }) {
+  function finishCodeEdit(
+    id: string,
+    next?: { body?: string[]; table: boolean; title: string; grid?: boolean },
+  ) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
-    if (!next) return;
-    if (codeState(id) !== codeBase)
+    const opened = codeBase;
+    codeBase = undefined;
+    if (!next || !opened) return;
+    const base = opened.fields;
+    const edits = {
+      title: next.title !== base.title,
+      table: next.table !== base.table,
+      body: !!next.body,
+    };
+    if (!edits.title && !edits.table && !edits.body) return;
+    // Each field the draft writes, and what it was read with: a body from grid cells also
+    // depends on the tab width and table setting it read them with.
+    const reads: (keyof CodeFields)[] = [
+      ...(edits.title ? (['title'] as const) : []),
+      ...(edits.table ? (['table'] as const) : []),
+      ...(edits.body ? (['body'] as const) : []),
+      ...(edits.body && next.grid ? (['cells'] as const) : []),
+    ];
+    if (opened.file !== s.shownFile() || s.shownFile() !== s.fileSession())
+      return toast('Another file is open now, so your code edit was not saved.');
+    const now = codeFields(id);
+    if (!now) return toast('This code was removed or renamed, so your edit was not saved.');
+    if (reads.some(k => now[k] !== base[k]))
       return toast('This code changed while you edited it, so your edit was not saved.');
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;
-      node.title = next.title;
-      const toggled = next.table !== !!node.code.table;
+      if (edits.title) node.title = next.title;
       // A caption edit leaves the code block as it is.
-      if (!next.body && !toggled) return;
+      if (!edits.body && !edits.table) return;
+      const table = edits.table ? next.table : !!node.code.table,
+        toggled = table !== !!node.code.table;
       const { table: _, cells: __, ...rest } = node.code;
       node.code = {
         ...rest,
-        ...(next.table ? { table: true } : {}),
+        ...(table ? { table: true } : {}),
         // `table=` sets the wrap default, unless the file sets `wrap=`.
-        ...(toggled && !rest.wrapSet ? { wrap: !next.table } : {}),
-        ...codeFromBody(next.body ?? rest.body ?? rest.lines, next.table, rest.tab),
+        ...(toggled && !rest.wrapSet ? { wrap: !table } : {}),
+        ...codeFromBody(next.body ?? rest.body ?? rest.lines, table, rest.tab),
       };
     });
   }

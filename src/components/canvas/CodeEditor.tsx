@@ -1,6 +1,6 @@
 import { batch, createMemo, createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
 import { resolveAppearance } from '../../model/appearance';
-import { CODE_TAB, CODE_TYPE, codeLines } from '../../model/code';
+import { CODE_TAB, CODE_TYPE, codeFromBody, codeLines } from '../../model/code';
 import { detailInk, drawnSwatch } from '../../model/colors';
 import { clamp } from '../../model/geometry';
 import { findNode, objectRect } from '../../model/graph';
@@ -47,20 +47,33 @@ function Editor(props: { id: string }) {
     swatch = drawnSwatch(s.doc, look, id, 'node'),
     muted = detailInk(look, swatch),
     tab = code.tab ?? CODE_TAB,
-    // The body as the file holds it: the text box edits it as it is, tabs and all.
-    raw = code.body ?? code.lines;
+    // The body and caption as the file held them when the editor opened: a copy, since the node
+    // is live and the file can change while the editor is open.
+    raw = [...(code.body ?? code.lines)],
+    openTitle = node.title;
 
   /** Text as a table, read as the file would read it: spreadsheet cells, or tabs expanded. */
   const asTable = (lines: string[]) =>
     pastedTable(lines.join('\n')) ?? readTable(codeLines(lines, tab));
+  /** The cells the compiler reads from the file's body with `table=on`. */
+  const fileTable = () => readTable(codeLines(raw, tab));
 
+  // A copy of the cells: the live node's arrays change when the file does.
+  const openGrid = edit.openGrid(
+    code.cells ? (JSON.parse(JSON.stringify(code.cells)) as typeof code.cells) : asTable(raw),
+  );
   const [table, setTable] = createSignal(!!code.table),
     // The compiler read the table once; the grid edits that read.
-    [grid, setGrid] = createSignal(edit.openGrid(code.cells ?? asTable(raw))),
+    [grid, setGrid] = createSignal(openGrid),
     [text, setText] = createSignal(raw.join('\n')),
-    [title, setTitle] = createSignal(node.title),
+    [title, setTitle] = createSignal(openTitle),
     [focus, setFocus] = createSignal({ r: 0, c: 0 }),
-    [dirty, setDirty] = createSignal(false);
+    [dirty, setDirty] = createSignal(false),
+    // The body was edited as cells, so text made from it depends on the tab width it read them
+    // with, even after the Table switch turns it back into text.
+    [fromCells, setFromCells] = createSignal(false);
+  /** The cells a body draws with `table=on`, read as the compiler reads them. */
+  const drawnCells = (lines: string[]) => JSON.stringify(codeFromBody(lines, true, tab).cells);
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
   const rows = () => grid().table.rows,
@@ -81,6 +94,7 @@ function Editor(props: { id: string }) {
     batch(() => {
       setGrid(fn);
       setDirty(true);
+      setFromCells(true);
     });
   const setCell = (r: number, c: number, value: string) =>
     change(g => edit.setCell(g, r, c, value));
@@ -126,8 +140,17 @@ function Editor(props: { id: string }) {
   /** Switch between the cell grid and plain text, carrying the body across. */
   const toggleTable = () => {
     batch(() => {
-      if (table()) setText(tableBody().join('\n'));
-      else setGrid(edit.openGrid(asTable(text().split('\n'))));
+      // Cells that still draw what the file's body draws go back to that body as it is written.
+      if (table())
+        setText(
+          drawnCells(tableBody()) === drawnCells(raw) ? raw.join('\n') : tableBody().join('\n'),
+        );
+      // The file's own text shows the cells the file reads once `table=on` is saved; changed text
+      // is read as a paste, and saved as the grid shows it.
+      else
+        setGrid(
+          edit.openGrid(text() === raw.join('\n') ? fileTable() : asTable(text().split('\n'))),
+        );
       setTable(!table());
       setDirty(true);
     });
@@ -140,13 +163,22 @@ function Editor(props: { id: string }) {
   /** Close the editor. `refocus`: give the canvas the keyboard; a focus-out save leaves it be. */
   const close = (save: boolean, refocus = true) => {
     if (closed) return;
-    // Only a changed body is written; a caption edit leaves the file's body as it is.
-    const body = dirty() ? (table() ? tableBody() : text().split('\n')) : undefined;
+    // Only a changed body is written: a caption edit or the Table switch alone leaves the file's
+    // body as it is, and so does an edit typed back to what the file holds.
+    // A body is written only when it draws something other than the file's body: a grid by the
+    // cells the file would read, text by its exact text. The Table switch alone writes no body.
+    const lines = table() ? tableBody() : text().split('\n'),
+      same = table() ? drawnCells(lines) === drawnCells(raw) : text() === raw.join('\n'),
+      body = same ? undefined : lines;
     closed = true;
-    const changed = dirty() || title().trim() !== node.title;
+    // An untouched caption is sent as the file had it at open, outer spaces and all.
+    const caption = title() === openTitle ? openTitle : title().trim();
+    const changed = dirty() || caption !== openTitle;
     s.finishCodeEdit(
       id,
-      save && changed ? { body, table: table(), title: title().trim() } : undefined,
+      save && changed
+        ? { body, table: table(), title: caption, grid: table() || fromCells() }
+        : undefined,
     );
     if (refocus) s.focusCanvas();
   };

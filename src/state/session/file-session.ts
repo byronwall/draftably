@@ -176,6 +176,12 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
 
   /** The open file or example, or null when the editor works on browser storage as usual. */
   const fileSession = state.info;
+  /**
+   * The file whose drawing is on screen: set when a source projects, so it lags `fileSession`
+   * while another file opens or stays invalid. An editor draft opens and saves only when the two
+   * agree.
+   */
+  const [shownFile, setShownFile] = createSignal<FileSessionInfo | null>(null);
   const fileMode = () => !!state.info();
   /** True while an example is open: edits are kept in this browser only. */
   const exampleMode = () => !!state.info()?.example;
@@ -364,6 +370,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     batch(() => {
       s.mapSourceIds(mapId);
       s.restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
+      // The drawing on screen is now this file's, in the same batch as its projection.
+      setShownFile(state.info());
       if (!pending) adopt(routes as Routes | undefined);
       routeSink.awaiting(!!pending);
       // A drag in a file keeps quick routes until its saved version is drawn.
@@ -853,6 +861,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     s.setCommitHandler(null);
     s.setHistoryHandler(null);
     state.setInfo(null);
+    setShownFile(null);
   }
 
   /**
@@ -1047,6 +1056,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     liveSource,
     sourceDraft,
     fileSession,
+    shownFile,
     fileMode,
     exampleMode,
     scratchName,
