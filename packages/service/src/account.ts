@@ -1,6 +1,7 @@
 /**
  * The account page: sign in with an emailed link, see the balance, make and revoke API keys. Plain HTML
- * forms; the session cookie is SameSite=Lax, so another site can't post to them.
+ * forms in the site's frame (html.ts); the session cookie is SameSite=Lax, so another site can't post
+ * to them.
  */
 import {
   cleanEmail,
@@ -15,43 +16,8 @@ import {
   type AuthEnv,
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
+import { COPY_ICON, esc, page } from './html';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
-
-const esc = (s: string) =>
-  s.replace(
-    /[&<>"']/g,
-    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
-  );
-
-const page = (title: string, body: string, status = 200, headers: Record<string, string> = {}) =>
-  new Response(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(title)} · Draftably</title>
-<style>
-:root{color-scheme:light dark;--fg:#1d2433;--muted:#5b6475;--line:#d8dde6;--bg:#f7f7f4;--card:#fff;--accent:#2f5bd3}
-@media (prefers-color-scheme:dark){:root{--fg:#e6e9ef;--muted:#9aa3b2;--line:#323a48;--bg:#15181e;--card:#1d222b;--accent:#7ea2ff}}
-body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
-main{max-width:720px;margin:40px auto;padding:0 16px}
-h1{font-size:22px;margin:0 0 4px}p.muted,.muted{color:var(--muted)}
-section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:16px 0}
-h2{font-size:15px;margin:0 0 8px}table{width:100%;border-collapse:collapse}
-td,th{text-align:left;padding:6px 4px;border-top:1px solid var(--line);font-size:14px}th{color:var(--muted);font-weight:500}
-code,pre{font:13px/1.45 ui-monospace,monospace}pre{background:var(--bg);padding:10px;border-radius:6px;overflow-x:auto}
-button,.button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:6px;padding:4px 12px;cursor:pointer;text-decoration:none}
-.primary{background:var(--accent);border-color:var(--accent);color:#fff}input{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
-.big{font-size:28px;font-weight:600}
-</style></head><body><main>${body}</main></body></html>`,
-    {
-      status,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-store',
-        // No other site may frame these pages and hide what a button does.
-        'Content-Security-Policy': "frame-ancestors 'none'",
-        ...headers,
-      },
-    },
-  );
 
 const redirect = (to: string, cookie?: string) =>
   new Response(null, {
@@ -65,6 +31,18 @@ interface KeyRow {
   created_at: string;
   last_used_at: string | null;
 }
+
+const n = (x: number) => x.toLocaleString('en-US');
+/** `2026-12-01…` as `Dec 1, 2026`. */
+const longDay = (iso: string) =>
+  new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+const copyButton = (text: string, label: string) =>
+  `<button type="button" class="copy-btn" data-copy="${esc(text)}" aria-label="${label}" title="${label}">${COPY_ICON}</button>`;
 
 async function accountPage(
   env: AuthEnv & StripeEnv,
@@ -81,64 +59,76 @@ async function accountPage(
       .bind(account.id)
       .all<KeyRow>()
   ).results;
-  const day = (s: string | null) => (s ? s.slice(0, 10) : 'never');
+  const day = (s: string | null) => (s ? longDay(s) : 'Never');
+  const curl = newKey
+    ? `curl -X POST ${origin}/v1/render \\
+  -H "Authorization: Bearer ${newKey}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"code": "node a \\"Web\\"\\nnode b \\"API\\"\\nedge e a -> b", "format": "svg"}'`
+    : '';
+  const left = Math.max(0, Math.min(100, (b.grant / MONTHLY_GRANT) * 100));
   return page(
     'Account',
-    `<h1>Draftably render service</h1>
-<p class="muted">Signed in as <b>${esc(account.email)}</b> · <form method="post" action="/logout" style="display:inline"><button>Sign out</button></form></p>
-<section><h2>Credits</h2>
-<div class="big">${(b.grant + b.bought).toLocaleString('en-US')}</div>
-<p class="muted">${b.grant.toLocaleString('en-US')} left in this month's free ${MONTHLY_GRANT.toLocaleString('en-US')} (resets ${b.resetsAt}) · ${b.bought.toLocaleString('en-US')} bought.
-An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</p></section>
-${bought ? '<p><b>Thanks.</b> Your credits appear here once Stripe confirms the payment, usually within seconds.</p>' : ''}
-${
-  paidCreditsOn(env)
-    ? `<section><h2>Buy credits</h2><p class="muted">Bought credits never expire. The monthly grant is spent first.</p>
-${PACKS.map(
-  p => `<form method="post" action="/account/buy" style="display:inline-block;margin-right:8px"><input type="hidden" name="pack" value="${p.id}">
-<button class="primary">${p.credits.toLocaleString('en-US')} credits · $${(p.cents / 100).toFixed(2)}</button></form>`,
-).join('')}</section>`
-    : ''
-}
+    `<div class="col">
+<div class="page-head"><div><h1>Account</h1>
+<p class="lead">Signed in as <b>${esc(account.email)}</b></p></div>
+<form method="post" action="/logout"><button class="button small">Sign out</button></form></div>
+${bought ? '<p class="note"><b>Thanks.</b> Your credits appear here once Stripe confirms the payment, usually within seconds.</p>' : ''}
 ${
   newKey
-    ? `<section><h2>Your new key</h2><p>Copy it now; it is not shown again.</p><pre>${esc(newKey)}</pre>
-<pre>curl -X POST ${origin}/v1/render \\
-  -H "Authorization: Bearer ${esc(newKey)}" \\
-  -H "Content-Type: application/json" \\
-  -d '{"code": "node a \\"Web\\"\\nnode b \\"API\\"\\nedge e a -> b", "format": "svg"}'</pre></section>`
+    ? `<section class="fresh"><h2>Your new key</h2><p>Copy it now; it is not shown again.</p>
+<div class="codeline"><code>${esc(newKey)}</code>${copyButton(newKey, 'Copy the key')}</div>
+<p class="try">Try it:</p>
+<div class="codeline"><pre>${esc(curl)}</pre>${copyButton(curl, 'Copy the command')}</div></section>`
     : ''
 }
-<section><h2>API keys</h2>
+<section class="block"><h2>Credits</h2>
+<div class="balance"><span class="big">${n(b.grant + b.bought)}</span><span class="unit">credits</span></div>
+<div class="meter" title="${n(b.grant)} of ${n(MONTHLY_GRANT)} free credits left"><span style="width:${left.toFixed(1)}%"></span></div>
+<dl class="facts"><dt>Free this month</dt><dd>${n(b.grant)} of ${n(MONTHLY_GRANT)} left · resets ${longDay(b.resetsAt)}</dd>
+<dt>Bought</dt><dd>${n(b.bought)} · never expire</dd>
+<dt>Cost</dt><dd>An SVG costs 1, a PNG 2. Cache hits, validate and convert are free.</dd></dl></section>
+${
+  paidCreditsOn(env)
+    ? `<section class="block"><h2>Buy credits</h2><p class="hint">Bought credits never expire. The monthly grant is spent first.</p>
+<div class="packs">${PACKS.map(
+        p => `<form method="post" action="/account/buy"><input type="hidden" name="pack" value="${p.id}">
+<button class="button">${n(p.credits)} credits <span class="price">$${(p.cents / 100).toFixed(2)}</span></button></form>`,
+      ).join('')}</div></section>`
+    : ''
+}
+<section class="block"><h2>API keys</h2>
 ${
   keys.length
-    ? `<table><tr><th>Key</th><th>Label</th><th>Made</th><th>Last used</th><th></th></tr>${keys
+    ? `<table class="keys"><tr><th>Key</th><th class="made">Made</th><th>Last used</th><th><span class="sr-only">Revoke</span></th></tr>${keys
         .map(
-          k => `<tr><td><code>dft_${esc(k.id)}.…</code></td><td>${esc(k.label)}</td><td>${day(k.created_at)}</td><td>${day(k.last_used_at)}</td>
-<td><form method="post" action="/account/keys/${esc(k.id)}/revoke"><button>Revoke</button></form></td></tr>`,
+          k => `<tr><td><span class="label">${esc(k.label)}</span><code>dft_${esc(k.id)}.…</code></td><td class="made">${day(k.created_at)}</td><td>${day(k.last_used_at)}</td>
+<td><form method="post" action="/account/keys/${esc(k.id)}/revoke"><button class="button small quiet">Revoke</button></form></td></tr>`,
         )
         .join('')}</table>`
-    : '<p class="muted">No keys yet.</p>'
+    : '<p class="empty">No keys yet. A key lets the REST API and the MCP server spend these credits.</p>'
 }
-<form method="post" action="/account/keys" style="margin-top:12px"><input name="label" placeholder="Label, such as laptop" maxlength="60"> <button class="primary">Make a key</button></form>
-</section>`,
+<form method="post" action="/account/keys" class="row make"><input class="input" name="label" placeholder="Label, such as laptop" maxlength="60" aria-label="Key label"><button class="button primary">Make a key</button></form>
+</section></div>`,
+    { current: 'account', script: !!newKey },
   );
 }
 
 const loginForm = (note = '', status = 200) =>
   page(
     'Sign in',
-    `<h1>Sign in to Draftably</h1>${note}
-<section><form method="post" action="/login"><p>We email you a link that signs you in. A new address gets a new account with 1,000 free credits a month.</p>
-<input type="email" name="email" required maxlength="254" placeholder="you@example.com" autocomplete="email"> <button class="primary">Email me a link</button></form></section>`,
-    status,
+    `<div class="col narrow"><h1>Sign in to Draftably</h1>
+<p class="lead">We email you a link that signs you in. A new address gets a new account with 1,000 free credits a month.</p>${note}
+<form method="post" action="/login" class="row form"><input class="input" type="email" name="email" required maxlength="254" placeholder="you@example.com" autocomplete="email" aria-label="Email"><button class="button primary">Email me a link</button></form></div>`,
+    { status, current: 'account' },
   );
 
 const failed = (message: string, status = 400) =>
   page(
     'Sign-in failed',
-    `<h1>Sign-in failed</h1><p>${esc(message)}</p><p><a href="/login">Try again</a></p>`,
-    status,
+    `<div class="col narrow"><h1>Sign-in failed</h1><p class="lead">${esc(message)}</p>
+<div class="actions"><a class="button primary" href="/login">Try again</a></div></div>`,
+    { status, current: 'account' },
   );
 
 /** `/login`, `/logout`, `/auth/verify` and `/account*`. Null for other paths. */
@@ -157,7 +147,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
   if (path === '/login') {
     if (req.method !== 'POST') return loginForm();
     const email = cleanEmail(String((await req.formData()).get('email') ?? ''));
-    if (!email) return loginForm('<p><b>That is not an email address.</b></p>', 400);
+    if (!email) return loginForm('<p class="note error">That is not an email address.</p>', 400);
     const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
     const tooMany = () =>
       failed('Too many sign-in emails. Wait a few minutes, then try again.', 429);
@@ -171,7 +161,9 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
     // The same answer for every address, so the form doesn't tell which ones have accounts.
     return page(
       'Check your email',
-      `<h1>Check your email</h1><p>We sent a sign-in link to <b>${esc(email)}</b>. It works once, for 15 minutes.</p>`,
+      `<div class="col narrow"><h1>Check your email</h1><p class="lead">We sent a sign-in link to <b>${esc(email)}</b>. It works once, for 15 minutes.</p>
+<p class="hint" style="margin-top:20px">Wrong address? <a href="/login">Use another one</a>.</p></div>`,
+      { current: 'account' },
     );
   }
   if (path === '/logout')
@@ -187,8 +179,9 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv, url:
       if (!email) return failed('This sign-in link was used already or has expired.');
       return page(
         'Sign in',
-        `<h1>Sign in to Draftably</h1><p>Sign in as <b>${esc(email)}</b>?</p>
-<form method="post" action="/auth/verify"><input type="hidden" name="token" value="${esc(token)}"><button class="primary">Sign in</button></form>`,
+        `<div class="col narrow"><h1>Sign in to Draftably</h1><p class="lead">Sign in as <b>${esc(email)}</b>?</p>
+<form method="post" action="/auth/verify" class="actions"><input type="hidden" name="token" value="${esc(token)}"><button class="button primary">Sign in</button></form></div>`,
+        { current: 'account' },
       );
     }
     const email = await useLoginToken(env.DB, String((await req.formData()).get('token') ?? ''));

@@ -7,6 +7,7 @@
 import { runtimeVersion } from '@draftably/runtime';
 import { decodeSource, SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
+import { homePage } from './html';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
 import { MAX_SEGMENT, render, type Payer } from './render';
@@ -132,7 +133,11 @@ export default {
     if (req.method !== 'GET')
       return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
     if (url.pathname === '/')
-      return new Response(HOME, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+      return req.headers.get('Accept')?.includes('text/html')
+        ? homePage(HOME)
+        : new Response(HOME, {
+            headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
+          });
     if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
     const route = parseImagePath(url.pathname);
     if (!route) return new Response('Not found', { status: 404 });
