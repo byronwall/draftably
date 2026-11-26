@@ -142,12 +142,15 @@ export function centre(ctx: Context) {
       );
       if (hugs) continue;
       // Another line in the gap shares it: the lanes, not the middle, decide where each runs.
+      const wide = above - below > GAP_MAX;
+      const laneLo = wide ? Math.min(at, mid) - s.edgeGap : below;
+      const laneHi = wide ? Math.max(at, mid) + s.edgeGap : above;
       const shared = others.some(o =>
         segments(o.points).some(
           ([c, d]) =>
             Math.abs(c[axis] - d[axis]) < EPS &&
-            c[axis] > below &&
-            c[axis] < above &&
+            c[axis] > laneLo &&
+            c[axis] < laneHi &&
             Math.min(hi, Math.max(c[along], d[along])) -
               Math.max(lo, Math.min(c[along], d[along])) >
               ALONGSIDE,
