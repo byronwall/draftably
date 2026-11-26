@@ -7,6 +7,7 @@ export default tseslint.config(
   {
     ignores: [
       '.claude',
+      '**/.wrangler',
       'dist',
       'dist-cli',
       'dist-site',
