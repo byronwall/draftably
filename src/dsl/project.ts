@@ -25,6 +25,14 @@ function resolveColor(scene: Scene, o: SceneObject): ColorKey {
   return 'auto';
 }
 
+/**
+ * The head an edge draws with and whether it is a tree line (a mind-map branch or a reporting
+ * line), as the compile decided from the whole file. An edit in the browser takes these from the
+ * checked source, so it draws what the saved file draws.
+ */
+export const edgeEnds = (e: Scene['edges'][number]) =>
+  e.branch ? { head: 'none' as const, branch: true } : e.head ? { head: e.head } : {};
+
 export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
   const set = (record: Record<string, unknown>, id: string, value: unknown) =>
@@ -104,7 +112,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       label: e.label,
       ...(e.was !== undefined ? { was: e.was } : {}),
       directed: e.directed !== false,
-      ...(e.branch ? { head: 'none' as const, branch: true } : e.head ? { head: e.head } : {}),
+      ...edgeEnds(e),
       ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
