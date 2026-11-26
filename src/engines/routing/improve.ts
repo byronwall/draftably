@@ -1,4 +1,6 @@
+import { standoffCost } from './cost.ts';
 import { conflicts, parallelConflicts } from './conflicts.ts';
+import type { Route } from './types.ts';
 import type { Context } from './context.ts';
 import { find } from './find.ts';
 import { cmp } from './geometry.ts';
@@ -11,15 +13,25 @@ import { cmp } from './geometry.ts';
 export function improve(ctx: Context) {
   const { rawOptions, s, edges, state, metrics, total, far, syncOpen } = ctx;
   let accepted = 0;
+  const costs = new WeakMap<Route, number>();
+  const clearanceCost = (r: Route) => {
+    if (!ctx.facingFans || !s.standoff || r.points.length < 3) return 0;
+    const known = costs.get(r);
+    if (known !== undefined) return known;
+    const value = standoffCost(r.points, ctx.near);
+    costs.set(r, value);
+    return value;
+  };
   if (!rawOptions.quick)
     for (let pass = 1; pass < s.passes; pass++) {
+      const before = accepted;
       const currentMetrics = metrics(state.routes);
       if (
         !currentMetrics.crossings &&
         !currentMetrics.shared &&
         !currentMetrics.blocked &&
         !currentMetrics.lanePairs &&
-        !state.routes.some(far)
+        !state.routes.some(r => far(r) || clearanceCost(r) > s.standoff)
       )
         break;
       // Each route's crossings with the others, counted once rather than in every comparison.
@@ -47,25 +59,27 @@ export function improve(ctx: Context) {
         const i = state.routes.findIndex(r => r.id === e.id),
           used = state.routes.filter((_, j) => j !== i),
           c = conflicts(state.routes[i].points, used);
-        if (
+        const clearanceOnly =
           !state.routes[i].blocked &&
           !c.crossings &&
           !c.shared &&
           !parallelConflicts(state.routes[i].points, used, s.edgeGap).lanePairs &&
-          !far(state.routes[i])
-        )
-          continue;
+          !far(state.routes[i]);
+        if (clearanceOnly && clearanceCost(state.routes[i]) <= s.standoff) continue;
         const next = find(ctx, e, used, state.routes[i]),
           candidate = [...state.routes];
         candidate[i] = next;
         const value = total(candidate);
-        if (value < current - 0.1) {
+        const old = state.routes[i];
+        const gain = clearanceCost(old) - clearanceCost(next);
+        if (clearanceOnly ? gain >= s.standoff && value <= current : value < current - 0.1) {
           state.routes = candidate;
           current = value;
           syncOpen();
           accepted++;
         }
       }
+      if (accepted === before) break;
     }
   return accepted;
 }
