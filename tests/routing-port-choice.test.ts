@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
+import { compute } from '../src/engines/routing/compute';
+import { conflicts } from '../src/engines/routing/conflicts';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import type { Route } from '../src/engines/routing-engine';
 import { computeRoutes } from '../src/model/routes';
@@ -191,6 +193,42 @@ layout root engine=compound-flow direction=down
       departure = line('edge_8');
     expect(arrival.toSide).toBe(departure.fromSide);
     expect(crosses(arrival, departure)).toBe(false);
+  });
+
+  it('does not create a crossing with a third edge when swapping ports', async () => {
+    const source = readFileSync(
+      new URL(
+        '../docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/v0.draft',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    const { line } = await route(source);
+    expect(conflicts(line('find').points, [line('dispatch')]).crossings).toBe(0);
+  });
+
+  it('keeps a straight edge on the diamond vertex when its other port moves', () => {
+    const result = compute(
+      {
+        nodes: [
+          { id: 'hub', x: 0, y: 92, w: 120, h: 96, shape: 'box' },
+          { id: 'diamond', x: 205, y: 80, w: 120, h: 120, shape: 'diamond' },
+          { id: 'return', x: 350, y: 0, w: 100, h: 60, shape: 'box' },
+        ],
+        groups: [],
+        edges: [
+          {
+            id: 'straight',
+            from: 'hub',
+            to: 'diamond',
+            cfg: { fromSide: 'right', toSide: 'left' },
+          },
+          { id: 'back', from: 'return', to: 'hub', cfg: { fromSide: 'bottom', toSide: 'right' } },
+        ],
+      },
+      { standoff: 0 },
+    );
+    expect(result.routes.find(r => r.id === 'straight')!.points.at(-1)).toEqual({ x: 205, y: 140 });
   });
 
   it('swaps two ports of a fan whose lines cross just past the side (#599)', async () => {

@@ -1,6 +1,6 @@
 import { conflicts } from './conflicts.ts';
 import type { Context } from './context.ts';
-import { center, clone, EPS, round } from './geometry.ts';
+import { center, clone, compress, EPS, round } from './geometry.ts';
 import { offsetKey, port, sideKey } from './ports.ts';
 import { LONE_GAIN, PORT_SLACK } from './tuning.ts';
 import type { Box, End, Point, Route, Side } from './types.ts';
@@ -194,6 +194,7 @@ function movePort(ctx: Context, sides: Map<string, PortEnd[]>, p: PortEnd, offse
   const r = ctx.state.routes[p.i],
     side = r[sideKey(p.end)],
     rect = ctx.rects.get(r[p.end])!;
+  if (ctx.facingFans && rect.shape === 'diamond' && offset !== 0) return;
   const axis = side === 'left' || side === 'right' ? 'y' : 'x';
   const points = clone(r.points),
     moved = port(rect, side, offset);
@@ -207,6 +208,7 @@ function movePort(ctx: Context, sides: Map<string, PortEnd[]>, p: PortEnd, offse
     const farOffset = round(moved[axis] - center(box)[axis]);
     if (
       !canMove(ctx, r, far) ||
+      (ctx.facingFans && box.shape === 'diamond' && farOffset !== 0) ||
       Math.abs(farOffset) > (axis === 'y' ? box.h : box.w) / 2 - 10 ||
       crowded(ctx, sides.get(r[far] + '|' + farSide)!, p.i, farOffset)
     )
@@ -219,7 +221,7 @@ function movePort(ctx: Context, sides: Map<string, PortEnd[]>, p: PortEnd, offse
 
 /** Exchange two occupied slots. Keep each edge's track beyond its first bend. */
 export function swapPorts(ctx: Context, attempt: Attempt) {
-  const { state, metrics } = ctx,
+  const { state } = ctx,
     sides = sidePorts(ctx);
   for (const ports of sides.values()) {
     const offset = (p: PortEnd) => state.routes[p.i][offsetKey(p.end)];
@@ -240,9 +242,22 @@ export function swapPorts(ctx: Context, attempt: Attempt) {
         [q.i, right.points],
       ]);
       const next = state.routes.map((r, i) =>
-        changes.has(i) ? { ...r, points: changes.get(i)! } : r,
+        changes.has(i) ? { ...r, points: compress(changes.get(i)!) } : r,
       );
-      if (metrics(next).crossings >= metrics(state.routes).crossings) continue;
+      if (conflicts(next[p.i].points, [next[q.i]]).crossings >= conflicts(a.points, [b]).crossings)
+        continue;
+      if (
+        [p.i, q.i].some(i =>
+          state.routes.some(
+            (r, j) =>
+              j !== p.i &&
+              j !== q.i &&
+              conflicts(next[i].points, [r]).crossings >
+                conflicts(state.routes[i].points, [r]).crossings,
+          ),
+        )
+      )
+        continue;
       if (attempt(changes, { [p.i]: left.extra, [q.i]: right.extra }, true))
         sorted.splice(k - 1, 2, q, p);
     }
@@ -275,8 +290,8 @@ export function clearPortCrossings(ctx: Context, attempt: Attempt) {
           )
         )
           continue;
-        const move = movePort(ctx, sides, p, next)!;
-        if (conflicts(move.points, [other]).crossings) continue;
+        const move = movePort(ctx, sides, p, next);
+        if (!move || conflicts(compress(move.points), [other]).crossings) continue;
         if (
           state.routes.some(
             (line, j) =>
