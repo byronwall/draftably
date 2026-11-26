@@ -146,7 +146,7 @@ function labelSpots(
   const ink =
     look.annotation.size +
     (edgeLabelLines(label, look, false, wrap).length - 1) * look.annotation.lineHeight;
-  const cost = (p: Point) => {
+  const cost = (p: Point, clearText = false) => {
     const r = box(p),
       text = { x: r.x + 8, y: p.y - ink / 2, w: Math.max(1, w - 16), h: ink },
       through = grown(r, -1),
@@ -155,8 +155,10 @@ function labelSpots(
     let c = 0;
     for (const { route, shared } of lines) {
       const hits = (q: Rect) => route.some((s, i) => i && segmentHits(route[i - 1], s, q));
-      if (hits(text)) c += shared ? 1 : 5;
-      else if (hits(through)) c += shared ? 1 : 3;
+      if (hits(text)) {
+        if (clearText && !shared) return Infinity;
+        c += shared ? 1 : 5;
+      } else if (hits(through)) c += shared ? 1 : 3;
       else if (!shared && hits(touch)) c += 2;
       else if (!shared && hits(near)) c += 1;
     }
@@ -212,12 +214,14 @@ function labelSpots(
       for (const offset of offsets) {
         const p = flat ? { x: along.x, y: along.y + offset } : { x: along.x + offset, y: along.y };
         if (obstacles.some(o => overlaps(box(p), o, 4))) continue;
+        const crowding = cost(p, k > steps);
+        if (!Number.isFinite(crowding)) continue;
         spots.push({
           ...p,
           w,
           h,
           ...(wrap ? { wrap } : {}),
-          cost: cost(p) + (flat && Math.abs(offset) > shift ? OFF_LINE : 0),
+          cost: crowding + (flat && Math.abs(offset) > shift ? OFF_LINE : 0),
           // Prefer long level segments, the middle of a segment, on the line, then above it.
           score: base - Math.abs(t - 0.5) * len * 0.5 - Math.abs(offset) * 3 + (offset < 0 ? 1 : 0),
         });

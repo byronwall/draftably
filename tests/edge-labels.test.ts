@@ -40,6 +40,13 @@ describe('edge label placement', () => {
     const label = placeEdgeLabel('AI', points, boxes);
     expect(distance(label, points)).toBe(0);
     expect(boxes.some(box => overlaps(rectOf(label), box, 4))).toBe(false);
+
+    const crossing = [
+      { x: 124.5, y: 0 },
+      { x: 124.5, y: 80 },
+    ];
+    const clear = placeEdgeLabel('AI', points, boxes, [], undefined, { routes: [crossing] });
+    expect(distance(clear, crossing)).toBeGreaterThan(clear.h / 2);
   });
 
   it.each([12, 32])('keeps a label clear of objects across a %ipx gap', gap => {
