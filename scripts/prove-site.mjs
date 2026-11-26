@@ -128,10 +128,9 @@ const journeys = {
       /flowchart|graph/i.test(sourceBody),
       sourceBody.slice(0, 80),
     );
-    check(
-      'the inspector shows the same source',
-      /flowchart|graph/i.test((await page.locator('.ae-side pre').textContent()) ?? ''),
-    );
+    const inspector = page.locator('.ae-side pre').filter({ hasText: /flowchart|graph/i });
+    await inspector.waitFor();
+    check('the inspector shows the same source', (await inspector.textContent()) === sourceBody);
     await page.keyboard.press('Escape');
     check('Escape closes the inspector', (await page.locator('.ae-inspector').count()) === 0);
 
