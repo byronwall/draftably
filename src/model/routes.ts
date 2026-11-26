@@ -155,7 +155,7 @@ function labelSpots(
     let c = 0;
     for (const { route, shared } of lines) {
       const hits = (q: Rect) => route.some((s, i) => i && segmentHits(route[i - 1], s, q));
-      if (clearText && !shared && hits(grown(text, HALO_WIDTH / 2))) return Infinity;
+      if (clearText && hits(grown(text, HALO_WIDTH / 2))) return Infinity;
       if (hits(text)) c += shared ? 1 : 5;
       else if (hits(through)) c += shared ? 1 : 3;
       else if (!shared && hits(touch)) c += 2;

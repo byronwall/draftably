@@ -51,7 +51,14 @@ describe('edge label placement', () => {
         { x, y: 80 },
       ];
       const clear = placeEdgeLabel(name, points, boxes, [], undefined, { routes: [crossing] });
-      expect(distance(clear, crossing)).toBeGreaterThan(clear.h / 2);
+      // Include the 4px half-width of the painted halo around the crossing line.
+      const ink = {
+        x: clear.x - clear.w / 2 + 8,
+        y: clear.y - clear.h / 2,
+        w: clear.w - 16,
+        h: clear.h,
+      };
+      expect(overlaps(ink, { x: x - 4, y: 0, w: 8, h: 80 })).toBe(false);
     }
   });
 
