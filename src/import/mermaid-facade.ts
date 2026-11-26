@@ -57,6 +57,8 @@ export type FlowSnapshot = {
   family: 'flowchart';
   parserVersion: typeof MERMAID_VERSION;
   direction: string;
+  /** Only frontmatter sets a flowchart's title. */
+  title?: string;
   vertices: FlowVertex[];
   edges: FlowEdge[];
   groups: FlowGroup[];
@@ -141,6 +143,8 @@ export type ParseFlowResult =
       ok: true;
       snapshot: FlowSnapshot | SequenceSnapshot | GanttSnapshot | TimelineSnapshot;
       diagnostics: ParserDiagnostic[];
+      /** The frontmatter's scalar keys, flattened (`title`, `config.theme`), when it has one. */
+      frontmatter?: Record<string, string>;
     }
   | { ok: false; diagnostics: ParserDiagnostic[] };
 
@@ -204,6 +208,63 @@ export function makePlainLabel(document: Document): (value: string) => string {
   };
 }
 
+/** Mermaid's frontmatter: a `---` block on the first line, closed by a `---` line. */
+const FRONTMATTER = /^[ \t]*---[ \t]*\n([\s\S]*?)\n[ \t]*---[ \t]*(?:\n|$)/;
+
+const unquote = (value: string) => {
+  const v = value.trim();
+  if (/^"(?:[^"\\]|\\.)*"$/.test(v)) return JSON.parse(v) as string;
+  if (/^'.*'$/.test(v)) return v.slice(1, -1).replace(/''/g, "'");
+  return v.replace(/\s+#.*$/, '');
+};
+
+/** A flow map such as `{theme: dark, flowchart: {curve: basis}}`, flattened into `out`. */
+function flowMap(text: string, prefix: string, out: Record<string, string>) {
+  const body = text.trim().slice(1, -1);
+  let depth = 0,
+    start = 0;
+  const parts: string[] = [];
+  for (let i = 0; i <= body.length; i++) {
+    const c = body[i];
+    if (c === '{' || c === '[') depth++;
+    else if (c === '}' || c === ']') depth--;
+    else if ((c === ',' && depth === 0) || i === body.length) {
+      parts.push(body.slice(start, i));
+      start = i + 1;
+    }
+  }
+  for (const part of parts) {
+    const m = /^\s*["']?([\w.-]+)["']?\s*:\s*([\s\S]*)$/.exec(part);
+    if (!m) continue;
+    if (m[2].trim().startsWith('{')) flowMap(m[2], prefix + m[1] + '.', out);
+    else out[prefix + m[1]] = unquote(m[2]);
+  }
+}
+
+/**
+ * Read the scalar keys of Mermaid frontmatter: nested block maps and flow maps, flattened to
+ * `config.theme`-style paths. Lists and multi-line values are skipped; Mermaid parses the full
+ * YAML itself when it strips the block. Undefined when the source has no frontmatter.
+ */
+export function readFrontmatter(source: string): Record<string, string> | undefined {
+  const match = FRONTMATTER.exec(source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n'));
+  if (!match) return undefined;
+  const out: Record<string, string> = {};
+  const parents: { indent: number; key: string }[] = [];
+  for (const line of match[1].split('\n')) {
+    const m = /^(\s*)["']?([\w.-]+)["']?\s*:(?:\s+(.*))?$/.exec(line);
+    if (!m) continue;
+    const indent = m[1].length;
+    while (parents.length && parents.at(-1)!.indent >= indent) parents.pop();
+    const path = parents.map(p => p.key + '.').join('') + m[2];
+    const value = m[3]?.trim() ?? '';
+    if (!value || value.startsWith('#')) parents.push({ indent, key: m[2] });
+    else if (value.startsWith('{')) flowMap(value, path + '.', out);
+    else out[path] = unquote(value);
+  }
+  return out;
+}
+
 export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   if (new TextEncoder().encode(source).length > MAX_BYTES) {
     return [
@@ -215,16 +276,28 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     ];
   }
   const normalized = source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
-  if (/^\s*---(?:\n|$)/.test(normalized) || /%%\s*\{/.test(normalized)) {
+  if (/%%\s*\{/.test(normalized)) {
     return [
       {
         code: 'MERMAID_CONFIGURATION_UNSUPPORTED',
         severity: 'error',
         message:
-          'This importer does not apply Mermaid frontmatter or directives. Remove the configuration block and import the diagram text.',
+          'This importer does not apply Mermaid directives. Remove the %%{...}%% block and import the diagram text.',
       },
     ];
   }
+  const frontmatter = FRONTMATTER.exec(normalized);
+  if (!frontmatter && /^\s*---[ \t]*(?:\n|$)/.test(normalized)) {
+    return [
+      {
+        code: 'MERMAID_FRONTMATTER_INVALID',
+        severity: 'error',
+        message:
+          'Mermaid frontmatter must open with --- on the first line and close with a --- line.',
+      },
+    ];
+  }
+  const body = frontmatter ? normalized.slice(frontmatter[0].length) : normalized;
   if (
     [...normalized].some(c => {
       const code = c.charCodeAt(0);
@@ -241,7 +314,7 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   }
   // A conservative family check, not a Mermaid grammar replacement.
   const firstCodeLine =
-    normalized.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
+    body.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
   if (!/^\s*(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/.test(firstCodeLine)) {
     return [
       {
@@ -408,6 +481,15 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
     const job = queue.then(async (): Promise<ParseFlowResult> => {
       const diagnostics = preflightMermaidFlow(source);
       if (diagnostics.some(d => d.severity === 'error')) return { ok: false, diagnostics };
+      const frontmatter = readFrontmatter(source);
+      const ok = (
+        snapshot: Extract<ParseFlowResult, { ok: true }>['snapshot'],
+      ): ParseFlowResult => ({
+        ok: true,
+        diagnostics,
+        snapshot,
+        ...(frontmatter ? { frontmatter } : {}),
+      });
       let phase: 'load' | 'parse' | 'snapshot' = 'load';
       try {
         const mermaid = await load();
@@ -420,7 +502,10 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
           suppressErrorRendering: true,
         });
         phase = 'parse';
-        const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''));
+        // Mermaid strips the frontmatter but drops its title unless it is handed back.
+        const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''), {
+          title: frontmatter?.title,
+        });
         if (
           !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)
         ) {
@@ -443,10 +528,8 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
             throw new Error(`Mermaid ${MERMAID_VERSION} boundary missing ${name}().`);
           return (db[name] as () => unknown).call(db);
         };
-        if (diagram.type === 'gantt')
-          return { ok: true, diagnostics, snapshot: ganttSnapshot(call) };
-        if (diagram.type === 'timeline')
-          return { ok: true, diagnostics, snapshot: timelineSnapshot(db, call) };
+        if (diagram.type === 'gantt') return ok(ganttSnapshot(call));
+        if (diagram.type === 'timeline') return ok(timelineSnapshot(db, call));
         if (diagram.type === 'sequence') {
           const snapshot = sequenceSnapshot(db, call);
           if (snapshot.actors.length > MAX_ENTITIES || snapshot.events.length > MAX_EDGES) {
@@ -462,7 +545,7 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
               ],
             };
           }
-          return { ok: true, diagnostics, snapshot };
+          return ok(snapshot);
         }
         const rawEdges = call('getEdges');
         const vertices = mapValues(call('getVertices')).map((value): FlowVertex => {
@@ -529,22 +612,19 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
           };
         }
         const extra = rawEdges as unknown as Record<string, unknown>;
-        return {
-          ok: true,
-          diagnostics,
-          snapshot: {
-            format: 'mermaid',
-            family: 'flowchart',
-            parserVersion: MERMAID_VERSION,
-            direction: string(call('getDirection'), 'TB'),
-            vertices,
-            edges,
-            groups,
-            classes,
-            defaultEdgeStyle: strings(extra.defaultStyle),
-            defaultEdgeInterpolate: optionalString(extra.defaultInterpolate),
-          },
-        };
+        return ok({
+          format: 'mermaid',
+          family: 'flowchart',
+          parserVersion: MERMAID_VERSION,
+          direction: string(call('getDirection'), 'TB'),
+          title: optionalString(call('getDiagramTitle')) || undefined,
+          vertices,
+          edges,
+          groups,
+          classes,
+          defaultEdgeStyle: strings(extra.defaultStyle),
+          defaultEdgeInterpolate: optionalString(extra.defaultInterpolate),
+        });
       } catch (error) {
         const e = error as {
           message?: string;

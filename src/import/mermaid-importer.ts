@@ -20,6 +20,15 @@ import { MERMAID_VERSION, type ParseFlowResult, type FlowClass } from './mermaid
 import { mapMermaidSequence } from './mermaid-sequence';
 import { mapMermaidGantt, mapMermaidTimeline } from './mermaid-timeline';
 
+/** Mermaid themes with a Draftably preset. `default` and `base` are Drafting, which needs no line. */
+const THEMES: Record<string, string | null> = { default: null, base: null, dark: 'blueprint' };
+
+/** The Draftably theme for the frontmatter's `config.theme`, or undefined when it has none. */
+const frontmatterTheme = (parsed: ParseFlowResult) => {
+  const name = parsed.ok ? parsed.frontmatter?.['config.theme'] : undefined;
+  return name && Object.hasOwn(THEMES, name) ? (THEMES[name] ?? undefined) : undefined;
+};
+
 /** Mermaid's link types that native ends cover; a type outside this list is refused. */
 const MERMAID_ENDS: Record<string, Pick<NativeEdge, 'head' | 'tail'>> = {
   arrow_point: {},
@@ -73,6 +82,15 @@ function mapMermaidFlow(
     );
     return done();
   }
+  const ignored = Object.keys(parsed.frontmatter ?? {}).filter(
+    k => k !== 'title' && !(k === 'config.theme' && Object.hasOwn(THEMES, parsed.frontmatter![k])),
+  );
+  if (ignored.length)
+    note(
+      'MERMAID_FRONTMATTER_IGNORED',
+      'Frontmatter settings with no Draftably equivalent were ignored: ' + ignored.join(', ') + '.',
+    );
+  if (snapshot.family === 'flowchart' && snapshot.title) plan.title = plainText(snapshot.title);
   if (snapshot.family === 'sequence')
     return mapMermaidSequence(snapshot, plainText, title, diagnostics);
   if (snapshot.family === 'gantt') return mapMermaidGantt(snapshot, plainText, title, diagnostics);
@@ -486,6 +504,9 @@ export function importMermaidFlow(
 ): ImportResult {
   const result = mapMermaidFlow(parsed, plainText, title);
   if (!result.nativeSource) return result;
+  const theme = frontmatterTheme(parsed);
+  // The diagram line is always first; the theme line follows it.
+  if (theme) result.nativeSource = result.nativeSource.replace(/^.*/, `$&\ntheme ${theme}`);
   try {
     checkSource(result.nativeSource);
     return result;

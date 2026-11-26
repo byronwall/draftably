@@ -4,6 +4,7 @@ import { compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { createMermaidFlowParser, makePlainLabel } from '../src/import/mermaid-facade';
 import { importMermaidFlow } from '../src/import/mermaid-importer';
+import { detectSource } from '../src/import/detect';
 
 const dom = new JSDOM('<!doctype html><html><body></body></html>');
 const parse = createMermaidFlowParser(async () => (await import('mermaid')).default);
@@ -74,6 +75,42 @@ X --- A`);
         importMermaidFlow(parsed, makePlainLabel(dom.window.document)).nativeSource,
       ).toBeUndefined();
     }
+  });
+});
+
+describe('Mermaid frontmatter', () => {
+  const imported = async (source: string) =>
+    importMermaidFlow(await parse(source), makePlainLabel(dom.window.document), 'File name');
+
+  it('takes the title and a mapped theme, and names the settings it ignores', async () => {
+    const r = await imported(`---
+title: "Checkout: flow"
+config:
+  theme: dark
+  flowchart: {curve: basis, htmlLabels: false}
+---
+flowchart LR
+  A --> B`);
+    expect(r.nativeSource!.split('\n').slice(0, 2)).toEqual([
+      'diagram "Checkout: flow" version=1',
+      'theme blueprint',
+    ]);
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toContain(
+      'config.flowchart.curve, config.flowchart.htmlLabels.',
+    );
+    await compile(r.nativeSource!);
+    expect(detectSource('---\ntitle: X\n---\nsequenceDiagram\na->>b: hi').status).toBe('detected');
+  });
+
+  it('keeps a title written in the diagram over the frontmatter title', async () => {
+    const r = await imported('---\ntitle: Outer\n---\nsequenceDiagram\ntitle Inner\na->>b: hi');
+    expect(r.nativeSource!.split('\n')[0]).toBe('diagram "Inner" version=1');
+    expect(r.diagnostics.some(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')).toBe(false);
+  });
+
+  it('refuses an unclosed block', async () => {
+    const parsed = await parse('---\ntitle: X\nflowchart LR\nA-->B');
+    expect(parsed.diagnostics.map(d => d.code)).toEqual(['MERMAID_FRONTMATTER_INVALID']);
   });
 });
 
