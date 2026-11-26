@@ -1,6 +1,6 @@
 import { standoffCost } from './cost.ts';
 import { conflicts, parallelConflicts } from './conflicts.ts';
-import { REPAIR_EDGES, shortStepLimit } from './tuning.ts';
+import { REPAIR_EDGES, SHORT_STEP } from './tuning.ts';
 import type { Route } from './types.ts';
 import type { Context } from './context.ts';
 import { find } from './find.ts';
@@ -74,7 +74,7 @@ export function improve(ctx: Context) {
           clearanceOnly &&
           rawOptions.tidy !== false &&
           rawOptions.jogs !== false &&
-          old.points.slice(1, -2).some((p, k) => distance(p, old.points[k + 2]) < shortStepLimit(s))
+          old.points.slice(1, -2).some((p, k) => distance(p, old.points[k + 2]) < SHORT_STEP)
         )
           continue;
         const next = find(ctx, e, used, old, [], clearanceOnly);

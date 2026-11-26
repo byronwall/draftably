@@ -43,6 +43,5 @@ export const MAX_REPAIRS = 4,
   // graph harness's DAGs. Hand-drawn diagrams stay well below this.
   REPAIR_EDGES = 32;
 
-/** A step narrower than normal line separation can straighten onto either adjacent run. */
-export const shortStepLimit = (s: { edgeGap: number; standoff: number }) =>
-  Math.max(12, Math.min(s.edgeGap, s.standoff));
+/** A step this short can straighten onto either adjacent run. */
+export const SHORT_STEP = 12;
