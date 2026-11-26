@@ -136,3 +136,21 @@ it('refuses a draft whose node the file renamed, and says so', async () => {
   expect(s.currentSource()).toBe(renamed);
   expect(toastMessage()?.text).toMatch(/removed or renamed/);
 });
+
+it('opens no draft from the last drawing while the newly opened file does not draw', async () => {
+  const s = await session();
+  const { toastMessage } = await import('../src/state/toast');
+  await s.openExampleSession('drafts-shown-a', 'A', BASE);
+  await settle(s);
+  await s.openExampleSession('drafts-shown-b', 'B', 'node q "Query" shape=code <<SQL\n');
+  await settle(s);
+  // A's drawing is still on screen, but the session saves to B: no draft opens.
+  s.startInlineEdit('q');
+  expect(s.codeEditId()).toBeNull();
+  expect(toastMessage()?.text).toMatch(/Still opening/);
+  // B repaired on disk draws, and its own node opens.
+  await s.receiveSource(BASE);
+  await settle(s);
+  s.startInlineEdit('q');
+  expect(s.codeEditId()).toBe('q');
+});

@@ -177,8 +177,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   /** The open file or example, or null when the editor works on browser storage as usual. */
   const fileSession = state.info;
   /**
-   * The file whose drawing is on screen. It lags `fileSession` while another file opens, and an
-   * editor draft opens and saves only when the two agree.
+   * The file whose drawing is on screen: set when a source projects, so it lags `fileSession`
+   * while another file opens or stays invalid. An editor draft opens and saves only when the two
+   * agree.
    */
   const [shownFile, setShownFile] = createSignal<FileSessionInfo | null>(null);
   const fileMode = () => !!state.info();
@@ -369,6 +370,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     batch(() => {
       s.mapSourceIds(mapId);
       s.restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
+      // The drawing on screen is now this file's, in the same batch as its projection.
+      setShownFile(state.info());
       if (!pending) adopt(routes as Routes | undefined);
       routeSink.awaiting(!!pending);
       // A drag in a file keeps quick routes until its saved version is drawn.
@@ -961,10 +964,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     });
     state.setInfo(info);
     takeFiles(info.files);
-    // The file is shown once its first drawing is projected, unless another file opened since.
-    return acceptDisk(info.source, info.revision).then(() => {
-      if (state.info() === info) setShownFile(info);
-    });
+    return acceptDisk(info.source, info.revision);
   }
 
   function onExternalChange(source: string, revision: string) {
