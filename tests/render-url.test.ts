@@ -37,7 +37,7 @@ describe('render URLs', () => {
     const noisy = Array.from({ length: 300 }, () => `# ${randomBytes(24).toString('hex')}`).join(
       '\n',
     );
-    await expect(imageUrl(noisy, 'svg')).rejects.toThrow(/POST \/v1\/render/);
+    await expect(imageUrl(noisy, 'svg')).rejects.toThrow(/POST \/api\/v1\/render/);
   });
 
   it('builds the service URL', async () => {
