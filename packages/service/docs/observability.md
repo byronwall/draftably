@@ -130,6 +130,31 @@ Visualize `Count`, Filter `event = request` and `status >= 500` (or `error_code 
 `build`. `wrangler deployments list` (in `packages/service`) maps a version ID to its deploy time.
 An Issue also shows its first and last seen times and the versions it occurred in.
 
+## The dev loop: `pnpm o11y`
+
+`pnpm o11y` (in [`scripts/o11y.ts`](../../../scripts/o11y.ts)) asks the Observability API the
+questions above and prints one brief: the last 24 hours against the 7 days before, the open Issues
+with a stack frame, version and trace ID, errors by code and by build, latency, cache, usage,
+limits, sign-ins and webhooks. It ends with at most three **Actions**, new failures first.
+
+1. Run `pnpm o11y` (each morning, or after a deploy). `--hours 6` for a shorter window; `--json`
+   for an agent; `--keys` lists the indexed field names when a query comes back empty.
+2. Take the first action: open its trace, reproduce it locally, fix it, and deploy.
+3. On the next run, read **By build**: the error should stop on the new build. With little traffic,
+   wait for more before calling it fixed.
+
+Each run saves `tmp/o11y/<time>.json`, so trends outlive Cloudflare's 7-day retention.
+
+It needs its own token: Wrangler's login has no observability scope. Make one at **My Profile → API
+Tokens → Create Token → Custom**, with Account → **Workers Observability: Edit** (the query
+endpoint asks for edit, even to read) on this account. Save it:
+
+```sh
+mkdir -p ~/.config/draftably && pbpaste > ~/.config/draftably/o11y-token
+```
+
+or set `CF_O11Y_TOKEN`. Don't put it in `CLOUDFLARE_API_TOKEN`: Wrangler would use it to deploy.
+
 ## Alerts
 
 Workers Issues sends a notice when a new issue opens or an old one comes back. In **Observability
