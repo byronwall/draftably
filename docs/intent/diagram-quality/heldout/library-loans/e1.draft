@@ -1,0 +1,15 @@
+diagram "Library loans"
+group copies "copies" <<COLS
+  id uuid pk
+  shelf text nn
+COLS
+layout copies table
+group loans "loans" <<COLS
+  id uuid pk
+  copy_id uuid fk -> copies.id
+  due_at date nn
+  renewed_at date
+COLS
+layout loans table
+
+# expect above loans.due_at loans.renewed_at
