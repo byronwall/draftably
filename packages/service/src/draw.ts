@@ -1,7 +1,7 @@
 /**
  * Drawing for every route: GET image URLs now, the REST API and MCP tools later. SVG comes from
- * `@draftably/runtime`; PNG from resvg-wasm with the CLI's TrueType fonts and the CLI's own
- * scaling and font renaming (`src/model/raster.ts`), so a PNG matches `draftably inspect --png`.
+ * `@draftably/runtime`; PNG from `drawPng` (`src/model/raster.ts`), the function the CLI uses,
+ * run on resvg-wasm with the CLI's TrueType fonts, so a PNG matches `draftably inspect --png`.
  */
 import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import wasm from '@resvg/resvg-wasm/index_bg.wasm';
@@ -9,8 +9,7 @@ import { renderSvg } from '@draftably/runtime';
 import { MAX_SOURCE_BYTES, SourceError, webLinks } from '../../../src/lib/render-url';
 import { formatSource } from '../../../src/dsl/syntax';
 import { withSourceStrip } from '../../../src/model/strip';
-import { embedPngSource } from '../../../src/model/embed';
-import { rasterFamilies, scaleSvg, svgSize } from '../../../src/model/raster';
+import { drawPng, svgSize, type Step } from '../../../src/model/raster';
 import { toDraft } from './mermaid';
 import { byteSize, note, span } from './obs';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
@@ -74,7 +73,10 @@ export function drawSvg(source: string, opts: DrawOptions) {
 }
 
 let ready: Promise<unknown> | undefined;
-const fonts = [sans500, sans600, serif600, mono500].map(b => new Uint8Array(b));
+const engine = {
+  Resvg,
+  fonts: { fontBuffers: [sans500, sans600, serif600, mono500].map(b => new Uint8Array(b)) },
+};
 
 function checkPixels(svg: string, scale: number) {
   const { w, h } = svgSize(svg);
@@ -85,27 +87,18 @@ function checkPixels(svg: string, scale: number) {
     );
 }
 
-/** `svg` as a PNG at `scale`, refused above MAX_PIXELS. */
-export function rasterize(svg: string, scale: number) {
-  return span('png.rasterize', { scale, cold: !ready }, () => rasterizeNow(svg, scale));
-}
-
-async function rasterizeNow(svg: string, scale: number) {
-  checkPixels(svg, scale);
-  await (ready ??= initWasm(wasm));
-  const r = new Resvg(rasterFamilies(scaleSvg(svg, scale)), {
-    font: { fontBuffers: fonts, loadSystemFonts: false, defaultFontFamily: 'Inter' },
-  });
-  try {
-    const img = r.render();
-    try {
-      return img.asPng();
-    } finally {
-      img.free();
-    }
-  } finally {
-    r.free();
-  }
+/** `svg` as a PNG at `scale`, with `source` in it when given; refused above MAX_PIXELS. */
+async function png(svg: string, scale: number, source?: string) {
+  // Check the size before the strip: building the strip for a huge drawing costs memory too.
+  await span('png.pixels', { scale }, () => checkPixels(svg, scale));
+  const step: Step = (name, fn) =>
+    span(`png.${name}`, name === 'rasterize' ? { scale, cold: !ready } : { scale }, async s => {
+      if (name === 'rasterize') await (ready ??= initWasm(wasm));
+      const out = await fn();
+      if (out instanceof Uint8Array) s.setAttribute('png_bytes', out.length);
+      return out;
+    });
+  return drawPng(engine, svg, { scale, source, step });
 }
 
 /**
@@ -117,14 +110,7 @@ export async function draw(source: string, format: Format, opts: DrawOptions) {
   const { draft } = await toDraft(source, opts.type);
   const svg = await drawSvg(draft, opts);
   if (format === 'svg') return svg;
-  const kept = formatSource(draft);
-  // Check the size before the strip: building the strip for a huge drawing costs memory too.
-  await span('png.pixels', { scale: opts.scale }, () => checkPixels(svg, opts.scale));
-  const strip = await span('png.strip', { scale: opts.scale }, () =>
-    withSourceStrip(svg, kept, opts.scale),
-  );
-  const png = await rasterize(strip, opts.scale);
-  return span('png.embed', { png_bytes: png.length }, () => embedPngSource(png, kept));
+  return png(svg, opts.scale, formatSource(draft));
 }
 
 /**
@@ -171,5 +157,5 @@ export function errorSvg(message: string) {
 /** The error drawn in the format the caller asked for. */
 export async function errorImage(message: string, format: Format) {
   const svg = errorSvg(message);
-  return format === 'svg' ? svg : rasterize(svg, 2);
+  return format === 'svg' ? svg : png(svg, 2);
 }
