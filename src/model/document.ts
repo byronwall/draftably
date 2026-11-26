@@ -6,6 +6,7 @@ import { ICONS } from './icons';
 import { ICON_NAME } from './iconify';
 import {
   defaultAppearance,
+  resolveAppearance,
   HEX_COLOR,
   isBuiltInFamily,
   isShade,
@@ -642,8 +643,17 @@ const sortedKeys = (_key: string, value: unknown) =>
  * replaced, so the worker's freshly projected copy of the same document lists its keys differently.
  */
 export function routingFingerprint(doc: Diagram) {
+  const { annotation, groupTitle } = resolveAppearance(doc.appearance);
   return JSON.stringify(
-    [doc.graph, doc.layout, doc.styles, doc.collapsed, doc.settings.routing],
+    [
+      doc.graph,
+      doc.layout,
+      doc.styles,
+      doc.collapsed,
+      doc.settings.routing,
+      annotation,
+      groupTitle,
+    ],
     sortedKeys,
   );
 }

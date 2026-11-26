@@ -10,13 +10,7 @@ import { resolveAppearance } from '../../model/appearance';
 import { diagramFrame, FRAME_PAD } from '../../model/frame';
 import { placeNotes } from '../../model/note';
 import { drawnLegend, usedStatuses } from '../../model/status';
-import {
-  frameRect,
-  makeGeometry,
-  styleOf,
-  visibleGraph,
-  type VisibleGraph,
-} from '../../model/graph';
+import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../../model/graph';
 import { startEngineTask, type RunningTask } from '../../lib/engine-tasks';
 import {
   computeRoutes,
@@ -134,25 +128,15 @@ export function createScene(s: DocumentPart & FileSessionPart) {
       if (deferred && !s.fileCompiling() && !awaiting()) refine(fingerprint);
       else if (!deferred && refining) queueMicrotask(stopRefining);
       const signature = JSON.stringify([
-        vg.edges,
+        fingerprint,
+        // Dragging and animations can move boxes without changing the saved layout.
         [...map],
-        s.doc.layout.edges,
-        s.doc.settings.routing,
-        vg.groups.map(g => [g.id, g.parentId, s.doc.collapsed.includes(g.id)]),
-        // A code node's range labels and their mode move its ports and block lines.
-        vg.nodes.map(n => [
-          n.id,
-          n.parentId,
-          styleOf(s.doc, n.id).shape,
-          // Its lines too: a line that starts to wrap moves the ports of the ranges below it.
-          n.code,
-        ]),
         quick,
         temporary,
         deferred,
         !!known,
         // A result the worker hands over replaces the routes drawn while it ran.
-        ready && adopted.fingerprint,
+        ready,
       ]);
       if (cache?.signature === signature) return cache.value;
       let value;
