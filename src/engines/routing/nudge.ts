@@ -116,15 +116,23 @@ export function centre(ctx: Context) {
         at = a[axis],
         lo = Math.min(a[along], b[along]),
         hi = Math.max(a[along], b[along]);
-      if (hi - lo < RUN_MIN) continue;
+      if (hi - lo <= ALONGSIDE) continue;
       const facing = sides[upright ? 1 : 0].filter(
         f => Math.min(hi, f.hi) - Math.max(lo, f.lo) > ALONGSIDE,
       );
       if (facing.some(f => Math.abs(f.at - at) < 1.5)) continue;
       const below = facing.filter(f => f.at < at).reduce((m, f) => Math.max(m, f.at), -Infinity),
         above = facing.filter(f => f.at > at).reduce((m, f) => Math.min(m, f.at), Infinity);
-      if (above - below > GAP_MAX) continue;
-      const mid = Math.round(below + above) / 2;
+      let mid: number;
+      if (above - below <= GAP_MAX) {
+        if (hi - lo < RUN_MIN) continue;
+        mid = Math.round(below + above) / 2;
+      } else {
+        // In open space, give the nearest face its requested clearance.
+        const nearer = at - below < above - at ? below : above;
+        if (Math.abs(nearer - at) >= Math.min(HUG, s.standoff)) continue;
+        mid = nearer + Math.sign(at - nearer) * s.standoff;
+      }
       if (Math.abs(mid - at) < 1) continue;
       // A gap too narrow to clear a box by `HUG` on both sides: the middle would bring the line
       // close along a box it now keeps clear of. Leave it where it is.
