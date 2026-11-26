@@ -19,6 +19,7 @@
 import assert from 'node:assert/strict';
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
@@ -698,6 +699,18 @@ if (!remote) {
   // PKCE code flow through the emailed sign-in and the consent page, a paid tool call with the
   // access token, refresh, and disconnect on /account. API keys keep working on /mcp (above).
   const resource = `${base}/mcp`;
+  // Off loopback, plain http goes to https instead of failing in the provider (a live 500).
+  if (!remote) {
+    // fetch drops a Host header, so ask with node:http.
+    const plain = await new Promise<http.IncomingMessage>((done, fail) =>
+      http
+        .get(`${base}/health`, { headers: { Host: 'api.example.test' } }, res => done(res.resume()))
+        .on('error', fail),
+    );
+    assert.equal(plain.statusCode, 301);
+    // wrangler dev rewrites the Location scheme to its own; live answers https://.
+    assert.match(plain.headers.location ?? '', /^https?:\/\/api\.example\.test\/health$/);
+  }
   const anon = await fetch(resource, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
