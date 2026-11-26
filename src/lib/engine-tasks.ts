@@ -14,11 +14,10 @@ import {
   type RoutingResult,
 } from '../engines/routing-engine';
 import { compile, type Scene } from '../dsl/compile';
-import { projectScene, type ViewState } from '../dsl/project';
+import { projectScene, visibleRects, type ViewState } from '../dsl/project';
 import { routingFingerprint } from '../model/document';
-import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
-import type { Diagram, Rect } from '../model/types';
+import type { Diagram } from '../model/types';
 
 export type EngineTask =
   | { kind: 'layout'; doc: Diagram; options: LayoutOptions }
@@ -68,11 +67,7 @@ export function runEngineTask(
 /** Compile a source variant and route it with no prior routes, as the viewer and CLI do. */
 async function compileCandidate(source: string, spec: CandidateSpec): Promise<CandidateResult> {
   const document = projectScene(await compile(source));
-  const routing = RouteLab.compute(ExplorerLab.sceneInput(document), {
-    ...document.settings.routing,
-    previous: [],
-  });
-  return { spec, document, report: null, routing };
+  return { spec, document, report: null, routing: documentRoutes(document) };
 }
 
 /**
@@ -99,14 +94,13 @@ async function compileScene(
   files?: CodeFiles,
 ): Promise<SceneResult> {
   const scene = await compiled(source, files),
-    document = projectScene(scene, view),
-    vg = visibleGraph(document),
-    geometry = makeGeometry(document),
-    rects = new Map<string, Rect>();
-  for (const n of vg.nodes) rects.set(n.id, { ...geometry(n.id) });
-  for (const g of vg.groups) rects.set(g.id, frameRect(document, geometry, g.id));
-  const { result } = computeRoutes(document, vg, rects, { previous: [] });
-  return { scene, fingerprint: routingFingerprint(document), routing: result };
+    document = projectScene(scene, view);
+  return { scene, fingerprint: routingFingerprint(document), routing: documentRoutes(document) };
+}
+
+function documentRoutes(document: Diagram): RoutingResult {
+  const { vg, rects } = visibleRects(document);
+  return computeRoutes(document, vg, rects, { previous: [] }).result;
 }
 
 // --- One long-lived worker -------------------------------------------------------------------
