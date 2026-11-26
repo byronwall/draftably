@@ -1764,6 +1764,7 @@ function wrapLanes(
   byId: Map<string, FoldBox>,
   immediate: (id: string, scope: string) => string | undefined,
   portPitch: number,
+  turns?: { min: number; max: number },
 ): Map<string, Lane> {
   const out = new Map<string, Lane>();
   for (const { scope, fold } of folds) {
@@ -1805,6 +1806,16 @@ function wrapLanes(
         if (enter && below.some(o => row(o, target) && end(o) <= start(target))) return [];
         return [{ id: e.id, source, target, leave, enter }];
       });
+      // A hint can pull the bands together; then there is no clear gap to share.
+      if (!wraps.length || bottom - top < (wraps.length + 1) * LANE_PITCH) continue;
+      // Frame sizing needs only the outermost turns. Their order does not affect the extent.
+      if (turns) {
+        const entering = wraps.filter(w => w.enter).length,
+          leaving = wraps.filter(w => w.leave).length;
+        if (entering) turns.min = Math.min(turns.min, entry - (entering - 1) * LANE_PITCH);
+        if (leaving) turns.max = Math.max(turns.max, exit + (leaving - 1) * LANE_PITCH);
+        continue;
+      }
       // Several wraps from one side of a source leave from ports the router spreads from the
       // middle outwards, nearest target first, leaning toward the targets. Their drops cross
       // the lanes unless the lanes follow the same order.
@@ -1822,8 +1833,6 @@ function wrapLanes(
           drop.set(w.id, mid(w.source) + step);
         });
       }
-      // A hint can pull the bands together; then there is no clear gap to share.
-      if (!wraps.length || bottom - top < (wraps.length + 1) * LANE_PITCH) continue;
       // Turns outside the bands nest: the lane nearest the earlier band leaves closest to its
       // end and enters furthest before the next band's start.
       const assign = (order: typeof wraps) => {
@@ -3812,6 +3821,38 @@ function layoutPass(
         for (const [id, p] of base.positions)
           base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
       const off = offsets(base.axis, base.positions);
+      let extraRight = 0,
+        extraBottom = 0;
+      if (scope !== 'root' && fold && list.every(n => n.type === 'node')) {
+        const boxes = new Map(
+          list.map(n => {
+            const p = base.positions.get(n.id)!,
+              o = off.get(n.id)!;
+            return [n.id, { ...n, ...o, x: p.x + o.x, y: p.y + o.y }] as const;
+          }),
+        );
+        const turns = { min: Infinity, max: -Infinity };
+        wrapLanes(
+          [{ scope, fold }],
+          m.edges.filter(e => boxes.has(e.source) && boxes.has(e.target)),
+          boxes,
+          immediate,
+          Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
+          turns,
+        );
+        const right = fold.axis === 'right',
+          axis = right ? 'x' : 'y',
+          size = right ? 'w' : 'h';
+        const gutter = GROUP_INSET - LANE_PITCH;
+        const occupied = Math.max(...[...boxes.values()].map(b => b[axis] + b[size]));
+        const before = Math.max(0, -turns.min - (right ? gutter : 0));
+        if (before)
+          for (const [id, p] of base.positions)
+            base.positions.set(id, { ...p, [axis]: p[axis] + before });
+        const after = Math.max(0, turns.max - occupied - gutter);
+        if (right) extraRight = after;
+        else extraBottom = after;
+      }
       const hints = !leaves.size
         ? m.hints
         : m.hints.map(h =>
@@ -3822,7 +3863,7 @@ function layoutPass(
       const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis);
       if ('followed' in base && base.followed) following.set(scope, holder!);
       else following.delete(scope);
-      return { base, fold, pos, off };
+      return { base, fold, pos, off, extraRight, extraBottom };
     };
     const drawnBox = (n: Item, at: ReturnType<typeof lay>) => {
       const p = at.pos.get(n.id)!,
@@ -3897,40 +3938,6 @@ function layoutPass(
             x: Math.max(0, -Math.min(...boxes.map(b => b.x))) + nest * SOFT_PAD,
             y: Math.max(0, -Math.min(...boxes.map(b => b.y))) + nest * (SOFT_PAD + SOFT_LABEL),
           };
-    // Size a folded group around the return tracks as well as its boxes.
-    let extraRight = 0,
-      extraBottom = 0;
-    if (
-      scope !== 'root' &&
-      laid.fold &&
-      list.every(n => n.type === 'node') &&
-      !m.hints.some(h => (h.type === 'pin' || h.type === 'stay') && list.some(n => n.id === h.id))
-    ) {
-      const localBoxes = new Map(list.map((n, i) => [n.id, { ...n, ...boxes[i] }]));
-      const lanes = wrapLanes(
-        [{ scope, fold: laid.fold }],
-        m.edges.filter(e => localBoxes.has(e.source) && localBoxes.has(e.target)),
-        localBoxes,
-        immediate,
-        Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
-      );
-      const turns = [...lanes.values()].flatMap(l =>
-        [l.enter, l.leave].filter((v): v is number => v !== undefined),
-      );
-      if (turns.length) {
-        const right = laid.fold.axis === 'right';
-        const near = Math.min(...turns);
-        const far = Math.max(...turns);
-        const axis = right ? 'x' : 'y';
-        const size = right ? 'w' : 'h';
-        const occupied = Math.max(...boxes.map(b => b[axis] + b[size]));
-        const gutter = GROUP_INSET - LANE_PITCH;
-        shift[axis] = Math.max(shift[axis], -near - (right ? gutter : 0));
-        const extra = Math.max(0, far - occupied - gutter);
-        if (right) extraRight = extra;
-        else extraBottom = extra;
-      }
-    }
     for (const [i, n] of list.entries()) {
       const b = boxes[i],
         o = laid.off.get(n.id)!,
@@ -3949,7 +3956,7 @@ function layoutPass(
           shift[a] +
           nest * SOFT_PAD
         : 0;
-    return { w: extent('x', 'w') + extraRight, h: extent('y', 'h') + extraBottom };
+    return { w: extent('x', 'w') + laid.extraRight, h: extent('y', 'h') + laid.extraBottom };
   }
   /**
    * A `cells` group's members, edge to edge from its content origin. The cells keep this place:

@@ -140,6 +140,22 @@ describe('routing clearance', () => {
     expect(closestParallel(ab.points, input.nodes[2])).toBeGreaterThanOrEqual(20);
   });
 
+  it('reports an unreachable waypoint even when it lines up with the port', () => {
+    const input: RouteInput = {
+      nodes: [box('a', 0, 0, 100, 60), box('b', 250, 200, 100, 60), box('c', 140, 10, 50, 40)],
+      groups: [],
+      edges: [
+        {
+          id: 'ab',
+          from: 'a',
+          to: 'b',
+          cfg: { fromSide: 'right', toSide: 'top', waypoints: [{ x: 150, y: 30 }] },
+        },
+      ],
+    };
+    expect(RouteLab.compute(input).routes[0].blocked).toBe(true);
+  });
+
   it('keeps runs off a group border', () => {
     const group = { id: 'g', x: 0, y: 0, w: 200, h: 200, collapsed: false };
     const input: RouteInput = {

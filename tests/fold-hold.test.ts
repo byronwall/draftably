@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes } from '../src/model/routes';
 import { describe, expect, it } from 'vitest';
 import { checkSource, compile } from '../src/dsl/compile';
 
@@ -76,4 +79,23 @@ describe('a relabel keeps a run unfolded', () => {
     ])
       expect(at(b).x).toBeGreaterThan(at(a).x);
   });
+});
+
+it('keeps both returns inside the frame when a member is held in place', async () => {
+  const file = 'docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/v0.draft';
+  const source = readFileSync(file, 'utf8');
+  const original = projectScene(await compile(source));
+  for (const hint of ['', 'pin jobs x=36 y=20', 'stay jobs x=36 y=20']) {
+    const doc = projectScene(await compile(source + '\n' + hint));
+    for (const [id, { x, y, w, h }] of Object.entries(original.layout.nodes))
+      expect(doc.layout.nodes[id]).toMatchObject({ x, y, w, h });
+    const { vg, rects } = visibleRects(doc),
+      frame = rects.get('services')!;
+    const { result } = computeRoutes(doc, vg, rects);
+    for (const id of ['dispatch', 'rollup']) {
+      const route = result.routes.find(r => r.id === id)!;
+      expect(route.blocked).toBe(false);
+      expect(route.points.every(p => p.x > frame.x && p.x < frame.x + frame.w)).toBe(true);
+    }
+  }
 });

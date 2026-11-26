@@ -378,8 +378,10 @@ function findAmong(
         for (const out of [
           { x: c.bs.x, y: point.y },
           { x: point.x, y: c.bs.y },
-        ])
-          remember([c.as, into, point, out, c.bs], c);
+        ]) {
+          const path = [c.as, into, point, out, c.bs];
+          if (segments(path).every(([a, b]) => !blocked(a, b, c.obs))) remember(path, c);
+        }
     }
   }
   if (!best && rawOptions.quick && old)
