@@ -15,7 +15,7 @@
  * storage until the user saves the example as a new file.
  */
 import { batch, createSignal } from 'solid-js';
-import { unwrap } from 'solid-js/store';
+import { produce, unwrap } from 'solid-js/store';
 import {
   checkSource,
   compile,
@@ -24,7 +24,7 @@ import {
   type Scene,
 } from '../../dsl/compile';
 import { setIconSource, type IconSet } from '../../model/iconify';
-import { projectScene } from '../../dsl/project';
+import { edgeEnds, projectScene } from '../../dsl/project';
 import { DslError, printSource, readSource } from '../../dsl/syntax';
 import {
   anchorSurroundings,
@@ -636,12 +636,40 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     const next = printSource(result.source);
     // Nothing the file stores changed (for example a move of an object that was not selected).
     if (next === localSource) return snapBack('That change is not saved to diagram files.');
+    let checked;
     try {
-      checkSource(next, codeFiles);
+      checked = checkSource(next, codeFiles);
     } catch (error) {
       if (error instanceof DslError) return snapBack(`That edit cannot be saved. ${error.message}`);
       throw error;
     }
+    const mapId = (id: string) => result.ids.get(id) ?? id,
+      { drops } = result;
+    // A written edge can stand in for the line a table row's `->` draws. Without it the row's line
+    // comes back, so the edit cannot remove it.
+    // In a change diagram the line can also move between panels, which its status says.
+    const shown = new Map(s.doc.graph.edges.map(e => [mapId(e.id), e.status]));
+    const back = checked.edges.find(
+      e => e.inferred && (!shown.has(e.id) || (shown.get(e.id) ?? undefined) !== e.status),
+    );
+    if (back)
+      return snapBack(
+        `Without that line, the row ${back.source} draws its own line to ${back.target}. Remove \`-> ${back.target}\` from its table's body in the source.`,
+      );
+    // Which lines are a mind map's branches or an org chart's reporting lines depends on the whole
+    // file, so take each line's head from the checked source.
+    const ends = new Map(checked.edges.map(e => [e.id, edgeEnds(e)]));
+    s.setDoc(
+      produce(d => {
+        for (const e of d.graph.edges) {
+          const end = ends.get(mapId(e.id));
+          if (!end) continue;
+          delete e.head;
+          delete e.branch;
+          Object.assign(e, end);
+        }
+      }),
+    );
     batch(() => {
       state.setUndoStack(stack =>
         [...stack, { before: localSource, after: next, label }].slice(-80),
@@ -650,8 +678,6 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     });
     setLocal(next);
     for (const [id, sourceId] of result.ids) pendingIds.set(id, sourceId);
-    const mapId = (id: string) => result.ids.get(id) ?? id,
-      { drops } = result;
     void showSource(next, () => s.selectedIds().map(mapId), mapId).then(
       drawn => drawn && checkDrops(drawn, next, drops),
     );

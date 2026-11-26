@@ -119,21 +119,7 @@ function targets(d: Diagram): [Kind, string][] {
  * Edits whose saved file draws something else today, as `<example>: <action> on <kind> <id>`,
  * with what goes wrong. Fix one, then delete its line: the test fails while a fixed edit is listed.
  */
-const KNOWN: Record<string, string> = {
-  'billing-schema.draft: delete on edge has-lines':
-    'An inferred foreign-key line comes back after the save.',
-  'launch-plan.draft: quick extend on node launch':
-    'The new step shows an arrow; the saved mind map draws a branch line.',
-  'launch-plan.draft: delete on edge b1':
-    'Removing a branch turns its sibling branches into arrows.',
-  'launch-plan.draft: reverse on edge b1': 'Reversing a branch turns the branches into arrows.',
-  'launch-plan.draft: rename on edge b1': 'Labeling a branch turns the branches into arrows.',
-  'org-chart.draft: delete on node ceo': 'Removing the root turns reporting lines into arrows.',
-  'org-chart.draft: quick extend on node ceo':
-    'The new report shows an arrow; the saved org chart draws a reporting line.',
-  'org-chart.draft: reverse on edge r1': 'Reversing a reporting line draws it as an arrow.',
-  'org-chart.draft: rename on edge r1': 'Labeling a reporting line draws it as an arrow.',
-};
+const KNOWN: Record<string, string> = {};
 
 const RUN = !!process.env.EDIT_MATRIX;
 const dir = path.join(__dirname, '../examples');

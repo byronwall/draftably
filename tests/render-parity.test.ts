@@ -50,10 +50,7 @@ function marks(root: ParentNode) {
 }
 
 /** Gaps between the renderers today, by example, with what differs. Delete a line once fixed. */
-const KNOWN: Record<string, string> = {
-  'roadmap.draft':
-    'Timeline links drawn on the chart (e1, e2, e3) have no data-id in either renderer, but the geometry places them.',
-};
+const KNOWN: Record<string, string> = {};
 
 /** The Solid scene's marks for one document. */
 function solidMarks(doc: Diagram) {
