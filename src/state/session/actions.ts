@@ -13,7 +13,13 @@ import {
   type Shade,
   type ThemeId,
 } from '../../model/appearance';
-import { CODE_MAX_WIDTH, codeFromBody, codeLayout, type CodeBlock } from '../../model/code';
+import {
+  CODE_MAX_WIDTH,
+  CODE_TAB,
+  codeFromBody,
+  codeLayout,
+  type CodeBlock,
+} from '../../model/code';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -38,11 +44,14 @@ import type { EditorPart } from './editor';
 import type { DocumentPart } from './document';
 import type { ScenePart } from './scene';
 import type { LayoutPart } from './layout';
+import type { FileSessionPart } from './file-session';
 
 /** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
 export const HEADING_EDIT = { title: textId('title'), subtitle: textId('subtitle') } as const;
 
-export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutPart) {
+export function createActions(
+  s: EditorPart & DocumentPart & FileSessionPart & ScenePart & LayoutPart,
+) {
   // --- Tools -----------------------------------------------------------------------------------
 
   /** Lets the brush and timeline intercept tool changes. Returns true when handled. */
@@ -87,15 +96,23 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   /**
    * What the open editor started from, field by field. A save writes only the fields its draft
    * changed, and is refused when one of those fields changed in the file since: a change the file
-   * made to another field stays.
+   * made to another field stays. `file` is the open file, so a draft never saves into another.
    */
-  let codeBase: CodeFields | undefined;
-  /** The fields of a code node the editor can write: caption, table setting and body. */
-  const codeFields = (id: string) => {
+  let codeBase: { file: unknown; fields: CodeFields } | undefined;
+  /**
+   * The fields of a code node the editor can write: caption, table setting and body. The body
+   * counts its tab width and table setting too: the editor read its cells with them, so a body
+   * saved after either changed could move or drop cells.
+   */
+  const codeFields = (id: string): CodeFields | undefined => {
     const node = findNode(s.doc, id),
       code = node?.code;
     return node && code
-      ? { title: node.title, table: !!code.table, body: JSON.stringify(code.body ?? code.lines) }
+      ? {
+          title: node.title,
+          table: !!code.table,
+          body: JSON.stringify([code.body ?? code.lines, code.tab ?? CODE_TAB, !!code.table]),
+        }
       : undefined;
   };
 
@@ -105,7 +122,8 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
     const code = findNode(s.doc, id)?.code;
     if (code?.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
-    codeBase = codeFields(id);
+    const fields = codeFields(id);
+    codeBase = fields && { file: s.fileSession(), fields };
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
@@ -145,19 +163,23 @@ export function createActions(s: EditorPart & DocumentPart & ScenePart & LayoutP
   function finishCodeEdit(id: string, next?: { body?: string[]; table: boolean; title: string }) {
     if (codeEditId() === id) setCodeEditId(null);
     saveOpenCode = undefined;
-    const base = codeBase,
-      now = codeFields(id);
+    const opened = codeBase;
     codeBase = undefined;
-    if (!next || !base || !now) return;
+    if (!next || !opened) return;
+    const base = opened.fields;
     const edits: Record<keyof CodeFields, boolean> = {
       title: next.title !== base.title,
       table: next.table !== base.table,
       body: !!next.body,
     };
     const fields = Object.keys(edits) as (keyof CodeFields)[];
+    if (!fields.some(k => edits[k])) return;
+    if (opened.file !== s.fileSession())
+      return toast('Another file is open now, so your code edit was not saved.');
+    const now = codeFields(id);
+    if (!now) return toast('This code was removed or renamed, so your edit was not saved.');
     if (fields.some(k => edits[k] && now[k] !== base[k]))
       return toast('This code changed while you edited it, so your edit was not saved.');
-    if (!fields.some(k => edits[k])) return;
     s.transact(next.table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;

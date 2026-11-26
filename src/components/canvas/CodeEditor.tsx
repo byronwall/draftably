@@ -60,7 +60,9 @@ function Editor(props: { id: string }) {
     [text, setText] = createSignal(raw.join('\n')),
     [title, setTitle] = createSignal(node.title),
     [focus, setFocus] = createSignal({ r: 0, c: 0 }),
-    [dirty, setDirty] = createSignal(false);
+    [dirty, setDirty] = createSignal(false),
+    // A change to the cells or text, as against only the Table switch: only that writes a body.
+    [edited, setEdited] = createSignal(false);
   let box!: HTMLDivElement, area: HTMLTextAreaElement | undefined;
 
   const rows = () => grid().table.rows,
@@ -81,6 +83,7 @@ function Editor(props: { id: string }) {
     batch(() => {
       setGrid(fn);
       setDirty(true);
+      setEdited(true);
     });
   const setCell = (r: number, c: number, value: string) =>
     change(g => edit.setCell(g, r, c, value));
@@ -140,14 +143,15 @@ function Editor(props: { id: string }) {
   /** Close the editor. `refocus`: give the canvas the keyboard; a focus-out save leaves it be. */
   const close = (save: boolean, refocus = true) => {
     if (closed) return;
-    // Only a changed body is written; a caption edit leaves the file's body as it is.
-    const body = dirty() ? (table() ? tableBody() : text().split('\n')) : undefined;
+    // Only a changed body is written: a caption edit or the Table switch alone leaves the file's
+    // body as it is, and so does an edit typed back to what the file holds.
+    const lines = edited() ? (table() ? tableBody() : text().split('\n')) : undefined,
+      body = lines && lines.join('\n') !== raw.join('\n') ? lines : undefined;
     closed = true;
-    const changed = dirty() || title().trim() !== node.title;
-    s.finishCodeEdit(
-      id,
-      save && changed ? { body, table: table(), title: title().trim() } : undefined,
-    );
+    // An untouched caption is sent as the file has it, outer spaces and all.
+    const caption = title() === node.title ? node.title : title().trim();
+    const changed = dirty() || caption !== node.title;
+    s.finishCodeEdit(id, save && changed ? { body, table: table(), title: caption } : undefined);
     if (refocus) s.focusCanvas();
   };
 
@@ -397,6 +401,7 @@ function Editor(props: { id: string }) {
               onInput={e => {
                 setText(e.currentTarget.value);
                 setDirty(true);
+                setEdited(true);
                 fitArea();
               }}
               onKeyDown={onAreaKey}

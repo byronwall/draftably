@@ -1,7 +1,8 @@
 // An editor draft is taken when the editor opens. If the file changes under it, a save of that
 // draft must not write over the change. Each case below changes one thing the file can say about a
 // code node while the Code editor is open, then saves a draft. The file keeps the change. A draft
-// of a different field still saves; a draft of the same field is refused.
+// of a different field still saves; a draft of the same field is refused. A body counts its tab
+// width and table setting, since the editor read its cells with them.
 import { afterAll, beforeAll, expect, it, vi } from 'vitest';
 import type { DiagramSession } from '../src/state/session';
 
@@ -61,13 +62,13 @@ const CHANGES: Record<string, [string, string]> = {
 // The draft the editor saves: a new caption, or a new body, or the Table switch, with the
 // change each one makes and the file change it edits too.
 const DRAFTS = {
-  caption: { draft: { table: false, title: 'Mine' }, shows: '"Mine"', same: 'caption' },
+  caption: { draft: { table: false, title: 'Mine' }, shows: '"Mine"', same: ['caption'] },
   body: {
     draft: { body: ['SELECT 3'], table: false, title: 'Query' },
     shows: 'SELECT 3',
-    same: 'body',
+    same: ['body', 'table', 'tab'],
   },
-  toggle: { draft: { table: true, title: 'Query' }, shows: 'table=on', same: 'table' },
+  toggle: { draft: { table: true, title: 'Query' }, shows: 'table=on', same: ['table'] },
 };
 
 it('saves a draft when the file did not change under it', async () => {
@@ -96,7 +97,37 @@ for (const [what, [changed, kept]] of Object.entries(CHANGES))
       const saved = s.currentSource();
       expect(saved).toContain(kept);
       // Both edited the same field: the file's version wins and the draft is refused.
-      if (what === same) expect(saved).toBe(changed);
+      if (same.includes(what)) expect(saved).toBe(changed);
       // A draft of another field lands on top of the file's change.
       else expect(saved).toContain(shows);
     });
+
+it('refuses a draft after another file opened, and leaves that file as it is', async () => {
+  const s = await session();
+  const { toastMessage } = await import('../src/state/toast');
+  await s.openExampleSession('drafts-a', 'A', BASE);
+  await settle(s);
+  s.startInlineEdit('q');
+  const other = file(' lang=sql', 'Query', ['SELECT 9']);
+  await s.openExampleSession('drafts-b', 'B', other);
+  await settle(s);
+  s.finishCodeEdit('q', DRAFTS.caption.draft);
+  await settle(s);
+  expect(s.currentSource()).toBe(other);
+  expect(toastMessage()?.text).toMatch(/Another file/);
+});
+
+it('refuses a draft whose node the file renamed, and says so', async () => {
+  const s = await session();
+  const { toastMessage } = await import('../src/state/toast');
+  await s.openExampleSession('drafts-renamed', 'Drafts', BASE);
+  await settle(s);
+  s.startInlineEdit('q');
+  const renamed = BASE.replace('node q ', 'node r ');
+  await s.receiveSource(renamed);
+  await settle(s);
+  s.finishCodeEdit('q', DRAFTS.caption.draft);
+  await settle(s);
+  expect(s.currentSource()).toBe(renamed);
+  expect(toastMessage()?.text).toMatch(/removed or renamed/);
+});
