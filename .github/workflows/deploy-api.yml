@@ -1,0 +1,40 @@
+name: Deploy the API to Cloudflare
+
+# Every push to main that changes the service or the code it bundles deploys draftably-api.
+# Migrations run first, so new code never meets an old schema. Run it by hand to redeploy.
+on:
+  push:
+    branches: [main]
+    paths:
+      - packages/**
+      - pnpm-lock.yaml
+      - .github/workflows/deploy-api.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      # pnpm reads its version from packageManager in package.json.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Applies only the migrations D1 has not seen yet (packages/service/migrations).
+      - run: pnpm --dir packages/service exec wrangler d1 migrations apply DB --remote
+      # Builds the runtime and deploys the draftably-api Worker (packages/service/wrangler.jsonc).
+      - run: pnpm service:deploy

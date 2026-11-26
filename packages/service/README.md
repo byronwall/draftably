@@ -103,12 +103,13 @@ Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
 
 ## Later deploys
 
-Run `pnpm service:deploy`. For a schema change, add a numbered file in `migrations/` and apply it
-before you deploy (`0002_shares.sql` needs this once):
+Merge to main. The `Deploy the API to Cloudflare` workflow (`.github/workflows/deploy-api.yml`) runs on
+every push to main that changes `packages/`. It applies new files in `migrations/` to D1, then runs
+`pnpm service:deploy`. Run the workflow by hand to redeploy. The `CLOUDFLARE_API_TOKEN` secret needs
+Workers Scripts Edit and D1 Edit.
 
-```sh
-pnpm --dir packages/service exec wrangler d1 migrations apply DB --remote
-```
+To deploy from a laptop, run step 2, then `pnpm service:deploy`, from a checkout of main.
 
-Short links' `edit` URLs (`draftably.dev/d/{id}`) are served by the site Worker, so deploy the site
-too (`pnpm site:deploy`) when shipping them.
+Short links' `edit` URLs (`draftably.dev/d/{id}`) are served by the site Worker. The API workflow does
+not deploy the site: run the `Deploy the site to Cloudflare` workflow (or `pnpm site:deploy`) when a
+change touches `site/`.
