@@ -1,0 +1,12 @@
+diagram "Library loans"
+group copies "copies" <<COLS
+  id uuid pk
+  shelf text nn
+COLS
+layout copies table
+group loans "loans" <<COLS
+  id uuid pk
+  copy_id uuid fk -> copies.id
+  due_at date nn
+COLS
+layout loans table

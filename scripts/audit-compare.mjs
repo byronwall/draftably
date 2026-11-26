@@ -26,7 +26,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -58,7 +58,7 @@ const only = option('--only');
 const outDir = path.resolve(option('--out', 'tmp/audit/compare'));
 if (args.length) {
   console.error(
-    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues,population] [--only a,b] [--shots] [--gate | --gate=flat] [--review] [--out <dir>]',
+    'Usage: node scripts/audit-compare.mjs [--base <ref>] [--sets corpus,heldout,examples,issues,population,options] [--only a,b] [--shots] [--gate | --gate=flat] [--review] [--out <dir>]',
   );
   process.exit(1);
 }
@@ -87,10 +87,34 @@ function examplesSet() {
   }
   return dir;
 }
+// Keep synthetic boundary cases outside the population weights.
+let optionAudit;
+if (setNames.includes('options')) {
+  const { build } = await import('vite');
+  const bundle = path.join(outDir, 'generator');
+  await build({
+    root,
+    configFile: false,
+    logLevel: 'error',
+    build: {
+      ssr: 'scripts/lib/audit-options.ts',
+      outDir: bundle,
+      emptyOutDir: false,
+      rollupOptions: { output: { entryFileNames: 'options.mjs' } },
+    },
+  });
+  optionAudit = await import(pathToFileURL(path.join(bundle, 'options.mjs')).href);
+  const dir = path.join(outDir, 'inputs/options');
+  fs.rmSync(dir, { recursive: true, force: true });
+  optionAudit.writeOptions(root, dir);
+  SET_DIRS.options = path.relative(root, dir);
+}
 const sets = setNames.map(name => {
   if (name === 'examples') return { name, dir: examplesSet() };
   if (!SET_DIRS[name]) {
-    console.error(`Unknown set "${name}". Sets: corpus, heldout, examples, issues, population.`);
+    console.error(
+      `Unknown set "${name}". Sets: corpus, heldout, examples, issues, population, options.`,
+    );
     process.exit(1);
   }
   return { name, dir: path.join(root, SET_DIRS[name]) };
@@ -230,6 +254,12 @@ const signed = n => (n > 0 ? `+${n}` : `${n}`);
 const loaded = {};
 for (const set of sets)
   loaded[set.name] = { base: load(path.join(outDir, 'base', set.name)), head: load(headOut(set)) };
+if (optionAudit) {
+  optionAudit.writeCoverage(
+    outDir,
+    sets.map(set => ({ ...set, renders: loaded[set.name].head })),
+  );
+}
 const ok = list => list.filter(r => !r.error);
 
 // ---------- frequency weights ----------
@@ -450,6 +480,16 @@ function weightedGate() {
   const GUARDED = ['population', 'corpus', 'heldout', 'examples'].filter(s => loaded[s]);
   const pooled = weigh(GUARDED);
   const rows = [hardDefects()];
+  if (loaded.options) {
+    const errors = loaded.options.head.filter(render => render.error);
+    rows.push([
+      'Option probes compile',
+      errors.length || !loaded.options.head.length ? 'FAIL' : 'PASS',
+      errors.length
+        ? errors.map(render => render.slug).join(', ')
+        : String(loaded.options.head.length),
+    ]);
+  }
   const ev = (b, h) => `${b.toFixed(2)} → ${h.toFixed(2)} (${signed(+(h - b).toFixed(2))})`;
   const [pb, ph] = [weightedMean(GUARDED, 'base', pooled), weightedMean(GUARDED, 'head', pooled)];
   rows.push([

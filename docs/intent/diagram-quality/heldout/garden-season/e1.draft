@@ -1,0 +1,9 @@
+diagram "Spring planting"
+group season "Garden calendar"
+layout season timeline today=2026-04-15
+node sow "Start seeds inside" in=season from=2026-03-12 to=2026-04-09
+node plant "Transplant outside" in=season from=2026-04-20 to=2026-04-24
+edge a sow -> plant
+
+milestone harvest "First harvest" at=2026-06-10 in=season
+# expect above sow plant

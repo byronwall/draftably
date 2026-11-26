@@ -21,3 +21,12 @@ node scripts/diagram-audit.mjs docs/intent/diagram-quality/heldout tmp/audit/rN-
 | Round 5  | [annotator-credit-checkout](annotator-credit-checkout/) | image-annotator        | payment lifecycle, default → flow down, none / mulberry         |
 
 Round 5's three have v0, e1 and e2. The earlier seven have v0 and e1.
+
+Four authored examples cover specialized recipes. Each has a first request and a follow-up edit.
+
+| Diagram                             | Recipe    | Follow-up                                                   |
+| ----------------------------------- | --------- | ----------------------------------------------------------- |
+| [Repair intake](repair-intake-map/) | Mind map  | Add an inspection under an existing decision.               |
+| [Festival staff](festival-staff/)   | Org chart | Add a shift under a manager.                                |
+| [Library loans](library-loans/)     | Table     | Insert a date column while preserving a foreign key.        |
+| [Garden season](garden-season/)     | Timeline  | Add a harvest deadline while preserving the order of tasks. |

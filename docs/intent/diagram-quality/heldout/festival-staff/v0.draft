@@ -1,0 +1,11 @@
+diagram "Festival staff"
+node chair "Festival chair"
+node stage "Stage lead"
+node site "Site lead"
+node sound "Day shift"
+node access "Access steward"
+edge a chair -> stage
+edge b chair -> site
+edge c stage -> sound
+edge d site -> access
+layout root orgchart root=chair leaves=row

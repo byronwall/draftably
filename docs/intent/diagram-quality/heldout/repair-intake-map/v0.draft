@@ -1,0 +1,11 @@
+diagram "Repair intake"
+node intake "Repair request"
+node safety "Is the bicycle safe to ride?"
+node parts "Which parts are available?"
+node slot "When can work start?"
+node frame "Inspect the frame"
+edge a intake -> safety
+edge b intake -> parts
+edge c intake -> slot
+edge d safety -> frame
+layout root mindmap root=intake
