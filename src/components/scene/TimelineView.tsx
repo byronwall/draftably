@@ -1,4 +1,4 @@
-import { createMemo, For, Match, Switch } from 'solid-js';
+import { createMemo, For, Match, Show, Switch } from 'solid-js';
 import type { ResolvedAppearance } from '../../model/appearance';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
@@ -85,6 +85,18 @@ function TimelineView(props: {
 
 /** One mark, as `markSvg` in `model/timeline.ts` writes it for the SVG export. */
 function Mark(props: { look: ResolvedAppearance; m: TimelineMark; backdrop: string }) {
+  return (
+    <Show when={props.m.id} fallback={<Shape {...props} />}>
+      {id => (
+        <g data-id={id()}>
+          <Shape {...props} />
+        </g>
+      )}
+    </Show>
+  );
+}
+
+function Shape(props: { look: ResolvedAppearance; m: TimelineMark; backdrop: string }) {
   const c = () => timelineColor(props.look, props.m.ink, props.backdrop);
   return (
     <Switch>

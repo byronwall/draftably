@@ -948,7 +948,12 @@ export function layoutTimeline(
       tries: Array<{ x: number; y: number; anchor: 'start' | 'end' }>;
     }> = [];
   const ink: TimelineInk = 'muted';
+  // Every mark of a link, its label too, carries the link's id, so a renderer can tag it.
+  const tag = (from: number, id: string) => {
+    for (let i = from; i < over.length; i++) over[i].id = id;
+  };
   for (const e of links) {
+    const start = over.length;
     const a = anchors.get(e.source),
       b = anchors.get(e.target);
     // A line to itself is routed. Across panels the elbow still runs from one row's end (on its
@@ -976,6 +981,7 @@ export function layoutTimeline(
       };
       over.push({ k: 'line', x1: x0, y1: y0, x2: x0, y2: y1 - down * 6, ink, w: 1.3 });
       over.push({ k: 'path', d: vHead(x0, y1, down), ink });
+      tag(start, e.id);
       if (e.label)
         pending.push({
           id: e.id,
@@ -1006,6 +1012,7 @@ export function layoutTimeline(
       stroke: 1.3,
     });
     over.push({ k: 'path', d: hHead(x1, b.y, right), ink });
+    tag(start, e.id);
     if (e.label) {
       const side = right > 0 ? 'start' : 'end',
         back = right > 0 ? 'end' : 'start';
@@ -1053,7 +1060,9 @@ export function layoutTimeline(
     placed.push(boxOf(pick));
     if (linkGeo[p.id]) linkGeo[p.id].label = boxOf(pick);
     right = Math.max(right, boxOf(pick).x + boxOf(pick).w);
+    const start = over.length;
     text(pick.x, pick.y, p.label, ink, 'small', pick.anchor, 220, true);
+    tag(start, p.id);
   }
 
   // The legend: one entry for each kind of mark the drawing uses.

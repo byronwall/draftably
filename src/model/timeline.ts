@@ -25,7 +25,8 @@ export type TimelineInk =
 
 export type TimelineFont = 'name' | 'detail' | 'key' | 'band' | 'small' | 'label' | 'caps';
 
-export type TimelineMark =
+/** `id` names the edge a mark draws (a link between rows), so a renderer tags it with `data-id`. */
+export type TimelineMark = { id?: string } & (
   | {
       k: 'line';
       x1: number;
@@ -48,7 +49,8 @@ export type TimelineMark =
       ink: TimelineInk;
       font: TimelineFont;
       anchor?: 'start' | 'middle' | 'end';
-    };
+    }
+);
 
 /** A timeline as the diagram holds it: its scope, where its plan's origin sits, and its rows. */
 export interface PlacedTimeline extends TimelinePlan {
@@ -184,7 +186,7 @@ export function validMark(m: unknown): m is TimelineMark {
         /^[\w-]+$/.test(ink.family) &&
         (ink.tone === undefined ||
           ['strong', 'ink', 'soft', 'track', 'tint'].includes(ink.tone as string));
-  if (!inkOk) return false;
+  if (!inkOk || (v.id !== undefined && typeof v.id !== 'string')) return false;
   switch (v.k) {
     case 'line':
       return (
@@ -239,6 +241,11 @@ export function timelineOrigin(t: PlacedTimeline, scopeRect: Rect | undefined) {
 
 /** One mark as SVG markup, for the string renderer. */
 export function markSvg(look: ResolvedAppearance, m: TimelineMark, backdrop?: string): string {
+  const out = shapeSvg(look, m, backdrop);
+  return m.id ? `<g data-id="${escText(m.id)}">${out}</g>` : out;
+}
+
+function shapeSvg(look: ResolvedAppearance, m: TimelineMark, backdrop?: string): string {
   const c = timelineColor(look, m.ink, backdrop);
   switch (m.k) {
     case 'line':
