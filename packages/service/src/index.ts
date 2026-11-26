@@ -337,6 +337,7 @@ const app = {
 // A token is for one resource, `<origin>/mcp`, so each origin (the custom domain, wrangler dev)
 // gets its own provider.
 const providers = new Map<string, OAuthProvider<Env>>();
+const LOOPBACK = new Set(['localhost', '127.0.0.1', '[::1]']);
 function provider(origin: string) {
   let found = providers.get(origin);
   if (!found) providers.set(origin, (found = new OAuthProvider(oauthOptions(origin, app))));
@@ -362,6 +363,12 @@ export default {
       const ip = req.headers.get('CF-Connecting-IP');
       // Best effort: a failed digest must not fail the request.
       if (ip) ev.ip = await ipHash(ip).catch(() => undefined);
+      // The provider refuses an http resource off loopback and throws, so send http to https.
+      if (url.protocol === 'http:' && !LOOPBACK.has(url.hostname)) {
+        url.protocol = 'https:';
+        ev.status = 301;
+        return Response.redirect(url.href, 301);
+      }
       // The provider caches its helpers on env, which Workers may reuse across requests and
       // origins; a copy keeps each origin's own.
       const res = await withEvent(ev, () => provider(url.origin).fetch(req, { ...env }, ctx));
