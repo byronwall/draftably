@@ -229,7 +229,10 @@ export async function go(url: string, { push = true } = {}) {
   await activeSession().settleSave();
   if (file) {
     const switching = activeSession().fileSession()?.file !== file;
-    if (switching && !(await activeSession().openFileSession(file))) return location.assign(url);
+    const opened = switching ? await activeSession().openFileSession(file) : true;
+    if (opened === false) return location.assign(url);
+    // A later navigation opened another file first: that one owns the URL and the view.
+    if (opened === null || activeSession().fileSession()?.file !== file) return;
     if (push) history.pushState(null, '', next.href);
     state.setStartOpen(false);
     if (switching) {

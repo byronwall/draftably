@@ -219,11 +219,51 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   const pendingIds = new Map<string, string>();
   /** An edit made while the file was compiling, saved once the compile finishes. */
   let queued: { before: string; after: string; label: string } | null = null;
+  /**
+   * Editor commands waiting for the revision being laid out. Each one reads the latest drawn
+   * source when it runs, so a change on disk made meanwhile is checked, not written over.
+   */
+  const commands: { session: FileSessionInfo | null; run: () => void }[] = [];
+  /** The last revision could not be drawn (not a source error): commands are refused until one is. */
+  let undrawable = false;
+  /** Set while waiting edits run: a command a running one submits waits its turn. */
+  let flushing = false;
   const flushQueued = () => {
+    // A drawing of text not committed yet (Source panel typing): its caller commits, then flushes.
+    if (shownSource !== localSource || flushing) return;
+    flushing = true;
+    try {
+      drain();
+    } finally {
+      flushing = false;
+    }
+  };
+  const drain = () => {
     const edit = queued;
     queued = null;
     if (edit) handleEdit(edit.before, edit.label, 'edit', edit.after);
+    // Each command that edits starts a compile, so the rest wait for that one in turn.
+    while (commands.length && !state.compiling()) {
+      const { session, run } = commands.shift()!;
+      // A command belongs to the file it was made in: another file never receives it.
+      if (session !== state.info()) toast('Another file is open now, so your edit was not saved.');
+      else run();
+    }
   };
+  /**
+   * Run an editor command against the latest drawn source: now, or once the revision being laid
+   * out is on screen. A command holds what its editor opened with and the fields it writes, not a
+   * snapshot of the drawing, so it applies to whatever the file says by then.
+   */
+  function whenDrawn(command: () => void) {
+    if (undrawable) return toast('The file could not be drawn, so your edit was not saved.');
+    if (state.info() && (state.compiling() || shownSource !== localSource || flushing))
+      commands.push({ session: state.info(), run: command });
+    else {
+      flushQueued();
+      command();
+    }
+  }
   const renamePending = <T>(value: T): T =>
     pendingIds.size
       ? JSON.parse(JSON.stringify(value), function (key, v) {
@@ -256,6 +296,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   };
 
   let showing = 0;
+  /** The source the drawing on screen was projected from. */
+  let shownSource = '';
 
   /** How a redrawn file reaches the scene's routes; `scene.ts` registers it (it imports this module). */
   let routeSink: {
@@ -345,11 +387,28 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       if (ticket !== showing) return null;
       state.setCompiling(false);
       routeSink.quick(false);
-      if (!(error instanceof DslError)) throw error;
+      if (!(error instanceof DslError)) {
+        // Nothing will draw this revision: waiting edits are refused, not left to wait.
+        if (queued || commands.length)
+          toast('The file could not be drawn, so your edit was not saved.');
+        queued = null;
+        commands.length = 0;
+        undrawable = true;
+        throw error;
+      }
       batch(() => {
         state.setSourceError({ message: error.message, line: error.line });
         state.setStatus('invalid');
       });
+      undrawable = false;
+      // Waiting edits run now and are refused: the file has an error to fix first.
+      if (source === localSource) shownSource = source;
+      else if (commands.length) {
+        // Typed text with an error replaced the drawing they waited for: they are refused, so a
+        // later redraw never saves them unasked.
+        commands.length = 0;
+        toast('The source has an error, so your edit was not saved.');
+      }
       flushQueued();
       return null;
     }
@@ -368,8 +427,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
         });
       });
     batch(() => {
-      s.mapSourceIds(mapId);
+      // A projection that a newer one superseded never mapped its new ids: the saved ones still do.
+      s.mapSourceIds(id => {
+        const mapped = mapId(id);
+        return mapped !== id ? mapped : (pendingIds.get(id) ?? id);
+      });
       s.restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
+      shownSource = source;
+      undrawable = false;
       // The drawing on screen is now this file's, in the same batch as its projection.
       setShownFile(state.info());
       if (!pending) adopt(routes as Routes | undefined);
@@ -400,6 +465,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     setLocal(source);
     diskRevision = revision;
     resetHistory();
+    // Ids the last local edits gave new objects do not carry into a source someone else wrote.
+    pendingIds.clear();
     const scene = await showSource(source);
     if (!scene) return;
     state.setStatus('saved');
@@ -450,17 +517,26 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       return;
     }
     saving = true;
+    let restart = false;
     state.setStatus('saving');
     try {
       for (;;) {
         saveAgain = false;
-        const sending = localSource;
+        // The session this save belongs to: its path and revision, read together.
+        const session = state.info(),
+          sending = localSource;
         const res = await fetch(`./api/source${fileQuery}`, {
           method: 'PUT',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ source: sending, base: diskRevision }),
         });
         const body = await res.json();
+        // Another file opened while this save was in flight: its answer is not that file's, and
+        // an edit made in that file meanwhile is saved on its own once this one ends.
+        if (state.info() !== session) {
+          restart = saveAgain;
+          return;
+        }
         if (res.status === 409) {
           enterConflict(body.source, body.revision);
           return;
@@ -485,6 +561,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       toast('Not saved: the file server is not reachable.');
     } finally {
       saving = false;
+      if (restart) void save();
+      else if (state.status() === 'saving')
+        state.setStatus(state.sourceError() ? 'invalid' : 'saved');
       const external = externalDuringSave;
       externalDuringSave = null;
       // The file was replaced after this save landed; show the newer version.
@@ -542,8 +621,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     setDraft(next);
     if (state.proposal()) return;
     if (next === localSource) {
-      // Typed back to the shown source: drop the error the draft reported.
-      if (!state.sourceError()) return setDraft(null);
+      // Typed back to the committed source: drop the error the draft reported, and draw that
+      // source again if a draft's drawing is on screen or on its way.
+      if (!state.sourceError()) {
+        setDraft(null);
+        if (state.compiling() || shownSource !== localSource || undrawable)
+          void showSource(localSource);
+        return;
+      }
       if ((await showSource(next)) && ticket === typing) {
         setDraft(null);
         if (state.status() === 'invalid') state.setStatus('saved');
@@ -568,6 +653,8 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     savedMessage = null;
     savedAction = undefined;
     void save();
+    // Edits that waited for this drawing apply to the text it was drawn from, now committed.
+    flushQueued();
   }
 
   // --- Edits and history ---------------------------------------------------------------------------
@@ -841,13 +928,16 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
 
   /**
    * Ask the local server for the session of `file` (a path relative to the served folder).
-   * Resolves false when the server has no such file.
+   * Resolves false when the server has no such file, and null when a later open superseded this
+   * one before it began.
    */
-  async function openFileSession(file: string): Promise<boolean> {
-    fileQuery = `?file=${encodeURIComponent(file)}`;
+  async function openFileSession(file: string): Promise<boolean | null> {
+    // Saves keep going to the open file until this one's session is begun.
+    const query = `?file=${encodeURIComponent(file)}`,
+      ticket = ++opening;
     let info: FileSessionInfo;
     try {
-      const res = await fetch(`./api/session${fileQuery}`, {
+      const res = await fetch(`./api/session${query}`, {
         headers: { accept: 'application/json' },
       });
       if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) return false;
@@ -855,9 +945,19 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     } catch {
       return false;
     }
-    document.title = `${file} · draftably`;
     await useServedIconSets();
-    await begin(info);
+    // Edits made in the open file while this one was asked for are saved to it first.
+    await settleSave();
+    // A save that failed or met a newer file keeps this file open, with its Retry or choice.
+    if (ticket === opening && (state.status() === 'failed' || state.status() === 'conflict')) {
+      toast('Your last edit was not saved. Retry it or keep the file before opening another.');
+      return null;
+    }
+    // A later open won the race: this file is not the one to show.
+    if (ticket !== opening) return null;
+    document.title = `${file} · draftably`;
+    await begin(info, query);
+    if (ticket !== opening) return null;
     listen();
     return true;
   }
@@ -874,6 +974,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       // Opening the file reports the problem.
     }
   }
+
+  /** Counts file opens, so only the newest one begins its session. */
+  let opening = 0;
 
   /** Wait for a save in flight, so leaving the file never drops an edit. */
   async function settleSave() {
@@ -973,8 +1076,16 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     keepScratch();
   }
 
-  function begin(info: FileSessionInfo): Promise<void> {
+  /** Begin the session of `info`; `query` selects a served file's session on the server. */
+  function begin(info: FileSessionInfo, query = ''): Promise<void> {
     if (info.revision !== 'host') hostSave = null;
+    // The save URL changes with the session, in the same step: never before it.
+    fileQuery = query;
+    // An edit queued in the last file is not this file's. Commands stay: each one checks which
+    // file it was opened in, and says why it was not saved.
+    queued = null;
+    // A disk change buffered during the last file's save belongs to that file.
+    externalDuringSave = null;
     stopListening();
     setDraft(null);
     if (!info.example) scratchKey = '';
@@ -1121,6 +1232,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     resetExample,
     markExampleSaved,
     fileStatusText,
+    whenDrawn,
   };
 }
 
