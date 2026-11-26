@@ -6,6 +6,8 @@ This file has everything an agent needs to draw a diagram: the syntax below, one
 
 ## Draw a diagram with no install
 
+The simplest way: write the source, open `https://api.draftably.dev/link?code=<source>` with the source percent-encoded, and share the short link it returns (see "Share a short link" below). The steps here make a long image URL instead, which stores nothing.
+
 1. Write the source. This is a complete sequence diagram:
 
 ```text
@@ -131,6 +133,17 @@ For every statement and option, read the [language guide](https://raw.githubuser
 - [Markdown](https://draftably.dev/docs/markdown/): remark and markdown-it adapters, includes and generated assets
 - [Documentation sites](https://draftably.dev/docs/documentation-sites/): Starlight, Docusaurus and VitePress setup
 - [Support](https://draftably.dev/docs/support/): package requirements and tested integrations
+
+## Share a short link
+
+The render service at https://api.draftably.dev turns a source into a short image link with one GET, so agents that can only browse can make one:
+
+1. Write the diagram source.
+2. Open `https://api.draftably.dev/link?code=<source>`, with the source percent-encoded. Encode all of it: a raw `#` ends the URL, `&` starts a new parameter and `+` reads as a space, so write them as `%23`, `%26` and `%2B`. Example: `https://api.draftably.dev/link?code=node%20a%20%22Hello%22%0Anode%20b%20%22World%22%0Aedge%20e%20a%20-%3E%20b`
+3. The answer is text with `png`, `svg` and `edit` URLs, such as `https://api.draftably.dev/d/<id>.png`. A source that doesn't draw returns `400` and the line to fix.
+4. To show the image, copy the returned `markdown` line; it uses the SVG when a PNG would be too large. To let someone edit it, share the `edit` URL, which opens the diagram on draftably.dev.
+
+The same source always gets the same link. For a shorter request, send base64url of the source, or `pako:` + base64url(zlib(source)), in the path: `/link/<encoded>`. `POST https://api.draftably.dev/v1/share` with `{"code": "..."}` takes large sources. `/png?code=<source>` and `/png/<encoded>` are long image URLs that store nothing.
 
 ## Optional
 

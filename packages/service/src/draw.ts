@@ -127,6 +127,21 @@ export async function draw(source: string, format: Format, opts: DrawOptions) {
   return span('png.embed', { png_bytes: png.length }, () => embedPngSource(png, kept));
 }
 
+/**
+ * The largest scale (4 down to 1) whose PNG of `svg` fits MAX_PIXELS, measured the way `draw()`
+ * measures it: before and after the source strip. 0 when no scale fits.
+ */
+export async function maxPngScale(svg: string, draft: string) {
+  const kept = formatSource(draft);
+  for (const scale of [4, 3, 2, 1]) {
+    const { w, h } = svgSize(svg);
+    if (w * h * scale * scale > MAX_PIXELS) continue;
+    const full = svgSize(await withSourceStrip(svg, kept, scale));
+    if (full.w * full.h * scale * scale <= MAX_PIXELS) return scale;
+  }
+  return 0;
+}
+
 const esc = (s: string) =>
   s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 

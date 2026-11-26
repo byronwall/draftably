@@ -201,7 +201,8 @@ layout root flow gap=48
 `;
 
 const GROUPS: [RegExp, string][] = [
-  [/^GET \/(svg|png)\//, 'Image URLs'],
+  [/^GET \/(svg|png)[/?]/, 'Image URLs'],
+  [/^(GET|POST)\s+\/(link|d\/|v1\/share)/, 'Short links'],
   [/^(GET|POST)\s+\/v1\//, 'REST API'],
   [/^\/mcp/, 'MCP server'],
   [/^\/account/, 'Account'],

@@ -660,6 +660,7 @@ if (!remote) {
     'image_url',
     'language_guide',
     'render_diagram',
+    'share_diagram',
     'validate_diagram',
   ]);
   const call = async (name: string, args: object) =>
@@ -680,13 +681,16 @@ if (!remote) {
   assert.equal(convMcp.split('\n# Warnings:')[0], conv.draft);
   const bigUrl = await call('image_url', { code: checkout + '\n#' + 'x'.repeat(66 * 1024) });
   assert.equal(bigUrl.isError, true, 'image_url gave a URL the service refuses');
+  const sharedMcp = (await call('share_diagram', { code: checkout + '\n# mcp\n' })).content[0].text;
+  const mcpId = /\/d\/([a-z2-7]{12})\.png/.exec(sharedMcp)?.[1];
+  assert.equal(sql(`SELECT account_id FROM shares WHERE id = '${mcpId}'`)[0].account_id, 'rich');
   assert.equal((await rpc('tools/list', {}, null)).status, 401);
   assert.equal(
     (await fetch(`${base}/mcp`, { headers: { Authorization: `Bearer ${KEYS.rich}` } })).status,
     405,
   );
   console.log(
-    `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405; image_url refuses a source over 64 KB.`,
+    `MCP: ${tools.length} tools; render_diagram PNG = /v1/render bytes; language_guide = SKILL.md; 401 without a key; GET is 405; image_url refuses a source over 64 KB; share_diagram stores a keyed link.`,
   );
 
   // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.
@@ -754,6 +758,163 @@ if (!remote) {
   assert.equal(bought(), 24999);
   console.log(
     'Stripe: a signed event added 25,000 credits once (sent twice); a delayed payment was credited once, on the paid event; unrelated and unknown-account sessions got 200 and no credits; an unsigned post got 400 and a 300 KB one 413; wrong or 10-minute-old signatures got 400; the grant is spent first.',
+  );
+}
+
+// Short links, local only (they read D1).
+if (!remote) {
+  const checkout = fs.readFileSync('examples/checkout.draft', 'utf8') + '\n# share\n';
+  const seg = b64url(new TextEncoder().encode(checkout));
+  const rows = (id: string) => sql(`SELECT count(*) AS n FROM shares WHERE id = '${id}'`)[0].n;
+  // GET twice: one id, one row. The text names the png, svg and edit URLs.
+  const one = await fetch(`${base}/link/${seg}`);
+  const text = await one.text();
+  assert.equal(one.status, 200, text);
+  const id = /\/d\/([a-z2-7]{12})\.png/.exec(text)?.[1];
+  assert.ok(id, text);
+  assert.match(text, new RegExp(`svg: \\S+/d/${id}\\.svg`));
+  assert.match(text, new RegExp(`edit: https://draftably\\.dev/d/${id}`));
+  const two = await (
+    await fetch(`${base}/link/pako:${b64url(deflateSync(checkout))}?format=json`)
+  ).json();
+  assert.equal(two.id, id);
+  assert.equal(rows(id), 1);
+  // POST, anonymous and keyed, gives the same id and still one row.
+  const share = (key?: string, body: object = { code: checkout }) =>
+    fetch(`${base}/v1/share`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(key ? { Authorization: `Bearer ${key}` } : {}),
+      },
+      body: JSON.stringify(body),
+    });
+  assert.equal((await (await share()).json()).id, id);
+  assert.equal((await (await share(KEYS.rich)).json()).id, id);
+  assert.equal(rows(id), 1);
+  assert.equal((await share('dft_000000000000.wrong-secret-0123456789ab')).status, 401);
+  // A keyed share records the account; the IP is stored only as a hash.
+  const keyed = await (await share(KEYS.rich, { code: checkout + '# keyed\n' })).json();
+  const row = sql(
+    `SELECT account_id, ip_hash FROM shares WHERE id = '${keyed.id}'`,
+  )[0] as unknown as {
+    account_id: string;
+    ip_hash: string;
+  };
+  assert.equal(row.account_id, 'rich');
+  assert.match(row.ip_hash, /^[0-9a-f]{16}$/);
+  // The short link draws the same bytes as the long URL, with options.
+  for (const [ext, q] of [
+    ['svg', ''],
+    ['png', ''],
+    ['png', '?scheme=dark&scale=1'],
+  ]) {
+    const short = await fetch(`${base}/d/${id}.${ext}${q}`);
+    const long = await fetch(`${base}/${ext}/${seg}${q}`);
+    assert.equal(short.status, 200);
+    assert.equal(short.headers.get('Cache-Control'), 'public, max-age=86400');
+    assert.deepEqual(Buffer.from(await short.arrayBuffer()), Buffer.from(await long.arrayBuffer()));
+  }
+  assert.equal(await (await fetch(`${base}/d/${id}.draft`)).text(), checkout);
+  // A Mermaid share keeps its type, and its .draft is the converted Draftably source.
+  const mm = await (await share(undefined, { code: 'flowchart LR\n  a --> b\n' })).json();
+  const mmDraft = await (await fetch(`${base}/d/${mm.id}.draft`)).text();
+  assert.doesNotMatch(mmDraft, /flowchart/);
+  assert.equal((await fetch(`${base}/d/${mm.id}.svg`)).status, 200);
+  // ?code= takes plain text: the same SVG as the base64 segment, and the same short id.
+  const q = (src: string) => `code=${encodeURIComponent(src)}`;
+  const viaCode = await fetch(`${base}/svg?${q(checkout)}`);
+  assert.equal(viaCode.status, 200);
+  assert.equal(await viaCode.text(), await (await fetch(`${base}/svg/${seg}`)).text());
+  assert.equal((await (await fetch(`${base}/link?${q(checkout)}&format=json`)).json()).id, id);
+  assert.equal(rows(id), 1);
+  // A %23-encoded comment and label survive; a raw # cuts the source and the error says why.
+  const hashed = '# a comment\nnode a "Issue #12"\nnode b "B"\nedge e a -> b\n';
+  const hashedPng = await fetch(`${base}/png?${q(hashed)}`);
+  assert.equal(hashedPng.status, 200);
+  assert.deepEqual(
+    Buffer.from(await hashedPng.arrayBuffer()),
+    Buffer.from(
+      await (await fetch(`${base}/png/${b64url(new TextEncoder().encode(hashed))}`)).arrayBuffer(),
+    ),
+  );
+  const cut = await fetch(`${base}/link?code=node a "A`);
+  assert.equal(cut.status, 400);
+  assert.match(await cut.text(), /a raw # ends the URL.*%23/);
+  // Both ways at once, an empty ?code=, no source at all, or over 8 KB: 400.
+  assert.equal((await fetch(`${base}/svg/${seg}?${q(checkout)}`)).status, 400);
+  assert.match(await (await fetch(`${base}/link/${seg}?${q(checkout)}`)).text(), /not both/);
+  assert.equal((await fetch(`${base}/png?code=`)).status, 400);
+  assert.equal((await fetch(`${base}/png`)).status, 400);
+  assert.equal((await fetch(`${base}/svg?${q('x'.repeat(9000))}`)).status, 400);
+  assert.equal((await fetch(`${base}/link?${q('x'.repeat(9000))}`)).status, 400);
+  // A ?code= value just over 8 KB once encoded, in a target under the route allowance.
+  const justOver = '#'.repeat(2731) + '\nnode a "A"';
+  assert.ok(q(justOver).length - 5 > 8192 && q(justOver).length < 8192 + 200);
+  assert.equal((await fetch(`${base}/link?${q(justOver)}`)).status, 400);
+
+  // Leading byte-order marks, any number, are dropped the same way on every way in.
+  const bommed = '\uFEFF\uFEFFnode a "BOM"\n';
+  const bomSeg = await (
+    await fetch(`${base}/link/${b64url(new TextEncoder().encode(bommed))}?format=json`)
+  ).json();
+  const bomCode = await (await fetch(`${base}/link?${q(bommed)}&format=json`)).json();
+  assert.equal(bomSeg.id, bomCode.id);
+  // A short link refuses a second source; an empty one is refused on every way in.
+  assert.equal((await fetch(`${base}/d/${id}.svg?${q('node z "Z"')}`)).status, 400);
+  assert.equal((await fetch(`${base}/link/pako:${b64url(deflateSync(''))}`)).status, 400);
+  // A drawing too big for a PNG gets an SVG markdown link and no PNG URL.
+  const xl = await (
+    await share(KEYS.rich, {
+      code: fs.readFileSync('scripts/bench/diagrams/xl-triggers.draft', 'utf8'),
+    })
+  ).json();
+  assert.equal(xl.png, null, JSON.stringify(xl));
+  assert.equal((await fetch(xl.svg.replace(/^https?:\/\/[^/]+/, base))).status, 200);
+
+  // A drawing whose PNG fits at scale 2 but not at 3 once the source strip is added.
+  const order = fs.readFileSync('examples/order-pipeline.draft', 'utf8');
+  const at3 = await (await fetch(`${base}/link?${q(order)}&scale=3&format=json`)).json();
+  const at2 = await (await fetch(`${base}/link?${q(order)}&format=json`)).json();
+  assert.equal(at3.png, null, JSON.stringify(at3));
+  assert.equal((await fetch(at2.png.replace(/^https?:\/\/[^/]+/, base))).status, 200);
+  assert.equal((await fetch(`${base}/png/${await encodeSource(order)}?scale=3`)).status, 400);
+  // .draft refuses a second source too; an ordinary last-line error gets no # hint.
+  assert.equal((await fetch(`${base}/d/${id}.draft?${q('node z "Z"')}`)).status, 400);
+  const purple = await (
+    await fetch(`${base}/link?${q('node a "A"\nnode b "B" color=purple')}`)
+  ).text();
+  assert.match(purple, /line 2[,:]/);
+  assert.doesNotMatch(purple, /%23/);
+
+  // A bad source: 400 with its line, as text and as JSON; nothing stored.
+  const bad = 'node a "A"\nnode b "B" color=purple\n';
+  const badRes = await fetch(`${base}/link/${b64url(new TextEncoder().encode(bad))}`);
+  assert.equal(badRes.status, 400);
+  assert.match(await badRes.text(), /^error: line 2[,:]/);
+  const badJson = await (await share(undefined, { code: bad })).json();
+  assert.equal(badJson.error.line, 2);
+  // Unknown ids are 404, as an image and as source.
+  const missing = await fetch(`${base}/d/aaaaaaaaaaaa.png`);
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get('Content-Type'), 'image/png');
+  assert.equal((await fetch(`${base}/d/aaaaaaaaaaaa.draft`)).status, 404);
+  // Over 8 KB of URL or 64 KB of source: 400.
+  assert.equal((await fetch(`${base}/link/${'a'.repeat(9000)}`)).status, 400);
+  assert.equal((await share(undefined, { code: 'x'.repeat(70 * 1024) })).status, 400);
+  // New links from one address stop at 30 a minute; existing ones still answer.
+  let limited = 0;
+  for (let n = 0; n < 35 && !limited; n++) {
+    const fresh = b64url(new TextEncoder().encode(`node a "A ${n} ${Date.now()}"\n`));
+    const r = await fetch(`${base}/link/${fresh}`);
+    if (r.status === 429) limited = n;
+    else assert.equal(r.status, 200, await r.text());
+  }
+  assert.ok(limited, 'no 429 after 35 new links');
+  assert.equal((await fetch(`${base}/link/${seg}`)).status, 200);
+  const count = sql(`SELECT count(*) AS n FROM shares`)[0].n;
+  console.log(
+    `Short links: GET twice, POST anonymous and keyed gave one id (${id}) and one row; /d/ PNG and SVG match the long URL byte for byte; ?code= gives the same SVG and id; a %23 comment draws; a cut source gets the # hint; both ways 400; bad source 400 at line 2; unknown id 404; oversize 400; 429 after ${limited} more new links; ${count} rows.`,
   );
 }
 
