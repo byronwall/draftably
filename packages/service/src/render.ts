@@ -9,18 +9,13 @@
  * there is no refund path. Parallel renders can all pass the first check; the guarded UPDATE then
  * lets only as many through as the balance covers, and the rest get 402 after drawing.
  */
-import { runtimeVersion } from '@draftably/runtime';
-import {
-  encodeSource,
-  MAX_SEGMENT,
-  MAX_SOURCE_BYTES,
-  SourceError,
-} from '../../../src/lib/render-url';
+import { encodeSource, MAX_SEGMENT } from '../../../src/lib/render-url';
 import { balance, COST, spend, type Balance } from './credits';
-import { draw, type DrawOptions, type Format } from './draw';
+import { draw } from './draw';
 import { ApiError } from './errors';
 import { freshness, sourceType } from './mermaid';
 import { bump, byteSize, note, span } from './obs';
+import { cacheKey, type DrawRequest } from './request';
 
 export { MAX_SEGMENT };
 
@@ -35,33 +30,6 @@ export interface Drawn {
   cacheControl: string;
   /** The balance after a paid miss. */
   left?: Balance;
-}
-
-const hex = (buf: ArrayBuffer) =>
-  [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
-
-/** The cache key for an image: on this service's own origin, so the Cache API accepts it. */
-async function cacheKey(
-  origin: string,
-  build: string,
-  source: string,
-  format: Format,
-  opts: DrawOptions,
-) {
-  const hash = hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source)));
-  const url = new URL(`/__cache/${format}/${hash}`, origin);
-  // Scale changes only a PNG; an SVG keyed on it would be drawn and charged twice.
-  for (const [k, v] of Object.entries(opts))
-    if (v != null && k !== 'type' && !(k === 'scale' && format === 'svg'))
-      url.searchParams.set(k, String(v));
-  // The language the source was read as, not how the caller named it.
-  url.searchParams.set('type', sourceType(source, opts.type).type);
-  url.searchParams.set('v', runtimeVersion);
-  url.searchParams.set('build', build);
-  // A gantt chart can draw differently tomorrow, so its key carries today's date.
-  const day = freshness(source, opts.type)?.day;
-  if (day) url.searchParams.set('day', day);
-  return new Request(url.toString());
 }
 
 // The DOM lib (for Mermaid's types) hides the Workers-only `caches.default`.
@@ -83,26 +51,14 @@ export function render<P>(
   env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
   ctx: ExecutionContext,
   origin: string,
-  rawSource: string,
-  format: Format,
-  opts: DrawOptions,
+  r: DrawRequest,
   prepare: (body: string | Uint8Array, cacheControl: string) => Promise<P>,
   payer?: Payer,
   beforeDraw?: () => Promise<void>,
 ): Promise<Drawn & { out: P }> {
   // One span per render, for latency by format and cache across GET, REST and MCP.
-  return span('render', { format, paid: !!payer }, async s => {
-    const drawn = await renderNow(
-      env,
-      ctx,
-      origin,
-      rawSource,
-      format,
-      opts,
-      prepare,
-      payer,
-      beforeDraw,
-    );
+  return span('render', { format: r.format, paid: !!payer }, async s => {
+    const drawn = await renderNow(env, ctx, origin, r, prepare, payer, beforeDraw);
     s.setAttribute('cache_hit', drawn.hit);
     return drawn;
   });
@@ -112,31 +68,23 @@ async function renderNow<P>(
   env: { DB: D1Database; CF_VERSION_METADATA: WorkerVersionMetadata },
   ctx: ExecutionContext,
   origin: string,
-  rawSource: string,
-  format: Format,
-  opts: DrawOptions,
+  r: DrawRequest,
   prepare: (body: string | Uint8Array, cacheControl: string) => Promise<P>,
   /** Who pays, or nobody for a free anonymous image. */
   payer?: Payer,
   /** Runs on a miss before drawing: the anonymous per-address limit. */
   beforeDraw?: () => Promise<void>,
 ): Promise<Drawn & { out: P }> {
-  // A GET URL's decoder drops a leading byte-order mark; drop them all here, so every way in (and
-  // a share's id) hashes the same text.
-  const source = rawSource.replace(/^\uFEFF+/, '');
-  const bytes = new TextEncoder().encode(source).length;
+  const { source, format, opts } = r;
   note({
     format,
-    source_bytes: bytes,
+    source_bytes: byteSize(source),
+    source_type: opts.type,
     scheme: opts.scheme,
     scale: format === 'png' ? opts.scale : undefined,
   });
-  if (bytes > MAX_SOURCE_BYTES)
-    throw new SourceError(`The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
-  const type = sourceType(source, opts.type).type;
-  note({ source_type: type });
   const { key, hit } = await span('cache.lookup', { format }, async s => {
-    const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, source, format, opts);
+    const key = await cacheKey(origin, env.CF_VERSION_METADATA.id, r);
     const hit = await cache().match(key);
     s.setAttribute('cache_hit', !!hit);
     return { key, hit };
@@ -193,12 +141,13 @@ async function renderNow<P>(
  * The public GET URL for the same image, with its options, or null when the source is too long
  * for a URL (the caller then has only the bytes it was given).
  */
-export async function embedUrl(origin: string, source: string, format: Format, opts: DrawOptions) {
-  const segment = await encodeSource(source);
+export async function embedUrl(origin: string, r: DrawRequest) {
+  const segment = await encodeSource(r.source);
   if (segment.length > MAX_SEGMENT) return null;
   const q = new URLSearchParams();
-  if (opts.type) q.set('type', opts.type);
-  if (opts.scheme !== 'light') q.set('scheme', opts.scheme);
-  if (format === 'png' && opts.scale !== 2) q.set('scale', String(opts.scale));
-  return `${origin}/api/${format}/${segment}${q.size ? `?${q}` : ''}`;
+  // The language only when the URL would not detect the same one.
+  if (sourceType(r.source).type !== r.opts.type) q.set('type', r.opts.type);
+  if (r.opts.scheme !== 'light') q.set('scheme', r.opts.scheme);
+  if (r.format === 'png' && r.opts.scale !== 2) q.set('scale', String(r.opts.scale));
+  return `${origin}/api/${r.format}/${segment}${q.size ? `?${q}` : ''}`;
 }

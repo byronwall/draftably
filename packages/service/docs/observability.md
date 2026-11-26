@@ -39,20 +39,23 @@ top-level key: filter on `event = request` to see only these lines.
 | `mcp_tool`, `mcp_calls`                    | the tool called (`unknown` for a name the server lacks) and the count. A batch joins names with commas; MCP dropped batches in its 2025-06 spec, so they are rare                                                                                                                                               |
 | `login`                                    | `form`, `bad_email`, `capped`, `sent`, `send_failed`, `link_shown`, `link_dead`, `signed_in`                                                                                                                                                                                                                    |
 | `webhook`, `stripe_event`                  | `off`, `bad_signature`, `too_large`, `ignored`, `not_ours`, `unmatched`, `fulfilled`, `duplicate`; and the Stripe event type                                                                                                                                                                                    |
-| `error_code`, `error`                      | `ERR_SOURCE`, `ERR_AUTH`, `ERR_LIMIT_BURST`, `ERR_LIMIT_BALANCE`, `ERR_NOT_FOUND`, `ERR_EMAIL`, `ERR_TOOL` (an MCP tool answered with an error), `ERR_INTERNAL` (uncaught), or `HTTP_<status>` for any other 4xx or 5xx; and the message, masked as below, 300 characters at most                               |
+| `error_code`                               | `ERR_SOURCE`, `ERR_TOO_LARGE` (a body over 256 KB), `ERR_AUTH`, `ERR_LIMIT_BURST`, `ERR_LIMIT_BALANCE`, `ERR_NOT_FOUND`, `ERR_SHARE`, `ERR_EMAIL`, `ERR_TOOL` (an MCP tool answered with an error), `ERR_INTERNAL` (uncaught), or `HTTP_<status>` for any other 4xx or 5xx                                      |
+| `diagnostic`                               | for a diagram that does not draw, the runtime's or the Mermaid importer's diagnostic code, such as `unknown-word`; `other` for a code that is not a short word                                                                                                                                                  |
+| `error_name`                               | for `ERR_INTERNAL`, the error's class, such as `TypeError`                                                                                                                                                                                                                                                      |
 
-The event never holds an email, a key secret, a session or sign-in token, or a raw IP. A source
-error's message can quote a line of the diagram; email addresses, API keys, IP addresses and long
-token-like runs in it show as `<email>`, `<key>`, `<ip>` and `<token>`. The Worker sets
+Every field is a number, a hash, an ID or a word from a fixed set. No field holds text the caller
+sent: no diagram source, no error message (a diagnostic can quote a line of the diagram), no
+email, key secret, session or sign-in token, or raw IP. The Worker sets
 `redact_query_string`, so Cloudflare's own logs and spans drop query strings: a sign-in link's
 token is in its query. Cloudflare's invocation log is its own record: it keeps request headers,
 including the client IP (`x-real-ip`), and shows an image path as `/png/REDACTED`.
 
 ## The spans
 
-An unexpected throw is recorded on its span as an exception, and Workers Issues groups it. An
-expected one (a bad diagram, a refused key, a limit) only sets the span's `refused` attribute, so a
-user's mistake never opens an Issue.
+An unexpected throw is recorded on its span as an exception, with its class and code frames but
+not its message, and Workers Issues groups it. An expected one (a bad diagram, a refused key, a
+limit) only sets the span's `refused` attribute to its error code, so a user's mistake never opens
+an Issue.
 
 Span durations count waiting on I/O only. Workers stops its clock while code runs, so a CPU step
 such as `render.svg` or `png.rasterize` shows about 0 ms however long it took. Spans show the order
@@ -107,7 +110,7 @@ Hit rate: Visualize `Count`, Filter `event = request` and `cache exists`, Group 
 
 **Which diagrams fail to render, and why? Mermaid import failures.**
 Visualize `Count`, Filter `event = request` and `error_code = ERR_SOURCE`, Group by `route`,
-`path`, `mcp_tool`, `source_type` and `error`. Failed renders are the rows with `route = image`,
+`path`, `mcp_tool`, `source_type` and `diagnostic`. Failed renders are the rows with `route = image`,
 `path = /v1/render` or `mcp_tool = render_diagram`; the rest are `/v1/validate`, `/v1/convert` and
 the MCP validate and convert tools. For Mermaid only, add Filter `source_type = mermaid`. To see a
 failure's steps, open the matching event's trace from the event's details, and look at its

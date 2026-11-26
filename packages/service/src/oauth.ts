@@ -67,7 +67,7 @@ export function oauthOptions<E extends ShareEnv & OAuthEnv>(
         if (who.key) ctx.waitUntil(touchKey(env.DB, who.key));
         // KV may still hold a disconnected app's token in another location; D1 does not.
         else if (!who.grant || (await disconnected(env.DB, who.grant))) {
-          noteError('ERR_AUTH', 'This app was disconnected.');
+          noteError('ERR_AUTH');
           return errorJson(new ApiError(401, 'ERR_AUTH', 'This app was disconnected.'));
         }
         return handleMcp(req, env, ctx, { account: who.account });

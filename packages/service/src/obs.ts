@@ -3,8 +3,12 @@
  * things fail. `docs/observability.md` lists the dashboard queries that read them.
  *
  * Any code that handles a request adds fields to that request's event with `note()`. The `fetch`
- * entry in `index.ts` starts the event and logs it once, when the response is ready. The event
- * never holds an email, a key secret, a token, or a raw IP.
+ * entry in `index.ts` starts the event and logs it once, when the response is ready.
+ *
+ * Every field is a number, a hash, an id or a word from a fixed set. No field holds text the
+ * caller sent: no diagram source, no error message (a diagnostic can quote the source), no email,
+ * key secret, token or raw IP. An error is its code, and for a diagram that does not draw, the
+ * runtime's diagnostic code.
  */
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { tracing } from 'cloudflare:workers';
@@ -74,7 +78,10 @@ export interface Wide {
     | 'duplicate';
   stripe_event?: string;
   error_code?: string;
-  error?: string;
+  /** The runtime's or the Mermaid importer's code for why a diagram did not draw. */
+  diagnostic?: string;
+  /** For an uncaught error: its class name, such as `TypeError`. */
+  error_name?: string;
 }
 
 const store = new AsyncLocalStorage<Wide>();
@@ -122,13 +129,17 @@ export const scrub = (text: string) =>
     .replace(/[\w+/=-]{24,}/g, '<token>')
     .slice(0, 300);
 
+/** A diagnostic code as logged: a short word, never free text. */
+const diagnosticCode = (code: string | undefined) =>
+  code === undefined ? undefined : /^[a-z][\w.-]{0,47}$/i.test(code) ? code : 'other';
+
 /**
- * Note an error the caller turns into an answer: its code, and a scrubbed message. With `keep`,
- * an error noted earlier in the request stays.
+ * Note an error the caller turns into an answer: its code and, for a diagram, the diagnostic's
+ * code. With `keep`, an error noted earlier in the request stays.
  */
-export function noteError(code: string, message: string, keep = false) {
+export function noteError(code: string, diagnostic?: string, keep = false) {
   if (keep && store.getStore()?.error_code) return;
-  note({ error_code: code, error: scrub(message) });
+  note({ error_code: code, diagnostic: diagnosticCode(diagnostic) });
 }
 
 /** The size of a body in bytes. */
@@ -151,15 +162,18 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
       return await fn(s);
     } catch (error) {
       const e = error instanceof Error ? error : new Error(String(error));
-      const message = scrub(e.message);
       if (error instanceof SourceError || error instanceof ApiError) {
-        s.setAttribute('refused', message);
+        s.setAttribute('refused', error instanceof ApiError ? error.code : 'ERR_SOURCE');
         throw error;
       }
-      // The stack's first line repeats the message.
-      const stack = e.stack?.replace(e.message, () => message);
-      s.recordException({ name: e.name, message, stack });
-      s.setStatus({ code: 'error', message });
+      // Only the class and the code frames: the message can quote what the caller sent, and the
+      // stack's first line repeats it.
+      const stack = e.stack
+        ?.split('\n')
+        .filter(l => /^\s+at /.test(l))
+        .join('\n');
+      s.recordException({ name: e.name, message: e.name, stack });
+      s.setStatus({ code: 'error', message: e.name });
       throw error;
     }
   });

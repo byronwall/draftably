@@ -10,8 +10,9 @@ import { SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
 import { homePage } from './html';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
-import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
+import { errorImage, type Format } from './draw';
 import { render, type Payer } from './render';
+import { readRequest, refusal } from './request';
 import { handleAuthorize, oauthOptions, type OAuthEnv } from './oauth';
 import {
   codeHint,
@@ -22,7 +23,7 @@ import {
   type ShareEnv,
 } from './share';
 import { handleWebhook, type StripeEnv } from './stripe';
-import { ipHash, note, noteError, scrub, span, withEvent, type Wide } from './obs';
+import { ipHash, note, noteError, span, withEvent, type Wide } from './obs';
 
 export interface Env extends ApiEnv, StripeEnv, ShareEnv, OAuthEnv {
   ANON_LIMIT: RateLimit;
@@ -46,11 +47,16 @@ function image(body: BodyInit, format: Format, status = 200, cache = IMMUTABLE) 
   });
 }
 
-/** The error as an image, and as one ASCII line in `X-Draftably-Error` for a script to read. */
-async function errorResponse(message: string, format: Format, status: number) {
-  const res = image(await errorImage(message, format), format, status, 'no-store');
-  const line = message.replace(/\n> /g, ' | ').replace(/…/g, '...');
+/**
+ * The error as an image, as one ASCII line in `X-Draftably-Error` and its code in
+ * `X-Draftably-Error-Code`, the code REST and MCP give for the same input.
+ */
+async function errorResponse(e: ApiError, format: Format) {
+  const res = image(await errorImage(e.message, format), format, e.status, 'no-store');
+  const line = e.message.replace(/\n> /g, ' | ').replace(/…/g, '...');
   res.headers.set('X-Draftably-Error', line.replace(/[^\x20-\x7e]/g, '?'));
+  res.headers.set('X-Draftably-Error-Code', e.code);
+  res.headers.set('Access-Control-Expose-Headers', 'X-Draftably-Error, X-Draftably-Error-Code');
   return res;
 }
 
@@ -89,45 +95,52 @@ function parseImagePath(url: URL, db: D1Database): { format: Format; load: Load 
 }
 
 /**
- * Draw an image URL, for free or, with `account`, for credits; errors come back as images. The
- * per-address limit applies only to anonymous misses.
+ * Draw an image URL, for free or, with a key, for credits; errors come back as images. A key is
+ * checked first, before the source is read and before the cache, so a revoked or wrong key is
+ * refused even for an image that is already cached. The per-address limit applies only to
+ * anonymous misses.
  */
 async function imageResponse(
   req: Request,
   env: Env,
   ctx: ExecutionContext,
-  origin: string,
-  load: Load,
-  format: Format,
-  opts: DrawOptions,
-  payer?: Payer,
+  url: URL,
+  route: { format: Format; load: Load },
 ) {
-  const anonLimit = async () => {
-    if (payer) return;
-    const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-    if (!(await env.ANON_LIMIT.limit({ key: ip })).success) {
-      note({ rate_limit: 'anon' });
-      throw new ApiError(
-        429,
-        'ERR_LIMIT_BURST',
-        'Too many renders from this address. Wait a minute, or use an API key.',
-      );
-    }
-  };
   try {
-    const { source, type } = await load();
-    // A share draws as the language it was stored as.
-    if (type) opts = { ...opts, type };
+    const payer: Payer | undefined = req.headers.has('Authorization')
+      ? await requireKey(req, env, ctx)
+      : undefined;
+    const { source, type } = await route.load();
+    const q = url.searchParams;
+    const r = readRequest({
+      code: source,
+      format: route.format,
+      // A share draws as the language it was stored as.
+      type: type ?? q.get('type'),
+      scheme: q.get('scheme'),
+      scale: q.get('scale'),
+    });
+    const anonLimit = async () => {
+      if (payer) return;
+      const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+      if (!(await env.ANON_LIMIT.limit({ key: ip })).success) {
+        note({ rate_limit: 'anon' });
+        throw new ApiError(
+          429,
+          'ERR_LIMIT_BURST',
+          'Too many renders from this address. Wait a minute, or use an API key.',
+        );
+      }
+    };
     // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
     // one. An anonymous answer varies on Authorization for the same reason.
     const drawn = await render(
       env,
       ctx,
-      origin,
-      source,
-      format,
-      opts,
-      async (body, cacheControl) => image(body, format, 200, payer ? 'no-store' : cacheControl),
+      url.origin,
+      r,
+      async (body, cacheControl) => image(body, r.format, 200, payer ? 'no-store' : cacheControl),
       payer,
       anonLimit,
     );
@@ -136,14 +149,10 @@ async function imageResponse(
     res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
     return res;
   } catch (caught) {
-    const error = codeHint(caught, new URL(req.url));
-    if (error instanceof ApiError) {
-      noteError(error.code, error.message);
-      return errorResponse(error.message, format, error.status);
-    }
-    if (!(error instanceof SourceError)) throw error;
-    noteError('ERR_SOURCE', error.message);
-    return errorResponse(error.message, format, 400);
+    const e = refusal(codeHint(caught, url));
+    if (!e) throw caught;
+    noteError(e.code, e.diagnostic);
+    return errorResponse(e, route.format);
   }
 }
 
@@ -327,29 +336,7 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, full: URL) 
   const route = parseImagePath(url, env.DB);
   if (!route) return new Response('Not found', { status: 404 });
   note({ format: route.format });
-
-  // Options are checked first, so a bad one never matches a cached image.
-  let opts: DrawOptions;
-  try {
-    opts = drawOptions(k => url.searchParams.get(k));
-  } catch (error) {
-    if (!(error instanceof SourceError)) throw error;
-    noteError('ERR_SOURCE', error.message);
-    return errorResponse(error.message, route.format, 400);
-  }
-  // A key spends credits and skips the per-address limit. It is checked before the cache, so a
-  // revoked or wrong key is refused even for an image that is already cached.
-  let payer: Payer | undefined;
-  if (req.headers.has('Authorization')) {
-    try {
-      payer = await requireKey(req, env, ctx);
-    } catch (error) {
-      if (!(error instanceof ApiError)) throw error;
-      noteError(error.code, error.message);
-      return errorResponse(error.message, route.format, error.status);
-    }
-  }
-  return imageResponse(req, env, ctx, url.origin, route.load, route.format, opts, payer);
+  return imageResponse(req, env, ctx, url, route);
 }
 
 /** Everything but `/mcp` and the OAuth endpoints, which the provider below answers first. */
@@ -403,7 +390,7 @@ export default {
       // Thrown on, so Workers Issues groups it as a failed invocation.
       ev.status = 500;
       ev.error_code = 'ERR_INTERNAL';
-      ev.error = scrub(String(error instanceof Error ? error.message : error));
+      ev.error_name = error instanceof Error ? error.name : typeof error;
       throw error;
     } finally {
       console.log(ev);

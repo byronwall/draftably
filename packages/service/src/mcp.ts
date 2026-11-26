@@ -6,37 +6,50 @@
  */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
-import { validate, runtimeVersion } from '@draftably/runtime';
+import { runtimeVersion } from '@draftably/runtime';
 import { z } from 'zod';
 import guide from '../../../skills/draftably/SKILL.md';
-import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
-import { ApiError, checkSource, errorJson } from './api';
-import { DEFAULT_FORMAT, drawOptions } from './draw';
+import { ApiError, checkDiagram, errorJson } from './api';
+import { DEFAULT_FORMAT } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
 import { bump, currentEvent, note, noteError, span } from './obs';
+import { readJson, readRequest, refusal } from './request';
 import { createShare, links, shareText, type ShareEnv } from './share';
 
-const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
+// The source is checked by readRequest, as on every route, so an empty one gets the same error.
+const code = z.string().describe('Diagram source: Draftably DSL or Mermaid.');
+const scheme = z.enum(['light', 'dark']).optional();
 const type = z
   .enum(['draftably', 'mermaid'])
   .optional()
   .describe('The source language. Detected when left out.');
 
 const text = (t: string) => ({ content: [{ type: 'text' as const, text: t }] });
-const failure = (t: string, code = 'ERR_SOURCE') => {
-  noteError(code, t);
-  return { ...text(t), isError: true };
+/** A refusal as a tool error, with the code REST and image URLs give in `_meta`. */
+const failure = (e: ApiError) => {
+  noteError(e.code, e.diagnostic);
+  return { ...text(e.message), isError: true, _meta: { 'draftably/error': e.code } };
 };
 
-/** A tool call, in its own span. */
-const tool = <R>(name: string, fn: () => Promise<R>) => span(`mcp.${name}`, { tool: name }, fn);
+/** Run a tool; a refusal becomes a tool error, anything else is thrown on. */
+const tool = <R>(name: string, fn: () => Promise<R>) =>
+  span(`mcp.${name}`, { tool: name }, async () => {
+    try {
+      return await fn();
+    } catch (error) {
+      const e = refusal(error);
+      if (!e) throw error;
+      return failure(e);
+    }
+  });
 
 const TOOLS = new Set([
   'render_diagram',
   'validate_diagram',
   'convert_mermaid',
   'image_url',
+  'share_diagram',
   'language_guide',
 ]);
 
@@ -70,7 +83,7 @@ function watch(transport: WebStandardStreamableHTTPServerTransport) {
   transport.send = (msg, opts) => {
     const m = msg as RpcMessage;
     const failed = m.error?.message ?? (m.result?.isError && m.result.content?.[0]?.text);
-    if (failed) noteError('ERR_TOOL', failed, true);
+    if (failed) noteError('ERR_TOOL', undefined, true);
     return send(msg, opts);
   };
 }
@@ -97,50 +110,33 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
         code,
         type,
         format: z.enum(['png', 'svg']).default(DEFAULT_FORMAT),
-        scheme: z.enum(['light', 'dark']).optional(),
+        scheme,
         scale: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
       },
     },
     async args =>
       tool('render_diagram', async () => {
-        try {
-          const get = (k: string) => {
-            const v = (args as Record<string, unknown>)[k];
-            return v === undefined ? null : String(v);
-          };
-          const source = checkSource(args.code);
-          const opts = drawOptions(get);
-          // The image content and URL are built before the credits are taken.
-          const url = await embedUrl(origin, source, args.format, opts);
-          const drawn = await render(
-            env,
-            ctx,
-            origin,
-            source,
-            args.format,
-            opts,
-            async body =>
-              args.format === 'png'
-                ? {
-                    type: 'image' as const,
-                    data: base64(body as Uint8Array),
-                    mimeType: 'image/png',
-                  }
-                : { type: 'text' as const, text: body as string },
-            who,
-          );
-          const summary = [
-            url ? `URL: ${url}` : 'No URL: the source is too long for one.',
-            drawn.hit
-              ? 'From the cache: no credits spent.'
-              : `Credits left: ${drawn.left!.grant + drawn.left!.bought}`,
-          ].join('\n');
-          return { content: [drawn.out, { type: 'text' as const, text: summary }] };
-        } catch (error) {
-          if (error instanceof ApiError) return failure(error.message, error.code);
-          if (error instanceof SourceError) return failure(error.message);
-          throw error;
-        }
+        const r = readRequest(args);
+        // The image content and URL are built before the credits are taken.
+        const url = await embedUrl(origin, r);
+        const drawn = await render(
+          env,
+          ctx,
+          origin,
+          r,
+          async body =>
+            r.format === 'png'
+              ? { type: 'image' as const, data: base64(body as Uint8Array), mimeType: 'image/png' }
+              : { type: 'text' as const, text: body as string },
+          who,
+        );
+        const summary = [
+          url ? `URL: ${url}` : 'No URL: the source is too long for one.',
+          drawn.hit
+            ? 'From the cache: no credits spent.'
+            : `Credits left: ${drawn.left!.grant + drawn.left!.bought}`,
+        ].join('\n');
+        return { content: [drawn.out, { type: 'text' as const, text: summary }] };
       }),
   );
 
@@ -151,28 +147,13 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
         'Check a diagram without drawing it. Returns errors and warnings with line numbers. Free.',
       inputSchema: { code, type },
     },
-    async ({ code, type }) =>
+    async args =>
       tool('validate_diagram', async () => {
-        try {
-          const { draft, warnings } = await toDraft(checkSource(code), type);
-          const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
-          const bad = result.diagnostics.find(d => d.severity === 'error');
-          if (!result.ok) noteError('ERR_SOURCE', bad?.message ?? 'invalid');
-          const lines = [
-            ...warnings.map(w => `warning: ${w}`),
-            ...result.diagnostics.map(
-              d =>
-                `${d.severity}: ${d.location?.line ? `line ${d.location.line}: ` : ''}${d.message}`,
-            ),
-          ];
-          return text(`${result.ok ? 'valid' : 'invalid'}\n${lines.join('\n')}`.trim());
-        } catch (error) {
-          if (error instanceof SourceError || error instanceof ApiError) {
-            noteError('ERR_SOURCE', error.message);
-            return text(`invalid\nerror: ${error.message}`);
-          }
-          throw error;
-        }
+        const checked = await checkDiagram(readRequest(args));
+        const lines = checked.diagnostics.map(
+          d => `${d.severity}: ${d.line ? `line ${d.line}: ` : ''}${d.message}`,
+        );
+        return text(`${checked.valid ? 'valid' : 'invalid'}\n${lines.join('\n')}`.trim());
       }),
   );
 
@@ -185,16 +166,9 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
     },
     async ({ code }) =>
       tool('convert_mermaid', async () => {
-        try {
-          const { draft, warnings } = await toDraft(checkSource(code), 'mermaid');
-          return text(
-            warnings.length ? `${draft}\n# Warnings:\n# ${warnings.join('\n# ')}` : draft,
-          );
-        } catch (error) {
-          if (error instanceof SourceError || error instanceof ApiError)
-            return failure(error.message);
-          throw error;
-        }
+        const r = readRequest({ code, type: 'mermaid' });
+        const { draft, warnings } = await toDraft(r.source, 'mermaid');
+        return text(warnings.length ? `${draft}\n# Warnings:\n# ${warnings.join('\n# ')}` : draft);
       }),
   );
 
@@ -203,25 +177,18 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
     {
       description:
         'A long public URL that holds the whole source and draws the diagram, for Markdown or an <img> tag. Nothing is stored; share_diagram gives a short link instead. The URL is free to fetch (rate-limited per address). Free.',
-      inputSchema: { code, format: z.enum(['png', 'svg']).default('svg') },
+      inputSchema: { code, type, format: z.enum(['png', 'svg']).default('svg'), scheme },
     },
-    async ({ code, format }) =>
+    async args =>
       tool('image_url', async () => {
-        try {
-          checkSource(code);
-        } catch (error) {
-          if (error instanceof ApiError) return failure(error.message);
-          throw error;
-        }
-        const url = await embedUrl(
-          origin,
-          code,
-          format,
-          drawOptions(() => null),
-        );
-        return url
-          ? text(url)
-          : failure('The source is too long for a URL. Use render_diagram instead.');
+        const url = await embedUrl(origin, readRequest(args));
+        if (!url)
+          throw new ApiError(
+            400,
+            'ERR_SOURCE',
+            'The source is too long for a URL. Use render_diagram instead.',
+          );
+        return text(url);
       }),
   );
 
@@ -231,32 +198,14 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
       description:
         'Store the diagram and return short public links: png, svg and an edit link that opens it on draftably.dev. ' +
         'The same source always gets the same link. Use it instead of image_url for links people will read. Free.',
-      inputSchema: {
-        code,
-        type,
-        scheme: z.enum(['light', 'dark']).optional(),
-      },
+      inputSchema: { code, type, scheme },
     },
-    async args => {
-      try {
-        const opts = drawOptions(k => {
-          const v = (args as Record<string, unknown>)[k];
-          return v === undefined ? null : String(v);
-        });
-        const share = await createShare(
-          req,
-          env,
-          checkSource(args.code),
-          opts.type ?? null,
-          who.account,
-        );
-        return text(shareText(links(origin, share, opts)));
-      } catch (error) {
-        if (error instanceof SourceError || error instanceof ApiError)
-          return failure(error.message);
-        throw error;
-      }
-    },
+    async args =>
+      tool('share_diagram', async () => {
+        const r = readRequest({ ...args, format: 'svg' });
+        const share = await createShare(req, env, r, who.account);
+        return text(shareText(links(origin, share, r.opts)));
+      }),
   );
 
   mcp.registerTool(
@@ -283,8 +232,18 @@ export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionConte
   if (!(await env.KEY_LIMIT.limit({ key: who.key ?? `account:${who.account}` })).success) {
     note({ rate_limit: who.key ? 'key' : 'account' });
     const error = new ApiError(429, 'ERR_LIMIT_BURST', 'Too many calls this minute.');
-    noteError(error.code, error.message);
+    noteError(error.code);
     return errorJson(error);
+  }
+  // Read here with the limit every route has, so the SDK never buffers more.
+  let parsedBody: unknown;
+  try {
+    parsedBody = await readJson(req);
+  } catch (error) {
+    const e = refusal(error);
+    if (!e) throw error;
+    noteError(e.code);
+    return errorJson(e);
   }
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
@@ -292,5 +251,5 @@ export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionConte
   });
   await server(req, env, ctx, who, url.origin).connect(transport);
   watch(transport);
-  return transport.handleRequest(req);
+  return transport.handleRequest(req, { parsedBody });
 }

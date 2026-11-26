@@ -77,6 +77,7 @@
     "markdown:serve-proof": "node scripts/serve-markdown-proof.ts",
     "host:pack-check": "node scripts/prove-host-packages.ts",
     "prove:service": "pnpm runtime:build && node scripts/prove-service.ts",
+    "prove:service-boundary": "pnpm runtime:build && node scripts/prove-service-boundary.ts",
     "o11y": "node scripts/o11y.ts",
     "service:dev": "pnpm --dir packages/service dev",
     "service:deploy": "pnpm --dir packages/service deploy",
