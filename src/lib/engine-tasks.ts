@@ -16,7 +16,7 @@ import {
 import { compile, type Scene } from '../dsl/compile';
 import { projectScene, visibleRects, type ViewState } from '../dsl/project';
 import { routingFingerprint } from '../model/document';
-import { computeRoutes } from '../model/routes';
+import { routeResult } from '../model/routes';
 import type { Diagram } from '../model/types';
 
 export type EngineTask =
@@ -100,7 +100,7 @@ async function compileScene(
 
 function documentRoutes(document: Diagram): RoutingResult {
   const { vg, rects } = visibleRects(document);
-  return computeRoutes(document, vg, rects, { previous: [] }).result;
+  return routeResult(document, vg, rects);
 }
 
 // --- One long-lived worker -------------------------------------------------------------------

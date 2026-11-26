@@ -1271,15 +1271,25 @@ export function rememberRoutes(
   keep(routingKey(doc, vg, rects, {}).key, result);
 }
 
+export function routeResult(
+  doc: Diagram,
+  vg: VisibleGraph,
+  rects: Map<string, Rect>,
+  options: { previous?: PriorRoute[]; quick?: boolean } = {},
+): RoutingResult {
+  const { input, settings, key } = routingKey(doc, vg, rects, options),
+    hit = recent.get(key),
+    result = hit ? structuredClone(hit) : RouteLab.compute(input, settings);
+  keep(key, result);
+  return result;
+}
+
 export function computeRoutes(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
   options: { previous?: PriorRoute[]; quick?: boolean } = {},
 ): SceneRoutes {
-  const { input, settings, key } = routingKey(doc, vg, rects, options),
-    hit = recent.get(key),
-    result = hit ? structuredClone(hit) : RouteLab.compute(input, settings);
-  keep(key, result);
+  const result = routeResult(doc, vg, rects, options);
   return { result, routes: drawRoutes(doc, vg, rects, result) };
 }
