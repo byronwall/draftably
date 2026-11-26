@@ -3,6 +3,8 @@
  * This file parses only; it neither renders Mermaid nor attaches interaction callbacks.
  * Call in an isolated Node worker with a DOM, or in a dedicated browser Mermaid instance.
  */
+import { matchFrontmatter, mermaidText, type FrontmatterBlock } from './mermaid-frontmatter';
+
 export const MERMAID_VERSION = '12.2.0' as const;
 
 export type ParserDiagnostic = {
@@ -57,6 +59,8 @@ export type FlowSnapshot = {
   family: 'flowchart';
   parserVersion: typeof MERMAID_VERSION;
   direction: string;
+  /** Only frontmatter sets a flowchart's title. */
+  title?: string;
   vertices: FlowVertex[];
   edges: FlowEdge[];
   groups: FlowGroup[];
@@ -141,6 +145,8 @@ export type ParseFlowResult =
       ok: true;
       snapshot: FlowSnapshot | SequenceSnapshot | GanttSnapshot | TimelineSnapshot;
       diagnostics: ParserDiagnostic[];
+      /** The frontmatter as Mermaid's YAML reader parses it, when the source has one. */
+      frontmatter?: Record<string, unknown>;
     }
   | { ok: false; diagnostics: ParserDiagnostic[] };
 
@@ -204,6 +210,28 @@ export function makePlainLabel(document: Document): (value: string) => string {
   };
 }
 
+/**
+ * Parse a frontmatter body the way Mermaid 12.2.0 does: its own bundled js-yaml (this chunk is
+ * js-yaml and nothing else), the JSON schema, and the fence's indentation removed from each line.
+ * A non-mapping document is empty, as in Mermaid. Throws on YAML Mermaid would reject.
+ */
+async function parseFrontmatter(block: FrontmatterBlock): Promise<Record<string, unknown>> {
+  const { load, JSON_SCHEMA } = (await import(
+    // @ts-expect-error Mermaid ships no types for its chunks; the pinned version fixes the name.
+    'mermaid/dist/chunks/mermaid.core/chunk-LNGE3PJU.mjs'
+  )) as { load: (text: string, options: { schema: unknown }) => unknown; JSON_SCHEMA: unknown };
+  const body = block.indent
+    ? block.body
+        .split('\n')
+        .map(line => (line.startsWith(block.indent) ? line.slice(block.indent.length) : line))
+        .join('\n')
+    : block.body;
+  const parsed = load(body, { schema: JSON_SCHEMA }) ?? {};
+  return typeof parsed === 'object' && !Array.isArray(parsed)
+    ? (parsed as Record<string, unknown>)
+    : {};
+}
+
 export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   if (new TextEncoder().encode(source).length > MAX_BYTES) {
     return [
@@ -214,14 +242,28 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
       },
     ];
   }
-  const normalized = source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
-  if (/^\s*---(?:\n|$)/.test(normalized) || /%%\s*\{/.test(normalized)) {
+  const normalized = mermaidText(source);
+  const frontmatter = matchFrontmatter(normalized);
+  // Frontmatter is data: only the diagram after it can hold a directive or a click.
+  const body = normalized.slice(frontmatter?.length ?? 0);
+  const bodyLine = normalized.slice(0, frontmatter?.length ?? 0).split('\n').length - 1;
+  if (/%%\s*\{/.test(body)) {
     return [
       {
         code: 'MERMAID_CONFIGURATION_UNSUPPORTED',
         severity: 'error',
         message:
-          'This importer does not apply Mermaid frontmatter or directives. Remove the configuration block and import the diagram text.',
+          'This importer does not apply Mermaid directives. Remove the %%{...}%% block and import the diagram text.',
+      },
+    ];
+  }
+  if (!frontmatter && /^[^\S\n]*---[^\S\n]*(?:\n|$)/.test(normalized)) {
+    return [
+      {
+        code: 'MERMAID_FRONTMATTER_INVALID',
+        severity: 'error',
+        message:
+          'Mermaid frontmatter must open with --- on the first line and close with a --- line.',
       },
     ];
   }
@@ -241,7 +283,7 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   }
   // A conservative family check, not a Mermaid grammar replacement.
   const firstCodeLine =
-    normalized.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
+    body.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
   if (!/^\s*(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/.test(firstCodeLine)) {
     return [
       {
@@ -253,13 +295,13 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     ];
   }
   const diagnostics: ParserDiagnostic[] = [];
-  for (const [index, line] of normalized.split('\n').entries()) {
+  for (const [index, line] of body.split('\n').entries()) {
     if (/(?:^|;)\s*click\s/.test(line)) {
       diagnostics.push({
         code: 'MERMAID_INTERACTION_IGNORED',
         severity: 'warning',
         message: 'Mermaid click links and callbacks are data only; no interactions are installed.',
-        line: index + 1,
+        line: bodyLine + index + 1,
         locationKind: 'source',
       });
     }
@@ -408,6 +450,16 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
     const job = queue.then(async (): Promise<ParseFlowResult> => {
       const diagnostics = preflightMermaidFlow(source);
       if (diagnostics.some(d => d.severity === 'error')) return { ok: false, diagnostics };
+      const block = matchFrontmatter(mermaidText(source));
+      let frontmatter: Record<string, unknown> | undefined, title: string | undefined;
+      const ok = (
+        snapshot: Extract<ParseFlowResult, { ok: true }>['snapshot'],
+      ): ParseFlowResult => {
+        // Mermaid's timeline DB has no title setter, so the metadata does not reach it: there the
+        // frontmatter title is the fallback. Other families keep Mermaid's final title.
+        if (snapshot.family === 'timeline' && !snapshot.title && title) snapshot.title = title;
+        return { ok: true, diagnostics, snapshot, ...(frontmatter ? { frontmatter } : {}) };
+      };
       let phase: 'load' | 'parse' | 'snapshot' = 'load';
       try {
         const mermaid = await load();
@@ -420,7 +472,29 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
           suppressErrorRendering: true,
         });
         phase = 'parse';
-        const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''));
+        if (block) frontmatter = await parseFrontmatter(block);
+        // Mermaid's rule: a truthy title, as a string. YAML escapes can decode to characters SVG
+        // text cannot hold (`\f`), which no diagram body can contain; they become spaces.
+        title = frontmatter?.title
+          ? [...String(frontmatter.title)]
+              .map(c => {
+                const code = c.codePointAt(0)!;
+                const bad =
+                  (code < 32 && ![9, 10, 13].includes(code)) ||
+                  code === 0xfffe ||
+                  code === 0xffff ||
+                  (code >= 0xd800 && code <= 0xdfff); // a lone surrogate: pairs iterate as one
+                return bad ? ' ' : c;
+              })
+              .join('')
+          : undefined;
+        // Mermaid gets only the diagram: the frontmatter is read here, once, and Mermaid's
+        // rewrite of HTML attribute quotes before its own YAML read cannot break ignored data.
+        // The title goes back as metadata, Mermaid's rule: a truthy title, as a string.
+        const diagram = await mermaid.mermaidAPI.getDiagramFromText(
+          block ? mermaidText(source).slice(block.length) : source.replace(/^\uFEFF/, ''),
+          { title },
+        );
         if (
           !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)
         ) {
@@ -443,10 +517,8 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
             throw new Error(`Mermaid ${MERMAID_VERSION} boundary missing ${name}().`);
           return (db[name] as () => unknown).call(db);
         };
-        if (diagram.type === 'gantt')
-          return { ok: true, diagnostics, snapshot: ganttSnapshot(call) };
-        if (diagram.type === 'timeline')
-          return { ok: true, diagnostics, snapshot: timelineSnapshot(db, call) };
+        if (diagram.type === 'gantt') return ok(ganttSnapshot(call));
+        if (diagram.type === 'timeline') return ok(timelineSnapshot(db, call));
         if (diagram.type === 'sequence') {
           const snapshot = sequenceSnapshot(db, call);
           if (snapshot.actors.length > MAX_ENTITIES || snapshot.events.length > MAX_EDGES) {
@@ -462,7 +534,7 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
               ],
             };
           }
-          return { ok: true, diagnostics, snapshot };
+          return ok(snapshot);
         }
         const rawEdges = call('getEdges');
         const vertices = mapValues(call('getVertices')).map((value): FlowVertex => {
@@ -529,22 +601,19 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
           };
         }
         const extra = rawEdges as unknown as Record<string, unknown>;
-        return {
-          ok: true,
-          diagnostics,
-          snapshot: {
-            format: 'mermaid',
-            family: 'flowchart',
-            parserVersion: MERMAID_VERSION,
-            direction: string(call('getDirection'), 'TB'),
-            vertices,
-            edges,
-            groups,
-            classes,
-            defaultEdgeStyle: strings(extra.defaultStyle),
-            defaultEdgeInterpolate: optionalString(extra.defaultInterpolate),
-          },
-        };
+        return ok({
+          format: 'mermaid',
+          family: 'flowchart',
+          parserVersion: MERMAID_VERSION,
+          direction: string(call('getDirection'), 'TB'),
+          title: optionalString(call('getDiagramTitle')) || undefined,
+          vertices,
+          edges,
+          groups,
+          classes,
+          defaultEdgeStyle: strings(extra.defaultStyle),
+          defaultEdgeInterpolate: optionalString(extra.defaultInterpolate),
+        });
       } catch (error) {
         const e = error as {
           message?: string;

@@ -1,3 +1,4 @@
+import { afterFrontmatter, mermaidText } from './mermaid-frontmatter';
 /** A bounded dispatcher, not a parser. Ambiguous plain text never becomes D2 by guess. */
 export type KnownFormat = 'native' | 'mermaid' | 'dot' | 'd2' | 'plantuml' | 'dbml' | 'nomnoml';
 export interface DetectedSource {
@@ -77,11 +78,32 @@ export function fencedSources(text: string): FencedSource[] {
   return blocks;
 }
 
-function signature(source: string): KnownFormat | undefined {
-  // Only leading comment forms are skipped; the parser still receives the original text.
-  const head = source
+/** Only leading comment forms are skipped; the parser still receives the original text. */
+const skipComments = (text: string) =>
+  text
     .replace(/^\uFEFF/, '')
     .replace(/^(?:\s|\/\/[^\n]*(?:\n|$)|%%[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*/, '');
+
+/** A Mermaid diagram keyword at the start of `head`. A bare `graph` is Mermaid's top-down graph. */
+const mermaidHeader = (head: string) =>
+  /^(?:flowchart|graph)\s+(?:TB|TD|BT|LR|RL)\b/.test(head) ||
+  /^(?:flowchart|graph)[ \t]*(?:;|\r?\n|$)/.test(head) ||
+  /^(?:sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|journey|pie|mindmap|timeline|gitGraph|xychart-beta|block-beta|architecture-beta|sankey-beta|quadrantChart|C4Context|C4Container|C4Component|C4Dynamic|C4Deployment)\b/.test(
+    head,
+  );
+
+/** Mermaid's diagram after frontmatter, when the source has frontmatter and a Mermaid header. */
+const mermaidAfterFrontmatter = (source: string) => {
+  const body = afterFrontmatter(source);
+  return body !== mermaidText(source) && mermaidHeader(skipComments(body));
+};
+
+function signature(source: string): KnownFormat | undefined {
+  // Only Mermaid has frontmatter, so only Mermaid's header is checked after it (not DOT's, which
+  // reads `graph` and a `{` node shape on the next line as `graph A {`).
+  if (afterFrontmatter(source) !== mermaidText(source))
+    return mermaidAfterFrontmatter(source) ? 'mermaid' : undefined;
+  const head = skipComments(source);
   if (/^diagram\s+"/.test(head)) return 'native';
   if (
     /^(?:strict\s+)?(?:di)?graph(?:\s+(?:"(?:\\.|[^"\\])*"|[A-Za-z_\u0080-\uFFFF][\w\u0080-\uFFFF]*|-?(?:\.\d+|\d+(?:\.\d*)?)))?\s*\{/.test(
@@ -89,15 +111,8 @@ function signature(source: string): KnownFormat | undefined {
     )
   )
     return 'dot';
-  if (
-    /^(?:flowchart|graph)\s+(?:TB|TD|BT|LR|RL)\b/.test(head) ||
-    // A bare header: Mermaid draws it top-down. (`graph {` is DOT, caught above.)
-    /^(?:flowchart|graph)[ \t]*(?:;|\r?\n|$)/.test(head) ||
-    /^(?:sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|journey|pie|mindmap|timeline|gitGraph|xychart-beta|block-beta|architecture-beta|sankey-beta|quadrantChart|C4Context|C4Container|C4Component|C4Dynamic|C4Deployment)\b/.test(
-      head,
-    )
-  )
-    return 'mermaid';
+  // (`graph {` is DOT, caught above.)
+  if (mermaidHeader(head)) return 'mermaid';
   if (/^@start(?:uml|mindmap|wbs|gantt|json|yaml)\b/i.test(head)) return 'plantuml';
   if (/^(?:Table|TableGroup|Enum|Project)\s+[A-Za-z_][\w.]*\s*\{/i.test(head)) return 'dbml';
   return undefined;
@@ -114,6 +129,9 @@ export function detectSource(
   const byExtension = alias(extension);
   if (byExtension)
     return { status: 'detected', format: byExtension, source, via: 'extension', startLine: 1 };
+  // A Mermaid diagram after frontmatter is the source itself, even when its YAML quotes a fence.
+  if (mermaidAfterFrontmatter(source))
+    return { status: 'detected', format: 'mermaid', source, via: 'signature', startLine: 1 };
   const blocks = fencedSources(source);
   if (blocks.length === 1) return { status: 'detected', ...blocks[0]!, via: 'fence' };
   if (blocks.length > 1) return { status: 'choose-fence', blocks };

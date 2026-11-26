@@ -1,5 +1,6 @@
 import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
 import type { Diagnostic } from '@draftably/runtime';
+import { afterFrontmatter } from '../../../src/import/mermaid-frontmatter';
 
 /**
  * Mermaid fences that Draftably draws natively. Mermaid's parser needs a DOM, so it runs with
@@ -9,13 +10,8 @@ import type { Diagnostic } from '@draftably/runtime';
 const CANDIDATE = /^(?:flowchart|graph|sequenceDiagram|gantt|timeline)\b/;
 
 export function isMermaidCandidate(text: string): boolean {
-  const lines = text.replace(/^\uFEFF/, '').split('\n');
-  let i = 0;
-  if (lines[0]?.trim() === '---') {
-    i = lines.findIndex((line, n) => n > 0 && line.trim() === '---') + 1;
-    if (i === 0) return false;
-  }
-  for (; i < lines.length; i++) {
+  const lines = afterFrontmatter(text).split('\n');
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line || line.startsWith('%%')) continue;
     return CANDIDATE.test(line);

@@ -39,6 +39,10 @@ import until you choose **Convert to draftably**.
 | Mermaid timeline  | Sections, periods, events            | Periods that are not dates (`Industry 4.0`)      |
 | D2                | Ordinary graphs, containers, labels  | Sequence, class, table and multi-board diagrams  |
 
+A Mermaid frontmatter block (`---` … `---`) is read: `title` becomes the diagram title, and
+`config.theme: dark` becomes `theme blueprint`. The import ignores other settings and names them in
+a warning. It refuses `%%{init: …}%%` directives.
+
 PlantUML, DBML, nomnoml and Mermaid's other chart types are not supported yet. To move many Mermaid
 fences in Markdown at once, use [`draftably migrate`](#convert-the-source).
 

@@ -4,6 +4,7 @@ import { compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { createMermaidFlowParser, makePlainLabel } from '../src/import/mermaid-facade';
 import { importMermaidFlow } from '../src/import/mermaid-importer';
+import { detectSource } from '../src/import/detect';
 
 const dom = new JSDOM('<!doctype html><html><body></body></html>');
 const parse = createMermaidFlowParser(async () => (await import('mermaid')).default);
@@ -74,6 +75,131 @@ X --- A`);
         importMermaidFlow(parsed, makePlainLabel(dom.window.document)).nativeSource,
       ).toBeUndefined();
     }
+  });
+});
+
+describe('Mermaid frontmatter', () => {
+  const imported = async (source: string) =>
+    importMermaidFlow(await parse(source), makePlainLabel(dom.window.document), 'File name');
+
+  it('takes the title and a mapped theme, and names the settings it ignores', async () => {
+    const r = await imported(`---
+title: "Checkout: flow"
+config:
+  theme: dark
+  flowchart: {curve: basis, htmlLabels: false}
+---
+flowchart LR
+  A --> B`);
+    expect(r.nativeSource!.split('\n').slice(0, 2)).toEqual([
+      'diagram "Checkout: flow" version=1',
+      'theme blueprint',
+    ]);
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toContain(
+      'config.flowchart.curve, config.flowchart.htmlLabels.',
+    );
+    await compile(r.nativeSource!);
+    expect(detectSource('---\ntitle: X\n---\nsequenceDiagram\na->>b: hi').status).toBe('detected');
+  });
+
+  it('keeps a title written in the diagram over the frontmatter title', async () => {
+    const r = await imported('---\ntitle: Outer\n---\nsequenceDiagram\ntitle Inner\na->>b: hi');
+    expect(r.nativeSource!.split('\n')[0]).toBe('diagram "Inner" version=1');
+    expect(r.diagnostics.some(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')).toBe(false);
+  });
+
+  // Codex review round 1: YAML that a line-based reader got wrong, and boundaries that detection
+  // and the import read differently.
+  it('reads YAML as Mermaid does: comments, escapes, block scalars, other line endings', async () => {
+    const r = await imported(
+      '---\ntitle: "Checkout flow" # nav label\nnotes: "Caf\\xE9"\nlist: [a, b]\nnone:\n' +
+        'config:\n  theme: "dark" # night\n---\nflowchart LR\n  A --> B',
+    );
+    expect(r.nativeSource!.split('\n').slice(0, 2)).toEqual([
+      'diagram "Checkout flow" version=1',
+      'theme blueprint',
+    ]);
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: notes, list, none.',
+    );
+    const scalar = '---\ntitle: x\nnote: |\n  a\n  ---\n  b\n---\nflowchart LR\nA-->B';
+    expect((await imported(scalar)).status).not.toBe('failed');
+    expect(detectSource(scalar).status).toBe('detected');
+    const cr = '---\rtitle: X\r---\rflowchart LR\rA-->B';
+    expect(detectSource(cr).status).toBe('detected');
+    expect((await imported(cr)).nativeSource!.split('\n')[0]).toBe('diagram "X" version=1');
+  });
+
+  it('keeps a title with a line separator whole when it adds a theme', async () => {
+    const r = await imported(
+      '---\ntitle: "First\\u2028Second"\nconfig: {theme: dark}\n---\nflowchart LR\nA-->B',
+    );
+    expect(r.status).not.toBe('failed');
+    expect(r.nativeSource!.split('\n')[1]).toBe('theme blueprint');
+    await compile(r.nativeSource!);
+  });
+
+  it('gives every family the frontmatter title unless its body has one', async () => {
+    const bodies = {
+      flowchart: 'flowchart LR\nA-->B',
+      sequence: 'sequenceDiagram\na->>b: hi',
+      gantt: 'gantt\ndateFormat YYYY-MM-DD\nTask :a1, 2025-01-06, 2d',
+      timeline: 'timeline\n2004 : Founded',
+    };
+    for (const [family, body] of Object.entries(bodies)) {
+      const r = await imported('---\ntitle: Outer\n---\n' + body);
+      expect([family, r.nativeSource?.split('\n')[0]]).toEqual([
+        family,
+        'diagram "Outer" version=1',
+      ]);
+      if (family === 'flowchart') continue; // a flowchart has no title line
+      const own = body.replace('\n', '\ntitle Inner\n');
+      const inner = await imported('---\ntitle: Outer\n---\n' + own);
+      expect([family, inner.nativeSource?.split('\n')[0]]).toEqual([
+        family,
+        'diagram "Inner" version=1',
+      ]);
+    }
+  });
+
+  // Codex review round 2: frontmatter is data, so diagram-like text in it changes nothing.
+  it('ignores HTML, directives, fences and aliases inside frontmatter values', async () => {
+    const plain = await imported('flowchart LR\nA-->B');
+    const source =
+      '---\nnotes: \'<span class="label">Docs</span>\'\nquote: "%%{init: {}}%%"\n' +
+      'base: &b {k: 1}\nagain: *b\nexample: |\n  ```mermaid\n  flowchart LR\n  X-->Y\n  ```\n' +
+      '---\nflowchart LR\nA-->B';
+    const r = await imported(source);
+    expect(r.nativeSource!.split('\n').slice(1)).toEqual(plain.nativeSource!.split('\n').slice(1));
+    expect(r.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: notes, quote, base.k, again.k, example.',
+    );
+    const found = detectSource(source);
+    expect(found.status === 'detected' && found.source).toBe(source);
+  });
+
+  // Codex review round 3.
+  it('detects a bare graph with a decision node, and keeps key paths and titles exact', async () => {
+    const graph =
+      '---\nexample: |\n  ```mermaid\n  flowchart LR\n  X-->Y\n  ```\n---\ngraph\n  A{Go?} --> B';
+    const found = detectSource(graph);
+    expect(found.status === 'detected' && [found.format, found.source]).toEqual(['mermaid', graph]);
+    const dotted = await imported(
+      '---\nconfig: {theme: dark}\n"config.theme": unrelated\n---\nflowchart LR\nA-->B',
+    );
+    expect(dotted.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: config.theme.',
+    );
+    const feed = await imported('---\ntitle: "First\\fSecond"\n---\nflowchart LR\nA-->B');
+    expect(feed.nativeSource!.split('\n')[0]).toBe('diagram "First Second" version=1');
+    await compile(feed.nativeSource!);
+    const empty = await imported('---\ntitle: Outer\n---\nsequenceDiagram\ntitle <T>\na->>b: hi');
+    expect(empty.nativeSource!.split('\n')[0]).not.toContain('Outer');
+  });
+
+  it('refuses an unclosed block', async () => {
+    const parsed = await parse('---\ntitle: X\nflowchart LR\nA-->B');
+    expect(parsed.diagnostics.map(d => d.code)).toEqual(['MERMAID_FRONTMATTER_INVALID']);
   });
 });
 
