@@ -1,5 +1,5 @@
 import { conflicts, parallelConflicts, parallelNear } from './conflicts.ts';
-import type { Point as RoutePoint } from './types.ts';
+import type { Point } from './types.ts';
 import type { Context } from './context.ts';
 import { cost, standoffCost } from './cost.ts';
 import { clone, compress, distance, EPS, round, segments } from './geometry.ts';
@@ -72,7 +72,7 @@ export function nudge(ctx: Context) {
 }
 
 // Check each segment against the part of its own path before the preceding bend.
-function crossesItself(points: RoutePoint[]) {
+function crossesItself(points: Point[]) {
   for (let i = 2; i < points.length - 1; i++) {
     const earlier = { points: points.slice(0, i) };
     const hit = conflicts([points[i], points[i + 1]], [earlier]);
@@ -155,8 +155,8 @@ export function centre(ctx: Context) {
       if (hugs) continue;
       // Another line in the gap shares it: the lanes, not the middle, decide where each runs.
       const wide = above - below > GAP_MAX;
-      const laneLo = wide ? Math.min(at, mid) - s.edgeGap : below;
-      const laneHi = wide ? Math.max(at, mid) + s.edgeGap : above;
+      const laneLo = wide ? Math.min(at, mid) : below;
+      const laneHi = wide ? Math.max(at, mid) : above;
       const shared = others.some(o =>
         segments(o.points).some(
           ([c, d]) =>
@@ -177,6 +177,24 @@ export function centre(ctx: Context) {
       p[i + 1][axis] = mid;
       // The segments either side keep their length clear of a jog.
       if (distance(p[i - 1], p[i]) < 8 || distance(p[i + 1], p[i + 2]) < 8) continue;
+      // Sliding the run also changes the length of each leg that meets it.
+      if (
+        wide &&
+        [i - 1, i + 1].some(k => {
+          const beside = (ps: Point[], lo: number, hi: number) =>
+            Math.min(Math.max(ps[k][axis], ps[k + 1][axis]), hi) -
+              Math.max(Math.min(ps[k][axis], ps[k + 1][axis]), lo) >
+            ALONGSIDE;
+          return sides[upright ? 0 : 1].some(
+            f =>
+              f.node &&
+              Math.abs(p[k][along] - f.at) < HUG &&
+              beside(p, f.lo, f.hi) &&
+              !beside(points, f.lo, f.hi),
+          );
+        })
+      )
+        continue;
       const beforeLane = parallelConflicts(points, others, s.edgeGap);
       const afterLane = parallelConflicts(p, others, s.edgeGap);
       if (
