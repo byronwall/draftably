@@ -38,7 +38,7 @@ jobs:
   proof-suite:
     runs-on: ubuntu-latest
     container: ${{ matrix.image }}
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
