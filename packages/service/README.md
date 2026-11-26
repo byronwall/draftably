@@ -55,24 +55,17 @@ Other clients take a JSON block like this:
 Tools: `render_diagram` (PNG as an image, or SVG; 2 or 1 credits), `validate_diagram`,
 `convert_mermaid`, `image_url` and `language_guide` (the agent skill), all free but the first.
 
-## First deploy
+## Hosting
 
-Run these once, from `packages/service`:
+The service runs at `https://api.draftably.dev` as the `draftably-api` Worker on a custom domain.
+Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
 
-1. `pnpm exec wrangler d1 create draftably-service`, then put the printed `database_id` into
-   `wrangler.jsonc`.
-2. `pnpm exec wrangler d1 migrations apply DB --remote`.
-3. Add `draftably.dev` to Cloudflare and move its nameservers there. Copy the GitHub Pages
-   records first, so the landing page keeps working.
-4. Onboard `draftably.dev` as a sending domain in Email Service (dashboard → Compute → Email
-   Service → Email Sending). It adds the SPF and DKIM records. Sign-in mail comes from
-   `vars.EMAIL_FROM` (`login@draftably.dev`). Email Service is in beta, and a new account starts
-   with a small daily quota.
-5. Add the route to `wrangler.jsonc`:
-   `"routes": [{ "pattern": "api.draftably.dev", "custom_domain": true }]`.
-6. `pnpm service:deploy`, then `pnpm prove:service --base https://api.draftably.dev`.
-
-Sign-in does not work before step 4, because Email Service sends only from an onboarded domain.
+- D1 database `draftably-service`, with its id in `wrangler.jsonc`.
+- `draftably.dev` is onboarded as an Email Service sending domain. Sign-in mail comes from
+  `vars.EMAIL_FROM` (`login@draftably.dev`). Email Service is in beta, and a new account starts
+  with a small daily quota.
+- Paid credits are off until `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` are set with
+  `pnpm exec wrangler secret put`.
 
 ## Later deploys
 
