@@ -173,7 +173,8 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
   } catch (error) {
     const e = error instanceof SourceError ? sourceError(error) : error;
     if (!(e instanceof ApiError)) throw error;
-    noteError(e.code, e.message);
+    // A 404's message repeats the path the caller sent.
+    noteError(e.code, e.code === 'ERR_NOT_FOUND' ? 'No such route.' : e.message);
     return errorJson(e);
   }
 }

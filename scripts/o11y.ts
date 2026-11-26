@@ -75,7 +75,27 @@ const eq = (key: string, value: string | number): Filter => ({
   type: typeof value === 'number' ? 'number' : 'string',
   value,
 });
-const has = (key: string): Filter => ({ key, operation: 'exists', type: 'string' });
+/** Fields Cloudflare indexes as numbers; every other field is a string. */
+const NUMERIC = new Set([
+  'status',
+  'credits_spent',
+  'credits_left',
+  'mcp_calls',
+  '$workers.wallTimeMs',
+  '$workers.cpuTimeMs',
+]);
+const typeOf = (key: string) => (NUMERIC.has(key) ? 'number' : 'string');
+const has = (key: string): Filter => ({ key, operation: 'exists', type: typeOf(key) });
+/** A GET image URL of one format, in either path form. */
+const imageGet = (format: string): Filter[] => [
+  eq('$workers.event.request.method', 'GET'),
+  {
+    key: '$workers.event.request.url',
+    operation: 'regex',
+    type: 'string',
+    value: `^https?://[^/]+/(draftably/)?${format}/`,
+  },
+];
 const gte = (key: string, value: number): Filter => ({
   key,
   operation: 'gte',
@@ -129,7 +149,7 @@ async function calc(
       datasets: [],
       filters,
       filterCombination: 'and',
-      groupBys: groupBy.map(value => ({ value, type: 'string' })),
+      groupBys: groupBy.map(value => ({ value, type: typeOf(value) })),
       calculations: calcs.map((c, i) => ({ ...c, alias: aliases[i] })),
       orderBy: { value: aliases[0], order: 'desc' },
       limit,
@@ -159,8 +179,9 @@ interface Issue {
   status: string;
   count: number;
   service: string;
-  firstObserved: string;
-  lastObserved: string;
+  /** Epoch ms in the API's answer; an ISO string is read too. */
+  firstObserved: number | string;
+  lastObserved: number | string;
 }
 interface Occurrence {
   timestamp: number;
@@ -169,12 +190,14 @@ interface Occurrence {
   worker?: { scriptVersion?: { id?: string } };
 }
 
+const ms = (t: number | string) => (typeof t === 'number' ? t : Date.parse(t));
+
 async function issues() {
   const list = await cf<Issue[]>(
     'GET',
     `${API}/issues?status=active&service=${SERVICE}&orderBy=lastObserved&order=desc&perPage=50`,
   );
-  const recent = list.filter(i => Date.parse(i.lastObserved) >= window.from);
+  const recent = list.filter(i => ms(i.lastObserved) >= window.from);
   return Promise.all(
     recent.map(async issue => {
       const occ = await cf<Occurrence[]>(
@@ -186,7 +209,7 @@ async function issues() {
       return {
         id: issue.id,
         title: issue.title,
-        isNew: Date.parse(issue.firstObserved) >= window.from,
+        isNew: ms(issue.firstObserved) >= window.from,
         total: issue.count,
         // At most the 100 newest occurrences are read, so this is a floor.
         inWindow: inWindow.length,
@@ -219,7 +242,6 @@ async function main() {
 
   const [
     byRoute,
-    base,
     errors,
     baseErrors,
     errorsByBuild,
@@ -235,9 +257,9 @@ async function main() {
     broke,
     scanners,
     issueList,
+    totals,
   ] = await Promise.all([
     calc(window, WIDE, ['route', 'status']),
-    calc(baseline, WIDE, ['status'], [{ operator: 'count' }], 100),
     calc(
       window,
       [...WIDE, has('error_code')],
@@ -250,34 +272,8 @@ async function main() {
     calc(window, [...WIDE, has('cache')], ['format', 'cache']),
     // Latency comes from Cloudflare's measure on the invocation log, not the event's `ms`.
     calc(window, [SCRIPT, has('$workers.wallTimeMs')], [], latencyCalcs()),
-    calc(
-      window,
-      [
-        SCRIPT,
-        {
-          key: '$workers.event.request.url',
-          operation: 'includes',
-          type: 'string',
-          value: '/png/',
-        },
-      ],
-      [],
-      latencyCalcs(),
-    ),
-    calc(
-      window,
-      [
-        SCRIPT,
-        {
-          key: '$workers.event.request.url',
-          operation: 'includes',
-          type: 'string',
-          value: '/svg/',
-        },
-      ],
-      [],
-      latencyCalcs(),
-    ),
+    calc(window, [SCRIPT, ...imageGet('png')], [], latencyCalcs()),
+    calc(window, [SCRIPT, ...imageGet('svg')], [], latencyCalcs()),
     calc(window, [...WIDE, has('rate_limit')], ['rate_limit']),
     calc(window, [...WIDE, has('login')], ['login']),
     calc(window, [...WIDE, has('webhook')], ['webhook', 'stripe_event']),
@@ -286,19 +282,26 @@ async function main() {
       window,
       [...WIDE, has('account')],
       ['account'],
-      [{ operator: 'count' }, { operator: 'sum', key: 'credits_spent', keyType: 'number' }],
+      // Ranked by credits spent, the first calculation.
+      [{ operator: 'sum', key: 'credits_spent', keyType: 'number' }, { operator: 'count' }],
       10,
     ),
     // An MCP call that runs out answers 200 with an error, so match the code, not the status.
     calc(window, [...WIDE, eq('error_code', 'ERR_LIMIT_BALANCE')], ['account']),
     calc(window, [...WIDE, gte('status', 400), has('ip')], ['ip'], [{ operator: 'count' }], 5),
     issues(),
+    // Headline counts, ungrouped, so a rare route or status is never cut by a group limit.
+    Promise.all(
+      [window, baseline].flatMap(t => [
+        calc(t, WIDE, []),
+        calc(t, [...WIDE, gte('status', 500)], []),
+      ]),
+    ),
   ]);
 
-  const requests = total(byRoute);
-  const fivexx = total(byRoute.filter(r => Number(r.status) >= 500));
-  const baseRequests = total(base) / BASELINE;
-  const baseFivexx = total(base.filter(r => Number(r.status) >= 500)) / BASELINE;
+  const [requests, fivexx, baseAll, base5] = totals.map(rows => total(rows));
+  const baseRequests = baseAll / BASELINE;
+  const baseFivexx = base5 / BASELINE;
   const rate = (n: number, d: number) => (d ? n / d : 0);
   const pct = (x: number) => `${(x * 100).toFixed(2)}%`;
   const baseByCode = new Map(baseErrors.map(r => [r.error_code, Number(r.count) / BASELINE]));

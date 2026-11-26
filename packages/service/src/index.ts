@@ -173,9 +173,13 @@ function pathLabel(route: Wide['route'], path: string) {
     '/account/keys/:id/revoke',
   );
   if (PATHS.has(template)) return template;
-  return (
-    scrub('/' + (path.split('/')[1] ?? '')).slice(0, 40) + (path.split('/').length > 2 ? '/*' : '')
-  );
+  // Decoded, so an encoded email is masked too.
+  let decoded = path;
+  try {
+    decoded = decodeURIComponent(path);
+  } catch {}
+  const parts = decoded.split('/');
+  return scrub('/' + (parts[1] ?? '')).slice(0, 40) + (parts.length > 2 ? '/*' : '');
 }
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {

@@ -164,12 +164,14 @@ async function renderNow<P>(
   if (payer) {
     left = (await spend(env.DB, payer.account, cost, format, payer.key)) ?? undefined;
     if (!left) {
-      // A parallel spend took the credits the first check saw; the balance now is not known.
-      note({ credits_left: undefined });
-      const live = await env.DB.prepare(`SELECT 1 FROM keys WHERE id = ?1 AND revoked_at IS NULL`)
+      const live = await env.DB.prepare(
+        `SELECT a.grant_left + a.bought AS left FROM keys k JOIN accounts a ON a.id = k.account_id
+         WHERE k.id = ?1 AND k.revoked_at IS NULL`,
+      )
         .bind(payer.key)
-        .first();
+        .first<{ left: number }>();
       if (!live) throw new ApiError(401, 'ERR_AUTH', 'This key was revoked.');
+      note({ credits_left: live.left });
       throw outOfCredits();
     }
     bump('credits_spent', cost);

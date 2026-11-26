@@ -92,12 +92,14 @@ export function bump(field: 'credits_spent' | 'mcp_calls', n = 1) {
  * keeps its words, so the log still says why a diagram failed.
  */
 export const scrub = (text: string) =>
+  // Cut first: the patterns below are slow on a long run of text with no match.
   text
-    .replace(/[^\s@<>"'(),;:/]+@[^\s@<>"'(),;:/]+/g, '<email>')
+    .slice(0, 400)
+    .replace(/[^\s@<>"'(),;:/]{1,64}@[^\s@<>"'(),;:/]{1,255}/g, '<email>')
     .replace(/dft_[\w.-]+/g, '<key>')
-    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, '<ip>')
-    .replace(/\b[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}\b/gi, m =>
-      /[0-9a-f]{1,4}:/i.test(m) ? '<ip>' : m,
+    .replace(/(?<!\d)\d{1,3}(?:\.\d{1,3}){3}(?!\d)/g, '<ip>')
+    .replace(/(?<![\w:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![\w:])/gi, m =>
+      /[0-9a-f]/i.test(m) ? '<ip>' : m,
     )
     .replace(/[\w+/=-]{24,}/g, '<token>')
     .slice(0, 300);
@@ -133,7 +135,7 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
       // The stack's first line repeats the message.
       const stack = e.stack?.replace(e.message, () => message);
       s.recordException({ name: e.name, message, stack });
-      s.setStatus({ code: 'error', message: scrub(e.message) });
+      s.setStatus({ code: 'error', message });
       throw error;
     }
   });

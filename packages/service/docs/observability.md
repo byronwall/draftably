@@ -90,9 +90,12 @@ MCP. For GET image URLs alone, the Query builder can also Visualize `P50` and `P
 `event = request` and `cache exists`, Group by `format` and `cache`.
 
 **Which diagrams fail to render, and why? Mermaid import failures.**
-Visualize `Count`, Filter `event = request` and `error_code = ERR_SOURCE`, Group by `source_type`
-and `error`. Mermaid only: add Filter `source_type = mermaid`. In Traces, filter on span name
-`mermaid.import` with status error to see the exception.
+Failed renders: Visualize `Count`, Filter `event = request`, `error_code = ERR_SOURCE` and
+`format exists` (set only by a render: GET images, `/v1/render`, MCP `render_diagram`), Group by
+`source_type` and `error`. Every failed import, including `/v1/validate`, `/v1/convert` and the
+MCP validate and convert tools: drop `format exists` and add `source_type = mermaid`, Group by
+`route` and `error`. To see a failure's steps, open the matching event's trace from the event's
+details, and look at its `mermaid.import` or `render.svg` span.
 
 **Who uses it: accounts and keys by request count and credits spent.**
 Visualize `Count` and `Sum` of `credits_spent`, Filter `event = request` and `account exists`,
