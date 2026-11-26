@@ -157,6 +157,9 @@ export function centre(ctx: Context) {
         ),
       );
       if (shared) continue;
+      // A slide must not reverse a neighboring leg and fold the route back across itself.
+      if ([points[i - 1], points[i + 2]].some(end => (at - end[axis]) * (mid - end[axis]) <= 0))
+        continue;
       const p = clone(points);
       p[i][axis] = mid;
       p[i + 1][axis] = mid;
