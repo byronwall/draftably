@@ -30,11 +30,31 @@ jobs:
         run: pnpm skill:check origin/${{ github.base_ref }}
       - run: pnpm release:check
 
-  proofs:
-    # Drives the real editor in Chromium against `draftably open`. Failure screenshots and
-    # failure.json are uploaded as an artifact.
+  proof-suite:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: site
+            run: pnpm site:bundle && pnpm prove:site
+          - suite: file
+            run: pnpm exec vite build && pnpm prove:file && pnpm prove:sequence && pnpm prove:layout
+          - suite: runtime
+            run: pnpm typecheck && pnpm runtime:pack-check && pnpm prove:runtime && pnpm mermaid:build
+          - suite: viewer
+            run: pnpm runtime:build && pnpm viewer:pack-check && pnpm prove:viewer && pnpm prove:element
+          - suite: markdown
+            run: pnpm runtime:build && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check
+          - suite: hosts
+            browsers: chromium firefox webkit
+            run: pnpm runtime:build && pnpm editor:build && pnpm prove:slots && pnpm prove:color-scheme
+          - suite: frameworks
+            run: pnpm runtime:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks
+          - suite: recipes
+            run: pnpm runtime:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:recipes
+    name: proof / ${{ matrix.suite }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -42,24 +62,34 @@ jobs:
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
-      # The runner's apt mirror sometimes fails to resolve; retry before failing the job.
-      - run: for i in 1 2 3; do pnpm exec playwright-core install --with-deps chromium firefox webkit && exit 0; sleep 30; done; exit 1
-      - run: pnpm site:build
-      - run: pnpm runtime:build && pnpm runtime:pack-check && pnpm viewer:pack-check && pnpm prove:runtime && pnpm prove:viewer && pnpm prove:element && pnpm markdown:build && pnpm markdown:pack-check && pnpm markdown:browser-check && pnpm mermaid:build && pnpm editor:build && pnpm frameworks:build && pnpm prove:frameworks && pnpm prove:recipes && pnpm prove:slots && pnpm prove:color-scheme
-      - run: pnpm prove:file
-      - run: pnpm prove:sequence
-      - run: pnpm prove:layout
-      - run: pnpm prove:site
+      - name: Install proof browsers
+        env:
+          BROWSERS: ${{ matrix.browsers || 'chromium' }}
+        run: |
+          for attempt in 1 2 3; do
+            pnpm exec playwright-core install --with-deps $BROWSERS && exit 0
+            if [ "$attempt" -lt 3 ]; then sleep 30; fi
+          done
+          exit 1
+      - run: ${{ matrix.run }}
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: proof-screenshots
+          name: proof-screenshots-${{ matrix.suite }}
           path: |
             tmp/proof/
             tmp/proof-layout/
             tmp/proof-sequence/
             tmp/proof-site/
             tmp/proof-slots/
+
+  proofs:
+    needs: proof-suite
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every proof suite
+        run: test "${{ needs.proof-suite.result }}" = success
 
   bench:
     # A report, not a gate: times CLI commands and viewer actions against the 200 ms interactive
