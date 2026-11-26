@@ -76,6 +76,31 @@ describe('routing clearance', () => {
     expect(closestParallel(route.points, blocker)).toBeGreaterThanOrEqual(20);
   });
 
+  it('keeps locked ports while finding a shorter path clear of the boxes', () => {
+    const blockers = [
+      box('c', 223, 24, 87, 85),
+      box('d', 212, 149, 92, 73),
+      box('e', 369, 105, 105, 62),
+      box('f', 145, -40, 80, 40),
+    ];
+    const input: RouteInput = {
+      nodes: [box('a', 381, 1, 94, 81), box('b', 32, 134, 90, 67), ...blockers],
+      groups: [],
+      edges: [{ id: 'link', from: 'a', to: 'b', cfg: { fromSide: 'left', toSide: 'right' } }],
+    };
+    const [route] = RouteLab.compute(input).routes;
+    expect([route.fromSide, route.toSide, route.blocked]).toEqual(['left', 'right', false]);
+    expect(route.points.length).toBeLessThanOrEqual(6);
+    const length = route.points
+      .slice(1)
+      .reduce(
+        (sum, p, i) => sum + Math.abs(p.x - route.points[i].x) + Math.abs(p.y - route.points[i].y),
+        0,
+      );
+    expect(length).toBeLessThan(400);
+    for (const r of blockers) expect(closestParallel(route.points, r)).toBeGreaterThanOrEqual(20);
+  });
+
   it('keeps runs off a group border', () => {
     const group = { id: 'g', x: 0, y: 0, w: 200, h: 200, collapsed: false };
     const input: RouteInput = {

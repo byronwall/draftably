@@ -1,4 +1,5 @@
 import { conflicts, flatten, parallelConflicts, unflatten } from './conflicts.ts';
+import { standoffCost } from './cost.ts';
 import type { Context } from './context.ts';
 import { crossingFloor, doglegs, laneLines } from './doglegs.ts';
 import {
@@ -85,9 +86,10 @@ export function find(
   used: Route[],
   old?: Prior,
   wall: Obstacle[] = [],
+  seekClearance = false,
 ): Route {
   const { rects, titleBands, obsFor, scores, opened } = ctx;
-  const gated = findIn(ctx, e, used, old, false, wall);
+  const gated = findIn(ctx, e, used, old, false, wall, seekClearance);
   if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
   const a = rects.get(e.from)!,
     b = rects.get(e.to)!,
@@ -104,7 +106,7 @@ export function find(
       !gated.blocked &&
       (against(ctx, e, gated) || (pinned && gatedLength > DETOUR_SOFT * floor + 40));
   if (!long && !weigh) return gated;
-  const open = findIn(ctx, e, used, old, true, wall);
+  const open = findIn(ctx, e, used, old, true, wall, seekClearance);
   if (open.blocked) return gated;
   const shorter = long && gatedLength > DETOUR_RATIO * pathLength(open.points),
     better = weigh && scores.get(open)! + BAND_COST < scores.get(gated)!;
@@ -134,10 +136,11 @@ function findIn(
   old: Prior,
   open: boolean,
   wall: Obstacle[] = [],
+  seekClearance = false,
 ) {
   const flattened = flatten(used);
   try {
-    return findAmong(ctx, e, used, old, open, wall);
+    return findAmong(ctx, e, used, old, open, wall, false, seekClearance);
   } finally {
     if (flattened) unflatten(used);
   }
@@ -150,6 +153,7 @@ function findAmong(
   open: boolean,
   wall: Obstacle[] = [],
   loose = false,
+  seekClearance = false,
 ): Route {
   const { rects, groups, s, near, rawOptions, obsFor, scores } = ctx;
   const a = rects.get(e.from)!,
@@ -315,6 +319,7 @@ function findAmong(
       !conflicts(best.points, used).crossings &&
       !parallelConflicts(best.points, used, s.edgeGap).lanePairs &&
       !cfg.waypoints?.length &&
+      !(seekClearance && standoffCost(best.points, near) > s.standoff) &&
       best.points.length <= 6
     )
       break;
@@ -362,11 +367,12 @@ function findAmong(
     }
     if (ok) remember(path, c);
   }
-  if (!best && rawOptions.quick && old) return findAmong(ctx, e, used, null, open, wall, loose);
+  if (!best && rawOptions.quick && old)
+    return findAmong(ctx, e, used, null, open, wall, loose, seekClearance);
   // Groups stacked edge to edge (rows of a lane layout) can leave no way round one that holds
   // neither end: the line crosses it, square through its borders, rather than give up.
   if (!best && !loose && ctx.facingFans && edgeObs.some(r => groups.has(r.id ?? '')))
-    return findAmong(ctx, e, used, old, open, wall, true);
+    return findAmong(ctx, e, used, old, open, wall, true, seekClearance);
   if (!best) {
     // No clear route: draw one anyway, through what is in the way. It still leaves and enters
     // square to its sides, a stub out, and turns in the gap between them, never along a box.
