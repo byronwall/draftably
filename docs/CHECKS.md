@@ -36,6 +36,13 @@ missing. `--jobs N` sets the number of shares. Each suite still runs alone with 
 `node tests/engine-parity.ts` makes all 320 comparisons in one process (about 55 seconds). Two
 comparisons take 10 seconds each, so more cores do not bring a run below about 15 seconds.
 
+`pnpm test:edits` (`tests/edit-roundtrip.test.ts`, about 80 seconds, in `pnpm release:check`)
+applies every editor action in its `ACTIONS` list to a node, a group and a link of every example,
+in file mode. The file the edit saves must draw the same objects, captions, members, links and
+color the browser showed, or the edit is refused with a message. `KNOWN` lists the edits that
+still disagree; a fixed one fails the run until it leaves the list. Add a new editor action to
+`ACTIONS`.
+
 `tests/engine-helpers.test.ts` (Vitest) checks pure helpers of the layout and routing engines:
 topology, settings, targets, path geometry, ports, conflicts and the heaps.
 
