@@ -1,4 +1,4 @@
-import { conflicts, flatten, parallelConflicts, unflatten } from './conflicts.ts';
+import { conflicts, crossesItself, flatten, parallelConflicts, unflatten } from './conflicts.ts';
 import type { Context } from './context.ts';
 import { crossingFloor, doglegs, laneLines } from './doglegs.ts';
 import {
@@ -380,7 +380,11 @@ function findAmong(
           { x: point.x, y: c.bs.y },
         ]) {
           const path = [c.as, into, point, out, c.bs];
-          if (segments(path).every(([a, b]) => !blocked(a, b, c.obs))) remember(path, c);
+          if (
+            segments(path).every(([a, b]) => !blocked(a, b, c.obs)) &&
+            !crossesItself(compress([c.start, ...path, c.end]))
+          )
+            remember(path, c);
         }
     }
   }
