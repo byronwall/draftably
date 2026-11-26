@@ -141,7 +141,11 @@ for (const [i, file] of files.entries()) {
   const form = forms[i % forms.length];
   const scheme = i % 5 === 0 ? 'dark' : 'light';
   const segment = await form.encode(source);
-  const res = await fetch(`${base}/svg/${segment}${scheme === 'dark' ? '?scheme=dark' : ''}`);
+  // A .draft file is Draftably by its name. Without the type, a file that holds only prose and
+  // one ```mermaid fence (an agent's refusal in docs/evaluations) is converted as Mermaid.
+  const res = await fetch(
+    `${base}/svg/${segment}?type=draftably${scheme === 'dark' ? '&scheme=dark' : ''}`,
+  );
   const body = await res.text();
   if (segment.length > 8 * 1024) {
     if (res.status === 400 && body.includes('over 8 KB')) tally.tooLong++;
