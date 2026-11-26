@@ -5,6 +5,7 @@ Pointers only. Read the linked doc when the task touches it.
 - **Checks:** `pnpm check:fast` (about 10s) while iterating; `pnpm check` before pushing. The engine
   suites take about 20s (`pnpm test:engines` runs them side by side). Suites, browser proofs and
   failure output: [docs/CHECKS.md](docs/CHECKS.md).
+- **Diagram eval rounds:** Use the [diagram eval skill](.agents/skills/draftably-diagram-evals/SKILL.md) to select a defect, compare candidates, and check option and usage coverage.
 - **Diagram quality audit:** rubric, corpus and round loop in
   [docs/intent/diagram-quality/RUBRIC.md](docs/intent/diagram-quality/RUBRIC.md); run it as
   [docs/CHECKS.md](docs/CHECKS.md) describes.
