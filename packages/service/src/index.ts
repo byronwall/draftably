@@ -226,7 +226,6 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
 export default {
   /** Every request: handle it, then log one wide event for it. */
   async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    const start = Date.now();
     const url = new URL(req.url);
     const route = routeKind(url.pathname);
     const ev: Wide = {
@@ -255,7 +254,6 @@ export default {
       ev.error = scrub(String(error instanceof Error ? error.message : error));
       throw error;
     } finally {
-      ev.ms = Date.now() - start;
       console.log(ev);
     }
   },

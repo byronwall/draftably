@@ -8,6 +8,8 @@
  */
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { tracing } from 'cloudflare:workers';
+import { SourceError } from '../../../src/lib/render-url';
+import { ApiError } from './errors';
 
 /** The fields of one request's log line. Docs: `docs/observability.md`. */
 export interface Wide {
@@ -17,7 +19,6 @@ export interface Wide {
   /** Only for routes whose path holds no diagram source. */
   path?: string;
   status?: number;
-  ms?: number;
   version: string;
   build: string;
   /** Short SHA-256 of the client IP: groups one address's requests, never shows it. */
@@ -121,8 +122,10 @@ type Attrs = Record<string, string | number | boolean | undefined>;
 type Span = Parameters<Parameters<typeof tracing.enterSpan>[1]>[0];
 
 /**
- * Run `fn` in a trace span named `name`. The span ends when `fn` settles. A throw is recorded on
- * the span, marks it as an error, and goes on to the caller.
+ * Run `fn` in a trace span named `name`. The span ends when `fn` settles. A throw goes on to the
+ * caller. An unexpected one is recorded on the span as an exception, which Workers Issues groups.
+ * An expected one (a bad diagram, a refused key, a limit) is only an attribute, so a user's
+ * mistake never opens an Issue.
  */
 export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> | T): Promise<T> {
   return tracing.enterSpan(name, async s => {
@@ -132,6 +135,10 @@ export function span<T>(name: string, attrs: Attrs, fn: (s: Span) => Promise<T> 
     } catch (error) {
       const e = error instanceof Error ? error : new Error(String(error));
       const message = scrub(e.message);
+      if (error instanceof SourceError || error instanceof ApiError) {
+        s.setAttribute('refused', message);
+        throw error;
+      }
       // The stack's first line repeats the message.
       const stack = e.stack?.replace(e.message, () => message);
       s.recordException({ name: e.name, message, stack });

@@ -25,7 +25,6 @@ top-level key: filter on `event = request` to see only these lines.
 | `route`                                    | `image`, `rest`, `mcp`, `account`, `login`, `webhook`, `health`, `other`                                                                                                                                                                                                          |
 | `method`, `status`                         | the request method and the answer's status; `500` for an uncaught error                                                                                                                                                                                                           |
 | `path`                                     | the route template (`/v1/render`, `/account/keys/:id/revoke`); none for `image` (its path holds the diagram source); for an unknown path, only its first segment, such as `/wp-login.php` or `/admin/*`                                                                           |
-| `ms`                                       | the time to the answer. Workers' clock moves only on I/O, so CPU work after the last I/O is not counted. Use `$workers.wallTimeMs` and `$workers.cpuTimeMs` for latency                                                                                                           |
 | `version`, `build`                         | the Draftably runtime version, and the Worker version ID of the deploy                                                                                                                                                                                                            |
 | `ip`                                       | the first 12 hex characters of the client IP's SHA-256. It groups one address's requests; it is not anonymous, since IPv4 is small enough to search                                                                                                                               |
 | `country`                                  | Cloudflare's country code for the client                                                                                                                                                                                                                                          |
@@ -50,7 +49,15 @@ token is in its query.
 
 ## The spans
 
-Each span records an exception and an `error` status when its step throws.
+An unexpected throw is recorded on its span as an exception, and Workers Issues groups it. An
+expected one (a bad diagram, a refused key, a limit) only sets the span's `refused` attribute, so a
+user's mistake never opens an Issue.
+
+Span durations count waiting on I/O only. Workers stops its clock while code runs, so a CPU step
+such as `render.svg` or `png.rasterize` shows about 0 ms however long it took. Spans show the order
+of the steps, what each read and wrote, and how long D1, the cache, the rate limiter and email
+took. For time spent computing, use `$workers.cpuTimeMs` and `$workers.wallTimeMs` on the
+invocation log (one per request).
 
 | Span                                                    | Attributes                                                                                       |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -82,12 +89,13 @@ tab, which shows requests, errors and CPU time with no query. For a probe, `GET 
 Visualize `Count`, Filter `event = request`, Group by `route` and `status`.
 
 **Render latency p50/p95 by format, and the cache hit rate.**
-Latency: in **Traces**, filter on span name `render` and `format = png` (then `svg`), and read the
-duration percentiles; add `cache_hit = false` for drawn images only. This covers GET, REST and
-MCP. For GET image URLs alone, the Query builder can also Visualize `P50` and `P95` of
-`$workers.wallTimeMs` and `$workers.cpuTimeMs` on the invocation logs, Filter
-`$workers.event.request.url` includes `/png/`. Hit rate: Visualize `Count`, Filter
-`event = request` and `cache exists`, Group by `format` and `cache`.
+Latency comes from the invocation logs (not the spans, above). In the Query builder, Visualize
+`P50` and `P95` of `$workers.cpuTimeMs` and `$workers.wallTimeMs`, Filter
+`$workers.event.request.method = GET` and `$workers.event.request.url` matches regex
+`/(draftably/)?png/` (then `svg/`). Cloudflare shows an image path as `/png/REDACTED`, which still
+matches. For REST and MCP, Filter the URL on `/v1/render` or `/mcp`: those don't split by format.
+Hit rate: Visualize `Count`, Filter `event = request` and `cache exists`, Group by `format` and
+`cache`.
 
 **Which diagrams fail to render, and why? Mermaid import failures.**
 Failed renders: Visualize `Count`, Filter `event = request`, `error_code = ERR_SOURCE` and
@@ -128,10 +136,13 @@ Visualize `Count`, Filter `route = mcp` and `mcp_tool exists`, Group by `mcp_too
 A tool that answered with an error has `error_code`.
 
 **A slow request: which step was slow?**
-In **Traces**, sort by duration, open a trace, and read the waterfall: `decode`, `cache.lookup`,
-`source.detect`, `mermaid.import`, `render.svg`, the `png.*` steps, `credits.spend`, then
-`cache.put`. The root span holds `cpu_time_ms` and `wall_time_ms`. A slow `mermaid.import` or
-`png.rasterize` with `cold = true` is a new isolate loading the parser or resvg.
+Find it: in the Query builder, on the invocation logs, Order by `$workers.cpuTimeMs` (or
+`wallTimeMs`) descending. Open its trace from the event. The waterfall shows the steps in order:
+`decode`, `render` (`cache.lookup`, `source.detect`, `mermaid.import`, `render.svg`, the `png.*`
+steps, `credits.spend`), then `cache.put`. A long I/O span (D1, cache, email) is the wait. High CPU
+time with short I/O spans means the drawing itself: read `source_bytes`, `pixels` and `scale` on
+the request's wide event, and `cold = true` on `mermaid.import` or `png.rasterize` (a new isolate
+loading the parser or resvg).
 
 **Which deploy did an error start in?**
 Visualize `Count`, Filter `event = request` and `status >= 500` (or `error_code exists`), Group by

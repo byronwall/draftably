@@ -86,6 +86,16 @@ const NUMERIC = new Set([
 ]);
 const typeOf = (key: string) => (NUMERIC.has(key) ? 'number' : 'string');
 const has = (key: string): Filter => ({ key, operation: 'exists', type: typeOf(key) });
+/** POSTs to one path, such as `/v1/render`. */
+const post = (path: string): Filter[] => [
+  eq('$workers.event.request.method', 'POST'),
+  {
+    key: '$workers.event.request.url',
+    operation: 'regex',
+    type: 'string',
+    value: `^https?://[^/]+${path}$`,
+  },
+];
 /** A GET image URL of one format, in either path form. */
 const imageGet = (format: string): Filter[] => [
   eq('$workers.event.request.method', 'GET'),
@@ -249,6 +259,8 @@ async function main() {
     latency,
     png,
     svg,
+    rest,
+    mcp,
     limits,
     logins,
     hooks,
@@ -274,6 +286,8 @@ async function main() {
     calc(window, [SCRIPT, has('$workers.wallTimeMs')], [], latencyCalcs()),
     calc(window, [SCRIPT, ...imageGet('png')], [], latencyCalcs()),
     calc(window, [SCRIPT, ...imageGet('svg')], [], latencyCalcs()),
+    calc(window, [SCRIPT, ...post('/v1/render')], [], latencyCalcs()),
+    calc(window, [SCRIPT, ...post('/mcp')], [], latencyCalcs()),
     calc(window, [...WIDE, has('rate_limit')], ['rate_limit']),
     calc(window, [...WIDE, has('login')], ['login']),
     calc(window, [...WIDE, has('webhook')], ['webhook', 'stripe_event']),
@@ -316,7 +330,7 @@ async function main() {
     errors,
     errorsByBuild,
     cache,
-    latency: { all: latency[0], png: png[0], svg: svg[0] },
+    latency: { all: latency[0], png: png[0], svg: svg[0], rest: rest[0], mcp: mcp[0] },
     limits,
     logins,
     hooks,
@@ -412,12 +426,14 @@ ${table(errorsByBuild, ['error_code', 'build', 'count'])}
 ${table(byRoute, ['route', 'status', 'count'])}
 
 ## Latency
-Cloudflare's measure on the invocation log. Only GET image URLs carry the format in the URL; for
-REST and MCP renders, read the \`render\` span in Observability → Traces.
+Cloudflare's measure on the invocation log; spans can't time CPU work. Only GET image URLs carry
+the format in the URL, so REST and MCP are one row each.
 
 - All requests: ${lat(latency[0])}
 - GET /png/ URLs: ${lat(png[0])}
 - GET /svg/ URLs: ${lat(svg[0])}
+- POST /v1/render: ${lat(rest[0])}
+- POST /mcp (every call, not only renders): ${lat(mcp[0])}
 
 ## Cache
 ${table(cache, ['format', 'cache', 'count'])}
