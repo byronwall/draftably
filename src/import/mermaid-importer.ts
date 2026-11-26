@@ -32,11 +32,16 @@ const mappedTheme = (frontmatter: Record<string, unknown> | undefined) => {
 };
 
 /**
- * Every setting's dotted path (`config.flowchart.curve`); a list, null or `{}` is one setting.
- * YAML aliases can repeat or nest a mapping inside itself, so a mapping already on the path is
- * one setting too, and the walk stops at 100 paths.
+ * Every setting's key path (`['config', 'flowchart', 'curve']`); a list, null or `{}` is one
+ * setting. YAML aliases can repeat or nest a mapping inside itself, so a mapping already on the
+ * path is one setting too, and the walk stops at 100 paths.
  */
-function settingPaths(value: unknown, prefix = '', above = new Set<object>(), out: string[] = []) {
+function settingPaths(
+  value: unknown,
+  path: string[] = [],
+  above = new Set<object>(),
+  out: string[][] = [],
+) {
   if (out.length >= 100) return out;
   if (
     value &&
@@ -46,9 +51,9 @@ function settingPaths(value: unknown, prefix = '', above = new Set<object>(), ou
     Object.keys(value).length
   ) {
     above.add(value);
-    for (const [k, v] of Object.entries(value)) settingPaths(v, prefix + k + '.', above, out);
+    for (const [k, v] of Object.entries(value)) settingPaths(v, [...path, k], above, out);
     above.delete(value);
-  } else out.push(prefix.slice(0, -1));
+  } else out.push(path);
   return out;
 }
 
@@ -106,9 +111,16 @@ function mapMermaidFlow(
     return done();
   }
   const theme = mappedTheme(parsed.frontmatter);
-  const ignored = (parsed.frontmatter ? settingPaths(parsed.frontmatter) : []).filter(
-    k => k && k !== 'title' && !(k === 'config.theme' && theme),
-  );
+  // Paths stay as key lists until they are filtered, so a literal `"config.theme"` key is not
+  // mistaken for the mapped `config` → `theme`.
+  const ignored = (parsed.frontmatter ? settingPaths(parsed.frontmatter) : [])
+    .filter(
+      p =>
+        p.length &&
+        !(p.length === 1 && p[0] === 'title') &&
+        !(theme && p.length === 2 && p[0] === 'config' && p[1] === 'theme'),
+    )
+    .map(p => p.join('.'));
   if (ignored.length)
     note(
       'MERMAID_FRONTMATTER_IGNORED',

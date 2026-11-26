@@ -451,13 +451,13 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
       const diagnostics = preflightMermaidFlow(source);
       if (diagnostics.some(d => d.severity === 'error')) return { ok: false, diagnostics };
       const block = matchFrontmatter(mermaidText(source));
-      let frontmatter: Record<string, unknown> | undefined;
+      let frontmatter: Record<string, unknown> | undefined, title: string | undefined;
       const ok = (
         snapshot: Extract<ParseFlowResult, { ok: true }>['snapshot'],
       ): ParseFlowResult => {
-        // A title written in the diagram wins; otherwise the frontmatter's, for every family
-        // (Mermaid's timeline DB has no title setter, so the metadata alone does not reach it).
-        if (!snapshot.title && frontmatter?.title) snapshot.title = String(frontmatter.title);
+        // Mermaid's timeline DB has no title setter, so the metadata does not reach it: there the
+        // frontmatter title is the fallback. Other families keep Mermaid's final title.
+        if (snapshot.family === 'timeline' && !snapshot.title && title) snapshot.title = title;
         return { ok: true, diagnostics, snapshot, ...(frontmatter ? { frontmatter } : {}) };
       };
       let phase: 'load' | 'parse' | 'snapshot' = 'load';
@@ -473,12 +473,20 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
         });
         phase = 'parse';
         if (block) frontmatter = await parseFrontmatter(block);
+        // Mermaid's rule: a truthy title, as a string. YAML escapes can decode to characters SVG
+        // text cannot hold (`\f`), which no diagram body can contain; they become spaces.
+        title = frontmatter?.title
+          ? String(frontmatter.title).replace(
+              /[\0-\x08\x0B\x0C\x0E-\x1F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g,
+              ' ',
+            )
+          : undefined;
         // Mermaid gets only the diagram: the frontmatter is read here, once, and Mermaid's
         // rewrite of HTML attribute quotes before its own YAML read cannot break ignored data.
         // The title goes back as metadata, Mermaid's rule: a truthy title, as a string.
         const diagram = await mermaid.mermaidAPI.getDiagramFromText(
           block ? mermaidText(source).slice(block.length) : source.replace(/^\uFEFF/, ''),
-          { title: frontmatter?.title ? String(frontmatter.title) : undefined },
+          { title },
         );
         if (
           !['flowchart', 'flowchart-v2', 'sequence', 'gantt', 'timeline'].includes(diagram.type)

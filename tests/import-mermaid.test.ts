@@ -178,6 +178,25 @@ flowchart LR
     expect(found.status === 'detected' && found.source).toBe(source);
   });
 
+  // Codex review round 3.
+  it('detects a bare graph with a decision node, and keeps key paths and titles exact', async () => {
+    const graph =
+      '---\nexample: |\n  ```mermaid\n  flowchart LR\n  X-->Y\n  ```\n---\ngraph\n  A{Go?} --> B';
+    const found = detectSource(graph);
+    expect(found.status === 'detected' && [found.format, found.source]).toEqual(['mermaid', graph]);
+    const dotted = await imported(
+      '---\nconfig: {theme: dark}\n"config.theme": unrelated\n---\nflowchart LR\nA-->B',
+    );
+    expect(dotted.diagnostics.find(d => d.code === 'MERMAID_FRONTMATTER_IGNORED')?.message).toBe(
+      'Frontmatter settings with no Draftably equivalent were ignored: config.theme.',
+    );
+    const feed = await imported('---\ntitle: "First\\fSecond"\n---\nflowchart LR\nA-->B');
+    expect(feed.nativeSource!.split('\n')[0]).toBe('diagram "First Second" version=1');
+    await compile(feed.nativeSource!);
+    const empty = await imported('---\ntitle: Outer\n---\nsequenceDiagram\ntitle <T>\na->>b: hi');
+    expect(empty.nativeSource!.split('\n')[0]).not.toContain('Outer');
+  });
+
   it('refuses an unclosed block', async () => {
     const parsed = await parse('---\ntitle: X\nflowchart LR\nA-->B');
     expect(parsed.diagnostics.map(d => d.code)).toEqual(['MERMAID_FRONTMATTER_INVALID']);
