@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { checkSource } from '../src/dsl/compile';
+import { checkSource, compile } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
 import fs from 'node:fs';
+import { MARKER_SHAPES, MARKER_STROKE } from '../src/model/markers';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes, placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
 import { buildStaticScene } from '../src/model/static-scene';
@@ -246,4 +247,17 @@ describe('edge labels in a crowded drawing', () => {
       }
     }
   });
+});
+
+it('keeps the arrowhead wings visible beside the Route 4 label', async () => {
+  const source = fs.readFileSync(
+    'docs/intent/diagram-quality/issues/i597-sibling-alignment/v0.draft',
+    'utf8',
+  );
+  const doc = projectScene(await compile(source));
+  const { vg, rects } = visibleRects(doc);
+  const route = computeRoutes(doc, vg, rects).routes.find(r => r.id === 'e4')!;
+  const tip = route.points.at(-1)!;
+  const label = rectOf(route.label!);
+  expect(label.x + label.w).toBeLessThanOrEqual(tip.x - MARKER_SHAPES.arrow.x - MARKER_STROKE / 2);
 });
