@@ -17,7 +17,13 @@ import {
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
 import { copyButton, esc, page } from './html';
-import { authorizeNext, disconnectApp, type GrantMeta, type OAuthEnv } from './oauth';
+import {
+  authorizeNext,
+  disconnectApp,
+  resumeAuthorize,
+  type GrantMeta,
+  type OAuthEnv,
+} from './oauth';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
 import { note, noteError, scrub } from './obs';
 
@@ -229,7 +235,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv & OAu
     const account = await upsertAccount(env.DB, email);
     const cookie = await startSession(env.DB, account);
     note({ login: 'signed_in', payer: 'session', account });
-    return redirect(authorizeNext(fields.get('next')) ?? '/account', cookie);
+    return redirect(resumeAuthorize(url.origin, fields.get('next')) ?? '/account', cookie);
   }
   if (!path.startsWith('/account')) return null;
   const account = await sessionAccount(req, env.DB);

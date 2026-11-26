@@ -774,7 +774,8 @@ if (!remote) {
   assert.ok(verifyPage.includes(`name="next" value="${next.replace(/&/g, '&amp;')}"`));
   const appSignIn = await form('/auth/verify', { token: mailed.searchParams.get('token')!, next });
   assert.equal(appSignIn.status, 303);
-  assert.equal(appSignIn.headers.get('Location'), next);
+  // Back into the authorization, marked so that its errors stay on this site.
+  assert.equal(appSignIn.headers.get('Location'), `${next}&resume=1`);
   const appSession = cookies(appSignIn)[0];
   // A link can't send the browser anywhere but back into an authorization.
   const offsite = await form('/auth/verify', {
@@ -782,10 +783,38 @@ if (!remote) {
     next: 'https://evil.example/',
   });
   assert.equal(offsite.headers.get('Location'), '/account');
+  // A crafted authorization (a response type the app may not use) goes straight to the app's
+  // callback with an error. After a sign-in link that carries it, the error shows on a page here.
+  const crafted = `/authorize?${new URLSearchParams({ response_type: 'token', client_id: clientId, redirect_uri: redirectUri, state: 'crafted' })}`;
+  const bounce = await fetch(`${base}${crafted}`, { redirect: 'manual' });
+  assert.equal(bounce.status, 302);
+  assert.ok(bounce.headers.get('Location')!.startsWith(`${redirectUri}?error=`));
+  const craftedSignIn = await form('/auth/verify', {
+    token: await mailLink('crafted@example.com'),
+    next: crafted,
+  });
+  assert.equal(craftedSignIn.status, 303);
+  const resumed = await fetch(`${base}${craftedSignIn.headers.get('Location')}`, {
+    headers: { Cookie: cookies(craftedSignIn)[0] },
+    redirect: 'manual',
+  });
+  assert.equal(resumed.status, 400);
+  assert.match(await resumed.text(), /Cannot connect/);
+  // A line break in `next` still signs in, to a clean same-site Location.
+  const brokenSignIn = await form('/auth/verify', {
+    token: await mailLink('crafted@example.com'),
+    next: next.replace('&', '\n&'),
+  });
+  assert.equal(brokenSignIn.status, 303);
+  assert.equal(brokenSignIn.headers.get('Location'), `${next}&resume=1`);
+  assert.ok(cookies(brokenSignIn)[0]);
 
   // Signed in: the consent page names the app, the account and where access goes.
   const consentFor = async () => {
-    const res = await fetch(`${base}${next}`, { headers: { Cookie: appSession } });
+    // The URL sign-in returned, so the consent page is proved on the real continuation.
+    const res = await fetch(`${base}${appSignIn.headers.get('Location')}`, {
+      headers: { Cookie: appSession },
+    });
     assert.equal(res.status, 200);
     const html = await res.text();
     return { html, handle: /name="handle" value="([^"]+)"/.exec(html)![1], cookies: cookies(res) };
@@ -922,7 +951,7 @@ if (!remote) {
     400,
   );
   console.log(
-    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site.',
+    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site, and an authorization it resumes shows its errors on a page here, never at the app callback.',
   );
 
   // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.
