@@ -64,6 +64,16 @@ export function find(
   old?: Prior,
   wall: Obstacle[] = [],
 ): Route {
+  const route = findWithLane(ctx, e, used, old, wall);
+  if (!route.blocked || !e.autoLane || !e.cfg.waypoints?.length) return route;
+  // Let the line find its own approach to a blocked lane. Keep both ports and the
+  // inner waypoints that carry the line along its track.
+  const waypoints = e.cfg.waypoints.slice(1, -1);
+  const free = findWithLane(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
+  return free.blocked ? route : free;
+}
+
+function findWithLane(ctx: Context, e: RouteEdge, used: Route[], old: Prior, wall: Obstacle[]) {
   const { rects, titleBands, obsFor, scores, opened } = ctx;
   const gated = findIn(ctx, e, used, old, false, wall);
   if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;

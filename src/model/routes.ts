@@ -766,6 +766,7 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
             ...(fromAt !== undefined ? [`${e.from}.${e.fromRange}`] : []),
             ...(toAt !== undefined ? [`${e.to}.${e.toRange}`] : []),
           ],
+          autoLane: !!doc.layout.edges[e.id]?.lane && !doc.layout.edges[e.id]?.waypoints?.length,
           cfg: laneBends(
             {
               ...doc.layout.edges[e.id],

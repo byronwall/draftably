@@ -33,6 +33,8 @@ export interface RouteEdgeInput {
   /** The edge's text. A labelled edge keeps the full port gap in a fan. */
   label?: string;
   cfg: EdgeLayout;
+  /** The layout supplied the waypoints. A blocked lane can use another path. */
+  autoLane?: boolean;
   /** The code ranges it ends at (`node.range`): their labels block only their text for it. */
   ranges?: string[];
 }
