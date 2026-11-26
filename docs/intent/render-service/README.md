@@ -50,13 +50,12 @@ account is on Workers Paid and has no domains yet; its one Worker is `context-re
 
 ## Domain
 
-`draftably.dev` uses Namecheap DNS (`dns1.registrar-servers.com`) today, and the landing page is
-on GitHub Pages. A Worker custom domain (`api.draftably.dev`) needs the zone on Cloudflare.
+Cloudflare runs the `draftably.dev` zone (Free plan; Namecheap is the registrar only). Both hosts
+are Workers on custom domains:
 
-- Move the nameservers to Cloudflare on the free zone plan. Copy the four GitHub Pages `A` records
-  and any `CNAME` and mail records first.
-- The landing page can stay on GitHub Pages. Moving it to Cloudflare is optional and not part of
-  this work.
+- `draftably.dev` and `www.draftably.dev`: the `draftably-site` Worker (`site/wrangler.jsonc`)
+  serves `dist-site` as static assets and sends www to the apex. It replaced GitHub Pages.
+- `api.draftably.dev`: the `draftably-api` Worker (`packages/service`).
 - Until the zone moves, the Worker runs on `draftably-api.<account>.workers.dev`. The first two
   slices can ship there. Edge caching is confirmed only for custom domains, so slice 1 also
   checks cache hits on `workers.dev`.

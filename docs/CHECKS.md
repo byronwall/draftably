@@ -260,7 +260,7 @@ download ZIP from the originals. Commit the generated files with any study chang
 `tests/site-downloads.test.ts` rejects stale copies or a stale ZIP during `check:fast` and opens
 the archive with `unzip` (included on macOS and the Ubuntu CI runner).
 
-`pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in
+`pnpm site:build && pnpm prove:site` serves `dist-site/` the way the site Worker does (a 404 page for missing paths) and drives it in
 Chromium with real clicks and keys. It covers the links between surfaces, narrow Playground panes,
 docs overlays, export blocking, reopening an exported image, and a failed module load. Direct URLs
 miss most of these failures, so a journey clicks what a visitor clicks. Pass a word from a journey's

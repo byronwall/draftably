@@ -13,3 +13,4 @@ packages/cli/DSL.md
 packages/cli/skills/
 packages/cli/THIRD_PARTY_NOTICES
 packages/cli/LICENSE
+.wrangler

@@ -1,7 +1,7 @@
 /**
  * Writes a static HTML page for each site route into dist-site/, after `vite build`. Link
  * previews and search crawlers do not run the app, so each page carries its own title,
- * description and social card in plain HTML. It also lets GitHub Pages serve deep links with a
+ * description and social card in plain HTML. It also lets the site host serve deep links with a
  * 200 instead of the 404.html fallback. Run by `pnpm site:build`.
  */
 import fs from 'node:fs';

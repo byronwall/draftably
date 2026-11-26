@@ -34,7 +34,8 @@ The release flow follows explorEDA and Product Grid:
 5. Actions checks, builds, tests and packs each package. Changesets publishes them and creates GitHub releases.
 6. After a publish, the release workflow deploys the docs site (draftably.dev), so the docs never
    describe a version that npm does not have. Pushes to `main` do not deploy it. To ship a
-   docs-only fix between releases, run **Deploy to GitHub Pages** by hand.
+   docs-only fix between releases, run **Deploy the site to Cloudflare** by hand. It needs the
+   `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets.
 
 A pull request that changes shipped files (`src/`, `index.html`, `examples/`, `docs/DSL.md`,
 `packages/cli/`) must add a changeset; CI runs `pnpm changeset:check` to enforce it. Use

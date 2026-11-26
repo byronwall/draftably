@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "site:dev": "vite -c vite.site.config.ts",
     "site:build": "pnpm build && vite build -c vite.site.config.ts && node scripts/site-pages.ts && cp -R dist dist-site/app",
+    "site:deploy": "wrangler deploy -c site/wrangler.jsonc",
     "site:og": "node scripts/og-image.ts",
     "docs:assets": "node scripts/diagram-compare/downloads.ts",
     "site:preview": "vite preview -c vite.site.config.ts",
@@ -120,7 +121,8 @@
     "vite": "^6.3.5",
     "vite-plugin-solid": "^2.11.6",
     "vitest": "^5.0.3",
-    "vue": "3.5.22"
+    "vue": "3.5.22",
+    "wrangler": "4.167.0"
   },
   "engines": {
     "node": ">=22.21.0"
