@@ -29,14 +29,14 @@
     {
       "binding": "DB",
       "database_name": "draftably-service",
-      // Set by `wrangler d1 create draftably-service` before the first deploy.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "e71a83cc-41c8-48cc-983d-399145558bac",
       "migrations_dir": "migrations",
     },
   ],
   // Paid credits: `wrangler secret put STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. With no key
   // the account page offers no packs.
   "vars": { "EMAIL_FROM": "login@draftably.dev" },
+  "routes": [{ "pattern": "api.draftably.dev", "custom_domain": true }],
   "env": {
     // `pnpm prove:service` renders every .draft in the repo from one address, and fires parallel
     // keyed renders at one account.
