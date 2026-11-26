@@ -126,6 +126,9 @@ const checkout = fs.readFileSync('examples/checkout.draft', 'utf8');
 const mermaid = 'flowchart LR\n  A[Start] --> B[End]\n';
 // Compresses into a short URL, so the GET route reaches the source limit, not the URL limit.
 const huge = checkout + '\n#' + 'x'.repeat(66 * 1024);
+// Exactly at the 64 KB limit, and the same with a byte-order mark, which counts as sent.
+const atLimit = checkout + '\n#' + 'x'.repeat(64 * 1024 - Buffer.byteLength(checkout) - 2);
+assert.equal(Buffer.byteLength(atLimit), 64 * 1024);
 
 /** Inputs that every transport takes, with the answer all must agree on. */
 const cases: { name: string; input: Input; want: 'image' | string; share?: boolean }[] = [
@@ -152,6 +155,12 @@ const cases: { name: string; input: Input; want: 'image' | string; share?: boole
   { name: 'bad source', input: { code: 'node a "unclosed', format: 'svg' }, want: 'ERR_SOURCE' },
   { name: 'empty source', input: { code: '  \n', format: 'svg' }, want: 'ERR_SOURCE' },
   { name: 'source over 64 KB', input: { code: huge, format: 'svg' }, want: 'ERR_SOURCE' },
+  { name: 'source at 64 KB', input: { code: atLimit, format: 'svg' }, want: 'image' },
+  {
+    name: 'byte-order mark past 64 KB',
+    input: { code: '\uFEFF' + atLimit, format: 'svg' },
+    want: 'ERR_SOURCE',
+  },
 ];
 
 const transports = {
@@ -188,6 +197,14 @@ const refusals: [string, Outcome][] = [
   ['REST', await viaRest(BAD_KEY)(warm)],
   ['MCP', await image(await post('/mcp', rpcBody('render_diagram', warm), BAD_KEY))],
   ['share', await viaShare(BAD_KEY)(warm)],
+  [
+    'GET /link',
+    await image(
+      await fetch(`${base}/link?format=json&code=${encodeURIComponent(warm.code + '\n# k')}`, {
+        headers: auth(BAD_KEY),
+      }),
+    ),
+  ],
 ];
 for (const [name, o] of refusals)
   assert.equal(o.status, 401, `wrong key over ${name}: ${o.status}`);
@@ -201,7 +218,38 @@ const tooBig: [string, Outcome][] = [
 ];
 for (const [name, o] of tooBig)
   assert.deepEqual(o, { result: 'ERR_TOO_LARGE', status: 413 }, `300 KB body over ${name}`);
-console.log('Refused alike: a wrong key 401 on 4 routes, warm image too; a 300 KB body 413 on 3.');
+// MCP keeps its own protocol errors for a body that is not JSON-RPC.
+const plain = await fetch(`${base}/mcp`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'text/plain',
+    Accept: 'application/json, text/event-stream',
+    ...auth(KEYS.rich),
+  },
+  body: '{}',
+});
+assert.equal(plain.status, 415);
+const cut = await post('/mcp', '{"jsonrpc": "2.0", "id": 1, "meth', KEYS.rich);
+assert.equal((await cut.json()).error?.code, -32700);
+console.log(
+  'Refused alike: a wrong key 401 on 5 routes, warm image too; a 300 KB body 413 on 3; MCP keeps 415 and -32700.',
+);
+
+// The links the MCP link tools return keep the options: they draw what render_diagram draws.
+const scaled: Input = { code: checkout + '\n# links\n', format: 'png', scheme: 'dark', scale: 1 };
+const direct = await viaRest(KEYS.rich)(scaled);
+const toolText = async (name: string) => {
+  const res = await post('/mcp', rpcBody(name, scaled), KEYS.rich);
+  return (await res.json()).result.content[0].text as string;
+};
+const longUrl = await toolText('image_url');
+const shortUrl = /png: (\S+)/.exec(await toolText('share_diagram'))![1];
+for (const [name, link] of [
+  ['image_url', longUrl],
+  ['share_diagram', shortUrl],
+])
+  assert.equal((await image(await fetch(link))).result, direct.result, `${name}: ${link}`);
+console.log('MCP link tools: image_url and share_diagram links draw the render_diagram bytes.');
 
 // Price: a miss costs 1 credit for SVG and 2 for PNG on every paid transport; the same image again,
 // by any transport, is a free hit; a source that does not draw costs nothing.

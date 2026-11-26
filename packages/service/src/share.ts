@@ -216,6 +216,8 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
   if (link && req.method === 'GET') {
     const json = url.searchParams.get('format') === 'json';
     try {
+      // A key is optional, as on POST /v1/share; a wrong one is refused before anything is stored.
+      const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
       const q = url.searchParams;
       // `?format=` here is the answer's format, not the image's.
       const r = readRequest({
@@ -225,7 +227,7 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
         scale: q.get('scale'),
         format: 'svg',
       });
-      const share = await createShare(req, env, r, null);
+      const share = await createShare(req, env, r, who?.account ?? null);
       return answer(links(url.origin, share, r.opts), json);
     } catch (error) {
       return failed(codeHint(error, url), json);

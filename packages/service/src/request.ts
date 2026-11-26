@@ -101,10 +101,12 @@ export function readRequest(fields: Fields, defaultFormat: Format = DEFAULT_FORM
   };
   // A GET URL's decoder drops a leading byte-order mark; drop them all here, so every way in
   // (and a share's id) reads the same text.
-  const source = typeof fields.code === 'string' ? fields.code.replace(/^﻿+/, '') : '';
-  if (!source.trim()) throw new ApiError(400, 'ERR_SOURCE', 'code must be the diagram source.');
-  if (new TextEncoder().encode(source).length > MAX_SOURCE_BYTES)
+  const raw = typeof fields.code === 'string' ? fields.code : '';
+  // The limit counts the bytes as sent, with any byte-order mark, as the GET decoder counts them.
+  if (new TextEncoder().encode(raw).length > MAX_SOURCE_BYTES)
     throw new ApiError(400, 'ERR_SOURCE', `The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
+  const source = raw.replace(/^\uFEFF+/, '');
+  if (!source.trim()) throw new ApiError(400, 'ERR_SOURCE', 'code must be the diagram source.');
   const format = get('format') ?? defaultFormat;
   if (format !== 'svg' && format !== 'png')
     throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');

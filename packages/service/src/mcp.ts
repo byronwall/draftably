@@ -14,12 +14,16 @@ import { DEFAULT_FORMAT } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
 import { bump, currentEvent, note, noteError, span } from './obs';
-import { readJson, readRequest, refusal } from './request';
+import { MAX_BODY, readRequest, refusal } from './request';
 import { createShare, links, shareText, type ShareEnv } from './share';
 
 // The source is checked by readRequest, as on every route, so an empty one gets the same error.
 const code = z.string().describe('Diagram source: Draftably DSL or Mermaid.');
 const scheme = z.enum(['light', 'dark']).optional();
+const scale = z
+  .union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)])
+  .optional()
+  .describe('PNG only: pixels per unit. 2 when left out.');
 const type = z
   .enum(['draftably', 'mermaid'])
   .optional()
@@ -111,7 +115,7 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
         type,
         format: z.enum(['png', 'svg']).default(DEFAULT_FORMAT),
         scheme,
-        scale: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
+        scale,
       },
     },
     async args =>
@@ -177,7 +181,7 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
     {
       description:
         'A long public URL that holds the whole source and draws the diagram, for Markdown or an <img> tag. Nothing is stored; share_diagram gives a short link instead. The URL is free to fetch (rate-limited per address). Free.',
-      inputSchema: { code, type, format: z.enum(['png', 'svg']).default('svg'), scheme },
+      inputSchema: { code, type, format: z.enum(['png', 'svg']).default('svg'), scheme, scale },
     },
     async args =>
       tool('image_url', async () => {
@@ -198,7 +202,7 @@ function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, 
       description:
         'Store the diagram and return short public links: png, svg and an edit link that opens it on draftably.dev. ' +
         'The same source always gets the same link. Use it instead of image_url for links people will read. Free.',
-      inputSchema: { code, type, scheme },
+      inputSchema: { code, type, scheme, scale },
     },
     async args =>
       tool('share_diagram', async () => {
@@ -235,21 +239,18 @@ export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionConte
     noteError(error.code);
     return errorJson(error);
   }
-  // Read here with the limit every route has, so the SDK never buffers more.
-  let parsedBody: unknown;
-  try {
-    parsedBody = await readJson(req);
-  } catch (error) {
-    const e = refusal(error);
-    if (!e) throw error;
-    noteError(e.code);
-    return errorJson(e);
-  }
+  // The SDK reads the body with the limit every route has, and keeps its own protocol errors
+  // (415, JSON-RPC parse errors). Only its size refusal is given the service's error.
   const transport = new WebStandardStreamableHTTPServerTransport({
     sessionIdGenerator: undefined,
     enableJsonResponse: true,
+    maxRequestBodySize: MAX_BODY,
   });
   await server(req, env, ctx, who, url.origin).connect(transport);
   watch(transport);
-  return transport.handleRequest(req, { parsedBody });
+  const res = await transport.handleRequest(req);
+  if (res.status !== 413) return res;
+  const error = new ApiError(413, 'ERR_TOO_LARGE', `The request is over ${MAX_BODY / 1024} KB.`);
+  noteError(error.code);
+  return errorJson(error);
 }
