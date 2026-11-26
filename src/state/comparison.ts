@@ -296,6 +296,7 @@ export function openComparison(mode: ComparisonMode = 'layout') {
 }
 
 let fileSnapshot: { source: string; scene: Scene; files?: CodeFiles } | undefined;
+export const comparisonSource = () => fileSnapshot?.source;
 const running = new Set<RunningTask<CandidateResult>>();
 let job = 0;
 
@@ -512,7 +513,7 @@ export function applyCandidate(i: number) {
 
 /** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
 export const candidateChange = (source: string) =>
-  activeSession().changedLine(source) ?? 'Same as the file';
+  activeSession().changedLine(source, comparisonSource()) ?? 'Same as the file';
 
 /** Save a file candidate's source: its layout recipe or routing line. */
 function applyToFile(cell: Candidate & { source: string }) {
