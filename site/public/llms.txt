@@ -2,56 +2,85 @@
 
 > draftably is a text format for diagrams. A `.draft` file lists boxes, groups and connections, one statement per line, and automatic layout draws them. A free public renderer at https://draftably.dev/api turns the source into an image URL, with no install and no account.
 
-This file has everything an agent needs to draw a diagram: the syntax below, one complete example, and the URL recipe. To work on `.draft` files in a repository, install the CLI and its agent skill (see Docs). To show or edit diagrams in a web app, start with [Choose how to embed](https://draftably.dev/docs/embed/).
+This file has everything an agent needs to draw a diagram: the recipe below, the syntax, and complete examples. To work on `.draft` files in a repository, install the CLI and its agent skill (see Docs). To show or edit diagrams in a web app, start with [Choose how to embed](https://draftably.dev/docs/embed/).
 
 ## Draw a diagram with no install
 
-The simplest way: write the source, open `https://draftably.dev/api/link?code=<source>` with the source percent-encoded, and share the short link it returns (see "Share a short link" below). The steps here make a long image URL instead, which stores nothing.
+No CLI, no API key, no encoder to write. The service checks the source and hands back short links.
 
-1. Write the source. This is a complete sequence diagram:
+1. Write the source. This is a complete architecture diagram: two titled groups, boxes with a smaller detail line (`\n`), labeled arrows inside and across the groups, and a note.
 
 ```text
-diagram "Load a profile"
-subtitle "The API reads the profile and returns it"
+diagram "Share a snapshot"
+subtitle "The owner approves; teammates read a copy until it expires"
 
-node browser "Browser"
-node api "API"
-node db "Database"
+group hub "Private hub" color=blue
+node owner "Owner" shape=pill in=hub
+node live "Account data\nlive, per account" in=hub
+node agent "Agent\nbuilds and publishes" in=hub
 
-edge ask browser -> api "GET /profile" message=call
-edge read api -> db "select profile" message=call
-edge row db -> api "profile row" answers=read
-edge reply api -> browser "200 JSON" answers=ask
+group shared "Shared" color=teal
+node team "Teammates" shape=pill in=shared
+node copy "Snapshot\none published copy" in=shared
 
-phase fetch "Fetch" ask read row reply
+edge approve owner -> agent "approves preview"
+edge export live -> agent "snapshot"
+edge publish agent -> copy "publish"
+edge read team -> copy "read if unexpired"
+note "Only the owner can withdraw the copy." near=copy side=right
 
-layout root sequence
+layout root flow direction=right
 ```
 
-2. Encode it: UTF-8 bytes, then base64url (`-` and `_`, no `=` padding). `pako:` + base64url(zlib(source)), as mermaid.ink uses, also works and makes shorter URLs. Keep the source under about 8 KB.
-3. Link the image: `https://draftably.dev/api/png/<encoded>` (or `/api/svg/<encoded>`). The image for the source above:
-   https://draftably.dev/api/png/ZGlhZ3JhbSAiTG9hZCBhIHByb2ZpbGUiCnN1YnRpdGxlICJUaGUgQVBJIHJlYWRzIHRoZSBwcm9maWxlIGFuZCByZXR1cm5zIGl0IgoKbm9kZSBicm93c2VyICJCcm93c2VyIgpub2RlIGFwaSAiQVBJIgpub2RlIGRiICJEYXRhYmFzZSIKCmVkZ2UgYXNrIGJyb3dzZXIgLT4gYXBpICJHRVQgL3Byb2ZpbGUiIG1lc3NhZ2U9Y2FsbAplZGdlIHJlYWQgYXBpIC0-IGRiICJzZWxlY3QgcHJvZmlsZSIgbWVzc2FnZT1jYWxsCmVkZ2Ugcm93IGRiIC0-IGFwaSAicHJvZmlsZSByb3ciIGFuc3dlcnM9cmVhZAplZGdlIHJlcGx5IGFwaSAtPiBicm93c2VyICIyMDAgSlNPTiIgYW5zd2Vycz1hc2sKCnBoYXNlIGZldGNoICJGZXRjaCIgYXNrIHJlYWQgcm93IHJlcGx5CgpsYXlvdXQgcm9vdCBzZXF1ZW5jZQo
-
-The PNG carries its source, so the image is also the editable diagram: drop it on https://draftably.dev to edit it. To link straight into the editor, use `https://draftably.dev/play#s=<base64url(raw deflate(source))>`. The editor link for the example: https://draftably.dev/play#s=fU_NTsMwDL7nKSzfERP3IYH4EQgNJPYCbuO1EVnTxa6qvT1Ou4wbp8Sfvl8fqMt0BPxI5IFgzOkQIqOTqdGgkQH3PcPD1xtkJi-gdl1IQIM3VKc8CARF54bkGZqcZuEM-Lh-cIVpDIDmczl9A_hESg2JpTn2nVHk56q-uV8Vr897uK2t4Mgi1PG2pRhXTWm1ME1QPIUjtwr_KdJcmDWgjjEYbZHMnGVbXKv_GM814DrtbrOB9-_P3Z_Cujs39rYGDqxtD_hSHlxGLSVL7uLmXKRzmtSQpCB8mnho2f0C
-
-JavaScript (browser or Node):
-
-```js
-const src = `diagram "Hello"\nnode a "A"\nnode b "B"\nedge go a -> b "calls"`;
-const bytes = new TextEncoder().encode(src);
-const b64 = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-const url = `https://draftably.dev/api/png/${b64}`;
-```
-
-Python (reads `diagram.draft`):
+2. Send it as plain text to `https://draftably.dev/api/link`, as the request body:
 
 ```sh
-python3 -c "import base64,sys;print('https://draftably.dev/api/png/'+base64.urlsafe_b64encode(sys.stdin.buffer.read()).decode().rstrip('='))" < diagram.draft
+curl --data-binary @diagram.draft https://draftably.dev/api/link
 ```
 
-Options: `?scheme=dark`, and `?scale=1|2|3|4` for PNG (default 2). Mermaid flowcharts, sequences, gantt charts and timelines also work at the same URL.
+   From a tool that can only GET, open `https://draftably.dev/api/link?code=<source>` with the source percent-encoded (see "Share a short link" below). When the source draws, the answer is `200` and text with the image and editor links:
 
-**Check before you share.** Fetch the URL. A good source returns `200`. A bad one returns `400` and an image that names the line, the column when known, and the text of that line, for example `line 3: Unknown color purple.` The same message is in the `X-Draftably-Error` response header, and the `/api/svg/` body is text you can read. The parser stops at the first error, so fix it and fetch again. Free use is 60 new drawings a minute per address; a URL drawn before is free.
+```text
+png: https://draftably.dev/api/d/<id>.png
+svg: https://draftably.dev/api/d/<id>.svg
+edit: https://draftably.dev/d/<id>
+markdown: ![Diagram](https://draftably.dev/api/d/<id>.png)
+```
+
+   Add `?format=json` for `{"id", "png", "svg", "edit", "diagnostics"}`. Long image links for the source above: [SVG](https://draftably.dev/api/svg/pako:eJxdkkFu3DAMRfc-BcF10wsUDpATpECynA1tMRYBDSlI1Dhz-8K2PEm6Evz1KX4-Oggtha6Ab5EKA0FVyjWa41Db5OKJAd8jg63KBSjnYjeuf8CZrldyrlCYAhDMlu_Q1CWBOPBnlsIVh2Ep1jLENgH-LXIj5-0DYbZkZZxS40EtnA3wdTsQaqTMY5aUQHSMbTpMSW4M-DLP1tQhkNNFN-0X5C3doeOPElpYHfBlOy46NUmhAmmA3KYkNXJ9-HvWuqEIHUk4kzpTOl7cRgd8PwH8H_YoP6w7FHzrTC9qyo--Yb_FbyUDh4VPxh3I0_M5wckecuGb8IqHnT-zFT_IfJm_1ribes9--_Tcg3W5m_ZF7sM9DLskH9D0WGjAQc0Z8FXTHfzxX8yksIrHUGjd5a38N4IylXF_qkrgscgSfRgS3a05FDOHj2QrBCk8u5h2xz8eEOnC), [PNG](https://draftably.dev/api/png/pako:eJxdkkFu3DAMRfc-BcF10wsUDpATpECynA1tMRYBDSlI1Dhz-8K2PEm6Evz1KX4-Oggtha6Ab5EKA0FVyjWa41Db5OKJAd8jg63KBSjnYjeuf8CZrldyrlCYAhDMlu_Q1CWBOPBnlsIVh2Ep1jLENgH-LXIj5-0DYbZkZZxS40EtnA3wdTsQaqTMY5aUQHSMbTpMSW4M-DLP1tQhkNNFN-0X5C3doeOPElpYHfBlOy46NUmhAmmA3KYkNXJ9-HvWuqEIHUk4kzpTOl7cRgd8PwH8H_YoP6w7FHzrTC9qyo--Yb_FbyUDh4VPxh3I0_M5wckecuGb8IqHnT-zFT_IfJm_1ribes9--_Tcg3W5m_ZF7sM9DLskH9D0WGjAQc0Z8FXTHfzxX8yksIrHUGjd5a38N4IylXF_qkrgscgSfRgS3a05FDOHj2QrBCk8u5h2xz8eEOnC), [editor](https://draftably.dev/play#s=XZJBbtwwDEX3PgXBddMLFA6QE6RAspwNbTEWAQ0pSNQ4c_vCtjxJuhL89Sl-PjoILYWugG-RCgNBVco1muNQ2-TiiQHfI4OtygUo52I3rn_Ama5Xcq5QmAIQzJbv0NQlgTjwZ5bCFYdhKdYyxDYB_i1yI-ftA2G2ZGWcUuNBLZwN8HU7EGqkzGOWlEB0jG06TEluDPgyz9bUIZDTRTftF-Qt3aHjjxJaWB3wZTsuOjVJoQJpgNymJDVyffh71rqhCB1JOJM6Uzpe3EYHfD8B_B_2KD-sOxR860wvasqPvmG_xW8lA4eFT8YdyNPzOcHJHnLhm_CKh50_sxU_yHyZv9a4m3rPfvv03IN1uZv2Re7DPQy7JB_Q9FhowEHNGfBV0x388V_MpLCKx1Bo3eWt_DeCMpVxf6pK4LHIEn0YEt2tORQzh49kKwQpPLuYdsc_).
+
+3. Fix what it names. A bad source gets `400` and no links. The error names the line, quotes its text, and usually says the fix:
+
+```text
+error: line 5: hub is a soft group, so it has no layout of its own. Use frame=box, or set the layout of the container around it.
+> layout hub row gap=24
+```
+
+   Fix that line and send it again. `info` and `warning` lines come back after the links on a good source too; they name arrows that run against the reading order, notes that cover the drawing, and colors without a legend. Act on them before you share.
+
+4. Look at the PNG before you share it. A diagram can be valid and still read badly: a label that wraps, a box that pulls the eye from the main path. The image shows what the diagnostics can't.
+
+5. Revise. Send the edited source to `/link` again for new links. The `edit` link opens the diagram in the editor; for a long image URL, change `/svg/` or `/png/` to `/edit/`.
+
+Options on `/link` and the image URLs: `?scheme=dark`, `?type=mermaid|draftably`; `?scale=1|2|3|4` for PNG (default 2). Mermaid flowcharts, sequences, gantt charts and timelines also work. Free use is 60 new drawings a minute per address and 30 new links; an image drawn before and a link made before are free. The service refuses sources over 64 KB, and an image URL over 8 KB.
+
+To build a long image URL yourself, it is `https://draftably.dev/api/svg/<encoded>` (or `/png/`), where `<encoded>` is base64url of the UTF-8 source with no `=` padding, or `pako:` + base64url(zlib(source)) for a shorter URL. It stores nothing. A bad source then returns `400` and an image that names the line; the same message is in the `X-Draftably-Error` header. The PNG carries its source, so dropping it on https://draftably.dev also opens it for editing.
+
+### Rules that trip agents up
+
+- One `layout` line per scope. A `frame=soft` or `frame=none` group takes no `layout`, `near` or `pin` of its own; use `frame=box` (the default) to lay out its members.
+- An `edge` needs its own ID before the ends: `edge go a -> b "label"`.
+- `\n` in a label starts a smaller detail line. Keep the first line to two to four words.
+- Members of a group stack in the order you declare them. Declare the source of an arrow before its target, or `/link` reports an arrow that runs up.
+- Colors are names from the list below, not hex values.
+- Try the automatic layout before you reach for `pin` or `size`. Change `direction=`, the declaration order, or `order` first.
+
+### What makes the drawing good
+
+- Pick the one path the reader must follow, and give it the clearest labels. Keep inputs and context secondary.
+- Label every arrow with what it means: a call (`"approves preview"`) or what moves (`"snapshot"`). An unlabeled arrow can mean either.
+- Put a rule on the path it governs (`"read if unexpired"`), not in the text of a box.
+- Draw boundaries honestly: a system the service only reads goes outside the group, with the arrow labeled.
 
 ## Syntax
 
@@ -83,6 +112,26 @@ edge order web -> api "place order"
 edge save api -> db "insert"
 edge mail api -> web "receipt" kind=async
 layout root flow direction=right
+```
+
+A sequence diagram:
+
+```text
+diagram "Load a profile"
+subtitle "The API reads the profile and returns it"
+
+node browser "Browser"
+node api "API"
+node db "Database"
+
+edge ask browser -> api "GET /profile" message=call
+edge read api -> db "select profile" message=call
+edge row db -> api "profile row" answers=read
+edge reply api -> browser "200 JSON" answers=ask
+
+phase fetch "Fetch" ask read row reply
+
+layout root sequence
 ```
 
 For every statement and option, read the [language guide](https://raw.githubusercontent.com/byronwall/draftably/main/skills/draftably/SKILL.md) (plain Markdown; its Syntax section is the part that matters without the CLI).
@@ -153,7 +202,7 @@ The render service at https://draftably.dev/api turns a source into a short imag
 3. The answer is text with `png`, `svg` and `edit` URLs, such as `https://draftably.dev/api/d/<id>.png`. A source that doesn't draw returns `400` and the line to fix.
 4. To show the image, copy the returned `markdown` line; it uses the SVG when a PNG would be too large. To let someone edit it, share the `edit` URL, which opens the diagram on draftably.dev.
 
-The same source always gets the same link. For a shorter request, send base64url of the source, or `pako:` + base64url(zlib(source)), in the path: `/api/link/<encoded>`. `POST https://draftably.dev/api/v1/share` with `{"code": "..."}` takes large sources. `/api/png?code=<source>` and `/api/png/<encoded>` are long image URLs that store nothing.
+The same source always gets the same link. For a shorter request, send base64url of the source, or `pako:` + base64url(zlib(source)), in the path: `/link/<encoded>`. `POST https://draftably.dev/api/link` with the source as the body, or `POST /v1/share` with `{"code": "..."}`, takes large sources. `/png?code=<source>` and `/png/<encoded>` are long image URLs that store nothing.
 
 ## Optional
 

@@ -15,6 +15,30 @@ goes:
 ![Architecture](https://draftably.dev/api/svg/pako:eJw1zE0K…)
 ```
 
+## Links without the CLI
+
+`/link` takes the source as plain text, checks it, and returns short links. Use it when you have
+no CLI, for example from an agent in a chat:
+
+```sh
+curl --data-binary @architecture.draft https://draftably.dev/api/link
+```
+
+```text
+png: https://draftably.dev/api/d/<id>.png
+svg: https://draftably.dev/api/d/<id>.svg
+edit: https://draftably.dev/d/<id>
+markdown: ![Diagram](https://draftably.dev/api/d/<id>.png)
+```
+
+Add `?format=json` for `{id, png, svg, edit, diagnostics}`. Warnings on a source that draws come
+after the links. `GET /link?code=<percent-encoded source>` gives the same answer. A source that
+doesn't draw gets `400` and no links; the error names the line and quotes its text. It takes the
+same `?type=`, `?scheme=` and `?scale=` options as the image URLs.
+
+To edit a diagram from a long image URL, change `/svg/` or `/png/` to `/edit/`. The service sends
+you to the editor with the source loaded.
+
 ## The URL
 
 ```text
