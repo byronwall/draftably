@@ -139,6 +139,7 @@ export function createScene(s: DocumentPart & FileSessionPart) {
       const adoptedResult = ready ? adopted.result : null;
       const labelsKey = JSON.stringify([
         typography,
+        vg.nodes.flatMap(n => (n.code ? [[n.id, n.title]] : [])),
         vg.groups.map(g => [g.id, g.title, g.titleLines, g.frame, g.hull]),
       ]);
       const signature = JSON.stringify([

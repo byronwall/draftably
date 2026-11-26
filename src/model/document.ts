@@ -641,7 +641,7 @@ const sortedKeys = (_key: string, value: unknown) =>
 /** Font metrics used by edge labels, group titles and code range ports. */
 export function routingTypography(doc: Diagram) {
   const { annotation, groupTitle } = resolveAppearance(doc.appearance);
-  return JSON.stringify([annotation, groupTitle]);
+  return JSON.stringify([annotation, doc.graph.groups.length ? groupTitle : null]);
 }
 
 /**
