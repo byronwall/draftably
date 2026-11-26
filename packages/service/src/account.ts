@@ -17,7 +17,7 @@ import {
 } from './auth';
 import { balance, MONTHLY_GRANT, upsertAccount } from './credits';
 import { copyButton, esc, page } from './html';
-import { authorizeNext, type GrantMeta, type OAuthEnv } from './oauth';
+import { authorizeNext, disconnectApp, type GrantMeta, type OAuthEnv } from './oauth';
 import { checkoutUrl, PACKS, paidCreditsOn, type StripeEnv } from './stripe';
 import { note, noteError, scrub } from './obs';
 
@@ -252,7 +252,11 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv & OAu
   // The provider checks the grant belongs to this account.
   const disconnect = /^\/account\/apps\/([\w-]{1,64})\/revoke$/.exec(path);
   if (req.method === 'POST' && disconnect) {
-    await env.OAUTH_PROVIDER.revokeGrant(disconnect[1], account.id);
+    // Only a grant this account holds: the provider ignores a grant id under another user.
+    const ours = (await env.OAUTH_PROVIDER.listUserGrants(account.id)).items.some(
+      g => g.id === disconnect[1],
+    );
+    if (ours) await disconnectApp(env, account.id, disconnect[1]);
     return redirect('/account');
   }
   if (path === '/account')

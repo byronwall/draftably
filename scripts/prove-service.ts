@@ -781,15 +781,19 @@ if (!remote) {
   assert.match(consent.html, /Allow <b>ChatGPT<\/b> to use your Draftably account\?/);
   assert.match(consent.html, /app@example\.com/);
   assert.match(consent.html, /<b>chatgpt\.com<\/b>/);
-  const decide = (c: typeof consent, decision: string, origin = base) =>
+  const decide = (c: typeof consent, decision: string, origin = base, session = appSession) =>
     fetch(`${base}/authorize`, {
       method: 'POST',
       headers: {
         Origin: origin,
-        Cookie: [appSession, ...c.cookies].join('; '),
+        Cookie: [session, ...c.cookies].join('; '),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({ handle: c.handle, decision }),
+      body: new URLSearchParams({
+        handle: c.handle,
+        account: /name="account" value="([^"]+)"/.exec(c.html)![1],
+        decision,
+      }),
       redirect: 'manual',
     });
   assert.equal((await decide(consent, 'allow', 'https://evil.example')).status, 403);
@@ -868,8 +872,44 @@ if (!remote) {
   // Deny sends the browser back with access_denied.
   const denied = await decide(await consentFor(), 'deny');
   assert.equal(new URL(denied.headers.get('Location')!).searchParams.get('error'), 'access_denied');
+  // A page opened for one account can't approve for another signed in since in the same browser.
+  const otherSession = cookies(await verify(await mailLink('proof@example.com')))[0];
+  const swapped = await decide(await consentFor(), 'allow', base, otherSession);
+  assert.equal(swapped.status, 400);
+  assert.match(await swapped.text(), /Account changed/);
+  // KV may lag a disconnect in other locations; the D1 record alone stops the token and refresh.
+  const third = new URL((await decide(await consentFor(), 'allow')).headers.get('Location')!);
+  const tokens3 = await (
+    await token({ ...exchange, code: third.searchParams.get('code')!, code_verifier: verifier })
+  ).json();
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 200);
+  const grant3 = /action="\/account\/apps\/([\w-]+)\/revoke"/.exec(
+    await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text(),
+  )![1];
+  // Another account can't disconnect this one's app by its id.
+  const foreignCut = await fetch(`${base}/account/apps/${grant3}/revoke`, {
+    method: 'POST',
+    headers: { Origin: base, Cookie: otherSession },
+    redirect: 'manual',
+  });
+  assert.equal(foreignCut.status, 303);
+  assert.ok(
+    (await (await fetch(`${base}/account`, { headers: { Cookie: appSession } })).text()).includes(
+      `/account/apps/${grant3}/revoke`,
+    ),
+    "another account's disconnect removed this account's grant",
+  );
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 200);
+  sql(
+    `INSERT INTO app_revocations (grant_id, account_id, revoked_at) SELECT '${grant3}', id, 'now' FROM accounts WHERE email = 'app@example.com'`,
+  );
+  assert.equal((await rpc('tools/list', {}, tokens3.access_token)).status, 401);
+  assert.equal(
+    (await token({ grant_type: 'refresh_token', refresh_token: tokens3.refresh_token })).status,
+    400,
+  );
   console.log(
-    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a sign-in link never redirects off-site.',
+    'OAuth: a 401 names the resource metadata; DCR, then the PKCE code flow through the emailed sign-in and consent (a foreign origin 403, a used handle 400, a wrong verifier 400, a reused code 400 and revokes its grant); the access token drew for 1 credit from its account; refresh issued a new token; disconnect on /account made the token 401 and the refresh 400; deny returns access_denied; a consent page cannot approve for an account signed in after it opened; a D1 revocation alone stops a token and its refresh while KV still holds the grant; a sign-in link never redirects off-site.',
   );
 
   // Stripe: a signed checkout event adds a pack once; bad or stale signatures do nothing.

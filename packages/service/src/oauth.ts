@@ -8,13 +8,14 @@
 import {
   AuthorizationError,
   CimdFetchError,
+  OAuthError,
   type OAuthHelpers,
   type OAuthProviderOptions,
 } from '@cloudflare/workers-oauth-provider';
 import { checkKey, sessionAccount, touchKey, type AuthEnv } from './auth';
 import { esc, page } from './html';
 import { handleMcp } from './mcp';
-import type { ApiEnv } from './api';
+import { ApiError, errorJson, type ApiEnv } from './api';
 import type { Payer } from './render';
 
 export interface OAuthEnv {
@@ -26,6 +27,22 @@ export interface OAuthEnv {
 /** The one thing an app may do: draw, spending the account's credits. */
 const SCOPE = 'draw';
 const DAY = 86400;
+
+/** What `/mcp` learns about its caller: an API key's account, or an app's account and grant. */
+type Caller = Payer & { grant?: string };
+
+/** Disconnect an app: D1 first, so the check below holds before KV forgets the grant. */
+export async function disconnectApp(env: AuthEnv & OAuthEnv, account: string, grant: string) {
+  await env.DB.prepare(
+    `INSERT OR IGNORE INTO app_revocations (grant_id, account_id, revoked_at) VALUES (?1, ?2, ?3)`,
+  )
+    .bind(grant, account, new Date().toISOString())
+    .run();
+  await env.OAUTH_PROVIDER.revokeGrant(grant, account);
+}
+
+const disconnected = async (db: D1Database, grant: string) =>
+  !!(await db.prepare(`SELECT 1 FROM app_revocations WHERE grant_id = ?1`).bind(grant).first());
 
 /** What a grant keeps for the account page. */
 export interface GrantMeta {
@@ -42,10 +59,13 @@ export function oauthOptions<E extends ApiEnv & OAuthEnv>(
   return {
     apiRoute: '/mcp',
     apiHandler: {
-      fetch: (req, env, ctx) => {
-        const who = (ctx as ExecutionContext & { props: Payer }).props;
+      fetch: async (req, env, ctx) => {
+        const who = (ctx as ExecutionContext & { props: Caller }).props;
         if (who.key) ctx.waitUntil(touchKey(env.DB, who.key));
-        return handleMcp(req, env, ctx, who);
+        // KV may still hold a disconnected app's token in another location; D1 does not.
+        else if (!who.grant || (await disconnected(env.DB, who.grant)))
+          return errorJson(new ApiError(401, 'ERR_AUTH', 'This app was disconnected.'));
+        return handleMcp(req, env, ctx, { account: who.account });
       },
     },
     defaultHandler: app,
@@ -60,6 +80,13 @@ export function oauthOptions<E extends ApiEnv & OAuthEnv>(
     // A connected app stays signed in while it is used at least once a month.
     refreshTokenTTL: 30 * DAY,
     refreshTokenIdleTTL: 30 * DAY,
+    // Every access token learns its grant, so `/mcp` can check it; a disconnected grant can't
+    // refresh, even when a refresh raced the disconnect in KV.
+    tokenExchangeCallback: async ({ grantId, props, env }) => {
+      if (await disconnected(env.DB, grantId))
+        throw new OAuthError('invalid_grant', { description: 'This app was disconnected.' });
+      return { accessTokenProps: { ...props, grant: grantId } satisfies Caller };
+    },
     // An API key (`dft_…`) is a bearer token too, for clients that send a header.
     resolveExternalToken: async ({ token, env }) => {
       const who = await checkKey(env.DB, token);
@@ -93,6 +120,7 @@ function consentPage(
   d: Awaited<ReturnType<OAuthHelpers['describeConsent']>>,
   handle: string,
   email: string,
+  account: string,
 ) {
   const name = esc(d.clientName);
   return page(
@@ -103,7 +131,7 @@ function consentPage(
 <dt>Sends access to</dt><dd><b>${esc(d.redirectHost)}</b></dd>
 <dt>App</dt><dd>${d.clientDomain ? `Published by <b>${esc(d.clientDomain)}</b>` : 'The app named itself; Draftably did not check the name.'}</dd></dl>
 ${d.redirectIsLoopback ? '<p class="note error"><b>This sends access to an app on your computer.</b> Allow it only if you just started connecting from that app.</p>' : ''}
-<form method="post" action="/authorize" class="actions"><input type="hidden" name="handle" value="${esc(handle)}">
+<form method="post" action="/authorize" class="actions"><input type="hidden" name="handle" value="${esc(handle)}"><input type="hidden" name="account" value="${esc(account)}">
 <button class="button primary" name="decision" value="allow">Allow</button><button class="button" name="decision" value="deny">Deny</button></form>
 <p class="hint" style="margin-top:20px">Disconnect it at any time on your <a href="/account">account page</a>.</p></div>`,
     { current: 'account' },
@@ -139,9 +167,17 @@ export async function handleAuthorize(req: Request, env: AuthEnv & OAuthEnv, url
       const request = await oauth.parseAuthRequest(req);
       const details = await oauth.describeConsent(request);
       const account = await sessionAccount(req, env.DB);
-      if (!account) return signInPage(details.clientName, url.pathname + url.search);
+      if (!account) {
+        // The request rides the emailed link back here; one too long to carry fails now.
+        const next = authorizeNext(url.pathname + url.search);
+        if (!next) return problem('Cannot connect', 'The app sent too long a request.');
+        return signInPage(details.clientName, next);
+      }
       const consent = await oauth.beginConsent(request);
-      return withHeaders(consentPage(details, consent.handle, account.email), consent.headers);
+      return withHeaders(
+        consentPage(details, consent.handle, account.email, account.id),
+        consent.headers,
+      );
     } catch (error) {
       return authError(error);
     }
@@ -154,6 +190,12 @@ export async function handleAuthorize(req: Request, env: AuthEnv & OAuthEnv, url
   if (!account) return problem('Signed out', 'Your session ended. Start again from the app.');
   const form = await req.formData();
   const handle = String(form.get('handle') ?? '');
+  // The page named one account; a sign-in in another tab since then must not swap in another.
+  if (form.get('account') !== account.id)
+    return problem(
+      'Account changed',
+      'You signed in as someone else after this page opened. Start again from the app.',
+    );
   try {
     if (form.get('decision') !== 'allow') {
       const denied = await oauth.denyConsent(req, handle);
