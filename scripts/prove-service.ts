@@ -526,7 +526,7 @@ if (!remote) {
       body: new URLSearchParams(fields),
       redirect: 'manual',
     });
-  const sent = () => [...log.matchAll(/Text: (\S+\.txt)/g)].map(m => m[1]);
+  const sent = () => [...svc!.out.log.matchAll(/Text: (\S+\.txt)/g)].map(m => m[1]);
   const mailLink = async (email: string) => {
     const before = sent().length;
     const res = await form('/login', { email });
