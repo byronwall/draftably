@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { checkSource, compile } from '../src/dsl/compile';
+import { checkSource } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
 import fs from 'node:fs';
-import { MARKER_SHAPES, MARKER_STROKE } from '../src/model/markers';
+import { ARROW_REACH } from '../src/model/markers';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes, placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
 import { buildStaticScene } from '../src/model/static-scene';
@@ -249,15 +249,28 @@ describe('edge labels in a crowded drawing', () => {
   });
 });
 
-it('keeps the arrowhead wings visible beside the Route 4 label', async () => {
-  const source = fs.readFileSync(
-    'docs/intent/diagram-quality/issues/i597-sibling-alignment/v0.draft',
-    'utf8',
-  );
-  const doc = projectScene(await compile(source));
-  const { vg, rects } = visibleRects(doc);
-  const route = computeRoutes(doc, vg, rects).routes.find(r => r.id === 'e4')!;
-  const tip = route.points.at(-1)!;
-  const label = rectOf(route.label!);
-  expect(label.x + label.w).toBeLessThanOrEqual(tip.x - MARKER_SHAPES.arrow.x - MARKER_STROKE / 2);
-});
+it.each(['right', 'left', 'top', 'bottom'] as const)(
+  'leaves the %s arrowhead visible in a tight gap',
+  side => {
+    const doc = projectScene(checkSource('node a "A"\nnode b "B"\nedge go a -> b "Go"'));
+    const flat = side === 'right' || side === 'left';
+    const forward = side === 'right' || side === 'bottom';
+    const axis = flat ? 'x' : 'y';
+    const size = flat ? 'w' : 'h';
+    Object.assign(doc.layout.nodes.a, { x: 0, y: 0, w: 80, h: 50 });
+    Object.assign(doc.layout.nodes.b, {
+      x: 0,
+      y: 0,
+      w: 80,
+      h: 50,
+      [axis]: (forward ? 1 : -1) * ((flat ? 80 : 50) + (flat ? 50 : 32)),
+    });
+    doc.layout.edges.go = { [flat ? 'labelDx' : 'labelDy']: (forward ? 1 : -1) * (flat ? 8 : 0) };
+    const { vg, rects } = visibleRects(doc);
+    const route = computeRoutes(doc, vg, rects).routes[0],
+      tip = route.points.at(-1)!;
+    expect(
+      Math.abs(tip[axis] - route.label![axis]) - route.label![size] / 2,
+    ).toBeGreaterThanOrEqual(ARROW_REACH);
+  },
+);

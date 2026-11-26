@@ -17,7 +17,7 @@ import {
   groupTitleLines,
   SELF_LOOP,
 } from './labels';
-import { hasMarkers, MARKER_SHAPES, MARKER_STROKE, markerRects, stoppedPoints } from './markers';
+import { ARROW_REACH, hasMarkers, MARKER_SHAPES, markerRects, stoppedPoints } from './markers';
 import { codeLayout } from './code';
 import { drawnRect, rangeLabelBoxes, rangePort } from './ranges';
 import {
@@ -1008,15 +1008,25 @@ export function drawRoutes(
     if (hasMarkers(edge)) continue;
     const end = route.points.at(-1)!,
       prev = route.points.at(-2);
-    if (!prev || prev.y !== end.y) continue;
-    const arrow = MARKER_SHAPES.arrow;
-    if (Math.abs(end.y - label.y) > (label.h + arrow.h) / 2) continue;
-    const gap = Math.sign(end.x - prev.x) * (end.x - label.x);
-    const width = 2 * (gap - arrow.x - MARKER_STROKE / 2);
-    if (width <= 0 || width >= label.w) continue;
+    if (!prev) continue;
+    const flat = prev.y === end.y;
+    if (!flat && prev.x !== end.x) continue;
+    const axis = flat ? 'x' : 'y',
+      across = flat ? 'y' : 'x',
+      size = flat ? 'w' : 'h';
+    if (
+      Math.abs(end[across] - label[across]) >
+      ((flat ? label.h : label.w) + MARKER_SHAPES.arrow.h) / 2
+    )
+      continue;
+    const gap = Math.sign(end[axis] - prev[axis]) * (end[axis] - label[axis]);
+    const room = 2 * (gap - ARROW_REACH);
+    if (gap <= 0 || room >= label[size]) continue;
     const lines = edgeLabelLines(edge.label!, look, false, label.wrap);
-    const textWidth = Math.max(...lines.map(line => measureText(line, look.annotation)));
-    if (width >= textWidth + 4) label.w = width;
+    const ink = flat
+      ? Math.max(...lines.map(line => measureText(line, look.annotation)))
+      : look.annotation.size + (lines.length - 1) * look.annotation.lineHeight;
+    label[size] = Math.min(label[size], Math.max(ink + 4, room));
   }
   // A sequence message's label sits just above its line, centred between two lifelines, or
   // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
