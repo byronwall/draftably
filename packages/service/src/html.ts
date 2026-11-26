@@ -127,6 +127,7 @@ h1{margin:0;font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.035e
 .ref dd span+span{color:var(--muted)}
 .ref dd code{color:var(--text);font-size:12.5px;overflow-wrap:break-word}
 .ref-foot{margin:28px 0 0 232px;color:var(--muted);font-size:13px}
+.recipe{margin:0;padding:12px 0;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
 .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:0 64px;align-items:start}
 .confirm{position:relative;display:inline-block}
 .confirm summary{list-style:none}.confirm summary::-webkit-details-marker{display:none}
@@ -230,7 +231,12 @@ const inline = (line: string) =>
 function reference(text: string) {
   const rows: { at: string; lines: string[] }[] = [];
   let footer = '';
-  for (const raw of text.split('\n').slice(1)) {
+  // The no-install recipe comes before the first endpoint line. It is prose and an example, not
+  // endpoint rows, so it draws as preformatted text.
+  const lines = text.split('\n').slice(1);
+  const first = lines.findIndex(l => /^(GET|POST|\/)/.test(l));
+  const recipe = lines.slice(0, first).join('\n').trim();
+  for (const raw of lines.slice(first)) {
     if (!raw.trim()) continue;
     if (/^Version /.test(raw)) {
       footer = raw;
@@ -255,7 +261,10 @@ function reference(text: string) {
     if (sections.at(-1)?.title !== title) sections.push({ title, rows: [] });
     sections.at(-1)!.rows.push(row);
   }
-  return `${sections
+  const intro = recipe
+    ? `<section class="ref-group"><h2>No install</h2><pre class="recipe">${inline(recipe)}</pre></section>`
+    : '';
+  return `${intro}${sections
     .map(
       s =>
         `<section class="ref-group"><h2>${esc(s.title)}</h2><dl class="ref">${s.rows
