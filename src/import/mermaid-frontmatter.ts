@@ -25,7 +25,8 @@ export interface FrontmatterBlock {
 }
 
 /** Mermaid's text as its preprocessor sees it: no BOM, `\n` line breaks. */
-export const mermaidText = (source: string) => source.replace(/^﻿/, '').replace(/\r\n?/g, '\n');
+export const mermaidText = (source: string) =>
+  source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 
 /** The frontmatter block at the start of `text`, or undefined when Mermaid would see none. */
 export function matchFrontmatter(text: string): FrontmatterBlock | undefined {
