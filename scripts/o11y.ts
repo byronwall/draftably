@@ -200,6 +200,21 @@ interface Occurrence {
   worker?: { scriptVersion?: { id?: string } };
 }
 
+/** The Worker version that logged the newest request event: the one live now. */
+async function currentBuild() {
+  const result = await cf<{
+    events?: { events?: { $workers?: { scriptVersion?: { id?: string } } }[] };
+  }>('POST', `${API}/telemetry/query`, {
+    queryId: `o11y-${++queries}`,
+    timeframe: window,
+    view: 'events',
+    dry: true,
+    limit: 1,
+    parameters: { filters: WIDE },
+  });
+  return result.events?.events?.[0]?.$workers?.scriptVersion?.id;
+}
+
 const ms = (t: number | string) => (typeof t === 'number' ? t : Date.parse(t));
 
 async function issues() {
@@ -269,6 +284,7 @@ async function main() {
     broke,
     scanners,
     issueList,
+    current,
     totals,
   ] = await Promise.all([
     calc(window, WIDE, ['route', 'status']),
@@ -304,6 +320,7 @@ async function main() {
     calc(window, [...WIDE, eq('error_code', 'ERR_LIMIT_BALANCE')], ['account']),
     calc(window, [...WIDE, gte('status', 400), has('ip')], ['ip'], [{ operator: 'count' }], 5),
     issues(),
+    currentBuild(),
     // Headline counts, ungrouped, so a rare route or status is never cut by a group limit.
     Promise.all(
       [window, baseline].flatMap(t => [
@@ -349,14 +366,26 @@ async function main() {
     return;
   }
 
-  // Actions: new or growing failures first, worst first, at most three.
+  // Cloudflare flags scanner probes (/.env, /wp-login.php) as Issues too; nothing to fix there.
+  const scan = (i: { title: string }) => /vulnerability scan/i.test(i.title);
+  // An issue no occurrence of which came from the live build is likely fixed.
+  const live = (i: { versions: unknown[] }) => !current || i.versions.includes(current);
+  const status = (i: (typeof issueList)[number]) =>
+    scan(i) ? 'scanner' : live(i) ? (i.isNew ? 'new' : 'open') : 'not on live build';
+
+  // Actions: new or growing failures on the live build first, worst first, at most three.
   const actions: string[] = [];
   for (const i of issueList
-    .filter(i => i.isNew || i.inWindow > 0)
+    .filter(i => !scan(i) && live(i) && i.inWindow > 0)
     .sort((a, b) => Number(b.isNew) - Number(a.isNew) || b.inWindow - a.inWindow))
     actions.push(
       `${i.isNew ? 'New' : 'Open'} issue "${i.title}" (${i.inWindow}× in window): ${i.frame ?? i.mechanism ?? ''}` +
         `${i.path ? ` on ${i.path}` : ''}. Open trace ${i.traceId ?? '(none)'} in Observability → Traces, reproduce, fix, deploy, then rerun this and check the issue stops on the new build.`,
+    );
+  const stale = issueList.filter(i => !scan(i) && !live(i));
+  if (stale.length)
+    actions.push(
+      `${stale.length} open issue(s) not seen on the live build ${current}: ${stale.map(i => `"${i.title.slice(0, 60)}"`).join(', ')}. If the route had traffic since the deploy, resolve them in Observability → Issues; with little traffic, wait.`,
     );
   if (rate(fivexx, requests) > 0.01 && fivexx > 3)
     actions.push(
@@ -364,11 +393,13 @@ async function main() {
     );
   for (const e of errors) {
     const code = String(e.error_code);
-    if (code === 'ERR_SOURCE' || code.startsWith('HTTP_4')) continue;
+    // Only the service's own failures; a rise in bad diagrams, bad keys or limits is the
+    // callers', and shows in the tables.
+    if (!/^(ERR_INTERNAL|ERR_EMAIL|HTTP_5)/.test(code)) continue;
     const was = baseByCode.get(code) ?? 0;
     if (Number(e.count) >= 3 && Number(e.count) > 2 * was)
       actions.push(
-        `${code} grew to ${e.count} from a daily ${was.toFixed(1)}: "${e.error}". Find its cause in the code that throws ${code}.`,
+        `${code} grew to ${e.count} from ${was.toFixed(1)} a window: "${e.error}". Find its cause in the code that throws ${code}.`,
       );
   }
   const p95 = Number(latency[0]?.['p95_$workers.wallTimeMs'] ?? 0);
@@ -387,6 +418,7 @@ async function main() {
               `| ${cols
                 .map(c =>
                   String(r[c] ?? '')
+                    .replace(/\s*\n\s*/g, ' ')
                     .replace(/\|/g, '\\|')
                     .slice(0, 120),
                 )
@@ -401,7 +433,7 @@ async function main() {
 
   console.log(`# ${SERVICE}: the last ${HOURS} h, to ${snapshot.at}
 
-**Requests** ${requests} (daily baseline ${baseRequests.toFixed(0)}) · **5xx** ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
+**Requests** ${requests} (baseline ${baseRequests.toFixed(0)} a window) · **5xx** ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
 
 ## Actions
 ${
@@ -414,7 +446,9 @@ ${
 }
 
 ## Issues
-${table(issueList.map(i => ({ ...i, new: i.isNew ? 'new' : '', versions: i.versions.join(' ') })) as unknown as Row[], ['new', 'title', 'inWindow', 'total', 'frame', 'versions', 'traceId'])}
+Live build: ${current ?? 'unknown'}
+
+${table(issueList.map(i => ({ ...i, status: status(i), versions: i.versions.join(' ') })) as unknown as Row[], ['status', 'title', 'inWindow', 'total', 'frame', 'versions', 'traceId'])}
 
 ## Errors (code, message)
 ${table(errors, ['error_code', 'error', 'count'])}

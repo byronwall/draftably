@@ -45,7 +45,8 @@ The event never holds an email, a key secret, a session or sign-in token, or a r
 error's message can quote a line of the diagram; email addresses, API keys, IP addresses and long
 token-like runs in it show as `<email>`, `<key>`, `<ip>` and `<token>`. The Worker sets
 `redact_query_string`, so Cloudflare's own logs and spans drop query strings: a sign-in link's
-token is in its query.
+token is in its query. Cloudflare's invocation log is its own record: it keeps request headers,
+including the client IP (`x-real-ip`), and shows an image path as `/png/REDACTED`.
 
 ## The spans
 
@@ -158,7 +159,9 @@ limits, sign-ins and webhooks. It ends with at most three **Actions**, new failu
 
 1. Run `pnpm o11y` (each morning, or after a deploy). `--hours 6` for a shorter window; `--json`
    for an agent; `--keys` lists the indexed field names when a query comes back empty.
-2. Take the first action: open its trace, reproduce it locally, fix it, and deploy.
+2. Take the first action: open its trace, reproduce it locally, fix it, and deploy. The Issues table
+   marks each issue `new`, `open`, `not on live build` (likely fixed: resolve it once the route has
+   had traffic) or `scanner` (Cloudflare's own flag for probes such as `/.env`; nothing to fix).
 3. On the next run, read **By build**: the error should stop on the new build. With little traffic,
    wait for more before calling it fixed.
 
