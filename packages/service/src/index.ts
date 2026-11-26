@@ -22,6 +22,7 @@ import {
   urlSource,
   type ShareEnv,
 } from './share';
+import { handleEdit } from './link';
 import { handleWebhook, type StripeEnv } from './stripe';
 import { ipHash, note, noteError, span, withEvent, type Wide } from './obs';
 
@@ -58,6 +59,19 @@ async function errorResponse(e: ApiError, format: Format) {
   res.headers.set('X-Draftably-Error-Code', e.code);
   res.headers.set('Access-Control-Expose-Headers', 'X-Draftably-Error, X-Draftably-Error-Code');
   return res;
+}
+
+/** The free per-address limit: 60 a minute, shared by image misses and `/edit/`. */
+async function addressLimit(req: Request, env: Env) {
+  const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+  if (!(await env.ANON_LIMIT.limit({ key: ip })).success) {
+    note({ rate_limit: 'anon' });
+    throw new ApiError(
+      429,
+      'ERR_LIMIT_BURST',
+      'Too many renders from this address. Wait a minute, or use an API key.',
+    );
+  }
 }
 
 /** The source an image route names, as `{type, source}` (a share keeps its type). */
@@ -122,16 +136,7 @@ async function imageResponse(
       scale: q.get('scale'),
     });
     const anonLimit = async () => {
-      if (payer) return;
-      const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-      if (!(await env.ANON_LIMIT.limit({ key: ip })).success) {
-        note({ rate_limit: 'anon' });
-        throw new ApiError(
-          429,
-          'ERR_LIMIT_BURST',
-          'Too many renders from this address. Wait a minute, or use an API key.',
-        );
-      }
+      if (!payer) await addressLimit(req, env);
     };
     // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
     // one. An anonymous answer varies on Authorization for the same reason.
@@ -163,10 +168,13 @@ Draw a diagram with no install and no account:
        node web "Web app"
        node api "API"
        edge call web -> api "GET /items"
-  2. Percent-encode it (write # as %23, & as %26 and + as %2B) and open
-     https://draftably.dev/api/link?code=<source>
-     It answers with short png, svg and edit links; share those.
+  2. Send it as is, with no encoding:
+       curl --data-binary @diagram.draft https://draftably.dev/api/link
+     From a tool that can only GET, percent-encode it (write # as %23, & as %26
+     and + as %2B) and open https://draftably.dev/api/link?code=<source>
+     Either answers with short png, svg and edit links; share those.
      A bad source returns 400 and the line to fix.
+  3. Look at the PNG before you share it.
   Compact form: base64url the UTF-8 bytes, no padding, and open /api/link/<encoded>
   or /api/png/<encoded> (a long image URL that stores nothing).
      Python: base64.urlsafe_b64encode(src.encode()).decode().rstrip('=')
@@ -184,10 +192,16 @@ GET /api/png/{encoded}    PNG drawing, with the source embedded; ?scale=1|2|3|4 
 
 GET /api/png?code=<src>   The source as percent-encoded text instead of {encoded}; also
                           /api/svg and /api/link. Write # as %23, & as %26 and + as %2B.
+GET /api/edit/{encoded}   Open an image URL's source in the Playground: change /svg/ or
+                          /png/ to /edit/. Also /api/edit?code=<src>.
 
 GET /api/link?code=<src>  A short link, made with a GET. Answers with text: png, svg and
                           edit URLs and a Markdown line (?format=json for JSON). The same
                           source always gets the same link. Also /api/link/{encoded}.
+POST /api/link            The source itself as the body, so nothing is encoded:
+                          curl --data-binary @diagram.draft .../api/link. The same answer
+                          and options as GET /api/link. A JSON body {"code": "..."}
+                          needs Content-Type: application/json.
 GET /api/d/{id}.png       The short link's drawing; also .svg, ?scheme=, ?scale=.
 GET /api/d/{id}.draft     The short link's source, as Draftably.
 POST /api/v1/share        {"code": "...", "type"?}  -> {id, png, svg, edit}. No key needed.
@@ -244,7 +258,13 @@ function apiPath(path: string) {
 function routeKind(path: string): Wide['route'] {
   const inner = apiPath(path);
   if (inner !== null) {
-    if (IMAGE_PATH.test(inner) || SHARE_IMAGE.test(inner) || /^\/d\/[^/]+\.draft$/.test(inner))
+    // An image, short link or editor link path can hold the source: logged with no path.
+    if (
+      IMAGE_PATH.test(inner) ||
+      SHARE_IMAGE.test(inner) ||
+      /^\/d\/[^/]+\.draft$/.test(inner) ||
+      /^\/edit(\/|$)/.test(inner)
+    )
       return 'image';
     if (/^\/link(\/|$)/.test(inner)) return 'share';
     if (inner.startsWith('/v1/')) return 'rest';
@@ -331,6 +351,8 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, full: URL) 
           headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
         });
   if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
+  const edit = /^\/edit(?:\/([^/]+))?$/.exec(url.pathname);
+  if (edit) return handleEdit(url, edit[1], () => addressLimit(req, env));
   const draft = /^\/d\/([^/.]+)\.draft$/.exec(url.pathname);
   if (draft) return draftResponse(env.DB, draft[1], url);
   const route = parseImagePath(url, env.DB);

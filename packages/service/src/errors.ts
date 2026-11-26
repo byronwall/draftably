@@ -17,11 +17,15 @@ export class ApiError extends Error {
   }
 }
 
-/** A source the renderer or the Mermaid importer refused, with the diagnostic's code. */
+/**
+ * A source the renderer or the Mermaid importer refused, with the diagnostic's code and, when the
+ * importer names one, its line in the submitted text.
+ */
 export class DiagramError extends SourceError {
   constructor(
     message: string,
     readonly diagnostic: string,
+    readonly line?: number,
   ) {
     super(message);
   }

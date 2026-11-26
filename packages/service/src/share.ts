@@ -3,16 +3,17 @@
  * always gets the same id and storing it twice adds no row. That makes the GET form safe to
  * prefetch: `GET /link/{encoded}` is how a web agent that can only GET makes a link.
  *
- * - `GET /link/{encoded}` and `POST /v1/share` store the source and return the short URLs.
+ * - `GET /link/{encoded}`, `POST /link` (the source as the body) and `POST /v1/share` store the
+ *   source and return the short URLs.
  * - `GET /d/{id}.png|svg` draws it through `render()`, so the cache and price are the long URL's.
  * - `GET /d/{id}.draft` returns the Draftably source, which the site's `/d/{id}` opens in the
  *   playground.
  */
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
-import { ApiError, errorJson, requireKey, type ApiEnv } from './api';
+import { ApiError, checkDiagram, errorJson, requireKey, type ApiEnv, type Diagnostic } from './api';
 import { drawSvg, maxPngScale, type DrawOptions } from './draw';
 import { freshness, toDraft } from './mermaid';
-import { readFields, readRequest, refusal, type DrawRequest } from './request';
+import { readBody, readFields, readRequest, refusal, type DrawRequest } from './request';
 
 export interface ShareEnv extends ApiEnv {
   /** New shares per IP. A link that already exists costs nothing. */
@@ -186,9 +187,41 @@ const plain = (body: string, status = 200) =>
     },
   });
 
-function answer(l: ReturnType<typeof links>, json: boolean) {
-  if (json) return Response.json(l, { headers: { 'Access-Control-Allow-Origin': '*' } });
-  return plain(shareText(l) + '\n');
+/**
+ * The links, with the warnings and notes on a source that draws (an arrow that runs up, a note
+ * that covers the drawing), so the caller can fix them before sharing.
+ */
+async function answer(origin: string, share: Share, r: DrawRequest, json: boolean) {
+  const l = links(origin, share, r.opts);
+  const notes = (await checkDiagram(r)).diagnostics.filter(d => d.severity !== 'error');
+  if (json)
+    return Response.json(
+      { ...l, diagnostics: notes },
+      { headers: { 'Access-Control-Allow-Origin': '*' } },
+    );
+  return plain([shareText(l), ...notes.map(noteText)].join('\n') + '\n');
+}
+
+/** A diagnostic as text: `warning: line 4: message`, then the line itself. */
+const noteText = (d: Diagnostic) =>
+  `${d.severity}: ${d.line ? `line ${d.line}: ` : ''}${d.message}${d.text ? `\n> ${d.text}` : ''}`;
+
+/**
+ * The source in a `POST /link` body: the text itself, so nothing is encoded, or `{"code": "..."}`
+ * when the request says JSON.
+ */
+async function postedSource(req: Request) {
+  const text = await readBody(req);
+  // `application/json` or a `+json` type, in any case, with or without parameters.
+  const media = (req.headers.get('Content-Type') ?? '').split(';')[0].trim().toLowerCase();
+  if (media !== 'application/json' && !/^application\/[\w.-]+\+json$/.test(media)) return text;
+  let json: unknown;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new ApiError(400, 'ERR_SOURCE', 'The body is not JSON. Send the source as plain text.');
+  }
+  return (json as { code?: unknown } | null)?.code;
 }
 
 /** The links as text lines, for `/link` and the MCP tool. */
@@ -208,7 +241,7 @@ function failed(error: unknown, json: boolean) {
 }
 
 /**
- * `GET /link/{encoded}`, `GET /link?code=` and `POST /v1/share`. Returns null for other routes. Options are the
+ * `GET /link/{encoded}`, `GET /link?code=`, `POST /link` and `POST /v1/share`. Returns null for other routes. Options are the
  * image URL's: `type` is stored with the source; `scheme` and `scale` go on the returned URLs.
  */
 export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionContext, url: URL) {
@@ -228,9 +261,27 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
         format: 'svg',
       });
       const share = await createShare(req, env, r, who?.account ?? null);
-      return answer(links(url.origin, share, r.opts), json);
+      return answer(url.origin, share, r, json);
     } catch (error) {
       return failed(codeHint(error, url), json);
+    }
+  }
+  if (url.pathname === '/link' && req.method === 'POST') {
+    const json = url.searchParams.get('format') === 'json';
+    try {
+      const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
+      const q = url.searchParams;
+      const r = readRequest({
+        code: await postedSource(req),
+        type: q.get('type'),
+        scheme: q.get('scheme'),
+        scale: q.get('scale'),
+        format: 'svg',
+      });
+      const share = await createShare(req, env, r, who?.account ?? null);
+      return answer(url.origin, share, r, json);
+    } catch (error) {
+      return failed(error, json);
     }
   }
   if (url.pathname === '/v1/share' && req.method === 'POST') {
@@ -239,7 +290,7 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
       const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
       const r = readRequest({ ...(await readFields(req)), format: 'svg' });
       const share = await createShare(req, env, r, who?.account ?? null);
-      return answer(links(url.origin, share, r.opts), true);
+      return answer(url.origin, share, r, true);
     } catch (error) {
       return failed(error, true);
     }
