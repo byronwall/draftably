@@ -28,6 +28,20 @@ const distance = (p: Point, route: Point[]) =>
   );
 
 describe('edge label placement', () => {
+  it('keeps a label on its arrow when only the middle of the gap fits', () => {
+    const points = [
+      { x: 100, y: 40 },
+      { x: 149, y: 40 },
+    ];
+    const boxes = [
+      { x: 0, y: 0, w: 100, h: 80 },
+      { x: 149, y: 0, w: 100, h: 80 },
+    ];
+    const label = placeEdgeLabel('AI', points, boxes);
+    expect(distance(label, points)).toBe(0);
+    expect(boxes.some(box => overlaps(rectOf(label), box, 4))).toBe(false);
+  });
+
   it.each([12, 32])('keeps a label clear of objects across a %ipx gap', gap => {
     const label = 'makes this connection clear',
       bounds = edgeLabelSize(label),

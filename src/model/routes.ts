@@ -204,8 +204,10 @@ function labelSpots(
         ? [0, -(h / 2 + 4), h / 2 + 4, ...clear, ...(shift > 8 ? [-shift, shift] : [])]
         : [0, -(h - 4), h - 4, ...beside(a, b)],
       steps = Math.max(2, Math.ceil(len / 6));
-    for (let k = 0; k <= steps; k++) {
-      const t = k / steps,
+    // An odd number of steps skips the exact center. In a narrow gap that can
+    // be the only spot with enough clearance from both endpoint boxes.
+    for (let k = 0; k <= steps + (steps % 2); k++) {
+      const t = k > steps ? 0.5 : k / steps,
         along = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
       for (const offset of offsets) {
         const p = flat ? { x: along.x, y: along.y + offset } : { x: along.x + offset, y: along.y };
