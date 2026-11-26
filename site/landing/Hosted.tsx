@@ -1,8 +1,7 @@
-import { createResource, For, onCleanup, Show } from 'solid-js';
+import { createResource, For, Show } from 'solid-js';
 import { encodeSource } from '../../src/lib/render-url';
-import { appUrl, paperOf } from '../draw';
+import { appUrl } from '../draw';
 import { CopyCommand } from './CopyCommand';
-import { drawSvg } from './render';
 import { A } from '@solidjs/router';
 
 export const API = 'https://api.draftably.dev';
@@ -39,25 +38,16 @@ const TOOLS: [string, string][] = [
 const TIERS: [string, string, string][] = [
   ['Image URL, no key', '60 new drawings a minute per address', 'Free'],
   ['Free account', '1,000 credits a month', 'Free'],
-  ['Small pack', '25,000 credits', '$5'],
-  ['Large pack', '150,000 credits', '$25'],
+  ['Small pack', '25,000 credits, on sale soon', '$5'],
+  ['Large pack', '150,000 credits, on sale soon', '$25'],
 ];
 
 /** The hosted render service: image URLs, MCP and the REST API, and what they cost. */
 export function Hosted() {
-  // The sample's real URL, and its drawing made here, so the page shows both without a request.
+  // The sample's real URL; the image below it is the live service drawing that URL.
   const [url] = createResource(async () => `${API}/svg/${await encodeSource(SAMPLE)}`);
-  const [img] = createResource(async () => {
-    const svg = await drawSvg(SAMPLE);
-    if (!svg) return null;
-    return {
-      paper: paperOf(svg),
-      src: URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' })),
-    };
-  });
-  onCleanup(() => img() && URL.revokeObjectURL(img()!.src));
   return (
-    <section class="install hosted" id="api">
+    <section class="hosted" id="api">
       <div class="section-head">
         <h2>Or let our server draw it</h2>
         <A href="/docs/hosted-render-urls">Read the API docs</A>
@@ -78,10 +68,11 @@ export function Hosted() {
           <pre class="hosted-code hosted-url">
             <code>{url() ?? `${API}/svg/…`}</code>
           </pre>
-          <div class="hosted-shot" style={{ background: img()?.paper }}>
-            <Show when={img()}>
+          <div class="hosted-shot">
+            <Show when={url()}>
               <img
-                src={img()!.src}
+                src={url()}
+                loading="lazy"
                 alt="The sample URL's drawing: a web app calls an API, which uses Postgres and a cache"
               />
             </Show>

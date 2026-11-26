@@ -1005,6 +1005,7 @@ main {
 
 .examples,
 .install,
+.hosted,
 .switch {
   max-width: var(--page);
   margin: 0 auto;
@@ -1125,24 +1126,28 @@ main {
   flex-direction: column;
 }
 
-.install h3 {
+.install h3,
+.hosted h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
 }
 
-.install h3 + * {
+.install h3 + *,
+.hosted h3 + * {
   margin-top: 8px;
 }
 
-.install p {
+.install p,
+.hosted p {
   margin: 10px 0 0;
   color: var(--muted);
   font-size: 14px;
 }
 
 /* A long command wraps inside its button, so it never sets the column's width. */
-.install .copy {
+.install .copy,
+.hosted .copy {
   align-items: flex-start;
   width: 100%;
   height: auto;
@@ -1152,16 +1157,19 @@ main {
   line-height: 20px;
 }
 
-.install .copy code {
+.install .copy code,
+.hosted .copy code {
   white-space: normal;
   text-wrap: balance;
 }
 
-.install .copy-prompt {
+.install .copy-prompt,
+.hosted .copy-prompt {
   line-height: 20px;
 }
 
-.install .copy-icon {
+.install .copy-icon,
+.hosted .copy-icon {
   margin-top: 2px;
 }
 
@@ -1177,6 +1185,7 @@ main {
 }
 
 .install p code,
+.hosted p code,
 .switch p code {
   white-space: nowrap;
 }
@@ -1272,7 +1281,8 @@ main {
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--canvas);
+  /* The default theme's paper, so the drawing's own background meets the box without a seam. */
+  background: #f7f7f4;
 }
 
 .hosted-shot img {
@@ -1282,7 +1292,7 @@ main {
   object-fit: contain;
 }
 
-.install .hosted-tools {
+.hosted .hosted-tools {
   margin-top: 14px;
   gap: 4px 16px;
   font-size: 13.5px;

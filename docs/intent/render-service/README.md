@@ -1,6 +1,6 @@
 # Hosted render service: design
 
-Status: built, not deployed (2026-11-25). The Worker is in `packages/service`. Task: TASK-0080. Build order:
+Status: deployed at `api.draftably.dev` (2026-11-25). The Worker is in `packages/service`. Task: TASK-0080. Build order:
 [plan.md](plan.md).
 
 ## Goal

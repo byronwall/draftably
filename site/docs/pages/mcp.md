@@ -41,4 +41,4 @@ Other clients take a JSON block like this:
 | `language_guide`   | Returns the language guide, the same text as the agent skill.                                                                                 | Free                 |
 
 A render that the server drew before comes from the cache and costs nothing. Each account gets
-1,000 free credits a month; see [Pricing](https://draftably.dev/pricing) for credit packs.
+1,000 free credits a month; credit packs go on sale soon. See [Pricing](https://draftably.dev/pricing).

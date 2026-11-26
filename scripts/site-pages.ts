@@ -34,7 +34,7 @@ const SITE: Meta[] = [
     path: 'pricing',
     title: 'Pricing · draftably',
     description:
-      'Image URLs are free with no key. An account gets 1,000 credits a month for the REST API and MCP server; credit packs add more. The CLI and editor stay free.',
+      'Image URLs are free with no key. An account gets 1,000 credits a month for the REST API and MCP server; credit packs go on sale soon. The CLI and editor stay free.',
   },
   {
     path: 'play',

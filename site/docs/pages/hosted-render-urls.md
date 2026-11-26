@@ -45,7 +45,7 @@ from the cache and does not count.
 Send an API key (`Authorization: Bearer dft_...`) to skip the address limit. A keyed request spends
 credits: an SVG costs 1 and a PNG 2. A cache hit is free. Make a key on the
 [account page](https://api.draftably.dev/account): sign in with your email. Each account gets
-1,000 free credits a month, and credit packs add more. See [Pricing](https://draftably.dev/pricing).
+1,000 free credits a month. Credit packs that add more go on sale soon. See [Pricing](https://draftably.dev/pricing).
 
 ## What the server keeps
 
