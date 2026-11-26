@@ -6,6 +6,8 @@ This file has everything an agent needs to draw a diagram: the syntax below, one
 
 ## Draw a diagram with no install
 
+The simplest way: write the source, open `https://api.draftably.dev/link?code=<source>` with the source percent-encoded, and share the short link it returns (see "Share a short link" below). The steps here make a long image URL instead, which stores nothing.
+
 1. Write the source. This is a complete sequence diagram:
 
 ```text

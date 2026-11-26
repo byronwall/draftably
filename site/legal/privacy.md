@@ -12,7 +12,7 @@ your browser or your files. A Playground link keeps the source after the `#` in 
 the browser never sends to a server.
 
 Two commands are the exception, because they make a URL for the render service: `draftably url`,
-and the MCP tool `image_url`. The section below covers what happens when that URL is opened.
+and the MCP tools `image_url` and `share_diagram`. The section below covers what happens when that URL is opened.
 
 ## This website
 
@@ -26,8 +26,14 @@ and a rough location from your IP address. Google sets cookies for this. Cloudfl
 **Diagram source.** An image URL holds the diagram's source, so anyone with the URL can see the
 diagram. The REST API and the MCP server receive the source in the request. The service draws it
 and keeps the image in Cloudflare's cache, so the next request for the same diagram is fast and
-free. A PNG carries its source inside the file. The service does not store the source anywhere
-else, and it never uses diagrams to train models.
+free. A PNG carries its source inside the file. Apart from short links (below), the service does
+not store the source anywhere else, and it never uses diagrams to train models.
+
+**Short links.** Creating a short link (`/link`, `/v1/share` or the MCP tool `share_diagram`)
+stores the diagram's source in the service's database, so the link can draw it later. Anyone with
+the link can see the diagram and its source. The service also stores when the link was made, the
+account when an API key made it, and a hash of the IP address (never the address itself). To have
+a link deleted, write to [hello@draftably.dev](mailto:hello@draftably.dev).
 
 **Rate limits.** Requests without a key are counted by IP address for one minute. The count is not
 kept after that.
