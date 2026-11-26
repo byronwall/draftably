@@ -104,6 +104,22 @@ export function oauthOptions<E extends ShareEnv & OAuthEnv>(
 export const authorizeNext = (next: unknown) =>
   typeof next === 'string' && next.startsWith('/authorize?') && next.length <= 4096 ? next : null;
 
+/**
+ * The authorization to resume after sign-in, or null. A link can carry any `next`, so it must
+ * parse as a valid request here first: one the library refuses would bounce the browser to the
+ * app's callback with an error before any consent page.
+ */
+export async function resumeAuthorize(env: OAuthEnv, origin: string, next: unknown) {
+  const path = authorizeNext(next);
+  if (!path) return null;
+  try {
+    await env.OAUTH_PROVIDER.parseAuthRequest(new Request(origin + path));
+    return path;
+  } catch {
+    return null;
+  }
+}
+
 const problem = (title: string, message: string, status = 400) =>
   page(
     title,
