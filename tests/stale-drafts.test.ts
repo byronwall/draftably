@@ -81,8 +81,9 @@ it('saves a draft when the file did not change under it', async () => {
   await s.openExampleSession('drafts', 'Drafts', BASE);
   await settle(s);
   s.startInlineEdit('q');
+  const token = s.codeDraft()!.token;
   expect(s.codeEditId()).toBe('q');
-  s.finishCodeEdit('q', DRAFTS.body.draft);
+  s.finishCodeEdit(token, DRAFTS.body.draft);
   await settle(s);
   expect(s.currentSource()).toContain('SELECT 3');
 });
@@ -94,10 +95,11 @@ for (const [what, [changed, kept]] of Object.entries(CHANGES))
       await s.openExampleSession(`drafts-${what}-${kind}`, 'Drafts', BASE);
       await settle(s);
       s.startInlineEdit('q');
+      const token = s.codeDraft()!.token;
       expect(s.codeEditId()).toBe('q');
       await s.receiveSource(changed);
       await settle(s);
-      s.finishCodeEdit('q', draft);
+      s.finishCodeEdit(token, draft);
       await settle(s);
       const saved = s.currentSource();
       expect(saved).toContain(kept);
@@ -113,10 +115,11 @@ it('refuses a draft after another file opened, and leaves that file as it is', a
   await s.openExampleSession('drafts-a', 'A', BASE);
   await settle(s);
   s.startInlineEdit('q');
+  const token = s.codeDraft()!.token;
   const other = file(' lang=sql', 'Query', ['SELECT 9']);
   await s.openExampleSession('drafts-b', 'B', other);
   await settle(s);
-  s.finishCodeEdit('q', DRAFTS.caption.draft);
+  s.finishCodeEdit(token, DRAFTS.caption.draft);
   await settle(s);
   expect(s.currentSource()).toBe(other);
   expect(toastMessage()?.text).toMatch(/Another file/);
@@ -128,10 +131,11 @@ it('refuses a draft whose node the file renamed, and says so', async () => {
   await s.openExampleSession('drafts-renamed', 'Drafts', BASE);
   await settle(s);
   s.startInlineEdit('q');
+  const token = s.codeDraft()!.token;
   const renamed = BASE.replace('node q ', 'node r ');
   await s.receiveSource(renamed);
   await settle(s);
-  s.finishCodeEdit('q', DRAFTS.caption.draft);
+  s.finishCodeEdit(token, DRAFTS.caption.draft);
   await settle(s);
   expect(s.currentSource()).toBe(renamed);
   expect(toastMessage()?.text).toMatch(/removed or renamed/);
@@ -153,4 +157,86 @@ it('opens no draft from the last drawing while the newly opened file does not dr
   await settle(s);
   s.startInlineEdit('q');
   expect(s.codeEditId()).toBe('q');
+});
+
+// A refresh from disk is still being laid out when the editor saves. The save waits for the new
+// revision and applies to it: a field the file changed is not written over, and a change the file
+// made elsewhere (a size line) stays.
+const SIZED = BASE + 'size q width=300 height=200\n';
+for (const [kind, { draft, shows, same }] of Object.entries(DRAFTS))
+  it(`checks a ${kind} draft saved during a refresh against the refreshed file`, async () => {
+    const s = await session();
+    await s.openExampleSession(`drafts-paused-${kind}`, 'Drafts', BASE);
+    await settle(s);
+    s.startInlineEdit('q');
+    const token = s.codeDraft()!.token;
+    const changed = SIZED.replace('"Query"', '"Report"');
+    // Not awaited: the refresh is still compiling when Done is pressed.
+    const refresh = s.receiveSource(changed);
+    expect(s.fileCompiling()).toBe(true);
+    s.finishCodeEdit(token, draft);
+    await refresh;
+    await settle(s);
+    const saved = s.currentSource();
+    expect(saved).toContain('size q width=300 height=200');
+    expect(saved).toContain('"Report"');
+    if (same.includes('caption')) expect(saved).toBe(changed);
+    else expect(saved).toContain(shows);
+  });
+
+it('keeps a draft opened on a new node when its temporary id becomes a source id', async () => {
+  const s = await session();
+  await s.openExampleSession('drafts-temp', 'Drafts', BASE);
+  await settle(s);
+  const temp = s.addTable(['a\tb', '1\t2']);
+  // The pasted table is not drawn from the file yet: its editor opens on the temporary id.
+  s.startInlineEdit(temp);
+  const draft = s.codeDraft()!;
+  expect(draft.id).toBe(temp);
+  await settle(s);
+  // The saved file names the table; the same draft now edits it under its source id.
+  expect(s.codeDraft()).toBe(draft);
+  expect(s.codeEditId()).not.toBe(temp);
+  expect(s.codeEditId()).toBe(draft.id);
+  s.finishCodeEdit(draft.token, { table: true, title: 'Pasted' });
+  await settle(s);
+  expect(s.currentSource()).toMatch(new RegExp(`node ${draft.id} "Pasted"`));
+});
+
+it('saves a draft to its own file while the next file is still opening', async () => {
+  vi.stubGlobal('window', Object.assign(new EventTarget(), { setTimeout, clearTimeout }));
+  vi.stubGlobal(
+    'EventSource',
+    class extends EventTarget {
+      close() {}
+    },
+  );
+  const puts: string[] = [];
+  let release!: () => void;
+  const paused = new Promise<void>(resolve => (release = resolve));
+  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+    if (init?.method === 'PUT') {
+      puts.push(url);
+      return Response.json({ revision: `r${puts.length}` });
+    }
+    if (url.includes('file=b.draft')) await paused;
+    // The two files are copies: the same text and the same revision.
+    return Response.json({ name: 'copy', path: '/copy', source: BASE, revision: 'same' });
+  });
+  const s = await session();
+  await s.openFileSession('a.draft');
+  await settle(s);
+  s.startInlineEdit('q');
+  const token = s.codeDraft()!.token;
+  // B is asked for, but has not answered: A is still the open file.
+  const opening = s.openFileSession('b.draft');
+  s.finishCodeEdit(token, DRAFTS.caption.draft);
+  await settle(s);
+  await s.settleSave();
+  expect(puts).toEqual(['./api/source?file=a.draft']);
+  release();
+  expect(await opening).toBe(true);
+  await settle(s);
+  expect(s.currentSource()).toBe(BASE);
+  expect(puts).toEqual(['./api/source?file=a.draft']);
 });

@@ -75,7 +75,7 @@ const ACTIONS: Action[] = [
     on: ['node', 'group', 'edge'],
     run: (s, id) => {
       s.startInlineEdit(id);
-      if (s.codeEditId()) return s.finishCodeEdit(id, { table: false, title: 'Renamed' });
+      if (s.codeEditId()) return s.finishCodeEdit(s.codeDraft()!.token, { table: false, title: 'Renamed' });
       s.setInlineDraft('Renamed');
       s.finishInlineEdit(true);
     },

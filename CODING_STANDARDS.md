@@ -11,3 +11,6 @@ is not listed here.
   changed in the file since it opened. A file change to another field stays.
   `tests/stale-drafts.test.ts` holds the Code editor to this rule; a new draft surface adds its
   fields to that test.
+- A draft save is a command, not a snapshot of the drawing. It names its draft, the fields it
+  writes and the values it read them with. The file session runs it against the latest drawn
+  source (`whenDrawn`), so a save made while a refresh compiles is checked against that refresh.

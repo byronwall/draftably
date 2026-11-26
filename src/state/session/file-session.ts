@@ -219,11 +219,27 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   const pendingIds = new Map<string, string>();
   /** An edit made while the file was compiling, saved once the compile finishes. */
   let queued: { before: string; after: string; label: string } | null = null;
+  /**
+   * Editor commands waiting for the revision being laid out. Each one reads the latest drawn
+   * source when it runs, so a change on disk made meanwhile is checked, not written over.
+   */
+  const commands: (() => void)[] = [];
   const flushQueued = () => {
     const edit = queued;
     queued = null;
     if (edit) handleEdit(edit.before, edit.label, 'edit', edit.after);
+    // Each command that edits starts a compile, so the rest wait for that one in turn.
+    while (commands.length && !state.compiling()) commands.shift()!();
   };
+  /**
+   * Run an editor command against the latest drawn source: now, or once the revision being laid
+   * out is on screen. A command holds what its editor opened with and the fields it writes, not a
+   * snapshot of the drawing, so it applies to whatever the file says by then.
+   */
+  function whenDrawn(command: () => void) {
+    if (state.info() && (state.compiling() || commands.length)) commands.push(command);
+    else command();
+  }
   const renamePending = <T>(value: T): T =>
     pendingIds.size
       ? JSON.parse(JSON.stringify(value), function (key, v) {
@@ -454,13 +470,17 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     try {
       for (;;) {
         saveAgain = false;
-        const sending = localSource;
+        // The session this save belongs to: its path and revision, read together.
+        const session = state.info(),
+          sending = localSource;
         const res = await fetch(`./api/source${fileQuery}`, {
           method: 'PUT',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ source: sending, base: diskRevision }),
         });
         const body = await res.json();
+        // Another file opened while this save was in flight: its answer is not that file's.
+        if (state.info() !== session) return;
         if (res.status === 409) {
           enterConflict(body.source, body.revision);
           return;
@@ -844,10 +864,12 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * Resolves false when the server has no such file.
    */
   async function openFileSession(file: string): Promise<boolean> {
-    fileQuery = `?file=${encodeURIComponent(file)}`;
+    // Saves keep going to the open file until this one's session is begun.
+    const query = `?file=${encodeURIComponent(file)}`,
+      ticket = ++opening;
     let info: FileSessionInfo;
     try {
-      const res = await fetch(`./api/session${fileQuery}`, {
+      const res = await fetch(`./api/session${query}`, {
         headers: { accept: 'application/json' },
       });
       if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) return false;
@@ -855,9 +877,11 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     } catch {
       return false;
     }
-    document.title = `${file} · draftably`;
     await useServedIconSets();
-    await begin(info);
+    // A later open won the race: this file is not the one to show.
+    if (ticket !== opening) return false;
+    document.title = `${file} · draftably`;
+    await begin(info, query);
     listen();
     return true;
   }
@@ -874,6 +898,9 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
       // Opening the file reports the problem.
     }
   }
+
+  /** Counts file opens, so only the newest one begins its session. */
+  let opening = 0;
 
   /** Wait for a save in flight, so leaving the file never drops an edit. */
   async function settleSave() {
@@ -973,8 +1000,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     keepScratch();
   }
 
-  function begin(info: FileSessionInfo): Promise<void> {
+  /** Begin the session of `info`; `query` selects a served file's session on the server. */
+  function begin(info: FileSessionInfo, query = ''): Promise<void> {
     if (info.revision !== 'host') hostSave = null;
+    // The save URL changes with the session, in the same step: never before it.
+    fileQuery = query;
+    // An edit queued in the last file is not this file's. Commands stay: each one checks which
+    // file it was opened in, and says why it was not saved.
+    queued = null;
     stopListening();
     setDraft(null);
     if (!info.example) scratchKey = '';
@@ -1121,6 +1154,7 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
     resetExample,
     markExampleSaved,
     fileStatusText,
+    whenDrawn,
   };
 }
 

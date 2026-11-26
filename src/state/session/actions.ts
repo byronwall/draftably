@@ -2,7 +2,8 @@
  * Editor operations behind the toolbar, menus, inspector and keyboard shortcuts.
  * Each one is a single undoable step.
  */
-import { batch, createSignal } from 'solid-js';
+import { batch, createMemo, createSignal } from 'solid-js';
+import { unwrap } from 'solid-js/store';
 import {
   groupShadeFor,
   isBuiltInFamily,
@@ -20,6 +21,7 @@ import {
   codeLayout,
   type CodeBlock,
 } from '../../model/code';
+import type { Table } from '../../model/code-table';
 import { normalize } from '../../model/document';
 import * as edits from '../../model/edits';
 import {
@@ -78,27 +80,43 @@ export function createActions(
   s.onSourceIdMap(mapId => {
     const id = s.inlineEditId();
     if (id) s.setInlineEditId(mapId(id));
-    const code = codeEditId();
-    if (code) setCodeEditId(mapId(code));
+    // An open or queued code draft follows its node when a temporary id becomes a source id.
+    for (const draft of codeDrafts) draft.id = mapId(draft.id);
+    const open = codeDraft();
+    if (open) setCodeEditId(open.id);
   });
 
   // --- Code and table editing ------------------------------------------------------------------
 
+  type CodeFields = { title: string; table: boolean; body: string; cells: string };
+  /**
+   * One open of the code editor. `token` names the draft for its whole life, while `id` follows
+   * the node when a temporary id becomes a source id. `open` is the node as it was when the editor
+   * opened, a copy the editor starts from; `base` is the same node field by field, which a save
+   * checks against the latest source. `file` is the session the draft was opened in: a draft
+   * never saves into another file.
+   */
+  interface CodeDraft {
+    token: number;
+    id: string;
+    file: unknown;
+    base: CodeFields;
+    open: { title: string; table: boolean; tab: number; body: string[]; cells?: Table };
+  }
+  /** Drafts that are open or waiting to be applied, so a source id map reaches each one. */
+  const codeDrafts = new Set<CodeDraft>();
+  let draftCount = 0;
+  const [codeDraft, setCodeDraft] = createSignal<CodeDraft | null>(null);
   /** The code node whose body is open in the code or table editor. */
   const [codeEditId, setCodeEditId] = createSignal<string | null>(null);
+  /** The open draft's token: the editor is keyed by it, so an id change keeps the draft. */
+  const codeEditToken = createMemo(() => codeDraft()?.token ?? null);
   /** Saves the open code editor's draft; the editor sets it while it is open. */
   let saveOpenCode: (() => void) | undefined;
   const onCodeSave = (fn: (() => void) | undefined) => (saveOpenCode = fn);
   /** Save the open code editor, if any, before another edit or a press on the canvas. */
   const commitCodeEdit = () => saveOpenCode?.();
 
-  type CodeFields = { title: string; table: boolean; body: string; cells: string };
-  /**
-   * What the open editor started from, field by field. A save writes only the fields its draft
-   * changed, and is refused when one of those fields changed in the file since: a change the file
-   * made to another field stays. `file` is the shown file, so a draft never saves into another.
-   */
-  let codeBase: { file: unknown; fields: CodeFields } | undefined;
   /**
    * The fields of a code node the editor can write: caption, table setting and body. `cells` is
    * what a grid read its cells with, tab width and table setting: a body written from grid cells
@@ -120,16 +138,32 @@ export function createActions(
   function startCodeEdit(id: string) {
     finishInlineEdit(true);
     commitCodeEdit();
-    const code = findNode(s.doc, id)?.code;
-    if (code?.src)
+    const node = findNode(s.doc, id),
+      code = node?.code;
+    if (!node || !code) return;
+    if (code.src)
       return toast(`This code reads its lines from ${code.src.path}. Edit that file instead.`);
     // Another file is opening: the drawing on screen is not the file a save would go to.
     if (s.shownFile() !== s.fileSession()) return toast('Still opening the file. Try again.');
-    const fields = codeFields(id);
-    codeBase = fields && { file: s.shownFile(), fields };
+    // Copies: the node is live, and the file can change while the editor is open.
+    const draft: CodeDraft = {
+      token: ++draftCount,
+      id,
+      file: s.fileSession(),
+      base: codeFields(id)!,
+      open: structuredClone({
+        title: node.title,
+        table: !!code.table,
+        tab: code.tab ?? CODE_TAB,
+        body: [...(code.body ?? code.lines)],
+        cells: unwrap(code.cells),
+      }),
+    };
+    codeDrafts.add(draft);
     batch(() => {
       s.setConnectFrom(null);
       s.setSelection([id]);
+      setCodeDraft(draft);
       setCodeEditId(id);
     });
   }
@@ -158,56 +192,74 @@ export function createActions(
   }
 
   /**
-   * Close the code editor of node `id`; with `next`, save its caption, table setting and, when it
-   * changed, its body, as one undo step. The node is read from the new body as the compiler
-   * reads a file, so it draws the same before and after the file is saved. A node that changed
-   * since the editor opened (the file was edited elsewhere) is not saved over.
+   * Close the code editor whose draft is `token`; with `next`, save its caption, table setting
+   * and, when it changed, its body, as one undo step. The save is a command the file session runs
+   * once the latest revision is drawn: it writes only the fields the draft changed, onto the node
+   * as the latest source has it, and is refused when a field it writes or read changed since the
+   * editor opened. The node is read from the new body as the compiler reads a file, so it draws
+   * the same before and after the file is saved.
    */
   function finishCodeEdit(
-    id: string,
+    token: number,
     next?: { body?: string[]; table: boolean; title: string; grid?: boolean },
   ) {
-    if (codeEditId() === id) setCodeEditId(null);
+    const draft = codeDraft();
+    if (!draft || draft.token !== token) return;
+    batch(() => {
+      setCodeDraft(null);
+      setCodeEditId(null);
+    });
     saveOpenCode = undefined;
-    const opened = codeBase;
-    codeBase = undefined;
-    if (!next || !opened) return;
-    const base = opened.fields;
-    const edits = {
-      title: next.title !== base.title,
-      table: next.table !== base.table,
-      body: !!next.body,
+    const base = draft.base;
+    const patch = next && {
+      title: next.title !== base.title ? next.title : undefined,
+      table: next.table !== base.table ? next.table : undefined,
+      body: next.body,
     };
-    if (!edits.title && !edits.table && !edits.body) return;
-    // Each field the draft writes, and what it was read with: a body from grid cells also
+    if (!patch || (patch.title === undefined && patch.table === undefined && !patch.body))
+      return void codeDrafts.delete(draft);
+    // Each field the patch writes, and what it was read with: a body from grid cells also
     // depends on the tab width and table setting it read them with.
     const reads: (keyof CodeFields)[] = [
-      ...(edits.title ? (['title'] as const) : []),
-      ...(edits.table ? (['table'] as const) : []),
-      ...(edits.body ? (['body'] as const) : []),
-      ...(edits.body && next.grid ? (['cells'] as const) : []),
+      ...(patch.title !== undefined ? (['title'] as const) : []),
+      ...(patch.table !== undefined ? (['table'] as const) : []),
+      ...(patch.body ? (['body'] as const) : []),
+      ...(patch.body && next.grid ? (['cells'] as const) : []),
     ];
-    if (opened.file !== s.shownFile() || s.shownFile() !== s.fileSession())
+    s.whenDrawn(() => {
+      codeDrafts.delete(draft);
+      applyCodePatch(draft, patch, reads);
+    });
+  }
+
+  /** Apply a code editor's patch to the node as the latest drawn source has it. */
+  function applyCodePatch(
+    draft: CodeDraft,
+    patch: { title?: string; table?: boolean; body?: string[] },
+    reads: (keyof CodeFields)[],
+  ) {
+    if (draft.file !== s.fileSession() || s.shownFile() !== s.fileSession())
       return toast('Another file is open now, so your code edit was not saved.');
-    const now = codeFields(id);
+    const id = draft.id,
+      now = codeFields(id);
     if (!now) return toast('This code was removed or renamed, so your edit was not saved.');
-    if (reads.some(k => now[k] !== base[k]))
+    if (reads.some(k => now[k] !== draft.base[k]))
       return toast('This code changed while you edited it, so your edit was not saved.');
-    s.transact(next.table ? 'Edit table' : 'Edit code', d => {
+    const table = patch.table ?? now.table;
+    s.transact(table ? 'Edit table' : 'Edit code', d => {
       const node = findNode(d, id);
       if (!node?.code || node.code.src) return;
-      if (edits.title) node.title = next.title;
+      if (patch.title !== undefined) node.title = patch.title;
       // A caption edit leaves the code block as it is.
-      if (!edits.body && !edits.table) return;
-      const table = edits.table ? next.table : !!node.code.table,
-        toggled = table !== !!node.code.table;
+      if (!patch.body && patch.table === undefined) return;
+      const toggled = table !== !!node.code.table;
       const { table: _, cells: __, ...rest } = node.code;
       node.code = {
         ...rest,
         ...(table ? { table: true } : {}),
         // `table=` sets the wrap default, unless the file sets `wrap=`.
         ...(toggled && !rest.wrapSet ? { wrap: !table } : {}),
-        ...codeFromBody(next.body ?? rest.body ?? rest.lines, table, rest.tab),
+        ...codeFromBody(patch.body ?? rest.body ?? rest.lines, table, rest.tab),
       };
     });
   }
@@ -791,6 +843,8 @@ export function createActions(
     startInlineEdit,
     finishInlineEdit,
     codeEditId,
+    codeEditToken,
+    codeDraft,
     startCodeEdit,
     finishCodeEdit,
     commitCodeEdit,
