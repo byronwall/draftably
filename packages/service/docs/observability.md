@@ -24,7 +24,7 @@ top-level key: filter on `event = request` to see only these lines.
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `route`                                    | `image`, `rest`, `mcp`, `account`, `login`, `webhook`, `health`, `other`                                                                                                                                                                                                          |
 | `method`, `status`                         | the request method and the answer's status; `500` for an uncaught error                                                                                                                                                                                                           |
-| `path`                                     | the route template (`/v1/render`, `/account/keys/:id/revoke`); none for `image` (its path holds the diagram source); for an unknown path, only its first segment, such as `/wp-login.php` or `/admin/*`                                                                           |
+| `path`                                     | the route template (`/v1/render`, `/account/keys/:id/revoke`); none for `image` (its path holds the diagram source); for an unknown path, its first segment when it is a plain name, such as `/wp-login.php` or `/admin/*`, else `/<other>`                                       |
 | `version`, `build`                         | the Draftably runtime version, and the Worker version ID of the deploy                                                                                                                                                                                                            |
 | `ip`                                       | the first 12 hex characters of the client IP's SHA-256. It groups one address's requests; it is not anonymous, since IPv4 is small enough to search                                                                                                                               |
 | `country`                                  | Cloudflare's country code for the client                                                                                                                                                                                                                                          |
@@ -82,9 +82,12 @@ at the top right. "Filter" means a row in the Filter section; "Group by" and "Vi
 other sections. Star a query to keep it.
 
 **Is it up? What is the error rate?**
-Visualize `Count`, Filter `event = request`, Group by `status`. Or use the Worker's **Metrics**
-tab, which shows requests, errors and CPU time with no query. For a probe, `GET /health` answers
-`{ok, version}`.
+Count from the invocation logs, which have one row per request, even for a request Cloudflare cut
+off at the CPU limit before the Worker logged its event. Visualize `Count`, Filter
+`$workers.outcome exists`, Group by `$workers.outcome` and `$workers.event.response.status`. A
+failure is an outcome other than `ok` (`exceededCpu`, `exception`) or a status of 500 or more. The
+Worker's **Metrics** tab shows requests, errors and CPU time with no query. For a probe,
+`GET /health` answers `{ok, version}`.
 
 **Requests by route and by status.**
 Visualize `Count`, Filter `event = request`, Group by `route` and `status`.
@@ -93,8 +96,9 @@ Visualize `Count`, Filter `event = request`, Group by `route` and `status`.
 Latency comes from the invocation logs (not the spans, above). In the Query builder, Visualize
 `P50` and `P95` of `$workers.cpuTimeMs` and `$workers.wallTimeMs`, Filter
 `$workers.event.request.method = GET` and `$workers.event.request.url` matches regex
-`/(draftably/)?png/[^/]+$` (then `svg`). Cloudflare shows an image path as `/png/REDACTED`, which still
-matches. For REST and MCP, Filter the URL on `/v1/render` or `/mcp`: those don't split by format.
+`^https?://[^/]+/(draftably/)?png/[^/]+$` (then `svg`). Cloudflare shows an image path as `/png/REDACTED`, which still
+matches. For REST and MCP, Filter method `POST` and the URL on regex `^https?://[^/]+/v1/render$` or
+`^https?://[^/]+/mcp$`: those don't split by format.
 Hit rate: Visualize `Count`, Filter `event = request` and `cache exists`, Group by `format` and
 `cache`.
 

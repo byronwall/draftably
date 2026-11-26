@@ -29,7 +29,7 @@ const arg = (name: string) => {
 };
 const HOURS = Number(arg('hours') ?? 24);
 /** Cloudflare keeps 7 days; the baseline is as many earlier windows as fit, up to 7. */
-const BASELINE = Math.max(1, Math.min(7, Math.floor((7 * 24 - HOURS) / HOURS)));
+const BASELINE = Math.min(7, Math.floor((7 * 24 - HOURS) / HOURS));
 
 function token() {
   if (process.env.CF_O11Y_TOKEN) return process.env.CF_O11Y_TOKEN.trim();
@@ -64,12 +64,9 @@ async function cf<T>(method: string, url: string, body?: unknown): Promise<T> {
 
 // --- Telemetry queries ---------------------------------------------------------------------
 
-type Filter = {
-  key: string;
-  operation: string;
-  type: 'string' | 'number';
-  value?: string | number;
-};
+type Filter =
+  | { key: string; operation: string; type: 'string' | 'number'; value?: string | number }
+  | { kind: 'group'; filterCombination: 'or' | 'and'; filters: Filter[] };
 const eq = (key: string, value: string | number): Filter => ({
   key,
   operation: 'eq',
@@ -78,6 +75,7 @@ const eq = (key: string, value: string | number): Filter => ({
 });
 /** Fields Cloudflare indexes as numbers; every other field is a string. */
 const NUMERIC = new Set([
+  '$workers.event.response.status',
   'status',
   'credits_spent',
   'credits_left',
@@ -130,7 +128,8 @@ type Row = Record<string, string | number>;
 
 const now = Date.now();
 const window = { from: now - HOURS * 3600e3, to: now };
-const baseline = { from: window.from - BASELINE * HOURS * 3600e3, to: window.from };
+// With no full earlier window in retention (`--hours` over 84), there is no baseline.
+const baseline = { from: window.from - Math.max(1, BASELINE) * HOURS * 3600e3, to: window.from };
 
 let queries = 0;
 async function calc(
@@ -212,7 +211,8 @@ async function currentBuild() {
     view: 'events',
     dry: true,
     limit: 1,
-    parameters: { filters: WIDE },
+    // The newest invocation, so a request cut off before its wide event still counts.
+    parameters: { filters: [SCRIPT, has('$workers.outcome')] },
   });
   return result.events?.events?.[0]?.$workers?.scriptVersion?.id;
 }
@@ -328,22 +328,20 @@ async function main() {
       [window, baseline].flatMap(t => [
         // From the invocation log, so a request Cloudflare cut off (CPU limit) still counts.
         calc(t, [SCRIPT, has('$workers.outcome')], []),
+        // Failed: cut off or threw (outcome), or answered 5xx. One count per invocation.
         calc(
           t,
           [
             SCRIPT,
             has('$workers.outcome'),
-            { key: '$workers.outcome', operation: 'neq', type: 'string', value: 'ok' },
-          ],
-          [],
-        ),
-        // A 5xx the Worker answered itself; a thrown one (ERR_INTERNAL) is already an outcome.
-        calc(
-          t,
-          [
-            ...WIDE,
-            gte('status', 500),
-            { key: 'error_code', operation: 'neq', type: 'string', value: 'ERR_INTERNAL' },
+            {
+              kind: 'group',
+              filterCombination: 'or',
+              filters: [
+                { key: '$workers.outcome', operation: 'neq', type: 'string', value: 'ok' },
+                gte('$workers.event.response.status', 500),
+              ],
+            },
           ],
           [],
         ),
@@ -351,17 +349,13 @@ async function main() {
     ),
   ]);
 
-  const [requests, failed, answered5xx, baseAll, baseFailed, base5xx] = totals.map(rows =>
-    total(rows),
-  );
-  // Failed: cut off or threw, or answered 5xx.
-  const fivexx = failed + answered5xx;
-  const base5 = baseFailed + base5xx;
-  const baseRequests = baseAll / BASELINE;
-  const baseFivexx = base5 / BASELINE;
+  const [requests, fivexx, baseAll, base5] = totals.map(rows => total(rows));
+  const per = BASELINE || NaN;
+  const baseRequests = baseAll / per;
+  const baseFivexx = base5 / per;
   const rate = (n: number, d: number) => (d ? n / d : 0);
   const pct = (x: number) => `${(x * 100).toFixed(2)}%`;
-  const baseByCode = new Map(baseErrors.map(r => [r.error_code, Number(r.count) / BASELINE]));
+  const baseByCode = new Map(baseErrors.map(r => [r.error_code, Number(r.count) / per]));
 
   const snapshot = {
     at: new Date(now).toISOString(),
@@ -394,12 +388,12 @@ async function main() {
 
   // Cloudflare flags scanner probes (/.env, /wp-login.php) as Issues too; nothing to fix there.
   const scan = (i: { title: string }) => /vulnerability scan/i.test(i.title);
-  // An issue no occurrence of which came from the live build is likely fixed.
+  // An issue with no occurrence on the newest build seen is likely fixed.
   const live = (i: { versions: unknown[] }) => !current || i.versions.includes(current);
   const status = (i: (typeof issueList)[number]) =>
-    scan(i) ? 'scanner' : live(i) ? (i.isNew ? 'new' : 'open') : 'not on live build';
+    scan(i) ? 'scanner' : live(i) ? (i.isNew ? 'new' : 'open') : 'not on newest build';
 
-  // Actions: new or growing failures on the live build first, worst first, at most three.
+  // Actions: new or growing failures on the newest build first, worst first, at most three.
   const actions: string[] = [];
   for (const i of issueList
     .filter(i => !scan(i) && live(i) && i.inWindow > 0)
@@ -411,7 +405,7 @@ async function main() {
   const stale = issueList.filter(i => !scan(i) && !live(i));
   if (stale.length)
     actions.push(
-      `${stale.length} open issue(s) not seen on the live build ${current}: ${stale.map(i => `"${i.title.slice(0, 60)}"`).join(', ')}. If the route had traffic since the deploy, resolve them in Observability → Issues; with little traffic, wait.`,
+      `${stale.length} open issue(s) not seen on the newest build seen, ${current}: ${stale.map(i => `"${i.title.slice(0, 60)}"`).join(', ')}. Check that build is the one deployed (\`wrangler deployments list\` in packages/service). If it is and the route had traffic since, resolve them in Observability → Issues; with little traffic, wait.`,
     );
   if (rate(fivexx, requests) > 0.01 && fivexx > 3)
     actions.push(
@@ -459,7 +453,7 @@ async function main() {
 
   console.log(`# ${SERVICE}: the last ${HOURS} h, to ${snapshot.at}
 
-**Requests** ${requests} (baseline ${baseRequests.toFixed(0)} a window) · **failed** (5xx, thrown or cut off) ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
+**Requests** ${requests} (baseline ${BASELINE ? baseRequests.toFixed(0) + ' a window' : 'n/a: no full earlier window in 7 days'}) · **failed** (5xx, thrown or cut off) ${fivexx}, ${pct(rate(fivexx, requests))} (baseline ${pct(rate(baseFivexx, baseRequests))}) · **open issues seen** ${issueList.length}
 
 ## Actions
 ${
@@ -472,7 +466,7 @@ ${
 }
 
 ## Issues
-Live build: ${current ?? 'unknown'}
+Newest build seen: ${current ?? 'unknown'}
 
 ${table(issueList.map(i => ({ ...i, status: status(i), versions: i.versions.join(' ') })) as unknown as Row[], ['status', 'title', 'inWindow', 'total', 'frame', 'versions', 'traceId'])}
 

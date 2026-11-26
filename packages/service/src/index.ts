@@ -194,13 +194,11 @@ function pathLabel(route: Wide['route'], path: string) {
     '/account/keys/:id/revoke',
   );
   if (PATHS.has(template)) return template;
-  // Decoded, so an encoded email is masked too.
-  let decoded = path;
-  try {
-    decoded = decodeURIComponent(path);
-  } catch {}
-  const parts = decoded.split('/');
-  return scrub('/' + (parts[1] ?? '')).slice(0, 40) + (parts.length > 2 ? '/*' : '');
+  // Anything else (scanner noise) logs its first segment when it is a plain name, such as
+  // `/wp-login.php`; any other text could be the caller's data.
+  const first = path.split('/')[1] ?? '';
+  const more = path.split('/').length > 2 ? '/*' : '';
+  return /^[\w.-]{1,40}$/.test(first) ? `/${first}${more}` : '/<other>';
 }
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {

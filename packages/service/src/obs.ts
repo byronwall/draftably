@@ -96,12 +96,16 @@ export const scrub = (text: string) =>
   // Cut first: the patterns below are slow on a long run of text with no match.
   text
     .slice(0, 400)
+    // A source error quotes the diagram's line after "> " for the error image; keep it out.
+    .replace(/\n> [\s\S]*/, '')
     // A percent-encoded @ is still an address.
     .replace(/%(?:25)*40/gi, '@')
-    .replace(/[^\s@<>"'(),;:/]{1,64}@[^\s@<>"'(),;:/]{1,255}/g, '<email>')
+    .replace(/[^\s<>(),;:/]{1,64}@[\w-]+(?:\.[\w-]+)+/g, '<email>')
     .replace(/dft_[\w.-]+/g, '<key>')
+    .replace(/\b(\w*(?:pass(?:word)?|secret|token|key|auth)\w*)(?:=|:(?!\s))\S+/gi, '$1=<secret>')
+    .replace(/\/\/[^/\s:@]+:[^/\s@]+@/g, '//<secret>@')
     .replace(/(?<!\d)\d{1,3}(?:\.\d{1,3}){3}(?!\d)/g, '<ip>')
-    .replace(/(?<![0-9a-f:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![\w:])/gi, m =>
+    .replace(/(?<![0-9a-f:])[0-9a-f]{0,4}(?::[0-9a-f]{0,4}){2,7}(?![0-9a-f:])/gi, m =>
       /[0-9a-f]/i.test(m) ? '<ip>' : m,
     )
     .replace(/[\w+/=-]{24,}/g, '<token>')
