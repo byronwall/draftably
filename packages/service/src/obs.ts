@@ -14,7 +14,7 @@ import { ApiError } from './errors';
 /** The fields of one request's log line. Docs: `docs/observability.md`. */
 export interface Wide {
   event: 'request';
-  route: 'image' | 'rest' | 'mcp' | 'account' | 'login' | 'webhook' | 'health' | 'other';
+  route: 'image' | 'share' | 'rest' | 'mcp' | 'account' | 'login' | 'webhook' | 'health' | 'other';
   method: string;
   /** Only for routes whose path holds no diagram source. */
   path?: string;

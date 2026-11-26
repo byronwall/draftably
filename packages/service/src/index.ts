@@ -5,17 +5,25 @@
  * API and `/account` the sign-in page.
  */
 import { runtimeVersion } from '@draftably/runtime';
-import { decodeSource, SourceError } from '../../../src/lib/render-url';
+import { SourceError } from '../../../src/lib/render-url';
 import { handleAccount } from './account';
 import { homePage } from './html';
 import { ApiError, handleApi, requireKey, type ApiEnv } from './api';
 import { drawOptions, errorImage, type DrawOptions, type Format } from './draw';
-import { MAX_SEGMENT, render, type Payer } from './render';
+import { render, type Payer } from './render';
 import { handleMcp } from './mcp';
+import {
+  codeHint,
+  draftResponse,
+  handleShare,
+  shareSource,
+  urlSource,
+  type ShareEnv,
+} from './share';
 import { handleWebhook, type StripeEnv } from './stripe';
 import { ipHash, note, noteError, scrub, span, withEvent, type Wide } from './obs';
 
-export interface Env extends ApiEnv, StripeEnv {
+export interface Env extends ApiEnv, StripeEnv, ShareEnv {
   ANON_LIMIT: RateLimit;
 }
 
@@ -45,10 +53,38 @@ async function errorResponse(message: string, format: Format, status: number) {
   return res;
 }
 
-/** `/{svg|png}/{encoded}` and the Kroki-style `/draftably/{svg|png}/{encoded}`. */
-function parseImagePath(path: string): { format: Format; segment: string } | null {
-  const m = /^\/(?:draftably\/)?(svg|png)\/([^/]+)$/.exec(path);
-  return m ? { format: m[1] as Format, segment: m[2] } : null;
+/** The source an image route names, as `{type, source}` (a share keeps its type). */
+type Load = () => Promise<{ source: string; type?: string | null }>;
+
+const IMAGE_PATH = /^\/(?:draftably\/)?(svg|png)(?:\/([^/]+))?$/;
+const SHARE_IMAGE = /^\/d\/([^/.]+)\.(svg|png)$/;
+
+/**
+ * `/{svg|png}/{encoded}` or `/{svg|png}?code=`, the Kroki-style `/draftably/{svg|png}/{encoded}`,
+ * and a share's `/d/{id}.{svg|png}`.
+ */
+function parseImagePath(url: URL, db: D1Database): { format: Format; load: Load } | null {
+  const m = IMAGE_PATH.exec(url.pathname);
+  if (m)
+    return {
+      format: m[1] as Format,
+      load: () =>
+        span('decode', { segment_bytes: m[2]?.length ?? 0 }, async s => {
+          const source = await urlSource(url, m[2], 'POST /v1/render');
+          s.setAttribute('source_bytes', new TextEncoder().encode(source).length);
+          return { source };
+        }),
+    };
+  const d = SHARE_IMAGE.exec(url.pathname);
+  if (!d) return null;
+  return {
+    format: d[2] as Format,
+    load: async () => {
+      if (url.searchParams.has('code'))
+        throw new SourceError('A short link names its diagram; ?code= is not allowed here.');
+      return shareSource(db, d[1]);
+    },
+  };
 }
 
 /**
@@ -60,7 +96,7 @@ async function imageResponse(
   env: Env,
   ctx: ExecutionContext,
   origin: string,
-  segment: string,
+  load: Load,
   format: Format,
   opts: DrawOptions,
   payer?: Payer,
@@ -78,13 +114,9 @@ async function imageResponse(
     }
   };
   try {
-    const source = await span('decode', { segment_bytes: segment.length }, async s => {
-      if (segment.length > MAX_SEGMENT)
-        throw new SourceError('The URL is over 8 KB. Use POST /v1/render for large diagrams.');
-      const text = await decodeSource(segment);
-      s.setAttribute('source_bytes', new TextEncoder().encode(text).length);
-      return text;
-    });
+    const { source, type } = await load();
+    // A share draws as the language it was stored as.
+    if (type) opts = { ...opts, type };
     // A keyed answer is never stored by a browser or CDN, so a revoked key can't be answered from
     // one. An anonymous answer varies on Authorization for the same reason.
     const drawn = await render(
@@ -102,7 +134,8 @@ async function imageResponse(
     if (!payer) res.headers.set('Vary', 'Authorization');
     res.headers.set('X-Draftably-Cache', drawn.hit ? 'hit' : 'miss');
     return res;
-  } catch (error) {
+  } catch (caught) {
+    const error = codeHint(caught, new URL(req.url));
     if (error instanceof ApiError) {
       noteError(error.code, error.message);
       return errorResponse(error.message, format, error.status);
@@ -120,10 +153,13 @@ Draw a diagram with no install and no account:
        node web "Web app"
        node api "API"
        edge call web -> api "GET /items"
-  2. Encode its UTF-8 bytes as base64url, no padding.
+  2. Percent-encode it (write # as %23, & as %26 and + as %2B) and open
+     https://api.draftably.dev/link?code=<source>
+     It answers with short png, svg and edit links; share those.
+     A bad source returns 400 and the line to fix.
+  Compact form: base64url the UTF-8 bytes, no padding, and open /link/<encoded>
+  or /png/<encoded> (a long image URL that stores nothing).
      Python: base64.urlsafe_b64encode(src.encode()).decode().rstrip('=')
-  3. Open https://api.draftably.dev/png/<encoded>
-     A bad source returns 400 and an image that names the line to fix.
 Syntax, a full example and JavaScript: https://draftably.dev/llms.txt
 
 GET /svg/{encoded}   SVG drawing of a Draftably diagram
@@ -136,6 +172,16 @@ GET /png/{encoded}   PNG drawing, with the source embedded; ?scale=1|2|3|4 (defa
                      Free: 60 new drawings a minute per address. Send an API key
                      (Authorization: Bearer dft_...) to use credits instead.
 
+GET /png?code=<src>  The source as percent-encoded text instead of {encoded}; also
+                     /svg and /link. Write # as %23, & as %26 and + as %2B.
+
+GET /link?code=<src> A short link, made with a GET. Answers with text: png, svg and
+                     edit URLs and a Markdown line (?format=json for JSON). The same
+                     source always gets the same link. Also /link/{encoded}.
+GET /d/{id}.png      The short link's drawing; also .svg, ?scheme=, ?scale=.
+GET /d/{id}.draft    The short link's source, as Draftably.
+POST /v1/share       {"code": "...", "type"?}  -> {id, png, svg, edit}. No key needed.
+
 POST /v1/render      {"code": "...", "format": "svg"|"png", "type"?, "scheme"?, "scale"?}
 POST /v1/validate    {"code": "...", "type"?}  -> {valid, type, diagnostics}
 POST /v1/convert     {"code": "...", "from": "mermaid"}  -> {draft, warnings}
@@ -143,7 +189,8 @@ GET  /v1/balance     -> {grant, bought, resetsAt}
                      All need Authorization: Bearer dft_.... An SVG costs 1 credit, a PNG 2.
 
 /mcp                 MCP server (Streamable HTTP) with the same key: render_diagram,
-                     validate_diagram, convert_mermaid, image_url, language_guide.
+                     validate_diagram, convert_mermaid, image_url, share_diagram,
+                     language_guide.
 
 /account             Sign in by email, see credits, make API keys, buy credits.
                      1,000 free credits a month.
@@ -153,7 +200,9 @@ Version ${runtimeVersion}. Language: https://draftably.dev/docs
 
 /** The route kind on the request's log line. */
 function routeKind(path: string): Wide['route'] {
-  if (parseImagePath(path)) return 'image';
+  if (IMAGE_PATH.test(path) || SHARE_IMAGE.test(path) || /^\/d\/[^/]+\.draft$/.test(path))
+    return 'image';
+  if (/^\/link(\/|$)/.test(path)) return 'share';
   if (path.startsWith('/v1/')) return 'rest';
   if (path === '/mcp') return 'mcp';
   if (path === '/stripe/webhook') return 'webhook';
@@ -180,6 +229,7 @@ const PATHS = new Set([
   '/v1/validate',
   '/v1/convert',
   '/v1/balance',
+  '/v1/share',
 ]);
 
 /**
@@ -188,7 +238,9 @@ const PATHS = new Set([
  * enough to spot scanners (`/wp-login.php`).
  */
 function pathLabel(route: Wide['route'], path: string) {
+  // An image or link path can hold the diagram source; a short link's id is not logged either.
   if (route === 'image') return undefined;
+  if (route === 'share') return '/link';
   const template = path.replace(
     /^\/account\/keys\/[0-9a-f]{12}\/revoke$/,
     '/account/keys/:id/revoke',
@@ -203,7 +255,10 @@ function pathLabel(route: Wide['route'], path: string) {
 
 async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
   if (req.method === 'POST' && url.pathname === '/stripe/webhook') return handleWebhook(req, env);
-  const api = (await handleApi(req, env, ctx, url)) ?? (await handleMcp(req, env, ctx, url));
+  const api =
+    (await handleShare(req, env, ctx, url)) ??
+    (await handleApi(req, env, ctx, url)) ??
+    (await handleMcp(req, env, ctx, url));
   if (api) return api;
   const account = await handleAccount(req, env, url);
   if (account) return account;
@@ -217,7 +272,9 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
           headers: { 'Content-Type': 'text/plain; charset=utf-8', Vary: 'Accept' },
         });
   if (url.pathname === '/health') return Response.json({ ok: true, version: runtimeVersion });
-  const route = parseImagePath(url.pathname);
+  const draft = /^\/d\/([^/.]+)\.draft$/.exec(url.pathname);
+  if (draft) return draftResponse(env.DB, draft[1], url);
+  const route = parseImagePath(url, env.DB);
   if (!route) return new Response('Not found', { status: 404 });
   note({ format: route.format });
 
@@ -242,7 +299,7 @@ async function handle(req: Request, env: Env, ctx: ExecutionContext, url: URL) {
       return errorResponse(error.message, route.format, error.status);
     }
   }
-  return imageResponse(req, env, ctx, url.origin, route.segment, route.format, opts, payer);
+  return imageResponse(req, env, ctx, url.origin, route.load, route.format, opts, payer);
 }
 
 export default {

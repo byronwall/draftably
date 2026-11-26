@@ -34,6 +34,34 @@ open the link from there. The proof reads the link the same way.
 Workers Logs, Traces and Issues are on. [docs/observability.md](docs/observability.md) lists the
 log fields, the spans, and the dashboard query for each production question.
 
+## Short links
+
+`GET /link?code=<source>` (plain text, percent-encoded) or `GET /link/{encoded}` (the same
+segment and options as `/png/{encoded}`) stores the source and answers with text that lists the
+`png`, `svg` and `edit` short URLs
+(`?format=json` for JSON). It works over GET because web agents such as ChatGPT can only GET.
+The id is the first 12 base32 characters of the SHA-256 of the source and its type, so the same
+source always gets the same link and no new row. A source that doesn't draw gets 400 with the
+first error and its line. `POST /v1/share {"code", "type"?}` does the same for sources too big
+for a URL; it needs no key, and a keyed call records the account.
+
+The agent flow: write the source, open `/link?code=<source>`, and copy the returned `markdown`
+line (it falls back to SVG when a PNG would be too large) or the `edit` URL. Percent-encode the whole `?code=` value: a raw `#` ends the URL, `&` starts a new parameter and
+`+` reads as a space, so write them as `%23`, `%26` and `%2B`. A failed source that has no `#` gets that hint in its error. Base64url or `pako:` in the
+path is the compact form. `/png?code=` and `/png/{encoded}` also work and need no storage. A
+source gives the same cache entry and the same id whichever way it comes; both at once is a 400.
+
+`/d/{id}.png` and `.svg` draw through the same `render()` as the long URLs (the same cache, the
+same free per-address limit). `/d/{id}.draft` returns the Draftably source; `draftably.dev/d/{id}`
+reads it and opens the playground. New links are limited to 30 a minute per address
+(`LINK_LIMIT`); a link that exists is free. The table keeps a hash of the IP, never the IP.
+
+To delete a share after an abuse report (its edge-cached images expire within a day):
+
+```sh
+pnpm exec wrangler d1 execute draftably-service --remote --command "DELETE FROM shares WHERE id = '<id>'"
+```
+
 ## Connect an MCP client
 
 The server is at `/mcp` (Streamable HTTP) and takes the same key as the REST API.
@@ -58,7 +86,8 @@ Other clients take a JSON block like this:
 ```
 
 Tools: `render_diagram` (PNG as an image, or SVG; 2 or 1 credits), `validate_diagram`,
-`convert_mermaid`, `image_url` and `language_guide` (the agent skill), all free but the first.
+`convert_mermaid`, `image_url`, `share_diagram` (a short link) and `language_guide` (the agent
+skill), all free but the first.
 
 ## Hosting
 
@@ -74,5 +103,9 @@ Cloudflare runs the `draftably.dev` zone. The first deploy was on 2026-11-25:
 
 ## Later deploys
 
-Run `pnpm service:deploy`. For a schema change, add a numbered file in `migrations/` and run step 2
-before you deploy.
+Run `pnpm service:deploy`. For a schema change, add a numbered file in `migrations/` and apply it
+before you deploy (`0002_shares.sql` needs this once):
+
+```sh
+pnpm --dir packages/service exec wrangler d1 migrations apply DB --remote
+```

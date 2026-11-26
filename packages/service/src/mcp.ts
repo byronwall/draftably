@@ -9,11 +9,12 @@ import { validate, runtimeVersion } from '@draftably/runtime';
 import { z } from 'zod';
 import guide from '../../../skills/draftably/SKILL.md';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
-import { ApiError, checkSource, errorJson, requireKey, type ApiEnv } from './api';
+import { ApiError, checkSource, errorJson, requireKey } from './api';
 import { DEFAULT_FORMAT, drawOptions } from './draw';
 import { embedUrl, render, type Payer } from './render';
 import { toDraft } from './mermaid';
 import { bump, currentEvent, noteError, span } from './obs';
+import { createShare, links, shareText, type ShareEnv } from './share';
 
 const code = z.string().min(1).describe('Diagram source: Draftably DSL or Mermaid.');
 const type = z
@@ -81,7 +82,7 @@ function base64(bytes: Uint8Array) {
 }
 
 /** The tools, for one caller. */
-function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) {
+function server(req: Request, env: ShareEnv, ctx: ExecutionContext, who: Payer, origin: string) {
   const mcp = new McpServer({ name: 'draftably', version: runtimeVersion });
 
   mcp.registerTool(
@@ -200,7 +201,7 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
     'image_url',
     {
       description:
-        'A public URL that draws the diagram, for Markdown or an <img> tag. Nothing is drawn now; the URL is free to fetch (rate-limited per address). Free.',
+        'A long public URL that holds the whole source and draws the diagram, for Markdown or an <img> tag. Nothing is stored; share_diagram gives a short link instead. The URL is free to fetch (rate-limited per address). Free.',
       inputSchema: { code, format: z.enum(['png', 'svg']).default('svg') },
     },
     async ({ code, format }) =>
@@ -224,6 +225,40 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
   );
 
   mcp.registerTool(
+    'share_diagram',
+    {
+      description:
+        'Store the diagram and return short public links: png, svg and an edit link that opens it on draftably.dev. ' +
+        'The same source always gets the same link. Use it instead of image_url for links people will read. Free.',
+      inputSchema: {
+        code,
+        type,
+        scheme: z.enum(['light', 'dark']).optional(),
+      },
+    },
+    async args => {
+      try {
+        const opts = drawOptions(k => {
+          const v = (args as Record<string, unknown>)[k];
+          return v === undefined ? null : String(v);
+        });
+        const share = await createShare(
+          req,
+          env,
+          checkSource(args.code),
+          opts.type ?? null,
+          who.account,
+        );
+        return text(shareText(links(origin, share, opts)));
+      } catch (error) {
+        if (error instanceof SourceError || error instanceof ApiError)
+          return failure(error.message);
+        throw error;
+      }
+    },
+  );
+
+  mcp.registerTool(
     'language_guide',
     {
       description:
@@ -237,7 +272,7 @@ function server(env: ApiEnv, ctx: ExecutionContext, who: Payer, origin: string) 
 }
 
 /** `/mcp`. Returns null for other paths. */
-export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext, url: URL) {
+export async function handleMcp(req: Request, env: ShareEnv, ctx: ExecutionContext, url: URL) {
   if (url.pathname !== '/mcp') return null;
   // Stateless: no session to stream to or close, so only POST means anything.
   if (req.method !== 'POST')
@@ -254,7 +289,7 @@ export async function handleMcp(req: Request, env: ApiEnv, ctx: ExecutionContext
     sessionIdGenerator: undefined,
     enableJsonResponse: true,
   });
-  await server(env, ctx, who, url.origin).connect(transport);
+  await server(req, env, ctx, who, url.origin).connect(transport);
   watch(transport);
   return transport.handleRequest(req);
 }

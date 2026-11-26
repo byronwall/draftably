@@ -56,7 +56,7 @@ const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png
 const MAX_BODY = 256 * 1024;
 
 /** The JSON body, read with a byte count so a missing Content-Length can't buffer more. */
-async function body(req: Request) {
+export async function body(req: Request) {
   const reader = req.body?.getReader();
   const parts: Uint8Array[] = [];
   let size = 0;

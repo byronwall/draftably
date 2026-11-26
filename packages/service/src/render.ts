@@ -120,8 +120,9 @@ async function renderNow<P>(
   /** Runs on a miss before drawing: the anonymous per-address limit. */
   beforeDraw?: () => Promise<void>,
 ): Promise<Drawn & { out: P }> {
-  // A GET URL's decoder drops a leading byte-order mark; drop it here too, so both hash the same.
-  const source = rawSource.replace(/^\uFEFF/, '');
+  // A GET URL's decoder drops a leading byte-order mark; drop them all here, so every way in (and
+  // a share's id) hashes the same text.
+  const source = rawSource.replace(/^\uFEFF+/, '');
   const bytes = new TextEncoder().encode(source).length;
   note({
     format,

@@ -1,5 +1,5 @@
 diagram "What D1 stores" version=1
-subtitle "One database holds accounts, keys, sign-ins and every credit change"
+subtitle "Accounts, keys, sign-ins, short links and every credit change"
 config link-base="../../.."
 
 group accounts "accounts" color=blue <<T
@@ -48,9 +48,20 @@ group login_tokens "login_tokens" color=slate <<T
 T
 layout login_tokens table
 
+group shares "shares" color=teal <<T
+  id          text  pk
+  source      text  nn
+  type        text  nn
+  created_at  text  nn
+  account_id  text  fk -> accounts.id
+  ip_hash     text  nn
+T
+layout shares table
+
 legend blue "Balance: monthly grant plus bought credits"
 legend amber "History: one row per render or purchase"
 legend slate "Sign-in: hashes only"
+legend teal "Short links: id = hash of type and source"
 
 note "Only a SHA-256 of the secret is stored. dft_<id>.<secret> is shown once." near=keys.hash side=left
 note "A unique index on ref for purchases adds each Stripe Checkout session once." near=ledger.ref side=below

@@ -37,6 +37,8 @@
     { "name": "KEY_LIMIT", "namespace_id": "1003", "simple": { "limit": 600, "period": 60 } },
     // Sign-in emails per IP. The per-address cap is a count in D1.
     { "name": "LOGIN_LIMIT", "namespace_id": "1005", "simple": { "limit": 10, "period": 60 } },
+    // New short links per IP. A link that already exists is free.
+    { "name": "LINK_LIMIT", "namespace_id": "1007", "simple": { "limit": 30, "period": 60 } },
   ],
   // Cloudflare Email Service sends the sign-in links. draftably.dev must be onboarded as a sending
   // domain first.
@@ -74,6 +76,12 @@
           "name": "LOGIN_LIMIT",
           "namespace_id": "1006",
           "simple": { "limit": 1000, "period": 60 },
+        },
+        // The production limit, so the proof can reach a 429.
+        {
+          "name": "LINK_LIMIT",
+          "namespace_id": "1008",
+          "simple": { "limit": 30, "period": 60 },
         },
       ],
       // Locally, wrangler writes each sent email to a file and logs its path.
