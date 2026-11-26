@@ -65,12 +65,28 @@ export function find(
   wall: Obstacle[] = [],
 ): Route {
   const route = findWithLane(ctx, e, used, old, wall);
+  return ctx.rawOptions.quick ? route : retryLane(ctx, e, used, route, old, wall);
+}
+
+export function retryLane(
+  ctx: Context,
+  e: RouteEdge,
+  used: Route[],
+  route: Route,
+  old?: Prior,
+  wall: Obstacle[] = [],
+) {
   if (!route.blocked || !e.autoLane || !e.cfg.waypoints?.length) return route;
   // Let the line find its own approach to a blocked lane. Keep both ports and the
   // inner waypoints that carry the line along its track.
-  const waypoints = e.cfg.waypoints.slice(1, -1);
-  const free = findWithLane(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
-  return free.blocked ? route : free;
+  const wp = e.cfg.waypoints;
+  for (const waypoints of [wp.slice(1, -1), wp.slice(1), wp.slice(0, -1)]) {
+    const free = findWithLane(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
+    if (free.blocked) continue;
+    if (waypoints.length) free.retainedLane = true;
+    return free;
+  }
+  return route;
 }
 
 function findWithLane(ctx: Context, e: RouteEdge, used: Route[], old: Prior, wall: Obstacle[]) {

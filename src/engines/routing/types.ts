@@ -54,6 +54,8 @@ export interface RouteInput {
 }
 
 export interface Route {
+  /** The recovered route still follows a generated lane bend. */
+  retainedLane?: boolean;
   id: string;
   from: string;
   to: string;

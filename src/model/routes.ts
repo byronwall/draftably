@@ -950,6 +950,7 @@ export function drawRoutes(
       if (
         !label ||
         route.blocked ||
+        route.retainedLane ||
         message(route) ||
         doc.layout.edges[route.id]?.waypoints?.length
       )

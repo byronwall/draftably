@@ -1,5 +1,5 @@
 import { createContext } from './context.ts';
-import { find } from './find.ts';
+import { find, retryLane } from './find.ts';
 import { cmp } from './geometry.ts';
 import { improve } from './improve.ts';
 import { centre, nudge } from './nudge.ts';
@@ -21,6 +21,18 @@ export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): Rou
     const plan = planned(ctx, e);
     if (plan) state.fixedPlans.add(e.id);
     state.routes.push(plan ?? find(ctx, e, state.routes, previous.get(e.id)));
+  }
+  if (rawOptions.quick) {
+    for (const [i, route] of state.routes.entries()) {
+      if (!route.blocked || !edges[i].autoLane) continue;
+      state.routes[i] = retryLane(
+        ctx,
+        edges[i],
+        state.routes.filter((_, j) => j !== i),
+        route,
+        previous.get(route.id),
+      );
+    }
   }
   syncOpen();
   const before = metrics(state.routes);
