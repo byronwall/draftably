@@ -26,6 +26,7 @@ import { sourceScope } from './session/file-session';
 import { LayoutLab } from '../engines/layout-engine';
 import { RouteLab } from '../engines/routing-engine';
 import type { CandidateSpec } from '../engines/explorer-engine';
+import type { CodeFiles } from '../model/code-src';
 import { activeSession } from './active-session';
 
 const CURRENT: CandidateSpec = {
@@ -58,6 +59,7 @@ export interface Candidate {
 interface ComparisonState {
   open: boolean;
   baseline: Diagram | null;
+  files?: CodeFiles;
   signature: string;
   config: ComparisonConfig | null;
   generatedConfig: ComparisonConfig | null;
@@ -271,6 +273,7 @@ export function openComparison(mode: ComparisonMode = 'layout') {
       ...initial(),
       open: true,
       baseline,
+      files: activeSession().codeFiles(),
       signature: documentIdentity(baseline),
       config: defaultConfig(mode),
       focusId:
@@ -379,7 +382,21 @@ export async function generate(override?: Partial<ComparisonConfig>) {
           ? activeSession().fileMode() && activeSession().currentSource()
           : candidateSource(baseline, specs[i], config);
       task = source
-        ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
+        ? startEngineTask(
+            {
+              kind: 'source',
+              source,
+              spec: specs[i],
+              files: cmp.files,
+              view: {
+                settings: baseline.settings,
+                theme: baseline.theme,
+                camera: baseline.camera,
+                collapsed: baseline.collapsed,
+              },
+            },
+            { timeout: 30000 },
+          )
         : startEngineTask(
             {
               kind: 'candidate',
