@@ -15,7 +15,7 @@ export function improve(ctx: Context) {
   let accepted = 0;
   const costs = new WeakMap<Route, number>();
   const clearanceCost = (r: Route) => {
-    if (!ctx.facingFans || !s.standoff || r.points.length < 3) return 0;
+    if (!ctx.facingFans || !s.standoff) return 0;
     const known = costs.get(r);
     if (known !== undefined) return known;
     const value = standoffCost(r.points, ctx.near);
@@ -65,14 +65,18 @@ export function improve(ctx: Context) {
           !c.shared &&
           !parallelConflicts(state.routes[i].points, used, s.edgeGap).lanePairs &&
           !far(state.routes[i]);
-        if (clearanceOnly && clearanceCost(state.routes[i]) <= s.standoff) continue;
+        const old = state.routes[i];
+        if (clearanceOnly && (old.points.length < 3 || clearanceCost(old) <= s.standoff)) continue;
         const next = find(ctx, e, used, state.routes[i]),
           candidate = [...state.routes];
         candidate[i] = next;
         const value = total(candidate);
-        const old = state.routes[i];
-        const gain = clearanceCost(old) - clearanceCost(next);
-        if (clearanceOnly ? gain >= s.standoff && value <= current : value < current - 0.1) {
+        // A route tried only for clearance must gain room without increasing the routing cost.
+        if (
+          clearanceOnly
+            ? value <= current && clearanceCost(old) - clearanceCost(next) >= s.standoff
+            : value < current - 0.1
+        ) {
           state.routes = candidate;
           current = value;
           syncOpen();
