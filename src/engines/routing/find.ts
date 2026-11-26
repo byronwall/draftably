@@ -11,6 +11,7 @@ import {
   EPS,
   lengthOf,
   pathLength,
+  round,
   segments,
   SIDES,
   vector,
@@ -57,17 +58,6 @@ interface Stubbed {
 // also a cost to weigh, not a wall (FEEL.md): a gated route that reads against the flow, or
 // takes the long way round from a side the file set, tries the crossing too, and takes it when
 // it scores better by more than `BAND_COST`.
-export function find(
-  ctx: Context,
-  e: RouteEdge,
-  used: Route[],
-  old?: Prior,
-  wall: Obstacle[] = [],
-): Route {
-  const route = findWithLane(ctx, e, used, old, wall);
-  return ctx.rawOptions.quick ? route : retryLane(ctx, e, used, route, old, wall);
-}
-
 export function retryLane(
   ctx: Context,
   e: RouteEdge,
@@ -81,7 +71,7 @@ export function retryLane(
   // inner waypoints that carry the line along its track.
   const wp = e.cfg.waypoints;
   for (const waypoints of [wp.slice(1, -1), wp.slice(1), wp.slice(0, -1)]) {
-    const free = findWithLane(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
+    const free = find(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
     if (free.blocked) continue;
     if (waypoints.length) free.retainedLane = true;
     return free;
@@ -89,7 +79,13 @@ export function retryLane(
   return route;
 }
 
-function findWithLane(ctx: Context, e: RouteEdge, used: Route[], old: Prior, wall: Obstacle[]) {
+export function find(
+  ctx: Context,
+  e: RouteEdge,
+  used: Route[],
+  old?: Prior,
+  wall: Obstacle[] = [],
+): Route {
   const { rects, titleBands, obsFor, scores, opened } = ctx;
   const gated = findIn(ctx, e, used, old, false, wall);
   if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
@@ -323,7 +319,13 @@ function findAmong(
     )
       break;
     // No grid search can reach a waypoint inside a solid obstacle.
-    if (cfg.waypoints?.some(point => blocked(point, point, c.obs))) continue;
+    if (
+      cfg.waypoints?.some(point => {
+        const grid = { x: round(point.x), y: round(point.y) };
+        return blocked(grid, grid, c.obs);
+      })
+    )
+      continue;
     const points = [c.as, ...(cfg.waypoints || []), c.bs],
       path: Point[] = [];
     let ok = true;
