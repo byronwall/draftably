@@ -23,6 +23,42 @@ const flow = (extra: string[]) =>
 const drifted = ['near c a side=below gap=4', 'stay b x=60 y=0', 'size a width=120 height=auto'];
 
 describe('refinements that drift', () => {
+  it('keeps a required near relation when label room does not fit', () => {
+    const source = `layout root row gap=48
+node a "A"
+node b "B"
+node c "C"
+size a width=80 height=56
+size b width=80 height=56
+size c width=80 height=56
+edge ab a -> b "Request authorization"
+align y a b c strength=required
+pin a x=0 y=0
+pin c x=183 y=0
+near b c side=left gap=12 strength=required`;
+    const scene = checkSource(source),
+      plain = checkSource(source.replace(' "Request authorization"', '')),
+      b = scene.byId.get('b')!,
+      c = scene.byId.get('c')!;
+    expect([b.x, c.x]).toEqual([plain.byId.get('b')!.x, plain.byId.get('c')!.x]);
+    expect(c.x - (b.x + b.w)).toBeGreaterThanOrEqual(12);
+    expect(scene.diagnostics.filter(d => d.level === 'error')).toEqual([]);
+  });
+
+  it('preserves an unrelated stay when label room would displace it', () => {
+    const source = `layout root column gap=48
+node api "API"
+node worker "Worker"
+node db "DB"
+edge ab api -> worker "Submit"
+pin api x=0 y=0
+stay worker x=103 y=0 weight=8
+stay db x=0 y=136 weight=8`;
+    const scene = checkSource(source),
+      db = scene.byId.get('db')!;
+    expect([db.localX, db.localY]).toEqual([0, 136]);
+    expect(scene.diagnostics.some(d => d.code === 'relaxed' && d.ids.includes('db'))).toBe(false);
+  });
   it('warns when a refinement gives way by more than a few pixels', async () => {
     const notes = (await compile(flow(drifted))).diagnostics.filter(d => d.code === 'relaxed');
     expect(notes.map(d => [d.line, d.level])).toEqual([

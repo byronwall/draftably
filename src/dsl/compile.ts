@@ -2874,6 +2874,37 @@ function refine(
   axis: 'right' | 'down',
   rooms: LabelRoom[],
 ): Map<string, Pos> {
+  if (!rooms.length) return refinePass(items, base, hints, scope, diagnostics, axis, rooms);
+
+  // Label room is optional. Keep the ordinary collision result if it would break a required
+  // constraint or displace a stay that the ordinary result preserved.
+  const withNotes: Diagnostic[] = [];
+  const withRoom = refinePass(items, base, hints, scope, withNotes, axis, rooms);
+  const stays = new Set(hints.filter(h => h.type === 'stay').map(h => h.line));
+  const affected = (d: Diagnostic) =>
+    d.level === 'error' || (d.code === 'relaxed' && d.line !== undefined && stays.has(d.line));
+  if (!withNotes.some(affected)) {
+    diagnostics.push(...withNotes);
+    return withRoom;
+  }
+  const plainNotes: Diagnostic[] = [];
+  const plain = refinePass(items, base, hints, scope, plainNotes, axis, []);
+  const key = (d: Diagnostic) => `${d.code}:${d.line}:${d.ids.join(',')}`;
+  const before = new Set(plainNotes.map(key));
+  const worsened = withNotes.some(d => affected(d) && !before.has(key(d)));
+  diagnostics.push(...(worsened ? plainNotes : withNotes));
+  return worsened ? plain : withRoom;
+}
+
+function refinePass(
+  items: Item[],
+  base: Map<string, Pos>,
+  hints: Hint[],
+  scope: string,
+  diagnostics: Diagnostic[],
+  axis: 'right' | 'down',
+  rooms: LabelRoom[],
+): Map<string, Pos> {
   const ids = items.map(n => n.id),
     by = new Map(items.map(n => [n.id, n])),
     pos = new Map(items.map(n => [n.id, { ...base.get(n.id)! }])),
