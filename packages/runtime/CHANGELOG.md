@@ -1,5 +1,22 @@
 # @draftably/runtime
 
+## 0.12.0
+
+### Minor Changes
+
+- a2f2e89: A label on a mind-map branch or an org-chart reporting line no longer takes that line out of the tree. The line keeps its place and draws its label between the columns, so the topics or people under it stay in the chart. A label never changes which lines form the tree: write a dotted-line report or a cross-link with `kind=async`.
+
+### Patch Changes
+
+- 0cba7b6: When a generated lane is blocked, retry its entry and exit so the arrow can clear the boxes.
+- 67a7555: Keep edge labels on short arrows when the label fits between the two boxes.
+- b15b2f1: Give an arrow room beside a box or group when the surrounding space is open.
+- 7dfc0c4: Keep arrowheads visible beside short labels when the text fits with less padding.
+- 91bbcf3: Reserve room for return arrows inside folded groups and keep a clear approach through their turns.
+- fdd349a: Incoming and outgoing edges can exchange ports on the same box side to avoid a crossing. A straight connection can slide with both ends aligned when the other box has room.
+- fb2a61c: Give a crowded arrow another route when it can clear a box or frame without increasing the routing cost.
+- c5ff4ae: Keep live edge labels and routes aligned when fonts, group titles, or code captions change.
+
 ## 0.11.1
 
 ### Patch Changes
