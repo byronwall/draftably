@@ -4,6 +4,8 @@ import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { main } from '../src/cli/main';
 import { checkSource, compile } from '../src/dsl/compile';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes } from '../src/model/routes';
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -23,6 +25,55 @@ const flow = (extra: string[]) =>
 const drifted = ['near c a side=below gap=4', 'stay b x=60 y=0', 'size a width=120 height=auto'];
 
 describe('refinements that drift', () => {
+  it('keeps a small nudge adjustment from growing when adding label room', () => {
+    const scene = checkSource(`layout root column gap=48
+node api "API"
+node worker "Worker"
+node db "DB"
+edge ab api -> worker "Submit"
+pin api x=0 y=0
+nudge worker dx=103 dy=-105
+nudge db dx=0 dy=-75`);
+    expect(scene.byId.get('db')!.localY).toBe(136);
+    expect(
+      scene.diagnostics.some(
+        d => d.code === 'relaxed' && d.ids.includes('db') && d.level === 'warning',
+      ),
+    ).toBe(false);
+  });
+
+  for (const placement of ['nudge c dx=-80 dy=0', 'pin c x=483 y=0'])
+    it(`keeps the Cache corridor clear with ${placement}`, async () => {
+      const source = `node a "API"
+node b "Worker"
+node c "DB"
+node d "Cache"
+size a width=100 height=56
+edge ab a -> b "Request authorization"
+edge bc b -> c "Write"
+align y a b c d strength=required
+pin a x=0 y=0
+${placement}`;
+      const doc = projectScene(await compile(source));
+      const { vg, rects } = visibleRects(doc),
+        cache = rects.get('d')!;
+      for (const quick of [false, true]) {
+        const routes = computeRoutes(doc, vg, rects, { previous: [], quick }).routes;
+        expect(routes.filter(r => r.blocked).map(r => r.id)).toEqual([]);
+        const ab = routes.find(r => r.id === 'ab')!;
+        const onBorder = ab.points.slice(1).some((p, i) => {
+          const q = ab.points[i];
+          return (
+            p.y === q.y &&
+            (p.y === cache.y || p.y === cache.y + cache.h) &&
+            Math.max(p.x, q.x) > cache.x &&
+            Math.min(p.x, q.x) < cache.x + cache.w
+          );
+        });
+        expect(onBorder).toBe(false);
+      }
+    });
+
   it('keeps a stayed sibling in order when label room cannot fit', () => {
     const source = `layout root row gap=48
 node a "API"

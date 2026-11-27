@@ -2877,6 +2877,7 @@ function refine(
   if (!rooms.length) return refinePass(items, base, hints, scope, diagnostics, axis, rooms);
 
   // Compare with ordinary collision placement only when optional label room moved a sibling.
+  // Keep authored positions and the open corridors between facing siblings.
   const withNotes: Diagnostic[] = [],
     used = { value: false };
   const withRoom = refinePass(items, base, hints, scope, withNotes, axis, rooms, used);
@@ -2891,8 +2892,10 @@ function refine(
   const stale = new Set(staleStays(items, base, local, axis));
   const distance = (a: Pos, b: Pos) => Math.hypot(a.x - b.x, a.y - b.y);
   const placementWorse = local.some(h => {
-    if (h.type === 'stay' && !stale.has(h)) {
-      const target = { x: h.x, y: h.y };
+    if ((h.type === 'stay' && !stale.has(h)) || h.type === 'nudge') {
+      const origin = base.get(h.id)!;
+      const target =
+        h.type === 'stay' ? { x: h.x, y: h.y } : { x: origin.x + h.dx, y: origin.y + h.dy };
       return distance(withRoom.get(h.id)!, target) > distance(plain.get(h.id)!, target) + 0.5;
     }
     if (h.type !== 'near' || !by.has(h.ref)) return false;
@@ -2903,7 +2906,7 @@ function refine(
     };
     return distance(relative(withRoom), relative(plain)) > 0.5;
   });
-  const orderReversed = items.some((a, i) =>
+  const corridorWorse = items.some((a, i) =>
     items.slice(i + 1).some(b =>
       (['x', 'y'] as const).some(ax => {
         const size = (n: Item) => (ax === 'x' ? n.w : n.h);
@@ -2911,16 +2914,23 @@ function refine(
           pb = plain.get(b.id)![ax];
         const wa = withRoom.get(a.id)![ax],
           wb = withRoom.get(b.id)![ax];
-        return (
-          (pa + size(a) <= pb && wb + size(b) <= wa) || (pb + size(b) <= pa && wa + size(a) <= wb)
-        );
+        const across = ax === 'x' ? 'y' : 'x';
+        const crossSize = (n: Item) => (across === 'x' ? n.w : n.h);
+        const crossA = plain.get(a.id)![across],
+          crossB = plain.get(b.id)![across];
+        const facing = crossA < crossB + crossSize(b) && crossB < crossA + crossSize(a);
+        if (pa + size(a) <= pb)
+          return wb + size(b) <= wa || (facing && wb - wa - size(a) < pb - pa - size(a) - 0.5);
+        if (pb + size(b) <= pa)
+          return wa + size(a) <= wb || (facing && wa - wb - size(b) < pa - pb - size(b) - 0.5);
+        return false;
       }),
     ),
   );
   const key = (d: Diagnostic) => `${d.code}:${d.line}:${d.ids.join(',')}`;
   const errors = new Set(plainNotes.filter(d => d.level === 'error').map(key));
   const newError = withNotes.some(d => d.level === 'error' && !errors.has(key(d)));
-  const worsened = placementWorse || orderReversed || newError;
+  const worsened = placementWorse || corridorWorse || newError;
   diagnostics.push(...(worsened ? plainNotes : withNotes));
   return worsened ? plain : withRoom;
 }
