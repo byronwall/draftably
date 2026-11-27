@@ -7,9 +7,9 @@ import { validate } from '@draftably/runtime';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { keyAccount, type AuthEnv } from './auth';
 import { balance } from './credits';
-import { type Format } from './draw';
-import { ApiError, errorJson } from './errors';
-import { toDraft } from './mermaid';
+import { type Format, type RuntimeNote } from './draw';
+import { ApiError, DiagramError, errorJson } from './errors';
+import { toDraft, type Note } from './mermaid';
 import { embedUrl, render } from './render';
 import { note, noteError } from './obs';
 import { readFields, readRequest, refusal, type DrawRequest } from './request';
@@ -41,39 +41,61 @@ export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContex
 
 const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };
 
+export interface Diagnostic {
+  severity: string;
+  message: string;
+  line?: number;
+  /** The text of that line, so a reader sees what to fix without the source. */
+  text?: string;
+}
+
 export interface Checked {
   valid: boolean;
   type: string;
-  diagnostics: { severity: string; message: string; line?: number }[];
+  diagnostics: Diagnostic[];
 }
 
-/** Check a diagram without drawing it: `/v1/validate` and the MCP tool. */
-export async function checkDiagram(r: DrawRequest): Promise<Checked> {
-  let draft: string, warnings: string[];
+/**
+ * Check a diagram without drawing it: `/v1/validate`, the MCP tool and the notes on a new short
+ * link. A line names the submitted text, so a Mermaid fence in Markdown counts the lines before
+ * it. `rendered` adds the renderer's own warnings (a dropped link), when the caller drew it.
+ */
+export async function checkDiagram(r: DrawRequest, rendered: RuntimeNote[] = []): Promise<Checked> {
+  const submitted = r.source.split('\n');
+  const at = (line?: number) => {
+    const text = line ? submitted[line - 1]?.trim() : undefined;
+    return { ...(line ? { line } : {}), ...(text ? { text } : {}) };
+  };
+  let draft: string, notes: Note[];
   try {
-    ({ draft, warnings } = await toDraft(r.source, r.opts.type));
+    ({ draft, notes } = await toDraft(r.source, r.opts.type));
   } catch (error) {
     if (!(error instanceof SourceError)) throw error;
     const e = refusal(error)!;
     noteError(e.code, e.diagnostic);
+    const line = error instanceof DiagramError ? error.line : undefined;
     return {
       valid: false,
       type: r.opts.type,
-      diagnostics: [{ severity: 'error', message: e.message }],
+      diagnostics: [{ severity: 'error', message: e.message, ...at(line) }],
     };
   }
   const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
   if (!result.ok)
     noteError('ERR_SOURCE', result.diagnostics.find(d => d.severity === 'error')?.code);
+  // Lines in a draft converted from Mermaid name nothing the caller wrote, so they are left out.
+  const own = r.opts.type === 'draftably';
+  const seen = new Set(result.diagnostics.map(d => `${d.message}@${d.location?.line ?? ''}`));
+  const extra = rendered.filter(d => !seen.has(`${d.message}@${d.location?.line ?? ''}`));
   return {
     valid: result.ok,
     type: r.opts.type,
     diagnostics: [
-      ...warnings.map(message => ({ severity: 'warning', message })),
-      ...result.diagnostics.map(d => ({
+      ...notes.map(n => ({ severity: 'warning', message: n.message, ...at(n.line) })),
+      ...[...result.diagnostics, ...extra].map(d => ({
         severity: d.severity,
         message: d.message,
-        ...(d.location?.line ? { line: d.location.line } : {}),
+        ...(own ? at(d.location?.line) : {}),
       })),
     ],
   };

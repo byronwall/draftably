@@ -15,6 +15,31 @@ goes:
 ![Architecture](https://draftably.dev/api/svg/pako:eJw1zE0K…)
 ```
 
+## Links without the CLI
+
+`/api/link` takes the source as plain text, checks it, stores it, and returns short links. Anyone with
+a short link can read the stored source. Use it when you have no CLI, for example from an agent in
+a chat:
+
+```sh
+curl --data-binary @architecture.draft https://draftably.dev/api/link
+```
+
+```text
+png: https://draftably.dev/api/d/<id>.png
+svg: https://draftably.dev/api/d/<id>.svg
+edit: https://draftably.dev/d/<id>
+markdown: ![Diagram](https://draftably.dev/api/d/<id>.png)
+```
+
+Add `?format=json` for `{id, png, svg, edit, diagnostics}`. Warnings on a source that draws come
+after the links. `GET /api/link?code=<percent-encoded source>` gives the same answer. A source that
+doesn't draw gets `400` and no links; the error names the line and quotes its text. It takes the
+same `?type=`, `?scheme=` and `?scale=` options as the image URLs.
+
+To edit a diagram from a long image URL, change `/svg/` or `/png/` to `/edit/`. The service sends
+you to the editor with the source loaded.
+
 ## The URL
 
 ```text
@@ -50,6 +75,8 @@ credits: an SVG costs 1 and a PNG 2. A cache hit is free. Make a key on the
 ## What the server keeps
 
 The URL sends the source to Draftably's server. The server keeps the images it draws in a cache.
+A short link (`/api/link` or `/api/v1/share`) stores the source itself, and anyone with the link can read
+it at `/api/d/{id}.draft`.
 For an account, it stores your email, your credit balance and a hash of each API key, never the key
 itself. To keep a diagram off the server, use `draftably inspect plan.draft --svg` and host the file
 yourself.

@@ -52,7 +52,18 @@ export function drawOptions(get: (key: string) => string | null | undefined): Dr
 }
 
 /** Draw `source` as SVG, or throw a SourceError with the first diagnostic. */
-export function drawSvg(source: string, opts: DrawOptions) {
+/** A diagnostic as the runtime gives it. */
+export interface RuntimeNote {
+  severity: string;
+  message: string;
+  location?: { line?: number };
+}
+
+/**
+ * The SVG for Draftably `source`, or a DiagramError naming the first error. `notes`, when given,
+ * collects the renderer's warnings and info, such as a link it dropped.
+ */
+export function drawSvg(source: string, opts: DrawOptions, notes?: RuntimeNote[]) {
   return span('render.svg', { source_bytes: byteSize(source), scheme: opts.scheme }, async s => {
     const result = await renderSvg(source, {
       colorScheme: opts.scheme,
@@ -71,6 +82,7 @@ export function drawSvg(source: string, opts: DrawOptions) {
         d?.code ?? 'unknown',
       );
     }
+    notes?.push(...result.diagnostics.filter(d => d.severity !== 'error'));
     s.setAttribute('svg_bytes', byteSize(result.value.svg));
     return result.value.svg;
   });

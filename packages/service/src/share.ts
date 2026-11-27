@@ -3,16 +3,17 @@
  * always gets the same id and storing it twice adds no row. That makes the GET form safe to
  * prefetch: `GET /link/{encoded}` is how a web agent that can only GET makes a link.
  *
- * - `GET /link/{encoded}` and `POST /v1/share` store the source and return the short URLs.
+ * - `GET /link/{encoded}`, `POST /link` (the source as the body) and `POST /v1/share` store the
+ *   source and return the short URLs.
  * - `GET /d/{id}.png|svg` draws it through `render()`, so the cache and price are the long URL's.
  * - `GET /d/{id}.draft` returns the Draftably source, which the site's `/d/{id}` opens in the
  *   playground.
  */
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
-import { ApiError, errorJson, requireKey, type ApiEnv } from './api';
-import { drawSvg, maxPngScale, type DrawOptions } from './draw';
+import { ApiError, checkDiagram, errorJson, requireKey, type ApiEnv, type Diagnostic } from './api';
+import { drawSvg, maxPngScale, type DrawOptions, type RuntimeNote } from './draw';
 import { freshness, toDraft } from './mermaid';
-import { readFields, readRequest, refusal, type DrawRequest } from './request';
+import { MAX_BODY, readBody, readFields, readRequest, refusal, type DrawRequest } from './request';
 
 export interface ShareEnv extends ApiEnv {
   /** New shares per IP. A link that already exists costs nothing. */
@@ -63,15 +64,20 @@ const ipHash = async (req: Request) => {
     .join('');
 };
 
-/** A stored share: its id and the largest PNG scale that fits the pixel limit (0 for none). */
+/**
+ * A stored share: its id, the largest PNG scale that fits the pixel limit (0 for none), and the
+ * warnings and notes found when it was stored.
+ */
 export interface Share {
   id: string;
   pngScale: number;
+  notes: Diagnostic[];
 }
 
 /**
  * Store `r` as a share, or find it. A new source must draw (the first diagnostic comes back as
- * a 400 with its line) and is counted against the caller's limit; one that exists is free.
+ * a 400 with its line) and is counted against the caller's limit; one that exists is free. Its
+ * notes are found once, when it is stored, so a repeat call only reads the row.
  */
 export async function createShare(
   req: Request,
@@ -83,36 +89,64 @@ export async function createShare(
   const { source, opts } = r;
   const kind = opts.type;
   const find = async () => {
-    const row = await env.DB.prepare(`SELECT source, type, png_scale FROM shares WHERE id = ?1`)
+    const row = await env.DB.prepare(
+      `SELECT source, type, png_scale, notes FROM shares WHERE id = ?1`,
+    )
       .bind(id)
-      .first<{ source: string; type: string; png_scale: number }>();
+      .first<{ source: string; type: string; png_scale: number; notes: string | null }>();
     if (row && (row.source !== source || row.type !== kind))
       throw new ApiError(
         409,
         'ERR_SHARE',
         'This id is taken by another diagram. Change the source a little.',
       );
-    return row && { id, pngScale: row.png_scale };
+    return row;
+  };
+  // Every draw counts against the caller's address, with or without a key.
+  const limit = async () => {
+    const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+    if (!(await env.LINK_LIMIT.limit({ key: ip })).success)
+      throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many new links this minute. Wait a minute.');
+  };
+  /** Draw it: only a source that draws is stored. Scheme doesn't change whether it draws. */
+  const draw = async () => {
+    const { draft } = await toDraft(source, kind);
+    const rendered: RuntimeNote[] = [];
+    const svg = await drawSvg(draft, { type: kind, scheme: 'light', scale: 1 }, rendered);
+    const notes = (await checkDiagram(r, rendered)).diagnostics.filter(d => d.severity !== 'error');
+    return { pngScale: await maxPngScale(svg, draft), notes };
   };
   const found = await find();
-  if (found) return found;
-  // Every new row counts against the caller's address, with or without a key.
-  const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-  if (!(await env.LINK_LIMIT.limit({ key: ip })).success)
-    throw new ApiError(429, 'ERR_LIMIT_BURST', 'Too many new links this minute. Wait a minute.');
-  // Only a source that draws is stored. Scheme doesn't change whether it draws.
-  const { draft } = await toDraft(source, kind);
-  const svg = await drawSvg(draft, { type: kind, scheme: 'light', scale: 1 });
-  const pngScale = await maxPngScale(svg, draft);
+  if (found?.notes != null)
+    return { id, pngScale: found.png_scale, notes: JSON.parse(found.notes) };
+  await limit();
+  if (found) {
+    // A row stored before notes were kept: find them once, under the same limit.
+    const { notes } = await draw();
+    await env.DB.prepare(`UPDATE shares SET notes = ?2 WHERE id = ?1`)
+      .bind(id, JSON.stringify(notes))
+      .run();
+    return { id, pngScale: found.png_scale, notes };
+  }
+  const { pngScale, notes } = await draw();
   const added = await env.DB.prepare(
-    `INSERT INTO shares (id, source, type, png_scale, created_at, account_id, ip_hash)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(id) DO NOTHING`,
+    `INSERT INTO shares (id, source, type, png_scale, created_at, account_id, ip_hash, notes)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8) ON CONFLICT(id) DO NOTHING`,
   )
-    .bind(id, source, kind, pngScale, new Date().toISOString(), account, await ipHash(req))
+    .bind(
+      id,
+      source,
+      kind,
+      pngScale,
+      new Date().toISOString(),
+      account,
+      await ipHash(req),
+      JSON.stringify(notes),
+    )
     .run();
   // A parallel call stored it first: the same source, or a collision that find() refuses.
-  if (!added.meta.changes) return (await find())!;
-  return { id, pngScale };
+  if (!added.meta.changes) await find();
+  return { id, pngScale, notes };
 }
 
 /**
@@ -186,9 +220,42 @@ const plain = (body: string, status = 200) =>
     },
   });
 
-function answer(l: ReturnType<typeof links>, json: boolean) {
-  if (json) return Response.json(l, { headers: { 'Access-Control-Allow-Origin': '*' } });
-  return plain(shareText(l) + '\n');
+/**
+ * The links, with the warnings and notes on a source that draws (an arrow that runs up, a note
+ * that covers the drawing), so the caller can fix them before sharing.
+ */
+function answer(origin: string, share: Share, r: DrawRequest, json: boolean) {
+  const l = links(origin, share, r.opts);
+  const { notes } = share;
+  if (json)
+    return Response.json(
+      { ...l, diagnostics: notes },
+      { headers: { 'Access-Control-Allow-Origin': '*' } },
+    );
+  return plain([shareText(l), ...notes.map(noteText)].join('\n') + '\n');
+}
+
+/** A diagnostic as text: `warning: line 4: message`, then the line itself. */
+const noteText = (d: Diagnostic) =>
+  `${d.severity}: ${d.line ? `line ${d.line}: ` : ''}${d.message}${d.text ? `\n> ${d.text}` : ''}`;
+
+/**
+ * The source in a `POST /link` body: the text itself, so nothing is encoded, or `{"code": "..."}`
+ * when the request says JSON.
+ */
+async function postedSource(req: Request) {
+  const text = await readBody(req, MAX_BODY, true);
+  // `application/json` or a `+json` type, in any case, with or without parameters.
+  const media = (req.headers.get('Content-Type') ?? '').split(';')[0].trim().toLowerCase();
+  if (media !== 'application/json' && !/^application\/[\w.-]+\+json$/.test(media)) return text;
+  let json: unknown;
+  try {
+    // A JSON body drops one byte-order mark, as `readFields` does.
+    json = JSON.parse(text.replace(/^\uFEFF/, ''));
+  } catch {
+    throw new ApiError(400, 'ERR_SOURCE', 'The body is not JSON. Send the source as plain text.');
+  }
+  return (json as { code?: unknown } | null)?.code;
 }
 
 /** The links as text lines, for `/link` and the MCP tool. */
@@ -208,7 +275,7 @@ function failed(error: unknown, json: boolean) {
 }
 
 /**
- * `GET /link/{encoded}`, `GET /link?code=` and `POST /v1/share`. Returns null for other routes. Options are the
+ * `GET /link/{encoded}`, `GET /link?code=`, `POST /link` and `POST /v1/share`. Returns null for other routes. Options are the
  * image URL's: `type` is stored with the source; `scheme` and `scale` go on the returned URLs.
  */
 export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionContext, url: URL) {
@@ -228,9 +295,27 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
         format: 'svg',
       });
       const share = await createShare(req, env, r, who?.account ?? null);
-      return answer(links(url.origin, share, r.opts), json);
+      return answer(url.origin, share, r, json);
     } catch (error) {
       return failed(codeHint(error, url), json);
+    }
+  }
+  if (url.pathname === '/link' && req.method === 'POST') {
+    const json = url.searchParams.get('format') === 'json';
+    try {
+      const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
+      const q = url.searchParams;
+      const r = readRequest({
+        code: await postedSource(req),
+        type: q.get('type'),
+        scheme: q.get('scheme'),
+        scale: q.get('scale'),
+        format: 'svg',
+      });
+      const share = await createShare(req, env, r, who?.account ?? null);
+      return answer(url.origin, share, r, json);
+    } catch (error) {
+      return failed(error, json);
     }
   }
   if (url.pathname === '/v1/share' && req.method === 'POST') {
@@ -239,7 +324,7 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
       const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
       const r = readRequest({ ...(await readFields(req)), format: 'svg' });
       const share = await createShare(req, env, r, who?.account ?? null);
-      return answer(links(url.origin, share, r.opts), true);
+      return answer(url.origin, share, r, true);
     } catch (error) {
       return failed(error, true);
     }

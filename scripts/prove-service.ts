@@ -22,7 +22,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { promisify } from 'node:util';
-import { deflateSync, inflateSync } from 'node:zlib';
+import { deflateSync, inflateRawSync, inflateSync } from 'node:zlib';
 import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { build } from 'esbuild';
 import { KEYS, startService } from './lib/local-service.ts';
@@ -149,6 +149,8 @@ const png = { same: 0, local: 0, overCap: 0, sourceBack: 0, failed: [] as string
  */
 const local = (source: string) =>
   /\bsrc="/.test(source) || (/\bhref="(?!https?:)/.test(source) && !webLinkBase(source));
+/** Files whose PNG URL the service refuses; /link must give them no PNG link. */
+const pngRefused = new Set<string>();
 async function checkPng({ file, source, segment }: (typeof drawn)[number], n: number) {
   const ours = path.join(dir, `${n}-service.png`),
     theirs = path.join(dir, `${n}-cli.png`),
@@ -156,6 +158,7 @@ async function checkPng({ file, source, segment }: (typeof drawn)[number], n: nu
   fs.writeFileSync(copy, source); // beside no code files: same as the service sees
   const res = await fetch(`${base}/api/png/${segment}`);
   if (res.status !== 200) {
+    pngRefused.add(file);
     // Over the pixel cap: refused on purpose, and the CLI's own PNG must be that big.
     await cli('inspect', copy, '--png', theirs).catch(() => {});
     const cliPx = fs.existsSync(theirs) ? pixels(fs.readFileSync(theirs)) : undefined;
@@ -310,6 +313,41 @@ console.log(
   `Mermaid detection: ${detected} of ${drawnMermaid.size} drawn the same with no ?type=.`,
 );
 assert.equal(detected, drawnMermaid.size, 'automatic and explicit Mermaid detection disagree');
+
+// /edit/: every file's image URL, with /svg/ changed to /edit/, opens an editor link that holds
+// exactly its source; ?code= gives the same link. A file the image route refuses still opens.
+const edits = { same: 0, failed: [] as string[] };
+const fromEdit = (href: string) =>
+  inflateRawSync(Buffer.from(/#s=([\w-]+)$/.exec(href)![1], 'base64url')).toString('utf8');
+for (const file of files) {
+  const source = fs.readFileSync(file, 'utf8');
+  const segment = await encodeSource(source);
+  if (segment.length > 8 * 1024) continue;
+  const edit = await fetch(`${base}/api/edit/${segment}?type=draftably`, { redirect: 'manual' });
+  const where = edit.headers.get('location') ?? '';
+  const code = `code=${encodeURIComponent(source)}`;
+  const same =
+    code.length > 8 * 1024 ||
+    (await fetch(`${base}/api/edit?${code}&type=draftably`, { redirect: 'manual' })).headers.get(
+      'location',
+    ) === where;
+  if (edit.status === 302 && where.startsWith('https://draftably.dev/play#s=') && same)
+    edits.same += fromEdit(where) === source ? 1 : 0;
+  if (edit.status !== 302 || !same || fromEdit(where) !== source)
+    edits.failed.push(`${file}: /edit/ gave ${edit.status} ${where.slice(0, 80)}`);
+}
+// /edit/ refuses a bad option as the image route does, and still opens a bad diagram.
+const editSeg = await encodeSource('node a "A" color=purple');
+assert.equal(
+  (await fetch(`${base}/api/edit/${editSeg}?type=bad`, { redirect: 'manual' })).status,
+  400,
+);
+assert.equal((await fetch(`${base}/api/edit/${editSeg}`, { redirect: 'manual' })).status, 302);
+console.log(
+  `/edit/: ${edits.same} files open an editor link that holds their source, the same by ?code=; ` +
+    `${edits.failed.length} wrong. A bad option is 400; a bad diagram still opens.`,
+);
+assert.equal(edits.failed.length, 0, edits.failed.join('\n'));
 
 // The REST API and credits, local only (the accounts are fixtures).
 if (!remote) {
@@ -1110,6 +1148,89 @@ if (!remote) {
   // Over 8 KB of URL or 64 KB of source: 400.
   assert.equal((await fetch(`${base}/api/link/${'a'.repeat(9000)}`)).status, 400);
   assert.equal((await share(undefined, { code: 'x'.repeat(70 * 1024) })).status, 400);
+  // POST /link takes the source itself as the body: the same id and answer as GET ?code= and a
+  // JSON POST, with a byte-order mark and with a JSON-looking first line.
+  const jsonType = { 'Content-Type': 'application/json' };
+  const post = (body: string, headers: Record<string, string> = {}, query = '?format=json') =>
+    fetch(`${base}/api/link${query}`, { method: 'POST', headers, body });
+  const parity: string[] = [];
+  for (const src of [
+    checkout,
+    '\uFEFFnode a "A"\n',
+    '{"code": 1}\n\n```mermaid\nflowchart LR\nA --> B\n```\n',
+    '\uFEFF' + 'x'.repeat(64 * 1024 - 3),
+  ]) {
+    // A 64 KB source is too long for any URL, so it compares the two POST forms only.
+    const viaGet = encodeURIComponent(src).length < 8000;
+    const answers = await Promise.all([
+      viaGet ? fetch(`${base}/api/link?${q(src)}&format=json`) : post(src),
+      post(src),
+      post(JSON.stringify({ code: src }), jsonType),
+    ]);
+    const bodies = await Promise.all(answers.map(r => r.json()));
+    const tag = JSON.stringify(src.slice(0, 20));
+    assert.equal(new Set(answers.map(r => r.status)).size, 1, `status differs for ${tag}`);
+    assert.deepEqual(bodies[1], bodies[0], `raw POST differs from GET for ${tag}`);
+    assert.deepEqual(bodies[2], bodies[0], `JSON POST differs from GET for ${tag}`);
+    parity.push(`${tag.slice(0, 14)}…: ${answers[0].status}`);
+  }
+  assert.equal((await (await post(checkout)).json()).id, id);
+  assert.match(await (await post(checkout, {}, '')).text(), new RegExp(`^png: \\S+/d/${id}\\.png`));
+  // JSON only for a JSON media type, in any case or with parameters; plain text otherwise.
+  for (const [type, body] of [
+    ['Application/JSON; charset=utf-8', JSON.stringify({ code: 'node a "A"' })],
+    ['application/vnd.api+json', JSON.stringify({ code: 'node a "A"' })],
+    ['text/plain; profile=json', 'node a "A"'],
+  ] as const)
+    assert.equal((await post(body, { 'Content-Type': type })).status, 200, `Content-Type ${type}`);
+  // A bad line comes back with its number and its text.
+  const badPost = await post('node a "A"\nnode b "B" color=purple\n', {}, '');
+  assert.equal(badPost.status, 400);
+  assert.match(await badPost.text(), /^error: line 2: .*\n> node b "B" color=purple/);
+  // A warning inside a Markdown fence names its line in the submission, with LF or CRLF ends.
+  for (const eol of ['\n', '\r\n']) {
+    const doc = [
+      'Notes',
+      '',
+      '```mermaid',
+      'flowchart LR',
+      'A --> B',
+      'click A "https://x.dev"',
+      '```',
+      '',
+    ].join(eol);
+    const got = (await (await post(doc)).json()) as {
+      diagnostics: { line?: number; text?: string }[];
+    };
+    const placed = got.diagnostics.filter(d => d.line);
+    assert.ok(
+      placed.length && placed.every(d => d.line === 6 && d.text === 'click A "https://x.dev"'),
+      `fence warning line with ${JSON.stringify(eol)}: ${JSON.stringify(got.diagnostics)}`,
+    );
+  }
+  // A link the hosted renderer drops is named, from the renderer's own warnings.
+  const hrefSrc = 'node a "A" href="src/parser.ts"\n';
+  const linked = await (await post(hrefSrc)).json();
+  assert.ok(linked.diagnostics.length, `no warning for a dropped link: ${JSON.stringify(linked)}`);
+  // A repeat call reads the notes stored with the row; it draws nothing. A row stored before notes
+  // were kept gets them once.
+  sql(
+    `UPDATE shares SET notes = '[{"severity":"info","message":"stored"}]' WHERE id = '${linked.id}'`,
+  );
+  const again = await (await post(hrefSrc)).json();
+  assert.deepEqual(again.diagnostics, [{ severity: 'info', message: 'stored' }]);
+  sql(`UPDATE shares SET notes = NULL WHERE id = '${linked.id}'`);
+  assert.deepEqual((await (await post(hrefSrc)).json()).diagnostics, linked.diagnostics);
+  assert.equal(
+    sql(`SELECT count(*) AS n FROM shares WHERE id = '${linked.id}' AND notes IS NOT NULL`)[0].n,
+    1,
+  );
+  console.log(
+    `POST /link: the same id as GET; transport parity ${parity.join('; ')}; JSON by media type; ` +
+      'a bad line comes back with its text; fence warnings name their line (LF and CRLF); ' +
+      'a dropped link is named; a repeat reads the stored notes.',
+  );
+
   // New links from one address stop at 30 a minute; existing ones still answer.
   let limited = 0;
   for (let n = 0; n < 35 && !limited; n++) {
