@@ -10,6 +10,7 @@ import { MAX_SOURCE_BYTES, SourceError, webLinks } from '../../../src/lib/render
 import { formatSource } from '../../../src/dsl/syntax';
 import { withSourceStrip } from '../../../src/model/strip';
 import { drawPng, svgSize, type Step } from '../../../src/model/raster';
+import { DiagramError } from './errors';
 import { toDraft } from './mermaid';
 import { byteSize, note, span } from './obs';
 import sans500 from '../../../src/cli/fonts/inter-latin-500-normal.ttf';
@@ -65,7 +66,10 @@ export function drawSvg(source: string, opts: DrawOptions) {
       // The line itself, so a reader of the error image sees what to fix without the source.
       const text = loc?.line ? source.split('\n')[loc.line - 1]?.trim() : '';
       const quoted = text ? `\n> ${text.slice(0, 200)}` : '';
-      throw new SourceError(at + (d?.message ?? 'The diagram did not render.') + quoted);
+      throw new DiagramError(
+        at + (d?.message ?? 'The diagram did not render.') + quoted,
+        d?.code ?? 'unknown',
+      );
     }
     s.setAttribute('svg_bytes', byteSize(result.value.svg));
     return result.value.svg;

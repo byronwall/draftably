@@ -299,7 +299,7 @@ async function main() {
     calc(
       window,
       [...WIDE, has('error_code')],
-      ['error_code', 'error'],
+      ['error_code', 'diagnostic', 'error_name'],
       [{ operator: 'count' }],
       15,
     ),
@@ -428,7 +428,7 @@ async function main() {
     const was = baseByCode.get(code) ?? 0;
     if (Number(e.count) >= 3 && Number(e.count) > 2 * was)
       actions.push(
-        `${code} grew to ${e.count} from ${was.toFixed(1)} a window: "${e.error}". Find its cause in the code that throws ${code}.`,
+        `${code} grew to ${e.count} from ${was.toFixed(1)} a window (${e.error_name ?? e.diagnostic ?? 'no detail'}). Find its cause in the code that throws ${code}.`,
       );
   }
   const p95 = Number(latency[0]?.['p95_$workers.wallTimeMs'] ?? 0);
@@ -479,8 +479,8 @@ Newest build seen: ${current ?? 'unknown'}
 
 ${table(issueList.map(i => ({ ...i, status: status(i), versions: i.versions.join(' ') })) as unknown as Row[], ['status', 'title', 'inWindow', 'total', 'frame', 'versions', 'traceId'])}
 
-## Errors (code, message)
-${table(errors, ['error_code', 'error', 'count'])}
+## Errors (code, diagnostic or error class)
+${table(errors, ['error_code', 'diagnostic', 'error_name', 'count'])}
 
 By build (does a fix hold?):
 ${table(errorsByBuild, ['error_code', 'build', 'count'])}

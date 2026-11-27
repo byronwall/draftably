@@ -4,6 +4,8 @@
  * session, however often Stripe sends it.
  */
 import { byteSize, note, span } from './obs';
+import { ApiError } from './errors';
+import { readBody } from './request';
 
 export interface StripeEnv {
   DB: D1Database;
@@ -99,31 +101,6 @@ interface CheckoutEvent {
 }
 
 /** `POST /stripe/webhook`: add a paid pack's credits once. */
-/** The body as text, or null past `max` bytes. */
-async function readLimited(req: Request, max: number) {
-  const reader = req.body?.getReader();
-  if (!reader) return '';
-  const parts: Uint8Array[] = [];
-  let size = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    size += value.length;
-    if (size > max) {
-      await reader.cancel();
-      return null;
-    }
-    parts.push(value);
-  }
-  const bytes = new Uint8Array(size);
-  let at = 0;
-  for (const p of parts) {
-    bytes.set(p, at);
-    at += p.length;
-  }
-  return new TextDecoder().decode(bytes);
-}
-
 export async function handleWebhook(req: Request, env: StripeEnv) {
   const secret = env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
@@ -137,8 +114,11 @@ export async function handleWebhook(req: Request, env: StripeEnv) {
     return new Response('Bad signature.', { status: 400 });
   };
   if (!/(?:^|,)t=\d+/.test(req.headers.get('Stripe-Signature') ?? '')) return badSignature();
-  const body = await readLimited(req, 256 * 1024);
-  if (body === null) {
+  let body: string;
+  try {
+    body = await readBody(req);
+  } catch (error) {
+    if (!(error instanceof ApiError)) throw error;
     note({ webhook: 'too_large' });
     return new Response('Too large.', { status: 413 });
   }

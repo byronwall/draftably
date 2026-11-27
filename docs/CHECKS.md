@@ -260,6 +260,21 @@ The viewer pack check also builds the diagram element example. `pnpm prove:eleme
 checks its real worker, source updates, fallback, removal and reconnection,
 keyboard controls, narrow layout, and isolation from host styles.
 
+## Render service
+
+`pnpm prove:service-boundary` (about 20 s, in CI) starts the render service in local workerd on a
+fresh D1. It sends the same inputs through an anonymous and a keyed GET image URL, `POST
+/v1/render`, the MCP tool `render_diagram` and a short link. Each input must give the same image
+bytes or the same error code and status everywhere, and the same price: 1 credit for SVG, 2 for
+PNG, nothing for a cache hit or a bad source. A wrong key gets 401 on every route, also for a
+cached image, and a body over 256 KB gets 413. Every transport reads its input through
+`readRequest()` in `packages/service/src/request.ts`; a new transport must too, and must join this
+proof.
+
+`pnpm prove:service` (about 5 minutes, not in CI) draws every tracked `.draft` and Mermaid input
+through the service and compares it with the runtime and the CLI. It also covers credits, OAuth,
+sign-in, Stripe and short links. `--base <url>` checks a deployed service.
+
 ## The public site
 
 `pnpm docs:assets` refreshes the comparison study's published sources, supporting documents and

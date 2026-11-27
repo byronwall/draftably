@@ -8,6 +8,7 @@ import { parseHTML } from 'linkedom';
 import { detectSource } from '../../../src/import/detect';
 import type { ParseFlowResult } from '../../../src/import/mermaid-facade';
 import { SourceError } from '../../../src/lib/render-url';
+import { DiagramError } from './errors';
 import { byteSize, note, span } from './obs';
 
 export type SourceType = 'draftably' | 'mermaid';
@@ -79,7 +80,10 @@ export async function fromMermaid(source: string) {
   const result = importMermaidFlow(await parse(source), makePlainLabel(doc), '');
   if (!result.nativeSource || result.status === 'failed') {
     const d = result.diagnostics.find(x => x.severity === 'error') ?? result.diagnostics[0];
-    throw new SourceError(d?.message ?? 'The Mermaid diagram could not be converted.');
+    throw new DiagramError(
+      d?.message ?? 'The Mermaid diagram could not be converted.',
+      d?.code ?? 'mermaid-failed',
+    );
   }
   return {
     draft: result.nativeSource,

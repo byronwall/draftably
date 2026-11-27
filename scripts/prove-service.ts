@@ -17,7 +17,7 @@
  * cache, which stays under its 60-a-minute address limit.
  */
 import assert from 'node:assert/strict';
-import { execFile, execFileSync, spawn } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -25,6 +25,7 @@ import { promisify } from 'node:util';
 import { deflateSync, inflateSync } from 'node:zlib';
 import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { build } from 'esbuild';
+import { KEYS, startService } from './lib/local-service.ts';
 
 // The URL codec and link policy import DSL modules that plain Node can't load, so bundle the
 // same file the Worker bundles.
@@ -41,86 +42,11 @@ const { encodeSource, webLinkBase, webLinks } = (await import(
 
 const at = process.argv.indexOf('--base');
 const remote = at > 0 ? process.argv[at + 1].replace(/\/$/, '') : undefined;
-const PORT = 8787 + Math.floor(Math.random() * 1000);
-const base = remote ?? `http://127.0.0.1:${PORT}`;
+const svc = remote ? undefined : await startService('.wrangler/proof-state');
+const base = remote ?? svc!.base;
 const { renderSvg } = await import('../packages/runtime/dist/index.js');
-
-// A fresh local D1 with two accounts: `poor` holds 20 credits, `rich` 100,000. Their keys are
-// fixtures for this proof only. Its state lives in its own folder, so a run never touches the
-// database `pnpm service:dev` uses.
-const STATE = '.wrangler/proof-state';
-const KEYS = {
-  poor: 'dft_aaaaaaaaaaaa.proof-secret-poor-0123456789',
-  rich: 'dft_bbbbbbbbbbbb.proof-secret-rich-0123456789',
-};
-const d1 = (...args: string[]) =>
-  execFileSync(
-    'pnpm',
-    ['exec', 'wrangler', 'd1', ...args, '--local', '--env', 'proof', '--persist-to', STATE],
-    {
-      cwd: 'packages/service',
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    },
-  );
-const sql = (command: string) =>
-  JSON.parse(d1('execute', 'DB', '--json', '--command', command))[0].results as Record<
-    string,
-    number
-  >[];
-if (!remote) {
-  fs.rmSync(path.join('packages/service', STATE), { recursive: true, force: true });
-  d1('migrations', 'apply', 'DB');
-  const month = new Date().toISOString().slice(0, 7),
-    now = new Date().toISOString();
-  const hash = (key: string) => createHash('sha256').update(key.split('.')[1]).digest('hex');
-  sql(
-    `INSERT INTO accounts (id, email, grant_left, grant_month, bought, created_at) VALUES
-     ('poor', 'poor@example.com', 20, '${month}', 0, '${now}'), ('rich', 'rich@example.com', 0, '${month}', 100000, '${now}');
-     INSERT INTO keys (id, account_id, hash, label, created_at) VALUES
-     ('aaaaaaaaaaaa', 'poor', '${hash(KEYS.poor)}', 'proof', '${now}'),
-     ('bbbbbbbbbbbb', 'rich', '${hash(KEYS.rich)}', 'proof', '${now}');`,
-  );
-}
-
-const dev = remote
-  ? undefined
-  : spawn(
-      'pnpm',
-      [
-        'exec',
-        'wrangler',
-        'dev',
-        '--local',
-        '--persist-to',
-        STATE,
-        '--env',
-        'proof',
-        '--port',
-        String(PORT),
-        '--ip',
-        '127.0.0.1',
-      ],
-      { cwd: 'packages/service', stdio: ['ignore', 'pipe', 'pipe'] },
-    );
-let log = '';
-dev?.stdout.on('data', d => (log += d));
-dev?.stderr.on('data', d => (log += d));
-const stop = () => dev?.kill('SIGTERM');
-process.on('exit', stop);
-
-async function ready() {
-  for (let i = 0; i < 120; i++) {
-    try {
-      if ((await fetch(`${base}/api/health`)).ok) return;
-    } catch {
-      // not listening yet
-    }
-    await new Promise(r => setTimeout(r, 500));
-  }
-  throw Error('wrangler dev did not start:\n' + log);
-}
-await ready();
+const sql = (command: string) => svc!.sql(command);
+const stop = () => svc?.stop();
 
 const b64url = (b: Uint8Array) => Buffer.from(b).toString('base64url');
 const forms = [
@@ -600,7 +526,7 @@ if (!remote) {
       body: new URLSearchParams(fields),
       redirect: 'manual',
     });
-  const sent = () => [...log.matchAll(/Text: (\S+\.txt)/g)].map(m => m[1]);
+  const sent = () => [...svc!.out.log.matchAll(/Text: (\S+\.txt)/g)].map(m => m[1]);
   const mailLink = async (email: string) => {
     const before = sent().length;
     const res = await form('/login', { email });

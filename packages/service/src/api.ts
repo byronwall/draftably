@@ -7,11 +7,12 @@ import { validate } from '@draftably/runtime';
 import { MAX_SOURCE_BYTES, SourceError } from '../../../src/lib/render-url';
 import { keyAccount, type AuthEnv } from './auth';
 import { balance } from './credits';
-import { DEFAULT_FORMAT, drawOptions, type Format } from './draw';
+import { type Format } from './draw';
 import { ApiError, errorJson } from './errors';
-import { sourceType, toDraft } from './mermaid';
+import { toDraft } from './mermaid';
 import { embedUrl, render } from './render';
 import { note, noteError } from './obs';
+import { readFields, readRequest, refusal, type DrawRequest } from './request';
 
 export { ApiError, errorJson };
 
@@ -20,11 +21,6 @@ export interface ApiEnv extends AuthEnv {
   /** Changes on every deploy; the render cache keys on it. */
   CF_VERSION_METADATA: WorkerVersionMetadata;
 }
-
-export const sourceError = (e: SourceError) => {
-  const line = /^line (\d+)(?:, column \d+)?: /.exec(e.message);
-  return new ApiError(400, 'ERR_SOURCE', e.message, line ? Number(line[1]) : undefined);
-};
 
 /** The calling account, rate-limited per key. */
 export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContext) {
@@ -43,49 +39,44 @@ export async function requireKey(req: Request, env: ApiEnv, ctx: ExecutionContex
   return who;
 }
 
-/** The diagram source a call may send: the same 64 KB the renderer takes, for every route. */
-export function checkSource(code: unknown): string {
-  if (typeof code !== 'string' || !code.trim())
-    throw new ApiError(400, 'ERR_SOURCE', 'code must be the diagram source.');
-  if (new TextEncoder().encode(code).length > MAX_SOURCE_BYTES)
-    throw new ApiError(400, 'ERR_SOURCE', `The source is over ${MAX_SOURCE_BYTES / 1024} KB.`);
-  return code;
+const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };
+
+export interface Checked {
+  valid: boolean;
+  type: string;
+  diagnostics: { severity: string; message: string; line?: number }[];
 }
 
-const TYPES: Record<Format, string> = { svg: 'image/svg+xml; charset=utf-8', png: 'image/png' };
-const MAX_BODY = 256 * 1024;
-
-/** The JSON body, read with a byte count so a missing Content-Length can't buffer more. */
-export async function body(req: Request) {
-  const reader = req.body?.getReader();
-  const parts: Uint8Array[] = [];
-  let size = 0;
-  for (;;) {
-    const chunk = reader ? await reader.read() : { done: true as const, value: undefined };
-    if (chunk.done) break;
-    size += chunk.value.length;
-    if (size > MAX_BODY) {
-      await reader!.cancel();
-      throw new ApiError(413, 'ERR_SOURCE', 'The request is over 256 KB.');
-    }
-    parts.push(chunk.value);
-  }
-  const bytes = new Uint8Array(size);
-  let at = 0;
-  for (const p of parts) {
-    bytes.set(p, at);
-    at += p.length;
-  }
-  let json: Record<string, unknown>;
+/** Check a diagram without drawing it: `/v1/validate` and the MCP tool. */
+export async function checkDiagram(r: DrawRequest): Promise<Checked> {
+  let draft: string, warnings: string[];
   try {
-    json = JSON.parse(new TextDecoder().decode(bytes));
-  } catch {
-    throw new ApiError(400, 'ERR_SOURCE', 'The body must be JSON.');
+    ({ draft, warnings } = await toDraft(r.source, r.opts.type));
+  } catch (error) {
+    if (!(error instanceof SourceError)) throw error;
+    const e = refusal(error)!;
+    noteError(e.code, e.diagnostic);
+    return {
+      valid: false,
+      type: r.opts.type,
+      diagnostics: [{ severity: 'error', message: e.message }],
+    };
   }
-  if (!json || typeof json !== 'object' || Array.isArray(json))
-    throw new ApiError(400, 'ERR_SOURCE', 'The body must be a JSON object.');
-  const get = (k: string) => (json[k] === undefined || json[k] === null ? null : String(json[k]));
-  return { code: checkSource(json.code), get };
+  const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
+  if (!result.ok)
+    noteError('ERR_SOURCE', result.diagnostics.find(d => d.severity === 'error')?.code);
+  return {
+    valid: result.ok,
+    type: r.opts.type,
+    diagnostics: [
+      ...warnings.map(message => ({ severity: 'warning', message })),
+      ...result.diagnostics.map(d => ({
+        severity: d.severity,
+        message: d.message,
+        ...(d.location?.line ? { line: d.location.line } : {}),
+      })),
+    ],
+  };
 }
 
 /** `/v1/*`. Returns null for a path that isn't an API route. */
@@ -99,24 +90,18 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
       case 'GET /v1/balance':
         return Response.json(await balance(env.DB, account));
       case 'POST /v1/render': {
-        const { code, get } = await body(req);
-        const format = (get('format') ?? DEFAULT_FORMAT) as Format;
-        if (format !== 'svg' && format !== 'png')
-          throw new ApiError(400, 'ERR_SOURCE', 'format must be svg or png.');
-        note({ format });
-        const opts = drawOptions(get);
+        const r = readRequest(await readFields(req));
+        note({ format: r.format });
         // Everything the answer needs is built before the credits are taken.
-        const link = await embedUrl(url.origin, code, format, opts);
+        const link = await embedUrl(url.origin, r);
         const drawn = await render(
           env,
           ctx,
           url.origin,
-          code,
-          format,
-          opts,
+          r,
           async body => {
             const headers = new Headers({
-              'Content-Type': TYPES[format],
+              'Content-Type': TYPES[r.format],
               'Cache-Control': 'no-store',
             });
             if (link) headers.set('X-Draftably-Url', link);
@@ -130,51 +115,23 @@ export async function handleApi(req: Request, env: ApiEnv, ctx: ExecutionContext
           headers.set('X-Draftably-Credits-Left', String(drawn.left.grant + drawn.left.bought));
         return new Response(drawn.out.body, { headers });
       }
-      case 'POST /v1/validate': {
-        const { code, get } = await body(req);
-        let draft: string, warnings: string[];
-        try {
-          ({ draft, warnings } = await toDraft(code, get('type')));
-        } catch (error) {
-          if (!(error instanceof SourceError)) throw error;
-          noteError('ERR_SOURCE', error.message);
-          return Response.json({
-            valid: false,
-            diagnostics: [{ severity: 'error', message: error.message }],
-          });
-        }
-        const result = await validate(draft, { limits: { maxSourceBytes: MAX_SOURCE_BYTES } });
-        const bad = result.diagnostics.find(d => d.severity === 'error');
-        if (!result.ok) noteError('ERR_SOURCE', bad?.message ?? 'invalid');
-        const diagnostics = [
-          ...warnings.map(message => ({ severity: 'warning', message })),
-          ...result.diagnostics.map(d => ({
-            severity: d.severity,
-            message: d.message,
-            ...(d.location?.line ? { line: d.location.line } : {}),
-          })),
-        ];
-        return Response.json({
-          valid: result.ok,
-          type: sourceType(code, get('type')).type,
-          diagnostics,
-        });
-      }
+      case 'POST /v1/validate':
+        return Response.json(await checkDiagram(readRequest(await readFields(req))));
       case 'POST /v1/convert': {
-        const { code, get } = await body(req);
-        if ((get('from') ?? 'mermaid') !== 'mermaid')
+        const fields = await readFields(req);
+        if ((fields.from ?? 'mermaid') !== 'mermaid')
           throw new ApiError(400, 'ERR_SOURCE', 'from must be mermaid.');
-        const { draft, warnings } = await toDraft(code, 'mermaid');
+        const r = readRequest({ code: fields.code, type: 'mermaid' });
+        const { draft, warnings } = await toDraft(r.source, 'mermaid');
         return Response.json({ draft, warnings });
       }
       default:
         throw new ApiError(404, 'ERR_NOT_FOUND', `No route ${route}.`);
     }
   } catch (error) {
-    const e = error instanceof SourceError ? sourceError(error) : error;
-    if (!(e instanceof ApiError)) throw error;
-    // A 404's message repeats the path the caller sent.
-    noteError(e.code, e.code === 'ERR_NOT_FOUND' ? 'No such route.' : e.message);
+    const e = refusal(error);
+    if (!e) throw error;
+    noteError(e.code, e.diagnostic);
     return errorJson(e);
   }
 }

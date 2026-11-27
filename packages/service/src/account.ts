@@ -194,7 +194,7 @@ export async function handleAccount(req: Request, env: AuthEnv & StripeEnv & OAu
       const message = scrub(error instanceof Error ? error.message : String(error));
       console.error(`sign-in email failed: ${message}`);
       note({ login: 'send_failed' });
-      noteError('ERR_EMAIL', message);
+      noteError('ERR_EMAIL');
       return failed('We could not send the email. Try again later.', 503);
     }
     note({ login: 'sent' });

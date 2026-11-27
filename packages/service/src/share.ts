@@ -9,9 +9,10 @@
  *   playground.
  */
 import { decodeSource, MAX_SEGMENT, SourceError } from '../../../src/lib/render-url';
-import { ApiError, body as readBody, errorJson, requireKey, sourceError, type ApiEnv } from './api';
-import { drawOptions, drawSvg, maxPngScale, type DrawOptions } from './draw';
-import { freshness, sourceType, toDraft } from './mermaid';
+import { ApiError, errorJson, requireKey, type ApiEnv } from './api';
+import { drawSvg, maxPngScale, type DrawOptions } from './draw';
+import { freshness, toDraft } from './mermaid';
+import { readFields, readRequest, refusal, type DrawRequest } from './request';
 
 export interface ShareEnv extends ApiEnv {
   /** New shares per IP. A link that already exists costs nothing. */
@@ -30,15 +31,11 @@ const sha256 = async (text: string) =>
   new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)));
 
 /**
- * The source as `render()` hashes it (a leading byte-order mark dropped), and its language as
- * the renderer reads it. The type is part of the id: the same text read as Mermaid or Draftably
- * draws two different images.
+ * The id for a request: from its source and the language it is read as. The type is part of the
+ * id: the same text read as Mermaid or Draftably draws two different images.
  */
-async function canonical(raw: string, type?: string | null) {
-  const source = raw.replace(/^\uFEFF+/, '');
-  if (!source.trim()) throw new SourceError('The source is empty.');
-  const kind = sourceType(source, type).type;
-  const bytes = await sha256(`${kind}\n${source}`);
+async function shareId(r: DrawRequest) {
+  const bytes = await sha256(`${r.opts.type}\n${r.source}`);
   let bits = 0,
     acc = 0,
     id = '';
@@ -52,7 +49,7 @@ async function canonical(raw: string, type?: string | null) {
     if (id.length === ID_LEN) break;
     acc &= (1 << bits) - 1;
   }
-  return { id, source, type: kind };
+  return id;
 }
 
 /**
@@ -73,17 +70,18 @@ export interface Share {
 }
 
 /**
- * Store `raw` as a share, or find it. A new source must draw (the first diagnostic comes back as
+ * Store `r` as a share, or find it. A new source must draw (the first diagnostic comes back as
  * a 400 with its line) and is counted against the caller's limit; one that exists is free.
  */
 export async function createShare(
   req: Request,
   env: { DB: D1Database; LINK_LIMIT: RateLimit },
-  raw: string,
-  type: string | null,
+  r: DrawRequest,
   account: string | null,
 ): Promise<Share> {
-  const { id, source, type: kind } = await canonical(raw, type);
+  const id = await shareId(r);
+  const { source, opts } = r;
+  const kind = opts.type;
   const find = async () => {
     const row = await env.DB.prepare(`SELECT source, type, png_scale FROM shares WHERE id = ?1`)
       .bind(id)
@@ -204,8 +202,7 @@ export function shareText(l: ReturnType<typeof links>) {
 }
 
 function failed(error: unknown, json: boolean) {
-  const e =
-    error instanceof SourceError ? sourceError(error) : error instanceof ApiError ? error : null;
+  const e = refusal(error);
   if (!e) throw error;
   return json ? errorJson(e) : plain(`error: ${e.message}\n`, e.status);
 }
@@ -219,10 +216,19 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
   if (link && req.method === 'GET') {
     const json = url.searchParams.get('format') === 'json';
     try {
-      const opts = drawOptions(k => url.searchParams.get(k));
-      const source = await urlSource(url, link[1], 'POST /api/v1/share');
-      const share = await createShare(req, env, source, opts.type ?? null, null);
-      return answer(links(url.origin, share, opts), json);
+      // A key is optional, as on POST /v1/share; a wrong one is refused before anything is stored.
+      const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
+      const q = url.searchParams;
+      // `?format=` here is the answer's format, not the image's.
+      const r = readRequest({
+        code: await urlSource(url, link[1], 'POST /api/v1/share'),
+        type: q.get('type'),
+        scheme: q.get('scheme'),
+        scale: q.get('scale'),
+        format: 'svg',
+      });
+      const share = await createShare(req, env, r, who?.account ?? null);
+      return answer(links(url.origin, share, r.opts), json);
     } catch (error) {
       return failed(codeHint(error, url), json);
     }
@@ -231,10 +237,9 @@ export async function handleShare(req: Request, env: ShareEnv, ctx: ExecutionCon
     try {
       // A key is optional; a bad one is still refused.
       const who = req.headers.has('Authorization') ? await requireKey(req, env, ctx) : null;
-      const { code, get } = await readBody(req);
-      const opts = drawOptions(get);
-      const share = await createShare(req, env, code, opts.type ?? null, who?.account ?? null);
-      return answer(links(url.origin, share, opts), true);
+      const r = readRequest({ ...(await readFields(req)), format: 'svg' });
+      const share = await createShare(req, env, r, who?.account ?? null);
+      return answer(links(url.origin, share, r.opts), true);
     } catch (error) {
       return failed(error, true);
     }

@@ -32,6 +32,10 @@ jobs:
             run: pnpm check:consumers
           - suite: integrations
             run: pnpm runtime:build && pnpm check:integrations
+          # The render service's request boundary in local workerd: the same bytes, price and
+          # error code through GET, REST, MCP and short links.
+          - suite: service
+            run: pnpm prove:service-boundary
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
