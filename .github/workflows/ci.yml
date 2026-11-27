@@ -57,12 +57,27 @@ jobs:
       - run: ${{ matrix.run }}
 
   check:
-    needs: check-suite
-    if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Require every release check
-        run: test "${{ needs.check-suite.result }}" = success
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Check changesets and language documentation
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          pnpm changeset:check "$BASE_SHA"
+          pnpm skill:check "$BASE_SHA"
+      - run: pnpm check:source
+      - run: pnpm test:unit
 
   proof-suite:
     runs-on: ubuntu-latest
@@ -145,12 +160,12 @@ jobs:
             tmp/proof-color-scheme/
 
   proofs:
-    needs: proof-suite
+    needs: [check-suite, proof-suite]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Require every proof suite
-        run: test "${{ needs.proof-suite.result }}" = success
+        run: test "${{ needs.check-suite.result }}" = success && test "${{ needs.proof-suite.result }}" = success
 
   bench:
     # A report, not a gate: times CLI commands and viewer actions against the 200 ms interactive
