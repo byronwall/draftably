@@ -28,6 +28,40 @@ const distance = (p: Point, route: Point[]) =>
   );
 
 describe('edge label placement', () => {
+  it('keeps a label on its arrow when only the middle of the gap fits', () => {
+    const points = [
+      { x: 100, y: 40 },
+      { x: 149, y: 40 },
+    ];
+    const boxes = [
+      { x: 0, y: 0, w: 100, h: 80 },
+      { x: 149, y: 0, w: 100, h: 80 },
+    ];
+    const label = placeEdgeLabel('AI', points, boxes);
+    expect(distance(label, points)).toBe(0);
+    expect(boxes.some(box => overlaps(rectOf(label), box, 4))).toBe(false);
+
+    // The second crossing misses the glyphs, but the halo would erase their left edge.
+    for (const [name, x] of [
+      ['AI', 124.5],
+      ['Pass', 112],
+    ] as const) {
+      const crossing = [
+        { x, y: 0 },
+        { x, y: 80 },
+      ];
+      const clear = placeEdgeLabel(name, points, boxes, [], undefined, { routes: [crossing] });
+      // Include the 4px half-width of the painted halo around the crossing line.
+      const ink = {
+        x: clear.x - clear.w / 2 + 8,
+        y: clear.y - clear.h / 2,
+        w: clear.w - 16,
+        h: clear.h,
+      };
+      expect(overlaps(ink, { x: x - 4, y: 0, w: 8, h: 80 })).toBe(false);
+    }
+  });
+
   it.each([12, 32])('keeps a label clear of objects across a %ipx gap', gap => {
     const label = 'makes this connection clear',
       bounds = edgeLabelSize(label),
