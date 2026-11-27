@@ -384,7 +384,7 @@ The command checks the painted SVGs against their saved metrics. It lists the ed
 coordinates, and length of each parallel run. An edge can enter or leave a node at one point.
 A positive-length run fails when its centerline follows the border or its stroke touches the border stroke.
 Parallel runs with a visible gap under 15 drawing units appear in the report for inspection.
-The check measures straight outline sections. A single tangent point on a curved corner is outside its scope.
+The check measures horizontal and vertical outline sections. A single tangent point on a curved corner is outside its scope.
 
 ### Ratchet gate for heuristic changes
 
