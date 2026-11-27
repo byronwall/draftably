@@ -1,5 +1,8 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
+import { compute } from '../src/engines/routing/compute';
+import { conflicts } from '../src/engines/routing/conflicts';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import type { Route } from '../src/engines/routing-engine';
 import { computeRoutes } from '../src/model/routes';
@@ -175,6 +178,106 @@ layout root engine=compound-flow direction=down
 `);
     const n = rect('n5');
     expect(line('e5').points[0]).toEqual({ x: n.x + n.w / 2, y: n.y + n.h });
+  });
+
+  it('orders an arrival and departure on the same side of My books', async () => {
+    const source = readFileSync(
+      new URL(
+        '../docs/intent/diagram-quality/population/comic-books-850d0f8e18/v0.draft',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    const { line } = await route(source);
+    const arrival = line('edge_3'),
+      departure = line('edge_8');
+    expect(arrival.toSide).toBe(departure.fromSide);
+    expect(crosses(arrival, departure)).toBe(false);
+  });
+
+  it('does not create a crossing with a third edge when swapping ports', async () => {
+    const source = readFileSync(
+      new URL(
+        '../docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/v0.draft',
+        import.meta.url,
+      ),
+      'utf8',
+    );
+    const { line } = await route(source);
+    expect(conflicts(line('find').points, [line('dispatch')]).crossings).toBe(0);
+  });
+
+  it('keeps a straight edge on the diamond vertex when its other port moves', () => {
+    const result = compute(
+      {
+        nodes: [
+          { id: 'hub', x: 0, y: 92, w: 120, h: 96, shape: 'box' },
+          { id: 'diamond', x: 205, y: 80, w: 120, h: 120, shape: 'diamond' },
+          { id: 'return', x: 350, y: 0, w: 100, h: 60, shape: 'box' },
+        ],
+        groups: [],
+        edges: [
+          {
+            id: 'straight',
+            from: 'hub',
+            to: 'diamond',
+            cfg: { fromSide: 'right', toSide: 'left' },
+          },
+          { id: 'back', from: 'return', to: 'hub', cfg: { fromSide: 'bottom', toSide: 'right' } },
+        ],
+      },
+      { standoff: 0 },
+    );
+    expect(result.routes.find(r => r.id === 'straight')!.points.at(-1)).toEqual({ x: 205, y: 140 });
+  });
+
+  it('keeps an authored arrival offset when another edge takes a free slot', () => {
+    const { routes, report } = compute({
+      nodes: [
+        { id: 'a', x: 0, y: 0, w: 120, h: 96, shape: 'box' },
+        { id: 'b', x: 205, y: 0, w: 120, h: 96, shape: 'box' },
+        { id: 'd', x: 0, y: 165, w: 120, h: 96, shape: 'diamond' },
+      ],
+      groups: [],
+      edges: [
+        { id: 'e0', from: 'a', to: 'b', cfg: { fromSide: 'bottom', toSide: 'right' } },
+        { id: 'e1', from: 'a', to: 'd', cfg: { fromSide: 'bottom', toSide: 'left' } },
+        {
+          id: 'e3',
+          from: 'd',
+          to: 'a',
+          cfg: { fromSide: 'right', toSide: 'bottom', toOffset: -16 },
+        },
+      ],
+    });
+    expect(routes.find(r => r.id === 'e3')!.points.at(-1)).toEqual({ x: 44, y: 96 });
+    expect(report.crossings).toBe(0);
+  });
+
+  it('tries bent edges before sliding a straight edge in a port swap', async () => {
+    const source = `
+node a "Source"
+node b "Near"
+node c "Far"
+size a width=120 height=96
+size b width=120 height=96
+size c width=120 height=96
+pin a x=0 y=0
+pin b x=220 y=0
+pin c x=440 y=0
+edge e0 a -> c from=right to=top
+edge e1 a -> c from=right to=right
+edge e2 a -> b from=right
+edge e3 a -> c from=right to=left
+edge e4 a -> c from=right to=top
+edge e5 a -> b from=right`;
+    const doc = projectScene(await compile(source)),
+      { vg, rects } = visibleRects(doc),
+      { result } = computeRoutes(doc, vg, rects, { previous: [] });
+    const e2 = result.routes.find(r => r.id === 'e2')!,
+      e4 = result.routes.find(r => r.id === 'e4')!;
+    expect(result.report.crossings).toBe(1);
+    expect(conflicts(e2.points, [e4]).crossings).toBe(0);
   });
 
   it('swaps two ports of a fan whose lines cross just past the side (#599)', async () => {

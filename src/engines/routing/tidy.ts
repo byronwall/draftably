@@ -3,7 +3,15 @@ import { standoffCost } from './cost.ts';
 import { center, clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { validPath } from './paths.ts';
 import { offsetKey, port, sideKey } from './ports.ts';
-import { centrePorts, ends, flat, swapPorts, tip, type Attempt } from './tidy-ports.ts';
+import {
+  clearPortCrossings,
+  centrePorts,
+  ends,
+  flat,
+  swapPorts,
+  tip,
+  type Attempt,
+} from './tidy-ports.ts';
 import { PORT_SLACK } from './tuning.ts';
 import type { Axis, End, Obstacle, Point, Route, RouteEdge, Side } from './types.ts';
 
@@ -82,7 +90,11 @@ export function tidy(ctx: Context) {
       const was = state.routes[i].points,
         moved = (a: Point, b: Point) => Math.abs(a.x - b.x) > EPS || Math.abs(a.y - b.y) > EPS;
       if (e.cfg.fromAt !== undefined && moved(r.points[0], was[0])) return false;
-      if (e.cfg.toAt !== undefined && moved(r.points.at(-1)!, was.at(-1)!)) return false;
+      if (
+        (e.cfg.toAt !== undefined || e.cfg.toOffset !== undefined) &&
+        moved(r.points.at(-1)!, was.at(-1)!)
+      )
+        return false;
     }
     const m0 = metrics(state.routes),
       m1 = metrics(next);
@@ -116,6 +128,7 @@ export function tidy(ctx: Context) {
   };
 
   centrePorts(ctx, attempt);
+  swapPorts(ctx, attempt, true);
   swapPorts(ctx, attempt);
 
   // Fans: edges leaving (or entering) one side turn on a shared line.
@@ -202,6 +215,7 @@ export function tidy(ctx: Context) {
       }
     }
 
+  clearPortCrossings(ctx, attempt);
   centrePorts(ctx, attempt);
 
   // Centre: an inner run between two sides (boxes or group borders) slides to the middle
