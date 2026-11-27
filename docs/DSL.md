@@ -1749,6 +1749,9 @@ narrower. Remove the `order` line, and Orders goes back above Users.
 | `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                                                                                                                                                                                                                                                                                              |
 | `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                                                                                                                                                                                                                                                                                          |
 
+A preferred `near` hint with no `gap=` can leave extra space for a label on the connecting edge.
+Specify `gap=` when the distance matters. A detached label can use a short curved leader to identify its edge.
+
 Soft rules give way to keep siblings from overlapping. When one does, `check` reports it with its
 line. Pins never move; conflicting pins are reported as errors.
 
