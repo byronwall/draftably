@@ -9,6 +9,7 @@ import {
   cancelGeneration,
   closeComparison,
   comparison,
+  comparisonSource,
   comparisonSheet,
   effectiveCamera,
   fitAll,
@@ -234,9 +235,8 @@ function currentLine() {
   const routing = comparison.config?.mode === 'routing',
     command = routing ? 'routing' : 'layout',
     scope = routing ? '' : ` ${sourceScope(comparison.config!) ?? 'root'}`;
-  const line = activeSession()
-    .currentSource()
-    .split('\n')
+  const line = comparisonSource()
+    ?.split('\n')
     .find(l => l.startsWith(command + scope));
   return line?.split(' #')[0].trim() ?? (routing ? 'Default routing' : 'Built-in recipe');
 }
@@ -356,7 +356,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
           </details>
         </Show>
       </div>
-      <Show when={props.cell.source ?? (props.cell.current && activeSession().fileMode())}>
+      <Show when={props.cell.source ?? (props.cell.current && comparisonSource())}>
         {source => (
           <footer>
             <code class="candidate-recipe" {...cutTip}>

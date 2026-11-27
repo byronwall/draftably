@@ -857,9 +857,14 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
    * The current source with `scope` arranged by the engine in `settings`. Throws
    * `UnstorableLayout` for an engine a file cannot name.
    */
-  function sourceWithRecipe(scope: string, settings: LayoutSettings, direction?: 'right' | 'down') {
-    const source = readSource(localSource),
-      removed = setLayoutRecipe(source, state.scene()!, scope, settings, direction);
+  function sourceWithRecipe(
+    scope: string,
+    settings: LayoutSettings,
+    direction?: 'right' | 'down',
+    base?: { source: string; scene: Scene },
+  ) {
+    const source = readSource(base?.source ?? localSource),
+      removed = setLayoutRecipe(source, base?.scene ?? state.scene()!, scope, settings, direction);
     return { source: printSource(source), removed };
   }
 
@@ -871,12 +876,12 @@ export function createFileSession(s: DocumentPart & CanvasTextPart) {
   }
 
   /** The `layout` or `routing` line that `source` adds to the file, as saving it would write. */
-  function changedLines(source: string) {
-    const now = new Set(localSource.split('\n'));
+  function changedLines(source: string, base = localSource) {
+    const now = new Set(base.split('\n'));
     return source.split('\n').filter(l => /^(layout|routing)\b/.test(l) && !now.has(l));
   }
 
-  const changedLine = (source: string) => changedLines(source)[0] ?? null;
+  const changedLine = (source: string, base?: string) => changedLines(source, base)[0] ?? null;
 
   /** The current source with these router settings. */
   function sourceWithRouting(routing: RoutingSettings, base = localSource) {

@@ -26,6 +26,8 @@ import { sourceScope } from './session/file-session';
 import { LayoutLab } from '../engines/layout-engine';
 import { RouteLab } from '../engines/routing-engine';
 import type { CandidateSpec } from '../engines/explorer-engine';
+import type { Scene } from '../dsl/compile';
+import type { CodeFiles } from '../model/code-src';
 import { activeSession } from './active-session';
 
 const CURRENT: CandidateSpec = {
@@ -232,10 +234,11 @@ const setProgress = (text: string, error = false) => setCmp('progress', { text, 
  * Returns null for runs that start from the current drawing (warm starts and passes).
  */
 function candidateSource(baseline: Diagram, spec: CandidateSpec, config: ComparisonConfig) {
-  if (!activeSession().fileMode()) return null;
+  if (!fileSnapshot) return null;
   if (config.mode === 'routing')
     return activeSession().sourceWithRouting(
       RouteLab.settings({ ...baseline.settings.routing, ...spec.patch }),
+      fileSnapshot.source,
     );
   if (config.run !== 'rebuild') return null;
   const scope = sourceScope(config);
@@ -244,7 +247,7 @@ function candidateSource(baseline: Diagram, spec: CandidateSpec, config: Compari
   const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
   const asked = spec.patch.direction;
   const direction = asked ? (asked === 'DOWN' ? 'down' : 'right') : undefined;
-  return activeSession().sourceWithRecipe(scope, settings, direction).source;
+  return activeSession().sourceWithRecipe(scope, settings, direction, fileSnapshot).source;
 }
 
 export function openComparison(mode: ComparisonMode = 'layout') {
@@ -265,7 +268,13 @@ export function openComparison(mode: ComparisonMode = 'layout') {
     setCmp('config', { ...defaultConfig(mode), priorRoutes: cmp.config!.priorRoutes });
     return;
   }
-  const baseline = JSON.parse(activeSession().snapshot()) as Diagram;
+  const session = activeSession();
+  const scene = session.fileScene();
+  fileSnapshot =
+    session.fileMode() && scene
+      ? { source: session.currentSource(), scene, files: session.codeFiles() }
+      : undefined;
+  const baseline = JSON.parse(session.snapshot()) as Diagram;
   setCmp(
     reconcile({
       ...initial(),
@@ -286,6 +295,8 @@ export function openComparison(mode: ComparisonMode = 'layout') {
   void generate();
 }
 
+let fileSnapshot: { source: string; scene: Scene; files?: CodeFiles } | undefined;
+export const comparisonSource = () => fileSnapshot?.source;
 const running = new Set<RunningTask<CandidateResult>>();
 let job = 0;
 
@@ -306,6 +317,7 @@ export const rememberFocus = (el: Element | null) => (returnFocus = el);
 export function closeComparison() {
   if (!cmp.open) return;
   cancelGeneration();
+  fileSnapshot = undefined;
   setCmp(reconcile(initial()));
   activeSession().setTool('select');
   if (returnFocus instanceof HTMLElement && returnFocus.isConnected)
@@ -375,11 +387,23 @@ export async function generate(override?: Partial<ComparisonConfig>) {
     let task: RunningTask<CandidateResult> | undefined;
     try {
       const current = specs[i] === CURRENT,
-        source = current
-          ? activeSession().fileMode() && activeSession().currentSource()
-          : candidateSource(baseline, specs[i], config);
+        source = current ? fileSnapshot?.source : candidateSource(baseline, specs[i], config);
       task = source
-        ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
+        ? startEngineTask(
+            {
+              kind: 'source',
+              source,
+              spec: specs[i],
+              files: fileSnapshot?.files,
+              view: {
+                settings: baseline.settings,
+                theme: baseline.theme,
+                camera: baseline.camera,
+                collapsed: baseline.collapsed,
+              },
+            },
+            { timeout: 30000 },
+          )
         : startEngineTask(
             {
               kind: 'candidate',
@@ -434,7 +458,12 @@ export async function generate(override?: Partial<ComparisonConfig>) {
 export function applyCandidate(i: number) {
   const cell = cmp.cells[i];
   if (!cmp.open || cell?.status !== 'ready' || !cell.result) return false;
-  if (documentIdentity(activeSession().doc) !== cmp.signature) {
+  if (
+    documentIdentity(activeSession().doc) !== cmp.signature ||
+    (fileSnapshot &&
+      (fileSnapshot.source !== activeSession().currentSource() ||
+        fileSnapshot.files !== activeSession().codeFiles()))
+  ) {
     setProgress(
       'The editor changed after this snapshot. Close and reopen Compare to avoid overwriting newer edits.',
       true,
@@ -484,7 +513,7 @@ export function applyCandidate(i: number) {
 
 /** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
 export const candidateChange = (source: string) =>
-  activeSession().changedLine(source) ?? 'Same as the file';
+  activeSession().changedLine(source, comparisonSource()) ?? 'Same as the file';
 
 /** Save a file candidate's source: its layout recipe or routing line. */
 function applyToFile(cell: Candidate & { source: string }) {
