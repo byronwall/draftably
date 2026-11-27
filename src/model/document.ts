@@ -6,6 +6,7 @@ import { ICONS } from './icons';
 import { ICON_NAME } from './iconify';
 import {
   defaultAppearance,
+  resolveAppearance,
   HEX_COLOR,
   isBuiltInFamily,
   isShade,
@@ -637,13 +638,26 @@ const sortedKeys = (_key: string, value: unknown) =>
     ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
     : value;
 
+/** Font metrics used by edge labels, group titles and code range ports. */
+export function routingTypography(doc: Diagram) {
+  const { annotation, groupTitle } = resolveAppearance(doc.appearance);
+  return JSON.stringify([annotation, doc.graph.groups.length ? groupTitle : null]);
+}
+
 /**
  * Inputs that affect connection routing. The editor store keeps the key order of the document it
  * replaced, so the worker's freshly projected copy of the same document lists its keys differently.
  */
-export function routingFingerprint(doc: Diagram) {
+export function routingFingerprint(doc: Diagram, typography = routingTypography(doc)) {
   return JSON.stringify(
-    [doc.graph, doc.layout, doc.styles, doc.collapsed, doc.settings.routing],
+    [
+      doc.graph,
+      doc.layout,
+      Object.fromEntries(Object.entries(doc.styles).map(([id, style]) => [id, style.shape])),
+      doc.collapsed,
+      doc.settings.routing,
+      typography,
+    ],
     sortedKeys,
   );
 }

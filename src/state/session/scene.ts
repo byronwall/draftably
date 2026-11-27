@@ -4,7 +4,7 @@
  */
 import { createMemo, createSignal } from 'solid-js';
 import type { PriorRoute, RoutingResult } from '../../engines/routing-engine';
-import { routingFingerprint } from '../../model/document';
+import { routingFingerprint, routingTypography } from '../../model/document';
 import { drawingBounds } from '../../model/bounds';
 import { resolveAppearance } from '../../model/appearance';
 import { diagramFrame, FRAME_PAD } from '../../model/frame';
@@ -68,6 +68,8 @@ export function createScene(s: DocumentPart & FileSessionPart) {
     let lastRoutes: DrawnRoute[] = [];
     let cache: {
       signature: string;
+      labelsKey: string;
+      adopted: RoutingResult | null;
       value: { routes: DrawnRoute[]; result: RoutingResult };
     } | null = null;
 
@@ -125,7 +127,8 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         quick = quickRouting(),
         temporary = !!sculptGeometry() || !!animationGeometry();
       const adopted = adoptedRoutes(),
-        fingerprint = routingFingerprint(s.doc),
+        typography = routingTypography(s.doc),
+        fingerprint = routingFingerprint(s.doc, typography),
         ready = !quick && !temporary && adopted?.fingerprint === fingerprint,
         // A file's full routes come from the engine worker, with each compiled revision or from
         // `refine`: routing a large file here would block the page for seconds.
@@ -133,6 +136,12 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         deferred = s.fileMode() && !quick && !temporary && !ready && !known;
       if (deferred && !s.fileCompiling() && !awaiting()) refine(fingerprint);
       else if (!deferred && refining) queueMicrotask(stopRefining);
+      const adoptedResult = ready ? adopted.result : null;
+      const labelsKey = JSON.stringify([
+        typography,
+        vg.nodes.flatMap(n => (n.code ? [[n.id, n.title]] : [])),
+        vg.groups.map(g => [g.id, g.title, g.titleLines, g.frame, g.hull]),
+      ]);
       const signature = JSON.stringify([
         vg.edges,
         [...map],
@@ -154,7 +163,21 @@ export function createScene(s: DocumentPart & FileSessionPart) {
         // A result the worker hands over replaces the routes drawn while it ran.
         ready && adopted.fingerprint,
       ]);
-      if (cache?.signature === signature) return cache.value;
+      const sameLabels = cache?.labelsKey === labelsKey;
+      if (cache?.signature === signature && sameLabels) {
+        if (cache.adopted === adoptedResult) return cache.value;
+        if (
+          adoptedResult &&
+          cache.adopted &&
+          JSON.stringify(cache.adopted.routes) === JSON.stringify(adoptedResult.routes)
+        ) {
+          cache.adopted = adoptedResult;
+          const result = structuredClone(adoptedResult);
+          rememberRoutes(s.doc, vg, map, result);
+          cache.value = { result, routes: cache.value.routes };
+          return cache.value;
+        }
+      }
       let value;
       if (ready) {
         const result = structuredClone(adopted.result);
@@ -169,12 +192,12 @@ export function createScene(s: DocumentPart & FileSessionPart) {
           // except while dragging: quick routes keep each line's sides from the last frame, so a
           // drag doesn't search every line from scratch on every pointer move. The drop redraws
           // without them.
-          previous: s.fileMode() && !quick ? [] : (routePrior() ?? lastRoutes),
+          previous: !quick && (s.fileMode() || !sameLabels) ? [] : (routePrior() ?? lastRoutes),
           quick: quick || !!animationGeometry(),
         });
       }
       lastRoutes = value.routes;
-      cache = { signature, value };
+      cache = { signature, labelsKey, adopted: adoptedResult, value };
       return value;
     });
 

@@ -30,6 +30,20 @@ describe('samples', () => {
 });
 
 describe('routingFingerprint', () => {
+  it('updates route geometry for font changes and keeps it for color edits', () => {
+    const doc = twoBoxes();
+    const original = routingFingerprint(doc);
+    doc.styles.a.color = 'red';
+    doc.styles.a.shade = 700;
+    doc.appearance.overrides.text = '#142034';
+    expect(routingFingerprint(doc)).toBe(original);
+    doc.appearance.overrides.annotationFont = 'mono';
+    expect(routingFingerprint(doc)).not.toBe(original);
+    delete doc.appearance.overrides.annotationFont;
+    doc.appearance.theme = 'signal';
+    expect(routingFingerprint(doc)).not.toBe(original);
+  });
+
   // The editor store keeps old key order, so worker routes are adopted only if order is ignored.
   it('ignores the order of layout keys', () => {
     const doc = twoBoxes(),
