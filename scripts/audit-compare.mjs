@@ -126,6 +126,7 @@ const SCRIPTS = [
   'scripts/diagram-audit.mjs',
   'scripts/shoot.mjs',
   'scripts/lib/buckets.mjs',
+  'scripts/lib/node-border.mjs',
   'src/model/font-metrics.json',
 ];
 const baseRoot = path.join(root, 'tmp/audit-base', short);
