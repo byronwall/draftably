@@ -34,6 +34,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bucketOf, featuresOf } from './lib/buckets.mjs';
+import { parseLabels } from './lib/audit-labels.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -213,45 +214,6 @@ function groupTitleInk(svg, g) {
     return { x: g.x + 3, y: g.y + 2, w: 30 + textWidth(m[4], m[0]) + 8, h: 28 };
   }
   return { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
-}
-
-function parseLabels(svg) {
-  const canvas = svg.match(
-    /<rect x="[-\d.]+" y="[-\d.]+" width="[\d.]+" height="[\d.]+" fill="(#[0-9A-Fa-f]+)"\/>/,
-  )?.[1];
-  const labels = [];
-  const re =
-    /<rect x="([-\d.]+)" y="([-\d.]+)" width="([\d.]+)" height="([\d.]+)" rx="4" fill="([^"]+)"\/>\s*<text[^>]*font-weight="500"[^>]*>([^<]*)</g;
-  let m;
-  while ((m = re.exec(svg))) {
-    if (canvas && m[5] !== canvas) continue;
-    labels.push({ x: +m[1], y: +m[2], w: +m[3], h: +m[4], text: m[6], at: m.index });
-  }
-  // The text itself, inside the label's padding: the renderer pads the measured text by 8px
-  // each side (to at least 36px wide) and centres one line of the annotation type in the box.
-  for (const label of labels) {
-    const tag = svg.slice(label.at).match(/<text[^>]*font-size="([\d.]+)"[^>]*>/);
-    const size = tag ? +tag[1] : 10.5;
-    const w = Math.min(label.w - 16, textWidth(label.text, tag ? tag[0] : ''));
-    const c = center(label);
-    label.ink = { x: c.x - w / 2, y: c.y - size / 2, w, h: size };
-  }
-  // The label's own path is the line in the edge's group, which holds the line and its label
-  // (the halo paths before it, where the line breaks a frame, have no line cap). A line with
-  // `head=none` has no end marker, so the last marked path before the label would be another
-  // edge's.
-  for (const label of labels) {
-    const before = svg.slice(0, label.at),
-      group = before.slice(before.lastIndexOf('<g data-id="'));
-    label.edge = group.match(/^<g data-id="([^"]+)"/)?.[1];
-    const d =
-      group.match(/<path d="(M[^"]+)"[^>]*stroke-linecap/)?.[1] ??
-      [...before.matchAll(/<path d="(M[^"]+)"[^>]*marker-end/g)].pop()?.[1];
-    label.path = d
-      ? [...d.matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(p => ({ x: +p[1], y: +p[2] }))
-      : [];
-  }
-  return labels;
 }
 
 // ---------- color ----------
@@ -1050,14 +1012,23 @@ function measure(file) {
   }
 
   // Labels.
-  const labels = parseLabels(svg);
+  const labels = parseLabels(svg, {
+    segs,
+    center,
+    textWidth,
+    decodeText,
+    routeIds: new Set(routes.map(r => r.id)),
+  });
   for (const [i, l] of labels.entries()) {
-    for (const n of leaves)
+    for (const node of leaves.filter(n => l.panel.ids.has(n.id))) {
+      const n = { ...node, x: node.x + l.panel.x, y: node.y + l.panel.y };
       if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
       // Pressed against a box without touching it: hard to read as the line's (feedback R5).
       else if (rectsOverlap(l, { x: n.x - 6, y: n.y - 6, w: n.w + 12, h: n.h + 12 }))
         note('label-near-node', `"${l.text}" by ${n.id}`);
-    for (const g of groups) {
+    }
+    for (const group of groups.filter(g => l.panel.ids.has(g.id))) {
+      const g = { ...group, x: group.x + l.panel.x, y: group.y + l.panel.y };
       const header = { x: g.x, y: g.y, w: g.w, h: 32 };
       if (rectsOverlap(l, header)) note('label-on-group-title', `"${l.text}" on ${g.id}`);
       const edgesCut = [
@@ -1095,18 +1066,11 @@ function measure(file) {
     else if (dist > 0.5)
       note('label-beside-line', `"${l.text}" ${Math.round(dist)}px off its edge`);
     // Another edge running under the label.
-    for (const r of routes) {
+    for (const r of l.panel.routes) {
       if (r.id === l.edge) continue;
-      if (
-        r.points[0] &&
-        l.path[0] &&
-        Math.abs(r.points[0].x - l.path[0].x) < 1 &&
-        Math.abs(r.points[0].y - l.path[0].y) < 1
-      )
-        continue;
       // Through the text itself is misleading (S1); under the padding only, a reader still
       // reads the label but the line seems to stop at it.
-      if (r.segs.some(sg => segHitsRect(sg, shrink(l.ink, 1))))
+      if (r.segs.some(sg => l.ink.some(ink => segHitsRect(sg, shrink(ink, 1)))))
         note('label-through-text', `${r.id} through the "${l.text}" text`);
       else if (r.segs.some(sg => segHitsRect(sg, shrink(l, 1))))
         note('label-on-edge', `"${l.text}" over ${r.id}`);
@@ -1221,7 +1185,11 @@ function measure(file) {
     h: Math.max(...ys0) - Math.min(...ys0),
   };
   const leafArea0 = leaves.reduce((s, n) => s + n.w * n.h, 0);
-  const hole = largestEmpty(rootFrame, [...leaves, ...labels], EMPTY_SIDE);
+  const hole = largestEmpty(
+    rootFrame,
+    [...leaves, ...labels.map(l => ({ ...l, x: l.x - l.panel.x, y: l.y - l.panel.y }))],
+    EMPTY_SIDE,
+  );
   const emptyShare = (hole.w * hole.h) / Math.max(1, rootFrame.w * rootFrame.h);
   const emptyBoxes = (hole.w * hole.h) / Math.max(1, leafArea0 / Math.max(1, leaves.length));
   if (emptyShare > EMPTY_AREA && emptyBoxes >= EMPTY_BOXES)
