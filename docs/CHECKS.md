@@ -377,6 +377,14 @@ per set, the issue kinds whose counts changed, and the renders that moved most.
   there, so later runs only audit the working tree.
 - A full run of all four sets takes about two minutes. Run it in the background.
 
+### Edge runs along node borders
+
+Run `pnpm audit:node-border tmp/audit/compare/head --check` after a diagram comparison.
+The command checks the painted SVGs against their saved metrics. It lists the edge, node, side,
+coordinates, and length of each parallel run. An edge can enter or leave a node at one point.
+A positive-length run fails when its centerline follows the border or its stroke touches the border stroke.
+Parallel runs with a visible gap under 15 drawing units appear in the report for inspection.
+
 ### Ratchet gate for heuristic changes
 
 A PR that changes layout, routing, port or label heuristics must not make the diagrams that
