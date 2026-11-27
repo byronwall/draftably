@@ -4,6 +4,7 @@ import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
 import fs from 'node:fs';
+import { ARROW_REACH } from '../src/model/markers';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes, placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
 import { buildStaticScene } from '../src/model/static-scene';
@@ -247,3 +248,29 @@ describe('edge labels in a crowded drawing', () => {
     }
   });
 });
+
+it.each(['right', 'left', 'top', 'bottom'] as const)(
+  'leaves the %s arrowhead visible in a tight gap',
+  side => {
+    const doc = projectScene(checkSource('node a "A"\nnode b "B"\nedge go a -> b "Go"'));
+    const flat = side === 'right' || side === 'left';
+    const forward = side === 'right' || side === 'bottom';
+    const axis = flat ? 'x' : 'y';
+    const size = flat ? 'w' : 'h';
+    Object.assign(doc.layout.nodes.a, { x: 0, y: 0, w: 80, h: 50 });
+    Object.assign(doc.layout.nodes.b, {
+      x: 0,
+      y: 0,
+      w: 80,
+      h: 50,
+      [axis]: (forward ? 1 : -1) * ((flat ? 80 : 50) + (flat ? 50 : 32)),
+    });
+    doc.layout.edges.go = { [flat ? 'labelDx' : 'labelDy']: (forward ? 1 : -1) * (flat ? 8 : 0) };
+    const { vg, rects } = visibleRects(doc);
+    const route = computeRoutes(doc, vg, rects).routes[0],
+      tip = route.points.at(-1)!;
+    expect(
+      Math.abs(tip[axis] - route.label![axis]) - route.label![size] / 2,
+    ).toBeGreaterThanOrEqual(ARROW_REACH);
+  },
+);

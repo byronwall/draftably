@@ -41,9 +41,19 @@ const foot = (x: number) => `M${x - 10} 6L${x} 1M${x - 10} 6L${x} 11`,
   bar = (x: number) => `M${x} 1V11`,
   ring = (x: number) => `M${x} 6a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0Z`;
 
+const arrowWingX = 1,
+  arrowWingY = 1;
+
 /** Each marker points along +x, in drawing units. `arrow` is the original open chevron. */
 export const MARKER_SHAPES: Record<Exclude<EndMarker, 'none'>, MarkerShape> = {
-  arrow: { w: 8, h: 8, x: 7, d: 'M1 1L7 4L1 7', fill: 'none', stop: 0 },
+  arrow: {
+    w: 8,
+    h: 8,
+    x: 7,
+    d: `M${arrowWingX} ${arrowWingY}L7 4L${arrowWingX} ${8 - arrowWingY}`,
+    fill: 'none',
+    stop: 0,
+  },
   triangle: { w: 10, h: 9, x: 1, d: 'M1 1L9 4.5L1 8Z', fill: 'ink', stop: 8 },
   'open-triangle': { w: 12, h: 11, x: 1, d: 'M1 1L11 5.5L1 10Z', fill: 'surface', stop: 10 },
   diamond: { w: 15, h: 9, x: 1, d: DIAMOND, fill: 'ink', stop: 13 },
@@ -67,6 +77,9 @@ export const MARKER_SHAPES: Record<Exclude<EndMarker, 'none'>, MarkerShape> = {
 };
 
 export const MARKER_STROKE = 1.5;
+/** Distance behind the plain arrow tip covered by its stroked wings. */
+export const ARROW_REACH = MARKER_SHAPES.arrow.x - arrowWingX + MARKER_STROKE / 2;
+export const ARROW_HALF_HEIGHT = MARKER_SHAPES.arrow.h / 2 - arrowWingY + MARKER_STROKE / 2;
 
 const shapeOf = (kind: EndMarker): MarkerShape | undefined =>
   kind === 'none' ? undefined : MARKER_SHAPES[kind];

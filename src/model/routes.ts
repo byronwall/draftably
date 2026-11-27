@@ -17,7 +17,7 @@ import {
   groupTitleLines,
   SELF_LOOP,
 } from './labels';
-import { hasMarkers, markerRects, stoppedPoints } from './markers';
+import { ARROW_HALF_HEIGHT, ARROW_REACH, hasMarkers, markerRects, stoppedPoints } from './markers';
 import { codeLayout } from './code';
 import { drawnRect, rangeLabelBoxes, rangePort } from './ranges';
 import {
@@ -1001,6 +1001,32 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
+  // A label can fit between two boxes while its padding still hides the arrowhead.
+  // Trim the padding only when the full text and a small margin fit beside the wings.
+  for (const [route, label] of labels) {
+    const edge = byEdge.get(route.id)!;
+    if (hasMarkers(edge)) continue;
+    const end = route.points.at(-1)!,
+      prev = route.points.at(-2);
+    if (!prev) continue;
+    const flat = prev.y === end.y;
+    if (!flat && prev.x !== end.x) continue;
+    const axis = flat ? 'x' : 'y',
+      across = flat ? 'y' : 'x',
+      size = flat ? 'w' : 'h';
+    if (Math.abs(end[across] - label[across]) > (flat ? label.h : label.w) / 2 + ARROW_HALF_HEIGHT)
+      continue;
+    const gap = Math.sign(end[axis] - prev[axis]) * (end[axis] - label[axis]);
+    const room = 2 * (gap - ARROW_REACH);
+    if (gap <= 0 || room >= label[size]) continue;
+    const lines = edgeLabelLines(edge.label!, look, false, label.wrap);
+    // Preserve the full line box for accented, combining or fallback glyphs.
+    if (!flat && lines.some(line => /[^ -~]/u.test(line))) continue;
+    const ink = flat
+      ? Math.max(...lines.map(line => measureText(line, look.annotation)))
+      : look.annotation.size + (lines.length - 1) * look.annotation.lineHeight;
+    label[size] = Math.min(label[size], Math.max(ink + 4, room));
+  }
   // A sequence message's label sits just above its line, centred between two lifelines, or
   // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
   for (const route of result.routes) {
