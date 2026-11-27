@@ -69,3 +69,17 @@ test('uses only rendered routes from the label panel, including state groups', (
   assert.equal(labels[0].path[0].x, 100);
   assert.equal(labels[2].path[0].x, 400);
 });
+
+test('finds serif edge labels without taking notes or status icons', () => {
+  const serif = edge('a', 10, 0, 'serif').replace('font-weight="500"', 'font-weight="600"');
+  const other = edge('note', 10, 0, 'note').replace('font-weight="500"', 'font-weight="600"');
+  const status = `<g data-id="status"><path d="M0,10L100,10" stroke-linecap="round"/><rect x="30" y="0" width="40" height="20" rx="4" fill="red"/><text font-weight="600">status</text></g>`;
+  const labels = parseLabels(panel(0, 0, serif + other + status), {
+    ...helpers,
+    routeIds: new Set(['a']),
+  });
+  assert.deepEqual(
+    labels.map(label => label.text),
+    ['serif'],
+  );
+});

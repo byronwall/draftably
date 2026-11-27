@@ -44,7 +44,7 @@ export function parseLabels(svg, { segs, center, textWidth, decodeText, routeIds
       const label = body.match(
         /<rect x="([-\d.]+)" y="([-\d.]+)" width="([\d.]+)" height="([\d.]+)" rx="4" [^>]*\/>\s*<text([^>]*)>([\s\S]*?)<\/text>/,
       );
-      if (!label || !/font-weight="500"/.test(label[5])) continue;
+      if (!label) continue;
       const lines = [...label[6].matchAll(/<tspan\b[^>]*>([^<]*)<\/tspan>/g)].map(m => m[1]);
       if (!lines.length) lines.push(label[6]);
       const size = +(label[5].match(/font-size="([\d.]+)"/)?.[1] ?? 10.5);
