@@ -1,7 +1,7 @@
 {
   "name": "draftably",
   "private": false,
-  "version": "0.21.0",
+  "version": "0.22.0",
   "license": "FSL-1.1-MIT",
   "description": "Local diagram DSL viewer and CLI.",
   "type": "module",

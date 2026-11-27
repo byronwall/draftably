@@ -1,5 +1,20 @@
 # @draftably/mermaid
 
+## 0.6.1
+
+### Patch Changes
+
+- Updated dependencies [0cba7b6]
+- Updated dependencies [67a7555]
+- Updated dependencies [b15b2f1]
+- Updated dependencies [7dfc0c4]
+- Updated dependencies [91bbcf3]
+- Updated dependencies [a2f2e89]
+- Updated dependencies [fdd349a]
+- Updated dependencies [fb2a61c]
+- Updated dependencies [c5ff4ae]
+  - @draftably/runtime@0.12.0
+
 ## 0.6.0
 
 ### Minor Changes
