@@ -29,6 +29,18 @@ const distance = (p: Point, route: Point[]) =>
   );
 
 describe('edge label placement', () => {
+  it('keeps a label on a short edge when separating a pinned sibling', () => {
+    const source = fs.readFileSync('examples/checkout.draft', 'utf8');
+    const doc = projectScene(
+      checkSource(`${source}\npin payments x=0 y=0\nrouting clearance=30\n`),
+    );
+    const { vg, rects } = visibleRects(doc);
+    const route = computeRoutes(doc, vg, rects, { previous: [] }).routes.find(
+      r => r.id === 'charge',
+    )!;
+    expect(route.label).toBeTruthy();
+    expect(distance(route.label!, route.points)).toBe(0);
+  });
   it('keeps a label on its arrow when only the middle of the gap fits', () => {
     const points = [
       { x: 100, y: 40 },

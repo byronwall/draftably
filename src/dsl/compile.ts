@@ -1205,6 +1205,7 @@ interface LabelRoom {
   b: string;
   w: number;
   h: number;
+  direct?: boolean;
 }
 
 function labelRoom(a: string, b: string, label: string, look: ResolvedAppearance): LabelRoom {
@@ -2871,6 +2872,7 @@ function refine(
   scope: string,
   diagnostics: Diagnostic[],
   axis: 'right' | 'down',
+  rooms: LabelRoom[],
 ): Map<string, Pos> {
   const ids = items.map(n => n.id),
     by = new Map(items.map(n => [n.id, n])),
@@ -3036,11 +3038,15 @@ function refine(
         const cost = (ax: 'x' | 'y') => (ax === 'x' ? ox : oy) + (ax === primary ? 0 : 3);
         const ax = [...choices].sort((p, q) => cost(p) - cost(q))[0],
           d = ax === 'x' ? dx : dy;
+        // Once these siblings must move apart, leave room for their own edge label too.
         movement += separate(
           ax,
           d >= 0 ? b.id : a.id,
           d >= 0 ? a.id : b.id,
-          (ax === 'x' ? a.w + b.w : a.h + b.h) / 2 + MIN_GAP,
+          (ax === 'x' ? a.w + b.w : a.h + b.h) / 2 +
+            (near.get(a.id)?.ref === b.id || near.get(b.id)?.ref === a.id
+              ? MIN_GAP
+              : roomBetween(rooms, a.id, b.id, MIN_GAP, ax === 'x')),
         );
       }
     // Group content stays at nonnegative local coordinates so it fits inside the frame; the root
@@ -3632,9 +3638,12 @@ function layoutPass(
         b = immediate(e.target, scope);
       if (!e.label || !a || !b || a === b) return [];
       const own = labelRoom(a, b, e.label, look);
-      if (ref === look) return [own];
+      const direct = e.source === a && e.target === b;
+      if (ref === look) return [{ ...own, direct }];
       const r = labelRoom(a, b, e.label, ref);
-      return [{ a, b, w: Math.max(r.w, own.w - LABEL_RUN), h: Math.max(r.h, own.h - LABEL_RUN) }];
+      return [
+        { a, b, direct, w: Math.max(r.w, own.w - LABEL_RUN), h: Math.max(r.h, own.h - LABEL_RUN) },
+      ];
     });
     // In a mind map only a link out to a topic off the tree crosses a gap that may widen.
     const offTree = new Set(
@@ -3875,7 +3884,8 @@ function layoutPass(
               ? { ...h, x: h.x - off.get(h.id)!.x, y: h.y - off.get(h.id)!.y }
               : h,
           );
-      const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis);
+      const directRooms = rooms.filter(r => r.direct);
+      const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis, directRooms);
       if ('followed' in base && base.followed) following.set(scope, holder!);
       else following.delete(scope);
       return { base, fold, pos, off, extraRight, extraBottom };
