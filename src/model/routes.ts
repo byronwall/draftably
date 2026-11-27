@@ -425,9 +425,8 @@ function shiftedLabel(
         }
     }
   }
-  // The nearest spot, where a line through the text (cost 5) counts as 40px further: the label
-  // may step past a line or two, or out of its group, but never flees far from its edge.
-  const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 16]));
+  // Favor a nearby spot while still counting the lines and borders it crosses.
+  const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 4]));
   shifted.sort((a, b) => rank.get(b)! - rank.get(a)!);
   const a = points[0] || { x: 0, y: 0 },
     b = points[1] || a;
