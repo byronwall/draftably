@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
-import { projectScene } from '../src/dsl/project';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes } from '../src/model/routes';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit } from '../src/dsl/translate';
 import { removeReferences } from '../src/dsl/source-edits';
@@ -64,6 +65,50 @@ describe('layout … mindmap', () => {
     expect(scene.diagnostics.filter(d => d.level !== 'info')).toEqual([]);
     // The parsed model stays as written, so compare and edits never see the drawn heads.
     expect(parseModel(sample).edges.some(e => e.head || e.branch)).toBe(false);
+  });
+
+  it('builds the same tree with or without labels on its lines', async () => {
+    const lines = [
+      'node r "R"',
+      'node a "A"',
+      'node b "B"',
+      'node c "C"',
+      'node d "D"',
+      'edge e1 r -> a',
+      'edge e2 a -> b',
+      'edge e3 r -> c',
+      'edge e4 b -> d',
+      'edge x1 r -> b kind=async',
+      'layout root mindmap root=r',
+    ];
+    const plain = await compile(lines.join('\n')),
+      labeled = await compile(
+        lines.map(l => (/^edge e\d/.test(l) ? `${l} "interim"` : l)).join('\n'),
+      ),
+      side = (scene: typeof plain, id: string) =>
+        Math.sign(scene.byId.get(id)!.x - scene.byId.get('r')!.x),
+      branches = (scene: typeof plain) => scene.edges.filter(e => e.branch).map(e => e.id);
+    expect(branches(labeled)).toEqual(['e1', 'e2', 'e3', 'e4']);
+    expect(branches(labeled)).toEqual(branches(plain));
+    for (const id of ['a', 'b', 'c', 'd']) expect(side(labeled, id)).toBe(side(plain, id));
+    // Each label has room on its own line: its box meets the line's route.
+    const doc = projectScene(labeled),
+      { vg, rects } = visibleRects(doc);
+    for (const r of computeRoutes(doc, vg, rects, { previous: [] }).routes) {
+      if (!labeled.edges.find(e => e.id === r.id)?.branch) continue;
+      const box = r.label!,
+        meets = r.points.some((p, k) => {
+          const q = r.points[k + 1];
+          return (
+            !!q &&
+            Math.max(p.x, q.x) >= box.x - box.w / 2 &&
+            Math.min(p.x, q.x) <= box.x + box.w / 2 &&
+            Math.max(p.y, q.y) >= box.y - box.h / 2 &&
+            Math.min(p.y, q.y) <= box.y + box.h / 2
+          );
+        });
+      expect(meets, r.id).toBe(true);
+    }
   });
 
   it('keeps an edge with a written style out of the tree', async () => {

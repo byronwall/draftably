@@ -3,8 +3,8 @@
  * reads the reporting tree out of them, places it top down, and plans each reporting line as part
  * of one bus per manager.
  *
- * - A reporting line is a plain edge (no label, `kind=`, ends or message) between two people in the
- *   scope, reached from the root by following edges forward. It draws with no head.
+ * - A reporting line is a plain edge (no `kind=`, ends or message; a label is fine) between two
+ *   people in the scope, reached from the root by following edges forward. It draws with no head.
  * - Every other edge between two people (a dotted-line report, say) draws as written and places
  *   nothing. A person the tree misses sits in a row below the chart.
  * - `role=assistant` on a report with no reports of its own hangs it beside its manager's stem,
@@ -14,8 +14,18 @@
  *   rows until the drawing is wider than `fit=` asks for (2:1 without it), then stacks the widest
  *   rows first.
  */
-import { FITS, layoutParent, type Fit, type Model, type OrgLeaves } from './syntax';
+import {
+  FITS,
+  layoutParent,
+  treeCandidates,
+  treeLine,
+  type Fit,
+  type Model,
+  type OrgLeaves,
+} from './syntax';
 import type { Planned } from './corridors';
+import { resolveAppearance } from '../model/appearance';
+import { edgeLabelSize } from '../model/labels';
 import type { Diagram } from '../model/types';
 
 /** Space between sibling blocks and between stacked leaves. */
@@ -74,13 +84,19 @@ export function withOrgcharts(m: Model): Model {
     const { tree } = reportingTree(out, inside, l.orgchart!.root);
     const pairs = new Set([...tree].map(e => `${e.source}\0${e.target}`));
     for (const e of out.edges) {
-      // An edge that repeats a reporting line's two ends is one too, as when compare holds an
-      // edge under its old and new ID.
-      if (tree.has(e) || (plainEdge(e) && pairs.has(`${e.source}\0${e.target}`))) e.branch = true;
+      // In a comparison, an edge that repeats a reporting line's two ends is one too: compare
+      // holds the edge under its old and new ID.
+      if (
+        tree.has(e) ||
+        (treeLine(e) &&
+          (e.status === 'added' || e.status === 'removed') &&
+          pairs.has(`${e.source}\0${e.target}`))
+      )
+        e.branch = true;
       else if (inside(e.source) && inside(e.target)) {
         // In a comparison, a reporting line that moved to another manager is still one: it
         // draws with no head, though only the tree places people.
-        if (plainEdge(e) && e.status) e.head = 'none';
+        if (treeLine(e) && e.status && e.status !== 'same') e.head = 'none';
         e.constraint = false;
       }
     }
@@ -103,15 +119,9 @@ export function chartEdges(m: Model): Set<string> {
   );
 }
 
-const plainEdge = (e: Model['edges'][number]) =>
-  !e.label && !e.styled && !e.message && e.constraint !== false;
-
 /** The reporting lines reached from `root`, breadth first, and each manager's reports in order. */
 function reportingTree(m: Model, inside: (id: string) => boolean, root: string) {
-  const out = new Map<string, Model['edges']>();
-  for (const e of m.edges)
-    if (plainEdge(e) && inside(e.source) && inside(e.target))
-      out.set(e.source, [...(out.get(e.source) ?? []), e]);
+  const out = treeCandidates(m.edges, inside);
   const kids = new Map<string, string[]>(),
     tree = new Set<Model['edges'][number]>(),
     seen = new Set([root]);
@@ -163,7 +173,15 @@ export function arrangeOrgchart(
       .filter(id => parent.get(id) === scope)
       .map(id => ({ id, ...doc.layout.nodes[id], ...sizes.get(id) })),
     by = new Map(items.map(p => [p.id, p])),
-    gaps = gapsFor(clearance);
+    gaps = gapsFor(clearance),
+    look = resolveAppearance(doc.appearance),
+    // A labeled reporting line draws its label on its own leg: the run from the stem to an
+    // assistant or a stacked leaf leaves room for the widest such label. The leaf modes are
+    // chosen with the plain gaps, so a label never changes which rows stack.
+    legs = { ...gaps };
+  for (const e of doc.graph.edges)
+    if (e.branch && e.label && by.has(e.from) && by.has(e.to))
+      legs.indent = Math.max(legs.indent, edgeLabelSize(e.label, look).w + 2 * clearance);
   if (!by.has(root)) return { doc, stacked: new Set() };
   const kids = new Map<string, string[]>(),
     seen = new Set([root]);
@@ -197,10 +215,10 @@ export function arrangeOrgchart(
     for (const id of leafy)
       modes.set(id, leaves === 'stack' ? 'stack' : below(id).length >= 3 ? 'split' : 'row');
   // A person the tree misses sits in a row below the chart.
-  const whole = (m: Map<string, Mode>) => {
-    const at = place(root, by, below, side, m, gaps),
+  const whole = (m: Map<string, Mode>, g = gaps) => {
+    const at = place(root, by, below, side, m, g),
       placed = [...at.values()],
-      top = Math.max(...placed.map(p => p.y + p.h)) + gaps.rank;
+      top = Math.max(...placed.map(p => p.y + p.h)) + g.rank;
     let x = Math.min(...placed.map(p => p.x));
     for (const p of items)
       if (!at.has(p.id)) {
@@ -223,6 +241,7 @@ export function arrangeOrgchart(
       at = next;
     }
   }
+  if (legs.indent !== gaps.indent) at = whole(modes, legs);
   // Move each member's slot onto its drawn box's center, and everything inside a group with it.
   const owner = (id: string | undefined): string | undefined =>
     id === undefined || by.has(id) ? id : owner(parent.get(id));

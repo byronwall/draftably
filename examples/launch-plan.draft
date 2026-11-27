@@ -31,7 +31,7 @@ edge b10 sup -> faq
 edge b11 sup -> status
 
 node forum "Community forum" icon=message-circle
-edge e1 hn -> forum "links to"
+edge e1 hn -> forum "links to" kind=async
 edge e2 docs -> blog "linked from" kind=async
 
 note "Docs must ship before Show HN." near=docs side=above

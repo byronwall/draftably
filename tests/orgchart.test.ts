@@ -63,6 +63,85 @@ describe('layout … orgchart', () => {
     expect(doc.graph.edges.find(e => e.id === 'dot')!.dashed).toBe(true);
   });
 
+  it('builds the same chart with or without labels on its reporting lines', async () => {
+    const lines = [
+      'node ceo "CEO"',
+      'node cto "CTO"',
+      'node cfo "CFO"',
+      'node web "Web"',
+      'edge r1 ceo -> cto',
+      'edge r2 ceo -> cfo',
+      'edge r3 cto -> web',
+      'edge d1 ceo -> web "dotted line" kind=async',
+      'layout root orgchart root=ceo',
+    ];
+    const plain = await compile(lines.join('\n')),
+      labeled = await compile(
+        lines.map(l => (/^edge r\d/.test(l) ? `${l} "interim"` : l)).join('\n'),
+      ),
+      top = (scene: typeof plain, id: string) => scene.byId.get(id)!.y,
+      branches = (scene: typeof plain) => scene.edges.filter(e => e.branch).map(e => e.id);
+    expect(branches(labeled)).toEqual(['r1', 'r2', 'r3']);
+    expect(branches(labeled)).toEqual(branches(plain));
+    expect(top(labeled, 'cto')).toBe(top(labeled, 'cfo'));
+    expect(top(labeled, 'web')).toBeGreaterThan(top(labeled, 'cto'));
+  });
+
+  it('keeps the same leaf rows when a manager line gets a label', async () => {
+    const lines = [
+      'node ceo "CEO"',
+      'node m "Manager"',
+      ...[1, 2, 3, 4].map(i => `node l${i} "Leaf ${i}"`),
+      'edge r0 ceo -> m',
+      ...[1, 2, 3, 4].map(i => `edge r${i} m -> l${i}`),
+      'layout root orgchart root=ceo',
+    ];
+    const plain = await compile(lines.join('\n')),
+      labeled = await compile(lines.join('\n').replace('ceo -> m', 'ceo -> m "Reports directly"')),
+      rows = (scene: typeof plain) =>
+        [1, 2, 3, 4].map(i => scene.byId.get(`l${i}`)!.y - scene.byId.get('m')!.y);
+    expect(rows(labeled)).toEqual(rows(plain));
+  });
+
+  it('draws each reporting line label on its own leg', async () => {
+    const source = [
+      'node ceo "CEO"',
+      'node ea "EA" role=assistant',
+      'node cto "CTO"',
+      'node cfo "CFO"',
+      'node w1 "W1"',
+      'node w2 "W2"',
+      'edge r0 ceo -> ea "reports directly"',
+      'edge r1 ceo -> cto "interim"',
+      'edge r2 ceo -> cfo',
+      'edge r3 cto -> w1 "contract"',
+      'edge r4 cto -> w2',
+      'layout root orgchart root=ceo leaves=stack',
+    ].join('\n');
+    const { scene, routes } = await routed(source);
+    expect(scene.edges.filter(e => e.branch).map(e => e.id)).toEqual([
+      'r0',
+      'r1',
+      'r2',
+      'r3',
+      'r4',
+    ]);
+    for (const r of routes.filter(r => r.label)) {
+      const box = r.label!,
+        meets = r.points.some((p, k) => {
+          const q = r.points[k + 1];
+          return (
+            !!q &&
+            Math.max(p.x, q.x) >= box.x - box.w / 2 &&
+            Math.min(p.x, q.x) <= box.x + box.w / 2 &&
+            Math.max(p.y, q.y) >= box.y - box.h / 2 &&
+            Math.min(p.y, q.y) <= box.y + box.h / 2
+          );
+        });
+      expect(meets, r.id).toBe(true);
+    }
+  });
+
   it('keeps the bus through a JSON round trip', async () => {
     const { doc, routes } = await routed(sample),
       again = normalize(JSON.parse(JSON.stringify(doc))),

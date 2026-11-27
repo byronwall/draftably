@@ -1120,13 +1120,15 @@ layout root mindmap root=launch
 **Try it:** add `color=rose` to `eng`. Engineering and its topics change from their given color to
 rose, and the other branch keeps its color.
 
-- **Branches:** an edge with no label, `kind=`, `head=`, `tail=` or `directed=` is a branch line.
-  The tree follows branch lines forward from `root=`. Branch lines draw with no arrowhead.
+- **Branches:** an edge with no `kind=`, `head=`, `tail=` or `directed=` is a branch line. It may
+  have a label, which draws on the line. The tree follows branch lines forward from `root=`.
+  Branch lines draw with no arrowhead.
 - **Colors:** each first-level topic takes the next color family in turn, and the topics under it
   draw as pale cards of the same family. A topic with `color=` keeps it, and the topics under it
   take it. The root keeps the neutral surface. Branch colors need no `legend` row.
-- **Cross-links:** an edge with a label or `kind=`, or one more edge into a topic that already has
-  a branch, draws as written but does not move the topics. An edge to an object outside the map
+- **Cross-links:** an edge with `kind=` or an end, or one more edge into a topic that already has
+  a branch, draws as written but does not move the topics. A label alone never makes a
+  cross-link: give a second line `kind=async` so it cannot become the branch. An edge to an object outside the map
   is a normal edge.
 - **Off the tree:** a topic that no branch line reaches from the root sits past the outermost
   topics, on the side of the topic it links to. A topic with no link to the tree sits below the
@@ -1169,9 +1171,10 @@ layout root orgchart root=ceo
 **Try it:** add `leaves=stack` to the layout line. The three engineers move from a row into a
 column right of Noah's stem, and the chart gets narrower.
 
-- **Reporting lines:** an edge with no label, `kind=`, `head=`, `tail=` or `directed=` is a
-  reporting line. The tree follows reporting lines down from `root=`. They draw with no arrowhead.
-  Put the name on the first line of the label and the title after `\n`.
+- **Reporting lines:** an edge with no `kind=`, `head=`, `tail=` or `directed=` is a reporting
+  line. It may have a label, such as `"interim"`, which draws on the line. The tree follows
+  reporting lines down from `root=`. They draw with no arrowhead.
+  Put a person's name on the first line of their node label and the title after `\n`.
 - **Leaves:** a manager whose reports have no reports of their own can stack them.
   `leaves=stack` puts them in one column right of the stem, `leaves=split` in two columns either
   side of it (for three or more), and `leaves=row` keeps them side by side. The default,
@@ -1181,8 +1184,8 @@ column right of Noah's stem, and the chart gets narrower.
   manager's stem, above the other reports.
 - **Open roles:** `role=vacant` draws a dashed outline, a pale card and faded text. A label with
   one line gets "Open role" as its second line. It works in any layout, not only an org chart.
-- **Dotted lines:** an edge with a label or `kind=`, or one more edge into a person who already
-  has a manager, draws as written but moves no one. Write a dotted-line report as
+- **Dotted lines:** an edge with `kind=`, or one more edge into a person who already has a
+  manager, draws as written but moves no one. A label alone does not make a dotted line. Write a dotted-line report as
   `edge dot pm -> web "partners with" kind=async`, and add a `legend line dashed` row for it.
 - **Off the tree:** a person that no reporting line reaches from the root sits in a row below the
   chart.

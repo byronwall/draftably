@@ -1653,6 +1653,26 @@ function addRowEdges(m: Model) {
 }
 
 /**
+ * A line a mind map or org chart may use as a tree line: no `kind=`, ends, message or
+ * `constraint=false`. A label does not matter: a labeled branch or reporting line stays in the
+ * tree and draws its label on the line.
+ */
+export const treeLine = (e: ModelEdge) => !e.styled && !e.message && e.constraint !== false;
+
+/**
+ * The lines a mind map or org chart builds its tree from, by source. Labels play no part, so
+ * adding or removing one never moves a topic; a second line that must stay out of the tree says
+ * so with `kind=` or an end. Both layouts read their tree through this one function.
+ */
+export function treeCandidates(edges: ModelEdge[], inside: (id: string) => boolean) {
+  const out = new Map<string, ModelEdge[]>();
+  for (const e of edges)
+    if (treeLine(e) && inside(e.source) && inside(e.target))
+      out.set(e.source, [...(out.get(e.source) ?? []), e]);
+  return out;
+}
+
+/**
  * The container that lays an object out: its parent, or the nearest framed container above it
  * when its parent is a soft or frameless group. Soft groups are never layout scopes.
  */
