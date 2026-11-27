@@ -1,4 +1,4 @@
-import { conflicts, parallelConflicts, parallelNear } from './conflicts.ts';
+import { conflicts, crossesItself, parallelConflicts, parallelNear } from './conflicts.ts';
 import type { Point } from './types.ts';
 import type { Context } from './context.ts';
 import { cost, standoffCost } from './cost.ts';
@@ -69,16 +69,6 @@ export function nudge(ctx: Context) {
       if (!changed) break;
     }
   return nudged;
-}
-
-// Check each segment against the part of its own path before the preceding bend.
-function crossesItself(points: Point[]) {
-  for (let i = 2; i < points.length - 1; i++) {
-    const earlier = { points: points.slice(0, i) };
-    const hit = conflicts([points[i], points[i + 1]], [earlier]);
-    if (hit.crossings || hit.shared) return true;
-  }
-  return false;
 }
 
 /** A gap wider than this between two facing sides is open space, not a gap to centre in. */

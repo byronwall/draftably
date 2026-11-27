@@ -140,6 +140,46 @@ describe('routing clearance', () => {
     expect(closestParallel(ab.points, input.nodes[2])).toBeGreaterThanOrEqual(20);
   });
 
+  it('keeps the waypoint on a clear route without crossing an earlier leg', () => {
+    const waypoint = { x: 425, y: 280 };
+    const input: RouteInput = {
+      nodes: [box('a', 0, 140, 100, 60), box('b', 230, 70, 100, 60), box('c', 440, 230, 90, 60)],
+      groups: [],
+      edges: [{ id: 'ab', from: 'a', to: 'b', cfg: { waypoints: [waypoint] } }],
+    };
+    const [route] = RouteLab.compute(input).routes;
+    expect(route.blocked).toBe(false);
+    const legs = route.points.slice(1).map((b, i) => [route.points[i], b]);
+    const contains = (a: Point, b: Point, p: Point) =>
+      p.x >= Math.min(a.x, b.x) &&
+      p.x <= Math.max(a.x, b.x) &&
+      p.y >= Math.min(a.y, b.y) &&
+      p.y <= Math.max(a.y, b.y);
+    expect(legs.some(([a, b]) => contains(a, b, waypoint))).toBe(true);
+    for (const [i, [a, b]] of legs.entries())
+      for (const [c, d] of legs.slice(i + 2)) {
+        const x = Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)),
+          y = Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y));
+        expect(contains(a, b, { x, y }) && contains(c, d, { x, y })).toBe(false);
+      }
+  });
+
+  it('reports an unreachable waypoint even when it lines up with the port', () => {
+    const input: RouteInput = {
+      nodes: [box('a', 0, 0, 100, 60), box('b', 250, 200, 100, 60), box('c', 140, 10, 50, 40)],
+      groups: [],
+      edges: [
+        {
+          id: 'ab',
+          from: 'a',
+          to: 'b',
+          cfg: { fromSide: 'right', toSide: 'top', waypoints: [{ x: 150, y: 30 }] },
+        },
+      ],
+    };
+    expect(RouteLab.compute(input).routes[0].blocked).toBe(true);
+  });
+
   it('keeps runs off a group border', () => {
     const group = { id: 'g', x: 0, y: 0, w: 200, h: 200, collapsed: false };
     const input: RouteInput = {

@@ -1747,6 +1747,8 @@ export function foldRanks(
   return { positions };
 }
 
+type FoldBox = Pick<SceneObject, 'id' | 'type' | 'x' | 'y' | 'w' | 'h'>;
+
 /**
  * Lanes for a fold's wrap edges. Each edge from one band into the next returns along its own line
  * in the gap between them: out of the band's end, back along the gap, into the next band. The
@@ -1759,24 +1761,25 @@ export function foldRanks(
 function wrapLanes(
   folds: Array<{ scope: string; fold: Fold }>,
   edges: ModelEdge[],
-  byId: Map<string, SceneObject>,
+  byId: Map<string, FoldBox>,
   immediate: (id: string, scope: string) => string | undefined,
   portPitch: number,
+  turns?: { min: number; max: number },
 ): Map<string, Lane> {
   const out = new Map<string, Lane>();
   for (const { scope, fold } of folds) {
     // Bands read right and stack down, so their lanes are level; or read down and stack right.
     // Below, `u` runs along the bands and `v` across them.
     const level = fold.axis === 'right',
-      lo = (o: SceneObject) => (level ? o.y : o.x),
-      hi = (o: SceneObject) => (level ? o.y + o.h : o.x + o.w),
-      start = (o: SceneObject) => (level ? o.x : o.y),
-      end = (o: SceneObject) => (level ? o.x + o.w : o.y + o.h),
-      mid = (o: SceneObject) => (start(o) + end(o)) / 2,
-      middle = (o: SceneObject) => (lo(o) + hi(o)) / 2,
-      overlap = (o: SceneObject, n: SceneObject) => start(o) < end(n) && end(o) > start(n);
+      lo = (o: FoldBox) => (level ? o.y : o.x),
+      hi = (o: FoldBox) => (level ? o.y + o.h : o.x + o.w),
+      start = (o: FoldBox) => (level ? o.x : o.y),
+      end = (o: FoldBox) => (level ? o.x + o.w : o.y + o.h),
+      mid = (o: FoldBox) => (start(o) + end(o)) / 2,
+      middle = (o: FoldBox) => (lo(o) + hi(o)) / 2,
+      overlap = (o: FoldBox, n: FoldBox) => start(o) < end(n) && end(o) > start(n);
     const band = new Map(fold.bands.flatMap((ids, k) => ids.map(id => [id, k] as const))),
-      bandOf = (o: SceneObject) => band.get(immediate(o.id, scope) ?? '');
+      bandOf = (o: FoldBox) => band.get(immediate(o.id, scope) ?? '');
     const leaves = (k: number) =>
       [...byId.values()].filter(o => o.type !== 'group' && bandOf(o) === k);
     for (let k = 0; k + 1 < fold.bands.length; k++) {
@@ -1798,11 +1801,21 @@ function wrapLanes(
             below.some(o => lo(o) < lo(target) && overlap(o, target));
         // A side turn reads only from the end of a row or into its start; otherwise the line
         // would run past a neighbour, so the router draws the edge as it would any other.
-        const row = (o: SceneObject, n: SceneObject) => lo(o) < hi(n) && hi(o) > lo(n);
+        const row = (o: FoldBox, n: FoldBox) => lo(o) < hi(n) && hi(o) > lo(n);
         if (leave && above.some(o => row(o, source) && start(o) >= end(source))) return [];
         if (enter && below.some(o => row(o, target) && end(o) <= start(target))) return [];
         return [{ id: e.id, source, target, leave, enter }];
       });
+      // A hint can pull the bands together; then there is no clear gap to share.
+      if (!wraps.length || bottom - top < (wraps.length + 1) * LANE_PITCH) continue;
+      // Frame sizing needs only the outermost turns. Their order does not affect the extent.
+      if (turns) {
+        const entering = wraps.filter(w => w.enter).length,
+          leaving = wraps.filter(w => w.leave).length;
+        if (entering) turns.min = Math.min(turns.min, entry - (entering - 1) * LANE_PITCH);
+        if (leaving) turns.max = Math.max(turns.max, exit + (leaving - 1) * LANE_PITCH);
+        continue;
+      }
       // Several wraps from one side of a source leave from ports the router spreads from the
       // middle outwards, nearest target first, leaning toward the targets. Their drops cross
       // the lanes unless the lanes follow the same order.
@@ -1820,8 +1833,6 @@ function wrapLanes(
           drop.set(w.id, mid(w.source) + step);
         });
       }
-      // A hint can pull the bands together; then there is no clear gap to share.
-      if (!wraps.length || bottom - top < (wraps.length + 1) * LANE_PITCH) continue;
       // Turns outside the bands nest: the lane nearest the earlier band leaves closest to its
       // end and enters furthest before the next band's start.
       const assign = (order: typeof wraps) => {
@@ -3810,6 +3821,53 @@ function layoutPass(
         for (const [id, p] of base.positions)
           base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
       const off = offsets(base.axis, base.positions);
+      let extraRight = 0,
+        extraBottom = 0;
+      if (scope !== 'root' && fold && list.every(n => n.type === 'node')) {
+        const boxes = new Map(
+          list.map(n => {
+            const p = base.positions.get(n.id)!,
+              o = off.get(n.id)!;
+            return [n.id, { ...n, ...o, x: p.x + o.x, y: p.y + o.y }] as const;
+          }),
+        );
+        const turns = { min: Infinity, max: -Infinity };
+        wrapLanes(
+          [{ scope, fold }],
+          m.edges.filter(e => boxes.has(e.source) && boxes.has(e.target)),
+          boxes,
+          immediate,
+          Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
+          turns,
+        );
+        const right = fold.axis === 'right',
+          axis = right ? 'x' : 'y',
+          size = right ? 'w' : 'h';
+        const gutter = GROUP_INSET - LANE_PITCH;
+        const occupied = Math.max(...[...boxes.values()].map(b => b[axis] + b[size]));
+        const before = Math.max(0, -turns.min - (right ? gutter : 0));
+        // Keep an authored position free when the leading gutter would push a sibling onto it.
+        const hitsAnchor =
+          before &&
+          m.hints.some(h => {
+            if (h.type !== 'pin' && h.type !== 'stay') return false;
+            const box = boxes.get(h.id);
+            if (!box) return false;
+            const anchor = { ...box, x: h.x, y: h.y };
+            return [...boxes.values()].some(
+              b =>
+                b.id !== h.id &&
+                clearance(b, anchor) >= 0 &&
+                clearance({ ...b, [axis]: b[axis] + before }, anchor) < 0,
+            );
+          });
+        if (before && !hitsAnchor)
+          for (const [id, p] of base.positions)
+            base.positions.set(id, { ...p, [axis]: p[axis] + before });
+        const after = Math.max(0, turns.max - occupied - gutter);
+        if (right) extraRight = after;
+        else extraBottom = after;
+      }
       const hints = !leaves.size
         ? m.hints
         : m.hints.map(h =>
@@ -3820,7 +3878,7 @@ function layoutPass(
       const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis);
       if ('followed' in base && base.followed) following.set(scope, holder!);
       else following.delete(scope);
-      return { base, fold, pos, off };
+      return { base, fold, pos, off, extraRight, extraBottom };
     };
     const drawnBox = (n: Item, at: ReturnType<typeof lay>) => {
       const p = at.pos.get(n.id)!,
@@ -3913,7 +3971,7 @@ function layoutPass(
           shift[a] +
           nest * SOFT_PAD
         : 0;
-    return { w: extent('x', 'w'), h: extent('y', 'h') };
+    return { w: extent('x', 'w') + laid.extraRight, h: extent('y', 'h') + laid.extraBottom };
   }
   /**
    * A `cells` group's members, edge to edge from its content origin. The cells keep this place:
