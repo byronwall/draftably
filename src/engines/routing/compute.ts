@@ -1,5 +1,5 @@
 import { createContext } from './context.ts';
-import { find } from './find.ts';
+import { find, retryLane } from './find.ts';
 import { cmp } from './geometry.ts';
 import { improve } from './improve.ts';
 import { centre, nudge } from './nudge.ts';
@@ -22,11 +22,29 @@ export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): Rou
     if (plan) state.fixedPlans.add(e.id);
     state.routes.push(plan ?? find(ctx, e, state.routes, previous.get(e.id)));
   }
+  // Keep ordinary paths in place before a blocked lane tries a different approach.
+  const recover = () => {
+    for (const [i, route] of state.routes.entries()) {
+      if (!route.blocked || !edges[i].autoLane) continue;
+      state.routes[i] = retryLane(
+        ctx,
+        edges[i],
+        state.routes.filter((_, j) => j !== i),
+        route,
+        previous.get(route.id),
+      );
+    }
+  };
+  if (rawOptions.quick) recover();
   syncOpen();
   const before = metrics(state.routes);
   const accepted = improve(ctx),
-    repaired = repair(ctx),
-    nudged = nudge(ctx),
+    repaired = repair(ctx);
+  if (!rawOptions.quick) {
+    recover();
+    syncOpen();
+  }
+  const nudged = nudge(ctx),
     tidyOn = !rawOptions.quick && rawOptions.tidy !== false,
     tidied = tidyOn ? tidy(ctx) : 0,
     centred = tidyOn ? centre(ctx) : 0,

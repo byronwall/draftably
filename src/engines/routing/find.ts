@@ -11,6 +11,7 @@ import {
   EPS,
   lengthOf,
   pathLength,
+  round,
   segments,
   SIDES,
   vector,
@@ -57,6 +58,27 @@ interface Stubbed {
 // also a cost to weigh, not a wall (FEEL.md): a gated route that reads against the flow, or
 // takes the long way round from a side the file set, tries the crossing too, and takes it when
 // it scores better by more than `BAND_COST`.
+export function retryLane(
+  ctx: Context,
+  e: RouteEdge,
+  used: Route[],
+  route: Route,
+  old?: Prior,
+  wall: Obstacle[] = [],
+) {
+  if (!route.blocked || !e.autoLane || !e.cfg.waypoints?.length) return route;
+  // Let the line find its own approach to a blocked lane. Keep both ports and the
+  // inner waypoints that carry the line along its track.
+  const wp = e.cfg.waypoints;
+  for (const waypoints of [wp.slice(1, -1), wp.slice(1), wp.slice(0, -1)]) {
+    const free = find(ctx, { ...e, cfg: { ...e.cfg, waypoints } }, used, old, wall);
+    if (free.blocked) continue;
+    if (waypoints.length) free.retainedLane = true;
+    return free;
+  }
+  return route;
+}
+
 export function find(
   ctx: Context,
   e: RouteEdge,
@@ -296,6 +318,14 @@ function findAmong(
       best.points.length <= 6
     )
       break;
+    // No grid search can reach a waypoint inside a solid obstacle.
+    if (
+      cfg.waypoints?.some(point => {
+        const grid = { x: round(point.x), y: round(point.y) };
+        return blocked(grid, grid, c.obs);
+      })
+    )
+      continue;
     const points = [c.as, ...(cfg.waypoints || []), c.bs],
       path: Point[] = [];
     let ok = true;
