@@ -48,10 +48,11 @@ for (const file of inventory.filter(f => f.endsWith('.svg'))) {
     if (!expected) errors.push(`${relative}: missing saved metrics`);
     else {
       checked++;
-      if (!expected.edges) edgeFree++;
-      if (scan.routes !== expected.edges || (expected.edges && scan.nodes !== expected.nodes))
+      const expectedRoutes = scan.expectedRouteIds?.length ?? expected.edges;
+      if (!expectedRoutes) edgeFree++;
+      if (scan.routes !== expectedRoutes || (expectedRoutes && scan.nodes !== expected.nodes))
         errors.push(
-          `${relative}: routes ${scan.routes}/${expected.edges}, nodes ${scan.nodes}/${expected.nodes}`,
+          `${relative}: routes ${scan.routes}/${expectedRoutes}, nodes ${scan.nodes}/${expected.nodes}`,
         );
     }
     for (const run of scan.findings) {

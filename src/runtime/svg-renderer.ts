@@ -42,6 +42,7 @@ import {
   isTableRow,
   shownTimelines,
   styleOf,
+  timelineRoutes,
 } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { rowParts, type TableRow } from '../model/table';
@@ -536,7 +537,7 @@ function sceneMarkup(
           'stroke',
         ),
       ),
-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
+      `<path d="${route.path}" class="edge-stroke" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
@@ -848,7 +849,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   // share one box and every unchanged object lines up across them.
   const merged = compare ? routesOf(doc) : undefined,
     shared = merged ? [oldRoutes(doc, merged), merged] : [],
-    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map((d, i) =>
+    panelDocs = compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc],
+    scenes = panelDocs.map((d, i) =>
       sceneMarkup(d, look, marker, opts, shared[i] ?? (compare ? undefined : opts.routes)),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
@@ -925,7 +927,10 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
             : `<line x1="${px - PANEL_GAP / 2}" x2="${px - PANEL_GAP / 2}" y1="${y0}" y2="${y0 + areaH}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
         );
     }
-    out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
+    const panelEdges = compare
+      ? ` data-panel-edges="${esc(JSON.stringify([...scene.routes, ...timelineRoutes(panelDocs[i], scene.rects)].map(r => r.id)))}"`
+      : '';
+    out.push(`<g transform="translate(${dx},${dy})"${panelEdges}>`, scene.markup, '</g>');
   });
   // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
   out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));

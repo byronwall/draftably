@@ -241,7 +241,9 @@ export function timelineOrigin(t: PlacedTimeline, scopeRect: Rect | undefined) {
 
 /** One mark as SVG markup, for the string renderer. */
 export function markSvg(look: ResolvedAppearance, m: TimelineMark, backdrop?: string): string {
-  const out = shapeSvg(look, m, backdrop);
+  let out = shapeSvg(look, m, backdrop);
+  if (m.id && (m.k === 'line' || (m.k === 'path' && m.stroke)))
+    out = out.replace(/\/>$/, ' class="edge-stroke"/>');
   return m.id ? `<g data-id="${escText(m.id)}">${out}</g>` : out;
 }
 

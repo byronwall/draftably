@@ -63,10 +63,16 @@ export function scanNodeBorders(svg) {
   const source = svg.match(/<metadata[^>]*>([\s\S]*?)<\/metadata>/)?.[1];
   const nodeIds = new Set([...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)/gm)].map(m => m[1]));
   const markerIds = new Set(
-    [...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)\b[^\n]*\bshape=marker\b/gm)].map(m => m[1]),
+    [...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)(?:\s|$)[^\n]*\bshape=marker\b/gm)].map(
+      m => m[1],
+    ),
+  );
+  const semantic = /class="edge-stroke"/.test(
+    svg.replace(/<metadata[^>]*>[\s\S]*?<\/metadata>/, ''),
   );
   const groups = [],
     timelines = [],
+    expectedPanels = [],
     stack = [];
   for (const match of svg.matchAll(/<\/?(?:g|svg)\b[^>]*>/g)) {
     const tag = match[0];
@@ -84,6 +90,18 @@ export function scanNodeBorders(svg) {
           const marker = body.match(/<rect\b[^>]*>/)?.[0];
           if (marker) shapes.push(marker);
         }
+        const paths = [...body.matchAll(/<path\b[^>]*>/g)].map(m => m[0]);
+        const route =
+          paths.find(tag => attr(tag, 'class') === 'edge-stroke') ??
+          (!semantic
+            ? paths.find(
+                tag =>
+                  !attr(tag, 'class') &&
+                  !attr(tag, 'transform') &&
+                  /stroke-linecap="round"/.test(tag) &&
+                  /stroke-linejoin="round"/.test(tag),
+              )
+            : undefined);
         groups.push({
           id: open.id,
           scope: open.scope,
@@ -91,10 +109,10 @@ export function scanNodeBorders(svg) {
           y: open.y,
           at: open.start,
           shapes,
-          path: body.match(
-            /<path\b[^>]*stroke-linecap="round"[^>]*stroke-linejoin="round"[^>]*>/,
-          )?.[0],
-          line: body.match(/<line\b[^>]*>/)?.[0],
+          path: route,
+          line: [...body.matchAll(/<line\b[^>]*>/g)]
+            .map(m => m[0])
+            .find(tag => !semantic || attr(tag, 'class') === 'edge-stroke'),
         });
       }
     } else if (!tag.endsWith('/>')) {
@@ -104,6 +122,18 @@ export function scanNodeBorders(svg) {
       const tr = attr(tag, 'transform'),
         parent = stack.at(-1);
       const move = tr?.match(/^translate\(\s*(-?[\d.]+)(?:[ ,]+(-?[\d.]+))?\s*\)$/);
+      const expected = attr(tag, 'data-panel-edges');
+      if (expected !== undefined) {
+        const decoded = expected
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&');
+        const ids = JSON.parse(decoded);
+        if (!Array.isArray(ids) || ids.some(value => typeof value !== 'string'))
+          throw new Error('Invalid panel edge metadata');
+        expectedPanels.push({ scope, ids });
+      }
       if (id && (parent?.unsupported || (tr && !move)))
         throw new Error(`Unsupported transform ${tr ?? parent.unsupported}`);
       stack.push({
@@ -271,11 +301,29 @@ export function scanNodeBorders(svg) {
         [...(shapePanels.get(scope) ?? [])].some(id => shapePanels.get(other)?.has(id)),
       ),
   );
-  if (shared && scopes.length === 2 && source !== undefined) {
-    const declared = [...source.matchAll(/^([+~.-]?)edge\s+(\S+)/gm)];
+  if (expectedPanels.length) {
+    for (const [i, panel] of expectedPanels.entries())
+      for (const id of panel.ids)
+        if (!panels.get(panel.scope.split('/')[1])?.has(id))
+          validationErrors.push(`panel ${i + 1} missing edge ${id}`);
+  } else if (shared && scopes.length === 2 && source !== undefined) {
+    const declared = [
+      ...source.matchAll(/^([+~.-]?)edge\s+(\S+)\s+(\S+)\s*(?:-&gt;|->)\s*(\S+)/gm),
+    ];
+    const statuses = new Map(
+      [...(source ?? '').matchAll(/^([+~.-]?)node\s+(\S+)/gm)].map(m => [m[2], m[1]]),
+    );
     for (const [i, scope] of scopes.entries())
       for (const edge of declared) {
-        if ((i === 0 && edge[1] === '+') || (i === 1 && edge[1] === '-')) continue;
+        const hidden = i === 0 ? '+' : '-';
+        if (
+          edge[1] === hidden ||
+          statuses.get(edge[3]) === hidden ||
+          statuses.get(edge[4]) === hidden ||
+          groupIds.has(edge[3]) ||
+          groupIds.has(edge[4])
+        )
+          continue;
         if (!panels.get(scope)?.has(edge[2]))
           validationErrors.push(`panel ${i + 1} missing edge ${edge[2]}`);
       }
@@ -289,6 +337,9 @@ export function scanNodeBorders(svg) {
     outlineIds,
     routes: new Set(routes.map(r => r.id)).size,
     routeIds: [...new Set(routes.map(r => r.id))],
+    expectedRouteIds: expectedPanels.length
+      ? [...new Set(expectedPanels.flatMap(p => p.ids))]
+      : null,
     validationErrors,
   };
 }

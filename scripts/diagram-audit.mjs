@@ -1421,7 +1421,7 @@ function measure(file) {
     nodeBorderRuns: borderScan.findings,
     nodeBorderCoverage: {
       routes: borderScan.routes,
-      expectedRoutes: routes.length,
+      expectedRoutes: borderScan.expectedRouteIds?.length ?? routes.length,
       nodes: borderScan.nodes,
       expectedNodes: leaves.length,
       errors: borderScan.validationErrors,
