@@ -301,13 +301,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          job_failures() {
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$1/jobs?per_page=100" \
+              --jq '.jobs[] | select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out") | {name,conclusion,html_url,steps:[.steps[] | select(.conclusion=="failure") | .name]}'
+          }
+          previous=$(gh api --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/nightly.yml/runs" \
+            -f branch="$GITHUB_REF_NAME" -f status=completed -F per_page=100 \
+            --jq "[.workflow_runs[] | select(.run_number < $GITHUB_RUN_NUMBER)][0].id // empty")
+          : > "$RUNNER_TEMP/prior-jobs"
+          if [[ -n "$previous" ]]; then job_failures "$previous" > "$RUNNER_TEMP/prior-jobs"; fi
+          job_failures "$GITHUB_RUN_ID" > "$RUNNER_TEMP/current-jobs"
           {
             echo "## Nightly review at \`$GITHUB_SHA\`"
             echo "The diagram-review summary compares outputs to the last healthy sweep. Download its artifact for the drawings. The bench summary lists measurements against budgets."
             echo
-            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" \
-              --jq '.jobs[] | select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out") | "- ["+.name+"]("+.html_url+"): "+.conclusion+" — "+([.steps[] | select(.conclusion=="failure") | .name] | join(", "))'
+            if [[ ! -s "$RUNNER_TEMP/current-jobs" ]]; then echo 'No failed jobs reported.'; fi
+            if [[ -n "$previous" ]]; then echo "Previous sweep: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$previous"; fi
+            jq -r --slurpfile prior "$RUNNER_TEMP/prior-jobs" '
+              . as $job | (if any($prior[]; .name==$job.name and .steps==$job.steps) then "Recurring" else "First observed since previous sweep" end) as $label |
+              "- "+$label+": ["+.name+"]("+.html_url+") — "+.conclusion+" "+(.steps|join(", "))' "$RUNNER_TEMP/current-jobs"
             echo
-            echo "Each proof job lists its commit, build, browser, shard and command. Failed proof artifacts retain both attempts."
+            echo "Inspect the linked step for the exact failure. Matrix suite summaries include the commit, build, browser, shard and command. Failed proof artifacts retain both attempts."
             echo "Re-run failed jobs on this same commit: \`gh run rerun $GITHUB_RUN_ID --failed -R $GITHUB_REPOSITORY\`."
           } >> "$GITHUB_STEP_SUMMARY"
