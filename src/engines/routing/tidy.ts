@@ -1,3 +1,4 @@
+import { SHORT_STEP } from './tuning.ts';
 import type { Context } from './context.ts';
 import { standoffCost } from './cost.ts';
 import { center, clone, compress, distance, EPS, round, segments } from './geometry.ts';
@@ -163,7 +164,7 @@ export function tidy(ctx: Context) {
     }
   }
 
-  // Jogs: a step under 12px between two parallel runs straightens by sliding one run onto
+  // Jogs: a short step between two parallel runs straightens by sliding one run onto
   // the other's line. A run that ends at a port slides the port too, when its side has room
   // and no other port sits there.
   if (rawOptions.jogs !== false)
@@ -204,7 +205,7 @@ export function tidy(ctx: Context) {
       };
       const ps = state.routes[i].points;
       for (let k = 1; k < ps.length - 2; k++) {
-        if (distance(ps[k], ps[k + 1]) >= 12) continue;
+        if (distance(ps[k], ps[k + 1]) >= SHORT_STEP) continue;
         // The step runs along `axis`'s other coordinate; its neighbours run across it.
         const axis = Math.abs(ps[k].x - ps[k + 1].x) < EPS ? 'y' : 'x';
         const options = [

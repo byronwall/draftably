@@ -42,3 +42,6 @@ export const MAX_REPAIRS = 4,
   // one crossing matters less. On larger drawings they rarely find a better pair: none did on the
   // graph harness's DAGs. Hand-drawn diagrams stay well below this.
   REPAIR_EDGES = 32;
+
+/** A step this short can straighten onto either adjacent run. */
+export const SHORT_STEP = 12;

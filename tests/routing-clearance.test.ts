@@ -76,6 +76,70 @@ describe('routing clearance', () => {
     expect(closestParallel(route.points, blocker)).toBeGreaterThanOrEqual(20);
   });
 
+  it('keeps locked ports while finding a shorter path clear of the boxes', () => {
+    const blockers = [
+      box('c', 223, 24, 87, 85),
+      box('d', 212, 149, 92, 73),
+      box('e', 369, 105, 105, 62),
+      box('f', 145, -40, 80, 40),
+    ];
+    const input: RouteInput = {
+      nodes: [box('a', 381, 1, 94, 81), box('b', 32, 134, 90, 67), ...blockers],
+      groups: [],
+      edges: [{ id: 'link', from: 'a', to: 'b', cfg: { fromSide: 'left', toSide: 'right' } }],
+    };
+    const [route] = RouteLab.compute(input).routes;
+    expect([route.fromSide, route.toSide, route.blocked]).toEqual(['left', 'right', false]);
+    expect(route.points.length).toBeLessThanOrEqual(6);
+    const length = route.points
+      .slice(1)
+      .reduce(
+        (sum, p, i) => sum + Math.abs(p.x - route.points[i].x) + Math.abs(p.y - route.points[i].y),
+        0,
+      );
+    expect(length).toBeLessThan(400);
+    for (const r of blockers) expect(closestParallel(route.points, r)).toBeGreaterThanOrEqual(20);
+  });
+
+  it('lets cleanup remove a short jog before trading it for extra bends', () => {
+    const input: RouteInput = {
+      nodes: [
+        box('a', 409, -18, 83, 85),
+        box('b', 7, 143, 94, 80),
+        box('c', 200, 30, 87, 96),
+        box('d', 232, 154, 81, 87),
+        box('e', 382, 86, 114, 65),
+        box('f', 155, -23, 95, 33),
+      ],
+      groups: [],
+      edges: [{ id: 'ab', from: 'a', to: 'b', cfg: { fromSide: 'left', toSide: 'right' } }],
+    };
+    const [route] = RouteLab.compute(input).routes;
+    expect(route.blocked).toBe(false);
+    expect(route.points).toHaveLength(4);
+  });
+
+  it('searches past a clear but costly dogleg', () => {
+    const input: RouteInput = {
+      nodes: [
+        box('a', 399, 27, 89, 79),
+        box('b', 17, 147, 97, 77),
+        box('c', 242, 0, 95, 88),
+        box('d', 207, 125, 100, 70),
+        box('e', 389, 102, 106, 56),
+        box('f', 166, -17, 82, 43),
+      ],
+      groups: [],
+      edges: [edge('ab', 'a', 'b'), edge('db', 'd', 'b'), edge('cd', 'c', 'd')],
+    };
+    const { routes, report } = RouteLab.compute(input, { tidy: false });
+    expect(routes.every(r => !r.blocked)).toBe(true);
+    expect(report.crossings).toBe(0);
+    const ab = routes.find(r => r.id === 'ab')!;
+    expect(ab.points.length).toBeLessThanOrEqual(6);
+    expect(closestParallel(ab.points, input.nodes[2])).toBeGreaterThanOrEqual(20);
+  });
+
   it('keeps runs off a group border', () => {
     const group = { id: 'g', x: 0, y: 0, w: 200, h: 200, collapsed: false };
     const input: RouteInput = {
