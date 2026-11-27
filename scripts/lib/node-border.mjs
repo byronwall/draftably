@@ -41,8 +41,10 @@ function nodeSides(tag) {
       y = +attr(tag, 'y'),
       w = +attr(tag, 'width'),
       h = +attr(tag, 'height');
-    const rx = Math.min(+(attr(tag, 'rx') ?? 0), w / 2);
-    const ry = Math.min(+(attr(tag, 'ry') ?? rx), h / 2);
+    const rawRx = +(attr(tag, 'rx') ?? attr(tag, 'ry') ?? 0);
+    const rawRy = +(attr(tag, 'ry') ?? attr(tag, 'rx') ?? 0);
+    const rx = Math.min(rawRx, w / 2);
+    const ry = Math.min(rawRy, h / 2);
     return [
       { side: 'top', a: point(x + rx, y), b: point(x + w - rx, y) },
       { side: 'right', a: point(x + w, y + ry), b: point(x + w, y + h - ry) },
@@ -92,13 +94,11 @@ export function scanNodeBorders(svg) {
       if (open.id) {
         const body = svg.slice(open.start, match.index).replace(/<svg\b[\s\S]*?<\/svg>/g, '');
         const shapes = [
-          ...body.matchAll(/<(?:rect|path|ellipse)\b[^>]*\bclass="shape"[^>]*>/g),
+          ...body.matchAll(/<(?:rect|path|ellipse)\b[^>]*\bclass="(?:shape|node-marker)"[^>]*>/g),
         ].map(x => x[0]);
-        if (!shapes.length) {
-          const marker =
-            body.match(/<rect\b[^>]*\bclass="node-marker"[^>]*>/)?.[0] ??
-            (markerIds.has(open.id) ? body.match(/<rect\b[^>]*>/)?.[0] : undefined);
-          if (marker) shapes.push(marker);
+        if (!shapes.length && markerIds.has(open.id)) {
+          const leading = body.match(/^\s*(?:<rect\b[^>]*>\s*)+/)?.[0] ?? '';
+          shapes.push(...[...leading.matchAll(/<rect\b[^>]*>/g)].map(m => m[0]));
         }
         const paths = [...body.matchAll(/<path\b[^>]*>/g)].map(m => m[0]);
         const route =

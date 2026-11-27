@@ -778,7 +778,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
         `<line x1="${x0 + 40}" x2="${x0 + cols * cw - 40}" y1="${py}" y2="${py}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
       );
     out.push(
-      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})" data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}">`,
+      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})" data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}" data-panel-edges="${esc(JSON.stringify([...scene.routes, ...timelineRoutes(docs[i], scene.rects)].map(r => r.id)))}">`,
       scene.markup,
       '</g>',
     );

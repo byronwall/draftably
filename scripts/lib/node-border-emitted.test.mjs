@@ -6,8 +6,14 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { scanNodeBorders } from './node-border.mjs';
 
-function inspect(source, svg = false) {
-  const args = ['scripts/draftably.mjs', 'inspect', '/dev/stdin', ...(svg ? ['--svg'] : [])];
+function inspect(source, svg = false, options = []) {
+  const args = [
+    'scripts/draftably.mjs',
+    'inspect',
+    '/dev/stdin',
+    ...(svg ? ['--svg'] : []),
+    ...options,
+  ];
   const result = spawnSync(process.execPath, args, { input: source, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   return svg ? result.stdout : JSON.parse(result.stdout);
@@ -175,5 +181,75 @@ layout root flow\n`;
     const failure = gate(source, damaged);
     assert.notEqual(failure.status, 0);
     assert.match(failure.stderr, /missing node b/);
+  }
+});
+
+test('a stacked marker checks its main face as well as the offset copies', () => {
+  const source = markerSource('mark').replace('shape=marker in=top', 'shape=marker count=3 in=top');
+  const svg = inspect(source, true);
+  const hits = scanNodeBorders(svg).findings.filter(
+    r => r.node === 'mark' && r.kind === 'paint-overlap',
+  );
+  assert(hits.length > 0);
+  assert(hits.every(r => r.shape === 2));
+  assert.notEqual(gate(source, svg).status, 0);
+  const legacy = svg
+    .replace(/ class="node-marker"/g, '')
+    .replace(/ class="edge-stroke"/g, '')
+    .replace(/ data-panel-nodes="[^"]*"/g, '');
+  assert.notEqual(gate(source, legacy).status, 0);
+  const clear = source.replace('x=72.5 y=130', 'x=100 y=130');
+  const result = gate(clear);
+  assert.equal(result.status, 0, result.stderr);
+});
+
+function pillSource(width, height, shape) {
+  return markerSource('mark')
+    .replace(/group top[^\n]*\n|layout top[^\n]*\n|node t(?:left|right)[^\n]*\n/g, '')
+    .replace('shape=marker in=top', `shape=${shape}`)
+    .replace(
+      'pin top x=72.5 y=130',
+      `size mark width=${width} height=${height}\npin mark x=133 y=240`,
+    );
+}
+
+test('wide and tall pills do not invent straight sides, while box faces still count', () => {
+  for (const [width, height] of [
+    [40, 180],
+    [180, 40],
+  ]) {
+    const clear = pillSource(width, height, 'pill');
+    const clearResult = gate(clear);
+    assert.equal(clearResult.status, 0, clearResult.stderr);
+    const overlap = pillSource(width, height, 'box');
+    const result = gate(overlap);
+    assert.notEqual(result.status, 0);
+    const hits = scanNodeBorders(inspect(overlap, true)).findings;
+    assert(hits.some(r => r.node === 'mark' && r.kind === 'paint-overlap'));
+  }
+});
+
+test('each emphasis state validates its own rendered edges', () => {
+  const source = `node a "A"
+node b "B"
+edge e a -> b
+state one "One" a
+state two "Two" b
+state three "Both" a b
+state four "Again" a\n`;
+  for (const count of [2, 3, 4]) {
+    let input = source;
+    if (count < 4) input = input.replace('state four "Again" a\n', '');
+    if (count < 3) input = input.replace('state three "Both" a b\n', '');
+    const svg = inspect(input, true, ['--states']);
+    const result = gate(input, svg);
+    assert.equal(result.status, 0, result.stderr);
+    const edges = [...svg.matchAll(/<g data-id="e"[^>]*>[\s\S]*?<\/g>/g)];
+    assert.equal(edges.length, count);
+    const last = edges.at(-1);
+    const damaged = svg.slice(0, last.index) + svg.slice(last.index + last[0].length);
+    const failure = gate(input, damaged);
+    assert.notEqual(failure.status, 0);
+    assert.match(failure.stderr, new RegExp(`panel ${count} missing edge e`));
   }
 });
