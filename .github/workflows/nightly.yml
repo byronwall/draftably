@@ -1,0 +1,313 @@
+name: Nightly proof review
+
+on:
+  schedule:
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.lookup.outputs.sha }}
+      run: ${{ steps.lookup.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: lookup
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api --paginate --method GET "repos/$GITHUB_REPOSITORY/actions/workflows/nightly.yml/runs" \
+            -f branch="$GITHUB_REF_NAME" -f status=success -F per_page=100 \
+            --jq ".workflow_runs[] | select(.run_number < $GITHUB_RUN_NUMBER) | [.id,.head_sha] | @tsv" > "$RUNNER_TEMP/healthy"
+          while read -r run sha; do
+            if git merge-base --is-ancestor "$sha" HEAD; then
+              echo "run=$run" >> "$GITHUB_OUTPUT"
+              echo "sha=$sha" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          done < "$RUNNER_TEMP/healthy"
+          echo "sha=$(git rev-parse HEAD^)" >> "$GITHUB_OUTPUT"
+          echo 'First healthy baseline pending. Comparing with the parent commit.' >> "$GITHUB_STEP_SUMMARY"
+
+  check-suite:
+    name: check / ${{ matrix.suite }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: source
+            run: pnpm check:source
+          - suite: unit
+            run: pnpm test:unit
+          - suite: engines
+            run: pnpm test:engines
+          - suite: edits
+            run: pnpm test:edits
+          - suite: cli
+            run: pnpm check:cli
+          - suite: consumers
+            run: pnpm check:consumers
+          - suite: integrations
+            run: pnpm runtime:build && pnpm check:integrations
+          # The render service's request boundary in local workerd: the same bytes, price and
+          # error code through GET, REST, MCP and short links.
+          - suite: service
+            run: pnpm prove:service-boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Run suite
+        run: bash scripts/ci/nightly-proof.sh
+        env:
+          PROOF_COMMAND: ${{ matrix.run }}
+
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-${{ matrix.suite }}-${{ github.run_attempt }}
+          path: |
+            tmp/nightly/
+            tmp/verification-current/
+
+  proof-suite:
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [site, frameworks, recipes]
+        half: [1, 2]
+        include:
+          - suite: site
+            build: pnpm site:bundle
+            run: pnpm prove:site
+          - suite: file
+            build: pnpm bundle:viewer
+            run: pnpm prove:file && pnpm prove:sequence && pnpm prove:layout
+          - suite: runtime
+            build: pnpm typecheck && pnpm runtime:pack-check && pnpm mermaid:build
+            run: pnpm prove:runtime
+          - suite: viewer
+            build: pnpm runtime:build && pnpm viewer:pack-check
+            run: pnpm prove:viewer && pnpm prove:element
+          - suite: markdown
+            build: pnpm runtime:build && pnpm markdown:build && pnpm markdown:pack-check
+            run: pnpm markdown:browser-check
+          - suite: hosts
+            # Match playwright-core in pnpm-lock.yaml. This image includes WebKit’s system libraries.
+            image: mcr.microsoft.com/playwright:v1.64.0-noble
+            browsers: chromium firefox webkit
+            build: pnpm runtime:build && pnpm editor:build
+            run: |
+              # Firefox requires the container user to own the Actions-mounted home directory.
+              chown "$(id -u)" "$HOME"
+              pnpm prove:slots &
+              slots=$!
+              pnpm prove:color-scheme
+              wait "$slots"
+          - suite: frameworks
+            build: &framework_build pnpm runtime:build && pnpm editor:build && pnpm frameworks:build
+            run: pnpm prove:frameworks
+          - suite: recipes
+            build: *framework_build
+            run: pnpm prove:recipes
+    name: proof / ${{ matrix.suite }} ${{ matrix.half }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - name: Build packages and install browsers
+        env:
+          BROWSERS: ${{ matrix.browsers || 'chromium' }}
+        run: |
+          (
+            for attempt in 1 2 3; do
+              pnpm exec playwright-core install $BROWSERS && exit 0
+              if [ "$attempt" -lt 3 ]; then sleep 30; fi
+            done
+            exit 1
+          ) &
+          install_pid=$!
+          ( ${{ matrix.build }} ) || exit 1
+          wait "$install_pid"
+      - name: Run suite
+        run: bash scripts/ci/nightly-proof.sh
+        env:
+          PROOF_COMMAND: ${{ matrix.run }}
+          PROOF_BUILD: ${{ matrix.build }}
+          PROOF_BROWSERS: ${{ matrix.browsers || 'chromium' }}
+          PROOF_HALF: ${{ matrix.half }}
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-${{ matrix.suite }}-${{ matrix.half }}-${{ github.run_attempt }}
+          path: |
+            tmp/nightly/
+            tmp/proof/
+            tmp/proof-layout/
+            tmp/proof-sequence/
+            tmp/proof-site/
+            tmp/proof-slots/
+            tmp/proof-color-scheme/
+
+  bench:
+    needs: baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      # The runner's apt mirror sometimes fails to resolve; retry before failing the job.
+      - run: for i in 1 2 3; do pnpm exec playwright-core install --with-deps chromium && exit 0; sleep 30; done; exit 1
+      - run: pnpm build
+      - name: Benchmark against the previous healthy sweep
+        env:
+          BASE_RUN: ${{ needs.baseline.outputs.run }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          args=()
+          if [[ -n "$BASE_RUN" ]]; then
+            # An expired artifact must not prevent collecting today's measurements.
+            if gh run download "$BASE_RUN" --pattern 'benchmark-*' --dir "$RUNNER_TEMP/previous"; then
+              previous=$(find "$RUNNER_TEMP/previous" -name latest.json | sort -V | tail -1)
+              if [[ -f "$previous" ]]; then args=(--compare "$previous"); fi
+            fi
+          fi
+          pnpm bench --runs 3 "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-${{ github.run_attempt }}
+          path: tmp/bench/latest.json
+
+  markdown-action:
+    # Runs actions/render-markdown twice on a fixture: the first run adds the SVGs and links, and
+    # the second must change nothing.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: ./actions/render-markdown
+        with:
+          files: integration-examples/markdown-action/**/*.md
+      - name: Check the images and links
+        working-directory: integration-examples/markdown-action
+        run: |
+          for svg in readme-1.svg checkout-flow.svg docs/guide-1.svg; do
+            grep -q 'id="draftably-source"' "$svg" || { echo "::error::$svg has no embedded source"; exit 1; }
+          done
+          grep -Fqx '![Request path](readme-1.svg)' README.md
+          grep -Fqx '![Cart, payment, then receipt.](checkout-flow.svg)' README.md
+          grep -Fqx '![Diagram](guide-1.svg)' docs/guide.md
+          test "$(grep -c '^<!-- draftably: ' README.md)" = 2
+          git diff --stat
+          git add -A
+      - name: Rerun
+        uses: ./actions/render-markdown
+        with:
+          files: integration-examples/markdown-action/**/*.md
+      - name: Check the rerun changed nothing
+        run: git diff --exit-code && test -z "$(git ls-files --others --exclude-standard)"
+
+  host-proofs:
+    # Builds the three pinned documentation hosts against fresh packed consumers.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: bash scripts/ci/nightly-proof.sh
+        env:
+          PROOF_COMMAND: pnpm host:pack-check
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: host-install-${{ github.run_attempt }}
+          path: tmp/nightly/
+
+  diagram-review:
+    needs: baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - name: Compare diagram quality with the last healthy sweep
+        env:
+          base: ${{ needs.baseline.outputs.sha }}
+        run: |
+          echo "Compare commits: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/$base...$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Reproduce at \`$GITHUB_SHA\` with \`pnpm audit:compare --base $base --gate --review\`." >> "$GITHUB_STEP_SUMMARY"
+          pnpm audit:compare --base "$base" --gate --review
+      - name: Publish findings and before/after drawings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagram-review-${{ github.run_attempt }}
+          path: |
+            tmp/audit/compare/compare.md
+            tmp/audit/compare/review.html
+            tmp/audit/compare/review.pdf
+            tmp/audit/compare/review/
+      - if: always()
+        run: |
+          if test -f tmp/audit/compare/compare.md; then
+            head -c 90000 tmp/audit/compare/compare.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  findings:
+    if: always()
+    needs: [baseline, check-suite, proof-suite, bench, markdown-action, host-proofs, diagram-review]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize failed steps and reproductions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          {
+            echo "## Nightly review at \`$GITHUB_SHA\`"
+            echo "The diagram-review summary compares outputs to the last healthy sweep. Download its artifact for the drawings. The bench summary lists measurements against budgets."
+            echo
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" \
+              --jq '.jobs[] | select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out") | "- ["+.name+"]("+.html_url+"): "+.conclusion+" — "+([.steps[] | select(.conclusion=="failure") | .name] | join(", "))'
+            echo
+            echo "Each proof job lists its commit, build, browser, shard and command. Failed proof artifacts retain both attempts."
+            echo "Re-run failed jobs on this same commit: \`gh run rerun $GITHUB_RUN_ID --failed -R $GITHUB_REPOSITORY\`."
+          } >> "$GITHUB_STEP_SUMMARY"

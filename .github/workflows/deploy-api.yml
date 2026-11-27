@@ -34,6 +34,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Verify the render service before migrating and deploying
+        run: pnpm prove:service-boundary
       # Applies only the migrations D1 has not seen yet (packages/service/migrations).
       - run: pnpm --dir packages/service exec wrangler d1 migrations apply DB --remote
       # Builds the runtime and deploys the draftably-api Worker (packages/service/wrangler.jsonc).
