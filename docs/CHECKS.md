@@ -1,5 +1,15 @@
 # Checks
 
+## Pull requests and nightly review
+
+The required `check` job uses one runner. It checks changesets and language documentation against the PR's actual base, then runs `pnpm check:source` and `pnpm test:unit`. A newer push cancels the older run for that PR.
+
+**Nightly proof review** runs on main at 07:17 UTC. Start it early with `gh workflow run nightly.yml --ref main`. The Actions run contains the suite results, the benchmark table, and a diagram-quality review. Open the **diagram-review** summary for the baseline and changed drawings. Its artifact includes the full comparison and a visual review. The first sweep uses the parent commit. Later sweeps compare with the last successful sweep on the same branch that is an ancestor of the tested commit.
+
+To investigate a failure, open **findings**, follow the failed job, and use its commit and failed step. Matrix suite summaries include the install, build, browser set, shard, and exact command. Suite failures get one repeat and both logs go in the artifact. A pass on the second attempt remains visible for investigation. Re-run only failed jobs at the same commit with `gh run rerun RUN_ID --failed`.
+
+The npm publication checks the release candidate. The Worker deployment verifies the service boundary before running migrations.
+
 ## Automated
 
 ```sh
@@ -88,7 +98,7 @@ seeds, so an equal digest proves a speedup changed no drawing. Keep the default 
 compare digests. Add `--quality quick|full`, `--only <name>`, `--out <file>` and
 `--compare <file>` for a before → after table.
 
-CI runs it once per change as a non-blocking `bench` job and puts the table in the job summary.
+The nightly sweep runs three repetitions, puts the timing table in the benchmark job summary, and uploads its measurements.
 Performance PRs paste a before → after table.
 
 ### Host contract budgets
