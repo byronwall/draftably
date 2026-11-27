@@ -93,11 +93,15 @@ if (!corpusDir || !outDir) {
 const run = (...a) => {
   try {
     return {
-      out: execFileSync(process.execPath, [cli, ...a], { encoding: 'utf8', stdio: 'pipe' }),
+      out: execFileSync(process.execPath, [cli, ...a], {
+        encoding: 'utf8',
+        stdio: 'pipe',
+        maxBuffer: 32 * 1024 * 1024,
+      }),
       ok: true,
     };
   } catch (e) {
-    return { out: `${e.stdout ?? ''}${e.stderr ?? ''}`, ok: false };
+    return { out: `${e.stderr ?? ''}${e.message ?? ''}`.trim(), ok: false };
   }
 };
 
@@ -183,10 +187,15 @@ function parseSource(text) {
   const diamonds = new Set();
   const groupTitles = new Map();
   let direction,
+    sequence = false,
     edgeGap = 16;
+  const actions = new Set();
   for (const raw of text.split('\n')) {
     const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
-    const e = line.match(/^edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
+    const action = line.match(/^[+~.\-]?action\s+(\S+)/);
+    if (action) actions.add(action[1]);
+    if (/^layout\s+root\s+sequence\b/.test(line)) sequence = true;
+    const e = line.match(/^[+~.\-]?edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
     if (n) diamonds.add(n[1]);
@@ -197,7 +206,7 @@ function parseSource(text) {
     const g = line.match(/^routing\b.*\b(?:edge|port)-gap=(\d+)/g);
     if (g) for (const m of g) edgeGap = Math.max(edgeGap, +m.match(/(\d+)$/)[1]);
   }
-  return { edges, diamonds, direction, edgeGap, groupTitles };
+  return { edges, diamonds, direction, edgeGap, groupTitles, sequence, actions };
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
@@ -464,9 +473,23 @@ function measure(file) {
   const check = run('check', file);
   const warnings = check.out.split('\n').filter(l => /warning/i.test(l));
   if (!check.ok) return { file, error: check.out.trim() };
-  const geo = JSON.parse(run('inspect', file).out);
-  const svg = run('inspect', file, '--svg').out;
-  const { edges, diamonds, direction, edgeGap, groupTitles } = parseSource(source);
+  const inspected = run('inspect', file);
+  if (!inspected.ok) return { file, error: `inspect failed: ${inspected.out}` };
+  let geo;
+  try {
+    geo = JSON.parse(inspected.out);
+    if (!Array.isArray(geo.nodes) || !Array.isArray(geo.routes))
+      throw new Error('missing geometry');
+  } catch (e) {
+    return { file, error: `invalid inspect geometry: ${e.message}` };
+  }
+  const rendered = run('inspect', file, '--svg');
+  if (!rendered.ok) return { file, error: `SVG inspect failed: ${rendered.out}` };
+  const svg = rendered.out;
+  if (!/<svg\b/.test(svg) || !/<\/svg>\s*$/.test(svg))
+    return { file, error: 'SVG inspect returned incomplete output' };
+  const { edges, diamonds, direction, edgeGap, groupTitles, sequence, actions } =
+    parseSource(source);
 
   const byId = new Map(geo.nodes.map(n => [n.id, n]));
   const parents = new Set(geo.nodes.map(n => n.parent));
@@ -1028,7 +1051,12 @@ function measure(file) {
         note('label-near-node', `"${l.text}" by ${n.id}`);
     }
     for (const group of groups.filter(g => l.panel.ids.has(g.id))) {
-      const g = { ...group, x: group.x + l.panel.x, y: group.y + l.panel.y };
+      const g = {
+        ...group,
+        x: group.x + l.panel.x,
+        y: group.y + l.panel.y,
+        ...l.panel.frames.get(group.id),
+      };
       const header = { x: g.x, y: g.y, w: g.w, h: 32 };
       if (rectsOverlap(l, header)) note('label-on-group-title', `"${l.text}" on ${g.id}`);
       const edgesCut = [
@@ -1045,6 +1073,7 @@ function measure(file) {
         note('label-overlap', `"${l.text}" × "${m.text}"`);
         continue;
       }
+      if (l.panel !== m.panel) continue;
       // Two labels on different edges closer than a label's height read as one phrase, or as
       // two labels on one edge.
       const gap = Math.max(
@@ -1059,12 +1088,19 @@ function measure(file) {
     // Detached: the label's box stands more than half its height clear of its own line. (Measured
     // from the box, not its centre, so a wide label crossed off-centre by an upright line counts
     // as on it; for a label beside a level line the two measures agree.)
-    const dist = Math.min(...segs(l.path).map(sg => rectSegDist(l, sg)));
-    if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
-    // Beside its line: clear of it, though near. Labels read as one set when every line runs
-    // through its own (FEEL.md), so one that steps aside is a mild defect.
-    else if (dist > 0.5)
-      note('label-beside-line', `"${l.text}" ${Math.round(dist)}px off its edge`);
+    const edge = edges.get(l.edge);
+    let attachment = l;
+    if (sequence && edge) {
+      // Messages sit 1px above their line; self-messages sit 4px beside the loop.
+      attachment = edge.source === edge.target ? { ...l, x: l.x - 4 } : { ...l, y: l.y + 1 };
+    }
+    const dist = Math.min(...segs(l.path).map(sg => rectSegDist(attachment, sg)));
+    if (!actions.has(l.edge)) {
+      if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
+      // Clear of its intended line position, though near.
+      else if (dist > 0.5)
+        note('label-beside-line', `"${l.text}" ${Math.round(dist)}px off its edge`);
+    }
     // Another edge running under the label.
     for (const r of l.panel.routes) {
       if (r.id === l.edge) continue;

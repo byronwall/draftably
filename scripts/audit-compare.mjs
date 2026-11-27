@@ -255,6 +255,15 @@ const signed = n => (n > 0 ? `+${n}` : `${n}`);
 const loaded = {};
 for (const set of sets)
   loaded[set.name] = { base: load(path.join(outDir, 'base', set.name)), head: load(headOut(set)) };
+const baseErrors = sets.flatMap(set =>
+  loaded[set.name].base
+    .filter(r => r.error)
+    .map(r => `${set.name}/${r.slug}/${r.file}: ${r.error}`),
+);
+if (baseErrors.length) {
+  console.error(`Baseline contains render errors:\n${baseErrors.join('\n')}`);
+  process.exit(1);
+}
 if (optionAudit) {
   optionAudit.writeCoverage(
     outDir,

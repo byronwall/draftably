@@ -83,3 +83,10 @@ test('finds serif edge labels without taking notes or status icons', () => {
     ['serif'],
   );
 });
+
+test('uses each panel’s painted group frame', () => {
+  const frame =
+    '<g data-id="group"><rect class="shape" x="4" y="5" width="80" height="60" rx="4"/></g>';
+  const labels = parseLabels(panel(50, 100, frame + edge('a', 10, 0)), helpers);
+  assert.deepEqual(labels[0].panel.frames.get('group'), { x: 54, y: 105, w: 80, h: 60 });
+});

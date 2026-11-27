@@ -29,6 +29,19 @@ export function parseLabels(svg, { segs, center, textWidth, decodeText, routeIds
   const panels = parsePanels(svg);
   for (const panel of panels) {
     panel.ids = new Set(panel.items.map(item => item.id));
+    panel.frames = new Map();
+    for (const { id, body } of panel.items) {
+      const rect = body.match(
+        /<rect class="shape" x="([-\d.]+)" y="([-\d.]+)" width="([\d.]+)" height="([\d.]+)"/,
+      );
+      if (rect)
+        panel.frames.set(id, {
+          x: +rect[1] + panel.x,
+          y: +rect[2] + panel.y,
+          w: +rect[3],
+          h: +rect[4],
+        });
+    }
     panel.routes = [];
     panel.labels = [];
     for (const { id, body } of panel.items) {
