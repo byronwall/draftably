@@ -485,7 +485,15 @@ function weightedGate() {
   for (const [set, { head }] of Object.entries(loaded)) {
     for (const render of head) {
       const name = `${set}/${render.slug}/${render.file}`;
-      if (!Array.isArray(render.nodeBorderRuns) || render.error) {
+      const coverage = render.nodeBorderCoverage;
+      if (
+        !Array.isArray(render.nodeBorderRuns) ||
+        render.error ||
+        !coverage ||
+        coverage.errors.length ||
+        coverage.routes !== coverage.expectedRoutes ||
+        (coverage.expectedRoutes > 0 && coverage.nodes !== coverage.expectedNodes)
+      ) {
         borderProblems.push(`${name} missing border measurement`);
         continue;
       }
