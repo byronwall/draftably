@@ -23,6 +23,53 @@ const flow = (extra: string[]) =>
 const drifted = ['near c a side=below gap=4', 'stay b x=60 y=0', 'size a width=120 height=auto'];
 
 describe('refinements that drift', () => {
+  it('keeps a stayed sibling in order when label room cannot fit', () => {
+    const source = `layout root row gap=48
+node a "API"
+node b "Worker"
+node c "DB"
+size a width=80 height=56
+size b width=80 height=56
+size c width=80 height=56
+edge ab a -> b "Request authorization"
+align y a b c strength=required
+pin a x=0 y=0
+pin c x=190 y=0
+stay b x=90 y=0 weight=8`;
+    const scene = checkSource(source),
+      b = scene.byId.get('b')!,
+      c = scene.byId.get('c')!;
+    expect(b.x + b.w).toBeLessThanOrEqual(c.x);
+    expect(b.localX).toBe(92);
+    expect(scene.diagnostics.some(d => d.code === 'relaxed' && d.level === 'warning')).toBe(false);
+  });
+
+  it('does not increase a small unrelated stay adjustment for label room', () => {
+    const scene = checkSource(`layout root column gap=48
+node api "API"
+node worker "Worker"
+node db "DB"
+edge ab api -> worker "Submit"
+pin api x=0 y=0
+stay worker x=103 y=0 weight=8
+stay db x=0 y=134 weight=8`);
+    expect(scene.byId.get('db')!.localY).toBe(136);
+  });
+
+  it('keeps an unrelated preferred near relation when adding label room', () => {
+    const scene = checkSource(`layout root column gap=48
+node api "API"
+node worker "Worker"
+node db "DB"
+edge ab api -> worker "Submit"
+pin api x=0 y=0
+stay worker x=103 y=0 weight=8
+near db api side=below gap=80 strength=prefer`);
+    const api = scene.byId.get('api')!,
+      db = scene.byId.get('db')!;
+    expect(db.y - api.y - api.h).toBe(80);
+  });
+
   it('keeps a required near relation when label room does not fit', () => {
     const source = `layout root row gap=48
 node a "A"

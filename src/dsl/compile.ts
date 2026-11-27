@@ -2876,22 +2876,51 @@ function refine(
 ): Map<string, Pos> {
   if (!rooms.length) return refinePass(items, base, hints, scope, diagnostics, axis, rooms);
 
-  // Label room is optional. Keep the ordinary collision result if it would break a required
-  // constraint or displace a stay that the ordinary result preserved.
-  const withNotes: Diagnostic[] = [];
-  const withRoom = refinePass(items, base, hints, scope, withNotes, axis, rooms);
-  const stays = new Set(hints.filter(h => h.type === 'stay').map(h => h.line));
-  const affected = (d: Diagnostic) =>
-    d.level === 'error' || (d.code === 'relaxed' && d.line !== undefined && stays.has(d.line));
-  if (!withNotes.some(affected)) {
+  // Compare with ordinary collision placement only when optional label room moved a sibling.
+  const withNotes: Diagnostic[] = [],
+    used = { value: false };
+  const withRoom = refinePass(items, base, hints, scope, withNotes, axis, rooms, used);
+  if (!used.value) {
     diagnostics.push(...withNotes);
     return withRoom;
   }
   const plainNotes: Diagnostic[] = [];
   const plain = refinePass(items, base, hints, scope, plainNotes, axis, []);
+  const by = new Map(items.map(n => [n.id, n]));
+  const local = hints.filter(h => 'id' in h && by.has(h.id));
+  const stale = new Set(staleStays(items, base, local, axis));
+  const distance = (a: Pos, b: Pos) => Math.hypot(a.x - b.x, a.y - b.y);
+  const placementWorse = local.some(h => {
+    if (h.type === 'stay' && !stale.has(h)) {
+      const target = { x: h.x, y: h.y };
+      return distance(withRoom.get(h.id)!, target) > distance(plain.get(h.id)!, target) + 0.5;
+    }
+    if (h.type !== 'near' || !by.has(h.ref)) return false;
+    const relative = (positions: Map<string, Pos>) => {
+      const a = positions.get(h.id)!,
+        b = positions.get(h.ref)!;
+      return { x: a.x - b.x, y: a.y - b.y };
+    };
+    return distance(relative(withRoom), relative(plain)) > 0.5;
+  });
+  const orderReversed = items.some((a, i) =>
+    items.slice(i + 1).some(b =>
+      (['x', 'y'] as const).some(ax => {
+        const size = (n: Item) => (ax === 'x' ? n.w : n.h);
+        const pa = plain.get(a.id)![ax],
+          pb = plain.get(b.id)![ax];
+        const wa = withRoom.get(a.id)![ax],
+          wb = withRoom.get(b.id)![ax];
+        return (
+          (pa + size(a) <= pb && wb + size(b) <= wa) || (pb + size(b) <= pa && wa + size(a) <= wb)
+        );
+      }),
+    ),
+  );
   const key = (d: Diagnostic) => `${d.code}:${d.line}:${d.ids.join(',')}`;
-  const before = new Set(plainNotes.map(key));
-  const worsened = withNotes.some(d => affected(d) && !before.has(key(d)));
+  const errors = new Set(plainNotes.filter(d => d.level === 'error').map(key));
+  const newError = withNotes.some(d => d.level === 'error' && !errors.has(key(d)));
+  const worsened = placementWorse || orderReversed || newError;
   diagnostics.push(...(worsened ? plainNotes : withNotes));
   return worsened ? plain : withRoom;
 }
@@ -2904,6 +2933,7 @@ function refinePass(
   diagnostics: Diagnostic[],
   axis: 'right' | 'down',
   rooms: LabelRoom[],
+  used?: { value: boolean },
 ): Map<string, Pos> {
   const ids = items.map(n => n.id),
     by = new Map(items.map(n => [n.id, n])),
@@ -3020,13 +3050,15 @@ function refinePass(
   const variable = (a: 'x' | 'y', id: string) => vars[a].get(uf[a].find(id))!;
   const center = (a: 'x' | 'y', id: string) => variable(a, id).value;
   /** Push `first` to be at least `gap` after `second` on axis `a`. */
-  const separate = (a: 'x' | 'y', first: string, second: string, gap: number) => {
+  const separate = (a: 'x' | 'y', first: string, second: string, gap: number, keep?: string) => {
     const u = variable(a, first),
       w = variable(a, second),
       delta = gap - (u.value - w.value);
     if (delta <= 0.005 || u === w || (u.fixed !== null && w.fixed !== null)) return 0;
     if (u.fixed !== null) w.value -= delta;
     else if (w.fixed !== null) u.value += delta;
+    else if (keep && u.members.includes(keep)) w.value -= delta;
+    else if (keep && w.members.includes(keep)) u.value += delta;
     else {
       const total = u.weight + w.weight;
       u.value += (delta * w.weight) / total;
@@ -3070,15 +3102,23 @@ function refinePass(
         const ax = [...choices].sort((p, q) => cost(p) - cost(q))[0],
           d = ax === 'x' ? dx : dy;
         // Once these siblings must move apart, leave room for their own edge label too.
-        movement += separate(
-          ax,
-          d >= 0 ? b.id : a.id,
-          d >= 0 ? a.id : b.id,
-          (ax === 'x' ? a.w + b.w : a.h + b.h) / 2 +
-            (near.get(a.id)?.ref === b.id || near.get(b.id)?.ref === a.id
-              ? MIN_GAP
-              : roomBetween(rooms, a.id, b.id, MIN_GAP, ax === 'x')),
-        );
+        const room =
+          near.get(a.id)?.ref === b.id || near.get(b.id)?.ref === a.id
+            ? MIN_GAP
+            : roomBetween(rooms, a.id, b.id, MIN_GAP, ax === 'x');
+        const first = d >= 0 ? b.id : a.id,
+          second = d >= 0 ? a.id : b.id;
+        const halfSize = (ax === 'x' ? a.w + b.w : a.h + b.h) / 2;
+        movement += separate(ax, first, second, halfSize + MIN_GAP);
+        if (room > MIN_GAP) {
+          const u = variable(ax, first),
+            w = variable(ax, second);
+          const anchored = (v: Variable) => v.members.some(id => intended.has(id));
+          const keep = anchored(u) !== anchored(w) ? (anchored(u) ? first : second) : undefined;
+          const moved = separate(ax, first, second, halfSize + room, keep);
+          if (used && moved > 0) used.value = true;
+          movement += moved;
+        }
       }
     // Group content stays at nonnegative local coordinates so it fits inside the frame; the root
     // has no frame, and clamping there would push anchored objects aside. Pins never move.

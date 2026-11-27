@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkSource } from '../src/dsl/compile';
+import { checkSource, compile } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
@@ -29,6 +29,26 @@ const distance = (p: Point, route: Point[]) =>
   );
 
 describe('edge label placement', () => {
+  it('leaves a stayed endpoint in place while making room for its label', async () => {
+    const source = fs.readFileSync(
+      'docs/intent/diagram-quality/corpus/draftably-code-layers/e2.draft',
+      'utf8',
+    );
+    const scene = await compile(source);
+    const plain = await compile(
+      source.replace(
+        'edge l13 package -> components "viewer build"',
+        'edge l13 package -> components',
+      ),
+    );
+    expect(
+      Math.abs(scene.byId.get('components')!.localY - plain.byId.get('components')!.localY),
+    ).toBeLessThanOrEqual(1);
+    const doc = projectScene(scene),
+      { vg, rects } = visibleRects(doc);
+    const route = computeRoutes(doc, vg, rects, { previous: [] }).routes.find(r => r.id === 'l13')!;
+    expect(distance(route.label!, route.points)).toBe(0);
+  });
   it('keeps a label on a short edge when separating a pinned sibling', () => {
     const source = fs.readFileSync('examples/checkout.draft', 'utf8');
     const doc = projectScene(
