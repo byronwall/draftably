@@ -61,9 +61,9 @@ function nodeSides(tag) {
 export function scanNodeBorders(svg) {
   if (!/<svg\b/.test(svg) || !/<\/svg>/.test(svg)) throw new Error('Not an SVG');
   const source = svg.match(/<metadata[^>]*>([\s\S]*?)<\/metadata>/)?.[1];
-  const nodeIds = new Set([...(source ?? '').matchAll(/^[+~.\-]?node\s+(\S+)/gm)].map(m => m[1]));
+  const nodeIds = new Set([...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)/gm)].map(m => m[1]));
   const markerIds = new Set(
-    [...(source ?? '').matchAll(/^[+~.\-]?node\s+(\S+)\b[^\n]*\bshape=marker\b/gm)].map(m => m[1]),
+    [...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)\b[^\n]*\bshape=marker\b/gm)].map(m => m[1]),
   );
   const groups = [],
     timelines = [],
@@ -118,8 +118,8 @@ export function scanNodeBorders(svg) {
     }
   }
   groups.sort((a, b) => a.at - b.at);
-  const edgeIds = new Set([...(source ?? '').matchAll(/^[+~.\-]?edge\s+(\S+)/gm)].map(m => m[1]));
-  const groupIds = new Set([...(source ?? '').matchAll(/^[+~.\-]?group\s+(\S+)/gm)].map(m => m[1]));
+  const edgeIds = new Set([...(source ?? '').matchAll(/^[+~.-]?edge\s+(\S+)/gm)].map(m => m[1]));
+  const groupIds = new Set([...(source ?? '').matchAll(/^[+~.-]?group\s+(\S+)/gm)].map(m => m[1]));
   const milestoneIds = new Set([...(source ?? '').matchAll(/^milestone\s+(\S+)/gm)].map(m => m[1]));
   const firstRoutes = new Map();
   for (const group of groups)
@@ -272,7 +272,7 @@ export function scanNodeBorders(svg) {
       ),
   );
   if (shared && scopes.length === 2 && source !== undefined) {
-    const declared = [...source.matchAll(/^([+~.\-]?)edge\s+(\S+)/gm)];
+    const declared = [...source.matchAll(/^([+~.-]?)edge\s+(\S+)/gm)];
     for (const [i, scope] of scopes.entries())
       for (const edge of declared) {
         if ((i === 0 && edge[1] === '+') || (i === 1 && edge[1] === '-')) continue;
