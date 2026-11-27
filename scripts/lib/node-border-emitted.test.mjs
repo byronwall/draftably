@@ -69,12 +69,12 @@ layout root flow\n`;
   assert.match(failed.stderr, /panel 1 missing edge e/);
 });
 
-function markerSource(id) {
+function markerSource(id, shape = 'marker') {
   return `node source "Sender"
 group top "Seam group"
 layout top cells
 node tleft "L" in=top
-node ${id} "Mark" shape=marker in=top
+node ${id} "Mark" shape=${shape} in=top
 node tright "R" in=top
 pin top x=72.5 y=130
 group g "Cells"
@@ -131,4 +131,49 @@ test('timeline connectors remain visible to the audit with marked edge strokes',
   assert.deepEqual(new Set(scan.routeIds), new Set(inspect(source).routes.map(r => r.id)));
   const result = gate(source, svg);
   assert.equal(result.status, 0, result.stderr);
+});
+
+test('quoted and unquoted marker shapes detect the same painted overlap, including legacy SVG', () => {
+  const findings = ['marker', '"marker"'].map(shape => {
+    const source = markerSource('mark-', shape);
+    const svg = inspect(source, true);
+    assert.match(svg, /class="node-marker"/);
+    const hits = scanNodeBorders(svg).findings.filter(
+      r => r.node === 'mark-' && r.kind === 'paint-overlap',
+    );
+    assert(hits.length > 0);
+    assert.notEqual(gate(source, svg).status, 0);
+    const legacy = svg
+      .replace(' class="node-marker"', '')
+      .replace(/ class="edge-stroke"/g, '')
+      .replace(/ data-panel-nodes="[^"]*"/g, '');
+    assert.deepEqual(
+      scanNodeBorders(legacy).findings.filter(
+        r => r.node === 'mark-' && r.kind === 'paint-overlap',
+      ),
+      hits,
+    );
+    assert.notEqual(gate(source, legacy).status, 0);
+    return hits;
+  });
+  assert.deepEqual(findings[1], findings[0]);
+});
+
+test('empty framed and frameless groups do not count as nodes in border coverage', () => {
+  for (const option of ['', ' frame=none']) {
+    const source = `group g "Future work"${option}
+node a "A"
+node b "B"
+edge e a -> b
+layout root flow\n`;
+    const svg = inspect(source, true);
+    const scan = scanNodeBorders(svg);
+    assert.deepEqual(new Set(scan.expectedNodeIds), new Set(['a', 'b']));
+    const result = gate(source, svg);
+    assert.equal(result.status, 0, result.stderr);
+    const damaged = svg.replace(/<g data-id="b"[^>]*>[\s\S]*?<\/g>/, '');
+    const failure = gate(source, damaged);
+    assert.notEqual(failure.status, 0);
+    assert.match(failure.stderr, /missing node b/);
+  }
 });

@@ -1423,7 +1423,7 @@ function measure(file) {
       routes: borderScan.routes,
       expectedRoutes: borderScan.expectedRouteIds?.length ?? routes.length,
       nodes: borderScan.nodes,
-      expectedNodes: leaves.length,
+      expectedNodes: borderScan.expectedNodeIds?.length ?? leaves.length,
       errors: borderScan.validationErrors,
     },
     counts,

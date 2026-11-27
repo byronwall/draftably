@@ -135,7 +135,7 @@ const TAGS = new Set(
   ),
 );
 const ATTRS = new Set(
-  'aria-labelledby role id data-id data-phase data-state data-theme data-panel-edges xmlns viewBox width height x y x1 y1 x2 y2 cx cy r rx ry d points transform fill fill-rule fill-opacity stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray opacity font-family font-size font-weight text-anchor dominant-baseline dy text-decoration marker-start marker-end markerWidth markerHeight markerUnits refX refY orient class clip-path nonce href target rel'.split(
+  'aria-labelledby role id data-id data-phase data-state data-theme data-panel-edges data-panel-nodes xmlns viewBox width height x y x1 y1 x2 y2 cx cy r rx ry d points transform fill fill-rule fill-opacity stroke stroke-opacity stroke-width stroke-linecap stroke-linejoin stroke-dasharray opacity font-family font-size font-weight text-anchor dominant-baseline dy text-decoration marker-start marker-end markerWidth markerHeight markerUnits refX refY orient class clip-path nonce href target rel'.split(
     ' ',
   ),
 );

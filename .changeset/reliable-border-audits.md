@@ -4,4 +4,4 @@
 '@draftably/runtime': patch
 ---
 
-Mark edge strokes and comparison panels so border audits check the lines each drawing contains.
+Mark edge strokes, marker outlines, and projected nodes so border audits check the drawing.

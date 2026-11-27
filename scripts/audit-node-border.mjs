@@ -49,10 +49,11 @@ for (const file of inventory.filter(f => f.endsWith('.svg'))) {
     else {
       checked++;
       const expectedRoutes = scan.expectedRouteIds?.length ?? expected.edges;
+      const expectedNodes = scan.expectedNodeIds?.length ?? expected.nodes;
       if (!expectedRoutes) edgeFree++;
-      if (scan.routes !== expectedRoutes || (expectedRoutes && scan.nodes !== expected.nodes))
+      if (scan.routes !== expectedRoutes || (expectedRoutes && scan.nodes !== expectedNodes))
         errors.push(
-          `${relative}: routes ${scan.routes}/${expectedRoutes}, nodes ${scan.nodes}/${expected.nodes}`,
+          `${relative}: routes ${scan.routes}/${expectedRoutes}, nodes ${scan.nodes}/${expectedNodes}`,
         );
     }
     for (const run of scan.findings) {

@@ -63,9 +63,11 @@ export function scanNodeBorders(svg) {
   const source = svg.match(/<metadata[^>]*>([\s\S]*?)<\/metadata>/)?.[1];
   const nodeIds = new Set([...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)/gm)].map(m => m[1]));
   const markerIds = new Set(
-    [...(source ?? '').matchAll(/^[+~.-]?node\s+(\S+)(?:\s|$)[^\n]*\bshape=marker\b/gm)].map(
-      m => m[1],
-    ),
+    [
+      ...(source ?? '').matchAll(
+        /^[+~.-]?node\s+(\S+)(?:\s|$)[^\n]*\bshape=(?:marker|"marker"|&quot;marker&quot;)(?=\s|$)/gm,
+      ),
+    ].map(m => m[1]),
   );
   const semantic = /class="edge-stroke"/.test(
     svg.replace(/<metadata[^>]*>[\s\S]*?<\/metadata>/, ''),
@@ -73,6 +75,7 @@ export function scanNodeBorders(svg) {
   const groups = [],
     timelines = [],
     expectedPanels = [],
+    expectedNodePanels = [],
     stack = [];
   for (const match of svg.matchAll(/<\/?(?:g|svg)\b[^>]*>/g)) {
     const tag = match[0];
@@ -80,14 +83,21 @@ export function scanNodeBorders(svg) {
       const open = stack.pop();
       if (!open) throw new Error('Unbalanced SVG groups');
       if (open.timeline)
-        timelines.push({ body: svg.slice(open.start, match.index), x: open.x, y: open.y });
+        timelines.push({
+          body: svg.slice(open.start, match.index),
+          scope: open.scope,
+          x: open.x,
+          y: open.y,
+        });
       if (open.id) {
         const body = svg.slice(open.start, match.index).replace(/<svg\b[\s\S]*?<\/svg>/g, '');
         const shapes = [
           ...body.matchAll(/<(?:rect|path|ellipse)\b[^>]*\bclass="shape"[^>]*>/g),
         ].map(x => x[0]);
-        if (!shapes.length && markerIds.has(open.id)) {
-          const marker = body.match(/<rect\b[^>]*>/)?.[0];
+        if (!shapes.length) {
+          const marker =
+            body.match(/<rect\b[^>]*\bclass="node-marker"[^>]*>/)?.[0] ??
+            (markerIds.has(open.id) ? body.match(/<rect\b[^>]*>/)?.[0] : undefined);
           if (marker) shapes.push(marker);
         }
         const paths = [...body.matchAll(/<path\b[^>]*>/g)].map(m => m[0]);
@@ -122,8 +132,12 @@ export function scanNodeBorders(svg) {
       const tr = attr(tag, 'transform'),
         parent = stack.at(-1);
       const move = tr?.match(/^translate\(\s*(-?[\d.]+)(?:[ ,]+(-?[\d.]+))?\s*\)$/);
-      const expected = attr(tag, 'data-panel-edges');
-      if (expected !== undefined) {
+      for (const [name, target] of [
+        ['data-panel-edges', expectedPanels],
+        ['data-panel-nodes', expectedNodePanels],
+      ]) {
+        const expected = attr(tag, name);
+        if (expected === undefined) continue;
         const decoded = expected
           .replace(/&quot;/g, '"')
           .replace(/&lt;/g, '<')
@@ -132,7 +146,7 @@ export function scanNodeBorders(svg) {
         const ids = JSON.parse(decoded);
         if (!Array.isArray(ids) || ids.some(value => typeof value !== 'string'))
           throw new Error('Invalid panel edge metadata');
-        expectedPanels.push({ scope, ids });
+        target.push({ scope, ids });
       }
       if (id && (parent?.unsupported || (tr && !move)))
         throw new Error(`Unsupported transform ${tr ?? parent.unsupported}`);
@@ -196,21 +210,33 @@ export function scanNodeBorders(svg) {
             a: point(side.a.x + group.x, side.a.y + group.y),
             b: point(side.b.x + group.x, side.b.y + group.y),
           })),
-          strokeWidth: +(attr(shape, 'stroke-width') ?? (markerIds.has(group.id) ? 0 : 1)),
+          strokeWidth: +(
+            attr(shape, 'stroke-width') ??
+            (attr(shape, 'class') === 'node-marker' || markerIds.has(group.id) ? 0 : 1)
+          ),
         });
     }
   }
+  const expectedNodeIds = expectedNodePanels.length
+    ? [...new Set(expectedNodePanels.flatMap(p => p.ids))]
+    : null;
+  const expectedNodeSet = new Set(expectedNodeIds ?? []);
   const observed = new Set([
     ...nodes.map(n => n.id),
-    ...groups.filter(g => nodeIds.has(g.id)).map(g => g.id),
+    ...groups.filter(g => nodeIds.has(g.id) || expectedNodeSet.has(g.id)).map(g => g.id),
   ]);
+  const timelineRows = [];
   for (const timeline of timelines) {
     const rows = [
       ...timeline.body.matchAll(/<rect\b[^>]*data-id="([^"]+)"[^>]*fill="transparent"[^>]*>/g),
     ].map(m => ({ id: m[1], tag: m[0] }));
     const bars = [...timeline.body.matchAll(/<line\b[^>]*stroke-width="6"[^>]*>/g)].map(m => m[0]);
     // Milestones count in canonical geometry but are axis marks, not node bars.
-    for (const row of rows) if (!groupIds.has(row.id)) observed.add(row.id);
+    for (const row of rows)
+      if (!groupIds.has(row.id)) {
+        observed.add(row.id);
+        timelineRows.push({ id: row.id, scope: timeline.scope });
+      }
     for (const row of rows.filter(r => !groupIds.has(r.id) && !milestoneIds.has(r.id))) {
       const mid = +attr(row.tag, 'y') + +attr(row.tag, 'height') / 2;
       const candidates = bars
@@ -284,6 +310,15 @@ export function scanNodeBorders(svg) {
     panels.get(panel).add(r.id);
   }
   const validationErrors = [];
+  for (const [i, panel] of expectedNodePanels.entries()) {
+    const panelId = panel.scope.split('/')[1];
+    for (const id of panel.ids) {
+      const found =
+        groups.some(g => g.id === id && g.scope.split('/')[1] === panelId) ||
+        timelineRows.some(r => r.id === id && r.scope.split('/')[1] === panelId);
+      if (!found) validationErrors.push(`panel ${i + 1} missing node ${id}`);
+    }
+  }
   const shapePanels = new Map();
   for (const group of groups.filter(g => g.shapes.length)) {
     const panel = group.scope.split('/')[1] ?? '';
@@ -333,6 +368,7 @@ export function scanNodeBorders(svg) {
     findings,
     nodes: observed.size,
     nodeIds: [...observed],
+    expectedNodeIds,
     outlines: outlineIds.length,
     outlineIds,
     routes: new Set(routes.map(r => r.id)).size,

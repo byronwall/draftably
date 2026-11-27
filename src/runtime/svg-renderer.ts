@@ -205,7 +205,7 @@ function outline(shape: string, r: Rect, radius: number, paint: string, ink = ''
     return `<ellipse cx="${r.x + r.w / 2}" cy="${r.y + r.h / 2}" rx="${r.w / 2}" ry="${r.h / 2}" ${paint}/>`;
   if (shape === 'text') return '';
   if (shape === 'marker')
-    return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" fill="${ink}"/>`;
+    return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" class="node-marker" fill="${ink}"/>`;
   const rx = shape === 'pill' ? r.h / 2 : radius;
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
@@ -643,6 +643,7 @@ function sceneMarkup(
   }
   return {
     markup: out.join('\n'),
+    nodeIds: vg.nodes.map(n => n.id),
     bounds: drawingBounds(doc, vg, rects, routes, 40),
     rects,
     routes,
@@ -777,7 +778,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
         `<line x1="${x0 + 40}" x2="${x0 + cols * cw - 40}" y1="${py}" y2="${py}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
       );
     out.push(
-      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})">`,
+      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})" data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}">`,
       scene.markup,
       '</g>',
     );
@@ -930,7 +931,12 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     const panelEdges = compare
       ? ` data-panel-edges="${esc(JSON.stringify([...scene.routes, ...timelineRoutes(panelDocs[i], scene.rects)].map(r => r.id)))}"`
       : '';
-    out.push(`<g transform="translate(${dx},${dy})"${panelEdges}>`, scene.markup, '</g>');
+    const panelNodes = ` data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}"`;
+    out.push(
+      `<g transform="translate(${dx},${dy})"${panelEdges}${panelNodes}>`,
+      scene.markup,
+      '</g>',
+    );
   });
   // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
   out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));
