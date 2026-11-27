@@ -1,6 +1,7 @@
 import { conflicts, parallelConflicts, parallelNear } from './conflicts.ts';
+import type { Point } from './types.ts';
 import type { Context } from './context.ts';
-import { cost } from './cost.ts';
+import { cost, standoffCost } from './cost.ts';
 import { clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { simplify, validPath } from './paths.ts';
 
@@ -70,6 +71,16 @@ export function nudge(ctx: Context) {
   return nudged;
 }
 
+// Check each segment against the part of its own path before the preceding bend.
+function crossesItself(points: Point[]) {
+  for (let i = 2; i < points.length - 1; i++) {
+    const earlier = { points: points.slice(0, i) };
+    const hit = conflicts([points[i], points[i + 1]], [earlier]);
+    if (hit.crossings || hit.shared) return true;
+  }
+  return false;
+}
+
 /** A gap wider than this between two facing sides is open space, not a gap to centre in. */
 const GAP_MAX = 80,
   /** A side counts as facing a segment when they run alongside each other this far. */
@@ -100,6 +111,7 @@ export function centre(ctx: Context) {
         : [r.y, r.y + r.h].map(at => ({ at, lo: r.x, hi: r.x + r.w, node: r.node })),
     );
   const sides = [faces(false), faces(true)];
+  const borders = ctx.near.filter(box => box.border);
   let moved = 0;
   for (let ri = 0; ri < state.routes.length; ri++) {
     const route = state.routes[ri],
@@ -116,15 +128,24 @@ export function centre(ctx: Context) {
         at = a[axis],
         lo = Math.min(a[along], b[along]),
         hi = Math.max(a[along], b[along]);
-      if (hi - lo < RUN_MIN) continue;
+      if (hi - lo <= ALONGSIDE) continue;
       const facing = sides[upright ? 1 : 0].filter(
         f => Math.min(hi, f.hi) - Math.max(lo, f.lo) > ALONGSIDE,
       );
       if (facing.some(f => Math.abs(f.at - at) < 1.5)) continue;
       const below = facing.filter(f => f.at < at).reduce((m, f) => Math.max(m, f.at), -Infinity),
         above = facing.filter(f => f.at > at).reduce((m, f) => Math.min(m, f.at), Infinity);
-      if (above - below > GAP_MAX) continue;
-      const mid = Math.round(below + above) / 2;
+      let mid: number;
+      if (above - below <= GAP_MAX) {
+        if (hi - lo < RUN_MIN) continue;
+        mid = Math.round(below + above) / 2;
+      } else {
+        if (!ctx.facingFans) continue;
+        // In open space, give the nearest face its requested clearance.
+        const nearer = at - below < above - at ? below : above;
+        if (Math.abs(nearer - at) >= Math.min(HUG, s.standoff)) continue;
+        mid = nearer + Math.sign(at - nearer) * s.standoff;
+      }
       if (Math.abs(mid - at) < 1) continue;
       // A gap too narrow to clear a box by `HUG` on both sides: the middle would bring the line
       // close along a box it now keeps clear of. Leave it where it is.
@@ -133,28 +154,60 @@ export function centre(ctx: Context) {
       );
       if (hugs) continue;
       // Another line in the gap shares it: the lanes, not the middle, decide where each runs.
+      const wide = above - below > GAP_MAX;
+      const laneLo = wide ? Math.min(at, mid) : below;
+      const laneHi = wide ? Math.max(at, mid) : above;
       const shared = others.some(o =>
         segments(o.points).some(
           ([c, d]) =>
             Math.abs(c[axis] - d[axis]) < EPS &&
-            c[axis] > below &&
-            c[axis] < above &&
+            c[axis] > laneLo &&
+            c[axis] < laneHi &&
             Math.min(hi, Math.max(c[along], d[along])) -
               Math.max(lo, Math.min(c[along], d[along])) >
               ALONGSIDE,
         ),
       );
       if (shared) continue;
+      // A slide must not reverse a neighboring leg and fold the route back across itself.
+      if ([points[i - 1], points[i + 2]].some(end => (at - end[axis]) * (mid - end[axis]) <= 0))
+        continue;
       const p = clone(points);
       p[i][axis] = mid;
       p[i + 1][axis] = mid;
       // The segments either side keep their length clear of a jog.
       if (distance(p[i - 1], p[i]) < 8 || distance(p[i + 1], p[i + 2]) < 8) continue;
+      // Sliding the run also changes the length of each leg that meets it.
+      if (
+        wide &&
+        [i - 1, i + 1].some(k => {
+          const beside = (ps: Point[], lo: number, hi: number) =>
+            Math.min(Math.max(ps[k][axis], ps[k + 1][axis]), hi) -
+              Math.max(Math.min(ps[k][axis], ps[k + 1][axis]), lo) >
+            ALONGSIDE;
+          return sides[upright ? 0 : 1].some(
+            f =>
+              f.node &&
+              Math.abs(p[k][along] - f.at) < HUG &&
+              beside(p, f.lo, f.hi) &&
+              !beside(points, f.lo, f.hi),
+          );
+        })
+      )
+        continue;
+      const beforeLane = parallelConflicts(points, others, s.edgeGap);
+      const afterLane = parallelConflicts(p, others, s.edgeGap);
+      if (
+        wide &&
+        (afterLane.laneDeficit > beforeLane.laneDeficit + EPS ||
+          standoffCost(p, borders) > standoffCost(points, borders) + EPS ||
+          crossesItself(p))
+      )
+        continue;
       if (
         !validPath(p, e, route.fromSide, route.toSide, obsFor(e)) ||
         conflicts(p, others).crossings > conflicts(points, others).crossings ||
-        parallelConflicts(p, others, s.edgeGap).lanePairs >
-          parallelConflicts(points, others, s.edgeGap).lanePairs
+        afterLane.lanePairs > beforeLane.lanePairs
       )
         continue;
       points = p;
