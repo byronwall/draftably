@@ -184,6 +184,17 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.route.label}>
         {label => (
           <g data-edge-label>
+            <Show when={label().leader}>
+              {line => (
+                <path
+                  data-edge-label-leader
+                  d={line().path}
+                  fill="none"
+                  stroke={stroke()}
+                  stroke-width="1"
+                />
+              )}
+            </Show>
             <rect
               class="edge-label-bg"
               x={label().x - label().w / 2}

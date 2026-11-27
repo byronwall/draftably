@@ -544,6 +544,11 @@ function sceneMarkup(
       lines = edgeLabelLines(edge.label, look, message, l?.wrap);
     if (l)
       out.push(
+        ...(l.leader
+          ? [
+              `<path data-edge-label-leader="" d="${l.leader.path}" fill="none" stroke="${ink}" stroke-width="1"/>`,
+            ]
+          : []),
         ...paintSurface(
           under(l),
           s =>

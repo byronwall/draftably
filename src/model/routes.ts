@@ -19,6 +19,7 @@ import {
 } from './labels';
 import { ARROW_HALF_HEIGHT, ARROW_REACH, hasMarkers, markerRects, stoppedPoints } from './markers';
 import { codeLayout } from './code';
+import { statusPaint } from './status';
 import { drawnRect, rangeLabelBoxes, rangePort } from './ranges';
 import {
   ancestors,
@@ -78,6 +79,8 @@ export interface EdgeLabelBox extends Point {
   score?: number;
   /** A narrower width the label's text wraps to than `LABEL_WRAP`, chosen to clear other lines. */
   wrap?: number;
+  /** A short connector from a detached label to its own route. */
+  leader?: { path: string; points: Point[] };
 }
 
 /** Lines and borders a label may sit on only when nothing better is free. */
@@ -98,6 +101,99 @@ const segmentHits = (a: Point, b: Point, r: Rect) =>
   Math.min(a.x, b.x) < r.x + r.w &&
   Math.max(a.y, b.y) > r.y &&
   Math.min(a.y, b.y) < r.y + r.h;
+
+/** A bowed connector only when its entire path and attachment are clear. */
+export function labelLeader(
+  label: EdgeLabelBox,
+  points: Point[],
+  obstacles: Rect[],
+  otherRoutes: Point[][],
+  dash?: string,
+): { path: string; points: Point[] } | undefined {
+  const box = { x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h },
+    candidates: Array<{ path: string; points: Point[]; length: number }> = [];
+  if (points.some((p, i) => i > 0 && segmentHits(points[i - 1], p, grown(box, 4)))) return;
+  // A multi-segment dashed path has rounded bends that change its dash phase.
+  if (dash && points.length !== 2) return;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1],
+      b = points[i],
+      flat = a.y === b.y;
+    if (!flat && a.x !== b.x) continue;
+    const lo = (flat ? Math.min(a.x, b.x) : Math.min(a.y, b.y)) + 10,
+      hi = (flat ? Math.max(a.x, b.x) : Math.max(a.y, b.y)) - 10,
+      from = flat ? Math.max(lo, box.x + 4) : Math.max(lo, box.y + 4),
+      to = flat ? Math.min(hi, box.x + box.w - 4) : Math.min(hi, box.y + box.h - 4);
+    if (from > to) continue;
+    let axis = clamp(flat ? label.x : label.y, from, to);
+    if (dash) {
+      const [on, off, ...rest] = dash.split(/[ ,]+/).map(Number);
+      if (!(on > 0 && off > 0) || rest.length) continue;
+      const origin = flat ? a.x : a.y,
+        direction = Math.sign((flat ? b.x : b.y) - origin);
+      const choices: number[] = [];
+      for (let d = on / 2; d < manhattan(a, b); d += on + off) {
+        const value = origin + direction * d;
+        if (value >= from && value <= to) choices.push(value);
+      }
+      if (!choices.length) continue;
+      axis = choices.sort((a, b) => Math.abs(a - axis) - Math.abs(b - axis))[0];
+    }
+    const edge = flat ? (a.y < box.y ? box.y : box.y + box.h) : a.x < box.x ? box.x : box.x + box.w,
+      cross = flat ? a.y : a.x,
+      length = Math.abs(edge - cross);
+    if (
+      length < 5 ||
+      length > 60 ||
+      (flat ? a.y >= box.y && a.y <= box.y + box.h : a.x >= box.x && a.x <= box.x + box.w)
+    )
+      continue;
+    const start = flat ? { x: axis, y: cross } : { x: cross, y: axis },
+      end = flat ? { x: axis, y: edge } : { x: edge, y: axis };
+    for (const bow of [8, -8]) {
+      const control = flat
+          ? { x: axis + bow, y: (cross + edge) / 2 }
+          : { x: (cross + edge) / 2, y: axis + bow },
+        curve = Array.from({ length: 17 }, (_, k) => {
+          const t = k / 16,
+            u = 1 - t;
+          return {
+            x: u * u * start.x + 2 * u * t * control.x + t * t * end.x,
+            y: u * u * start.y + 2 * u * t * control.y + t * t * end.y,
+          };
+        });
+      const areas = curve.slice(1).map((p, j) =>
+        grown(
+          {
+            x: Math.min(p.x, curve[j].x),
+            y: Math.min(p.y, curve[j].y),
+            w: Math.abs(p.x - curve[j].x),
+            h: Math.abs(p.y - curve[j].y),
+          },
+          3,
+        ),
+      );
+      if (
+        areas.some(
+          area =>
+            obstacles.some(r => overlaps(area, r)) ||
+            points.some((p, j) => j > 0 && j !== i && segmentHits(points[j - 1], p, area)) ||
+            otherRoutes.some(route =>
+              route.some((p, j) => j > 0 && segmentHits(route[j - 1], p, area)),
+            ),
+        )
+      )
+        continue;
+      candidates.push({
+        path: `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`,
+        points: curve,
+        length,
+      });
+      break;
+    }
+  }
+  return candidates.sort((a, b) => a.length - b.length)[0];
+}
 
 /** A spot for an edge's label, with what it crosses (`cost`) and how well it reads (`score`). */
 interface LabelSpot extends EdgeLabelBox {
@@ -1026,6 +1122,29 @@ export function drawRoutes(
       ? Math.max(...lines.map(line => measureText(line, look.annotation)))
       : look.annotation.size + (lines.length - 1) * look.annotation.lineHeight;
     label[size] = Math.min(label[size], Math.max(ink + 4, room));
+  }
+  const leaders: Point[][] = [];
+  for (const [route, label] of labels) {
+    const edge = findEdge(doc, route.id)!;
+    if (route.blocked) continue;
+    const dash =
+      statusPaint(look, edge.status, edge.spot).dash ?? (edge.dashed ? '5 5' : undefined);
+    const otherLabels = [...labels]
+      .filter(([r]) => r !== route)
+      .map(([, l]) => ({
+        x: l.x - l.w / 2,
+        y: l.y - l.h / 2,
+        w: l.w,
+        h: l.h,
+      }));
+    label.leader = labelLeader(
+      label,
+      route.points,
+      [...obstacles, ...borders, ...marks, ...otherLabels],
+      [...result.routes.filter(r => r !== route).map(r => r.points), ...leaders],
+      dash,
+    );
+    if (label.leader) leaders.push(label.leader.points);
   }
   // A sequence message's label sits just above its line, centred between two lifelines, or
   // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
