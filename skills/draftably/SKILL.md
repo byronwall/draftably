@@ -454,9 +454,11 @@ content area.
 - A boxed group pads its members and moves as one block. When a group only says "these belong
   together" and its frame makes the drawing bigger or pushes lines across it, write
   `frame=soft`: members lay out with the container around the group and draw on a light tint.
-  `frame=none` keeps the membership (and `color=auto`) but draws nothing. A soft group takes no
-  `layout`, `near` or `pin` of its own. `check` reports `soft-split` when its members end up apart
-  and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
+  `frame=none` keeps the membership (and `color=auto`) but draws nothing. A group that has its
+  own `layout`, or that `order`, `align`, `near`, `nudge`, `stay` or `pin` names, must be
+  `frame=box`; soft and none groups take their container's layout. `check` reports `soft-split`
+  when a soft group's members end up apart and `soft-overlap` when its tint covers an object
+  outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
   Write `\n` for a line break in a label. `\\n` draws a backslash and an n, and `check` warns
   `literal-newline`.
@@ -477,7 +479,9 @@ content area.
   between table rows.
 - A feedback edge (a refetch, a retry back to the start) pulls the section it points at below its
   source. Add `constraint=false` to draw it without letting it rank anything.
-- Use color to mean something, not for decoration:
+- Use color to mean something, not for decoration. Color accents; it doesn't organize:
+  - Use color on the one box or code range the reader must notice. Leave groups neutral unless
+    the color carries meaning a legend explains.
   - Two to four accent families, each for one role (external systems, data stores, the failure
     path), and `slate` or `stone` for everything else. More reads as noise.
   - Give the most common role a pale shade (100–200) and save strong shades for the few
@@ -494,9 +498,9 @@ content area.
     `legend-lines` when they are missing).
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
-  - Color the outer group and let members inherit (`color=auto`): members draw as pale cards on
-    the group's tint, and a node that names a color stands out at 500. Nested groups of one
-    family are drawn in stepped shades. Never give a member its container's family at a pale shade.
+  - When a group's color does carry meaning, color the outer group and let members inherit
+    (`color=auto`): members draw as pale cards on the group's tint, and a node that names a color
+    stands out at 500. Nested groups of one family are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - To show a change, write one file with both versions merged and mark only the lines that
   differ: `+` added, `-` removed, `~` changed (`was="old label"`, `was-shape=circle`,
@@ -517,6 +521,8 @@ content area.
   `subtitle` with one short takeaway: one line, about 10 words. The drawing says the rest, so the
   exported picture stands alone. Don't add a paragraph of context; `check` warns
   `heading-prose` on a subtitle that wraps and on a note with no `near=`.
+- If the diagram uses notation you invented (a condensed IR, a query sketch), say so in the title
+  or subtitle.
 - Add a note only when the drawing cannot say it, and put it beside the object it explains:
   `note "…" near=id side=below`. Never fake one with `node … shape=text`:
   a node takes part in layout and pushes rows and ranks apart. `check` warns `note-overlap` when
