@@ -27,6 +27,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { baselineCache, clearReports } from './lib/audit-cache.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -62,6 +63,8 @@ if (args.length) {
   );
   process.exit(1);
 }
+
+clearReports(outDir);
 
 const git = (...a) => execFileSync('git', a, { cwd: root, encoding: 'utf8' }).trim();
 const sha = git('rev-parse', '--verify', `${baseRef}^{commit}`);
@@ -209,11 +212,8 @@ const headOut = set => path.join(outDir, 'head', set.name);
 await Promise.all(
   sets.map(async set => {
     const cached = baseOut(set);
-    if (fs.existsSync(path.join(cached, 'summary.md'))) console.log(`base ${set.name}: cached`);
-    else {
-      fs.rmSync(cached, { recursive: true, force: true });
-      await audit('base', baseScripts, set, cached);
-    }
+    if (await baselineCache(cached, () => audit('base', baseScripts, set, cached), load))
+      console.log(`base ${set.name}: cached`);
     fs.rmSync(path.join(outDir, 'base', set.name), { recursive: true, force: true });
     fs.mkdirSync(path.join(outDir, 'base'), { recursive: true });
     fs.cpSync(cached, path.join(outDir, 'base', set.name), { recursive: true });

@@ -190,8 +190,41 @@ function parseSource(text) {
     sequence = false,
     edgeGap = 16;
   const actions = new Set();
+  let bodyTag;
   for (const raw of text.split('\n')) {
-    const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
+    if (bodyTag) {
+      if (raw.trim() === bodyTag) bodyTag = undefined;
+      continue;
+    }
+    // Here-doc bodies are code or table data, never diagram statements. Ignore comments only
+    // outside quoted strings, as the language lexer does, before looking for an opening tag.
+    let quoted = false,
+      escaped = false,
+      end = raw.length;
+    for (let i = 0; i < raw.length; i++) {
+      const c = raw[i];
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (quoted && c === '\\') {
+        escaped = true;
+        continue;
+      }
+      if (c === '"') {
+        quoted = !quoted;
+        continue;
+      }
+      if (
+        !quoted &&
+        (c === '#' || (raw.startsWith('//', i) && (i === 0 || /\s/.test(raw[i - 1]))))
+      ) {
+        end = i;
+        break;
+      }
+    }
+    const line = raw.slice(0, end).trim();
+    bodyTag = line.match(/(?:^|\s)<<([A-Za-z_][A-Za-z0-9_]*)\s*$/)?.[1];
     const action = line.match(/^[+~.-]?action\s+(\S+)/);
     if (action) actions.add(action[1]);
     if (/^layout\s+root\s+sequence\b/.test(line)) sequence = true;
@@ -1074,6 +1107,8 @@ function measure(file) {
         continue;
       }
       if (l.panel !== m.panel) continue;
+      // Sequence messages occupy distinct rows; their normal row gap is not label crowding.
+      if (sequence && l.path[0] && m.path[0] && Math.abs(l.path[0].y - m.path[0].y) > EPS) continue;
       // Two labels on different edges closer than a label's height read as one phrase, or as
       // two labels on one edge.
       const gap = Math.max(
@@ -1095,7 +1130,7 @@ function measure(file) {
       attachment = edge.source === edge.target ? { ...l, x: l.x - 4 } : { ...l, y: l.y + 1 };
     }
     const dist = Math.min(...segs(l.path).map(sg => rectSegDist(attachment, sg)));
-    if (!actions.has(l.edge)) {
+    if (!sequence || !actions.has(l.edge)) {
       if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
       // Clear of its intended line position, though near.
       else if (dist > 0.5)

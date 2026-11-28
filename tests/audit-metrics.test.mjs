@@ -153,3 +153,34 @@ test('rejects failed and malformed geometry inspection', () => {
     assert.equal(result.defectIndex, undefined);
   }
 });
+
+test('normal sequence rows are not crowded but nonsequence neighbors are', () => {
+  const close = drawing.replace('x="90" y="129"', 'x="90" y="112"');
+  const seq = audit(sequence, { nodes, routes }, close);
+  assert.equal(seq.issues.filter(i => i.kind === 'labels-too-close').length, 0);
+  const flat = audit(
+    sequence.replace('layout root sequence', 'layout root flow'),
+    { nodes, routes },
+    close,
+  );
+  assert.ok(flat.issues.some(i => i.kind === 'labels-too-close'));
+  const overlap = drawing.replace('x="90" y="129"', 'x="90" y="90"');
+  assert.ok(
+    audit(sequence, { nodes, routes }, overlap).issues.some(i => i.kind === 'label-overlap'),
+  );
+});
+
+test('code bodies cannot declare actions, edges, or a sequence layout', () => {
+  const flat = 'node a "A"\nnode b "B"\nedge call a -> b "call"\n';
+  const moved = drawing.replace('x="90" y="79"', 'x="90" y="20"');
+  const original = audit(flat, { nodes, routes }, moved).issues.filter(
+    i => i.kind === 'label-detached',
+  );
+  const code =
+    'node sample shape=code <<CODE # comment\naction call a "example"\nlayout root sequence\nedge call b -> b "fake"\nCODE\n';
+  const withCode = audit(flat + code, { nodes, routes }, moved).issues.filter(
+    i => i.kind === 'label-detached',
+  );
+  assert.ok(original.some(i => i.detail.includes('call')));
+  assert.deepEqual(withCode, original);
+});
