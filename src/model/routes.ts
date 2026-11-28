@@ -112,7 +112,8 @@ export function labelLeader(
 ): { path: string; points: Point[] } | undefined {
   const box = { x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h },
     candidates: Array<{ path: string; points: Point[]; length: number }> = [];
-  if (points.some((p, i) => i > 0 && segmentHits(points[i - 1], p, grown(box, 4)))) return;
+  const nearLabel = grown(box, label.h / 2);
+  if (points.some((p, i) => i > 0 && segmentHits(points[i - 1], p, nearLabel))) return;
   // A multi-segment dashed path has rounded bends that change its dash phase.
   if (dash && points.length !== 2) return;
   for (let i = 1; i < points.length; i++) {
@@ -143,7 +144,7 @@ export function labelLeader(
       cross = flat ? a.y : a.x,
       length = Math.abs(edge - cross);
     if (
-      length < 5 ||
+      length <= label.h / 2 ||
       length > 60 ||
       (flat ? a.y >= box.y && a.y <= box.y + box.h : a.x >= box.x && a.x <= box.x + box.w)
     )

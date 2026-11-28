@@ -53,6 +53,9 @@ describe('edge label leaders', () => {
     ];
     expect(labelLeader(label, onOther, [], [])).toBeUndefined();
   });
+  it('keeps a nearby label clear of extra marks', () => {
+    expect(labelLeader({ ...label, y: 17 }, route, [], [])).toBeUndefined();
+  });
   it('tries the opposite bow when only one curve is blocked', () => {
     const leader = labelLeader(label, route, [{ x: 55, y: 12, w: 2, h: 6 }], []);
     expect(leader?.path).toBe('M 50 0 Q 42 15 50 30');
