@@ -1283,6 +1283,13 @@ button.folder-heading:hover {
   border-top: 0;
 }
 
+.placement-rule {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
 .align-row {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

@@ -116,6 +116,28 @@ try {
     /^near payments orders side=below gap=\d+/m.test(read()),
   );
 
+  // Inspect the rule just written by the drag, without changing the file or drawing.
+  const beforeInspection = read();
+  if (!(await page.getByRole('complementary', { name: 'Inspector' }).isVisible()))
+    await page.keyboard.press(']');
+  await page.getByRole('tab', { name: 'Properties' }).click();
+  const placement = page.locator('.placement-rule');
+  await placement.waitFor();
+  const description = await placement.textContent();
+  const authored = beforeInspection
+    .split('\n')
+    .findIndex(line => line.startsWith('near payments '));
+  check(
+    'placement names its anchor and source line',
+    /below Orders/.test(description) && description.includes(`Line ${authored + 1} ·`),
+  );
+  check(
+    'inspecting placement is read-only',
+    read() === beforeInspection && same(await browserGeometry(page), inspect()),
+  );
+  await page.screenshot({ path: path.join(proof.out, 'proof-placement.png') });
+  await page.getByRole('button', { name: 'Close panel' }).click();
+
   // 3. Pin another object.
   await page.mouse.click(...center(await box(page, 'api')));
   await page.keyboard.press('p');
@@ -196,6 +218,20 @@ try {
   await page.locator('.file-notes button').click();
   await page.screenshot({ path: path.join(proof.out, 'proof-2-notes.png') });
   await page.locator('.file-notes button').click();
+
+  // Re-select after the external edit; the same rule still points to Orders.
+  await page.evaluate(() => window.diagramStudio.select('payments'));
+  await page.keyboard.press(']');
+  await placement.waitFor();
+  check(
+    'placement survives external insertion',
+    /below Orders/.test(await placement.textContent()),
+  );
+  check(
+    'inspection after insertion preserves bytes and geometry',
+    read() === text && same(await browserGeometry(page), added),
+  );
+  await page.getByRole('button', { name: 'Close panel' }).click();
 
   // 7. Restart: a fresh process and a fresh page draw the same thing.
   await stopViewer(server);
@@ -283,6 +319,55 @@ try {
     'forward navigation',
   );
   check('forward navigation restores the next file', true);
+
+  // A controlled overlap makes a soft placement rule yield. Inspect, then remove only that rule.
+  const probe = path.join(dir, 'placement.draft');
+  const base = [
+    'diagram "Placement trial" version=1',
+    'node a "Anchor"',
+    'node b "Obstacle"',
+    'node c "Target"',
+    'edge e a -> c',
+    'layout root flow',
+    'pin a x=0 y=0',
+    'pin b x=0 y=80',
+    '',
+  ].join('\n');
+  fs.writeFileSync(probe, base + 'near c a side=below gap=24\n');
+  await page.goto(`${new URL(server.url).origin}/?file=placement.draft`);
+  await waitFor(page, () => !!window.diagramStudio?.fileState, 'placement trial viewer');
+  await page.evaluate(() => window.diagramStudio.ready());
+  await page.evaluate(() => window.diagramStudio.select('c'));
+  if (!(await page.getByRole('complementary', { name: 'Inspector' }).isVisible()))
+    await page.keyboard.press(']');
+  await page.getByRole('tab', { name: 'Properties' }).click();
+  await placement.waitFor();
+  check(
+    'the inspector distinguishes a relaxed preference from a guarantee',
+    /below Anchor[\s\S]*gave way/.test(await placement.textContent()),
+  );
+  const renamed = base.replace('"Anchor"', '"Anchor for fulfillment reconciliation"');
+  fs.writeFileSync(probe + '.tmp', renamed + 'near c a side=below gap=24\n');
+  fs.renameSync(probe + '.tmp', probe);
+  await waitFor(
+    page,
+    () =>
+      document.querySelector('.placement-rule')?.textContent.includes('fulfillment reconciliation'),
+    'placement updates the anchor label while selected',
+  );
+  check('placement updates the anchor label while selected', true);
+  const ids = await page.evaluate(() => {
+    const { nodes, routes } = window.diagramStudio.fileGeometry();
+    return [nodes.map(n => n.id), routes.map(e => e.id)];
+  });
+  fs.writeFileSync(probe + '.tmp', renamed);
+  fs.renameSync(probe + '.tmp', probe);
+  await placement.waitFor({ state: 'hidden' });
+  const after = await page.evaluate(() => {
+    const { nodes, routes } = window.diagramStudio.fileGeometry();
+    return [nodes.map(n => n.id), routes.map(e => e.id)];
+  });
+  check('removing the rule hides its explanation and preserves all IDs', same(ids, after));
 } catch (error) {
   check('proof ran to completion', false, error.message);
 } finally {

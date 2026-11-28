@@ -135,6 +135,8 @@ export interface SceneEdge extends ModelEdge {
 
 export interface Scene {
   model: Model;
+  /** Original rules when layout normalizes them, e.g. a cross-container near uses a group. */
+  authoredHints?: Hint[];
   title: string;
   objects: SceneObject[];
   byId: Map<string, SceneObject>;
@@ -165,7 +167,9 @@ const round = (n: number) => Math.round(n);
 /** `files` holds the text of the files `src=` names; see `CodeFiles`. */
 export async function compile(source: string, files?: CodeFiles): Promise<Scene> {
   const m = withOrgcharts(withMindmaps(parseModel(source, files)));
-  return withIcons(await compileFit(m), m);
+  const scene = await compileFit(m);
+  if (scene.model.hints !== m.hints) scene.authoredHints = m.hints;
+  return withIcons(scene, m);
 }
 
 /**

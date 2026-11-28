@@ -22,7 +22,7 @@ import {
   type Shade,
 } from '../model/appearance';
 import { headOf, MARKERS, tailOf } from '../model/markers';
-import { DSL_SHAPES } from '../dsl/syntax';
+import { DSL_SHAPES, type Hint } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type {
   ColorKey,
@@ -538,6 +538,9 @@ function ObjectInspector(props: { id: string }) {
   return (
     <>
       <Heading title={container() ? 'Container' : 'Shape'} />
+      <Show when={!lanes() && s.fileMode() && !s.sourceError()}>
+        <PlacementRule id={props.id} />
+      </Show>
       <Section>
         <TextField
           label="Label"
@@ -643,6 +646,60 @@ function ObjectInspector(props: { id: string }) {
         </CommandButton>
       </div>
     </>
+  );
+}
+
+/** Show the source's intent, not a guess based on where the solver left the box. */
+function PlacementRule(props: { id: string }) {
+  const s = useDiagramSession();
+  const rule = () => {
+    const scene = s.fileScene();
+    return (scene?.authoredHints ?? scene?.model.hints)?.find(
+      (h): h is Extract<Hint, { type: 'near' }> => h.type === 'near' && h.id === props.id,
+    );
+  };
+  return (
+    <Show when={rule()}>
+      {near => {
+        const target = () => s.fileScene()?.byId.get(near().ref)?.label || near().ref;
+        const adjustment = () =>
+          s
+            .fileDiagnostics()
+            .find(
+              d =>
+                (d.code === 'relaxed' || d.code === 'unsatisfied-near') &&
+                d.line === near().line &&
+                d.ids[0] === props.id,
+            )?.code;
+        return (
+          <Section title="Placement rule">
+            <div class="placement-rule">
+              <p>
+                {near().strength === 'required' ? 'Required: ' : 'Prefers to sit '}
+                {near().side === 'left' || near().side === 'right'
+                  ? `${near().side} of`
+                  : near().side}{' '}
+                <strong>{target()}</strong>.
+              </p>
+              <p class="hint">
+                Line {near().line} · {near().gap}px requested gap
+                {near().offset ? ` · ${near().offset}px offset` : ''}
+              </p>
+              <Show when={adjustment()}>
+                <p class="hint">
+                  {adjustment() === 'relaxed'
+                    ? 'This preference gave way to make room in the layout.'
+                    : 'The layout could not satisfy this rule.'}
+                </p>
+              </Show>
+              <Show when={near().strength === 'prefer' && s.geometry(props.id).pinned}>
+                <p class="hint">Pinned coordinates take priority over this preference.</p>
+              </Show>
+            </div>
+          </Section>
+        );
+      }}
+    </Show>
   );
 }
 

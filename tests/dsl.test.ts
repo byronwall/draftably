@@ -19,6 +19,16 @@ const errorLine = (source: string) => {
   throw Error('expected a DslError');
 };
 
+it('keeps the authored reference when layout anchors a near rule to a sibling container', async () => {
+  const scene = await compile(checkout + 'near db api side=below gap=40\n');
+  expect(scene.model.hints).toContainEqual(
+    expect.objectContaining({ type: 'near', id: 'db', ref: 'platform' }),
+  );
+  expect(scene.authoredHints).toContainEqual(
+    expect.objectContaining({ type: 'near', id: 'db', ref: 'api', offset: 0 }),
+  );
+});
+
 describe('syntax', () => {
   it('reports the line of each kind of error', () => {
     expect(errorLine('node a "A"\nnode a "B"')).toBe(2);
