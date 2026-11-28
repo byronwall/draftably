@@ -27,7 +27,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { baselineCache, clearReports } from './lib/audit-cache.mjs';
+import { assertResults, baselineCache, clearReports, selectedInputs } from './lib/audit-cache.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -198,9 +198,13 @@ function audit(side, cwd, set, out, extra = []) {
     const stream = fs.createWriteStream(log);
     child.stdout.pipe(stream);
     child.stderr.pipe(stream);
-    child.on('close', code => {
+    child.on('error', reject);
+    child.on('close', (code, signal) => {
       const secs = ((Date.now() - started) / 1000).toFixed(0);
-      if (code) return reject(new Error(`${side} ${set.name} failed (exit ${code}); see ${log}`));
+      if (code !== 0 || signal)
+        return reject(
+          new Error(`${side} ${set.name} failed (${signal ?? `exit ${code}`}); see ${log}`),
+        );
       console.log(`${side} ${set.name}: done in ${secs}s`);
       resolve();
     });
@@ -212,7 +216,9 @@ const headOut = set => path.join(outDir, 'head', set.name);
 await Promise.all(
   sets.map(async set => {
     const cached = baseOut(set);
-    if (await baselineCache(cached, () => audit('base', baseScripts, set, cached), load))
+    const expected = selectedInputs(set.dir, only?.split(','));
+    const complete = dir => assertResults(load(dir), expected);
+    if (await baselineCache(cached, () => audit('base', baseScripts, set, cached), complete))
       console.log(`base ${set.name}: cached`);
     fs.rmSync(path.join(outDir, 'base', set.name), { recursive: true, force: true });
     fs.mkdirSync(path.join(outDir, 'base'), { recursive: true });
@@ -222,6 +228,7 @@ await Promise.all(
       '--baseline',
       path.join(outDir, 'base', set.name),
     ]);
+    complete(headOut(set));
   }),
 );
 

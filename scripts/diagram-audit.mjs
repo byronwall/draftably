@@ -217,7 +217,7 @@ function parseSource(text) {
       }
       if (
         !quoted &&
-        (c === '#' || (raw.startsWith('//', i) && (i === 0 || /\s/.test(raw[i - 1]))))
+        (c === '#' || (raw.startsWith('//', i) && (i === 0 || /[\s"]/.test(raw[i - 1]))))
       ) {
         end = i;
         break;
@@ -227,7 +227,12 @@ function parseSource(text) {
     bodyTag = line.match(/(?:^|\s)<<([A-Za-z_][A-Za-z0-9_]*)\s*$/)?.[1];
     const action = line.match(/^[+~.-]?action\s+(\S+)/);
     if (action) actions.add(action[1]);
-    if (/^layout\s+root\s+sequence\b/.test(line)) sequence = true;
+    // A repeated root layout replaces the earlier one, including an engine layout.
+    const words = line.match(/(?:[^\s"]+|"(?:\\.|[^"\\])*")+/g) ?? [];
+    const value = word => (word?.startsWith('"') ? JSON.parse(word) : word);
+    if (value(words[0]) === 'layout' && value(words[1]) === 'root') {
+      sequence = !words.some(word => word.startsWith('engine=')) && value(words[2]) === 'sequence';
+    }
     const e = line.match(/^[+~.-]?edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
@@ -339,11 +344,18 @@ function hookOf(r, s, t) {
  * x-coordinates, the longest free run in y between the obstacles that span it.
  */
 function largestEmpty(frame, obstacles, minSide = 0) {
+  obstacles = obstacles.flatMap(o => {
+    const x = Math.max(frame.x, o.x),
+      y = Math.max(frame.y, o.y);
+    const right = Math.min(frame.x + frame.w, o.x + o.w);
+    const bottom = Math.min(frame.y + frame.h, o.y + o.h);
+    return right > x && bottom > y ? [{ x, y, w: right - x, h: bottom - y }] : [];
+  });
   const xs = [
     ...new Set(
-      [frame.x, frame.x + frame.w, ...obstacles.flatMap(o => [o.x, o.x + o.w])]
-        .map(v => Math.min(frame.x + frame.w, Math.max(frame.x, v)))
-        .map(Math.round),
+      [frame.x, frame.x + frame.w, ...obstacles.flatMap(o => [o.x, o.x + o.w])].map(v =>
+        Math.min(frame.x + frame.w, Math.max(frame.x, v)),
+      ),
     ),
   ].sort((a, b) => a - b);
   let best = { x: frame.x, y: frame.y, w: 0, h: 0 };

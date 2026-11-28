@@ -184,3 +184,40 @@ test('code bodies cannot declare actions, edges, or a sequence layout', () => {
   assert.ok(original.some(i => i.detail.includes('call')));
   assert.deepEqual(withCode, original);
 });
+
+test('quoted layout and later overrides follow the effective root layout', () => {
+  const close = drawing.replace('x="90" y="129"', 'x="90" y="112"');
+  const bare = audit(sequence, { nodes, routes }, close);
+  const quoted = audit(
+    sequence.replace('layout root sequence', 'layout root "sequence"'),
+    { nodes, routes },
+    close,
+  );
+  const kinds = r =>
+    r.issues.filter(i =>
+      ['labels-too-close', 'label-detached', 'label-beside-line'].includes(i.kind),
+    );
+  assert.deepEqual(kinds(quoted), kinds(bare));
+  const plain = sequence
+    .replace('layout root sequence', 'layout root flow')
+    .replace(' message=call', '')
+    .replace(' answers=call', '');
+  const prior = audit(plain, { nodes, routes }, close);
+  const overridden = audit(
+    plain.replace('layout root flow', 'layout root sequence\nlayout root flow'),
+    { nodes, routes },
+    close,
+  );
+  assert.deepEqual(kinds(overridden), kinds(prior));
+  assert.ok(kinds(prior).some(i => i.kind === 'labels-too-close'));
+});
+
+test('labels outside the node frame do not create empty area outside it', () => {
+  const result = audit(sequence, { nodes, routes }, drawing);
+  const empty = result.issues.filter(i => i.kind === 'empty-area');
+  for (const issue of empty) {
+    const percentage = Number(issue.detail.match(/\((\d+)%/)?.[1]);
+    assert.ok(percentage <= 100, issue.detail);
+  }
+  assert.equal(empty.length, 0);
+});
