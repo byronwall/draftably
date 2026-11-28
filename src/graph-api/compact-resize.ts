@@ -6,6 +6,7 @@ import { find } from '../engines/routing/find';
 import { REPAIR_EDGES } from '../engines/routing/tuning';
 import type { Context } from '../engines/routing/context';
 import type { Point, Route } from '../engines/routing/types';
+import { relaxChannels } from './compact-channels';
 import { createGrid } from './resize-grid';
 
 /** Move the most expensive row connections first. The grid suggests candidates;
@@ -142,5 +143,6 @@ export function compactResize(ctx: Context) {
   for (const { i } of priority()) if (!refine(i, false)) return;
   if (state.routes.length <= REPAIR_EDGES)
     for (const { i } of priority().slice(0, 8)) if (!refine(i, true)) return;
+  relaxChannels(ctx, byId);
   return true;
 }

@@ -39,9 +39,8 @@ export function resizeKey(graph: RouteIn) {
   return JSON.stringify([graph.nodes.map(n => n.id), graph.edges, graph.routing]);
 }
 
-/** Move a vertical track with its nearest card face. A column that splits or changes order
- * has no such mapping. */
-function columnMap(before: PlacedNodeIn[], after: PlacedNodeIn[]) {
+/** Map vertical tracks between corresponding faces. A split or reordered column has no mapping. */
+function columnMap(before: PlacedNodeIn[], after: PlacedNodeIn[], clearance?: number) {
   const faces = new Map<number, number>();
   for (const [i, a] of before.entries()) {
     const b = after[i];
@@ -56,6 +55,16 @@ function columnMap(before: PlacedNodeIn[], after: PlacedNodeIn[]) {
   const xs = [...faces.keys()].sort((a, b) => a - b);
   if (!xs.length || xs.some((x, i) => i && faces.get(x)! <= faces.get(xs[i - 1])!)) return;
   return (x: number) => {
+    // Keep clearance tracks attached to the faces. Scale the free space between them.
+    if (clearance !== undefined && x > xs[0] && x < xs.at(-1)!) {
+      const right = xs.findIndex(face => face >= x);
+      const lo = xs[right - 1] + clearance,
+        hi = xs[right] - clearance;
+      const leftFace = faces.get(xs[right - 1])! + clearance,
+        rightFace = faces.get(xs[right])! - clearance;
+      if (x > lo && x < hi && leftFace < rightFace)
+        return round(leftFace + ((x - lo) * (rightFace - leftFace)) / (hi - lo));
+    }
     const face = xs.reduce((a, b) => (Math.abs(x - a) <= Math.abs(x - b) ? a : b));
     return round(x + faces.get(face)! - face);
   };
@@ -139,7 +148,7 @@ export function resize(
     })
   )
     return structuredClone(old.routes);
-  const move = columnMap(old.nodes, nodes);
+  const move = columnMap(old.nodes, nodes, compact ? ctx.s.clearance : undefined);
   if (!move) return;
   const prior = new Map(old.routes.map(r => [r.id, r]));
   const missing = [];

@@ -51,8 +51,8 @@ Set both sides and row offsets on each line. Reuse supports unlabelled lines bet
 
 For full-quality row schemas, opt into the experimental compact grid with
 `route({ ...graph, resize: 'compact' }, previous)`. It tries direct connections and
-separates unrelated shared runs. It uses ordinary full routing for drawings with up to 12 lines.
-For larger drawings, check its [measured quality and resize times](../../docs/intent/route-speed/COMPACT.md).
+separates unrelated shared runs. After the grid search, it slides inner runs and tests shortcuts on the longest detours first.
+Drawings with up to 12 lines use ordinary full routing. See the [measured quality and resize times](../../docs/intent/route-speed/COMPACT.md#round-2).
 
 ```ts
 import '@draftably/runtime/element';
