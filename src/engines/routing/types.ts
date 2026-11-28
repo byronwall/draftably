@@ -109,7 +109,7 @@ export interface RoutingResult {
 export interface RoutingOptions extends Partial<RoutingSettings> {
   previous?: PriorRoute[];
   quick?: boolean;
-  /** During resize, use the best clear dogleg before trying the grid. */
+  /** During resize, try fewer grid lanes when a clear dogleg exists. */
   resize?: boolean;
   /** A reading direction for every edge without its own `cfg.flow`; forward edges run along it. */
   direction?: 'right' | 'down';

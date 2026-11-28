@@ -308,7 +308,6 @@ function findAmong(
   // Dragging keeps this bounded; settled diagrams receive refinement passes.
   let searches = 0;
   for (const c of candidates) {
-    if (best && rawOptions.resize) break;
     if (best && c.lower > best.score) continue;
     if (searches++ >= (rawOptions.quick ? 1 : 3)) break;
     // A clean route out of or into a far side still loops round the outside: a forward route
@@ -356,7 +355,17 @@ function findAmong(
       for (const m of rawOptions.window === false ? [null] : WINDOWS) {
         const win = m === null ? null : grow(span, m);
         // The standoff makes some searches wander; it gets a larger budget.
-        part = search(p, q, c.obs, used, s, near, near.length ? 64000 : 16000, win);
+        part = search(
+          p,
+          q,
+          c.obs,
+          used,
+          s,
+          near,
+          near.length ? 64000 : 16000,
+          win,
+          !!best && !!rawOptions.resize,
+        );
         if (part) break;
       }
       if (!part) {

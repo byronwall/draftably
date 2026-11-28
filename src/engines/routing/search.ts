@@ -62,6 +62,7 @@ export function search(
   near: NearBox[] = [],
   limit = 16000,
   win: Window | null = null,
+  coarse = false,
 ) {
   const xs = [start.x, end.x],
     ys = [start.y, end.y];
@@ -81,11 +82,14 @@ export function search(
     ys.push(p.y - s.edgeGap, p.y + s.edgeGap);
   }
   // Extra lanes beside existing paths allow rerouting without bundling them.
-  for (const r of used)
-    for (const p of r.points) {
-      xs.push(p.x - s.edgeGap, p.x + s.edgeGap);
-      ys.push(p.y - s.edgeGap, p.y + s.edgeGap);
-    }
+  // A resize preview with a clear fallback tries only obstacle, standoff and terminal lanes.
+  // All prior lines still contribute crossings, shared length and lane costs.
+  if (!coarse)
+    for (const r of used)
+      for (const p of r.points) {
+        xs.push(p.x - s.edgeGap, p.x + s.edgeGap);
+        ys.push(p.y - s.edgeGap, p.y + s.edgeGap);
+      }
   xs.push(Math.min(...xs) - 32, Math.max(...xs) + 32);
   ys.push(Math.min(...ys) - 32, Math.max(...ys) + 32);
   // A window keeps only the grid lines inside it, with its own edges as the outermost lanes.

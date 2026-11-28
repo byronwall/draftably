@@ -18,7 +18,7 @@ export type Arrange = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | `engine
  * How hard the router works. `full` repairs crossings and evens out lanes; `quick` routes each
  * line once. `auto` (the default) routes quickly first, and fully when the quick lines predict a
  * full pass within `AUTO_FULL_LIMIT`. That prediction counts lines and conflicts, never time, so
- * the same input always takes the same mode. Use `resize` for an interactive preview that accepts a clear dogleg.
+ * the same input always takes the same mode. Use `resize` for an interactive preview with fewer grid lanes.
  */
 export type Quality = 'auto' | 'full' | 'quick' | 'resize';
 
