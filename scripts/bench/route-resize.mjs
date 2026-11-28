@@ -268,10 +268,16 @@ for (const lines of sizes)
         routing: { quality: 'full', avoidNodes: 'strict' },
       };
       const key = [lines, seed, step].join('/');
+      if (!reference && step)
+        assert.ok(
+          Number.isInteger(fresh[key]?.score.outside),
+          'Regenerate the fresh reference for ' + key,
+        );
       const start = performance.now();
       const out = route(graph, reference ? undefined : previous);
       const ms = performance.now() - start;
       const score = measure(out, graph.nodes);
+      if (independent) assert.equal(score.outside, 0, key + ' left its row of cards');
       const boxes = new Map(graph.nodes.map(n => [n.id, n]));
       for (const edge of graph.edges) {
         const r = out.edges[edge.id];
@@ -302,7 +308,7 @@ for (const lines of sizes)
         else {
           const loss = (score.total - fresh[key].score.total) / fresh[key].score.total;
           const addedSharing = score.unrelated - fresh[key].score.unrelated;
-          const extraOutside = score.outside - fresh[key].score.outside;
+          const extraOutside = Math.max(0, score.outside - fresh[key].score.outside);
           if (
             extraOutside > worstOutside ||
             (extraOutside === worstOutside &&
@@ -329,10 +335,6 @@ if (!reference) {
   for (const lines of sizes) {
     const rows = results.filter(r => r.lines === lines);
     const times = rows.map(r => r.ms).sort((a, b) => a - b);
-    assert.ok(
-      rows.every(r => Number.isInteger(r.fresh.score.outside)),
-      'Regenerate the fresh reference to measure outside paths.',
-    );
     const worse = rows.filter(
       r =>
         r.score.total > r.fresh.score.total ||
