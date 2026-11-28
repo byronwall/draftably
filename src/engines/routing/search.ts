@@ -195,11 +195,10 @@ export function search(
         shared: new Float64Array(m),
         lanes: new Float64Array(m),
       };
-    // A route meets the line at a point once: the points so far of the route in hand (its
-    // segments are listed together), as coordinates along the line.
-    let id: string | null = null;
-    const mine: number[] = [],
-      crossings: number[] = [];
+    // A route meets the line at a point once: per route id, its points so far, as coordinates
+    // along the line.
+    const byId = new Map<string, number[]>();
+    const crossings: number[] = [];
     for (const k of bucket) {
       const t = existing[k];
       if (horizontal === t.h) {
@@ -224,11 +223,10 @@ export function search(
       const p = horizontal ? { x: t.a.x, y: at } : { x: at, y: t.a.y };
       if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
       const v = horizontal ? p.x : p.y;
-      if (t.id !== id) {
-        id = t.id;
-        mine.length = 0;
-      } else if (mine.includes(v)) continue;
-      mine.push(v);
+      const mine = byId.get(t.id);
+      if (!mine) byId.set(t.id, [v]);
+      else if (mine.includes(v)) continue;
+      else mine.push(v);
       crossings.push(v);
     }
     crossings.sort((a, b) => a - b);

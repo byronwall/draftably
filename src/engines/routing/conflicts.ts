@@ -329,6 +329,14 @@ export interface PairTerms {
   minGap: number | null;
   gap: number;
 }
+const NO_TERMS: PairTerms = {
+  crossings: 0,
+  shared: [],
+  lanePairs: 0,
+  deficits: [],
+  minGap: null,
+  gap: NaN,
+};
 // Kept per pair of points arrays, which are never changed in place.
 const pairs = new WeakMap<Point[], WeakMap<Point[], PairTerms>>();
 /**
@@ -336,6 +344,8 @@ const pairs = new WeakMap<Point[], WeakMap<Point[], PairTerms>>();
  * that adds a pair's terms in order, pair after pair, gets the very sums the two give for a list.
  */
 export function pairTerms(a: Point[], b: Point[], gap: number) {
+  // Lines whose boxes, grown by the gap, do not meet have no terms: nothing is kept for them.
+  if (!within(spanOf(a), spanOf(b), gap)) return NO_TERMS;
   let byB = pairs.get(a);
   if (!byB) pairs.set(a, (byB = new WeakMap()));
   let t = byB.get(b);
@@ -345,7 +355,17 @@ export function pairTerms(a: Point[], b: Point[], gap: number) {
       deficits: number[] = [],
       c = conflicts(a, other, Infinity, defaults, shared),
       p = parallelConflicts(a, other, gap, deficits);
-    t = { crossings: c.crossings, shared, lanePairs: p.lanePairs, deficits, minGap: p.minGap, gap };
+    t =
+      c.crossings || shared.length || deficits.length
+        ? {
+            crossings: c.crossings,
+            shared,
+            lanePairs: p.lanePairs,
+            deficits,
+            minGap: p.minGap,
+            gap,
+          }
+        : { ...NO_TERMS, gap };
     byB.set(b, t);
   }
   return t;
