@@ -1,0 +1,220 @@
+{
+  "schema_version": "0.5.0",
+  "initiative": {
+    "title": "Hosted diagram workspaces",
+    "slug": "hosted-diagram-workspaces",
+    "scale": "capability",
+    "current_phase": "plan",
+    "last_updated": "2026-11-28",
+    "summary": "Recover hosted diagrams and arrange related work across clients.",
+    "status": "planned",
+    "next_action": "Confirm capture and placement defaults, then run the local reunion proof."
+  },
+  "artifacts": {
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "current",
+      "updated_at": "2026-11-28"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
+      "status": "current",
+      "updated_at": "2026-11-28"
+    },
+    "implementation_plan": {
+      "path": "implementation-plan.md",
+      "status": "current",
+      "updated_at": "2026-11-28"
+    }
+  },
+  "sources": [
+    {
+      "id": "U",
+      "type": "transcript",
+      "location": "User request",
+      "anchor": "all diagrams ever made",
+      "authority": "user"
+    },
+    {
+      "id": "S",
+      "type": "repo",
+      "location": "packages/service/src/share.ts",
+      "anchor": "createShare early return",
+      "authority": "repo"
+    },
+    {
+      "id": "M",
+      "type": "repo",
+      "location": "packages/service/src/mcp.ts",
+      "anchor": "render_diagram and share_diagram",
+      "authority": "repo"
+    },
+    {
+      "id": "W",
+      "type": "repo",
+      "location": "src/server/workspace.ts",
+      "anchor": "WorkspaceInfo",
+      "authority": "repo"
+    }
+  ],
+  "intent": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "One place to see diagrams",
+        "sources": [
+          "U"
+        ],
+        "confidence": "high",
+        "kind": "goal"
+      },
+      {
+        "id": "C2",
+        "statement": "Workspaces group diagrams",
+        "sources": [
+          "U"
+        ],
+        "confidence": "high",
+        "kind": "goal"
+      },
+      {
+        "id": "C3",
+        "statement": "API and MCP parity",
+        "sources": [
+          "U"
+        ],
+        "confidence": "high",
+        "kind": "goal"
+      }
+    ],
+    "themes": [],
+    "conflicts": [],
+    "human_questions": []
+  },
+  "brainstorm": {
+    "status": "not-requested",
+    "requested_count": 7,
+    "options": [],
+    "selected_option": null
+  },
+  "shape": {
+    "status": "current",
+    "appetite": null,
+    "problem": null,
+    "recommended_shape": "Account gallery plus ordered reusable placements",
+    "success_moves": [
+      "Separate public shares from private identity",
+      "Test a cross-client round trip",
+      "Recover only attributable history"
+    ],
+    "first_proof": {
+      "question": "Is ordering sufficient?",
+      "artifact": "Checkout fixture in two workspaces",
+      "decision_rule": "Prototype coordinates if reading order cannot convey a required relationship."
+    },
+    "rabbit_holes": [],
+    "open_decisions": [
+      "Automatic capture or explicit saves",
+      "Ordered cards or spatial placement"
+    ]
+  },
+  "implementation": {
+    "status": "current",
+    "repository_snapshot": {
+      "root": null,
+      "revision": "04650908b0f17fa4b9bc09a46e268b96577507b4",
+      "worktree_status": null,
+      "subsystems": [],
+      "test_commands": [],
+      "deployment_surfaces": []
+    },
+    "dependencies": [
+      {
+        "name": "D1",
+        "material": true,
+        "application_seam": "Account-scoped diagram repository",
+        "first_proof_role": {
+          "mode": "fake",
+          "rationale": "Test arrangement before persisting it"
+        },
+        "failure_modes": [
+          "Partial write",
+          "Stale revision"
+        ],
+        "proof_rungs": [
+          "Memory",
+          "Local D1",
+          "Staging"
+        ],
+        "local_proof": "Replay contract tests with local binding",
+        "live_proof": "Staging account round trip",
+        "rollout": "Gate capture separately from reads"
+      }
+    ],
+    "fast_local_loop": {
+      "command": "node --test tests/hosted-workspace-contract.test.mjs",
+      "status": "planned fixture"
+    },
+    "milestones": [
+      {
+        "id": "m1",
+        "title": "Reopen a set",
+        "proof": "Local card fixture",
+        "outcome": "Two sets retain order",
+        "rollback": "Discard fixture",
+        "valid_intermediate_state": "Two sets retain order",
+        "status": "planned",
+        "dependencies_introduced": []
+      },
+      {
+        "id": "m2",
+        "title": "Recover diagrams",
+        "proof": "Local D1 contract",
+        "outcome": "Private account history",
+        "rollback": "Disable capture",
+        "valid_intermediate_state": "Private account history",
+        "status": "planned",
+        "dependencies_introduced": [
+          "D1"
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Continue across clients",
+        "proof": "REST to MCP to REST",
+        "outcome": "Headless workspace",
+        "rollback": "Disable new routes",
+        "valid_intermediate_state": "Headless workspace",
+        "status": "planned",
+        "dependencies_introduced": []
+      },
+      {
+        "id": "m4",
+        "title": "Browse everything",
+        "proof": "Phone and desktop gallery",
+        "outcome": "Signed-in browser gallery",
+        "rollback": "Disable writes and retain read access",
+        "valid_intermediate_state": "Signed-in browser gallery",
+        "status": "planned",
+        "dependencies_introduced": []
+      }
+    ],
+    "cut_line": [],
+    "open_decisions": [
+      "Automatic capture or explicit saves",
+      "Ordered cards or spatial placement"
+    ]
+  },
+  "history": [
+    {
+      "date": "2026-11-28",
+      "event": "Planning package created. Product choices provisional."
+    }
+  ],
+  "closure": null
+}
