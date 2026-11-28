@@ -1,4 +1,4 @@
-// From the repository root, run pnpm runtime:build, then node scripts/bench/route-resize.mjs.
+// pnpm bench:route:resize [--holdout | --independent | --picture]
 // Collect fresh drawings in a separate process so their cache cannot serve a resize call.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -8,7 +8,12 @@ import { createContext } from '../../src/engines/routing/context.ts';
 import { conflicts } from '../../src/engines/routing/conflicts.ts';
 import { schema } from './route-schema.mjs';
 
-const dir = 'tmp/route-resize';
+const picture = process.argv.includes('--picture');
+const holdout = process.argv.includes('--holdout');
+const independent = process.argv.includes('--independent');
+const sizes = independent ? [60] : [10, 30, 60];
+const seeds = independent ? [101] : holdout ? [401, 402, 403, 404, 405] : [101, 102, 103, 104, 105];
+const dir = 'tmp/route-resize' + (independent ? '/independent' : holdout ? '/heldout' : '');
 fs.mkdirSync(dir, { recursive: true });
 const steps = [
   [320, 220],
@@ -27,14 +32,18 @@ const steps = [
 ];
 const reference = process.argv.includes('--fresh');
 const compare = process.argv.includes('--compare');
-if (!reference && !compare) {
-  const child = spawnSync(process.execPath, [import.meta.filename, '--fresh'], {
-    stdio: 'inherit',
-  });
+if (!reference && !compare && !picture) {
+  const child = spawnSync(
+    process.execPath,
+    [import.meta.filename, '--fresh', ...process.argv.slice(2)],
+    {
+      stdio: 'inherit',
+    },
+  );
   if (child.status !== 0) process.exit(child.status ?? 1);
 }
 const filename = dir + '/reference.json';
-const fresh = reference ? {} : JSON.parse(fs.readFileSync(filename, 'utf8'));
+const fresh = reference || picture ? {} : JSON.parse(fs.readFileSync(filename, 'utf8'));
 const ctx = createContext({ nodes: [], edges: [], groups: [] }, {});
 function measure(out) {
   const lines = Object.entries(out.edges).map(([id, r]) => ({ id, ...r }));
@@ -55,43 +64,92 @@ function measure(out) {
   );
   return { ...ctx.metrics(lines), total: ctx.total(lines), unrelated };
 }
-function svg(graph, out) {
+function svg(graph, out, { x, y, w, h }) {
+  // Both panels use the same extent, with room for paths outside the card columns.
   const paths = Object.values(out.edges)
-    .map(e => '<path d="' + e.path + '"/>')
+    .map(e => `<path d="${e.path}"/>`)
     .join('');
-  const boxes = graph.nodes
-    .map(
-      n =>
-        '<rect x="' +
-        n.x +
-        '" y="' +
-        n.y +
-        '" width="' +
-        n.width +
-        '" height="' +
-        n.height +
-        '"/><text x="' +
-        (n.x + 8) +
-        '" y="' +
-        (n.y + 23) +
-        '">' +
-        n.id +
-        '</text>',
-    )
+  const cards = graph.nodes
+    .map(n => {
+      const rows = Math.round((n.height - 46) / 26);
+      const labels = Array.from(
+        { length: rows },
+        (_, i) => `<text x="${n.x + 10}" y="${n.y + 46 + i * 26 + 17}">field ${i + 1}</text>`,
+      ).join('');
+      return `<rect x="${n.x}" y="${n.y}" width="${n.width}" height="${n.height}" rx="3"/>
+      <text class="title" x="${n.x + 10}" y="${n.y + 27}">${n.id}</text>${labels}`;
+    })
     .join('');
-  return (
-    '<svg xmlns="http://www.w3.org/2000/svg" width="1650" height="1500" viewBox="-70 -75 1650 1500"><rect x="-70" y="-75" width="100%" height="100%" fill="white"/><g fill="none" stroke="#345d80" stroke-width="2">' +
-    paths +
-    '</g><g fill="#f3f5f6" stroke="#62727c">' +
-    boxes +
-    '</g></svg>'
-  );
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}">
+    <style>text{font:12px system-ui;fill:#4a5968;stroke:none}.title{font-weight:650;fill:#1c3449}</style>
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="white"/>
+    <g stroke="#315d82" stroke-width="2" fill="none">${paths}</g>
+    <g fill="#f3f6f8" stroke="#7c8e9d">${cards}</g></svg>`;
+}
+if (picture) {
+  const base = schema(60, 401);
+  const routing = { quality: 'full', avoidNodes: 'strict' };
+  const before = route({ ...base, routing });
+  const [pitch, width] = steps[1];
+  const graph = {
+    ...base,
+    routing,
+    nodes: base.nodes.map(n => ({ ...n, x: (n.x / 320) * pitch, width })),
+  };
+  const moved = route(graph, before);
+  const full = route(graph);
+  const points = [
+    ...graph.nodes.flatMap(n => [n, { x: n.x + n.width, y: n.y + n.height }]),
+    ...[full, moved].flatMap(o => Object.values(o.edges).flatMap(e => e.points)),
+  ];
+  const x = Math.floor(Math.min(...points.map(p => p.x))) - 16,
+    y = Math.floor(Math.min(...points.map(p => p.y))) - 16;
+  const bounds = {
+    x,
+    y,
+    w: Math.ceil(Math.max(...points.map(p => p.x))) - x + 16,
+    h: Math.ceil(Math.max(...points.map(p => p.y))) - y + 16,
+  };
+  fs.writeFileSync(dir + '/fresh.svg', svg(graph, full, bounds));
+  fs.writeFileSync(dir + '/reuse.svg', svg(graph, moved, bounds));
+  console.log({
+    fresh: measure(full),
+    reuse: measure(moved),
+    movedLines: Object.keys(before.edges).filter(
+      id => JSON.stringify(before.edges[id].points) !== JSON.stringify(moved.edges[id].points),
+    ).length,
+  });
+  process.exit(0);
+}
+// Positive control for the cost lower bound. Each row has its own pair of cards.
+function separateRows(lines) {
+  const nodes = [],
+    edges = [];
+  for (let i = 0; i < lines; i++) {
+    const source = 'a' + i,
+      target = 'b' + i;
+    for (const [id, x] of [
+      [source, 0],
+      [target, 320],
+    ])
+      nodes.push({ id, x, y: i * 100, width: 220, height: 60 });
+    edges.push({
+      id: 'e' + i,
+      source,
+      target,
+      sourceSide: 'right',
+      targetSide: 'left',
+      sourceAt: 30,
+      targetAt: 30,
+    });
+  }
+  return { nodes, edges };
 }
 const results = [];
 route({ ...schema(30, 999), routing: { quality: 'full' } });
-for (const lines of [10, 30, 60])
-  for (const seed of [101, 102, 103, 104, 105]) {
-    const g = schema(lines, seed);
+for (const lines of sizes)
+  for (const seed of seeds) {
+    const g = independent ? separateRows(lines) : schema(lines, seed);
     let previous;
     for (const [step, [pitch, width]] of steps.entries()) {
       const graph = {
@@ -128,8 +186,6 @@ for (const lines of [10, 30, 60])
       if (reference) fresh[key] = { score, ms };
       else if (step)
         results.push({ lines, seed, step, pitch, width, ms, score, fresh: fresh[key] });
-      if (lines === 60 && seed === 101 && step === 9)
-        fs.writeFileSync(dir + (reference ? '/fresh.svg' : '/reuse.svg'), svg(graph, out));
       previous = out;
     }
     console.log(reference ? 'fresh' : 'reuse', lines, seed);
@@ -138,3 +194,27 @@ fs.writeFileSync(
   reference ? filename : dir + '/replay.json',
   JSON.stringify(reference ? fresh : results),
 );
+
+if (!reference) {
+  for (const lines of sizes) {
+    const rows = results.filter(r => r.lines === lines);
+    const times = rows.map(r => r.ms).sort((a, b) => a - b);
+    const worse = rows.filter(
+      r => r.score.total > r.fresh.score.total || r.score.unrelated > r.fresh.score.unrelated,
+    );
+    console.log({
+      lines,
+      calls: rows.length,
+      median: (times[Math.floor((times.length - 1) / 2)] + times[Math.floor(times.length / 2)]) / 2,
+      p95: times[Math.ceil(times.length * 0.95) - 1],
+      max: times.at(-1),
+      worse: worse.map(r => [
+        r.seed,
+        r.step,
+        r.score.total - r.fresh.score.total,
+        r.score.unrelated - r.fresh.score.unrelated,
+      ]),
+    });
+    if (worse.length) process.exitCode = 1;
+  }
+}

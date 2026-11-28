@@ -104,6 +104,12 @@ schema drawings: 30 cards in five fixed columns and 10, 30 or 60 lines between t
 its row, or draws differently for the same input. It also prints the entry's minified size.
 
 The nightly sweep runs three repetitions, puts the timing table in the benchmark job summary, and uploads its measurements.
+
+`pnpm bench:route:resize` compares twelve column resizes on each of the five schemas per line count.
+A separate process draws each full reference. The command checks row anchors, card clearance, weighted routing cost, and shared length between lines with no common card.
+It prints median, p95, and maximum call time. It saves every comparison in `tmp/route-resize/replay.json`.
+Pass `--holdout` for five other seeds or `--independent` for sixty separated rows.
+Pass `--picture` to generate both SVGs for the [60-line comparison](intent/route-speed/RESIZE.md#60-line-comparison).
 Performance PRs paste a before → after table.
 
 ### Host contract budgets
