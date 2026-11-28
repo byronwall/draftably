@@ -197,28 +197,31 @@ describe('route strict mode', () => {
     expect(out.edges.e).toMatchObject({ blocked: true, points: [], crosses: ['obs'] });
   });
 
-  it('catches a corner that clips a box between its ends', () => {
-    const out = route({
-      nodes: [
-        { id: 'a', x: 0, y: 17, width: 100, height: 100 },
-        { id: 'b', x: 270, y: 136, width: 100, height: 100 },
-        { id: 'obs', x: 192, y: 50, width: 47, height: 181 },
-      ],
-      edges: [
-        {
-          id: 'e',
-          source: 'a',
-          target: 'b',
-          sourceSide: 'right',
-          targetSide: 'left',
-          sourceAt: 50,
-          targetAt: 50,
-        },
-      ],
-      routing: { quality: 'quick', avoidNodes: 'strict', cornerRadius: 64 },
-    });
-    expect(out.edges.e).toMatchObject({ blocked: true, crosses: ['obs'] });
-  });
+  it.each([64, 57.25])(
+    'catches a corner that clips a box between its ends (radius %s)',
+    cornerRadius => {
+      const out = route({
+        nodes: [
+          { id: 'a', x: 0, y: 17, width: 100, height: 100 },
+          { id: 'b', x: 270, y: 136, width: 100, height: 100 },
+          { id: 'obs', x: 192, y: 50, width: 47, height: 181 },
+        ],
+        edges: [
+          {
+            id: 'e',
+            source: 'a',
+            target: 'b',
+            sourceSide: 'right',
+            targetSide: 'left',
+            sourceAt: 50,
+            targetAt: 50,
+          },
+        ],
+        routing: { quality: 'quick', avoidNodes: 'strict', cornerRadius },
+      });
+      expect(out.edges.e).toMatchObject({ blocked: true, crosses: ['obs'] });
+    },
+  );
 
   it('keeps a row port on a diamond that the line leaves cleanly', () => {
     const out = route({
@@ -235,6 +238,28 @@ describe('route strict mode', () => {
           targetSide: 'left',
           sourceAt: 59,
           targetAt: 59,
+        },
+      ],
+      routing: { avoidNodes: 'strict' },
+    });
+    expect(out.edges.e.blocked).toBe(false);
+  });
+
+  it.each(['pill', 'circle', 'diamond'] as const)('keeps a row port on a tall %s', shape => {
+    const out = route({
+      nodes: [
+        { id: 's', x: 0, y: 0, width: 100, height: 200, shape },
+        { id: 'b', x: 300, y: 0, width: 200, height: 120 },
+      ],
+      edges: [
+        {
+          id: 'e',
+          source: 's',
+          target: 'b',
+          sourceSide: 'right',
+          targetSide: 'left',
+          sourceAt: 60,
+          targetAt: 60,
         },
       ],
       routing: { avoidNodes: 'strict' },

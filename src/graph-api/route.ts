@@ -121,12 +121,12 @@ function pieces(path: string, points: Point[]) {
   return out.length ? out : points.slice(1).map((b, i) => [points[i], b]);
 }
 
-/** A piece's points, at most a pixel apart. */
+/** A piece's points, at most a quarter pixel apart. */
 function along(ps: Point[]) {
   const [p, c, q] = ps.length === 3 ? ps : [ps[0], ps[0], ps[1]],
     steps = Math.max(
       1,
-      Math.ceil(Math.hypot(c.x - p.x, c.y - p.y) + Math.hypot(q.x - c.x, q.y - c.y)),
+      Math.ceil(4 * (Math.hypot(c.x - p.x, c.y - p.y) + Math.hypot(q.x - c.x, q.y - c.y))),
     );
   return Array.from({ length: steps + 1 }, (_, k) => {
     const t = k / steps,
@@ -138,12 +138,20 @@ function along(ps: Point[]) {
   });
 }
 
-/** The nodes, by ID, whose outline the drawn line enters, its rounded corners included. */
-function crossed(points: Point[], path: string, nodes: Obstacle[]) {
+/**
+ * The nodes, by ID, whose outline the drawn line enters, its rounded corners included. The straight
+ * stub out of each port only leaves its own node, whose outline there is the router's to place.
+ */
+function crossed(points: Point[], path: string, nodes: Obstacle[], ends: [string, string]) {
   const all = pieces(path, points);
   return nodes
     .filter(o =>
-      all.some(ps => {
+      all.some((ps, i) => {
+        if (
+          ps.length === 2 &&
+          ((i === 0 && o.id === ends[0]) || (i === all.length - 1 && o.id === ends[1]))
+        )
+          return false;
         const lo = { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
           hi = { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) };
         return through(lo, hi, o.r) && along(ps).some(p => inside(p, o));
@@ -232,7 +240,10 @@ export function route(graph: RouteIn): Routed {
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
   for (const [id, e] of Object.entries(out.edges)) {
-    const hits = avoidNodes === 'strict' || e.blocked ? crossed(e.points, e.path, boxes) : [];
+    const hits =
+      avoidNodes === 'strict' || e.blocked
+        ? crossed(e.points, e.path, boxes, [e.source, e.target])
+        : [];
     if (avoidNodes === 'strict' && (e.blocked || hits.length)) {
       if (!e.blocked) held++;
       edges[id] = { ...e, points: [], path: '', label: null, blocked: true, crosses: hits };
