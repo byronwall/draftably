@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { pairTerms } from '../src/engines/routing/conflicts.ts';
 import { search } from '../src/engines/routing/search.ts';
 import { defaults } from '../src/engines/routing/settings.ts';
 import type { Route } from '../src/engines/routing/types.ts';
@@ -28,5 +29,18 @@ describe('route search', () => {
       { x: 0, y: 0 },
       { x: 120, y: 0 },
     ]);
+  });
+
+  // `metrics` keeps each pair's terms; lines that cannot meet must keep nothing, so a sparse
+  // drawing's cache grows with the pairs that conflict, not with every pair.
+  it('keeps nothing for lines that cannot meet', () => {
+    const at = (x: number) => [
+      { x, y: 0 },
+      { x: x + 10, y: 0 },
+    ];
+    const a = pairTerms(at(0), at(100), 16),
+      b = pairTerms(at(200), at(300), 16);
+    expect(a).toBe(b);
+    expect(a.crossings + a.shared.length + a.deficits.length).toBe(0);
   });
 });
