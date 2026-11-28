@@ -1,4 +1,4 @@
-// pnpm bench:route:resize [--compact] [--holdout | --wide | --round2-heldout | --independent] [--picture --frame=60/401/1]
+// pnpm bench:route:resize [--compact] [--holdout | --wide | --round2-heldout | --independent] [--picture --frame=60/401/1 | --capture-worst]
 // Collect fresh drawings in a separate process so their cache cannot serve a resize call.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -142,6 +142,22 @@ function svg(graph, out, { x, y, w, h }) {
     <g stroke="#315d82" stroke-width="2" fill="none">${paths}</g>
     <g fill="#f3f6f8" stroke="#7c8e9d">${cards}</g></svg>`;
 }
+function writePair(graph, full, moved) {
+  const points = [
+    ...graph.nodes.flatMap(n => [n, { x: n.x + n.width, y: n.y + n.height }]),
+    ...[full, moved].flatMap(o => Object.values(o.edges).flatMap(e => e.points)),
+  ];
+  const x = Math.floor(Math.min(...points.map(p => p.x))) - 16,
+    y = Math.floor(Math.min(...points.map(p => p.y))) - 16;
+  const bounds = {
+    x,
+    y,
+    w: Math.ceil(Math.max(...points.map(p => p.x))) - x + 16,
+    h: Math.ceil(Math.max(...points.map(p => p.y))) - y + 16,
+  };
+  fs.writeFileSync(dir + '/fresh.svg', svg(graph, full, bounds));
+  fs.writeFileSync(dir + '/reuse.svg', svg(graph, moved, bounds));
+}
 if (picture) {
   const frame = process.argv.find(a => a.startsWith('--frame='))?.slice(8) ?? '60/401/1';
   const [lines, seed, target] = frame.split('/').map(Number);
@@ -167,20 +183,7 @@ if (picture) {
   const graph = at(steps[target]),
     moved = route(graph, before);
   const full = route(graph);
-  const points = [
-    ...graph.nodes.flatMap(n => [n, { x: n.x + n.width, y: n.y + n.height }]),
-    ...[full, moved].flatMap(o => Object.values(o.edges).flatMap(e => e.points)),
-  ];
-  const x = Math.floor(Math.min(...points.map(p => p.x))) - 16,
-    y = Math.floor(Math.min(...points.map(p => p.y))) - 16;
-  const bounds = {
-    x,
-    y,
-    w: Math.ceil(Math.max(...points.map(p => p.x))) - x + 16,
-    h: Math.ceil(Math.max(...points.map(p => p.y))) - y + 16,
-  };
-  fs.writeFileSync(dir + '/fresh.svg', svg(graph, full, bounds));
-  fs.writeFileSync(dir + '/reuse.svg', svg(graph, moved, bounds));
+  writePair(graph, full, moved);
   console.log({
     fresh: measure(full),
     reuse: measure(moved),
@@ -214,6 +217,12 @@ function separateRows(lines) {
   }
   return { nodes, edges };
 }
+// Keep the worst pair from this run, so a held-out sequence never needs a second replay.
+const captureWorst = process.argv.includes('--capture-worst');
+const drawingDir = dir + '/fresh-drawings';
+if (captureWorst && reference) fs.mkdirSync(drawingDir, { recursive: true });
+let worstLoss = 0,
+  worstSharing = 0;
 const results = [];
 route({ ...schema(30, 999), routing: { quality: 'full' } });
 for (const lines of sizes)
@@ -256,6 +265,20 @@ for (const lines of sizes)
       if (reference) fresh[key] = { score, ms };
       else if (step)
         results.push({ lines, seed, step, pitch, width, ms, score, fresh: fresh[key] });
+      if (captureWorst && step) {
+        const file = drawingDir + '/' + [lines, seed, step].join('-') + '.json';
+        if (reference) fs.writeFileSync(file, JSON.stringify(out));
+        else {
+          const loss = (score.total - fresh[key].score.total) / fresh[key].score.total;
+          const addedSharing = score.unrelated - fresh[key].score.unrelated;
+          if (loss > worstLoss || (worstLoss === 0 && addedSharing > worstSharing)) {
+            worstLoss = Math.max(0, loss);
+            worstSharing = addedSharing;
+            writePair(graph, JSON.parse(fs.readFileSync(file, 'utf8')), out);
+            console.log('Worst frame so far', key, { loss, addedSharing });
+          }
+        }
+      }
       previous = out;
     }
     console.log(reference ? 'fresh' : 'reuse', lines, seed);
