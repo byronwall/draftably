@@ -308,6 +308,7 @@ function findAmong(
   // Dragging keeps this bounded; settled diagrams receive refinement passes.
   let searches = 0;
   for (const c of candidates) {
+    if (best && rawOptions.resize) break;
     if (best && c.lower > best.score) continue;
     if (searches++ >= (rawOptions.quick ? 1 : 3)) break;
     // A clean route out of or into a far side still loops round the outside: a forward route

@@ -1260,17 +1260,20 @@ function messageRoute(
  */
 const recent = new Map<string, RoutingResult>();
 
+type RouteOptions = { previous?: PriorRoute[]; quick?: boolean; resize?: boolean };
+
 function routingKey(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
-  options: { previous?: PriorRoute[]; quick?: boolean },
+  options: RouteOptions,
 ) {
   const input = routeInput(doc, vg, rects),
     settings = {
       ...doc.settings.routing,
       previous: options.previous ?? [],
       quick: !!options.quick,
+      ...(options.resize && { resize: true }),
     };
   return { input, settings, key: JSON.stringify([input, settings]) };
 }
@@ -1301,7 +1304,7 @@ export function routeResult(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
-  options: { previous?: PriorRoute[]; quick?: boolean } = {},
+  options: RouteOptions = {},
 ): RoutingResult {
   const { input, settings, key } = routingKey(doc, vg, rects, options),
     hit = recent.get(key),
@@ -1314,7 +1317,7 @@ export function computeRoutes(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
-  options: { previous?: PriorRoute[]; quick?: boolean } = {},
+  options: RouteOptions = {},
 ): SceneRoutes {
   const result = routeResult(doc, vg, rects, options);
   return { result, routes: drawRoutes(doc, vg, rects, result) };

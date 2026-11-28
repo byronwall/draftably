@@ -23,6 +23,8 @@ export function routesFor(
   rects: Map<string, Rect>,
   quality: Quality = 'auto',
 ) {
+  if (quality === 'resize')
+    return { ...computeRoutes(doc, vg, rects, { quick: true, resize: true }), quality };
   if (quality === 'full')
     return { ...computeRoutes(doc, vg, rects, { previous: [] }), quality: 'full' as const };
   const quick = computeRoutes(doc, vg, rects, { previous: [], quick: true }),

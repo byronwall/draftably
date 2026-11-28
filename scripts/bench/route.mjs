@@ -4,7 +4,7 @@
  * drawings, with cards in five fixed columns and lines from row to row, and reports the entry's
  * minified size.
  *
- * Usage: pnpm bench:route [--runs N]
+ * Usage: pnpm bench:route [--runs N] [--quality resize|quick|full]
  *
  * Each run routes a new seeded schema, so the router's cache never helps. Fails (exit 1) when a
  * line runs through a card under `avoidNodes: 'strict'`, a line misses its row, or the same input
@@ -96,7 +96,10 @@ let failed = false;
 const rowsOut = [];
 // Warm the engine once, as a host that reroutes on every resize has.
 route({ ...schema(30, 999), routing: { quality: 'full' } });
-for (const quality of ['quick', 'full'])
+const q = process.argv.indexOf('--quality');
+const qualities = q > 0 ? [process.argv[q + 1]] : ['quick', 'full'];
+if (qualities.some(q => !['resize', 'quick', 'full'].includes(q))) throw Error('Unknown quality');
+for (const quality of qualities)
   for (const lines of [10, 30, 60]) {
     const times = [];
     let blocked = 0;
