@@ -117,3 +117,30 @@ for (const file of examples)
     if (file in KNOWN) expect(found, `fixed? take ${file} off KNOWN`).not.toEqual([]);
     else expect(found).toEqual([]);
   });
+
+it.each(['e1', 'e2'])(
+  'draws the same curved leaders in the Solid scene and SVG export: %s',
+  async variant => {
+    const source = readFileSync(
+      `docs/intent/diagram-quality/corpus/visual-notes-mcp-call/${variant}.draft`,
+      'utf8',
+    );
+    const doc = projectScene(await compile(source));
+    const { vg, rects } = visibleRects(doc);
+    const scene = buildStaticScene(doc, computeRoutes(doc, vg, rects, { previous: [] }).result);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const dispose = render(() => StaticScene({ scene, idPrefix: '' }), svg);
+    const solid = [...svg.querySelectorAll('[data-edge-label-leader]')].map(el =>
+      el.getAttribute('d'),
+    );
+    const exported = [
+      ...new DOMParser()
+        .parseFromString(renderSvg(doc), 'image/svg+xml')
+        .querySelectorAll('[data-edge-label-leader]'),
+    ].map(el => el.getAttribute('d'));
+    dispose();
+    expect(solid).toContain('M 439.5 107 Q 431.5 86.5 439.5 66');
+    expect(solid.every(path => path?.includes(' Q '))).toBe(true);
+    expect(exported).toEqual(solid);
+  },
+);

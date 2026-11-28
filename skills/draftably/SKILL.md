@@ -447,6 +447,9 @@ content area.
 | `pin id x= y=`                                      | Exact position; layout never moves it. Use sparingly.                                                                    |
 | `stay id x= y= weight=8`                            | Soft position. The viewer's tools write these; leave them.                                                               |
 
+A preferred `near` hint with no `gap=` can leave extra space for a label on the connecting edge.
+Specify `gap=` when the distance matters. A detached label can use a short curved leader to identify its edge.
+
 ## Guidance
 
 - Prefer structure over coordinates: groups, `layout` recipes, `order` and `align` survive

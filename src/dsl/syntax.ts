@@ -449,6 +449,7 @@ export type Hint =
       ref: string;
       side: NearSide;
       gap: number;
+      implicitGap?: boolean;
       offset: number;
       strength: Strength;
       line: number;
@@ -1522,6 +1523,7 @@ export function parseModel(source: string | SourceDoc, files?: CodeFiles): Model
             ref,
             side: choice('side', 'right', ['right', 'left', 'above', 'below'] as const),
             gap: num('gap', 28, 0, 2000),
+            implicitGap: !attrs.has('gap'),
             offset: num('offset', 0),
             strength: choice('strength', 'prefer', ['prefer', 'required'] as const),
             line,

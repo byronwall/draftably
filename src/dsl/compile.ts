@@ -2994,13 +2994,21 @@ function refinePass(
     const a = by.get(id)!,
       b = by.get(h.ref)!,
       p = pos.get(h.ref)!;
+    const labelled = rooms.some(
+        r =>
+          r.direct &&
+          ((r.a === id && r.b === h.ref) || (r.b === id && r.a === h.ref)) &&
+          (h.side === 'right' || h.side === 'left' ? r.w : r.h) - 2 * LABEL_RUN + 8 <= 40,
+      ),
+      anchored = local.some(p => p.type === 'pin' || p.type === 'stay' || p.type === 'nudge'),
+      gap = h.implicitGap && h.strength === 'prefer' && labelled && !anchored ? 40 : h.gap;
     let x = p.x + (b.w - a.w) / 2,
       y = p.y + (b.h - a.h) / 2;
     if (h.side === 'right' || h.side === 'left') {
-      x = h.side === 'right' ? p.x + b.w + h.gap : p.x - a.w - h.gap;
+      x = h.side === 'right' ? p.x + b.w + gap : p.x - a.w - gap;
       y += h.offset;
     } else {
-      y = h.side === 'below' ? p.y + b.h + h.gap : p.y - a.h - h.gap;
+      y = h.side === 'below' ? p.y + b.h + gap : p.y - a.h - gap;
       x += h.offset;
     }
     pos.set(id, { x, y });

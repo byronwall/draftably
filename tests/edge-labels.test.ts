@@ -4,9 +4,16 @@ import { overlaps } from '../src/model/geometry';
 import { resolveAppearance } from '../src/model/appearance';
 import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
 import fs from 'node:fs';
-import { ARROW_REACH } from '../src/model/markers';
+import { ARROW_REACH, MARKERS, markerRects } from '../src/model/markers';
 import { projectScene, visibleRects } from '../src/dsl/project';
-import { computeRoutes, placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
+import {
+  computeRoutes,
+  labelLeader,
+  placeEdgeLabel,
+  placeEdgeLabels,
+  roomForLabel,
+  routeBends,
+} from '../src/model/routes';
 import { buildStaticScene } from '../src/model/static-scene';
 import type { Point, Rect } from '../src/model/types';
 
@@ -28,7 +35,136 @@ const distance = (p: Point, route: Point[]) =>
     }),
   );
 
+describe('edge label leaders', () => {
+  const label = { x: 50, y: 40, w: 40, h: 20 },
+    route = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+    ];
+  it('connects a detached label to an interior point of its own line', () => {
+    expect(labelLeader(label, route, [], [])?.path).toBe('M 50 0 Q 58 15 50 30');
+  });
+  it('attaches to a painted dash and omits leaders for labels on another segment', () => {
+    expect(labelLeader(label, route, [], [], '5 5')?.path).toBe('M 52.5 0 Q 60.5 15 52.5 30');
+    const onOther = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+      { x: 100, y: 40 },
+      { x: 50, y: 40 },
+    ];
+    expect(labelLeader(label, onOther, [], [])).toBeUndefined();
+  });
+  it('keeps a nearby label clear of extra marks', () => {
+    expect(labelLeader({ ...label, y: 17 }, route, [], [])).toBeUndefined();
+  });
+  it('tries the opposite bow when only one curve is blocked', () => {
+    const leader = labelLeader(label, route, [{ x: 55, y: 12, w: 2, h: 6 }], []);
+    expect(leader?.path).toBe('M 50 0 Q 42 15 50 30');
+  });
+  it.each([0, 6, 16])('keeps leaders clear of painted bends at radius %i', radius => {
+    const own = [
+        { x: 57, y: -40 },
+        { x: 57, y: 40 },
+      ],
+      other = [
+        { x: 0, y: 0 },
+        { x: 60, y: 0 },
+        { x: 60, y: 45 },
+      ],
+      near = { x: 32, y: 4, w: 26, h: 8 },
+      leader = labelLeader(near, own, routeBends(other, radius), [other], undefined, radius);
+    if (radius === 0) expect(leader).toBeDefined();
+    else expect(leader?.path).not.toBe('M 57 4 Q 51 12 45 4');
+  });
+  it.each(MARKERS.filter(kind => kind !== 'none'))('keeps leaders off a %s marker', kind => {
+    const other = [
+        { x: 0, y: 0 },
+        { x: 80, y: 0 },
+      ],
+      own = [
+        { x: 74.25, y: -40 },
+        { x: 74.25, y: 40 },
+      ],
+      label = { x: 46, y: 3.1, w: 30, h: 20 };
+    expect(labelLeader(label, own, markerRects(other, { head: kind }), [other])).toBeUndefined();
+  });
+  it('omits a leader blocked by a shape or another line', () => {
+    expect(labelLeader(label, route, [{ x: 45, y: 10, w: 10, h: 10 }], [])).toBeUndefined();
+    expect(
+      labelLeader(
+        label,
+        route,
+        [],
+        [
+          [
+            { x: 30, y: 15 },
+            { x: 70, y: 15 },
+          ],
+        ],
+      ),
+    ).toBeUndefined();
+  });
+});
+
 describe('edge label placement', () => {
+  it('adds modest room only to an implicit preferred near gap', () => {
+    const source = `diagram "Near labels"
+node a "First"
+node b "Second"
+edge e a -> b "AI"
+near b a side=below`;
+    const gap = (text: string) => {
+      const scene = checkSource(text),
+        a = scene.byId.get('a')!,
+        b = scene.byId.get('b')!;
+      return b.localY - a.localY - a.h;
+    };
+    expect(gap(source)).toBe(40);
+    expect(gap(source + ' gap=28')).toBe(28);
+    expect(gap(source + ' strength=required')).toBe(28);
+  });
+  it.each(['pin', 'stay'])('does not close an anchored sibling corridor with %s', kind => {
+    const source = `diagram "Corridor"
+node a "A"
+node b "B"
+node c "C"
+node d "D"
+edge e a -> b "AI"
+near b a side=below
+edge out c -> d from=top
+${kind} c x=0 y=164
+pin d x=195 y=110`;
+    const scene = checkSource(source),
+      plain = checkSource(source.replace('side=below', 'side=below gap=28'));
+    for (const quick of [false, true]) {
+      const blocked = (scene: ReturnType<typeof checkSource>) => {
+        const doc = projectScene(scene),
+          { vg, rects } = visibleRects(doc);
+        return computeRoutes(doc, vg, rects, { previous: [], quick })
+          .routes.filter(r => r.blocked)
+          .map(r => r.id);
+      };
+      expect(blocked(scene)).toEqual(blocked(plain));
+      expect(blocked(scene)).not.toContain('out');
+    }
+  });
+  it('keeps the Srcly fingerprint on its direct near edge', async () => {
+    const source = fs.readFileSync(
+      'docs/intent/diagram-quality/corpus/srcly-scan-lifecycle/e2.draft',
+      'utf8',
+    );
+    const scene = await compile(source),
+      a = scene.byId.get('jobs')!,
+      b = scene.byId.get('cache')!;
+    expect(b.localY - a.localY - a.h).toBe(40);
+    const doc = projectScene(scene),
+      { vg, rects } = visibleRects(doc);
+    const route = computeRoutes(doc, vg, rects, { previous: [] }).routes.find(
+      r => r.id === 'lookup',
+    )!;
+    expect(distance(route.label!, route.points)).toBe(0);
+    expect(route.label!.leader).toBeUndefined();
+  });
   it('leaves a stayed endpoint in place while making room for its label', async () => {
     const source = fs.readFileSync(
       'docs/intent/diagram-quality/corpus/draftably-code-layers/e2.draft',
