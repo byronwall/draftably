@@ -309,13 +309,22 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
         : []),
     ],
   };
-  if (key)
+  if (key) {
+    const nodes = graph.nodes.map(({ id, x, y, width, height }) => ({ id, x, y, width, height }));
+    const saved = structuredClone(routes);
     snapshots.set(result, {
       key,
       compact: compact && !!moved,
+      anchor:
+        compact && prior?.key === key
+          ? baseline
+            ? { nodes, routes: moved ? structuredClone(baseline.result.routes) : saved }
+            : (prior.anchor ?? { nodes: prior.nodes, routes: prior.routes })
+          : undefined,
       // Only what resize reads: other data on the caller's cards is never copied.
-      nodes: graph.nodes.map(({ id, x, y, width, height }) => ({ id, x, y, width, height })),
-      routes: structuredClone(routes),
+      nodes,
+      routes: saved,
     });
+  }
   return result;
 }

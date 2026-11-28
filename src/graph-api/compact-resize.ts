@@ -7,17 +7,20 @@ import { REPAIR_EDGES } from '../engines/routing/tuning';
 import type { Context } from '../engines/routing/context';
 import type { Point, Route } from '../engines/routing/types';
 import { relaxChannels } from './compact-channels';
+import { outsideCardBounds, outwardPort } from './card-envelope';
 import { createGrid } from './resize-grid';
 
 /** Move the most expensive row connections first. The grid suggests candidates;
  * exact geometry checks and the router's line cost decide which ones to keep. */
-export function compactResize(ctx: Context) {
+export function compactResize(ctx: Context, previousOutside: number) {
   const { s, state } = ctx,
     gap = s.edgeGap,
     clearance = s.clearance;
   const grid = createGrid(ctx);
   if (!grid) return false;
-  const { X, occupancy, commonStubs, search } = grid;
+  const { X, occupancy, commonStubs, search, bounds } = grid;
+  const forced = state.routes.filter(r => outwardPort(r, bounds)).length;
+  const target = forced + Math.floor(Math.max(0, previousOutside - forced) * 0.85);
   const byId = new Map(ctx.edges.map(e => [e.id, e]));
   const others = (r: Route) => state.routes.filter(o => o.id !== r.id && !o.blocked);
   const priority = () =>
@@ -38,15 +41,21 @@ export function compactResize(ctx: Context) {
     );
     flatten(used);
     const obs = ctx.obsFor(e);
+    const outside = used.filter(q => outsideCardBounds(q.points, bounds)).length;
+    const price =
+      (outside < target ? 1 : state.routes.length <= REPAIR_EDGES ? 24 : 50) * s.crossingPenalty;
+    grid.priceBoundary(price);
+    const shapeCost = (points: Point[]) =>
+      cost(points, used, s, ctx.near) + (outsideCardBounds(points, bounds) ? price : 0);
     let best = r.points,
       shared = r.blocked ? Infinity : conflicts(best, unrelated).shared,
-      value = r.blocked ? Infinity : cost(best, used, s, ctx.near);
+      value = r.blocked ? Infinity : shapeCost(best);
     const consider = (points: Point[]) => {
       if (!same(points[0], r.points[0]) || !same(points.at(-1)!, r.points.at(-1)!)) return;
       if (!validPath(points, e, r.fromSide, r.toSide, obs) || crossesItself(points)) return;
       const overlap = conflicts(points, unrelated).shared;
       if (overlap > shared) return;
-      const v = cost(points, used, s, ctx.near);
+      const v = shapeCost(points);
       if (overlap < shared || v < value) {
         best = points;
         shared = overlap;
@@ -142,7 +151,8 @@ export function compactResize(ctx: Context) {
   };
   for (const { i } of priority()) if (!refine(i, false)) return;
   if (state.routes.length <= REPAIR_EDGES)
-    for (const { i } of priority().slice(0, 8)) if (!refine(i, true)) return;
+    for (const { i } of priority().slice(0, 24)) if (!refine(i, true)) return;
+  relaxChannels(ctx, byId);
   relaxChannels(ctx, byId);
   return true;
 }

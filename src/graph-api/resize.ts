@@ -1,3 +1,4 @@
+import { cardEnvelope, outsideCardBounds, outwardPort } from './card-envelope';
 import { compactResize } from './compact-resize';
 import { finish } from '../engines/routing/compute';
 import { conflicts, crossesItself, parallelNear } from '../engines/routing/conflicts';
@@ -15,6 +16,7 @@ export interface Previous {
   nodes: PlacedNodeIn[];
   compact: boolean;
   routes: Route[];
+  anchor?: Pick<Previous, 'nodes' | 'routes'>;
 }
 
 /** Only fixed row ports on rectangular cards have the same known terminal points before and
@@ -185,9 +187,51 @@ export function resize(
   };
   // The one acceptance step. `checked`: the drawing must tie or beat a fresh route unless it
   // reaches the lower bound.
-  const accept = (routes: Route[], checked: boolean) => {
+  const accept = (
+    routes: Route[],
+    checked: boolean,
+    compactRef?: {
+      anchor: Pick<Previous, 'nodes' | 'routes'>;
+      referenceOutside: number;
+    },
+  ) => {
     if (routes.some(r => r.blocked || !clear(r))) return;
-    if (atBound(routes) || !checked) return byId(routes);
+    if (compactRef) {
+      const { anchor, referenceOutside } = compactRef;
+      const bounds = cardEnvelope(ctx.rects.values());
+      const outside = routes.filter(r => outsideCardBounds(r.points, bounds)).length;
+      const compulsory = routes.filter(r => outwardPort(r, bounds)).length;
+      const value = ctx.total(routes);
+      const moveRef = columnMap(anchor.nodes, nodes, ctx.s.clearance);
+      // Reprice the last full drawing at this column spacing. Row changes need a fresh comparison.
+      const fixedRows = anchor.nodes.every(
+        (n, i) => n.y === nodes[i].y && n.height === nodes[i].height,
+      );
+      if (
+        old.anchor &&
+        moveRef &&
+        fixedRows &&
+        outside <= Math.max(compulsory, referenceOutside - 2)
+      ) {
+        const transported = anchor.routes.map(r => ({
+          ...r,
+          points: r.points.map(p => ({ x: moveRef(p.x), y: p.y })),
+        }));
+        const reserve = ctx.s.crossingPenalty * Math.ceil(routes.length / 4);
+        if (value + reserve <= Math.min(ctx.total(anchor.routes), ctx.total(transported)))
+          return byId(routes);
+      }
+      const full = fresh();
+      if (full.some(r => r.blocked || !clear(r))) return byId(routes);
+      if (
+        outside > full.filter(r => outsideCardBounds(r.points, bounds)).length ||
+        value > ctx.total(full) ||
+        unrelatedShared(routes).cards > unrelatedShared(full).cards
+      )
+        return;
+      return byId(routes);
+    }
+    if (!checked || atBound(routes)) return byId(routes);
     const baseline = fresh();
     // Strict mode can withhold even an engine-clear line when a rounded corner enters a card.
     if (baseline.some(r => r.blocked || !clear(r))) return;
@@ -288,8 +332,15 @@ export function resize(
     // Lines that all moved clear and already meet the lower bound need no grid.
     if (!ctx.state.routes.some(r => r.blocked) && atBound(ctx.state.routes))
       return accept(ctx.state.routes, false);
-    if (!compactResize(ctx)) return;
-    return accept(ctx.state.routes, false);
+    const anchor = old.anchor ?? old;
+    const referenceBounds = cardEnvelope(
+      anchor.nodes.map(n => ({ x: n.x, y: n.y, w: n.width, h: n.height })),
+    );
+    const referenceOutside = anchor.routes.filter(r =>
+      outsideCardBounds(r.points, referenceBounds),
+    ).length;
+    if (!compactResize(ctx, referenceOutside)) return;
+    return accept(ctx.state.routes, false, { anchor, referenceOutside });
   }
   // A conflict between two fixed lines survives every repair of the missing lines.
   if (missing.length) {

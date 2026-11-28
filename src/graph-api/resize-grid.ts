@@ -1,4 +1,5 @@
 // A single obstacle grid serves all row connections for this resize.
+import { cardEnvelope } from './card-envelope';
 import { below, atMost, compress, round, vector } from '../engines/routing/geometry';
 import { standoffRun } from '../engines/routing/cost';
 import type { Context } from '../engines/routing/context';
@@ -127,6 +128,26 @@ export function createGrid(ctx: Context) {
       j = yIndex.get(round(p.y)) ?? -1;
     return i < 0 || j < 0 ? -1 : j * nx + i;
   };
+  const bounds = cardEnvelope(ctx.rects.values());
+  const left = below(X, bounds.left),
+    right = atMost(X, bounds.right) - 1;
+  const top = below(Y, bounds.top),
+    bottom = atMost(Y, bounds.bottom) - 1;
+  // Charge each transition between the card envelope and an exterior track.
+  let currentToll = 0;
+  const priceBoundary = (price: number) => {
+    const toll = price / 2 - currentToll;
+    currentToll = price / 2;
+    if (!toll) return;
+    for (let j = top; j <= bottom; j++) {
+      if (left > 0) H[j * nx + left - 1] += toll;
+      if (right + 1 < nx) H[j * nx + right] += toll;
+    }
+    for (let i = left; i <= right; i++) {
+      if (top > 0) V[(top - 1) * nx + i] += toll;
+      if (bottom + 1 < ny) V[bottom * nx + i] += toll;
+    }
+  };
   const search = (r: Route, attraction: number) => {
     const a = r.points[0],
       b = r.points.at(-1)!,
@@ -181,5 +202,5 @@ export function createGrid(ctx: Context) {
       if (j) visit(cell - nx, 1, V[cell - nx], i, j - 1);
     }
   };
-  return { X, occupancy, commonStubs, search };
+  return { X, occupancy, commonStubs, search, bounds, priceBoundary };
 }
