@@ -245,27 +245,59 @@ describe('route strict mode', () => {
     expect(out.edges.e.blocked).toBe(false);
   });
 
-  it.each(['pill', 'circle', 'diamond'] as const)('keeps a row port on a tall %s', shape => {
-    const out = route({
-      nodes: [
-        { id: 's', x: 0, y: 0, width: 100, height: 200, shape },
-        { id: 'b', x: 300, y: 0, width: 200, height: 120 },
-      ],
-      edges: [
-        {
-          id: 'e',
-          source: 's',
-          target: 'b',
-          sourceSide: 'right',
-          targetSide: 'left',
-          sourceAt: 60,
-          targetAt: 60,
-        },
-      ],
-      routing: { avoidNodes: 'strict' },
-    });
-    expect(out.edges.e.blocked).toBe(false);
-  });
+  const shapes = ['box', 'pill', 'circle', 'diamond'] as const;
+  const sizes = [
+    ['tall', 100, 200],
+    ['wide', 200, 100],
+  ] as const;
+  for (const shape of shapes)
+    for (const [aspect, width, height] of sizes) {
+      it(`keeps a row port on a ${aspect} ${shape}`, () => {
+        const out = route({
+          nodes: [
+            { id: 's', x: 0, y: 0, width, height, shape },
+            { id: 'b', x: 400, y: 0, width: 200, height: 120 },
+          ],
+          edges: [
+            {
+              id: 'e',
+              source: 's',
+              target: 'b',
+              sourceSide: 'right',
+              targetSide: 'left',
+              sourceAt: height * 0.3,
+              targetAt: 60,
+            },
+          ],
+          routing: { avoidNodes: 'strict' },
+        });
+        expect(out.edges.e.blocked).toBe(false);
+      });
+
+      it(`holds back a line through a ${aspect} ${shape}`, () => {
+        // `wall` sits on `a`'s right side: the line must leave through it.
+        const out = route({
+          nodes: [
+            { id: 'a', x: 0, y: 0, width: 100, height: height },
+            { id: 'wall', x: 100, y: 0, width, height, shape },
+            { id: 'b', x: 600, y: 0, width: 100, height: height },
+          ],
+          edges: [
+            {
+              id: 'e',
+              source: 'a',
+              target: 'b',
+              sourceSide: 'right',
+              targetSide: 'left',
+              sourceAt: height / 2,
+              targetAt: height / 2,
+            },
+          ],
+          routing: { avoidNodes: 'strict' },
+        });
+        expect(out.edges.e).toMatchObject({ blocked: true, points: [], crosses: ['wall'] });
+      });
+    }
 
   it('keeps a fallback line on its rows', () => {
     const out = route({
