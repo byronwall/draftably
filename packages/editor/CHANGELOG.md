@@ -1,5 +1,18 @@
 # @draftably/editor
 
+## 0.14.0
+
+### Minor Changes
+
+- 2a41e83: Reuse clear fixed-row routes after card resizes and check crowded layouts against fresh routing.
+- 2a41e83: Add an opt-in compact search grid for fixed-row schema resizes. Use full routing on small drawings and shorten detours through the gaps between cards.
+
+### Patch Changes
+
+- c962cb0: Route lines about twice as fast in full quality, with the same drawings.
+- e1e1531: Leave room for labels when overlapping siblings move apart.
+- 29dd359: Mark edge strokes, marker outlines, and projected nodes so border audits check the drawing.
+
 ## 0.13.0
 
 ### Patch Changes
