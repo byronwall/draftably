@@ -110,13 +110,27 @@ export function parallelConflicts(points: Point[], used: Line[], gap: number, te
     if (f && !near(f.box, q, own, gap)) continue;
     const other = f ? f.spansOf[q] : spanOf(used[q].points);
     if (!within(own, other, gap)) continue;
-    for (let i = 0; i < own.n; i++)
-      for (let j = 0; j < other.n; j++) {
-        if (own.h[i] !== other.h[j]) continue;
-        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
-        if (!(overlap > 1)) continue;
-        const separation = Math.abs(own.at[i] - other.at[j]);
-        if (!(separation < limit)) continue;
+    const o = sortedOf(other);
+    for (let i = 0; i < own.n; i++) {
+      // Only the other line's segments this way within `limit` across can count: found by
+      // `sortedOf` a unit wide of it, then added in the other line's order.
+      const at = own.at[i],
+        ids = own.h[i] ? o.lv : o.up,
+        ats = own.h[i] ? o.lvAt : o.upAt;
+      let one = -1,
+        many: number[] | null = null;
+      for (let k = from(ats, at - limit - 1); k < ats.length && ats[k] <= at + limit + 1; k++) {
+        const j = ids[k];
+        if (!(Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]) > 1)) continue;
+        if (!(Math.abs(at - other.at[j]) < limit)) continue;
+        if (one < 0) one = j;
+        else (many ??= [one]).push(j);
+      }
+      if (one < 0) continue;
+      if (many) many.sort((a, b) => a - b);
+      for (const j of many ?? [one]) {
+        const overlap = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]),
+          separation = Math.abs(at - other.at[j]);
         // Duplicate terminals need a short common fan-out; do not count the single
         // endpoint itself, but a shared run with positive length still counts.
         pairs++;
@@ -125,6 +139,7 @@ export function parallelConflicts(points: Point[], used: Line[], gap: number, te
         if (terms) terms.push(term);
         minGap = Math.min(minGap, separation);
       }
+    }
   }
   return {
     lanePairs: pairs,
