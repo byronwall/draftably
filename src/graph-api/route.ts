@@ -165,7 +165,10 @@ export function route(graph: RouteIn): Routed {
   );
   // A blocked line names the boxes its stand-in runs through. In strict mode a line through a
   // box is blocked too, and a blocked line has no points, so the host never draws one.
-  const boxes = graph.nodes.map(n => ({ id: n.id, r: { x: n.x, y: n.y, w: n.width, h: n.height } }));
+  const boxes = graph.nodes.map(n => ({
+    id: n.id,
+    r: { x: n.x, y: n.y, w: n.width, h: n.height },
+  }));
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
   for (const [id, e] of Object.entries(out.edges)) {
@@ -180,7 +183,9 @@ export function route(graph: RouteIn): Routed {
     quality: out.quality,
     warnings: [
       ...out.warnings,
-      ...(held ? [`${noun(held)} ran through a box and ${held > 1 ? 'were' : 'was'} held back.`] : []),
+      ...(held
+        ? [`${noun(held)} ran through a box and ${held > 1 ? 'were' : 'was'} held back.`]
+        : []),
     ],
   };
 }

@@ -98,6 +98,11 @@ seeds, so an equal digest proves a speedup changed no drawing. Keep the default 
 compare digests. Add `--quality quick|full`, `--only <name>`, `--out <file>` and
 `--compare <file>` for a before → after table.
 
+`pnpm bench:route` builds the runtime and times `route()` from `@draftably/runtime/route` on seeded
+schema drawings: 30 cards in five fixed columns and 10, 30 or 60 lines between their rows, in
+`quick` and `full`. It fails when a line runs through a card under `avoidNodes: 'strict'`, misses
+its row, or draws differently for the same input. It also prints the entry's minified size.
+
 The nightly sweep runs three repetitions, puts the timing table in the benchmark job summary, and uploads its measurements.
 Performance PRs paste a before → after table.
 
