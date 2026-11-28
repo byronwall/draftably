@@ -410,8 +410,11 @@ function findAmong(
           : sides[0],
       fs = toward(from, ca, cb),
       ts = toward(to, cb, ca),
-      start = port(a, fs),
-      end = port(b, ts),
+      // An end at a code range or row keeps its line on the range's side.
+      at = (v: number | undefined, x: Side) =>
+        typeof v === 'number' && LEVEL_SIDES.includes(x) ? v : 0,
+      start = port(a, fs, at(cfg.fromAt, fs)),
+      end = port(b, ts, at(cfg.toAt, ts)),
       n = s.clearance + 3,
       as = { x: start.x + vector[fs].x * n, y: start.y + vector[fs].y * n },
       bs = { x: end.x + vector[ts].x * n, y: end.y + vector[ts].y * n },

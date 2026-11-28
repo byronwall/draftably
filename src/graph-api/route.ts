@@ -7,7 +7,7 @@ import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../mod
 import { computeRoutes } from '../model/routes';
 import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect } from '../model/types';
-import type { EdgeIn, EdgeOut, Quality, RouteIn, Routed } from './core';
+import type { EdgeIn, EdgeOut, Quality, RouteIn, Routed, Shape } from './core';
 
 /**
  * `auto` routes fully when the quick routes predict a full pass within the budget. The full
@@ -75,7 +75,7 @@ export function edgeIds(edges: EdgeIn[]) {
   });
 }
 
-/** Whether the segment from `a` to `b` runs through the inside of `r`; its outline does not count. */
+/** Whether the box spanned by `a` and `b` overlaps the inside of `r`; its outline does not count. */
 function through(a: Point, b: Point, r: Rect) {
   const e = 0.5;
   return (
@@ -86,42 +86,70 @@ function through(a: Point, b: Point, r: Rect) {
   );
 }
 
-/**
- * Points along a drawn path: each straight run's ends, and each rounded corner sampled 8 times. A
- * corner cuts inside its bend, so a large radius with a small clearance can clip a box that the
- * route's points clear.
- */
-function sampled(path: string) {
-  const n = (path.match(/-?[\d.]+(?:e-?\d+)?/g) ?? []).map(Number),
-    out: Point[] = [];
-  let at = 0;
-  for (const op of path.match(/[MLQ]/g) ?? []) {
-    if (op === 'Q') {
-      const p = out.at(-1)!,
-        [cx, cy, x, y] = n.slice(at, (at += 4));
-      for (let k = 1; k <= 8; k++) {
-        const t = k / 8,
-          u = 1 - t;
-        out.push({
-          x: u * u * p.x + 2 * u * t * cx + t * t * x,
-          y: u * u * p.y + 2 * u * t * cy + t * t * y,
-        });
-      }
-    } else out.push({ x: n[at++], y: n[at++] });
+type Obstacle = { id: string; r: Rect; shape: Shape };
+
+/** Whether `p` is inside a node's outline, more than half a pixel in. */
+function inside(p: Point, { r, shape }: Obstacle) {
+  const e = 0.5,
+    a = r.w / 2 - e,
+    b = r.h / 2 - e,
+    dx = Math.abs(p.x - r.x - r.w / 2),
+    dy = Math.abs(p.y - r.y - r.h / 2);
+  if (a <= 0 || b <= 0 || dx >= a || dy >= b) return false;
+  if (shape === 'diamond') return dx / a + dy / b < 1;
+  if (shape === 'circle') return (dx / a) ** 2 + (dy / b) ** 2 < 1;
+  if (shape === 'pill') {
+    const k = Math.min(a, b);
+    return Math.hypot(Math.max(0, dx - (a - k)), Math.max(0, dy - (b - k))) < k;
   }
-  return out;
+  return true;
 }
 
-/** The boxes, by ID, that a line runs through: its route, or its drawn path's corners. */
-function crossed(points: Point[], path: string, boxes: { id: string; r: Rect }[]) {
-  const drawn = sampled(path);
-  return boxes
-    .filter(
-      ({ r }) =>
-        points.slice(1).some((b, i) => through(points[i], b, r)) ||
-        drawn.some(p => through(p, p, r)),
+/** The straight runs and rounded corners of a drawn path, each as its start, control and end. */
+function pieces(path: string, points: Point[]) {
+  const n = (path.match(/-?[\d.]+(?:e-?\d+)?/g) ?? []).map(Number),
+    out: Point[][] = [];
+  let at = 0,
+    last: Point | undefined;
+  for (const op of path.match(/[MLQ]/g) ?? []) {
+    const next = op === 'Q' ? n.slice(at, (at += 4)) : n.slice(at, (at += 2)),
+      end = { x: next[next.length - 2], y: next[next.length - 1] };
+    if (last && op !== 'M')
+      out.push(op === 'Q' ? [last, { x: next[0], y: next[1] }, end] : [last, end]);
+    last = end;
+  }
+  return out.length ? out : points.slice(1).map((b, i) => [points[i], b]);
+}
+
+/** A piece's points, at most a pixel apart. */
+function along(ps: Point[]) {
+  const [p, c, q] = ps.length === 3 ? ps : [ps[0], ps[0], ps[1]],
+    steps = Math.max(
+      1,
+      Math.ceil(Math.hypot(c.x - p.x, c.y - p.y) + Math.hypot(q.x - c.x, q.y - c.y)),
+    );
+  return Array.from({ length: steps + 1 }, (_, k) => {
+    const t = k / steps,
+      u = 1 - t;
+    return {
+      x: u * u * p.x + 2 * u * t * c.x + t * t * q.x,
+      y: u * u * p.y + 2 * u * t * c.y + t * t * q.y,
+    };
+  });
+}
+
+/** The nodes, by ID, whose outline the drawn line enters, its rounded corners included. */
+function crossed(points: Point[], path: string, nodes: Obstacle[]) {
+  const all = pieces(path, points);
+  return nodes
+    .filter(o =>
+      all.some(ps => {
+        const lo = { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
+          hi = { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) };
+        return through(lo, hi, o.r) && along(ps).some(p => inside(p, o));
+      }),
     )
-    .map(b => b.id);
+    .map(o => o.id);
 }
 
 /**
@@ -199,6 +227,7 @@ export function route(graph: RouteIn): Routed {
   const boxes = graph.nodes.map(n => ({
     id: n.id,
     r: { x: n.x, y: n.y, w: n.width, h: n.height },
+    shape: n.shape ?? 'box',
   }));
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
