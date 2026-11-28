@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { RouteLab } from '../src/engines/routing-engine';
 import { layout, route } from '../src/graph-api';
 
 describe('graph api layout', () => {
@@ -139,4 +140,246 @@ describe('graph api route', () => {
       }),
     ).toThrow('Edge "e1" refers to unknown id "b".');
   });
+});
+
+describe('fixed row ports during resize', () => {
+  const box = (id: string, x: number, y: number) => ({ id, x, y, width: 100, height: 60 });
+  const row = (id: string, source: string, target: string) => ({
+    id,
+    source,
+    target,
+    sourceSide: 'right' as const,
+    targetSide: 'left' as const,
+    sourceAt: 30,
+    targetAt: 30,
+  });
+  const routing = { quality: 'full', avoidNodes: 'strict' } as const;
+
+  it('reuses clear rows at their new coordinates and protects the stored route from caller edits', () => {
+    const graph = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    const before = route(graph);
+    before.edges.line.points[0].x = 9999;
+    const resized = { ...graph, nodes: [{ ...graph.nodes[0], width: 124 }, box('b', 360, 0)] };
+    const compute = vi.spyOn(RouteLab, 'compute');
+    try {
+      const out = route(resized, before);
+      expect(out.edges.line.points).toEqual([
+        { x: 124, y: 30 },
+        { x: 360, y: 30 },
+      ]);
+      expect(compute).not.toHaveBeenCalled();
+      expect(route(resized, before)).toEqual(out);
+    } finally {
+      compute.mockRestore();
+    }
+  });
+
+  it('accepts an ordinary result for compact resize and preserves the guarded route when switched back', () => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const graph = {
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, 300, i * 100)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing,
+    };
+    const before = route(graph);
+    const next = { ...graph, nodes: graph.nodes.map(n => ({ ...n, x: n.x ? 400 : 0 })) };
+    const compact = { ...next, resize: 'compact' as const };
+    const compute = vi.spyOn(RouteLab, 'compute');
+    try {
+      const moved = route(compact, before);
+      expect(compute).not.toHaveBeenCalled();
+      expect(route(compact, before)).toEqual(moved);
+      expect(Object.values(moved.edges).every(e => !e.blocked && e.points.at(-1)?.x === 400)).toBe(
+        true,
+      );
+      expect(route(next, moved)).toEqual(route(next));
+    } finally {
+      compute.mockRestore();
+    }
+  });
+
+  it('ignores caller data that routing does not read', () => {
+    const plain = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    const meta: Record<string, unknown> = { size: 10n };
+    meta.self = meta;
+    const tagged = { ...plain, edges: [{ ...row('line', 'a', 'b'), meta }] };
+    expect(route(tagged)).toEqual(route(plain));
+    expect(route({ ...tagged, routing: { ...routing, quality: 'quick' as const } })).toEqual(
+      route({ ...plain, routing: { ...routing, quality: 'quick' as const } }),
+    );
+  });
+
+  it('routes afresh when a routing setting changes', () => {
+    const nodes = [box('a', 0, 0), box('b', 400, 0), box('c', 115, 50)];
+    const edges = [row('line', 'a', 'b')];
+    const at = (clearance: number) => ({ nodes, edges, routing: { ...routing, clearance } });
+    const before = route(at(30));
+    expect(route(at(4), before)).toEqual(route(at(4)));
+  });
+
+  it('never copies card data that routing does not read', () => {
+    const card = box('a', 0, 0);
+    Object.defineProperty(card, 'meta', {
+      enumerable: true,
+      get: () => {
+        throw Error('read');
+      },
+    });
+    const plain = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    expect(route({ ...plain, nodes: [card, box('b', 300, 0)] })).toEqual(route(plain));
+  });
+
+  it('turns a straight compact line once each way when its rows move apart', () => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const at = (dy: number) => ({
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, 300, i * 100 + dy)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing,
+      resize: 'compact' as const,
+    });
+    const before = route(at(0));
+    const out = route(at(12), before);
+    expect(out.edges['0'].points).toEqual([
+      { x: 100, y: 30 },
+      { x: 200, y: 30 },
+      { x: 200, y: 42 },
+      { x: 300, y: 42 },
+    ]);
+    expect(route(at(0), out).edges['0'].points).toEqual(before.edges['0'].points);
+  });
+
+  it.each([
+    [undefined, 'full'],
+    [undefined, 'quick'],
+    ['compact', 'full'],
+    ['compact', 'quick'],
+  ] as const)('keeps valid routes as rows move apart and back (%s, %s)', (resize, quality) => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const at = (x: number, dy: number) => ({
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, x, i * 100 + dy)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing: { ...routing, quality },
+      resize,
+    });
+    let previous = route(at(300, 0));
+    for (const [x, dy] of [
+      [303, 12],
+      [306, 0],
+      [309.01, 12.02],
+      [312, 0],
+    ]) {
+      const graph = at(x, dy);
+      previous = route(graph, previous);
+      for (const [id, e] of Object.entries(previous.edges)) {
+        const i = Number(id);
+        expect(e.blocked).toBe(false);
+        expect(e.points[0]).toEqual({ x: 100, y: i * 100 + 30 });
+        expect(e.points.at(-1)!.x).toBeCloseTo(x);
+        expect(e.points.at(-1)!.y).toBeCloseTo(i * 100 + dy + 30);
+      }
+    }
+  });
+
+  it('falls back when a compact line clears as a polyline but its rounded corner enters a card', () => {
+    const ids = Array.from({ length: 12 }, (_, i) => String(i));
+    const settings = { ...routing, clearance: 4, standoff: 0, cornerRadius: 20 };
+    const graph = (dy: number) => ({
+      nodes: [
+        box('a', 0, 0),
+        box('b', 300, dy),
+        { id: 'post', x: 204, y: 40, width: 38, height: 86 },
+        ...ids.flatMap(id => [
+          box('p' + id, 0, 400 + +id * 100),
+          box('q' + id, 300, 400 + +id * 100),
+        ]),
+      ],
+      edges: [row('ab', 'a', 'b'), ...ids.map(id => row(id, 'p' + id, 'q' + id))],
+      routing: settings,
+      resize: 'compact' as const,
+    });
+    const before = route(graph(0));
+    const next = graph(100);
+    expect(route(next).edges.ab.blocked).toBe(false);
+    // Strict mode would hide the line if its drawn corner entered the post.
+    const out = route(next, before).edges.ab;
+    expect(out.blocked).toBe(false);
+    expect(out.points.length).toBeGreaterThan(0);
+  });
+
+  it('routes afresh when a field read through a getter changes', () => {
+    const edge = (target: string) => {
+      const e = row('line', 'a', 'x');
+      Object.defineProperty(e, 'target', { get: () => target, enumerable: false });
+      return e;
+    };
+    const nodes = [box('a', 0, 0), box('b', 300, 0), box('c', 300, 200)];
+    const before = route({ nodes, edges: [edge('b')], routing });
+    const next = { nodes, edges: [edge('c')], routing };
+    expect(route(next, before)).toEqual(route(next));
+    expect(route(next, before).edges.line.points.at(-1)).toEqual({ x: 300, y: 230 });
+  });
+
+  it('takes the shorter full route when a resize opens a straight path', () => {
+    const graph = {
+      nodes: [box('a', 0, 0), box('b', 500, 0), box('wall', 220, 0)],
+      edges: [row('ab', 'a', 'b')],
+      routing,
+    };
+    const before = route(graph);
+    expect(before.edges.ab.points.length).toBeGreaterThan(2);
+    const next = { ...graph, nodes: [...graph.nodes.slice(0, 2), box('wall', 220, 200)] };
+    const resized = route(next, before);
+    expect(resized).toEqual(route(next));
+    expect(resized.edges.ab.points).toHaveLength(2);
+  });
+
+  it.each([undefined, 'compact'] as const)(
+    'routes around a new obstacle and keeps the other rows clear (%s)',
+    resize => {
+      const nodes = [
+        box('a', 0, 0),
+        box('b', 500, 0),
+        box('c', 0, 240),
+        box('d', 500, 240),
+        box('e', 0, 480),
+        box('f', 500, 480),
+        box('wall', 220, 120),
+      ];
+      const edges = [row('ab', 'a', 'b'), row('cd', 'c', 'd'), row('ef', 'e', 'f')];
+      const before = route({ nodes, edges, routing });
+      expect(before.edges.ab.points).toHaveLength(2);
+      const wall = box('wall', 220, 0);
+      const graph = { nodes: [...nodes.slice(0, -1), wall], edges, routing, resize };
+      const out = route(graph, before);
+      const points = out.edges.ab.points;
+      expect(out.edges.ab.blocked).toBe(false);
+      expect(points.length).toBeGreaterThan(2);
+      expect(points[0]).toEqual({ x: 100, y: 30 });
+      expect(points.at(-1)).toEqual({ x: 500, y: 30 });
+      for (const [i, b] of points.slice(1).entries()) {
+        const a = points[i];
+        expect(
+          Math.max(a.x, b.x) > wall.x &&
+            Math.min(a.x, b.x) < wall.x + wall.width &&
+            Math.max(a.y, b.y) > wall.y &&
+            Math.min(a.y, b.y) < wall.y + wall.height,
+        ).toBe(false);
+      }
+      expect(out.edges.cd).toEqual(before.edges.cd);
+      expect(out.edges.ef).toEqual(before.edges.ef);
+      expect(route(graph, before)).toEqual(out);
+    },
+  );
 });

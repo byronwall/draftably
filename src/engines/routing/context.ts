@@ -5,6 +5,7 @@ import { TIGHT_PITCH } from './ports.ts';
 
 // How far in from a corner a port sits (`port` clamps offsets the same).
 const PORT_INSET = 10;
+export const BLOCKED_PENALTY = 1e8;
 import { settings } from './settings.ts';
 import type {
   Box,
@@ -271,7 +272,7 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
   const total = (rs: Route[]) => {
     const m = metrics(rs);
     return (
-      m.blocked * 1e8 +
+      m.blocked * BLOCKED_PENALTY +
       m.length +
       m.bends * s.bendPenalty +
       m.crossings * s.crossingPenalty +

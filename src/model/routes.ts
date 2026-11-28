@@ -865,12 +865,22 @@ export function roomForLabel(
   return best ?? points;
 }
 
+/** The visible line, including the marker setback and rounded corners. */
+export function drawnPath(
+  points: Point[],
+  edge: Diagram['graph']['edges'][number] | undefined,
+  radius: number,
+) {
+  return roundedPath(edge ? stoppedPoints(points, edge) : points, radius);
+}
+
 /** Add label positions and SVG paths to raw routes. */
 export function drawRoutes(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
-  result: RoutingResult,
+  result: Pick<RoutingResult, 'routes'>,
+  halos = true,
 ): DrawnRoute[] {
   // A route for an edge this graph doesn't draw (a timeline's on-chart line) is dropped.
   const visible = new Set(vg.edges.map(e => e.id));
@@ -1074,14 +1084,16 @@ export function drawRoutes(
     return {
       ...route,
       label: labels.get(route) ?? null,
-      path: roundedPath(edge ? stoppedPoints(route.points, edge) : route.points, radius),
-      halo: haloPath(
-        route.points,
-        result.routes
-          .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
-          .map(r => r.points),
-        frames,
-      ),
+      path: drawnPath(route.points, edge, radius),
+      halo: halos
+        ? haloPath(
+            route.points,
+            result.routes
+              .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
+              .map(r => r.points),
+            frames,
+          )
+        : '',
       ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
     };
   });

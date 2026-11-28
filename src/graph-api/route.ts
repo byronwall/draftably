@@ -4,7 +4,8 @@
  */
 import { emptyDiagram } from '../model/document';
 import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../model/graph';
-import { computeRoutes } from '../model/routes';
+import { resize, resizeKey, type Previous } from './resize';
+import { computeRoutes, drawRoutes, routeInput, drawnPath, type DrawnRoute } from '../model/routes';
 import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect } from '../model/types';
 import type { EdgeIn, EdgeOut, Quality, RouteIn, Routed, Shape } from './core';
@@ -52,12 +53,23 @@ export function placed(
   edgeId: (id: string) => string,
 ) {
   const { vg, rects } = visibleRects(doc),
-    routed = routesFor(doc, vg, rects, quality),
-    out = placedItems(doc, rects, routed.routes, objectId, edgeId),
+    routed = routesFor(doc, vg, rects, quality);
+  return placedRoutes(doc, rects, routed.routes, routed.quality, objectId, edgeId);
+}
+
+function placedRoutes(
+  doc: Diagram,
+  rects: Map<string, Rect>,
+  routes: DrawnRoute[],
+  quality: Routed['quality'],
+  objectId = (id: string) => id,
+  edgeId = (id: string) => id,
+) {
+  const out = placedItems(doc, rects, routes, objectId, edgeId),
     blocked = Object.values(out.edges).filter(e => e.blocked).length;
   return {
     ...out,
-    quality: routed.quality,
+    quality,
     warnings: blocked ? [`${noun(blocked)} found no clear way.`] : [],
   };
 }
@@ -143,28 +155,33 @@ function along(ps: Point[]) {
  * stub out of each port only leaves its own node, whose outline there is the router's to place.
  */
 function crossed(points: Point[], path: string, nodes: Obstacle[], ends: [string, string]) {
-  const all = pieces(path, points);
+  const all = pieces(path, points).map(ps => ({
+    ps,
+    lo: { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
+    hi: { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) },
+  }));
   return nodes
     .filter(o =>
-      all.some((ps, i) => {
+      all.some(({ ps, lo, hi }, i) => {
         if (
           ps.length === 2 &&
           ((i === 0 && o.id === ends[0]) || (i === all.length - 1 && o.id === ends[1]))
         )
           return false;
-        const lo = { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
-          hi = { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) };
         return through(lo, hi, o.r) && along(ps).some(p => inside(p, o));
       }),
     )
     .map(o => o.id);
 }
 
+const snapshots = new WeakMap<Routed, Previous>();
+
 /**
  * Route lines between boxes the caller placed. Nothing moves. Routing is deterministic: the same
- * input gives the same lines, with no randomness and no time limit.
+ * graph and previous result give the same lines. Pass the last result from this instance to
+ * reuse fixed row-to-row lines after a resize. An incompatible result routes fresh.
  */
-export function route(graph: RouteIn): Routed {
+export function route(graph: RouteIn, previous?: Routed): Routed {
   const doc = emptyDiagram(),
     groups = graph.groups ?? [],
     known = new Map<string, { width: number; height: number }>(),
@@ -224,12 +241,6 @@ export function route(graph: RouteIn): Routed {
       ...(toAt !== undefined ? { toAt } : {}),
     };
   });
-  const out = placed(
-    doc,
-    quality,
-    id => id,
-    id => id,
-  );
   // A blocked line names the boxes its stand-in runs through. In strict mode a line through a
   // box is blocked too, and a blocked line has no points, so the host never draws one.
   const boxes = graph.nodes.map(n => ({
@@ -237,6 +248,45 @@ export function route(graph: RouteIn): Routed {
     r: { x: n.x, y: n.y, w: n.width, h: n.height },
     shape: n.shape ?? 'box',
   }));
+  const key =
+    new Set(ids).size === ids.length ? resizeKey(graph, ids, doc.settings.routing) : undefined;
+  const prior = previous && snapshots.get(previous);
+  const { vg, rects } = visibleRects(doc);
+  let baseline: ReturnType<typeof routesFor> | undefined;
+  const fresh = () => (baseline ??= routesFor(doc, vg, rects, quality));
+  const edgeById = new Map(doc.graph.edges.map(e => [e.id, e]));
+  const compact = graph.resize === 'compact' && quality === 'full';
+  // A full route is cheaper than constructing a grid and checking a small drawing.
+  const moved =
+    (!compact || ids.length > 12) &&
+    key !== undefined &&
+    prior?.key === key &&
+    (compact || !prior.compact)
+      ? resize(
+          prior,
+          graph.nodes,
+          routeInput(doc, vg, rects),
+          { ...doc.settings.routing, quick: quality === 'quick' },
+          r =>
+            !crossed(
+              r.points,
+              drawnPath(r.points, edgeById.get(r.id), doc.settings.routing.cornerRadius),
+              boxes,
+              [r.from, r.to],
+            ).length,
+          () => fresh().result.routes,
+          compact,
+        )
+      : undefined;
+  const routes = moved ?? fresh().result.routes;
+  const out = moved
+    ? placedRoutes(
+        doc,
+        rects,
+        drawRoutes(doc, vg, rects, { routes }, false),
+        quality === 'quick' ? 'quick' : 'full',
+      )
+    : placedRoutes(doc, rects, fresh().routes, fresh().quality);
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
   for (const [id, e] of Object.entries(out.edges)) {
@@ -249,7 +299,7 @@ export function route(graph: RouteIn): Routed {
       edges[id] = { ...e, points: [], path: '', label: null, blocked: true, crosses: hits };
     } else edges[id] = e.blocked ? { ...e, crosses: hits } : e;
   }
-  return {
+  const result = {
     edges,
     quality: out.quality,
     warnings: [
@@ -259,4 +309,13 @@ export function route(graph: RouteIn): Routed {
         : []),
     ],
   };
+  if (key)
+    snapshots.set(result, {
+      key,
+      compact: compact && !!moved,
+      // Only what resize reads: other data on the caller's cards is never copied.
+      nodes: graph.nodes.map(({ id, x, y, width, height }) => ({ id, x, y, width, height })),
+      routes: structuredClone(routes),
+    });
+  return result;
 }
