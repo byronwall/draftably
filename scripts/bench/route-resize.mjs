@@ -1,4 +1,4 @@
-// pnpm bench:route:resize [--compact] [--holdout | --wide | --round2-heldout | --independent] [--picture --frame=60/401/1 | --capture-worst]
+// pnpm bench:route:resize [--compact] [--holdout | --wide | --round2-heldout | --round3-heldout | --independent] [--picture --frame=60/401/1 | --capture-worst]
 // Collect fresh drawings in a separate process so their cache cannot serve a resize call.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -8,6 +8,10 @@ import { createContext } from '../../src/engines/routing/context.ts';
 import { conflicts } from '../../src/engines/routing/conflicts.ts';
 import { schema } from './route-schema.mjs';
 
+import { cardEnvelope, outsideCardBounds } from '../../src/graph-api/card-envelope.ts';
+
+const newHeldout = process.argv.includes('--round3-heldout');
+const round3 = newHeldout || process.argv.includes('--round3');
 const compact = process.argv.includes('--compact');
 const reserved = process.argv.includes('--round2-heldout');
 const round2 = reserved || process.argv.includes('--round2');
@@ -16,76 +20,96 @@ const picture = process.argv.includes('--picture');
 const holdout = process.argv.includes('--holdout');
 const independent = process.argv.includes('--independent');
 const sizes = independent ? [60] : [10, 30, 60];
-const seeds = reserved
-  ? [1103, 1129, 1151, 1171, 1193]
-  : independent
-    ? [101]
-    : wide
-      ? [701, 702, 703, 704, 705]
-      : holdout
-        ? [401, 402, 403, 404, 405]
-        : [101, 102, 103, 104, 105];
+const seeds = newHeldout
+  ? [1511, 1543, 1579, 1601, 1637]
+  : reserved
+    ? [1103, 1129, 1151, 1171, 1193]
+    : independent
+      ? [101]
+      : wide
+        ? [701, 702, 703, 704, 705]
+        : holdout
+          ? [401, 402, 403, 404, 405]
+          : [101, 102, 103, 104, 105];
 const dir =
   (compact ? 'tmp/compact-grid' : 'tmp/route-resize') +
-  (round2 ? '/round2' : '') +
-  (reserved
-    ? '/reserved'
-    : wide
-      ? '/wide'
-      : independent
-        ? '/independent'
-        : holdout
-          ? '/heldout'
-          : '');
+  (round3 ? '/round3' : round2 ? '/round2' : '') +
+  (newHeldout
+    ? '/new-heldout'
+    : reserved
+      ? '/reserved'
+      : wide
+        ? '/wide'
+        : independent
+          ? '/independent'
+          : holdout
+            ? '/heldout'
+            : '');
 fs.mkdirSync(dir, { recursive: true });
 // These twelve layouts and seeds were reserved before tuning the compact grid.
-const steps = reserved
+const steps = newHeldout
   ? [
       [320, 220],
-      [355, 234],
-      [429, 281],
-      [458, 292],
-      [343, 257],
-      [268, 198],
-      [218, 162],
-      [207, 158],
-      [241, 171],
-      [297, 223],
-      [438, 277],
-      [367, 215],
-      [279, 193],
+      [391, 246],
+      [467, 301],
+      [412, 260],
+      [281, 193],
+      [229, 174],
+      [198, 153],
+      [252, 201],
+      [333, 227],
+      [447, 279],
+      [351, 244],
+      [264, 182],
+      [308, 216],
     ]
-  : wide
+  : reserved
     ? [
         [320, 220],
-        [374, 244],
-        [392, 254],
-        [414, 272],
-        [384, 248],
-        [306, 196],
-        [258, 192],
-        [246, 184],
-        [230, 176],
-        [254, 186],
-        [312, 204],
-        [382, 252],
-        [402, 266],
+        [355, 234],
+        [429, 281],
+        [458, 292],
+        [343, 257],
+        [268, 198],
+        [218, 162],
+        [207, 158],
+        [241, 171],
+        [297, 223],
+        [438, 277],
+        [367, 215],
+        [279, 193],
       ]
-    : [
-        [320, 220],
-        [326, 222],
-        [340, 230],
-        [352, 230],
-        [360, 240],
-        [344, 236],
-        [330, 232],
-        [310, 222],
-        [295, 212],
-        [282, 204],
-        [270, 200],
-        [298, 210],
-        [322, 218],
-      ];
+    : wide
+      ? [
+          [320, 220],
+          [374, 244],
+          [392, 254],
+          [414, 272],
+          [384, 248],
+          [306, 196],
+          [258, 192],
+          [246, 184],
+          [230, 176],
+          [254, 186],
+          [312, 204],
+          [382, 252],
+          [402, 266],
+        ]
+      : [
+          [320, 220],
+          [326, 222],
+          [340, 230],
+          [352, 230],
+          [360, 240],
+          [344, 236],
+          [330, 232],
+          [310, 222],
+          [295, 212],
+          [282, 204],
+          [270, 200],
+          [298, 210],
+          [322, 218],
+        ];
 const reference = process.argv.includes('--fresh');
 const compare = process.argv.includes('--compare');
 if (!reference && !compare && !picture) {
@@ -101,7 +125,8 @@ if (!reference && !compare && !picture) {
 const filename = dir + '/reference.json';
 const fresh = reference || picture ? {} : JSON.parse(fs.readFileSync(filename, 'utf8'));
 const ctx = createContext({ nodes: [], edges: [], groups: [] }, {});
-function measure(out) {
+function measure(out, nodes) {
+  const bounds = cardEnvelope(nodes.map(n => ({ x: n.x, y: n.y, w: n.width, h: n.height })));
   const lines = Object.entries(out.edges).map(([id, r]) => ({ id, ...r }));
   const drawn = lines.filter(r => !r.blocked);
   const unrelated = drawn.reduce(
@@ -118,7 +143,12 @@ function measure(out) {
       ).shared,
     0,
   );
-  return { ...ctx.metrics(lines), total: ctx.total(lines), unrelated };
+  return {
+    ...ctx.metrics(lines),
+    total: ctx.total(lines),
+    unrelated,
+    outside: drawn.filter(r => outsideCardBounds(r.points, bounds)).length,
+  };
 }
 function svg(graph, out, { x, y, w, h }) {
   // Both panels use the same extent, with room for paths outside the card columns.
@@ -185,8 +215,8 @@ if (picture) {
   const full = route(graph);
   writePair(graph, full, moved);
   console.log({
-    fresh: measure(full),
-    reuse: measure(moved),
+    fresh: measure(full, graph.nodes),
+    reuse: measure(moved, graph.nodes),
     movedLines: Object.keys(before.edges).filter(
       id => JSON.stringify(before.edges[id].points) !== JSON.stringify(moved.edges[id].points),
     ).length,
@@ -222,7 +252,8 @@ const captureWorst = process.argv.includes('--capture-worst');
 const drawingDir = dir + '/fresh-drawings';
 if (captureWorst && reference) fs.mkdirSync(drawingDir, { recursive: true });
 let worstLoss = 0,
-  worstSharing = 0;
+  worstSharing = 0,
+  worstOutside = 0;
 const results = [];
 route({ ...schema(30, 999), routing: { quality: 'full' } });
 for (const lines of sizes)
@@ -240,7 +271,7 @@ for (const lines of sizes)
       const start = performance.now();
       const out = route(graph, reference ? undefined : previous);
       const ms = performance.now() - start;
-      const score = measure(out);
+      const score = measure(out, graph.nodes);
       const boxes = new Map(graph.nodes.map(n => [n.id, n]));
       for (const edge of graph.edges) {
         const r = out.edges[edge.id];
@@ -271,11 +302,17 @@ for (const lines of sizes)
         else {
           const loss = (score.total - fresh[key].score.total) / fresh[key].score.total;
           const addedSharing = score.unrelated - fresh[key].score.unrelated;
-          if (loss > worstLoss || (worstLoss === 0 && addedSharing > worstSharing)) {
+          const extraOutside = score.outside - fresh[key].score.outside;
+          if (
+            extraOutside > worstOutside ||
+            (extraOutside === worstOutside &&
+              (loss > worstLoss || (worstLoss === 0 && addedSharing > worstSharing)))
+          ) {
+            worstOutside = extraOutside;
             worstLoss = Math.max(0, loss);
             worstSharing = addedSharing;
             writePair(graph, JSON.parse(fs.readFileSync(file, 'utf8')), out);
-            console.log('Worst frame so far', key, { loss, addedSharing });
+            console.log('Worst frame so far', key, { loss, addedSharing, extraOutside });
           }
         }
       }
@@ -292,12 +329,24 @@ if (!reference) {
   for (const lines of sizes) {
     const rows = results.filter(r => r.lines === lines);
     const times = rows.map(r => r.ms).sort((a, b) => a - b);
+    assert.ok(
+      rows.every(r => Number.isInteger(r.fresh.score.outside)),
+      'Regenerate the fresh reference to measure outside paths.',
+    );
     const worse = rows.filter(
-      r => r.score.total > r.fresh.score.total || r.score.unrelated > r.fresh.score.unrelated,
+      r =>
+        r.score.total > r.fresh.score.total ||
+        r.score.unrelated > r.fresh.score.unrelated ||
+        r.score.outside > r.fresh.score.outside,
     );
     console.log({
       lines,
       calls: rows.length,
+      outside: {
+        fresh: rows.reduce((n, r) => n + r.fresh.score.outside, 0),
+        resize: rows.reduce((n, r) => n + r.score.outside, 0),
+        worse: rows.filter(r => r.score.outside > r.fresh.score.outside).length,
+      },
       median: (times[Math.floor((times.length - 1) / 2)] + times[Math.floor(times.length / 2)]) / 2,
       p95: times[Math.ceil(times.length * 0.95) - 1],
       max: times.at(-1),
@@ -306,6 +355,7 @@ if (!reference) {
         r.step,
         r.score.total - r.fresh.score.total,
         r.score.unrelated - r.fresh.score.unrelated,
+        r.score.outside - r.fresh.score.outside,
       ]),
     });
     if (worse.length) process.exitCode = 1;
