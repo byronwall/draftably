@@ -8,8 +8,6 @@ import type { Context } from '../engines/routing/context';
 import type { Point, Route } from '../engines/routing/types';
 import { createGrid } from './resize-grid';
 
-export const SMALL_REFERENCE_LIMIT = 12;
-
 /** Move the most expensive row connections first. The grid suggests candidates;
  * exact geometry checks and the router's line cost decide which ones to keep. */
 export function compactResize(ctx: Context) {
@@ -142,7 +140,7 @@ export function compactResize(ctx: Context) {
     return true;
   };
   for (const { i } of priority()) if (!refine(i, false)) return;
-  if (state.routes.length > SMALL_REFERENCE_LIMIT && state.routes.length <= REPAIR_EDGES)
+  if (state.routes.length <= REPAIR_EDGES)
     for (const { i } of priority().slice(0, 8)) if (!refine(i, true)) return;
   return true;
 }

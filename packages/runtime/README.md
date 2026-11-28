@@ -51,7 +51,7 @@ Set both sides and row offsets on each line. Reuse supports unlabelled lines bet
 
 For full-quality row schemas, opt into the experimental compact grid with
 `route({ ...graph, resize: 'compact' }, previous)`. It tries direct connections and
-separates unrelated shared runs. It compares small drawings with a fresh route.
+separates unrelated shared runs. It uses ordinary full routing for drawings with up to 12 lines.
 For larger drawings, check its [measured quality and resize times](../../docs/intent/route-speed/COMPACT.md).
 
 ```ts

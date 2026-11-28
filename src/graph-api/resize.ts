@@ -1,4 +1,4 @@
-import { compactResize, SMALL_REFERENCE_LIMIT } from './compact-resize';
+import { compactResize } from './compact-resize';
 import { finish } from '../engines/routing/compute';
 import { conflicts, crossesItself, parallelNear } from '../engines/routing/conflicts';
 import { BLOCKED_PENALTY, createContext } from '../engines/routing/context';
@@ -188,19 +188,7 @@ export function resize(
   }
   if (compact) {
     if (!compactResize(ctx) || !ctx.state.routes.every(clear)) return;
-    const routes = ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
-    // One crossing can outweigh the whole gain on a small diagram. Its full
-    // reference fits in the measured resize budget for these row schemas.
-    if (routes.length <= SMALL_REFERENCE_LIMIT) {
-      const baseline = fresh();
-      if (
-        baseline.some(r => r.blocked || !clear(r)) ||
-        ctx.total(routes) > ctx.total(baseline) ||
-        unrelatedShared(routes).cards > unrelatedShared(baseline).cards
-      )
-        return;
-    }
-    return routes;
+    return ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
   }
   // A conflict between two fixed lines survives every repair of the missing lines.
   if (missing.length) {

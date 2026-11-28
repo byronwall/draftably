@@ -255,8 +255,12 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
   const fresh = () => (baseline ??= routesFor(doc, vg, rects, quality));
   const edgeById = new Map(doc.graph.edges.map(e => [e.id, e]));
   const compact = graph.resize === 'compact' && quality === 'full';
+  // A full route is cheaper than constructing a grid and checking a small drawing.
   const moved =
-    key !== undefined && prior?.key === key && (compact || !prior.compact)
+    (!compact || ids.length > 12) &&
+    key !== undefined &&
+    prior?.key === key &&
+    (compact || !prior.compact)
       ? resize(
           prior,
           graph.nodes,
