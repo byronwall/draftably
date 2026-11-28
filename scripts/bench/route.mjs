@@ -4,7 +4,8 @@
  * drawings, with cards in five fixed columns and lines from row to row, and reports the entry's
  * minified size.
  *
- * Usage: pnpm bench:route [--runs N] [--quality resize|quick|full]
+ * Usage: pnpm bench:route [--runs N] [--quality resize|quick|full] [--sweep]
+ * --sweep moves the columns of each 60-line schema through twelve widths (three seeds by default).
  *
  * Each run routes a new seeded schema, so the router's cache never helps. Fails (exit 1) when a
  * line runs through a card under `avoidNodes: 'strict'`, a line misses its row, or the same input
@@ -17,8 +18,10 @@ import { build } from 'esbuild';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const entry = path.join(root, 'packages/runtime/dist/route.js');
 const { route } = await import(entry);
-const i = process.argv.indexOf('--runs'),
-  runs = i > 0 ? Number(process.argv[i + 1]) : 5;
+const sweep = process.argv.includes('--sweep');
+const i = process.argv.indexOf('--runs');
+const runs = i > 0 ? Number(process.argv[i + 1]) : sweep ? 3 : 5;
+if (!Number.isInteger(runs) || runs < 1) throw Error('--runs needs a positive integer');
 
 const HEADER = 46,
   ROW = 26;
@@ -100,12 +103,16 @@ const q = process.argv.indexOf('--quality');
 const qualities = q > 0 ? [process.argv[q + 1]] : ['quick', 'full'];
 if (qualities.some(q => !['resize', 'quick', 'full'].includes(q))) throw Error('Unknown quality');
 for (const quality of qualities)
-  for (const lines of [10, 30, 60]) {
+  for (const lines of sweep ? [60] : [10, 30, 60]) {
     const times = [];
     let blocked = 0;
-    for (let r = 0; r < runs; r++) {
-      const g = schema(lines, 101 + r),
-        routing = { quality, avoidNodes: 'strict' },
+    for (let r = 0; r < runs * (sweep ? 12 : 1); r++) {
+      const g = schema(lines, sweep ? 401 + Math.floor(r / 12) : 101 + r);
+      if (sweep) {
+        const pitch = 260 + (r % 12) * 10;
+        for (const n of g.nodes) n.x = (n.x / 320) * pitch;
+      }
+      const routing = { quality, avoidNodes: 'strict' },
         t = performance.now(),
         out = route({ ...g, routing });
       times.push(performance.now() - t);
@@ -132,6 +139,13 @@ for (const quality of qualities)
           failed = true;
         }
       }
+    }
+    if (sweep) {
+      const ordered = times.toSorted((a, b) => a - b);
+      const p95 = ordered[Math.ceil(ordered.length * 0.95) - 1];
+      console.log(
+        `${quality} resize sweep: ${times.filter(t => t < 100).length}/${times.length} under 100 ms, p95 ${Math.round(p95)} ms`,
+      );
     }
     rowsOut.push(
       `| ${quality} | 30 | ${lines} | ${Math.round(median(times))} | ${Math.round(Math.max(...times))} | ${blocked} |`,
