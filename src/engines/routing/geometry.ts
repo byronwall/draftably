@@ -38,23 +38,25 @@ const passes = (r: Obstacle, x: number) =>
 export function blocked(a: Point, b: Point, obs: Obstacle[]) {
   if (same(a, b)) return obs.some(r => !r.across && contains(a, r));
   if (Math.abs(a.x - b.x) < EPS)
-    return obs.some(
-      r =>
-        !passes(r, a.x) &&
-        a.x > r.x + EPS &&
-        a.x < r.x + r.w - EPS &&
-        Math.max(a.y, b.y) > r.y + EPS &&
-        Math.min(a.y, b.y) < r.y + r.h - EPS,
-    );
+    return blockedRun(false, a.x, Math.min(a.y, b.y), Math.max(a.y, b.y), obs);
   if (Math.abs(a.y - b.y) < EPS)
-    return obs.some(
-      r =>
-        a.y > r.y + EPS &&
-        a.y < r.y + r.h - EPS &&
-        Math.max(a.x, b.x) > r.x + EPS &&
-        Math.min(a.x, b.x) < r.x + r.w - EPS,
-    );
+    return blockedRun(true, a.y, Math.min(a.x, b.x), Math.max(a.x, b.x), obs);
   return true;
+}
+/** `blocked` for a level (`h`) or upright run at `at`, from `lo` to `hi` along it. */
+export function blockedRun(h: boolean, at: number, lo: number, hi: number, obs: Obstacle[]) {
+  for (const r of obs)
+    if (
+      h
+        ? at > r.y + EPS && at < r.y + r.h - EPS && hi > r.x + EPS && lo < r.x + r.w - EPS
+        : !passes(r, at) &&
+          at > r.x + EPS &&
+          at < r.x + r.w - EPS &&
+          hi > r.y + EPS &&
+          lo < r.y + r.h - EPS
+    )
+      return true;
+  return false;
 }
 /** A path with rounded points, without repeats or points inside a straight run. */
 export function compress(ps: Point[]) {

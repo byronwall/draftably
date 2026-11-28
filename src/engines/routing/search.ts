@@ -1,9 +1,9 @@
 import { spanOf } from './conflicts.ts';
-import { standoffLines, standoffSegment } from './cost.ts';
+import { standoffLines, standoffRun } from './cost.ts';
 import {
   atMost,
   below,
-  blocked,
+  blockedRun,
   compress,
   distance,
   EPS,
@@ -37,12 +37,16 @@ interface Track {
   y0: number;
   y1: number;
 }
-/** What can block or cost a grid edge on one grid line. */
+/**
+ * What can block or cost a grid edge on one grid line. Edge `i` runs from grid line `i` to
+ * `i + 1` across it: `shared` and `lanes` hold its shared length and lane deficit.
+ */
 interface GridLine {
   obs: Obstacle[];
   near: NearBox[];
-  parallel: Track[];
-  crossings: number[];
+  hits: Int32Array;
+  shared: Float64Array;
+  lanes: Float64Array;
 }
 /**
  * A* over the grid of lines through the ends, the obstacles' sides, the standoff bands and a lane
@@ -147,62 +151,107 @@ export function search(
         y1: Math.max(a.y, b.y),
       });
   }
+  // Shared and parallel runs use the same tests and sums, in the same order.
+  const gap = s.edgeGap,
+    laneLimit = gap - 0.05;
   // A grid line has fixed crossing points. Count each route once per point, then query the
   // sorted coordinates for every grid edge. Parallel costs keep their original summation order.
-  const lineCache = [new Map<number, GridLine>(), new Map<number, GridLine>()];
-  function onLine(horizontal: boolean, at: number) {
-    const memo = lineCache[horizontal ? 0 : 1];
-    let hit = memo.get(at);
-    if (hit) return hit;
+  // Kept per grid line: rows (level lines, by index into Y) and columns (upright, into X).
+  const rows: Array<GridLine | undefined> = new Array(ny),
+    cols: Array<GridLine | undefined> = new Array(nx);
+  // Per grid line, the tracks within `reach` of it, in their order: rows first, then columns.
+  let near0: number[][] | null = null,
+    near1: number[][] | null = null;
+  const reaching = (horizontal: boolean) => {
+    const lines = horizontal ? Y : X,
+      out: number[][] = lines.map(() => []);
+    existing.forEach((t, k) => {
+      const lo = horizontal ? t.y0 : t.x0,
+        hi = horizontal ? t.y1 : t.x1;
+      // The lines at which neither `hi < at - reach` nor `lo > at + reach`, tested as written;
+      // the bounds only skip lines a unit or more past them.
+      for (
+        let j = below(lines, lo - reach - 1);
+        j < lines.length && lines[j] <= hi + reach + 1;
+        j++
+      )
+        if (!(hi < lines[j] - reach || lo > lines[j] + reach)) out[j].push(k);
+    });
+    return out;
+  };
+  function onLine(horizontal: boolean, j: number): GridLine {
+    const at = horizontal ? Y[j] : X[j],
+      bucket = horizontal ? (near0 ??= reaching(true))[j] : (near1 ??= reaching(false))[j];
     const lo = horizontal ? 'y' : 'x',
       size = horizontal ? 'h' : 'w',
       t0 = horizontal ? 'y0' : 'x0',
       t1 = horizontal ? 'y1' : 'x1';
-    hit = {
-      obs: obsIn.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
-      near: nearIn.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
-      parallel: [],
-      crossings: [],
-    };
-    const seen = new Set<string>();
-    for (const t of existing) {
-      if (t[t1] < at - reach || t[t0] > at + reach) continue;
+    const along = horizontal ? X : Y,
+      m = along.length - 1,
+      hit: GridLine = {
+        obs: obsIn.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
+        near: nearIn.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
+        hits: new Int32Array(m),
+        shared: new Float64Array(m),
+        lanes: new Float64Array(m),
+      };
+    // A route meets the line at a point once: the points so far of the route in hand (its
+    // segments are listed together), as coordinates along the line.
+    let id: string | null = null;
+    const mine: number[] = [],
+      crossings: number[] = [];
+    for (const k of bucket) {
+      const t = existing[k];
       if (horizontal === t.h) {
-        hit.parallel.push(t);
+        // A run along the line adds to the edges it overlaps, track by track in their order, so
+        // each edge's sums are the ones a pass over every track gives.
+        const t0 = horizontal ? t.x0 : t.y0,
+          t1 = horizontal ? t.x1 : t.y1,
+          separation = Math.abs(at - (horizontal ? t.a.y : t.a.x)),
+          shares = !(separation > EPS),
+          lane = separation < laneLimit;
+        if (!shares && !lane) continue;
+        // An edge that ends at or before the run starts, or starts at or after it ends, overlaps
+        // it by nothing.
+        for (let i = Math.max(0, atMost(along, t0) - 1); i < m && along[i] < t1; i++) {
+          const overlap = Math.min(along[i + 1], t1) - Math.max(along[i], t0);
+          if (shares && overlap > EPS) hit.shared[i] += overlap;
+          if (overlap > 1 && lane) hit.lanes[i] += (overlap * (gap - separation)) / gap;
+        }
         continue;
       }
       if (at < t[t0] - EPS || at > t[t1] + EPS) continue;
       const p = horizontal ? { x: t.a.x, y: at } : { x: at, y: t.a.y };
       if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
-      const key = t.id + ':' + p.x + ',' + p.y;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      hit.crossings.push(horizontal ? p.x : p.y);
+      const v = horizontal ? p.x : p.y;
+      if (t.id !== id) {
+        id = t.id;
+        mine.length = 0;
+      } else if (mine.includes(v)) continue;
+      mine.push(v);
+      crossings.push(v);
     }
-    hit.crossings.sort((a, b) => a - b);
-    memo.set(at, hit);
+    crossings.sort((a, b) => a - b);
+    // Per edge, the crossings from `lo - EPS` to `hi + EPS`: both ends only move forward.
+    for (let i = 0, a = 0, b = 0; i < m; i++) {
+      const lo = along[i] - EPS,
+        hi = along[i + 1] + EPS;
+      while (a < crossings.length && crossings[a] < lo) a++;
+      while (b < crossings.length && crossings[b] <= hi) b++;
+      hit.hits[i] = b - a;
+    }
     return hit;
   }
-  // Shared and parallel runs use the same tests and sums, in the same order.
-  const gap = s.edgeGap,
-    laneLimit = gap - 0.05;
-  function segmentCost(a: Point, b: Point, line: GridLine) {
-    let shared = 0,
-      lanes = 0;
-    const h = Math.abs(a.y - b.y) < EPS,
-      lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
-      hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
-      at = h ? a.y : a.x;
-    for (const t of line.parallel) {
-      const overlap = Math.min(hi, h ? t.x1 : t.y1) - Math.max(lo, h ? t.x0 : t.y0),
-        separation = Math.abs(at - (h ? t.a.y : t.a.x));
-      if (!(separation > EPS) && overlap > EPS) shared += overlap;
-      if (overlap > 1 && separation < laneLimit) lanes += (overlap * (gap - separation)) / gap;
-    }
-    const hits = atMost(line.crossings, hi + EPS) - below(line.crossings, lo - EPS);
+  // A grid edge is edge `i` of a grid line: the level (`h`) or upright run at `at` from `lo` to
+  // `hi`.
+  function segmentCost(h: boolean, at: number, i: number, lo: number, hi: number, line: GridLine) {
+    const shared = line.shared[i],
+      lanes = line.lanes[i];
+    const hits = line.hits[i];
     return (
-      distance(a, b) +
-      (near.length ? standoffSegment(a, b, line.near) : 0) +
+      hi -
+      lo +
+      (near.length ? standoffRun(h, at, lo, hi, line.near) : 0) +
       hits * s.crossingPenalty +
       shared * s.sharedPenalty +
       lanes * s.parallelPenalty
@@ -240,10 +289,15 @@ export function search(
         ck = (cell < nc ? cell : nc) * 2 + nd;
       let k = cache[ck];
       if (k !== k) {
-        const a = { x: X[x], y: Y[y] },
-          b = { x: X[xx], y: Y[yy] },
-          line = nd ? onLine(false, a.x) : onLine(true, a.y);
-        k = blocked(a, b, line.obs) ? Infinity : segmentCost(a, b, line);
+        const h = nd === 0,
+          line = h ? (rows[y] ??= onLine(true, y)) : (cols[x] ??= onLine(false, x)),
+          at = h ? Y[y] : X[x],
+          u = h ? X[x] : Y[y],
+          v = h ? X[xx] : Y[yy],
+          lo = u < v ? u : v,
+          hi = u < v ? v : u,
+          i = h ? Math.min(x, xx) : Math.min(y, yy);
+        k = blockedRun(h, at, lo, hi, line.obs) ? Infinity : segmentCost(h, at, i, lo, hi, line);
         cache[ck] = k;
       }
       if (k === Infinity) continue;
