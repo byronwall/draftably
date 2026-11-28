@@ -148,3 +148,78 @@ pnpm shoot --sheet tmp/compact-grid/wide/worst-comparison.png --cols 2 --size 21
 ```
 
 Each set writes its fresh reference and per-frame results under `tmp/compact-grid/`. Confirmation uses `heldout/` and the reserved set uses `wide/`. A replay writes the per-frame JSON and exits nonzero if any frame fails either quality check.
+
+## Round 2
+
+### Why the long loops survived
+
+On the former worst frame, 60/705/10, 22 compact paths left the outer card bounds. Fresh routing sent 15 outside. Paths that left the bounds only in compact accounted for 12,532 of its 14,534 extra pixels. One line, `use56`, was four times its Manhattan distance. Substituting the fresh version alone added 95 px of unrelated sharing against the existing neighbors. Only three of the 60 individual fresh replacements lowered the drawing cost without increasing unrelated sharing.
+
+The compact grid searched fixed tracks next to cards and ports. On this frame, 56 of the 60 fresh paths used at least one off-grid interior vertex. During a resize, the old mapping moved each track with its nearest face. When a gap reopened, a route could keep its old detour. Above 32 lines the router finished after one pass, before an early line could use space its neighbors had freed.
+
+Adding intermediate grid tracks, increasing the length penalty, and restarting from the initial full drawing each still lost frames. Running the full line search on the three biggest detours also left losses. On wide-range seeds 701 and 705, that search still lost five of 24 dense resizes and took about 134 ms median.
+
+### What changed
+
+Compact now scales a track's position across the usable gap when both faces move. Tracks within the clearance margin stay with the nearest face. After grid routing, it revisits lines in descending order of excess length over Manhattan distance. It can slide an interior run by a quarter, half or full lane, or replace a folded section with a straight run or one elbow.
+
+The pass ranks local edits by their changed segments and checks the three best legal candidates with the router's exact line cost. It rejects added unrelated overlap and self-intersections. The final rounded-path clearance check still applies. At 12 lines or fewer, an explicit compact request goes straight to ordinary full routing.
+
+### Results on the three tuning sets
+
+Each row covers five seeds and twelve resizes per seed. The primary and confirmation sets span pitches of 270–360 px and widths of 200–240 px. The former held-out set spans pitches of 230–414 px and widths of 176–272 px. All three were available during tuning. Fresh timings and scores for these sets come from the original separate reference runs.
+
+| Set             | Lines | Cost better / tied / worse | Worst cost loss | Mean unrelated px, fresh → resize | Max added unrelated px | Resize median / p95 / max (ms) | Fresh median / p95 / max (ms) |
+| --------------- | ----: | -------------------------: | --------------: | --------------------------------: | ---------------------: | -----------------------------: | ----------------------------: |
+| Primary         |    10 |                 0 / 60 / 0 |          0.000% |                       0.00 → 0.00 |                      0 |           54.7 / 100.8 / 113.1 |            45.9 / 68.1 / 75.2 |
+| Primary         |    30 |                 60 / 0 / 0 |          0.000% |                       2.98 → 0.00 |                      0 |           90.2 / 146.2 / 170.2 |         310.0 / 442.4 / 486.7 |
+| Primary         |    60 |                 60 / 0 / 0 |          0.000% |                      19.12 → 0.00 |                      0 |           79.5 / 121.7 / 132.5 |      1716.8 / 2152.4 / 2414.3 |
+| Confirmation    |    10 |                 0 / 60 / 0 |          0.000% |                       0.00 → 0.00 |                      0 |           50.5 / 101.9 / 152.2 |           51.7 / 89.8 / 103.7 |
+| Confirmation    |    30 |                 60 / 0 / 0 |          0.000% |                       0.27 → 0.00 |                      0 |           84.8 / 110.6 / 135.9 |         318.7 / 391.7 / 460.1 |
+| Confirmation    |    60 |                 60 / 0 / 0 |          0.000% |                      32.00 → 0.00 |                      0 |            70.2 / 88.6 / 106.8 |      1811.8 / 2432.8 / 2883.0 |
+| Former held-out |    10 |                 0 / 60 / 0 |          0.000% |                       0.00 → 0.00 |                      0 |           49.0 / 111.9 / 198.1 |           42.7 / 55.8 / 101.7 |
+| Former held-out |    30 |                 60 / 0 / 0 |          0.000% |                       1.10 → 0.00 |                      0 |          105.9 / 191.9 / 368.1 |        345.8 / 637.5 / 1122.9 |
+| Former held-out |    60 |                 60 / 0 / 0 |          0.000% |                      18.50 → 0.00 |                      0 |           75.7 / 121.3 / 156.2 |      1963.6 / 3300.3 / 4784.1 |
+
+All 11 former losses became wins. On 60/705/10, weighted cost fell from 630,081.04 to 569,160.88, against 594,251.02 fresh. The old drawing had 88 extra crossings and 272 extra bends. The revised drawing has one extra crossing and 64 extra bends. It still draws 12,645 extra pixels of line.
+
+![Fresh full and revised compact routes on former worst frame 60/705/10](../../../tmp/compact-grid/round2/former-worst.png)
+
+### New held-out set
+
+Commit `d315ea94` reserved seeds 1103, 1129, 1151, 1171 and 1193 before tuning. The new dimensions span pitches of 207–458 px and widths of 158–292 px. The algorithm was frozen at `b627b421`. The benchmark ran the full sequence once and captured any worst-frame pair during that run.
+
+| Set          | Lines | Cost better / tied / worse | Worst cost loss | Mean unrelated px, fresh → resize | Max added unrelated px | Resize median / p95 / max (ms) | Fresh median / p95 / max (ms) |
+| ------------ | ----: | -------------------------: | --------------: | --------------------------------: | ---------------------: | -----------------------------: | ----------------------------: |
+| New held-out |    10 |                 0 / 60 / 0 |          0.000% |                       0.02 → 0.02 |                      0 |             50.0 / 64.9 / 76.0 |          54.7 / 110.8 / 219.2 |
+| New held-out |    30 |                 60 / 0 / 0 |          0.000% |                       0.50 → 0.00 |                      0 |           73.6 / 104.2 / 144.3 |         353.8 / 522.6 / 587.3 |
+| New held-out |    60 |                 60 / 0 / 0 |          0.000% |                      26.93 → 0.00 |                      0 |            74.0 / 91.1 / 120.6 |      2143.9 / 2931.0 / 5717.0 |
+
+All timings measure the synchronous packaged call. They exclude the initial full drawing and the benchmark's scoring, assertions and screenshot capture. P95 uses nearest rank. The 10-line rows measure ordinary full routing. Elapsed time can vary between runs of the same algorithm. For example, the former held-out 60-line median was 109.8 ms and p95 was 288.9 ms with another trial running. The table uses a separate run with that trial finished.
+
+### What remains
+
+Across all 720 resizes, 480 drawings beat fresh routing and 240 tied. The new held-out set contributed 120 wins, 60 ties and zero losses. All 24,000 resized line instances reached their assigned rows and cleared the cards. Every 30- and 60-line drawing had zero unrelated sharing. On 10/1151/7, ordinary full routing shared one pixel between unrelated lines. The compact request returned the same drawing.
+
+Every 60-line median met the 100 ms target. P95 reached 121.7 ms on primary and 121.3 ms on the former held-out set. Across all 240 dense resizes, median / p95 / max was 75.2 / 106.8 / 156.2 ms.
+
+Some outer loops remain visible. On 60/705/10, the number of paths outside the card bounds fell from 22 to 20, versus 15 fresh. The paths that previously went outside only in compact regained 7,629 px in total. A prominent one, `use56`, now stays inside and measures 1,042 px, down from 3,786 px and close to 940 px fresh. The score rewards lane separation as well as short paths. The measured wins do not establish a cost bound for other drawings.
+
+### Verification and reproduction
+
+All 180 ordinary public results matched round 2's starting commit `c16a708f` byte for byte. The comparison covered omitted quality, auto, quick and full, on the initial layout, a changed layout, and a guarded resize. [Parity log](../../../tmp/compact-grid/round2/parity.log)
+
+`pnpm check` passed, including type checking, lint, formatting, the production build and `pnpm test:engines`. The unit suite passed 1,199 tests and skipped 41. The engine suite passed 320 parity comparisons across 13 fixtures and 11 algorithms. All four `pnpm bench:fresh` digests matched round 1. All six `pnpm bench:route` cases had zero blocked lines. [Repository check](../../../tmp/compact-grid/round2/check.log) · [Fresh digests](../../../tmp/compact-grid/round2/bench-fresh.log) · [Route benchmark](../../../tmp/compact-grid/round2/bench-route.log)
+
+The default diagram audit tied on all 429 renders with zero errors. The weighted gate passed. Its only warning was the unchanged issue score. [Audit](../../../tmp/compact-grid/round2/audit/compare.md) · [Coverage](../../../tmp/compact-grid/round2/audit/coverage.md)
+
+Reproduce the four comparisons with these commands. Each command collects a fresh reference in a separate process before the resize sequence.
+
+```sh
+pnpm bench:route:resize --compact --round2
+pnpm bench:route:resize --compact --round2 --holdout
+pnpm bench:route:resize --compact --round2 --wide
+pnpm bench:route:resize --compact --round2-heldout --capture-worst
+```
+
+The per-frame results include scores and timings for both routes. [Primary](../../../tmp/compact-grid/round2/replay.json) · [Confirmation](../../../tmp/compact-grid/round2/heldout/replay.json) · [Former held-out](../../../tmp/compact-grid/round2/wide/replay.json) · [New held-out](../../../tmp/compact-grid/round2/reserved/replay.json)
