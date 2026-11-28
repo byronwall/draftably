@@ -1,4 +1,4 @@
-import { conflicts, parallelConflicts } from './conflicts.ts';
+import { pairSums } from './conflicts.ts';
 import { BORDER_WEIGHT } from './cost.ts';
 import { center, cmp, distance, EPS, inflate, round, segments, SIDES, vector } from './geometry.ts';
 import { TIGHT_PITCH } from './ports.ts';
@@ -246,10 +246,10 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
           .filter(
             q => !fixed(r) || !fixed(q) || start(q).x !== start(r).x || start(q).y !== start(r).y,
           ),
-        c = conflicts(r.points, used),
-        p = parallelConflicts(rs[i].points, used, s.edgeGap);
-      crossings += c.crossings;
-      shared += c.shared;
+        // Most lines are the same from one call to the next: their pairs' terms are kept.
+        p = pairSums(r.points, used, s.edgeGap);
+      crossings += p.crossings;
+      shared += p.shared;
       lanePairs += p.lanePairs;
       laneDeficit += p.laneDeficit;
       if (p.minGap !== null) minGap = Math.min(minGap, p.minGap);

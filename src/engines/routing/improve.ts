@@ -1,5 +1,5 @@
 import { standoffCost } from './cost.ts';
-import { conflicts, parallelConflicts } from './conflicts.ts';
+import { conflicts, pairSums, parallelConflicts } from './conflicts.ts';
 import { REPAIR_EDGES, SHORT_STEP } from './tuning.ts';
 import type { Route } from './types.ts';
 import type { Context } from './context.ts';
@@ -40,9 +40,10 @@ export function improve(ctx: Context) {
       const crossed = new Map(
         state.routes.map(r => [
           r.id,
-          conflicts(
+          pairSums(
             r.points,
             state.routes.filter(q => q !== r),
+            s.edgeGap,
           ).crossings,
         ]),
       );

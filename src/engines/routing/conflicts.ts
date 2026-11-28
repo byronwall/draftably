@@ -99,7 +99,7 @@ export function parallelNear(a: Point, b: Point, c: Point, d: Point, gap: number
 }
 // The pair checks below work on `spanOf` arrays: `parallelNear` and the crossing test on numbers,
 // in the same order, without building a point or result for every pair.
-export function parallelConflicts(points: Point[], used: Line[], gap: number) {
+export function parallelConflicts(points: Point[], used: Line[], gap: number, terms?: number[]) {
   let deficit = 0,
     pairs = 0,
     minGap = Infinity;
@@ -120,7 +120,9 @@ export function parallelConflicts(points: Point[], used: Line[], gap: number) {
         // Duplicate terminals need a short common fan-out; do not count the single
         // endpoint itself, but a shared run with positive length still counts.
         pairs++;
-        deficit += (overlap * (gap - separation)) / gap;
+        const term = (overlap * (gap - separation)) / gap;
+        deficit += term;
+        if (terms) terms.push(term);
         minGap = Math.min(minGap, separation);
       }
   }
@@ -161,6 +163,7 @@ export function conflicts(
   used: Line[],
   bound = Infinity,
   s: RoutingSettings = defaults,
+  terms?: number[],
 ) {
   let shared = 0,
     hits = 0;
@@ -192,7 +195,10 @@ export function conflicts(
         if (own.h[i] === other.h[j]) {
           if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
           const amount = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
-          if (amount > EPS) shared += amount;
+          if (amount > EPS) {
+            shared += amount;
+            if (terms) terms.push(amount);
+          }
           if (bound < Infinity && hits * s.crossingPenalty + shared * s.sharedPenalty >= bound)
             return { crossings: hits, shared };
           continue;
@@ -229,6 +235,63 @@ export function conflicts(
     }
   }
   return { crossings: hits, shared };
+}
+
+/**
+ * One line's terms against one other line, in the order `conflicts` and `parallelConflicts` add
+ * them: crossings, each shared run, lane pairs, each lane deficit, and the closest lane gap.
+ */
+export interface PairTerms {
+  crossings: number;
+  shared: number[];
+  lanePairs: number;
+  deficits: number[];
+  minGap: number | null;
+  gap: number;
+}
+// Kept per pair of points arrays, which are never changed in place.
+const pairs = new WeakMap<Point[], WeakMap<Point[], PairTerms>>();
+/**
+ * `conflicts` and `parallelConflicts` of `a` against the one line `b`, kept for the pair. A caller
+ * that adds a pair's terms in order, pair after pair, gets the very sums the two give for a list.
+ */
+export function pairTerms(a: Point[], b: Point[], gap: number) {
+  let byB = pairs.get(a);
+  if (!byB) pairs.set(a, (byB = new WeakMap()));
+  let t = byB.get(b);
+  if (!t || t.gap !== gap) {
+    const other = [{ points: b }],
+      shared: number[] = [],
+      deficits: number[] = [],
+      c = conflicts(a, other, Infinity, defaults, shared),
+      p = parallelConflicts(a, other, gap, deficits);
+    t = { crossings: c.crossings, shared, lanePairs: p.lanePairs, deficits, minGap: p.minGap, gap };
+    byB.set(b, t);
+  }
+  return t;
+}
+/** `conflicts` and `parallelConflicts` of `points` against `used`, from the pairs' kept terms. */
+export function pairSums(points: Point[], used: Line[], gap: number) {
+  let crossings = 0,
+    shared = 0,
+    lanePairs = 0,
+    deficit = 0,
+    minGap = Infinity;
+  for (const q of used) {
+    const t = pairTerms(points, q.points, gap);
+    crossings += t.crossings;
+    for (const v of t.shared) shared += v;
+    lanePairs += t.lanePairs;
+    for (const v of t.deficits) deficit += v;
+    if (t.minGap !== null) minGap = Math.min(minGap, t.minGap);
+  }
+  return {
+    crossings,
+    shared,
+    lanePairs,
+    laneDeficit: round(deficit),
+    minGap: Number.isFinite(minGap) ? minGap : null,
+  };
 }
 
 // Check each segment against the part of its own path before the preceding bend.
