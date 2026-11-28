@@ -1,7 +1,9 @@
-import { cardEnvelope, outsideCardBounds, outwardPort } from './card-envelope';
+import { outsideCardBounds, outwardPort } from './card-envelope';
+import { compactFrame, nearestFrame, type FullFrame } from './compact-reference';
+import { REPAIR_EDGES } from '../engines/routing/tuning';
 import { compactResize } from './compact-resize';
 import { finish } from '../engines/routing/compute';
-import { conflicts, crossesItself, parallelNear } from '../engines/routing/conflicts';
+import { crossesItself, pairTerms, parallelNear } from '../engines/routing/conflicts';
 import { BLOCKED_PENALTY, createContext } from '../engines/routing/context';
 import { standoffCost } from '../engines/routing/cost';
 import { find } from '../engines/routing/find';
@@ -16,7 +18,7 @@ export interface Previous {
   nodes: PlacedNodeIn[];
   compact: boolean;
   routes: Route[];
-  anchor?: Pick<Previous, 'nodes' | 'routes'>;
+  samples?: FullFrame[];
 }
 
 /** Only fixed row ports on rectangular cards have the same known terminal points before and
@@ -126,11 +128,13 @@ function keepsLane(r: Route, moved: Point[], other: Route, prior: Route, gap: nu
 }
 
 /** Shared length for pairs with no common card, and for pairs with no common row port. */
-function unrelatedShared(routes: Route[]) {
+function unrelatedShared(routes: Route[], gap: number) {
   let cards = 0,
     rows = 0;
   for (const [i, r] of routes.entries()) {
     for (const q of routes.slice(0, i)) {
+      const lengths = pairTerms(r.points, q.points, gap).shared;
+      if (!lengths.length) continue;
       const ends = [
         [r.from, r.points[0]],
         [r.to, r.points.at(-1)!],
@@ -141,7 +145,7 @@ function unrelatedShared(routes: Route[]) {
       ] as const;
       if (ends.some(([id, p]) => others.some(([other, at]) => id === other && same(p, at))))
         continue;
-      const shared = conflicts(r.points, [q]).shared;
+      const shared = lengths.reduce((sum, length) => sum + length, 0);
       rows += shared;
       if (r.from !== q.from && r.from !== q.to && r.to !== q.from && r.to !== q.to) cards += shared;
     }
@@ -160,78 +164,80 @@ export function resize(
   options: RoutingOptions,
   clear: (route: Route) => boolean,
   fresh: () => Route[],
-  compact: boolean,
+  samples: FullFrame[] | undefined,
 ) {
+  const compact = samples !== undefined;
   const ctx = createContext(input, options);
   const byId = (rs: Route[]) => rs.sort((a, b) => cmp(a.id, b.id));
   // No route can cost less: no conflicts, no standoff, and each line at its Manhattan length
   // with the fewest bends. A line with level ends needs two bends to reach another row.
   // If any line is blocked, the objective starts at 1e8.
   const atBound = (routes: Route[]) => {
-    const m = ctx.metrics(routes);
-    return (
-      !m.crossings &&
-      !m.lanePairs &&
-      !m.shared &&
-      ctx.total(routes) < BLOCKED_PENALTY &&
-      routes.every(r => {
+    if (
+      !routes.every(r => {
         const a = r.points[0],
           b = r.points.at(-1)!;
         return (
           r.points.length === (Math.abs(a.y - b.y) < EPS ? 2 : 4) &&
           Math.abs(lengthOf(r.points) - distance(a, b)) < EPS
         );
-      }) &&
+      })
+    )
+      return false;
+    const m = ctx.metrics(routes);
+    return (
+      !m.crossings &&
+      !m.lanePairs &&
+      !m.shared &&
+      ctx.total(routes) < BLOCKED_PENALTY &&
       routes.every(r => standoffCost(r.points, ctx.near) === 0)
     );
   };
-  // The one acceptance step. `checked`: the drawing must tie or beat a fresh route unless it
-  // reaches the lower bound.
-  const accept = (
-    routes: Route[],
-    checked: boolean,
-    compactRef?: {
-      anchor: Pick<Previous, 'nodes' | 'routes'>;
-      referenceOutside: number;
-    },
-  ) => {
+  // Every proposed drawing goes through the same final card clearance check.
+  const accept = (routes: Route[], mode: 'bound' | 'guarded' | 'compact') => {
     if (routes.some(r => r.blocked || !clear(r))) return;
-    if (compactRef) {
-      const { anchor, referenceOutside } = compactRef;
-      const bounds = cardEnvelope(ctx.rects.values());
-      const outside = routes.filter(r => outsideCardBounds(r.points, bounds)).length;
-      const compulsory = routes.filter(r => outwardPort(r, bounds)).length;
-      const value = ctx.total(routes);
-      const moveRef = columnMap(anchor.nodes, nodes, ctx.s.clearance);
-      // Reprice the last full drawing at this column spacing. Row changes need a fresh comparison.
-      const fixedRows = anchor.nodes.every(
-        (n, i) => n.y === nodes[i].y && n.height === nodes[i].height,
-      );
+    if (mode === 'bound') return byId(routes);
+    if (mode === 'compact' && samples) {
+      const frame = compactFrame(nodes);
+      const count = (rs: Route[]) =>
+        rs.filter(r => outsideCardBounds(r.points, frame.bounds)).length;
+      const value = ctx.total(routes),
+        outside = count(routes);
+      const shared = unrelatedShared(routes, ctx.s.edgeGap).cards;
+      const previous = nearestFrame(samples, frame, ctx.s.clearance, outside);
       if (
-        old.anchor &&
-        moveRef &&
-        fixedRows &&
-        outside <= Math.max(compulsory, referenceOutside - 2)
-      ) {
-        const transported = anchor.routes.map(r => ({
-          ...r,
-          points: r.points.map(p => ({ x: moveRef(p.x), y: p.y })),
-        }));
-        const reserve = ctx.s.crossingPenalty * Math.ceil(routes.length / 4);
-        if (value + reserve <= Math.min(ctx.total(anchor.routes), ctx.total(transported)))
-          return byId(routes);
+        routes.length > REPAIR_EDGES &&
+        previous &&
+        previous.distance <= 0.65 &&
+        outside <=
+          Math.max(
+            routes.filter(r => outwardPort(r, frame.bounds)).length,
+            previous.outsideLimit,
+          ) &&
+        value <= previous.frame.cost * 0.98 &&
+        shared === 0
+      )
+        return byId(routes);
+      if (!samples.length) {
+        const origin = compactFrame(old.nodes);
+        samples.push({
+          ...origin,
+          cost: ctx.total(old.routes),
+          outside: old.routes.filter(r => outsideCardBounds(r.points, origin.bounds)).length,
+        });
       }
       const full = fresh();
       if (full.some(r => r.blocked || !clear(r))) return byId(routes);
-      if (
-        outside > full.filter(r => outsideCardBounds(r.points, bounds)).length ||
-        value > ctx.total(full) ||
-        unrelatedShared(routes).cards > unrelatedShared(full).cards
-      )
-        return;
-      return byId(routes);
+      const reference = { ...frame, cost: ctx.total(full), outside: count(full) };
+      if (samples.length >= 8) samples.shift();
+      samples.push(reference);
+      return outside <= reference.outside &&
+        value <= reference.cost &&
+        shared <= unrelatedShared(full, ctx.s.edgeGap).cards
+        ? byId(routes)
+        : undefined;
     }
-    if (!checked || atBound(routes)) return byId(routes);
+    if (atBound(routes)) return byId(routes);
     const baseline = fresh();
     // Strict mode can withhold even an engine-clear line when a rounded corner enters a card.
     if (baseline.some(r => r.blocked || !clear(r))) return;
@@ -243,8 +249,8 @@ export function resize(
       m.shared > base.shared
     )
       return;
-    const shared = unrelatedShared(routes),
-      reference = unrelatedShared(baseline);
+    const shared = unrelatedShared(routes, ctx.s.edgeGap),
+      reference = unrelatedShared(baseline, ctx.s.edgeGap);
     if (shared.cards > reference.cards || shared.rows > reference.rows) return;
     const standoff = (rs: Route[]) => rs.reduce((s, r) => s + standoffCost(r.points, ctx.near), 0);
     return standoff(routes) <= standoff(baseline) ? byId(routes) : undefined;
@@ -331,16 +337,9 @@ export function resize(
   if (compact) {
     // Lines that all moved clear and already meet the lower bound need no grid.
     if (!ctx.state.routes.some(r => r.blocked) && atBound(ctx.state.routes))
-      return accept(ctx.state.routes, false);
-    const anchor = old.anchor ?? old;
-    const referenceBounds = cardEnvelope(
-      anchor.nodes.map(n => ({ x: n.x, y: n.y, w: n.width, h: n.height })),
-    );
-    const referenceOutside = anchor.routes.filter(r =>
-      outsideCardBounds(r.points, referenceBounds),
-    ).length;
-    if (!compactResize(ctx, referenceOutside)) return;
-    return accept(ctx.state.routes, false, { anchor, referenceOutside });
+      return accept(ctx.state.routes, 'bound');
+    if (!compactResize(ctx)) return;
+    return accept(ctx.state.routes, 'compact');
   }
   // A conflict between two fixed lines survives every repair of the missing lines.
   if (missing.length) {
@@ -353,5 +352,5 @@ export function resize(
     ctx.state.routes = ctx.edges.map(e => ids.get(e.id)!);
     finish(ctx);
   }
-  return accept(ctx.state.routes, true);
+  return accept(ctx.state.routes, 'guarded');
 }

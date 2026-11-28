@@ -5,6 +5,7 @@
 import { emptyDiagram } from '../model/document';
 import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../model/graph';
 import { resize, resizeKey, type Previous } from './resize';
+import type { FullFrame } from './compact-reference';
 import { computeRoutes, drawRoutes, routeInput, drawnPath, type DrawnRoute } from '../model/routes';
 import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect } from '../model/types';
@@ -256,6 +257,9 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
   const fresh = () => (baseline ??= routesFor(doc, vg, rects, quality));
   const edgeById = new Map(doc.graph.edges.map(e => [e.id, e]));
   const compact = graph.resize === 'compact' && quality === 'full';
+  // Copy the samples so two resizes from the same public result stay independent.
+  const samples: FullFrame[] | undefined =
+    compact && prior?.key === key ? [...(prior?.samples ?? [])] : undefined;
   // A full route is cheaper than constructing a grid and checking a small drawing.
   const moved =
     (!compact || ids.length > 12) &&
@@ -275,7 +279,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
               [r.from, r.to],
             ).length,
           () => fresh().result.routes,
-          compact,
+          samples,
         )
       : undefined;
   const routes = moved ?? fresh().result.routes;
@@ -315,12 +319,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     snapshots.set(result, {
       key,
       compact: compact && !!moved,
-      anchor:
-        compact && prior?.key === key
-          ? baseline
-            ? { nodes, routes: moved ? structuredClone(baseline.result.routes) : saved }
-            : (prior.anchor ?? { nodes: prior.nodes, routes: prior.routes })
-          : undefined,
+      samples,
       // Only what resize reads: other data on the caller's cards is never copied.
       nodes,
       routes: saved,

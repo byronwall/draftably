@@ -5,7 +5,7 @@ import { standoffRun } from '../engines/routing/cost';
 import type { Context } from '../engines/routing/context';
 import type { Point, Route } from '../engines/routing/types';
 
-export function createGrid(ctx: Context) {
+export function createGrid(ctx: Context, exteriorPrice: number) {
   const { s, state } = ctx,
     gap = s.edgeGap,
     clearance = s.clearance;
@@ -38,6 +38,13 @@ export function createGrid(ctx: Context) {
   const H = new Float64Array(count),
     V = new Float64Array(count);
   const boxes = ctx.obsFor(ctx.edges[0]);
+  // Arcs on the same track share the cards that can block or crowd that track.
+  const rowBoxes = Y.map(y => boxes.filter(r => y > r.y && y < r.y + r.h));
+  const columnBoxes = X.map(x => boxes.filter(r => x > r.x && x < r.x + r.w));
+  const rowBands = Y.map(y => ctx.near.filter(r => y >= r.y - r.band && y <= r.y + r.h + r.band));
+  const columnBands = X.map(x =>
+    ctx.near.filter(r => x >= r.x - r.band && x <= r.x + r.w + r.band),
+  );
   for (let j = 0; j < ny; j++)
     for (let i = 0; i < nx; i++) {
       const id = j * nx + i,
@@ -46,13 +53,13 @@ export function createGrid(ctx: Context) {
         xx = X[i + 1],
         yy = Y[j + 1];
       H[id] =
-        xx === undefined || boxes.some(r => y > r.y && y < r.y + r.h && xx > r.x && x < r.x + r.w)
+        xx === undefined || rowBoxes[j].some(r => xx > r.x && x < r.x + r.w)
           ? Infinity
-          : xx - x + standoffRun(true, y, x, xx, ctx.near);
+          : xx - x + standoffRun(true, y, x, xx, rowBands[j]);
       V[id] =
-        yy === undefined || boxes.some(r => x > r.x && x < r.x + r.w && yy > r.y && y < r.y + r.h)
+        yy === undefined || columnBoxes[i].some(r => yy > r.y && y < r.y + r.h)
           ? Infinity
-          : yy - y + standoffRun(false, x, y, yy, ctx.near);
+          : yy - y + standoffRun(false, x, y, yy, columnBands[i]);
     }
   // Charge shared runs, parallel runs and crossings on each grid arc they reach.
   const occupied = new WeakMap<Point[], { indices: number[]; charges: number[] }>();
@@ -134,11 +141,8 @@ export function createGrid(ctx: Context) {
   const top = below(Y, bounds.top),
     bottom = atMost(Y, bounds.bottom) - 1;
   // Charge each transition between the card envelope and an exterior track.
-  let currentToll = 0;
-  const priceBoundary = (price: number) => {
-    const toll = price / 2 - currentToll;
-    currentToll = price / 2;
-    if (!toll) return;
+  const toll = exteriorPrice / 2;
+  if (toll) {
     for (let j = top; j <= bottom; j++) {
       if (left > 0) H[j * nx + left - 1] += toll;
       if (right + 1 < nx) H[j * nx + right] += toll;
@@ -147,7 +151,7 @@ export function createGrid(ctx: Context) {
       if (top > 0) V[(top - 1) * nx + i] += toll;
       if (bottom + 1 < ny) V[bottom * nx + i] += toll;
     }
-  };
+  }
   const search = (r: Route, attraction: number) => {
     const a = r.points[0],
       b = r.points.at(-1)!,
@@ -202,5 +206,5 @@ export function createGrid(ctx: Context) {
       if (j) visit(cell - nx, 1, V[cell - nx], i, j - 1);
     }
   };
-  return { X, occupancy, commonStubs, search, bounds, priceBoundary };
+  return { X, occupancy, commonStubs, search, bounds };
 }

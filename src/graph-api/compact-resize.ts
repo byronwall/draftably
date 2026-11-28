@@ -7,20 +7,20 @@ import { REPAIR_EDGES } from '../engines/routing/tuning';
 import type { Context } from '../engines/routing/context';
 import type { Point, Route } from '../engines/routing/types';
 import { relaxChannels } from './compact-channels';
-import { outsideCardBounds, outwardPort } from './card-envelope';
+import { outsideCardBounds } from './card-envelope';
 import { createGrid } from './resize-grid';
 
 /** Move the most expensive row connections first. The grid suggests candidates;
  * exact geometry checks and the router's line cost decide which ones to keep. */
-export function compactResize(ctx: Context, previousOutside: number) {
+export function compactResize(ctx: Context) {
   const { s, state } = ctx,
     gap = s.edgeGap,
     clearance = s.clearance;
-  const grid = createGrid(ctx);
+  // A path that leaves and re-enters pays the exterior price once.
+  const price = (state.routes.length <= REPAIR_EDGES ? 10 : 24) * s.crossingPenalty;
+  const grid = createGrid(ctx, price);
   if (!grid) return false;
   const { X, occupancy, commonStubs, search, bounds } = grid;
-  const forced = state.routes.filter(r => outwardPort(r, bounds)).length;
-  const target = forced + Math.floor(Math.max(0, previousOutside - forced) * 0.85);
   const byId = new Map(ctx.edges.map(e => [e.id, e]));
   const others = (r: Route) => state.routes.filter(o => o.id !== r.id && !o.blocked);
   const priority = () =>
@@ -41,10 +41,6 @@ export function compactResize(ctx: Context, previousOutside: number) {
     );
     flatten(used);
     const obs = ctx.obsFor(e);
-    const outside = used.filter(q => outsideCardBounds(q.points, bounds)).length;
-    const price =
-      (outside < target ? 1 : state.routes.length <= REPAIR_EDGES ? 24 : 50) * s.crossingPenalty;
-    grid.priceBoundary(price);
     const shapeCost = (points: Point[]) =>
       cost(points, used, s, ctx.near) + (outsideCardBounds(points, bounds) ? price : 0);
     let best = r.points,
