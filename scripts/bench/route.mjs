@@ -4,7 +4,7 @@
  * drawings, with cards in five fixed columns and lines from row to row, and reports the entry's
  * minified size.
  *
- * Usage: pnpm bench:route [--runs N] [--quality resize|quick|full] [--sweep]
+ * Usage: pnpm bench:route [--runs N] [--quality resize|quick|full] [--sweep] [--dist DIR]
  * --sweep moves the columns of each 60-line schema through twelve widths (three seeds by default).
  *
  * Each run routes a new seeded schema, so the router's cache never helps. Fails (exit 1) when a
@@ -16,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const entry = path.join(root, 'packages/runtime/dist/route.js');
+const d = process.argv.indexOf('--dist');
+const entry = path.resolve(root, d > 0 ? process.argv[d + 1] : 'packages/runtime/dist', 'route.js');
 const { route } = await import(entry);
 const sweep = process.argv.includes('--sweep');
 const i = process.argv.indexOf('--runs');
@@ -144,7 +145,7 @@ for (const quality of qualities)
       const ordered = times.toSorted((a, b) => a - b);
       const p95 = ordered[Math.ceil(ordered.length * 0.95) - 1];
       console.log(
-        `${quality} resize sweep: ${times.filter(t => t < 100).length}/${times.length} under 100 ms, p95 ${Math.round(p95)} ms`,
+        `Width sweep (${quality}): ${times.filter(t => t < 100).length}/${times.length} under 100 ms, p95 ${Math.round(p95)} ms`,
       );
     }
     rowsOut.push(
