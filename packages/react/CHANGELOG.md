@@ -1,5 +1,14 @@
 # @draftably/react
 
+## 0.13.0
+
+### Patch Changes
+
+- Updated dependencies [6d81934]
+- Updated dependencies [6d81934]
+  - @draftably/runtime@0.13.0
+  - @draftably/editor@0.13.0
+
 ## 0.12.0
 
 ### Patch Changes
