@@ -102,6 +102,26 @@ const segmentHits = (a: Point, b: Point, r: Rect) =>
   Math.max(a.y, b.y) > r.y &&
   Math.min(a.y, b.y) < r.y + r.h;
 
+/** Bounds of the quadratic corner bends drawn by roundedPath. */
+export function routeBends(points: Point[], radius: number): Rect[] {
+  return points.slice(1, -1).flatMap((p, i) => {
+    const a = points[i],
+      b = points[i + 2],
+      r = Math.min(radius, manhattan(a, p) / 2, manhattan(p, b) / 2);
+    if (!r || (a.x === p.x && p.x === b.x) || (a.y === p.y && p.y === b.y)) return [];
+    const before = { x: p.x + Math.sign(a.x - p.x) * r, y: p.y + Math.sign(a.y - p.y) * r },
+      after = { x: p.x + Math.sign(b.x - p.x) * r, y: p.y + Math.sign(b.y - p.y) * r };
+    return [
+      {
+        x: Math.min(before.x, after.x),
+        y: Math.min(before.y, after.y),
+        w: Math.abs(before.x - after.x),
+        h: Math.abs(before.y - after.y),
+      },
+    ];
+  });
+}
+
 /** A bowed connector only when its entire path and attachment are clear. */
 export function labelLeader(
   label: EdgeLabelBox,
@@ -109,6 +129,7 @@ export function labelLeader(
   obstacles: Rect[],
   otherRoutes: Point[][],
   dash?: string,
+  radius = 6,
 ): { path: string; points: Point[] } | undefined {
   const box = { x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h },
     candidates: Array<{ path: string; points: Point[]; length: number }> = [];
@@ -121,8 +142,18 @@ export function labelLeader(
       b = points[i],
       flat = a.y === b.y;
     if (!flat && a.x !== b.x) continue;
-    const lo = (flat ? Math.min(a.x, b.x) : Math.min(a.y, b.y)) + 10,
-      hi = (flat ? Math.max(a.x, b.x) : Math.max(a.y, b.y)) - 10,
+    const length = manhattan(a, b),
+      startInset = Math.max(
+        10,
+        i > 1 ? Math.min(radius, length / 2, manhattan(points[i - 2], a) / 2) : 0,
+      ),
+      endInset = Math.max(
+        10,
+        i < points.length - 1 ? Math.min(radius, length / 2, manhattan(b, points[i + 1]) / 2) : 0,
+      ),
+      forward = flat ? b.x > a.x : b.y > a.y,
+      lo = (flat ? Math.min(a.x, b.x) : Math.min(a.y, b.y)) + (forward ? startInset : endInset),
+      hi = (flat ? Math.max(a.x, b.x) : Math.max(a.y, b.y)) - (forward ? endInset : startInset),
       from = flat ? Math.max(lo, box.x + 4) : Math.max(lo, box.y + 4),
       to = flat ? Math.min(hi, box.x + box.w - 4) : Math.min(hi, box.y + box.h - 4);
     if (from > to) continue;
@@ -142,10 +173,10 @@ export function labelLeader(
     }
     const edge = flat ? (a.y < box.y ? box.y : box.y + box.h) : a.x < box.x ? box.x : box.x + box.w,
       cross = flat ? a.y : a.x,
-      length = Math.abs(edge - cross);
+      gap = Math.abs(edge - cross);
     if (
-      length <= label.h / 2 ||
-      length > 60 ||
+      gap <= label.h / 2 ||
+      gap > 60 ||
       (flat ? a.y >= box.y && a.y <= box.y + box.h : a.x >= box.x && a.x <= box.x + box.w)
     )
       continue;
@@ -188,7 +219,7 @@ export function labelLeader(
       candidates.push({
         path: `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`,
         points: curve,
-        length,
+        length: gap,
       });
       break;
     }
@@ -1124,6 +1155,15 @@ export function drawRoutes(
       : look.annotation.size + (lines.length - 1) * look.annotation.lineHeight;
     label[size] = Math.min(label[size], Math.max(ink + 4, room));
   }
+  // Keep leader clearance separate from label placement: include plain arrows and painted bends.
+  const leaderMarks = result.routes.flatMap(route => {
+    const edge = findEdge(doc, route.id);
+    return edge ? markerRects(route.points, edge) : [];
+  });
+  const bends = result.routes.flatMap(route => {
+    const edge = findEdge(doc, route.id);
+    return routeBends(edge ? stoppedPoints(route.points, edge) : route.points, radius);
+  });
   const leaders: Point[][] = [];
   for (const [route, label] of labels) {
     const edge = findEdge(doc, route.id)!;
@@ -1141,9 +1181,10 @@ export function drawRoutes(
     label.leader = labelLeader(
       label,
       route.points,
-      [...obstacles, ...borders, ...marks, ...otherLabels],
+      [...obstacles, ...borders, ...leaderMarks, ...bends, ...otherLabels],
       [...result.routes.filter(r => r !== route).map(r => r.points), ...leaders],
       dash,
+      radius,
     );
     if (label.leader) leaders.push(label.leader.points);
   }

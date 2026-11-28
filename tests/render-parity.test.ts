@@ -139,7 +139,7 @@ it.each(['e1', 'e2'])(
         .querySelectorAll('[data-edge-label-leader]'),
     ].map(el => el.getAttribute('d'));
     dispose();
-    expect(solid).toContain('M 439.5 107 Q 447.5 86.5 439.5 66');
+    expect(solid).toContain('M 439.5 107 Q 431.5 86.5 439.5 66');
     expect(solid.every(path => path?.includes(' Q '))).toBe(true);
     expect(exported).toEqual(solid);
   },

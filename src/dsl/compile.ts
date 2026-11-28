@@ -3000,8 +3000,8 @@ function refinePass(
           ((r.a === id && r.b === h.ref) || (r.b === id && r.a === h.ref)) &&
           (h.side === 'right' || h.side === 'left' ? r.w : r.h) - 2 * LABEL_RUN + 8 <= 40,
       ),
-      pinned = local.some(p => p.type === 'pin' && (p.id === id || p.id === h.ref)),
-      gap = h.implicitGap && h.strength === 'prefer' && labelled && !pinned ? 40 : h.gap;
+      anchored = local.some(p => p.type === 'pin' || p.type === 'stay' || p.type === 'nudge'),
+      gap = h.implicitGap && h.strength === 'prefer' && labelled && !anchored ? 40 : h.gap;
     let x = p.x + (b.w - a.w) / 2,
       y = p.y + (b.h - a.h) / 2;
     if (h.side === 'right' || h.side === 'left') {
