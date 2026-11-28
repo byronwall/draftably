@@ -64,7 +64,7 @@
     "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
     "eval:diagrams:tooled": "node scripts/diagram-compare/tooled.mjs",
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",
-    "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs",
+    "eval:diagrams:test": "node --test scripts/diagram-compare/adapter.test.mjs tests/audit-labels.test.mjs tests/audit-metrics.test.mjs tests/audit-cache.test.mjs",
     "runtime:build": "node scripts/build-runtime.ts",
     "integration:pack": "node scripts/pack-integrations.ts",
     "runtime:pack-check": "node scripts/prove-runtime-package.ts",

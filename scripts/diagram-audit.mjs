@@ -34,6 +34,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bucketOf, featuresOf } from './lib/buckets.mjs';
+import { parseLabels } from './lib/audit-labels.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -92,11 +93,15 @@ if (!corpusDir || !outDir) {
 const run = (...a) => {
   try {
     return {
-      out: execFileSync(process.execPath, [cli, ...a], { encoding: 'utf8', stdio: 'pipe' }),
+      out: execFileSync(process.execPath, [cli, ...a], {
+        encoding: 'utf8',
+        stdio: 'pipe',
+        maxBuffer: 32 * 1024 * 1024,
+      }),
       ok: true,
     };
   } catch (e) {
-    return { out: `${e.stdout ?? ''}${e.stderr ?? ''}`, ok: false };
+    return { out: `${e.stderr ?? ''}${e.message ?? ''}`.trim(), ok: false };
   }
 };
 
@@ -182,10 +187,53 @@ function parseSource(text) {
   const diamonds = new Set();
   const groupTitles = new Map();
   let direction,
+    sequence = false,
     edgeGap = 16;
+  const actions = new Set();
+  let bodyTag;
   for (const raw of text.split('\n')) {
-    const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
-    const e = line.match(/^edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
+    if (bodyTag) {
+      if (raw.trim() === bodyTag) bodyTag = undefined;
+      continue;
+    }
+    // Here-doc bodies are code or table data, never diagram statements. Ignore comments only
+    // outside quoted strings, as the language lexer does, before looking for an opening tag.
+    let quoted = false,
+      escaped = false,
+      end = raw.length;
+    for (let i = 0; i < raw.length; i++) {
+      const c = raw[i];
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (quoted && c === '\\') {
+        escaped = true;
+        continue;
+      }
+      if (c === '"') {
+        quoted = !quoted;
+        continue;
+      }
+      if (
+        !quoted &&
+        (c === '#' || (raw.startsWith('//', i) && (i === 0 || /[\s"]/.test(raw[i - 1]))))
+      ) {
+        end = i;
+        break;
+      }
+    }
+    const line = raw.slice(0, end).trim();
+    bodyTag = line.match(/(?:^|\s)<<([A-Za-z_][A-Za-z0-9_]*)\s*$/)?.[1];
+    const action = line.match(/^[+~.-]?action\s+(\S+)/);
+    if (action) actions.add(action[1]);
+    // A repeated root layout replaces the earlier one, including an engine layout.
+    const words = line.match(/(?:[^\s"]+|"(?:\\.|[^"\\])*")+/g) ?? [];
+    const value = word => (word?.startsWith('"') ? JSON.parse(word) : word);
+    if (value(words[0]) === 'layout' && value(words[1]) === 'root') {
+      sequence = !words.some(word => word.startsWith('engine=')) && value(words[2]) === 'sequence';
+    }
+    const e = line.match(/^[+~.-]?edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
     if (n) diamonds.add(n[1]);
@@ -196,7 +244,7 @@ function parseSource(text) {
     const g = line.match(/^routing\b.*\b(?:edge|port)-gap=(\d+)/g);
     if (g) for (const m of g) edgeGap = Math.max(edgeGap, +m.match(/(\d+)$/)[1]);
   }
-  return { edges, diamonds, direction, edgeGap, groupTitles };
+  return { edges, diamonds, direction, edgeGap, groupTitles, sequence, actions };
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
@@ -213,45 +261,6 @@ function groupTitleInk(svg, g) {
     return { x: g.x + 3, y: g.y + 2, w: 30 + textWidth(m[4], m[0]) + 8, h: 28 };
   }
   return { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
-}
-
-function parseLabels(svg) {
-  const canvas = svg.match(
-    /<rect x="[-\d.]+" y="[-\d.]+" width="[\d.]+" height="[\d.]+" fill="(#[0-9A-Fa-f]+)"\/>/,
-  )?.[1];
-  const labels = [];
-  const re =
-    /<rect x="([-\d.]+)" y="([-\d.]+)" width="([\d.]+)" height="([\d.]+)" rx="4" fill="([^"]+)"\/>\s*<text[^>]*font-weight="500"[^>]*>([^<]*)</g;
-  let m;
-  while ((m = re.exec(svg))) {
-    if (canvas && m[5] !== canvas) continue;
-    labels.push({ x: +m[1], y: +m[2], w: +m[3], h: +m[4], text: m[6], at: m.index });
-  }
-  // The text itself, inside the label's padding: the renderer pads the measured text by 8px
-  // each side (to at least 36px wide) and centres one line of the annotation type in the box.
-  for (const label of labels) {
-    const tag = svg.slice(label.at).match(/<text[^>]*font-size="([\d.]+)"[^>]*>/);
-    const size = tag ? +tag[1] : 10.5;
-    const w = Math.min(label.w - 16, textWidth(label.text, tag ? tag[0] : ''));
-    const c = center(label);
-    label.ink = { x: c.x - w / 2, y: c.y - size / 2, w, h: size };
-  }
-  // The label's own path is the line in the edge's group, which holds the line and its label
-  // (the halo paths before it, where the line breaks a frame, have no line cap). A line with
-  // `head=none` has no end marker, so the last marked path before the label would be another
-  // edge's.
-  for (const label of labels) {
-    const before = svg.slice(0, label.at),
-      group = before.slice(before.lastIndexOf('<g data-id="'));
-    label.edge = group.match(/^<g data-id="([^"]+)"/)?.[1];
-    const d =
-      group.match(/<path d="(M[^"]+)"[^>]*stroke-linecap/)?.[1] ??
-      [...before.matchAll(/<path d="(M[^"]+)"[^>]*marker-end/g)].pop()?.[1];
-    label.path = d
-      ? [...d.matchAll(/(-?[\d.]+),(-?[\d.]+)/g)].map(p => ({ x: +p[1], y: +p[2] }))
-      : [];
-  }
-  return labels;
 }
 
 // ---------- color ----------
@@ -335,11 +344,18 @@ function hookOf(r, s, t) {
  * x-coordinates, the longest free run in y between the obstacles that span it.
  */
 function largestEmpty(frame, obstacles, minSide = 0) {
+  obstacles = obstacles.flatMap(o => {
+    const x = Math.max(frame.x, o.x),
+      y = Math.max(frame.y, o.y);
+    const right = Math.min(frame.x + frame.w, o.x + o.w);
+    const bottom = Math.min(frame.y + frame.h, o.y + o.h);
+    return right > x && bottom > y ? [{ x, y, w: right - x, h: bottom - y }] : [];
+  });
   const xs = [
     ...new Set(
-      [frame.x, frame.x + frame.w, ...obstacles.flatMap(o => [o.x, o.x + o.w])]
-        .map(v => Math.min(frame.x + frame.w, Math.max(frame.x, v)))
-        .map(Math.round),
+      [frame.x, frame.x + frame.w, ...obstacles.flatMap(o => [o.x, o.x + o.w])].map(v =>
+        Math.min(frame.x + frame.w, Math.max(frame.x, v)),
+      ),
     ),
   ].sort((a, b) => a - b);
   let best = { x: frame.x, y: frame.y, w: 0, h: 0 };
@@ -502,9 +518,23 @@ function measure(file) {
   const check = run('check', file);
   const warnings = check.out.split('\n').filter(l => /warning/i.test(l));
   if (!check.ok) return { file, error: check.out.trim() };
-  const geo = JSON.parse(run('inspect', file).out);
-  const svg = run('inspect', file, '--svg').out;
-  const { edges, diamonds, direction, edgeGap, groupTitles } = parseSource(source);
+  const inspected = run('inspect', file);
+  if (!inspected.ok) return { file, error: `inspect failed: ${inspected.out}` };
+  let geo;
+  try {
+    geo = JSON.parse(inspected.out);
+    if (!Array.isArray(geo.nodes) || !Array.isArray(geo.routes))
+      throw new Error('missing geometry');
+  } catch (e) {
+    return { file, error: `invalid inspect geometry: ${e.message}` };
+  }
+  const rendered = run('inspect', file, '--svg');
+  if (!rendered.ok) return { file, error: `SVG inspect failed: ${rendered.out}` };
+  const svg = rendered.out;
+  if (!/<svg\b/.test(svg) || !/<\/svg>\s*$/.test(svg))
+    return { file, error: 'SVG inspect returned incomplete output' };
+  const { edges, diamonds, direction, edgeGap, groupTitles, sequence, actions } =
+    parseSource(source);
 
   const byId = new Map(geo.nodes.map(n => [n.id, n]));
   const parents = new Set(geo.nodes.map(n => n.parent));
@@ -1050,14 +1080,28 @@ function measure(file) {
   }
 
   // Labels.
-  const labels = parseLabels(svg);
+  const labels = parseLabels(svg, {
+    segs,
+    center,
+    textWidth,
+    decodeText,
+    routeIds: new Set(routes.map(r => r.id)),
+  });
   for (const [i, l] of labels.entries()) {
-    for (const n of leaves)
+    for (const node of leaves.filter(n => l.panel.ids.has(n.id))) {
+      const n = { ...node, x: node.x + l.panel.x, y: node.y + l.panel.y };
       if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
       // Pressed against a box without touching it: hard to read as the line's (feedback R5).
       else if (rectsOverlap(l, { x: n.x - 6, y: n.y - 6, w: n.w + 12, h: n.h + 12 }))
         note('label-near-node', `"${l.text}" by ${n.id}`);
-    for (const g of groups) {
+    }
+    for (const group of groups.filter(g => l.panel.ids.has(g.id))) {
+      const g = {
+        ...group,
+        x: group.x + l.panel.x,
+        y: group.y + l.panel.y,
+        ...l.panel.frames.get(group.id),
+      };
       const header = { x: g.x, y: g.y, w: g.w, h: 32 };
       if (rectsOverlap(l, header)) note('label-on-group-title', `"${l.text}" on ${g.id}`);
       const edgesCut = [
@@ -1074,6 +1118,9 @@ function measure(file) {
         note('label-overlap', `"${l.text}" × "${m.text}"`);
         continue;
       }
+      if (l.panel !== m.panel) continue;
+      // Sequence messages occupy distinct rows; their normal row gap is not label crowding.
+      if (sequence && l.path[0] && m.path[0] && Math.abs(l.path[0].y - m.path[0].y) > EPS) continue;
       // Two labels on different edges closer than a label's height read as one phrase, or as
       // two labels on one edge.
       const gap = Math.max(
@@ -1088,25 +1135,25 @@ function measure(file) {
     // Detached: the label's box stands more than half its height clear of its own line. (Measured
     // from the box, not its centre, so a wide label crossed off-centre by an upright line counts
     // as on it; for a label beside a level line the two measures agree.)
-    const dist = Math.min(...segs(l.path).map(sg => rectSegDist(l, sg)));
-    if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
-    // Beside its line: clear of it, though near. Labels read as one set when every line runs
-    // through its own (FEEL.md), so one that steps aside is a mild defect.
-    else if (dist > 0.5)
-      note('label-beside-line', `"${l.text}" ${Math.round(dist)}px off its edge`);
+    const edge = edges.get(l.edge);
+    let attachment = l;
+    if (sequence && edge) {
+      // Messages sit 1px above their line; self-messages sit 4px beside the loop.
+      attachment = edge.source === edge.target ? { ...l, x: l.x - 4 } : { ...l, y: l.y + 1 };
+    }
+    const dist = Math.min(...segs(l.path).map(sg => rectSegDist(attachment, sg)));
+    if (!sequence || !actions.has(l.edge)) {
+      if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
+      // Clear of its intended line position, though near.
+      else if (dist > 0.5)
+        note('label-beside-line', `"${l.text}" ${Math.round(dist)}px off its edge`);
+    }
     // Another edge running under the label.
-    for (const r of routes) {
+    for (const r of l.panel.routes) {
       if (r.id === l.edge) continue;
-      if (
-        r.points[0] &&
-        l.path[0] &&
-        Math.abs(r.points[0].x - l.path[0].x) < 1 &&
-        Math.abs(r.points[0].y - l.path[0].y) < 1
-      )
-        continue;
       // Through the text itself is misleading (S1); under the padding only, a reader still
       // reads the label but the line seems to stop at it.
-      if (r.segs.some(sg => segHitsRect(sg, shrink(l.ink, 1))))
+      if (r.segs.some(sg => l.ink.some(ink => segHitsRect(sg, shrink(ink, 1)))))
         note('label-through-text', `${r.id} through the "${l.text}" text`);
       else if (r.segs.some(sg => segHitsRect(sg, shrink(l, 1))))
         note('label-on-edge', `"${l.text}" over ${r.id}`);
@@ -1221,7 +1268,11 @@ function measure(file) {
     h: Math.max(...ys0) - Math.min(...ys0),
   };
   const leafArea0 = leaves.reduce((s, n) => s + n.w * n.h, 0);
-  const hole = largestEmpty(rootFrame, [...leaves, ...labels], EMPTY_SIDE);
+  const hole = largestEmpty(
+    rootFrame,
+    [...leaves, ...labels.map(l => ({ ...l, x: l.x - l.panel.x, y: l.y - l.panel.y }))],
+    EMPTY_SIDE,
+  );
   const emptyShare = (hole.w * hole.h) / Math.max(1, rootFrame.w * rootFrame.h);
   const emptyBoxes = (hole.w * hole.h) / Math.max(1, leafArea0 / Math.max(1, leaves.length));
   if (emptyShare > EMPTY_AREA && emptyBoxes >= EMPTY_BOXES)

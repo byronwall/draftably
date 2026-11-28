@@ -27,6 +27,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { assertResults, baselineCache, clearReports, selectedInputs } from './lib/audit-cache.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -62,6 +63,8 @@ if (args.length) {
   );
   process.exit(1);
 }
+
+clearReports(outDir);
 
 const git = (...a) => execFileSync('git', a, { cwd: root, encoding: 'utf8' }).trim();
 const sha = git('rev-parse', '--verify', `${baseRef}^{commit}`);
@@ -126,6 +129,7 @@ const SCRIPTS = [
   'scripts/diagram-audit.mjs',
   'scripts/shoot.mjs',
   'scripts/lib/buckets.mjs',
+  'scripts/lib/audit-labels.mjs',
   'src/model/font-metrics.json',
 ];
 const baseRoot = path.join(root, 'tmp/audit-base', short);
@@ -194,9 +198,13 @@ function audit(side, cwd, set, out, extra = []) {
     const stream = fs.createWriteStream(log);
     child.stdout.pipe(stream);
     child.stderr.pipe(stream);
-    child.on('close', code => {
+    child.on('error', reject);
+    child.on('close', (code, signal) => {
       const secs = ((Date.now() - started) / 1000).toFixed(0);
-      if (code) return reject(new Error(`${side} ${set.name} failed (exit ${code}); see ${log}`));
+      if (code !== 0 || signal)
+        return reject(
+          new Error(`${side} ${set.name} failed (${signal ?? `exit ${code}`}); see ${log}`),
+        );
       console.log(`${side} ${set.name}: done in ${secs}s`);
       resolve();
     });
@@ -208,11 +216,10 @@ const headOut = set => path.join(outDir, 'head', set.name);
 await Promise.all(
   sets.map(async set => {
     const cached = baseOut(set);
-    if (fs.existsSync(path.join(cached, 'summary.md'))) console.log(`base ${set.name}: cached`);
-    else {
-      fs.rmSync(cached, { recursive: true, force: true });
-      await audit('base', baseScripts, set, cached);
-    }
+    const expected = selectedInputs(set.dir, only?.split(','));
+    const complete = dir => assertResults(load(dir), expected);
+    if (await baselineCache(cached, () => audit('base', baseScripts, set, cached), complete))
+      console.log(`base ${set.name}: cached`);
     fs.rmSync(path.join(outDir, 'base', set.name), { recursive: true, force: true });
     fs.mkdirSync(path.join(outDir, 'base'), { recursive: true });
     fs.cpSync(cached, path.join(outDir, 'base', set.name), { recursive: true });
@@ -221,6 +228,7 @@ await Promise.all(
       '--baseline',
       path.join(outDir, 'base', set.name),
     ]);
+    complete(headOut(set));
   }),
 );
 
@@ -254,6 +262,15 @@ const signed = n => (n > 0 ? `+${n}` : `${n}`);
 const loaded = {};
 for (const set of sets)
   loaded[set.name] = { base: load(path.join(outDir, 'base', set.name)), head: load(headOut(set)) };
+const baseErrors = sets.flatMap(set =>
+  loaded[set.name].base
+    .filter(r => r.error)
+    .map(r => `${set.name}/${r.slug}/${r.file}: ${r.error}`),
+);
+if (baseErrors.length) {
+  console.error(`Baseline contains render errors:\n${baseErrors.join('\n')}`);
+  process.exit(1);
+}
 if (optionAudit) {
   optionAudit.writeCoverage(
     outDir,
