@@ -192,10 +192,10 @@ function parseSource(text) {
   const actions = new Set();
   for (const raw of text.split('\n')) {
     const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
-    const action = line.match(/^[+~.\-]?action\s+(\S+)/);
+    const action = line.match(/^[+~.-]?action\s+(\S+)/);
     if (action) actions.add(action[1]);
     if (/^layout\s+root\s+sequence\b/.test(line)) sequence = true;
-    const e = line.match(/^[+~.\-]?edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
+    const e = line.match(/^[+~.-]?edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
     if (n) diamonds.add(n[1]);
