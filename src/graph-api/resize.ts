@@ -147,9 +147,10 @@ function unrelatedShared(routes: Route[]) {
   return { cards, rows };
 }
 
-/** A clear candidate can still lose to a fresh full route on the new geometry. Only skip
- * that comparison when the previous drawing was already checked for these boxes, or the
- * candidate reaches a lower bound on every term of the routing objective. */
+/** A clear candidate can still lose to a fresh full route on the new geometry. Every candidate,
+ * guarded or compact, passes one acceptance step (`accept`): each line clears the cards as
+ * drawn, then the drawing either reaches a lower bound on every term of the routing objective
+ * or, in guarded mode, ties or beats a fresh route. */
 export function resize(
   old: Previous,
   nodes: PlacedNodeIn[],
@@ -160,8 +161,9 @@ export function resize(
   compact: boolean,
 ) {
   const ctx = createContext(input, options);
+  const byId = (rs: Route[]) => rs.sort((a, b) => cmp(a.id, b.id));
   // No route can cost less: no conflicts, no standoff, and each line at its Manhattan length
-  // with the fewest bends. A line with horizontal ends needs two bends to reach another row.
+  // with the fewest bends. A line with level ends needs two bends to reach another row.
   // If any line is blocked, the objective starts at 1e8.
   const atBound = (routes: Route[]) => {
     const m = ctx.metrics(routes);
@@ -173,10 +175,35 @@ export function resize(
       routes.every(r => {
         const a = r.points[0],
           b = r.points.at(-1)!;
-        return r.points.length === (a.y === b.y ? 2 : 4) && lengthOf(r.points) === distance(a, b);
+        return (
+          r.points.length === (Math.abs(a.y - b.y) < EPS ? 2 : 4) &&
+          Math.abs(lengthOf(r.points) - distance(a, b)) < EPS
+        );
       }) &&
       routes.every(r => standoffCost(r.points, ctx.near) === 0)
     );
+  };
+  // The one acceptance step. `checked`: the drawing must tie or beat a fresh route unless it
+  // reaches the lower bound.
+  const accept = (routes: Route[], checked: boolean) => {
+    if (routes.some(r => r.blocked || !clear(r))) return;
+    if (atBound(routes) || !checked) return byId(routes);
+    const baseline = fresh();
+    // Strict mode can withhold even an engine-clear line when a rounded corner enters a card.
+    if (baseline.some(r => r.blocked || !clear(r))) return;
+    const m = ctx.metrics(routes),
+      base = ctx.metrics(baseline);
+    if (
+      ctx.total(routes) > ctx.total(baseline) ||
+      m.laneDeficit > base.laneDeficit ||
+      m.shared > base.shared
+    )
+      return;
+    const shared = unrelatedShared(routes),
+      reference = unrelatedShared(baseline);
+    if (shared.cards > reference.cards || shared.rows > reference.rows) return;
+    const standoff = (rs: Route[]) => rs.reduce((s, r) => s + standoffCost(r.points, ctx.near), 0);
+    return standoff(routes) <= standoff(baseline) ? byId(routes) : undefined;
   };
   if (
     nodes.every((n, i) => {
@@ -214,29 +241,37 @@ export function resize(
       ),
     );
     // A straight line whose rows moved apart turns once each way, midway across the gap.
-    if (ps.length === 2 && ps[0].y !== ps[1].y) {
+    if (ps.length === 2 && Math.abs(ps[0].y - ps[1].y) >= EPS) {
       const mid = round((ps[0].x + ps[1].x) / 2);
       ps = [ps[0], { x: mid, y: ps[0].y }, { x: mid, y: ps[1].y }, ps[1]];
     }
     const moved = { ...r, fromOffset: e.cfg.fromAt!, toOffset: e.cfg.toAt!, points: ps };
+    // The room checks compare each segment with the one it came from, so they hold only while
+    // the segments still correspond. A line whose segments changed is judged as a whole, by
+    // `accept`.
+    const corresponds = ps.length === r.points.length;
     if (
       !r.blocked &&
       same(a, ps[0]) &&
       same(b, ps.at(-1)!) &&
       validPath(ps, e, r.fromSide, r.toSide, ctx.obsFor(e)) &&
       !crossesItself(ps) &&
+      clear(moved) &&
       (compact ||
-        (clear(moved) &&
-          ps.every(
-            (p, i) =>
-              !i ||
-              nodes.every(
-                (n, j) =>
-                  cardGap(ps[i - 1], p, n, ctx.s.standoff) + EPS >=
-                  cardGap(r.points[i - 1], r.points[i], old.nodes[j], ctx.s.standoff),
-              ),
-          ) &&
-          ctx.state.routes.every(q => keepsLane(r, ps, q, prior.get(q.id)!, ctx.s.edgeGap))))
+        !corresponds ||
+        (ps.every(
+          (p, i) =>
+            !i ||
+            nodes.every(
+              (n, j) =>
+                cardGap(ps[i - 1], p, n, ctx.s.standoff) + EPS >=
+                cardGap(r.points[i - 1], r.points[i], old.nodes[j], ctx.s.standoff),
+            ),
+        ) &&
+          ctx.state.routes.every(q => {
+            const was = prior.get(q.id)!;
+            return was.points.length !== q.points.length || keepsLane(r, ps, q, was, ctx.s.edgeGap);
+          })))
     ) {
       ctx.state.routes.push(moved);
       ctx.state.fixedPlans.add(e.id);
@@ -252,9 +287,9 @@ export function resize(
   if (compact) {
     // Lines that all moved clear and already meet the lower bound need no grid.
     if (!ctx.state.routes.some(r => r.blocked) && atBound(ctx.state.routes))
-      return ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
-    if (!compactResize(ctx) || !ctx.state.routes.every(clear)) return;
-    return ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
+      return accept(ctx.state.routes, false);
+    if (!compactResize(ctx)) return;
+    return accept(ctx.state.routes, false);
   }
   // A conflict between two fixed lines survives every repair of the missing lines.
   if (missing.length) {
@@ -263,28 +298,9 @@ export function resize(
   }
   for (const e of missing) ctx.state.routes.push(find(ctx, e, ctx.state.routes));
   if (missing.length) {
-    const byId = new Map(ctx.state.routes.map(r => [r.id, r]));
-    ctx.state.routes = ctx.edges.map(e => byId.get(e.id)!);
+    const ids = new Map(ctx.state.routes.map(r => [r.id, r]));
+    ctx.state.routes = ctx.edges.map(e => ids.get(e.id)!);
     finish(ctx);
-    if (ctx.state.routes.some(r => !ctx.state.fixedPlans.has(r.id) && (r.blocked || !clear(r))))
-      return;
   }
-  const routes = ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
-  const m = ctx.metrics(routes);
-  if (atBound(routes)) return routes;
-  const baseline = fresh();
-  // Strict mode can withhold even an engine-clear line when a rounded corner enters a card.
-  if (baseline.some(r => r.blocked || !clear(r))) return;
-  const base = ctx.metrics(baseline);
-  if (
-    ctx.total(routes) > ctx.total(baseline) ||
-    m.laneDeficit > base.laneDeficit ||
-    m.shared > base.shared
-  )
-    return;
-  const shared = unrelatedShared(routes),
-    reference = unrelatedShared(baseline);
-  if (shared.cards > reference.cards || shared.rows > reference.rows) return;
-  const standoff = (rs: Route[]) => rs.reduce((s, r) => s + standoffCost(r.points, ctx.near), 0);
-  return standoff(routes) <= standoff(baseline) ? routes : undefined;
+  return accept(ctx.state.routes, true);
 }

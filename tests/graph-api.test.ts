@@ -260,6 +260,64 @@ describe('fixed row ports during resize', () => {
     expect(route(at(0), out).edges['0'].points).toEqual(before.edges['0'].points);
   });
 
+  it.each([
+    [undefined, 'full'],
+    [undefined, 'quick'],
+    ['compact', 'full'],
+    ['compact', 'quick'],
+  ] as const)('keeps valid routes as rows move apart and back (%s, %s)', (resize, quality) => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const at = (x: number, dy: number) => ({
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, x, i * 100 + dy)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing: { ...routing, quality },
+      resize,
+    });
+    let previous = route(at(300, 0));
+    for (const [x, dy] of [
+      [303, 12],
+      [306, 0],
+      [309.01, 12.02],
+      [312, 0],
+    ]) {
+      const graph = at(x, dy);
+      previous = route(graph, previous);
+      for (const [id, e] of Object.entries(previous.edges)) {
+        const i = Number(id);
+        expect(e.blocked).toBe(false);
+        expect(e.points[0]).toEqual({ x: 100, y: i * 100 + 30 });
+        expect(e.points.at(-1)!.x).toBeCloseTo(x);
+        expect(e.points.at(-1)!.y).toBeCloseTo(i * 100 + dy + 30);
+      }
+    }
+  });
+
+  it('falls back when a compact line clears as a polyline but its rounded corner enters a card', () => {
+    const ids = Array.from({ length: 12 }, (_, i) => String(i));
+    const settings = { ...routing, clearance: 4, standoff: 0, cornerRadius: 20 };
+    const graph = (dy: number) => ({
+      nodes: [
+        box('a', 0, 0),
+        box('b', 300, dy),
+        { id: 'post', x: 204, y: 40, width: 38, height: 86 },
+        ...ids.flatMap(id => [
+          box('p' + id, 0, 400 + +id * 100),
+          box('q' + id, 300, 400 + +id * 100),
+        ]),
+      ],
+      edges: [row('ab', 'a', 'b'), ...ids.map(id => row(id, 'p' + id, 'q' + id))],
+      routing: settings,
+      resize: 'compact' as const,
+    });
+    const before = route(graph(0));
+    const next = graph(100);
+    expect(route(next).edges.ab.blocked).toBe(false);
+    // Strict mode would hide the line if its drawn corner entered the post.
+    const out = route(next, before).edges.ab;
+    expect(out.blocked).toBe(false);
+    expect(out.points.length).toBeGreaterThan(0);
+  });
+
   it('routes afresh when a field read through a getter changes', () => {
     const edge = (target: string) => {
       const e = row('line', 'a', 'x');
