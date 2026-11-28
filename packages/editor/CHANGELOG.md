@@ -1,5 +1,11 @@
 # @draftably/editor
 
+## 0.13.0
+
+### Patch Changes
+
+- 6d81934: Fix a rare crash in the router's corridor pass when an earlier move had reshaped a line, and keep a blocked line from a code range on that range's row.
+
 ## 0.12.0
 
 ### Minor Changes

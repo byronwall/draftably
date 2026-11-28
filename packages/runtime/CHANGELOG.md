@@ -1,5 +1,11 @@
 # @draftably/runtime
 
+## 0.13.0
+
+### Minor Changes
+
+- 6d81934: Route lines to rows inside boxes with sourceAt and targetAt, keep every line out of nodes with routing avoidNodes 'strict', and import the router alone from @draftably/runtime/route.
+
 ## 0.12.0
 
 ### Minor Changes
