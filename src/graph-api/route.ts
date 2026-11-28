@@ -86,10 +86,41 @@ function through(a: Point, b: Point, r: Rect) {
   );
 }
 
-/** The boxes, by ID, that a line runs through. */
-function crossed(points: Point[], boxes: { id: string; r: Rect }[]) {
+/**
+ * Points along a drawn path: each straight run's ends, and each rounded corner sampled 8 times. A
+ * corner cuts inside its bend, so a large radius with a small clearance can clip a box that the
+ * route's points clear.
+ */
+function sampled(path: string) {
+  const n = (path.match(/-?[\d.]+(?:e-?\d+)?/g) ?? []).map(Number),
+    out: Point[] = [];
+  let at = 0;
+  for (const op of path.match(/[MLQ]/g) ?? []) {
+    if (op === 'Q') {
+      const p = out.at(-1)!,
+        [cx, cy, x, y] = n.slice(at, (at += 4));
+      for (let k = 1; k <= 8; k++) {
+        const t = k / 8,
+          u = 1 - t;
+        out.push({
+          x: u * u * p.x + 2 * u * t * cx + t * t * x,
+          y: u * u * p.y + 2 * u * t * cy + t * t * y,
+        });
+      }
+    } else out.push({ x: n[at++], y: n[at++] });
+  }
+  return out;
+}
+
+/** The boxes, by ID, that a line runs through: its route, or its drawn path's corners. */
+function crossed(points: Point[], path: string, boxes: { id: string; r: Rect }[]) {
+  const drawn = sampled(path);
   return boxes
-    .filter(({ r }) => points.slice(1).some((b, i) => through(points[i], b, r)))
+    .filter(
+      ({ r }) =>
+        points.slice(1).some((b, i) => through(points[i], b, r)) ||
+        drawn.some(p => through(p, p, r)),
+    )
     .map(b => b.id);
 }
 
@@ -172,7 +203,7 @@ export function route(graph: RouteIn): Routed {
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
   for (const [id, e] of Object.entries(out.edges)) {
-    const hits = avoidNodes === 'strict' || e.blocked ? crossed(e.points, boxes) : [];
+    const hits = avoidNodes === 'strict' || e.blocked ? crossed(e.points, e.path, boxes) : [];
     if (avoidNodes === 'strict' && (e.blocked || hits.length)) {
       if (!e.blocked) held++;
       edges[id] = { ...e, points: [], path: '', label: null, blocked: true, crosses: hits };

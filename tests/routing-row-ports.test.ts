@@ -168,6 +168,35 @@ describe('route strict mode', () => {
     expect(out.warnings).toEqual(['1 line found no clear way.']);
   });
 
+  // Codex's repros: with a large corner radius and a small clearance, the drawn corner cuts
+  // into `obs` though the route's points clear it. A clip under 0.5px counts as the outline.
+  it.each([
+    [{ x: 0, y: 62 }, { x: 270, y: 196 }, { x: 166, y: 95, width: 82, height: 202 }, 64],
+    [{ x: 0, y: 72 }, { x: 270, y: 287 }, { x: 127, y: 126, width: 88, height: 196 }, 128],
+    [{ x: 0, y: 21 }, { x: 270, y: 76 }, { x: 220, y: 20, width: 23, height: 188 }, 256],
+  ])('holds back a line whose rounded corner clips a box', (a, b, obs, cornerRadius) => {
+    const out = route({
+      nodes: [
+        { id: 'a', ...a, width: 100, height: 100 },
+        { id: 'b', ...b, width: 100, height: 100 },
+        { id: 'obs', ...obs },
+      ],
+      edges: [
+        {
+          id: 'e',
+          source: 'a',
+          target: 'b',
+          sourceSide: 'right',
+          targetSide: 'left',
+          sourceAt: 50,
+          targetAt: 50,
+        },
+      ],
+      routing: { quality: 'quick', avoidNodes: 'strict', cornerRadius, clearance: 4 },
+    });
+    expect(out.edges.e).toMatchObject({ blocked: true, points: [], crosses: ['obs'] });
+  });
+
   it('leaves clear lines alone', () => {
     const open = [card('a', 0, 0, 2), card('b', 400, 0, 2)];
     const out = route({ nodes: open, edges, routing: { avoidNodes: 'strict' } });

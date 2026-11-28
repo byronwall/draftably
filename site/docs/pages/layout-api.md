@@ -146,7 +146,8 @@ they share the port and fan out from it.
 By default a line that finds no clear way still comes back, `blocked: true`, as a fallback line
 that can cross boxes. Set `routing: { avoidNodes: 'strict' }` when no line may cross a node. Then a
 blocked line has no `points`, an empty `path` and no `label`, and the host decides what to draw,
-such as a mark on the card. A line that would run through a node is blocked too. Every blocked
+such as a mark on the card. A line that would run through a node, its rounded corners
+included, is blocked too. Every blocked
 line lists the nodes its fallback runs through in `crosses`. Group borders are not nodes: lines
 still cross them.
 
