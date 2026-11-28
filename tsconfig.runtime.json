@@ -12,6 +12,7 @@
     "src/runtime/viewer.ts",
     "src/runtime/element.ts",
     "src/runtime/host.ts",
-    "src/graph-api/index.ts"
+    "src/graph-api/index.ts",
+    "src/graph-api/route-entry.ts"
   ]
 }

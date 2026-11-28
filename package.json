@@ -61,6 +61,7 @@
     "bench:host": "pnpm runtime:build && node scripts/bench/host.mjs",
     "bench:graph": "pnpm runtime:build && node scripts/bench/graph.mjs",
     "bench:fresh": "pnpm runtime:build && node scripts/bench/graph-fresh.mjs",
+    "bench:route": "pnpm runtime:build && node scripts/bench/route.mjs",
     "eval:diagrams:generate": "node scripts/diagram-compare/generate.mjs",
     "eval:diagrams:tooled": "node scripts/diagram-compare/tooled.mjs",
     "eval:diagrams:replay": "node scripts/diagram-compare/replay.mjs",

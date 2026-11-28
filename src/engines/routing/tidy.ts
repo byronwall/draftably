@@ -296,6 +296,8 @@ export function tidy(ctx: Context) {
       if (Math.abs(gap - pitch) <= 1 || gap > 2.5 * pitch) continue;
       const target = round(prev.at + pitch),
         ps = clone(state.routes[run.i].points);
+      // An earlier move in this pass may have reshaped the route: a stale run is skipped.
+      if (run.k + 2 >= ps.length) continue;
       if (Math.abs(ps[run.k][axis] - run.at) > EPS || Math.abs(ps[run.k + 1][axis] - run.at) > EPS)
         continue;
       ps[run.k][axis] = target;

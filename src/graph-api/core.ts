@@ -6,25 +6,30 @@
  * `route(graph)` draws lines between boxes the caller already placed.
  */
 import { checkSource, compile, type Scene } from '../dsl/compile';
-import { projectScene, visibleRects } from '../dsl/project';
+import { projectScene } from '../dsl/project';
 import { bare, parseModel, printSource, quoted, type SourceLine, type Word } from '../dsl/syntax';
-import { emptyDiagram } from '../model/document';
-import type { VisibleGraph } from '../model/graph';
-import { computeRoutes } from '../model/routes';
-import { placedItems } from '../runtime/geometry';
-import type { Diagram, Point, Rect, RoutingSettings, Side } from '../model/types';
+import type { Point, RoutingSettings, Side } from '../model/types';
+import { edgeIds, placed } from './route';
 
 export type Shape = 'box' | 'pill' | 'circle' | 'diamond' | 'text';
 /** How a scope arranges its children: a recipe, or a layout engine as `engine:<name>`. */
 export type Arrange = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | `engine:${string}`;
 /**
  * How hard the router works. `full` repairs crossings and evens out lanes; `quick` routes each
- * line once. `auto` (the default) routes quickly first, and fully when that will stay fast.
+ * line once. `auto` (the default) routes quickly first, and fully when the quick lines predict a
+ * full pass within `AUTO_FULL_LIMIT`. That prediction counts lines and conflicts, never time, so
+ * the same input always takes the same mode. Pass `full` or `quick` to pin the mode anyway.
  */
 export type Quality = 'auto' | 'full' | 'quick';
 
 export interface RoutingOptions extends Partial<RoutingSettings> {
   quality?: Quality;
+  /**
+   * `route()` only. `strict`: no line runs through a node. A line that finds no clear way, or
+   * that would run through a node, comes back `blocked` with no points and no path, and names
+   * the nodes in its way in `crosses`. `prefer` (the default) draws such a line anyway.
+   */
+  avoidNodes?: 'prefer' | 'strict';
 }
 
 export interface NodeIn {
@@ -56,6 +61,14 @@ export interface EdgeIn {
   dashed?: boolean;
   sourceSide?: Side;
   targetSide?: Side;
+  /**
+   * `route()` only. A row port: the end sits on the box's left or right side, this many pixels
+   * below the box's top edge, such as `46 + 1.5 * 26` for the middle of a card's second row.
+   * The end keeps at least 10px from a corner. Without a side the router picks left or right;
+   * `top` or `bottom` with a row port is an error.
+   */
+  sourceAt?: number;
+  targetAt?: number;
 }
 
 export interface GraphIn {
@@ -97,8 +110,13 @@ export interface EdgeOut {
   path: string;
   /** The label's box. Draw a backing behind it: other lines may pass under it. */
   label: Box | null;
-  /** True when the router found no clear way and drew a fallback line. */
+  /**
+   * True when the router found no clear way and drew a fallback line. Under
+   * `avoidNodes: 'strict'` a blocked line has no points and an empty path.
+   */
   blocked: boolean;
+  /** On a blocked line from `route()`: the nodes its fallback line runs through. */
+  crosses?: string[];
 }
 
 export interface Routed {
@@ -147,19 +165,6 @@ function aliases(ids: string[], kind: string) {
   };
 }
 
-/** Edge IDs, numbering the ones without an ID after those the caller gave. */
-function edgeIds(edges: EdgeIn[]) {
-  const given = new Set(edges.flatMap(e => (e.id ? [e.id] : [])));
-  let n = 0;
-  return edges.map(e => {
-    if (e.id) return e.id;
-    let id;
-    do id = `e${++n}`;
-    while (given.has(id));
-    return id;
-  });
-}
-
 const kebab = (key: string) => key.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`);
 
 function statement(command: string, args: Word[], attrs: Record<string, unknown> = {}): SourceLine {
@@ -183,46 +188,6 @@ function layoutLine(scope: string, arrange: Arrange, attrs: Record<string, unkno
     ...(engine ? { engine } : {}),
     ...attrs,
   });
-}
-
-/**
- * `auto` routes fully when the quick routes predict a full pass within the budget. The full
- * pass reroutes each line with a crossing or crowded lane against all the others, so its cost
- * grows with lines times conflicts; this limit keeps it near the 1 s load budget.
- */
-export const AUTO_FULL_LIMIT = 1200;
-
-function routesFor(
-  doc: Diagram,
-  vg: VisibleGraph,
-  rects: Map<string, Rect>,
-  quality: Quality = 'auto',
-) {
-  if (quality === 'full')
-    return { ...computeRoutes(doc, vg, rects, { previous: [] }), quality: 'full' as const };
-  const quick = computeRoutes(doc, vg, rects, { previous: [], quick: true }),
-    { edges, crossings, lanePairs, shared } = quick.result.report,
-    work = edges * (1 + crossings + lanePairs + (shared ? 1 : 0));
-  if (quality === 'quick' || work > AUTO_FULL_LIMIT) return { ...quick, quality: 'quick' as const };
-  return { ...computeRoutes(doc, vg, rects, { previous: [] }), quality: 'full' as const };
-}
-
-/** Geometry for every node, group and edge of a projected document, under the caller's IDs. */
-function placed(
-  doc: Diagram,
-  quality: Quality | undefined,
-  objectId: (id: string) => string,
-  edgeId: (id: string) => string,
-) {
-  const { vg, rects } = visibleRects(doc),
-    routed = routesFor(doc, vg, rects, quality),
-    out = placedItems(doc, rects, routed.routes, objectId, edgeId),
-    blocked = Object.values(out.edges).filter(e => e.blocked).length;
-  return {
-    ...out,
-    quality: routed.quality,
-    warnings: blocked ? [`${blocked} line${blocked > 1 ? 's' : ''} found no clear way.`] : [],
-  };
 }
 
 /** A file message with each alias it names written as the caller's ID. */
@@ -254,7 +219,8 @@ function build(graph: GraphIn) {
     objects = aliases([...groups.map(g => g.id), ...nodes.map(n => n.id)], 'node or group'),
     lines = aliases(ids, 'edge'),
     of = objects.of,
-    { quality, ...routing } = graph.routing ?? {},
+    // `avoidNodes` is `route()`'s alone: a file has no such setting.
+    { quality, avoidNodes: _, ...routing } = graph.routing ?? {},
     warnings: string[] = [];
   const doc: SourceLine[] = [
     ...groups.map(g =>
@@ -381,64 +347,4 @@ export interface RouteIn {
   routing?: RoutingOptions;
 }
 
-/** Route lines between boxes the caller placed. Nothing moves. */
-export function route(graph: RouteIn): Routed {
-  const doc = emptyDiagram(),
-    groups = graph.groups ?? [],
-    known = new Set<string>(),
-    { quality, ...routing } = graph.routing ?? {},
-    ids = edgeIds(graph.edges);
-  doc.settings.routing = { ...doc.settings.routing, ...routing };
-  for (const o of [...groups, ...graph.nodes]) {
-    if (known.has(o.id)) throw Error(`Duplicate node or group id "${o.id}".`);
-    known.add(o.id);
-  }
-  const check = (id: string | undefined, from: string) => {
-    if (id !== undefined && !known.has(id)) throw Error(`${from} refers to unknown id "${id}".`);
-  };
-  for (const g of groups) {
-    check(g.parent, `Group "${g.id}"`);
-    doc.graph.groups.push({
-      id: g.id,
-      title: g.label ?? '',
-      ...(g.parent ? { parentId: g.parent } : {}),
-    });
-    doc.layout.containers[g.id] = { direction: 'inherit', padding: 0, manualSize: true };
-  }
-  for (const n of graph.nodes) {
-    check(n.parent, `Node "${n.id}"`);
-    doc.graph.nodes.push({ id: n.id, title: '', ...(n.parent ? { parentId: n.parent } : {}) });
-    doc.styles[n.id] = { shape: n.shape ?? 'box', color: 'auto', icon: '' };
-  }
-  for (const o of [...groups, ...graph.nodes])
-    doc.layout.nodes[o.id] = { x: o.x, y: o.y, w: o.width, h: o.height };
-  graph.edges.forEach((e, i) => {
-    const id = ids[i];
-    check(e.source, `Edge "${id}"`);
-    check(e.target, `Edge "${id}"`);
-    doc.graph.edges.push({
-      id,
-      from: e.source,
-      to: e.target,
-      label: e.label ?? '',
-      directed: true,
-      emphasis: false,
-      dashed: !!e.dashed,
-    });
-    doc.layout.edges[id] = {
-      ...(e.sourceSide ? { fromSide: e.sourceSide } : {}),
-      ...(e.targetSide ? { toSide: e.targetSide } : {}),
-    };
-  });
-  const {
-    edges,
-    quality: used,
-    warnings,
-  } = placed(
-    doc,
-    quality,
-    id => id,
-    id => id,
-  );
-  return { edges, quality: used, warnings };
-}
+export { AUTO_FULL_LIMIT, route } from './route';

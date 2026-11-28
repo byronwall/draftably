@@ -34,6 +34,10 @@
       "types": "./dist/types/src/graph-api/index.d.ts",
       "import": "./dist/graph.js"
     },
+    "./route": {
+      "types": "./dist/types/src/graph-api/route-entry.d.ts",
+      "import": "./dist/route.js"
+    },
     "./viewer.css": "./dist/viewer.css",
     "./host.css": "./dist/host.css",
     "./fonts.css": "./dist/fonts.css",
