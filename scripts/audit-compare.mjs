@@ -126,6 +126,7 @@ const SCRIPTS = [
   'scripts/diagram-audit.mjs',
   'scripts/shoot.mjs',
   'scripts/lib/buckets.mjs',
+  'scripts/lib/node-border.mjs',
   'src/model/font-metrics.json',
 ];
 const baseRoot = path.join(root, 'tmp/audit-base', short);
@@ -480,6 +481,35 @@ function weightedGate() {
   const GUARDED = ['population', 'corpus', 'heldout', 'examples'].filter(s => loaded[s]);
   const pooled = weigh(GUARDED);
   const rows = [hardDefects()];
+  const borderProblems = [];
+  let checkedBorders = 0;
+  for (const [set, { head }] of Object.entries(loaded)) {
+    for (const render of head) {
+      const name = `${set}/${render.slug}/${render.file}`;
+      const coverage = render.nodeBorderCoverage;
+      if (
+        !Array.isArray(render.nodeBorderRuns) ||
+        render.error ||
+        !coverage ||
+        coverage.errors.length ||
+        coverage.routes !== coverage.expectedRoutes ||
+        (coverage.expectedRoutes > 0 && coverage.nodes !== coverage.expectedNodes)
+      ) {
+        borderProblems.push(`${name} missing border measurement`);
+        continue;
+      }
+      checkedBorders++;
+      for (const run of render.nodeBorderRuns) {
+        if (run.kind === 'overlap' || run.kind === 'paint-overlap')
+          borderProblems.push(`${name} ${run.edge} along ${run.node} (${run.side})`);
+      }
+    }
+  }
+  rows.push([
+    'Edges clear node borders',
+    checkedBorders && !borderProblems.length ? 'PASS' : 'FAIL',
+    borderProblems.length ? borderProblems.join(', ') : `${checkedBorders} renders checked`,
+  ]);
   if (loaded.options) {
     const errors = loaded.options.head.filter(render => render.error);
     rows.push([

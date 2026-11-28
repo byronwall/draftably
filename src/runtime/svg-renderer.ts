@@ -42,6 +42,7 @@ import {
   isTableRow,
   shownTimelines,
   styleOf,
+  timelineRoutes,
 } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { rowParts, type TableRow } from '../model/table';
@@ -204,7 +205,7 @@ function outline(shape: string, r: Rect, radius: number, paint: string, ink = ''
     return `<ellipse cx="${r.x + r.w / 2}" cy="${r.y + r.h / 2}" rx="${r.w / 2}" ry="${r.h / 2}" ${paint}/>`;
   if (shape === 'text') return '';
   if (shape === 'marker')
-    return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" fill="${ink}"/>`;
+    return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" class="node-marker" fill="${ink}"/>`;
   const rx = shape === 'pill' ? r.h / 2 : radius;
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
@@ -536,7 +537,7 @@ function sceneMarkup(
           'stroke',
         ),
       ),
-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
+      `<path d="${route.path}" class="edge-stroke" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
@@ -642,6 +643,7 @@ function sceneMarkup(
   }
   return {
     markup: out.join('\n'),
+    nodeIds: vg.nodes.map(n => n.id),
     bounds: drawingBounds(doc, vg, rects, routes, 40),
     rects,
     routes,
@@ -776,7 +778,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
         `<line x1="${x0 + 40}" x2="${x0 + cols * cw - 40}" y1="${py}" y2="${py}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
       );
     out.push(
-      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})">`,
+      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})" data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}" data-panel-edges="${esc(JSON.stringify([...scene.routes, ...timelineRoutes(docs[i], scene.rects)].map(r => r.id)))}">`,
       scene.markup,
       '</g>',
     );
@@ -848,7 +850,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   // share one box and every unchanged object lines up across them.
   const merged = compare ? routesOf(doc) : undefined,
     shared = merged ? [oldRoutes(doc, merged), merged] : [],
-    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map((d, i) =>
+    panelDocs = compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc],
+    scenes = panelDocs.map((d, i) =>
       sceneMarkup(d, look, marker, opts, shared[i] ?? (compare ? undefined : opts.routes)),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
@@ -925,7 +928,15 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
             : `<line x1="${px - PANEL_GAP / 2}" x2="${px - PANEL_GAP / 2}" y1="${y0}" y2="${y0 + areaH}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
         );
     }
-    out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
+    const panelEdges = compare
+      ? ` data-panel-edges="${esc(JSON.stringify([...scene.routes, ...timelineRoutes(panelDocs[i], scene.rects)].map(r => r.id)))}"`
+      : '';
+    const panelNodes = ` data-panel-nodes="${esc(JSON.stringify(scene.nodeIds))}"`;
+    out.push(
+      `<g transform="translate(${dx},${dy})"${panelEdges}${panelNodes}>`,
+      scene.markup,
+      '</g>',
+    );
   });
   // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
   out.push(footnoteMarkup(look, frame.foot, frame.foot.x, frame.foot.y, writeHref(opts)));

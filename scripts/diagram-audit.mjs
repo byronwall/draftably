@@ -34,6 +34,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bucketOf, featuresOf } from './lib/buckets.mjs';
+import { scanNodeBorders } from './lib/node-border.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -1381,6 +1382,7 @@ function measure(file) {
   const defectIndex = +(raw / Math.max(1, routes.length / 10)).toFixed(1);
 
   const expectations = [...source.matchAll(/^\s*#\s*expect\s+(.+)$/gm)].map(m => m[1].trim());
+  const borderScan = scanNodeBorders(svg);
 
   return {
     file: path.basename(file),
@@ -1416,6 +1418,14 @@ function measure(file) {
       y: Math.round(hole.y),
     },
     edgeStretch: stretch,
+    nodeBorderRuns: borderScan.findings,
+    nodeBorderCoverage: {
+      routes: borderScan.routes,
+      expectedRoutes: borderScan.expectedRouteIds?.length ?? routes.length,
+      nodes: borderScan.nodes,
+      expectedNodes: borderScan.expectedNodeIds?.length ?? leaves.length,
+      errors: borderScan.validationErrors,
+    },
     counts,
     defectIndex,
     issues,
