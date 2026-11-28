@@ -217,6 +217,49 @@ describe('fixed row ports during resize', () => {
     );
   });
 
+  it('routes afresh when a routing setting changes', () => {
+    const nodes = [box('a', 0, 0), box('b', 400, 0), box('c', 115, 50)];
+    const edges = [row('line', 'a', 'b')];
+    const at = (clearance: number) => ({ nodes, edges, routing: { ...routing, clearance } });
+    const before = route(at(30));
+    expect(route(at(4), before)).toEqual(route(at(4)));
+  });
+
+  it('never copies card data that routing does not read', () => {
+    const card = box('a', 0, 0);
+    Object.defineProperty(card, 'meta', {
+      enumerable: true,
+      get: () => {
+        throw Error('read');
+      },
+    });
+    const plain = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    expect(route({ ...plain, nodes: [card, box('b', 300, 0)] })).toEqual(route(plain));
+  });
+
+  it('turns a straight compact line once each way when its rows move apart', () => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const at = (dy: number) => ({
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, 300, i * 100 + dy)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing,
+      resize: 'compact' as const,
+    });
+    const before = route(at(0));
+    const out = route(at(12), before);
+    expect(out.edges['0'].points).toEqual([
+      { x: 100, y: 30 },
+      { x: 200, y: 30 },
+      { x: 200, y: 42 },
+      { x: 300, y: 42 },
+    ]);
+    expect(route(at(0), out).edges['0'].points).toEqual(before.edges['0'].points);
+  });
+
   it('routes afresh when a field read through a getter changes', () => {
     const edge = (target: string) => {
       const e = row('line', 'a', 'x');

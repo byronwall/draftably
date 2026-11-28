@@ -4,7 +4,7 @@ import { conflicts, crossesItself, parallelNear } from '../engines/routing/confl
 import { BLOCKED_PENALTY, createContext } from '../engines/routing/context';
 import { standoffCost } from '../engines/routing/cost';
 import { find } from '../engines/routing/find';
-import { cmp, distance, EPS, lengthOf, round, same } from '../engines/routing/geometry';
+import { cmp, compress, distance, EPS, lengthOf, round, same } from '../engines/routing/geometry';
 import { validPath } from '../engines/routing/paths';
 import { port } from '../engines/routing/ports';
 import type { Point, Route, RouteInput, RoutingOptions } from '../engines/routing/types';
@@ -19,7 +19,7 @@ export interface Previous {
 
 /** Only fixed row ports on rectangular cards have the same known terminal points before and
  * after a resize. The ordinary router handles auto-selected ports, labels, shapes and groups. */
-export function resizeKey(graph: RouteIn, ids: string[]) {
+export function resizeKey(graph: RouteIn, ids: string[], settings: object) {
   if (
     !graph.routing?.quality ||
     graph.routing.quality === 'auto' ||
@@ -51,6 +51,10 @@ export function resizeKey(graph: RouteIn, ids: string[]) {
     ]),
     graph.routing.quality,
     graph.routing.avoidNodes ?? null,
+    // The effective settings, so a changed clearance or gap routes afresh.
+    Object.entries(settings)
+      .filter(([, v]) => ['number', 'string', 'boolean'].includes(typeof v))
+      .sort(([a], [b]) => cmp(a, b)),
   ]);
 }
 
@@ -191,12 +195,29 @@ export function resize(
       last = r.points.at(-1)!;
     const a = port(ctx.rects.get(e.from)!, r.fromSide, e.cfg.fromAt),
       b = port(ctx.rects.get(e.to)!, r.toSide, e.cfg.toAt);
-    const ps = r.points.map(p => ({
-      x: move(p.x),
-      y: round(
-        p.y + (Math.abs(p.y - first.y) <= Math.abs(p.y - last.y) ? a.y - first.y : b.y - last.y),
+    let ps = compress(
+      // The ends sit on their new ports; a point between follows the nearer end's row.
+      r.points.map((p, i) =>
+        i === 0
+          ? { x: move(p.x), y: a.y }
+          : i === r.points.length - 1
+            ? { x: move(p.x), y: b.y }
+            : {
+                x: move(p.x),
+                y: round(
+                  p.y +
+                    (Math.abs(p.y - first.y) <= Math.abs(p.y - last.y)
+                      ? a.y - first.y
+                      : b.y - last.y),
+                ),
+              },
       ),
-    }));
+    );
+    // A straight line whose rows moved apart turns once each way, midway across the gap.
+    if (ps.length === 2 && ps[0].y !== ps[1].y) {
+      const mid = round((ps[0].x + ps[1].x) / 2);
+      ps = [ps[0], { x: mid, y: ps[0].y }, { x: mid, y: ps[1].y }, ps[1]];
+    }
     const moved = { ...r, fromOffset: e.cfg.fromAt!, toOffset: e.cfg.toAt!, points: ps };
     if (
       !r.blocked &&

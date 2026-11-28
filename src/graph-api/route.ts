@@ -248,7 +248,8 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     r: { x: n.x, y: n.y, w: n.width, h: n.height },
     shape: n.shape ?? 'box',
   }));
-  const key = new Set(ids).size === ids.length ? resizeKey(graph, ids) : undefined;
+  const key =
+    new Set(ids).size === ids.length ? resizeKey(graph, ids, doc.settings.routing) : undefined;
   const prior = previous && snapshots.get(previous);
   const { vg, rects } = visibleRects(doc);
   let baseline: ReturnType<typeof routesFor> | undefined;
@@ -312,7 +313,8 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     snapshots.set(result, {
       key,
       compact: compact && !!moved,
-      nodes: graph.nodes.map(n => ({ ...n })),
+      // Only what resize reads: other data on the caller's cards is never copied.
+      nodes: graph.nodes.map(({ id, x, y, width, height }) => ({ id, x, y, width, height })),
       routes: structuredClone(routes),
     });
   return result;
