@@ -154,10 +154,54 @@ export function siblingDeficit(points: Point[], used: Line[], min: number, gap: 
   }
   return deficit;
 }
+// A span's level and upright segments, each sorted by the coordinate across them (`at`), so
+// `conflicts` reads only those near a segment: `lv`/`up` hold segment indices, `lvAt`/`upAt`
+// their `at`.
+interface Sorted {
+  lv: Int32Array;
+  lvAt: Float64Array;
+  up: Int32Array;
+  upAt: Float64Array;
+}
+const sorted = new WeakMap<Span, Sorted>();
+function sortedOf(v: Span): Sorted {
+  let o = sorted.get(v);
+  if (!o) {
+    const lv: number[] = [],
+      up: number[] = [];
+    for (let i = 0; i < v.n; i++) (v.h[i] ? lv : up).push(i);
+    const by = (a: number, b: number) => v.at[a] - v.at[b] || a - b;
+    lv.sort(by);
+    up.sort(by);
+    o = {
+      lv: Int32Array.from(lv),
+      lvAt: Float64Array.from(lv, i => v.at[i]),
+      up: Int32Array.from(up),
+      upAt: Float64Array.from(up, i => v.at[i]),
+    };
+    sorted.set(v, o);
+  }
+  return o;
+}
+// The first index in sorted `a` whose value is at least `v`.
+function from(a: Float64Array, v: number) {
+  let lo = 0,
+    hi = a.length;
+  while (lo < hi) {
+    const m = (lo + hi) >> 1;
+    if (a[m] < v) lo = m + 1;
+    else hi = m;
+  }
+  return lo;
+}
 // Crossing points already counted by `conflicts`, as route index, x, y: a crossing at a corner
 // meets two segments of a line but counts once. Reused between calls.
 let seen = new Float64Array(96);
+const NONE: number[] = [];
 // A finite bound needs only enough conflicts to rule out a candidate. Reports use Infinity.
+// Each segment meets only the other line's segments near it, found by `sortedOf`: shared runs in
+// the other line's order, so their sum is the same; crossings by position, which changes only
+// where a finite bound stops, never whether it does.
 export function conflicts(
   points: Point[],
   used: Line[],
@@ -176,14 +220,18 @@ export function conflicts(
     const r = used[q],
       other = f ? f.spansOf[q] : spanOf(r.points);
     if (!within(own, other, 0)) continue;
-    const first = hits; // A crossing can repeat only within this route.
+    const first = hits, // A crossing can repeat only within this route.
+      o = sortedOf(other);
     for (let i = 0; i < own.n; i++) {
       // A segment that misses the other line's box can neither cross nor share a run with it.
       const level = own.h[i] === 1,
-        x0 = level ? own.lo[i] : own.at[i],
-        x1 = level ? own.hi[i] : own.at[i],
-        y0 = level ? own.at[i] : own.lo[i],
-        y1 = level ? own.at[i] : own.hi[i];
+        at = own.at[i],
+        lo = own.lo[i],
+        hi = own.hi[i],
+        x0 = level ? lo : at,
+        x1 = level ? hi : at,
+        y0 = level ? at : lo,
+        y1 = level ? at : hi;
       if (
         x1 < other.x0 - 2 * EPS ||
         x0 > other.x1 + 2 * EPS ||
@@ -191,21 +239,38 @@ export function conflicts(
         y0 > other.y1 + 2 * EPS
       )
         continue;
-      for (let j = 0; j < other.n; j++) {
-        if (own.h[i] === other.h[j]) {
-          if (Math.abs(own.at[i] - other.at[j]) > EPS) continue;
-          const amount = Math.min(own.hi[i], other.hi[j]) - Math.max(own.lo[i], other.lo[j]);
-          if (amount > EPS) {
-            shared += amount;
-            if (terms) terms.push(amount);
-          }
-          if (bound < Infinity && hits * s.crossingPenalty + shared * s.sharedPenalty >= bound)
-            return { crossings: hits, shared };
-          continue;
+      // Shared runs: the other line's segments this way within `EPS` across, in its order.
+      const same0 = level ? o.lv : o.up,
+        sameAt = level ? o.lvAt : o.upAt;
+      // Mostly none or one: more are put back in the other line's order.
+      let one = -1,
+        many: number[] | null = null;
+      for (let k = from(sameAt, at - 2 * EPS); k < sameAt.length && sameAt[k] <= at + 2 * EPS; k++)
+        if (!(Math.abs(at - other.at[same0[k]]) > EPS)) {
+          if (one < 0) one = same0[k];
+          else (many ??= [one]).push(same0[k]);
         }
+      if (many) many.sort((a, b) => a - b);
+      for (const j of many ?? (one < 0 ? NONE : [one])) {
+        const amount = Math.min(hi, other.hi[j]) - Math.max(lo, other.lo[j]);
+        if (amount > EPS) {
+          shared += amount;
+          if (terms) terms.push(amount);
+        }
+        if (bound < Infinity && hits * s.crossingPenalty + shared * s.sharedPenalty >= bound)
+          return { crossings: hits, shared };
+      }
+      // Crossings: the other line's segments the other way whose `at` lies along this one.
+      const across = level ? o.up : o.lv,
+        acrossAt = level ? o.upAt : o.lvAt;
+      for (
+        let k = from(acrossAt, lo - 2 * EPS);
+        k < acrossAt.length && acrossAt[k] <= hi + 2 * EPS;
+        k++
+      ) {
+        const j = across[k];
         // One level, one upright: they meet where the upright's x crosses the level's y.
-        const level = own.h[i] === 1,
-          l = level ? own : other,
+        const l = level ? own : other,
           li = level ? i : j,
           u = level ? other : own,
           ui = level ? j : i,
@@ -219,10 +284,10 @@ export function conflicts(
           continue;
         const rx = round(x),
           ry = round(y);
-        let k = first;
-        while (k < hits && !(seen[k * 3] === q && seen[k * 3 + 1] === rx && seen[k * 3 + 2] === ry))
-          k++;
-        if (k < hits) continue;
+        let m = first;
+        while (m < hits && !(seen[m * 3] === q && seen[m * 3 + 1] === rx && seen[m * 3 + 2] === ry))
+          m++;
+        if (m < hits) continue;
         if (hits * 3 + 3 > seen.length) {
           const grown = new Float64Array(seen.length * 2);
           grown.set(seen);
