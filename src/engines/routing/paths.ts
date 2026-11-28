@@ -1,6 +1,6 @@
 import { conflicts, parallelConflicts } from './conflicts.ts';
 import { gate, type Context } from './context.ts';
-import { cost } from './cost.ts';
+import { cost, costOf, ownCost, standoffCost } from './cost.ts';
 import { blocked, compress, EPS, vector } from './geometry.ts';
 import type { Obstacle, Point, Route, RouteEdge, Side } from './types.ts';
 
@@ -64,16 +64,15 @@ export function simplify(
           b = result[j];
         for (const mid of [[{ x: a.x, y: b.y }], [{ x: b.x, y: a.y }], []]) {
           const p = compress([...result.slice(0, i + 1), ...mid, ...result.slice(j)]);
-          if (p.length >= result.length || !validPath(p, e, fs, ts, obs)) continue;
-          const c = conflicts(p, used),
-            lane = parallelConflicts(p, used, s.edgeGap),
-            score = cost(p, used, s, near);
-          if (
-            c.crossings > before.crossings ||
-            lane.laneDeficit > beforeLane.laneDeficit + 0.1 ||
-            score >= bestCost - 0.01
-          )
-            continue;
+          // Every term of `cost` past its own length, bends and jogs is at least zero.
+          if (p.length >= result.length || ownCost(p, s) >= bestCost - 0.01) continue;
+          if (!validPath(p, e, fs, ts, obs)) continue;
+          const c = conflicts(p, used);
+          if (c.crossings > before.crossings) continue;
+          const lane = parallelConflicts(p, used, s.edgeGap);
+          if (lane.laneDeficit > beforeLane.laneDeficit + 0.1) continue;
+          const score = costOf(p, s, near.length ? standoffCost(p, near) : 0, c, lane.laneDeficit);
+          if (score >= bestCost - 0.01) continue;
           result = p;
           bestCost = score;
           improved = true;

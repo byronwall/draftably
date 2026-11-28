@@ -1,7 +1,7 @@
 import { conflicts, crossesItself, parallelConflicts, parallelNear } from './conflicts.ts';
 import type { Point } from './types.ts';
 import type { Context } from './context.ts';
-import { cost, standoffCost } from './cost.ts';
+import { cost, costOf, standoffCost } from './cost.ts';
 import { clone, compress, distance, EPS, round, segments } from './geometry.ts';
 import { simplify, validPath } from './paths.ts';
 
@@ -45,12 +45,16 @@ export function nudge(ctx: Context) {
             p[i][axis] = value;
             p[i + 1][axis] = value;
             const clean = compress(p);
-            if (
-              !validPath(clean, e, route.fromSide, route.toSide, obs) ||
-              conflicts(clean, used).crossings > before.crossings
-            )
-              continue;
-            const score = cost(clean, used, s, near);
+            if (!validPath(clean, e, route.fromSide, route.toSide, obs)) continue;
+            const c = conflicts(clean, used);
+            if (c.crossings > before.crossings) continue;
+            const score = costOf(
+              clean,
+              s,
+              near.length ? standoffCost(clean, near) : 0,
+              c,
+              parallelConflicts(clean, used, s.edgeGap).laneDeficit,
+            );
             if (score < bestValue - 0.1) {
               best = clean;
               bestValue = score;
