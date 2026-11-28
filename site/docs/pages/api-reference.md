@@ -12,6 +12,7 @@ show each one in use, and the [Layout API](#layout-api) documents the graph func
 | `@draftably/runtime/viewer`                       | `mountViewer` and its types                                                            |
 | `@draftably/runtime/host`                         | `HOST_EVENTS`, `hostDetail` and the event, camera and geometry types. No side effects. |
 | `@draftably/runtime/graph`                        | `layout`, `layoutSync`, `route` and the drop-ins: see [Layout API](#layout-api)        |
+| `@draftably/runtime/route`                        | `route` alone, without the layout engine: see [Layout API](#layout-api)                |
 | `@draftably/runtime/host.css`                     | The page rules: heights, hidden slot content, pointer for marked content               |
 | `@draftably/runtime/viewer.css`                   | The viewer's styles, for `mountViewer`                                                 |
 | `@draftably/runtime/fonts.css`                    | The fonts as files, for `render: { fonts: 'host' }`                                    |

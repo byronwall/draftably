@@ -84,6 +84,7 @@ Each edge has:
   a label.
 - `sourceSide` and `targetSide`: the sides the line leaves and enters.
 - `blocked`: `true` when the router found no clear way and drew a fallback line.
+- `crosses`: on a blocked line from `route`, the nodes its fallback runs through.
 
 ## Route lines only
 
@@ -105,6 +106,80 @@ const { edges } = route({
 
 Group boxes and node shapes are obstacles, as in a `.draft` drawing. Give a group its `label` so
 lines keep out of its title band. `route` runs synchronously.
+
+### Row ports
+
+A line can start or end at a row inside a box, such as a field in a table card. `sourceAt` and
+`targetAt` give the end's distance in pixels down from the box's top edge. The end sits on the
+box's left or right side. Without `sourceSide` or `targetSide`, the router picks left or right. A
+row port on `top` or `bottom` throws. An end keeps at least 10 px from a corner.
+
+```ts
+const HEADER = 46,
+  ROW = 26;
+const field = (i: number) => HEADER + (i + 0.5) * ROW; // the middle of field i
+
+route({
+  nodes: [
+    { id: 'jobs', x: 0, y: 0, width: 200, height: HEADER + 3 * ROW },
+    { id: 'runs', x: 0, y: 180, width: 200, height: HEADER + 2 * ROW },
+  ],
+  edges: [
+    // Both ends on the right side of two cards in one column.
+    {
+      source: 'jobs',
+      target: 'runs',
+      sourceSide: 'right',
+      targetSide: 'right',
+      sourceAt: field(1),
+      targetAt: field(0),
+    },
+  ],
+});
+```
+
+Both ends can be on the same side, in one column or in two. Several lines can leave one row:
+they share the port and fan out from it.
+
+### Never cross a box
+
+By default a line that finds no clear way still comes back, `blocked: true`, as a fallback line
+that can cross boxes. Set `routing: { avoidNodes: 'strict' }` when no line may cross a node. Then a
+blocked line has no `points`, an empty `path` and no `label`, and the host decides what to draw,
+such as a mark on the card. A line that would run through a node, its rounded corners
+included, is blocked too. Every blocked
+line lists the nodes its fallback runs through in `crosses`. Group borders are not nodes: lines
+still cross them.
+
+### Router-only entry
+
+`@draftably/runtime/route` exports `route` and its types without `layout`, the file language or a
+layout engine. It is about 102 KB minified (43 KB gzip), against the whole graph entry's compiler,
+fonts and icons. It runs synchronously, with no DOM and no worker.
+
+```ts
+import { route } from '@draftably/runtime/route';
+```
+
+### Same input, same lines
+
+`route` and `layout` have no randomness and no time limit. The same input always draws the same
+lines. `quality: 'auto'` chooses `full` or `quick` from the number of lines and how often the quick
+lines conflict, never from time. Pass `quality: 'full'` or `'quick'` to pin it anyway.
+
+### Time
+
+`pnpm bench:route` routes schema-like drawings: 30 cards in five fixed columns, lines from row to
+row and from header to header. On a laptop, with a warm engine:
+
+| Lines | `quick` | `full` |
+| ----- | ------- | ------ |
+| 10    | 13 ms   | 50 ms  |
+| 30    | 75 ms   | 530 ms |
+| 60    | 370 ms  | 3.1 s  |
+
+`full` grows with lines times conflicts. For a drawing that reroutes as the user works, use
+`quick` above about 20 lines, or route off the main thread.
 
 ## Synchronous layout
 

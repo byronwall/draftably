@@ -1,4 +1,7 @@
 import { LayoutLab } from '../engines/layout-engine';
+// The defaults alone, so a caller of `emptyDiagram` (the router's own entry) need not bundle the
+// layout engine.
+import { defaults as layoutDefaults } from '../engines/layout/settings';
 import { validMark } from './timeline';
 import { RouteLab } from '../engines/routing-engine';
 import { clamp, clone, finite } from './geometry';
@@ -51,7 +54,7 @@ export function uid(prefix = 'n') {
 }
 
 export const DEFAULT_SETTINGS: DiagramSettings = {
-  ...LayoutLab.defaults,
+  ...layoutDefaults,
   snap: true,
   showManual: true,
   routing: { ...RouteLab.defaults },

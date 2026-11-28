@@ -26,6 +26,20 @@ const placed = await layout({
 ```
 
 ```ts
+import { route } from '@draftably/runtime/route';
+
+// Lines only, between boxes your app placed: the router without the layout engine.
+const { edges } = route({
+  nodes: [
+    { id: 'a', x: 0, y: 0, width: 200, height: 124 },
+    { id: 'b', x: 260, y: 40, width: 200, height: 98 },
+  ],
+  edges: [{ source: 'a', target: 'b', sourceAt: 85, targetAt: 59 }], // rows, down from each top
+  routing: { avoidNodes: 'strict' }, // a line with no clear way comes back blocked, not drawn
+});
+```
+
+```ts
 import '@draftably/runtime/element';
 import '@draftably/runtime/host.css'; // once per page: heights and slot rules before the element loads
 // <draft-diagram source='node api "API"' label="API diagram"></draft-diagram>
