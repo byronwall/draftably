@@ -341,6 +341,8 @@ export interface PlacedGroupIn extends Box {
 }
 
 export interface RouteIn {
+  /** Try a compact search grid when reusing fixed row ports on a full-quality resize. */
+  resize?: 'compact';
   nodes: PlacedNodeIn[];
   groups?: PlacedGroupIn[];
   edges: EdgeIn[];

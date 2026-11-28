@@ -1,3 +1,4 @@
+import { compactResize, SMALL_REFERENCE_LIMIT } from './compact-resize';
 import { finish } from '../engines/routing/compute';
 import { conflicts, crossesItself, parallelNear } from '../engines/routing/conflicts';
 import { BLOCKED_PENALTY, createContext } from '../engines/routing/context';
@@ -12,6 +13,7 @@ import type { PlacedNodeIn, RouteIn } from './core';
 export interface Previous {
   key: string;
   nodes: PlacedNodeIn[];
+  compact: boolean;
   routes: Route[];
 }
 
@@ -127,6 +129,7 @@ export function resize(
   options: RoutingOptions,
   clear: (route: Route) => boolean,
   fresh: () => Route[],
+  compact: boolean,
 ) {
   const ctx = createContext(input, options);
   if (
@@ -159,27 +162,47 @@ export function resize(
       same(b, ps.at(-1)!) &&
       validPath(ps, e, r.fromSide, r.toSide, ctx.obsFor(e)) &&
       !crossesItself(ps) &&
-      clear(moved) &&
-      ps.every(
-        (p, i) =>
-          !i ||
-          nodes.every(
-            (n, j) =>
-              cardGap(ps[i - 1], p, n, ctx.s.standoff) + EPS >=
-              cardGap(r.points[i - 1], r.points[i], old.nodes[j], ctx.s.standoff),
-          ),
-      ) &&
-      ctx.state.routes.every(q => keepsLane(r, ps, q, prior.get(q.id)!, ctx.s.edgeGap))
+      (compact ||
+        (clear(moved) &&
+          ps.every(
+            (p, i) =>
+              !i ||
+              nodes.every(
+                (n, j) =>
+                  cardGap(ps[i - 1], p, n, ctx.s.standoff) + EPS >=
+                  cardGap(r.points[i - 1], r.points[i], old.nodes[j], ctx.s.standoff),
+              ),
+          ) &&
+          ctx.state.routes.every(q => keepsLane(r, ps, q, prior.get(q.id)!, ctx.s.edgeGap))))
     ) {
       ctx.state.routes.push(moved);
       ctx.state.fixedPlans.add(e.id);
     } else {
+      if (compact) {
+        ctx.state.routes.push({ ...moved, points: [a, b], blocked: true });
+        continue;
+      }
       missing.push(e);
       if (missing.length > ctx.edges.length / 3) return;
     }
   }
-  // A conflict between two fixed lines survives every repair of the missing lines. A
-  // comparison with a fresh drawing is then inevitable. Pay for the full pass only once.
+  if (compact) {
+    if (!compactResize(ctx) || !ctx.state.routes.every(clear)) return;
+    const routes = ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
+    // One crossing can outweigh the whole gain on a small diagram. Its full
+    // reference fits in the measured resize budget for these row schemas.
+    if (routes.length <= SMALL_REFERENCE_LIMIT) {
+      const baseline = fresh();
+      if (
+        baseline.some(r => r.blocked || !clear(r)) ||
+        ctx.total(routes) > ctx.total(baseline) ||
+        unrelatedShared(routes).cards > unrelatedShared(baseline).cards
+      )
+        return;
+    }
+    return routes;
+  }
+  // A conflict between two fixed lines survives every repair of the missing lines.
   if (missing.length) {
     const kept = ctx.metrics(ctx.state.routes);
     if (kept.crossings || kept.shared || kept.lanePairs) return;

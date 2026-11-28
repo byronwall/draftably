@@ -155,17 +155,19 @@ function along(ps: Point[]) {
  * stub out of each port only leaves its own node, whose outline there is the router's to place.
  */
 function crossed(points: Point[], path: string, nodes: Obstacle[], ends: [string, string]) {
-  const all = pieces(path, points);
+  const all = pieces(path, points).map(ps => ({
+    ps,
+    lo: { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
+    hi: { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) },
+  }));
   return nodes
     .filter(o =>
-      all.some((ps, i) => {
+      all.some(({ ps, lo, hi }, i) => {
         if (
           ps.length === 2 &&
           ((i === 0 && o.id === ends[0]) || (i === all.length - 1 && o.id === ends[1]))
         )
           return false;
-        const lo = { x: Math.min(...ps.map(p => p.x)), y: Math.min(...ps.map(p => p.y)) },
-          hi = { x: Math.max(...ps.map(p => p.x)), y: Math.max(...ps.map(p => p.y)) };
         return through(lo, hi, o.r) && along(ps).some(p => inside(p, o));
       }),
     )
@@ -252,8 +254,9 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
   let baseline: ReturnType<typeof routesFor> | undefined;
   const fresh = () => (baseline ??= routesFor(doc, vg, rects, quality));
   const edgeById = new Map(doc.graph.edges.map(e => [e.id, e]));
+  const compact = graph.resize === 'compact' && quality === 'full';
   const moved =
-    key !== undefined && prior?.key === key
+    key !== undefined && prior?.key === key && (compact || !prior.compact)
       ? resize(
           prior,
           graph.nodes,
@@ -267,6 +270,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
               [r.from, r.to],
             ).length,
           () => fresh().result.routes,
+          compact,
         )
       : undefined;
   const routes = moved ?? fresh().result.routes;
@@ -274,7 +278,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     ? placedRoutes(
         doc,
         rects,
-        drawRoutes(doc, vg, rects, { routes }),
+        drawRoutes(doc, vg, rects, { routes }, false),
         quality === 'quick' ? 'quick' : 'full',
       )
     : placedRoutes(doc, rects, fresh().routes, fresh().quality);
@@ -303,6 +307,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
   if (key)
     snapshots.set(result, {
       key,
+      compact: compact && !!moved,
       nodes: graph.nodes.map(n => ({ ...n })),
       routes: structuredClone(routes),
     });

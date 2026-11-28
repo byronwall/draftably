@@ -108,7 +108,9 @@ The nightly sweep runs three repetitions, puts the timing table in the benchmark
 `pnpm bench:route:resize` compares twelve column resizes on each of the five schemas per line count.
 A separate process draws each full reference. The command checks row anchors, card clearance, weighted routing cost, and shared length between lines with no common card.
 It prints median, p95, and maximum call time. It saves every comparison in `tmp/route-resize/replay.json`.
-Pass `--holdout` for five other seeds or `--independent` for sixty separated rows.
+Pass `--holdout` for five confirmation seeds or `--independent` for sixty separated rows.
+Add `--compact` to measure the experimental grid. Combine it with `--wide` for five reserved seeds and twelve width and pitch changes.
+Compact results are under `tmp/compact-grid/`. Add `--picture --frame=60/701/1` to reproduce a specific frame with its preceding route history.
 Pass `--picture` to generate both SVGs for the [60-line comparison](intent/route-speed/RESIZE.md#60-line-comparison).
 Performance PRs paste a before → after table.
 

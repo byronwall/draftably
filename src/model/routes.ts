@@ -880,6 +880,7 @@ export function drawRoutes(
   vg: VisibleGraph,
   rects: Map<string, Rect>,
   result: Pick<RoutingResult, 'routes'>,
+  halos = true,
 ): DrawnRoute[] {
   // A route for an edge this graph doesn't draw (a timeline's on-chart line) is dropped.
   const visible = new Set(vg.edges.map(e => e.id));
@@ -1084,13 +1085,15 @@ export function drawRoutes(
       ...route,
       label: labels.get(route) ?? null,
       path: drawnPath(route.points, edge, radius),
-      halo: haloPath(
-        route.points,
-        result.routes
-          .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
-          .map(r => r.points),
-        frames,
-      ),
+      halo: halos
+        ? haloPath(
+            route.points,
+            result.routes
+              .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
+              .map(r => r.points),
+            frames,
+          )
+        : '',
       ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
     };
   });

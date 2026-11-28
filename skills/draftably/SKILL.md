@@ -16,6 +16,9 @@ For a host that places its own rectangular cards, import `route` from `@draftabl
 Set `sourceSide`, `targetSide`, `sourceAt`, and `targetAt` for fixed row ports.
 Use `routing: { quality: 'full', avoidNodes: 'strict' }` to hold back blocked lines.
 Keep the result in the same worker. On resize, call `route(newGraph, previousResult)`.
+For the experimental compact grid on full-quality fixed-row schemas, call
+`route({ ...newGraph, resize: 'compact' }, previousResult)`. Large drawings use the
+grid's checked geometry directly. See the [replay results](../../docs/intent/route-speed/COMPACT.md).
 Dense layouts can require a fresh full route to verify quality.
 
 ## Workflow

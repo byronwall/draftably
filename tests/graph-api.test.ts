@@ -178,6 +178,30 @@ describe('fixed row ports during resize', () => {
     }
   });
 
+  it('accepts an ordinary result for compact resize and preserves the guarded route when switched back', () => {
+    const ids = Array.from({ length: 16 }, (_, i) => String(i));
+    const graph = {
+      nodes: ids.flatMap((id, i) => [box('a' + id, 0, i * 100), box('b' + id, 300, i * 100)]),
+      edges: ids.map(id => row(id, 'a' + id, 'b' + id)),
+      routing,
+    };
+    const before = route(graph);
+    const next = { ...graph, nodes: graph.nodes.map(n => ({ ...n, x: n.x ? 400 : 0 })) };
+    const compact = { ...next, resize: 'compact' as const };
+    const compute = vi.spyOn(RouteLab, 'compute');
+    try {
+      const moved = route(compact, before);
+      expect(compute).not.toHaveBeenCalled();
+      expect(route(compact, before)).toEqual(moved);
+      expect(Object.values(moved.edges).every(e => !e.blocked && e.points.at(-1)?.x === 400)).toBe(
+        true,
+      );
+      expect(route(next, moved)).toEqual(route(next));
+    } finally {
+      compute.mockRestore();
+    }
+  });
+
   it('takes the shorter full route when a resize opens a straight path', () => {
     const graph = {
       nodes: [box('a', 0, 0), box('b', 500, 0), box('wall', 220, 0)],
@@ -192,38 +216,41 @@ describe('fixed row ports during resize', () => {
     expect(resized.edges.ab.points).toHaveLength(2);
   });
 
-  it('routes a line around a newly obstructing card and keeps the other rows clear', () => {
-    const nodes = [
-      box('a', 0, 0),
-      box('b', 500, 0),
-      box('c', 0, 240),
-      box('d', 500, 240),
-      box('e', 0, 480),
-      box('f', 500, 480),
-      box('wall', 220, 120),
-    ];
-    const edges = [row('ab', 'a', 'b'), row('cd', 'c', 'd'), row('ef', 'e', 'f')];
-    const before = route({ nodes, edges, routing });
-    expect(before.edges.ab.points).toHaveLength(2);
-    const wall = box('wall', 220, 0);
-    const graph = { nodes: [...nodes.slice(0, -1), wall], edges, routing };
-    const out = route(graph, before);
-    const points = out.edges.ab.points;
-    expect(out.edges.ab.blocked).toBe(false);
-    expect(points.length).toBeGreaterThan(2);
-    expect(points[0]).toEqual({ x: 100, y: 30 });
-    expect(points.at(-1)).toEqual({ x: 500, y: 30 });
-    for (const [i, b] of points.slice(1).entries()) {
-      const a = points[i];
-      expect(
-        Math.max(a.x, b.x) > wall.x &&
-          Math.min(a.x, b.x) < wall.x + wall.width &&
-          Math.max(a.y, b.y) > wall.y &&
-          Math.min(a.y, b.y) < wall.y + wall.height,
-      ).toBe(false);
-    }
-    expect(out.edges.cd).toEqual(before.edges.cd);
-    expect(out.edges.ef).toEqual(before.edges.ef);
-    expect(route(graph, before)).toEqual(out);
-  });
+  it.each([undefined, 'compact'] as const)(
+    'routes around a new obstacle and keeps the other rows clear (%s)',
+    resize => {
+      const nodes = [
+        box('a', 0, 0),
+        box('b', 500, 0),
+        box('c', 0, 240),
+        box('d', 500, 240),
+        box('e', 0, 480),
+        box('f', 500, 480),
+        box('wall', 220, 120),
+      ];
+      const edges = [row('ab', 'a', 'b'), row('cd', 'c', 'd'), row('ef', 'e', 'f')];
+      const before = route({ nodes, edges, routing });
+      expect(before.edges.ab.points).toHaveLength(2);
+      const wall = box('wall', 220, 0);
+      const graph = { nodes: [...nodes.slice(0, -1), wall], edges, routing, resize };
+      const out = route(graph, before);
+      const points = out.edges.ab.points;
+      expect(out.edges.ab.blocked).toBe(false);
+      expect(points.length).toBeGreaterThan(2);
+      expect(points[0]).toEqual({ x: 100, y: 30 });
+      expect(points.at(-1)).toEqual({ x: 500, y: 30 });
+      for (const [i, b] of points.slice(1).entries()) {
+        const a = points[i];
+        expect(
+          Math.max(a.x, b.x) > wall.x &&
+            Math.min(a.x, b.x) < wall.x + wall.width &&
+            Math.max(a.y, b.y) > wall.y &&
+            Math.min(a.y, b.y) < wall.y + wall.height,
+        ).toBe(false);
+      }
+      expect(out.edges.cd).toEqual(before.edges.cd);
+      expect(out.edges.ef).toEqual(before.edges.ef);
+      expect(route(graph, before)).toEqual(out);
+    },
+  );
 });
