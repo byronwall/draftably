@@ -58,14 +58,9 @@ export function standoffCost(ps: Point[], near: NearBox[], bound = Infinity) {
   }
   return n * STANDOFF_WEIGHT;
 }
-// `standoffCost` of the one segment a→b, without building its segment list.
-export function standoffSegment(a: Point, b: Point, near: NearBox[]) {
+// `standoffCost` of one level (`h`) or upright run at `at`, from `lo` to `hi` along it.
+export function standoffRun(h: boolean, at: number, lo: number, hi: number, near: NearBox[]) {
   let n = 0;
-  const h = Math.abs(a.y - b.y) < EPS;
-  if (!h && Math.abs(a.x - b.x) >= EPS) return 0;
-  const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
-    hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
-    at = h ? a.y : a.x;
   for (const r of near) {
     const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
     if (run <= 1) continue;
