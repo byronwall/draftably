@@ -202,6 +202,34 @@ describe('fixed row ports during resize', () => {
     }
   });
 
+  it('ignores caller data that routing does not read', () => {
+    const plain = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    const meta: Record<string, unknown> = { size: 10n };
+    meta.self = meta;
+    const tagged = { ...plain, edges: [{ ...row('line', 'a', 'b'), meta }] };
+    expect(route(tagged)).toEqual(route(plain));
+    expect(route({ ...tagged, routing: { ...routing, quality: 'quick' as const } })).toEqual(
+      route({ ...plain, routing: { ...routing, quality: 'quick' as const } }),
+    );
+  });
+
+  it('routes afresh when a field read through a getter changes', () => {
+    const edge = (target: string) => {
+      const e = row('line', 'a', 'x');
+      Object.defineProperty(e, 'target', { get: () => target, enumerable: false });
+      return e;
+    };
+    const nodes = [box('a', 0, 0), box('b', 300, 0), box('c', 300, 200)];
+    const before = route({ nodes, edges: [edge('b')], routing });
+    const next = { nodes, edges: [edge('c')], routing };
+    expect(route(next, before)).toEqual(route(next));
+    expect(route(next, before).edges.line.points.at(-1)).toEqual({ x: 300, y: 230 });
+  });
+
   it('takes the shorter full route when a resize opens a straight path', () => {
     const graph = {
       nodes: [box('a', 0, 0), box('b', 500, 0), box('wall', 220, 0)],

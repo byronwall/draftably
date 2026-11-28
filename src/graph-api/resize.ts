@@ -19,7 +19,7 @@ export interface Previous {
 
 /** Only fixed row ports on rectangular cards have the same known terminal points before and
  * after a resize. The ordinary router handles auto-selected ports, labels, shapes and groups. */
-export function resizeKey(graph: RouteIn) {
+export function resizeKey(graph: RouteIn, ids: string[]) {
   if (
     !graph.routing?.quality ||
     graph.routing.quality === 'auto' ||
@@ -36,7 +36,22 @@ export function resizeKey(graph: RouteIn) {
     )
   )
     return;
-  return JSON.stringify([graph.nodes.map(n => n.id), graph.edges, graph.routing]);
+  // Only the fields routing reads: other data on the caller's objects never changes the key,
+  // and a field read through a getter or a class counts as it routes.
+  return JSON.stringify([
+    graph.nodes.map(n => n.id),
+    graph.edges.map((e, i) => [
+      ids[i],
+      e.source,
+      e.target,
+      e.sourceSide,
+      e.targetSide,
+      e.sourceAt,
+      e.targetAt,
+    ]),
+    graph.routing.quality,
+    graph.routing.avoidNodes ?? null,
+  ]);
 }
 
 /** Map vertical tracks between corresponding faces. A split or reordered column has no mapping. */
@@ -141,6 +156,24 @@ export function resize(
   compact: boolean,
 ) {
   const ctx = createContext(input, options);
+  // No route can cost less: no conflicts, no standoff, and each line at its Manhattan length
+  // with the fewest bends. A line with horizontal ends needs two bends to reach another row.
+  // If any line is blocked, the objective starts at 1e8.
+  const atBound = (routes: Route[]) => {
+    const m = ctx.metrics(routes);
+    return (
+      !m.crossings &&
+      !m.lanePairs &&
+      !m.shared &&
+      ctx.total(routes) < BLOCKED_PENALTY &&
+      routes.every(r => {
+        const a = r.points[0],
+          b = r.points.at(-1)!;
+        return r.points.length === (a.y === b.y ? 2 : 4) && lengthOf(r.points) === distance(a, b);
+      }) &&
+      routes.every(r => standoffCost(r.points, ctx.near) === 0)
+    );
+  };
   if (
     nodes.every((n, i) => {
       const a = old.nodes[i];
@@ -196,6 +229,9 @@ export function resize(
     }
   }
   if (compact) {
+    // Lines that all moved clear and already meet the lower bound need no grid.
+    if (!ctx.state.routes.some(r => r.blocked) && atBound(ctx.state.routes))
+      return ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
     if (!compactResize(ctx) || !ctx.state.routes.every(clear)) return;
     return ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
   }
@@ -214,21 +250,7 @@ export function resize(
   }
   const routes = ctx.state.routes.sort((a, b) => cmp(a.id, b.id));
   const m = ctx.metrics(routes);
-  // A line with horizontal ends needs at least two bends to reach a different row.
-  // If any line is blocked, the objective starts at 1e8.
-  if (
-    !m.crossings &&
-    !m.lanePairs &&
-    !m.shared &&
-    ctx.total(routes) < BLOCKED_PENALTY &&
-    routes.every(r => {
-      const a = r.points[0],
-        b = r.points.at(-1)!;
-      return r.points.length === (a.y === b.y ? 2 : 4) && lengthOf(r.points) === distance(a, b);
-    }) &&
-    routes.every(r => standoffCost(r.points, ctx.near) === 0)
-  )
-    return routes;
+  if (atBound(routes)) return routes;
   const baseline = fresh();
   // Strict mode can withhold even an engine-clear line when a rounded corner enters a card.
   if (baseline.some(r => r.blocked || !clear(r))) return;

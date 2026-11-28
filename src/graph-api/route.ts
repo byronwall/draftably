@@ -248,7 +248,7 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     r: { x: n.x, y: n.y, w: n.width, h: n.height },
     shape: n.shape ?? 'box',
   }));
-  const key = new Set(ids).size === ids.length ? resizeKey(graph) : undefined;
+  const key = new Set(ids).size === ids.length ? resizeKey(graph, ids) : undefined;
   const prior = previous && snapshots.get(previous);
   const { vg, rects } = visibleRects(doc);
   let baseline: ReturnType<typeof routesFor> | undefined;
