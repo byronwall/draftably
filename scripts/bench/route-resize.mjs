@@ -1,4 +1,4 @@
-// pnpm bench:route:resize [--compact] [--holdout | --wide | --independent] [--picture --frame=60/401/1]
+// pnpm bench:route:resize [--compact] [--holdout | --wide | --round2-heldout | --independent] [--picture --frame=60/401/1]
 // Collect fresh drawings in a separate process so their cache cannot serve a resize call.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -9,54 +9,83 @@ import { conflicts } from '../../src/engines/routing/conflicts.ts';
 import { schema } from './route-schema.mjs';
 
 const compact = process.argv.includes('--compact');
+const reserved = process.argv.includes('--round2-heldout');
+const round2 = reserved || process.argv.includes('--round2');
 const wide = process.argv.includes('--wide');
 const picture = process.argv.includes('--picture');
 const holdout = process.argv.includes('--holdout');
 const independent = process.argv.includes('--independent');
 const sizes = independent ? [60] : [10, 30, 60];
-const seeds = independent
-  ? [101]
-  : wide
-    ? [701, 702, 703, 704, 705]
-    : holdout
-      ? [401, 402, 403, 404, 405]
-      : [101, 102, 103, 104, 105];
+const seeds = reserved
+  ? [1103, 1129, 1151, 1171, 1193]
+  : independent
+    ? [101]
+    : wide
+      ? [701, 702, 703, 704, 705]
+      : holdout
+        ? [401, 402, 403, 404, 405]
+        : [101, 102, 103, 104, 105];
 const dir =
   (compact ? 'tmp/compact-grid' : 'tmp/route-resize') +
-  (wide ? '/wide' : independent ? '/independent' : holdout ? '/heldout' : '');
+  (round2 ? '/round2' : '') +
+  (reserved
+    ? '/reserved'
+    : wide
+      ? '/wide'
+      : independent
+        ? '/independent'
+        : holdout
+          ? '/heldout'
+          : '');
 fs.mkdirSync(dir, { recursive: true });
 // These twelve layouts and seeds were reserved before tuning the compact grid.
-const steps = wide
+const steps = reserved
   ? [
       [320, 220],
-      [374, 244],
-      [392, 254],
-      [414, 272],
-      [384, 248],
-      [306, 196],
-      [258, 192],
-      [246, 184],
-      [230, 176],
-      [254, 186],
-      [312, 204],
-      [382, 252],
-      [402, 266],
+      [355, 234],
+      [429, 281],
+      [458, 292],
+      [343, 257],
+      [268, 198],
+      [218, 162],
+      [207, 158],
+      [241, 171],
+      [297, 223],
+      [438, 277],
+      [367, 215],
+      [279, 193],
     ]
-  : [
-      [320, 220],
-      [326, 222],
-      [340, 230],
-      [352, 230],
-      [360, 240],
-      [344, 236],
-      [330, 232],
-      [310, 222],
-      [295, 212],
-      [282, 204],
-      [270, 200],
-      [298, 210],
-      [322, 218],
-    ];
+  : wide
+    ? [
+        [320, 220],
+        [374, 244],
+        [392, 254],
+        [414, 272],
+        [384, 248],
+        [306, 196],
+        [258, 192],
+        [246, 184],
+        [230, 176],
+        [254, 186],
+        [312, 204],
+        [382, 252],
+        [402, 266],
+      ]
+    : [
+        [320, 220],
+        [326, 222],
+        [340, 230],
+        [352, 230],
+        [360, 240],
+        [344, 236],
+        [330, 232],
+        [310, 222],
+        [295, 212],
+        [282, 204],
+        [270, 200],
+        [298, 210],
+        [322, 218],
+      ];
 const reference = process.argv.includes('--fresh');
 const compare = process.argv.includes('--compare');
 if (!reference && !compare && !picture) {
