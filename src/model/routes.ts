@@ -870,7 +870,7 @@ export function drawRoutes(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
-  result: RoutingResult,
+  result: Pick<RoutingResult, 'routes'>,
 ): DrawnRoute[] {
   // A route for an edge this graph doesn't draw (a timeline's on-chart line) is dropped.
   const visible = new Set(vg.edges.map(e => e.id));

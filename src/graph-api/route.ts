@@ -4,7 +4,8 @@
  */
 import { emptyDiagram } from '../model/document';
 import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../model/graph';
-import { computeRoutes } from '../model/routes';
+import { resize, type Previous } from './resize';
+import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
 import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect } from '../model/types';
 import type { EdgeIn, EdgeOut, Quality, RouteIn, Routed, Shape } from './core';
@@ -53,11 +54,23 @@ export function placed(
 ) {
   const { vg, rects } = visibleRects(doc),
     routed = routesFor(doc, vg, rects, quality),
-    out = placedItems(doc, rects, routed.routes, objectId, edgeId),
+    out = placedRoutes(doc, rects, routed.routes, routed.quality, objectId, edgeId);
+  return out;
+}
+
+function placedRoutes(
+  doc: Diagram,
+  rects: Map<string, Rect>,
+  routes: DrawnRoute[],
+  quality: Routed['quality'],
+  objectId = (id: string) => id,
+  edgeId = (id: string) => id,
+) {
+  const out = placedItems(doc, rects, routes, objectId, edgeId),
     blocked = Object.values(out.edges).filter(e => e.blocked).length;
   return {
     ...out,
-    quality: routed.quality,
+    quality,
     warnings: blocked ? [`${noun(blocked)} found no clear way.`] : [],
   };
 }
@@ -160,11 +173,13 @@ function crossed(points: Point[], path: string, nodes: Obstacle[], ends: [string
     .map(o => o.id);
 }
 
+const snapshots = new WeakMap<Routed, Previous>();
+
 /**
  * Route lines between boxes the caller placed. Nothing moves. Routing is deterministic: the same
  * input gives the same lines, with no randomness and no time limit.
  */
-export function route(graph: RouteIn): Routed {
+export function route(graph: RouteIn, previous?: Routed): Routed {
   const doc = emptyDiagram(),
     groups = graph.groups ?? [],
     known = new Map<string, { width: number; height: number }>(),
@@ -224,11 +239,34 @@ export function route(graph: RouteIn): Routed {
       ...(toAt !== undefined ? { toAt } : {}),
     };
   });
-  const out = placed(
+  const eligible =
+    quality === 'full' &&
+    !groups.length &&
+    graph.nodes.every(n => !n.parent && (!n.shape || n.shape === 'box')) &&
+    graph.edges.every(
+      e =>
+        !e.label &&
+        e.sourceAt !== undefined &&
+        e.targetAt !== undefined &&
+        (e.sourceSide === 'left' || e.sourceSide === 'right') &&
+        (e.targetSide === 'left' || e.targetSide === 'right'),
+    );
+  const key = eligible
+    ? JSON.stringify([graph.nodes.map(n => n.id), graph.edges, graph.routing])
+    : undefined;
+  const prior = previous && snapshots.get(previous);
+  const { vg, rects } = visibleRects(doc);
+  const moved =
+    prior && prior.key === key
+      ? resize(prior, graph.nodes, routeInput(doc, vg, rects), doc.settings.routing)
+      : undefined;
+  const fresh = moved ? undefined : routesFor(doc, vg, rects, quality);
+  const routes = moved ?? fresh!.result.routes;
+  const out = placedRoutes(
     doc,
-    quality,
-    id => id,
-    id => id,
+    rects,
+    fresh?.routes ?? drawRoutes(doc, vg, rects, { routes }),
+    fresh?.quality ?? 'full',
   );
   // A blocked line names the boxes its stand-in runs through. In strict mode a line through a
   // box is blocked too, and a blocked line has no points, so the host never draws one.
@@ -249,7 +287,7 @@ export function route(graph: RouteIn): Routed {
       edges[id] = { ...e, points: [], path: '', label: null, blocked: true, crosses: hits };
     } else edges[id] = e.blocked ? { ...e, crosses: hits } : e;
   }
-  return {
+  const result = {
     edges,
     quality: out.quality,
     warnings: [
@@ -259,4 +297,11 @@ export function route(graph: RouteIn): Routed {
         : []),
     ],
   };
+  if (key)
+    snapshots.set(result, {
+      key,
+      nodes: graph.nodes.map(n => ({ ...n })),
+      routes: structuredClone(routes),
+    });
+  return result;
 }
