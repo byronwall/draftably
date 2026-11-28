@@ -294,6 +294,7 @@ export function createContext(input: RouteInput, rawOptions: RoutingOptions) {
     );
   };
   return {
+    resizeRefinements: 0,
     rawOptions,
     facingFans,
     titleBands,

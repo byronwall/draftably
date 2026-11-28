@@ -322,6 +322,14 @@ function findAmong(
       best.points.length <= 6
     )
       break;
+    // Spend preview refinements on lines that would otherwise share a long run.
+    // Space them through the routing order so early, short lines cannot use them all.
+    if (best && rawOptions.resize) {
+      const limit = Math.min(12, Math.ceil((used.length + 1) / 4));
+      if (ctx.resizeRefinements >= limit || conflicts(best.points, used).shared < 4 * s.edgeGap)
+        break;
+      ctx.resizeRefinements++;
+    }
     // No grid search can reach a waypoint inside a solid obstacle.
     if (
       cfg.waypoints?.some(point => {
