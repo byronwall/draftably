@@ -4,8 +4,8 @@
  */
 import { emptyDiagram } from '../model/document';
 import { frameRect, makeGeometry, visibleGraph, type VisibleGraph } from '../model/graph';
-import { resize, type Previous } from './resize';
-import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
+import { resize, resizeKey, type Previous } from './resize';
+import { computeRoutes, drawRoutes, routeInput, drawnPath, type DrawnRoute } from '../model/routes';
 import { placedItems } from '../runtime/geometry';
 import type { Diagram, Point, Rect } from '../model/types';
 import type { EdgeIn, EdgeOut, Quality, RouteIn, Routed, Shape } from './core';
@@ -53,9 +53,8 @@ export function placed(
   edgeId: (id: string) => string,
 ) {
   const { vg, rects } = visibleRects(doc),
-    routed = routesFor(doc, vg, rects, quality),
-    out = placedRoutes(doc, rects, routed.routes, routed.quality, objectId, edgeId);
-  return out;
+    routed = routesFor(doc, vg, rects, quality);
+  return placedRoutes(doc, rects, routed.routes, routed.quality, objectId, edgeId);
 }
 
 function placedRoutes(
@@ -177,7 +176,8 @@ const snapshots = new WeakMap<Routed, Previous>();
 
 /**
  * Route lines between boxes the caller placed. Nothing moves. Routing is deterministic: the same
- * input gives the same lines, with no randomness and no time limit.
+ * graph and previous result give the same lines. Pass the last result from this instance to
+ * reuse fixed row-to-row lines after a resize. An incompatible result routes fresh.
  */
 export function route(graph: RouteIn, previous?: Routed): Routed {
   const doc = emptyDiagram(),
@@ -239,35 +239,6 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
       ...(toAt !== undefined ? { toAt } : {}),
     };
   });
-  const eligible =
-    quality === 'full' &&
-    !groups.length &&
-    graph.nodes.every(n => !n.parent && (!n.shape || n.shape === 'box')) &&
-    graph.edges.every(
-      e =>
-        !e.label &&
-        e.sourceAt !== undefined &&
-        e.targetAt !== undefined &&
-        (e.sourceSide === 'left' || e.sourceSide === 'right') &&
-        (e.targetSide === 'left' || e.targetSide === 'right'),
-    );
-  const key = eligible
-    ? JSON.stringify([graph.nodes.map(n => n.id), graph.edges, graph.routing])
-    : undefined;
-  const prior = previous && snapshots.get(previous);
-  const { vg, rects } = visibleRects(doc);
-  const moved =
-    prior && prior.key === key
-      ? resize(prior, graph.nodes, routeInput(doc, vg, rects), doc.settings.routing)
-      : undefined;
-  const fresh = moved ? undefined : routesFor(doc, vg, rects, quality);
-  const routes = moved ?? fresh!.result.routes;
-  const out = placedRoutes(
-    doc,
-    rects,
-    fresh?.routes ?? drawRoutes(doc, vg, rects, { routes }),
-    fresh?.quality ?? 'full',
-  );
   // A blocked line names the boxes its stand-in runs through. In strict mode a line through a
   // box is blocked too, and a blocked line has no points, so the host never draws one.
   const boxes = graph.nodes.map(n => ({
@@ -275,6 +246,38 @@ export function route(graph: RouteIn, previous?: Routed): Routed {
     r: { x: n.x, y: n.y, w: n.width, h: n.height },
     shape: n.shape ?? 'box',
   }));
+  const key = new Set(ids).size === ids.length ? resizeKey(graph) : undefined;
+  const prior = previous && snapshots.get(previous);
+  const { vg, rects } = visibleRects(doc);
+  let baseline: ReturnType<typeof routesFor> | undefined;
+  const fresh = () => (baseline ??= routesFor(doc, vg, rects, quality));
+  const edgeById = new Map(doc.graph.edges.map(e => [e.id, e]));
+  const moved =
+    key !== undefined && prior?.key === key
+      ? resize(
+          prior,
+          graph.nodes,
+          routeInput(doc, vg, rects),
+          { ...doc.settings.routing, quick: quality === 'quick' },
+          r =>
+            !crossed(
+              r.points,
+              drawnPath(r.points, edgeById.get(r.id), doc.settings.routing.cornerRadius),
+              boxes,
+              [r.from, r.to],
+            ).length,
+          () => fresh().result.routes,
+        )
+      : undefined;
+  const routes = moved ?? fresh().result.routes;
+  const out = moved
+    ? placedRoutes(
+        doc,
+        rects,
+        drawRoutes(doc, vg, rects, { routes }),
+        quality === 'quick' ? 'quick' : 'full',
+      )
+    : placedRoutes(doc, rects, fresh().routes, fresh().quality);
   const edges: Record<string, EdgeOut> = {};
   let held = 0;
   for (const [id, e] of Object.entries(out.edges)) {

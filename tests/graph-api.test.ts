@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { RouteLab } from '../src/engines/routing-engine';
 import { layout, route } from '../src/graph-api';
 
 describe('graph api layout', () => {
@@ -138,5 +139,91 @@ describe('graph api route', () => {
         edges: [{ source: 'a', target: 'b' }],
       }),
     ).toThrow('Edge "e1" refers to unknown id "b".');
+  });
+});
+
+describe('fixed row ports during resize', () => {
+  const box = (id: string, x: number, y: number) => ({ id, x, y, width: 100, height: 60 });
+  const row = (id: string, source: string, target: string) => ({
+    id,
+    source,
+    target,
+    sourceSide: 'right' as const,
+    targetSide: 'left' as const,
+    sourceAt: 30,
+    targetAt: 30,
+  });
+  const routing = { quality: 'full', avoidNodes: 'strict' } as const;
+
+  it('reuses clear rows at their new coordinates and protects the stored route from caller edits', () => {
+    const graph = {
+      nodes: [box('a', 0, 0), box('b', 300, 0)],
+      edges: [row('line', 'a', 'b')],
+      routing,
+    };
+    const before = route(graph);
+    before.edges.line.points[0].x = 9999;
+    const resized = { ...graph, nodes: [{ ...graph.nodes[0], width: 124 }, box('b', 360, 0)] };
+    const compute = vi.spyOn(RouteLab, 'compute');
+    try {
+      const out = route(resized, before);
+      expect(out.edges.line.points).toEqual([
+        { x: 124, y: 30 },
+        { x: 360, y: 30 },
+      ]);
+      expect(compute).not.toHaveBeenCalled();
+      expect(route(resized, before)).toEqual(out);
+    } finally {
+      compute.mockRestore();
+    }
+  });
+
+  it('takes the shorter full route when a resize opens a straight path', () => {
+    const graph = {
+      nodes: [box('a', 0, 0), box('b', 500, 0), box('wall', 220, 0)],
+      edges: [row('ab', 'a', 'b')],
+      routing,
+    };
+    const before = route(graph);
+    expect(before.edges.ab.points.length).toBeGreaterThan(2);
+    const next = { ...graph, nodes: [...graph.nodes.slice(0, 2), box('wall', 220, 200)] };
+    const resized = route(next, before);
+    expect(resized).toEqual(route(next));
+    expect(resized.edges.ab.points).toHaveLength(2);
+  });
+
+  it('routes a line around a newly obstructing card and keeps the other rows clear', () => {
+    const nodes = [
+      box('a', 0, 0),
+      box('b', 500, 0),
+      box('c', 0, 240),
+      box('d', 500, 240),
+      box('e', 0, 480),
+      box('f', 500, 480),
+      box('wall', 220, 120),
+    ];
+    const edges = [row('ab', 'a', 'b'), row('cd', 'c', 'd'), row('ef', 'e', 'f')];
+    const before = route({ nodes, edges, routing });
+    expect(before.edges.ab.points).toHaveLength(2);
+    const wall = box('wall', 220, 0);
+    const graph = { nodes: [...nodes.slice(0, -1), wall], edges, routing };
+    const out = route(graph, before);
+    const points = out.edges.ab.points;
+    expect(out.edges.ab.blocked).toBe(false);
+    expect(points.length).toBeGreaterThan(2);
+    expect(points[0]).toEqual({ x: 100, y: 30 });
+    expect(points.at(-1)).toEqual({ x: 500, y: 30 });
+    for (const [i, b] of points.slice(1).entries()) {
+      const a = points[i];
+      expect(
+        Math.max(a.x, b.x) > wall.x &&
+          Math.min(a.x, b.x) < wall.x + wall.width &&
+          Math.max(a.y, b.y) > wall.y &&
+          Math.min(a.y, b.y) < wall.y + wall.height,
+      ).toBe(false);
+    }
+    expect(out.edges.cd).toEqual(before.edges.cd);
+    expect(out.edges.ef).toEqual(before.edges.ef);
+    expect(route(graph, before)).toEqual(out);
   });
 });

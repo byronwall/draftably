@@ -1,4 +1,4 @@
-import { createContext } from './context.ts';
+import { createContext, type Context } from './context.ts';
 import { find, retryLane } from './find.ts';
 import { cmp } from './geometry.ts';
 import { improve } from './improve.ts';
@@ -14,7 +14,7 @@ import type { RouteInput, RoutingOptions, RoutingReport, RoutingResult } from '.
  */
 export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): RoutingResult {
   const ctx = createContext(input, rawOptions),
-    { facingFans, began, s, previous, edges, state, syncOpen, metrics } = ctx;
+    { previous, edges, state } = ctx;
   // Planned routes stay as planned: the passes below trade a crossing for bends or a backwards
   // side, which the plan's ranks avoid.
   for (const e of edges) {
@@ -22,6 +22,12 @@ export function compute(input: RouteInput, rawOptions: RoutingOptions = {}): Rou
     if (plan) state.fixedPlans.add(e.id);
     state.routes.push(plan ?? find(ctx, e, state.routes, previous.get(e.id)));
   }
+  return finish(ctx);
+}
+
+/** Run the quality passes with the routes in edge order. Fixed routes stay in their lanes. */
+export function finish(ctx: Context): RoutingResult {
+  const { rawOptions, facingFans, began, s, previous, edges, state, syncOpen, metrics } = ctx;
   // Keep ordinary paths in place before a blocked lane tries a different approach.
   const recover = () => {
     for (const [i, route] of state.routes.entries()) {

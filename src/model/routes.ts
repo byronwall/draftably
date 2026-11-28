@@ -865,6 +865,15 @@ export function roomForLabel(
   return best ?? points;
 }
 
+/** The visible line, including the marker setback and rounded corners. */
+export function drawnPath(
+  points: Point[],
+  edge: Diagram['graph']['edges'][number] | undefined,
+  radius: number,
+) {
+  return roundedPath(edge ? stoppedPoints(points, edge) : points, radius);
+}
+
 /** Add label positions and SVG paths to raw routes. */
 export function drawRoutes(
   doc: Diagram,
@@ -1074,7 +1083,7 @@ export function drawRoutes(
     return {
       ...route,
       label: labels.get(route) ?? null,
-      path: roundedPath(edge ? stoppedPoints(route.points, edge) : route.points, radius),
+      path: drawnPath(route.points, edge, radius),
       halo: haloPath(
         route.points,
         result.routes

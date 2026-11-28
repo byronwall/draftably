@@ -39,6 +39,16 @@ const { edges } = route({
 });
 ```
 
+For a schema resize, pass the last result as the second argument to `route`.
+
+```ts
+const routing = { quality: 'full', avoidNodes: 'strict' } as const;
+const previous = route({ nodes, edges, routing });
+const resized = route({ nodes: resizedNodes, edges, routing }, previous);
+```
+
+Set both sides and row offsets on each line. Reuse supports unlabelled lines between rectangular cards with explicit full or quick quality. Keep the result in the worker that called `route`. The router checks moved lanes and repairs invalid ones. A crowded drawing can still need a fresh quality comparison. A graph edit, an unsupported input, or a copied result uses ordinary routing.
+
 ```ts
 import '@draftably/runtime/element';
 import '@draftably/runtime/host.css'; // once per page: heights and slot rules before the element loads

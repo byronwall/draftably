@@ -89,14 +89,14 @@ export async function layout(input: object): Promise<unknown> {
   return layoutGraph(input as GraphIn);
 }
 
-export function route(graph: RouteIn): Routed;
+export function route(graph: RouteIn, previous?: Routed): Routed;
 export function route<N extends FlowNode, E extends FlowEdge>(
   input: { reactFlow: FlowGraph<N, E>; routing?: RoutingOptions } & FlowOptions,
 ): { reactFlow: FlowRouted<N, E>; result: Routed };
 export function route<N extends FlowNode, E extends FlowEdge>(
   input: { svelteFlow: FlowGraph<N, E>; routing?: RoutingOptions } & FlowOptions,
 ): { svelteFlow: FlowRouted<N, E>; result: Routed };
-export function route(input: object): unknown {
+export function route(input: object, previous?: Routed): unknown {
   for (const key of ['reactFlow', 'svelteFlow'] as const)
     if (key in input) {
       const {
@@ -107,5 +107,5 @@ export function route(input: object): unknown {
       const result = routeGraph({ ...placedFlow(flow, { shape }), routing });
       return { [key]: { nodes: flow.nodes, edges: routedFlow(flow.edges, result) }, result };
     }
-  return routeGraph(input as RouteIn);
+  return routeGraph(input as RouteIn, previous);
 }

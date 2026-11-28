@@ -12,6 +12,12 @@ edit the source, never coordinates you guessed.
 Run the CLI with `npx draftably` (or `draftably` if installed globally, or `pnpm draftably`
 inside the draftably repo). It needs Node 22.21 or later.
 
+For a host that places its own rectangular cards, import `route` from `@draftably/runtime/route`.
+Set `sourceSide`, `targetSide`, `sourceAt`, and `targetAt` for fixed row ports.
+Use `routing: { quality: 'full', avoidNodes: 'strict' }` to hold back blocked lines.
+Keep the result in the same worker. On resize, call `route(newGraph, previousResult)`.
+Dense layouts can require a fresh full route to verify quality.
+
 ## Workflow
 
 1. **Plan the model.** List the boxes, the containers they belong to, and the connections. Pick
