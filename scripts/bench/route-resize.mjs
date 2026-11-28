@@ -1,4 +1,4 @@
-// pnpm bench:route:resize [--holdout | --independent | --picture]
+// pnpm bench:route:resize [--compact] [--holdout | --wide | --independent] [--picture --frame=60/401/1]
 // Collect fresh drawings in a separate process so their cache cannot serve a resize call.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -8,28 +8,55 @@ import { createContext } from '../../src/engines/routing/context.ts';
 import { conflicts } from '../../src/engines/routing/conflicts.ts';
 import { schema } from './route-schema.mjs';
 
+const compact = process.argv.includes('--compact');
+const wide = process.argv.includes('--wide');
 const picture = process.argv.includes('--picture');
 const holdout = process.argv.includes('--holdout');
 const independent = process.argv.includes('--independent');
 const sizes = independent ? [60] : [10, 30, 60];
-const seeds = independent ? [101] : holdout ? [401, 402, 403, 404, 405] : [101, 102, 103, 104, 105];
-const dir = 'tmp/route-resize' + (independent ? '/independent' : holdout ? '/heldout' : '');
+const seeds = independent
+  ? [101]
+  : wide
+    ? [701, 702, 703, 704, 705]
+    : holdout
+      ? [401, 402, 403, 404, 405]
+      : [101, 102, 103, 104, 105];
+const dir =
+  (compact ? 'tmp/compact-grid' : 'tmp/route-resize') +
+  (wide ? '/wide' : independent ? '/independent' : holdout ? '/heldout' : '');
 fs.mkdirSync(dir, { recursive: true });
-const steps = [
-  [320, 220],
-  [326, 222],
-  [340, 230],
-  [352, 230],
-  [360, 240],
-  [344, 236],
-  [330, 232],
-  [310, 222],
-  [295, 212],
-  [282, 204],
-  [270, 200],
-  [298, 210],
-  [322, 218],
-];
+// These twelve layouts and seeds were reserved before tuning the compact grid.
+const steps = wide
+  ? [
+      [320, 220],
+      [374, 244],
+      [392, 254],
+      [414, 272],
+      [384, 248],
+      [306, 196],
+      [258, 192],
+      [246, 184],
+      [230, 176],
+      [254, 186],
+      [312, 204],
+      [382, 252],
+      [402, 266],
+    ]
+  : [
+      [320, 220],
+      [326, 222],
+      [340, 230],
+      [352, 230],
+      [360, 240],
+      [344, 236],
+      [330, 232],
+      [310, 222],
+      [295, 212],
+      [282, 204],
+      [270, 200],
+      [298, 210],
+      [322, 218],
+    ];
 const reference = process.argv.includes('--fresh');
 const compare = process.argv.includes('--compare');
 if (!reference && !compare && !picture) {
@@ -87,16 +114,29 @@ function svg(graph, out, { x, y, w, h }) {
     <g fill="#f3f6f8" stroke="#7c8e9d">${cards}</g></svg>`;
 }
 if (picture) {
-  const base = schema(60, 401);
+  const frame = process.argv.find(a => a.startsWith('--frame='))?.slice(8) ?? '60/401/1';
+  const [lines, seed, target] = frame.split('/').map(Number);
+  assert.ok(
+    frame.split('/').length === 3 &&
+      sizes.includes(lines) &&
+      Number.isInteger(seed) &&
+      Number.isInteger(target) &&
+      target > 0 &&
+      target < steps.length,
+    'Use --frame=lines/seed/step',
+  );
+  const base = schema(lines, seed);
   const routing = { quality: 'full', avoidNodes: 'strict' };
-  const before = route({ ...base, routing });
-  const [pitch, width] = steps[1];
-  const graph = {
+  const at = ([pitch, width]) => ({
     ...base,
+    ...(compact && { resize: 'compact' }),
     routing,
     nodes: base.nodes.map(n => ({ ...n, x: (n.x / 320) * pitch, width })),
-  };
-  const moved = route(graph, before);
+  });
+  let before;
+  for (const step of steps.slice(0, target)) before = route(at(step), before);
+  const graph = at(steps[target]),
+    moved = route(graph, before);
   const full = route(graph);
   const points = [
     ...graph.nodes.flatMap(n => [n, { x: n.x + n.width, y: n.y + n.height }]),
@@ -154,6 +194,7 @@ for (const lines of sizes)
     for (const [step, [pitch, width]] of steps.entries()) {
       const graph = {
         ...g,
+        ...(compact && { resize: 'compact' }),
         nodes: g.nodes.map(n => ({ ...n, x: (n.x / 320) * pitch, width })),
         routing: { quality: 'full', avoidNodes: 'strict' },
       };
